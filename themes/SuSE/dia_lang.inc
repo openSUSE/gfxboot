@@ -25,6 +25,7 @@
   [ "ja" "\u65e5\u672c\u8a9e" ]
   [ "hu" "Magyar" ]
   [ "nl" "Nederlands" ]
+  [ "ro" "Romanian" ]
   [ "ru" "\u0420\u0443\u0441\u0441\u043a\u0438\u0439" ]
   [ "sk" "Sloven\u010dina" ]
   [ "sl" "Sloven\u0161\u010dina" ]
