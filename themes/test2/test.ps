@@ -46,34 +46,33 @@
 
 
 800 600 16 findmode setmode not { false .end } if
+% 640 480 8 findmode setmode not { false .end } if
 
-/max_image_colors 0 def
+"test.jpg" findfile
+% "test.pcx" findfile
+
+setimage loadpalette
+
+/max_image_colors image.colors def
 
 /black 0x000000 newcolor
 /white 0xffffff newcolor
 
 white settextmodecolor
 
-"test.jpg" findfile
+image.size pop pop
 
-setimage image.size
-
-dtrace
-
-pop pop
-
-0 0 800 600 image.unpack
-
-/i exch def
+/w 400 def
+/h 200 def
 
 white setcolor
-0 0 moveto 300 300 fillrect
+10 200 moveto w 2 add h 2 add fillrect
+11 201 moveto
 
-0 0 moveto
+% 0 0 200 100 image.unpack dup restorescreen free
+0 400 w h image
+% 0 0 moveto 0 0 image.size image
 
-i
-
-restorescreen
 
 dtrace
 

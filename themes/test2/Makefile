@@ -14,7 +14,7 @@ themes: bootlogo
 
 bootlogo: test.ps $(BM_TARGET)
 	$(MKBOOTMSG) $(BFLAGS) -l log -c $< init
-	echo -e "init\ntest.jpg" | cpio -o >bootlogo
+	echo -e "init\ntest.jpg\ntest.pcx" | cpio -o >bootlogo
 
 clean:
 	rm -f *~ log init bootlogo
