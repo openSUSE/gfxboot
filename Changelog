@@ -1,4 +1,7 @@
-14/4/2003:	v2.4.19
+14/4/2004:	v2.4.20
+	- irqs might have been turned off in some cases
+
+14/4/2004:	v2.4.19
 	- font creation missed some chars (#38223)
 
 8/4/2004:	v2.4.18

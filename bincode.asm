@@ -2212,8 +2212,11 @@ real_to_pm:
 
 		mov eax,cr0
 		test al,1		; in prot mode (maybe vm86)?
+		jz real_to_pm_10
 		stc
-		jnz real_to_pm_90
+		sti
+		jmp real_to_pm_90
+real_to_pm_10:
 		or al,1
 
 		o32 lgdt [pm_gdt]
