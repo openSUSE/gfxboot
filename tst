@@ -128,11 +128,12 @@ done
 shift $(($OPTIND - 1))
 
 [ "$what" ] || what=$1
-[ "$theme" ] || theme=$2
-[ "$program" ] || program=$3
+[ "$what" ] || what=cdrom
 
+[ "$theme" ] || theme=$2
 [ "$theme" ] || theme=SuSE
 
+[ "$program" ] || program=$3
 [ "$program" ] || program=dosemu
 
 if [ ! "$logo" ] ; then

@@ -1,3 +1,5 @@
+BINDIR      := $(shell [ -x ../../mkbootmsg ] && echo ../../ )
+
 HELP2TXT     = $(BINDIR)help2txt
 MKBOOTMSG    = $(BINDIR)mkbootmsg
 BFLAGS       = -O -v -L ../..
