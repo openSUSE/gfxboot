@@ -1,9 +1,34 @@
-	.file	"jpg.c"
+	.file	"jpeg.S"
 	.text
-	.code16
-	.align 32
-	.type	aaidct, @object
-	.size	aaidct, 32
+	.code16gcc
+
+	.globl jpeg_decode
+	.globl jpeg_get_size
+
+datap:
+	.space	4,0
+
+tmp_img:
+	.space	512,0
+
+info:
+	.space	12,0
+
+comps:
+	.space	48,0
+
+dscans:
+	.space	112,0
+
+quant:
+	.space	256,0
+
+dhuff:
+	.space	5648,0
+
+in:
+	.space	24,0
+
 aaidct:
 	.long	724
 	.long	1004
@@ -13,9 +38,7 @@ aaidct:
 	.long	569
 	.long	392
 	.long	200
-	.align 32
-	.type	zig, @object
-	.size	zig, 64
+
 zig:
 	.byte	0
 	.byte	1
@@ -81,9 +104,7 @@ zig:
 	.byte	58
 	.byte	62
 	.byte	63
-	.align 32
-	.type	zig2, @object
-	.size	zig2, 64
+
 zig2:
 	.byte	0
 	.byte	2
@@ -150,28 +171,21 @@ zig2:
 	.byte	47
 	.byte	49
 
-	.type	getbyte, @function
 getbyte:
 	movl	datap, %edx
-	movzbl	(%edx), %eax
+	movzbl	%es:(%edx), %eax
 	incl	%edx
 	movl	%edx, datap
 	ret
-	.size	getbyte, .-getbyte
-	.type	getword, @function
+
 getword:
 	movl	datap, %edx
-	leal	1(%edx), %ecx
-	movzbl	(%edx), %eax
-	sall	$8, %eax
-	movl	%ecx, datap
-	movzbl	1(%edx), %ecx
+	movzwl	%es:(%edx), %eax
 	addl	$2, %edx
-	orl	%ecx, %eax
+	xchgb	%al,%ah
 	movl	%edx, datap
 	ret
-	.size	getword, .-getword
-	.type	fillbits, @function
+
 fillbits:
 	pushl	%ebp
 	pushl	%edi
@@ -237,28 +251,7 @@ fillbits:
 	popl	%edi
 	popl	%ebp
 	ret
-	.size	fillbits, .-fillbits
-	.type	dec_readmarker, @function
-dec_readmarker:
-	pushl	%ebx
-	movl	%eax, %ebx
-	movl	8(%eax), %edx
-	movl	4(%eax), %ecx
-	call	fillbits
-	xorl	%edx, %edx
-	movl	%eax, 8(%ebx)
-	movl	12(%ebx), %eax
-	testl	%eax, %eax
-	je	.L15
-	movl	$0, 8(%ebx)
-	movl	$0, 12(%ebx)
-	movl	%eax, %edx
-.L15:
-	movl	%edx, %eax
-	popl	%ebx
-	ret
-	.size	dec_readmarker, .-dec_readmarker
-	.type	dec_rec2, @function
+
 dec_rec2:
 	pushl	%ebp
 	pushl	%edi
@@ -274,7 +267,7 @@ dec_rec2:
 	movl	36(%esp), %ebx
 	movl	%eax, 4(%esp)
 	testl	%esi, %esi
-	je	.L18
+	je	.L16
 	movl	%esi, %eax
 	sarl	$8, %esi
 	andl	$127, %eax
@@ -282,17 +275,17 @@ dec_rec2:
 	movl	%esi, %eax
 	sarl	$8, %esi
 	andl	$15, %eax
-	jmp	.L33
-.L18:
-	movl	$10, %esi
-	jmp	.L20
-.L26:
+	jmp	.L31
+.L16:
+	movl	$8, %esi
+	jmp	.L18
+.L24:
 	incl	%esi
-.L20:
+.L18:
 	addl	%ebx, %ebx
 	testl	%edi, %edi
 	movl	%ebx, (%esp)
-	jg	.L25
+	jg	.L23
 	movl	%edi, %edx
 	movl	4(%esp), %ecx
 	movl	%ebp, %eax
@@ -300,7 +293,7 @@ dec_rec2:
 	movl	4(%ebp), %edx
 	movl	%eax, %edi
 	movl	%edx, 4(%esp)
-.L25:
+.L23:
 	decl	%edi
 	movl	4(%esp), %ebx
 	movl	%edi, %ecx
@@ -309,12 +302,12 @@ dec_rec2:
 	andl	$1, %ebx
 	orl	(%esp), %ebx
 	cmpl	(%eax,%esi,4), %ebx
-	jge	.L26
+	jge	.L24
 	cmpl	$15, %esi
-	jle	.L27
+	jle	.L25
 	movl	$-1, 12(%ebp)
-	jmp	.L32
-.L27:
+	jmp	.L30
+.L25:
 	movl	12(%esp), %edx
 	movl	8(%esp), %ecx
 	movl	-4(%edx,%esi,4), %eax
@@ -325,19 +318,19 @@ dec_rec2:
 	movl	%esi, %eax
 	andl	$15, %esi
 	sarl	$4, %eax
-.L33:
+.L31:
 	movl	%eax, (%ecx)
 	testl	%esi, %esi
-	jne	.L28
+	jne	.L26
 	movl	4(%esp), %eax
 	movl	%edi, 8(%ebp)
 	movl	%eax, 4(%ebp)
-.L32:
+.L30:
 	xorl	%eax, %eax
-	jmp	.L17
-.L28:
+	jmp	.L15
+.L26:
 	cmpl	%esi, %edi
-	jge	.L30
+	jge	.L28
 	movl	%edi, %edx
 	movl	4(%esp), %ecx
 	movl	%ebp, %eax
@@ -345,7 +338,7 @@ dec_rec2:
 	movl	4(%ebp), %edx
 	movl	%eax, %edi
 	movl	%edx, 4(%esp)
-.L30:
+.L28:
 	subl	%esi, %edi
 	movl	$1, %eax
 	movl	%edi, %ecx
@@ -359,25 +352,24 @@ dec_rec2:
 	andl	%edx, %ebx
 	sall	%cl, %eax
 	cmpl	%eax, %ebx
-	jge	.L31
+	jge	.L29
 	orl	$-1, %eax
 	movl	%esi, %ecx
 	sall	%cl, %eax
 	leal	1(%eax,%ebx), %ebx
-.L31:
+.L29:
 	movl	4(%esp), %eax
 	movl	%edi, 8(%ebp)
 	movl	%eax, 4(%ebp)
 	movl	%ebx, %eax
-.L17:
+.L15:
 	addl	$16, %esp
 	popl	%ebx
 	popl	%esi
 	popl	%edi
 	popl	%ebp
 	ret
-	.size	dec_rec2, .-dec_rec2
-	.type	readtables, @function
+
 readtables:
 	pushl	%ebp
 	pushl	%edi
@@ -385,44 +377,44 @@ readtables:
 	pushl	%ebx
 	subl	$360, %esp
 	movl	%eax, 36(%esp)
-.L129:
+.L127:
 	call	getbyte
 	orl	$-1, %edx
 	cmpl	$255, %eax
-	jne	.L34
+	jne	.L32
 	call	getbyte
 	xorl	%edx, %edx
 	cmpl	36(%esp), %eax
-	je	.L34
+	je	.L32
 	cmpl	$196, %eax
-	je	.L54
-	jg	.L107
+	je	.L52
+	jg	.L105
 	cmpl	$194, %eax
-	je	.L34
-	jmp	.L101
-.L107:
+	je	.L32
+	jmp	.L99
+.L105:
 	cmpl	$219, %eax
-	je	.L42
+	je	.L40
 	cmpl	$221, %eax
-	je	.L100
-	jmp	.L101
-.L42:
+	je	.L98
+	jmp	.L99
+.L40:
 	call	getword
 	movl	%eax, %edi
 	cmpl	$2, %eax
-	jle	.L129
-.L53:
+	jle	.L127
+.L51:
 	call	getbyte
 	orl	$-1, %edx
 	movl	%eax, %ebp
 	andl	$15, %ebp
 	cmpl	$3, %ebp
-	jg	.L34
+	jg	.L32
 	sarl	$4, %eax
 	testl	%eax, %eax
-	jne	.L34
+	jne	.L32
 	xorl	%esi, %esi
-.L52:
+.L50:
 	call	getbyte
 	movl	%ebp, %ebx
 	sall	$6, %ebx
@@ -430,17 +422,17 @@ readtables:
 	movb	%al, (%esi,%ebx)
 	incl	%esi
 	cmpl	$63, %esi
-	jle	.L52
+	jle	.L50
 	subl	$65, %edi
 	cmpl	$2, %edi
-	jg	.L53
-	jmp	.L129
-.L54:
+	jg	.L51
+	jmp	.L127
+.L52:
 	call	getword
 	cmpl	$2, %eax
 	movl	%eax, 32(%esp)
-	jle	.L129
-.L99:
+	jle	.L127
+.L97:
 	call	getbyte
 	movl	%eax, %ecx
 	sarl	$4, %eax
@@ -454,22 +446,22 @@ readtables:
 	orl	%edx, %eax
 	orl	$-1, %edx
 	testb	$1, %al
-	jne	.L34
+	jne	.L32
 	xorl	%esi, %esi
-.L63:
+.L61:
 	call	getbyte
 	movl	%eax, 296(%esp,%esi,4)
 	incl	%esi
 	cmpl	$15, %esi
-	jle	.L63
+	jle	.L61
 	subl	$17, 32(%esp)
 	xorl	%ebp, %ebp
 	xorl	%esi, %esi
-.L73:
+.L71:
 	xorl	%edi, %edi
 	cmpl	296(%esp,%esi,4), %edi
-	jge	.L119
-.L72:
+	jge	.L117
+.L70:
 	leal	360(%esp), %ecx
 	incl	%edi
 	leal	(%ecx,%ebp), %ebx
@@ -477,47 +469,47 @@ readtables:
 	incl	%ebp
 	cmpl	296(%esp,%esi,4), %edi
 	movb	%al, -320(%ebx)
-	jl	.L72
-.L119:
+	jl	.L70
+.L117:
 	movl	296(%esp,%esi,4), %eax
 	incl	%esi
 	subl	%eax, 32(%esp)
 	cmpl	$15, %esi
-	jle	.L73
-	imull	$4484, 28(%esp), %eax
+	jle	.L71
+	imull	$1412, 28(%esp), %eax
 	leal	40(%esp), %edx
 	addl	$dhuff, %eax
 	movl	%eax, 24(%esp)
 	movl	%edx, 20(%esp)
 	xorl	%edi, %edi
-.L78:
+.L76:
 	movl	24(%esp), %ecx
 	movl	$0, 388(%ecx,%edi,4)
 	incl	%edi
-	cmpl	$1023, %edi
-	jle	.L78
+	cmpl	$255, %edi
+	jle	.L76
 	movl	$0, 16(%esp)
 	movl	$0, 12(%esp)
 	xorl	%edi, %edi
-	movl	$9, (%esp)
-.L97:
+	movl	$7, (%esp)
+.L95:
 	movl	24(%esp), %edx
 	movl	12(%esp), %eax
 	movl	%eax, 68(%edx,%edi,4)
 	movl	296(%esp,%edi,4), %eax
 	testl	%eax, %eax
-	jle	.L125
+	jle	.L123
 	movl	%eax, 8(%esp)
-.L96:
+.L94:
 	movl	20(%esp), %ecx
 	movl	12(%esp), %edx
 	movb	(%ecx), %al
 	incl	%ecx
 	movl	%ecx, 20(%esp)
 	movl	24(%esp), %ecx
-	cmpl	$9, %edi
+	cmpl	$7, %edi
 	movb	%al, 132(%ecx,%edx)
-	jg	.L87
+	jg	.L85
 	movb	(%esp), %cl
 	movl	$1, %ebp
 	movl	16(%esp), %edx
@@ -527,29 +519,29 @@ readtables:
 	andl	%eax, %esi
 	decl	%ebp
 	movl	%edx, 4(%esp)
-	js	.L87
-.L95:
+	js	.L85
+.L93:
 	leal	(%edi,%esi), %eax
-	cmpl	$9, %eax
-	jg	.L92
+	cmpl	$7, %eax
+	jg	.L90
 	movl	%esi, %ecx
 	movl	%ebp, %ebx
 	negl	%ecx
 	subl	%edi, %ecx
-	addl	$9, %ecx
+	addl	$7, %ecx
 	sarl	%cl, %ebx
 	testl	%esi, %esi
-	je	.L93
+	je	.L91
 	leal	-1(%esi), %ecx
 	movl	$1, %eax
 	sall	%cl, %eax
 	cmpl	%eax, %ebx
-	jge	.L93
+	jge	.L91
 	orl	$-1, %eax
 	movl	%esi, %ecx
 	sall	%cl, %eax
 	leal	1(%eax,%ebx), %ebx
-.L93:
+.L91:
 	movl	12(%esp), %edx
 	movl	24(%esp), %ecx
 	sall	$16, %ebx
@@ -558,12 +550,12 @@ readtables:
 	leal	(%esi,%edi), %edx
 	sall	$4, %eax
 	orl	%eax, %ebx
-	movl	$9, %eax
+	movl	$7, %eax
 	subl	%edx, %eax
 	orl	%eax, %ebx
 	orb	$-128, %bl
-	jmp	.L94
-.L92:
+	jmp	.L92
+.L90:
 	movl	12(%esp), %edx
 	movl	24(%esp), %ecx
 	movl	%esi, %ebx
@@ -573,19 +565,19 @@ readtables:
 	sall	$4, %eax
 	orl	%eax, %ebx
 	orl	(%esp), %ebx
-.L94:
+.L92:
 	movl	4(%esp), %eax
 	movl	24(%esp), %edx
 	orl	%ebp, %eax
 	decl	%ebp
 	movl	%ebx, 388(%edx,%eax,4)
-	jns	.L95
-.L87:
+	jns	.L93
+.L85:
 	incl	16(%esp)
 	incl	12(%esp)
 	decl	8(%esp)
-	jne	.L96
-.L125:
+	jne	.L94
+.L123:
 	movl	24(%esp), %ecx
 	movl	16(%esp), %eax
 	decl	(%esp)
@@ -594,30 +586,30 @@ readtables:
 	incl	%edi
 	movl	%eax, 16(%esp)
 	cmpl	$15, %edi
-	jle	.L97
+	jle	.L95
 	movl	$131072, 64(%ecx)
 	cmpl	$2, 32(%esp)
-	jg	.L99
-	jmp	.L129
-.L100:
+	jg	.L97
+	jmp	.L127
+.L98:
 	call	getword
 	call	getword
 	movl	%eax, info+8
-	jmp	.L129
-.L101:
+	jmp	.L127
+.L99:
 	call	getword
 	movl	%eax, 32(%esp)
 	decl	32(%esp)
 	cmpl	$2, %eax
-	jle	.L129
-.L105:
+	jle	.L127
+.L103:
 	call	getbyte
 	movl	32(%esp), %eax
 	decl	32(%esp)
 	cmpl	$2, %eax
-	jg	.L105
-	jmp	.L129
-.L34:
+	jg	.L103
+	jmp	.L127
+.L32:
 	addl	$360, %esp
 	movl	%edx, %eax
 	popl	%ebx
@@ -625,8 +617,7 @@ readtables:
 	popl	%edi
 	popl	%ebp
 	ret
-	.size	readtables, .-readtables
-	.type	idct, @function
+
 idct:
 	pushl	%ebp
 	pushl	%edi
@@ -639,13 +630,13 @@ idct:
 	movl	%ecx, 28(%esp)
 	movl	%eax, 24(%esp)
 	cmpl	$1, 320(%esp)
-	jne	.L131
+	jne	.L129
 	movl	36(%esp), %edx
 	movl	(%ecx), %eax
 	movl	$0, 4(%esp)
 	imull	(%edx), %eax
 	addl	%eax, 24(%esp)
-.L136:
+.L134:
 	movl	4(%esp), %ecx
 	movl	24(%esp), %eax
 	sarl	$11, %eax
@@ -654,14 +645,14 @@ idct:
 	incl	%ecx
 	movl	%ecx, 4(%esp)
 	cmpl	$63, %ecx
-	jle	.L136
-	jmp	.L130
-.L131:
+	jle	.L134
+	jmp	.L128
+.L129:
 	leal	40(%esp), %eax
 	movl	$zig2, (%esp)
 	movl	%eax, 8(%esp)
 	movl	$7, 4(%esp)
-.L141:
+.L139:
 	movl	(%esp), %ecx
 	movl	28(%esp), %ebp
 	movzbl	(%ecx), %edx
@@ -812,9 +803,9 @@ idct:
 	decl	4(%esp)
 	movl	%ebp, 8(%esp)
 	movl	$0, 24(%esp)
-	jns	.L141
+	jns	.L139
 	movl	$0, 4(%esp)
-.L146:
+.L144:
 	movl	4(%esp), %edx
 	sall	$5, %edx
 	movl	40(%esp,%edx), %ecx
@@ -920,16 +911,15 @@ idct:
 	movl	12(%esp), %ecx
 	movl	%ecx, 28(%edx)
 	cmpl	$7, 4(%esp)
-	jle	.L146
-.L130:
+	jle	.L144
+.L128:
 	addl	$296, %esp
 	popl	%ebx
 	popl	%esi
 	popl	%edi
 	popl	%ebp
 	ret
-	.size	idct, .-idct
-	.type	idctqtab, @function
+
 idctqtab:
 	pushl	%ebp
 	movl	%eax, %ebp
@@ -938,9 +928,9 @@ idctqtab:
 	pushl	%esi
 	xorl	%esi, %esi
 	pushl	%ebx
-.L162:
+.L160:
 	xorl	%ebx, %ebx
-.L161:
+.L159:
 	movl	aaidct(,%ebx,4), %eax
 	imull	aaidct(,%esi,4), %eax
 	movzbl	zig(%ebx,%esi,8), %ecx
@@ -950,85 +940,77 @@ idctqtab:
 	imull	%eax, %edx
 	cmpl	$7, %ebx
 	movl	%edx, (%edi,%ecx,4)
-	jle	.L161
+	jle	.L159
 	incl	%esi
 	cmpl	$7, %esi
-	jle	.L162
+	jle	.L160
 	popl	%ebx
 	popl	%esi
 	popl	%edi
 	popl	%ebp
 	ret
-	.size	idctqtab, .-idctqtab
-	.type	scaleidctqtab, @function
+
 scaleidctqtab:
 	pushl	%ebx
 	xorl	%ecx, %ecx
 	movl	%eax, %ebx
-.L172:
+.L170:
 	movl	(%ebx,%ecx,4), %eax
 	imull	%edx, %eax
 	sarl	$11, %eax
 	movl	%eax, (%ebx,%ecx,4)
 	incl	%ecx
 	cmpl	$63, %ecx
-	jle	.L172
+	jle	.L170
 	popl	%ebx
 	ret
-	.size	scaleidctqtab, .-scaleidctqtab
-.globl jpeg_decode
-	.type	jpeg_decode, @function
+
 jpeg_decode:
 	pushl	%ebp
 	pushl	%edi
 	pushl	%esi
 	pushl	%ebx
-	subl	$152, %esp
+	subl	$132, %esp
 	orl	$-1, %edx
-	cmpl	$0, 192(%esp)
-	je	.L175
-	movl	172(%esp), %eax
+	cmpl	$0, 160(%esp)
+	je	.L173
+	movl	152(%esp), %eax
 	movl	%eax, datap
 	call	getbyte
 	movl	$1, %edx
 	cmpl	$255, %eax
-	jne	.L175
+	jne	.L173
 	call	getbyte
 	movl	$1, %edx
 	cmpl	$216, %eax
-	jne	.L175
+	jne	.L173
 	movl	$192, %eax
 	call	readtables
 	movl	$14, %edx
 	testl	%eax, %eax
-	jne	.L175
+	jne	.L173
+	movl	$12, %edx
+	cmpl	$0, info+8
+	jne	.L173
 	call	getword
 	call	getbyte
 	movl	$2, %edx
 	cmpl	$8, %eax
-	jne	.L175
+	jne	.L173
 	call	getword
-	movl	$3, %edx
-	addl	$15, %eax
-	andl	$-16, %eax
-	cmpl	184(%esp), %eax
-	jne	.L175
+	movl	%eax, 68(%esp)
 	call	getword
-	movl	$4, %edx
-	addl	$15, %eax
-	andl	$-16, %eax
-	cmpl	180(%esp), %eax
-	jne	.L175
+	movl	%eax, 72(%esp)
 	call	getbyte
 	movl	$6, %edx
 	movl	%eax, info
 	cmpl	$4, %eax
-	jg	.L175
+	jg	.L173
 	xorl	%esi, %esi
 	cmpl	%eax, %esi
-	jge	.L392
+	jge	.L328
 	xorl	%ebp, %ebp
-.L192:
+.L187:
 	call	getbyte
 	movl	%eax, comps(%ebp)
 	call	getbyte
@@ -1047,36 +1029,36 @@ jpeg_decode:
 	orl	%edx, %eax
 	movl	$7, %edx
 	testb	$1, %al
-	jne	.L175
+	jne	.L173
 	movl	$8, %edx
 	cmpl	$3, %ecx
-	jg	.L175
+	jg	.L173
 	incl	%esi
 	addl	$12, %ebp
 	cmpl	info, %esi
-	jl	.L192
-.L392:
+	jl	.L187
+.L328:
 	movl	$218, %eax
 	call	readtables
 	movl	$14, %edx
 	testl	%eax, %eax
-	jne	.L175
+	jne	.L173
 	call	getword
 	call	getbyte
 	movl	$9, %edx
 	movl	%eax, info+4
 	cmpl	$3, %eax
-	jne	.L175
+	jne	.L173
 	xorl	%esi, %esi
 	xorl	%ebp, %ebp
-.L207:
+.L202:
 	call	getbyte
 	movl	%eax, dscans+16(%ebp)
 	call	getbyte
 	movl	%eax, %edi
 	andl	$15, %eax
 	sarl	$4, %edi
-	movl	%eax, 112(%esp)
+	movl	%eax, 92(%esp)
 	cmpl	$1, %edi
 	setg	%dl
 	decl	%eax
@@ -1084,94 +1066,114 @@ jpeg_decode:
 	orl	%edx, %eax
 	movl	$8, %edx
 	testb	$1, %al
-	jne	.L175
+	jne	.L173
 	xorl	%ebx, %ebx
 	movl	info, %ecx
 	cmpl	%ecx, %ebx
-	jge	.L201
+	jge	.L196
 	movl	$comps, %edx
-.L205:
+.L200:
 	movl	dscans+16(%ebp), %eax
 	cmpl	%eax, (%edx)
-	je	.L201
+	je	.L196
 	incl	%ebx
 	addl	$12, %edx
 	cmpl	%ecx, %ebx
-	jl	.L205
-.L201:
+	jl	.L200
+.L196:
 	movl	$10, %edx
 	cmpl	%ecx, %ebx
-	je	.L175
+	je	.L173
 	imull	$12, %ebx, %edx
 	incl	%esi
 	movl	comps+4(%edx), %eax
 	movl	%eax, dscans+20(%ebp)
 	movl	comps+8(%edx), %eax
 	movl	%eax, dscans+24(%ebp)
-	imull	$4484, %edi, %eax
+	imull	$1412, %edi, %eax
 	addl	$dhuff, %eax
 	movl	%eax, dscans+4(%ebp)
-	imull	$4484, 112(%esp), %eax
-	addl	$dhuff+8968, %eax
+	imull	$1412, 92(%esp), %eax
+	addl	$dhuff+2824, %eax
 	movl	%eax, dscans+8(%ebp)
 	addl	$28, %ebp
 	cmpl	$2, %esi
-	jle	.L207
+	jle	.L202
 	call	getbyte
 	movl	%eax, %esi
 	call	getbyte
 	movl	%eax, %ebx
 	call	getbyte
 	testl	%esi, %esi
-	movl	%eax, %edi
+	movl	%eax, %ecx
 	setne	%dl
 	cmpl	$63, %ebx
 	setne	%al
 	orl	%edx, %eax
 	testb	$1, %al
-	jne	.L209
-	testl	%edi, %edi
-	je	.L208
-.L209:
+	jne	.L204
+	testl	%ecx, %ecx
+	je	.L203
+.L204:
 	movl	$11, %edx
-	jmp	.L175
-.L208:
+	jmp	.L173
+.L203:
 	cmpl	$1, dscans+16
-	jne	.L213
+	jne	.L208
 	cmpl	$2, dscans+44
-	jne	.L213
+	jne	.L208
 	cmpl	$3, dscans+72
-	jne	.L213
+	jne	.L208
 	cmpl	$34, dscans+20
-	jne	.L213
+	jne	.L208
 	cmpl	$17, dscans+48
-	jne	.L213
+	jne	.L208
 	cmpl	$17, dscans+76
-	je	.L212
-.L213:
+	je	.L207
+.L208:
 	movl	$9, %edx
-	jmp	.L175
-.L212:
-	movl	180(%esp), %edx
-	movl	dscans+24, %eax
+	jmp	.L173
+.L207:
+	movl	168(%esp), %eax
+	movl	72(%esp), %edx
+	addl	$15, %eax
+	movl	68(%esp), %ecx
+	sarl	$4, %eax
+	movl	164(%esp), %ebx
+	decl	%eax
+	movl	172(%esp), %edi
 	sarl	$4, %edx
-	movl	184(%esp), %ecx
-	sall	$6, %eax
-	movl	%edx, 108(%esp)
-	movl	192(%esp), %edx
-	addl	$quant, %eax
+	movl	%eax, 60(%esp)
+	movl	176(%esp), %eax
+	movl	%edx, 88(%esp)
 	sarl	$4, %ecx
-	addl	$3136, %edx
-	movl	%ecx, 104(%esp)
-	call	idctqtab
-	movl	192(%esp), %esi
-	movl	dscans+52, %eax
+	addl	$15, %eax
+	sarl	$4, %eax
+	movl	%ecx, 84(%esp)
+	sarl	$4, %ebx
+	sarl	$4, %edi
+	leal	-1(%eax), %edx
+	movl	%ebx, 64(%esp)
+	movl	%edi, 56(%esp)
+	movl	%edx, 52(%esp)
+	cmpl	%ecx, %edx
+	jge	.L209
+	movl	%eax, 84(%esp)
+.L209:
+	movl	dscans+24, %eax
+	movl	160(%esp), %edx
 	sall	$6, %eax
-	addl	$3392, %esi
+	addl	$3136, %edx
 	addl	$quant, %eax
-	movl	%esi, %edx
 	call	idctqtab
-	movl	192(%esp), %ebx
+	movl	160(%esp), %esi
+	movl	dscans+52, %eax
+	addl	$3392, %esi
+	sall	$6, %eax
+	movl	%esi, %edx
+	addl	$quant, %eax
+	call	idctqtab
+	movl	160(%esp), %ebx
 	movl	dscans+80, %eax
 	addl	$3648, %ebx
 	sall	$6, %eax
@@ -1186,123 +1188,91 @@ jpeg_decode:
 	call	scaleidctqtab
 	movl	datap, %eax
 	movl	%eax, in
-	movl	info+8, %eax
-	incl	%eax
-	movl	$0, in+8
-	movl	%eax, info+12
 	movl	info+4, %eax
+	movl	$0, in+8
 	movl	$0, in+4
 	movl	$0, in+12
-	movl	$208, info+16
-	cmpl	%eax, %edi
-	jge	.L397
+	testl	%eax, %eax
+	jle	.L333
 	movl	$dscans, %edx
-.L220:
+.L216:
 	movl	$0, (%edx)
 	addl	$28, %edx
 	decl	%eax
-	jne	.L220
-.L397:
-	movl	$0, 96(%esp)
-	movl	104(%esp), %ebx
+	jne	.L216
+.L333:
+	movl	$0, 76(%esp)
+	movl	84(%esp), %ecx
 	movl	$2, dscans+12
 	movl	$1, dscans+40
 	movl	$0, dscans+68
-	cmpl	%ebx, 96(%esp)
-	jge	.L399
-.L389:
-	movl	$0, 100(%esp)
-	movl	108(%esp), %edi
-	cmpl	%edi, 100(%esp)
-	jge	.L401
-.L388:
-	cmpl	$0, info+8
-	je	.L230
-	movl	info+12, %eax
-	decl	%eax
-	movl	%eax, info+12
-	testl	%eax, %eax
-	jne	.L230
-	movl	$in, %eax
-	call	dec_readmarker
-	movl	$12, %edx
-	movl	%eax, %ecx
-	cmpl	info+16, %eax
-	jne	.L175
-	movl	info+8, %eax
-	movl	%eax, info+12
-	leal	1(%ecx), %eax
-	andl	$-9, %eax
-	movl	%eax, info+16
-	movl	info+4, %eax
-	testl	%eax, %eax
-	jle	.L230
-	movl	$dscans, %edx
-.L238:
-	movl	$0, (%edx)
-	addl	$28, %edx
-	decl	%eax
-	jne	.L238
-.L230:
-	leal	120(%esp), %eax
-	movl	192(%esp), %esi
-	movl	%eax, 84(%esp)
-	movl	$dscans, 88(%esp)
+	cmpl	%ecx, 76(%esp)
+	jge	.L335
+.L326:
+	movl	$0, 80(%esp)
+	movl	88(%esp), %ebx
+	cmpl	%ebx, 80(%esp)
+	jge	.L337
+.L325:
+	movl	160(%esp), %esi
+	leal	100(%esp), %edi
+	movl	$dscans, 44(%esp)
+	movl	%edi, 40(%esp)
 	movl	%esi, %eax
 	movl	$1535, %edx
-.L242:
+.L229:
 	decl	%edx
 	movb	$0, (%eax)
 	incl	%eax
 	cmpl	$-1, %edx
-	jne	.L242
-	movl	in+4, %edx
+	jne	.L229
+	movl	in+4, %eax
 	movl	in+8, %ebx
-	movl	%edx, 8(%esp)
-	movl	$5, 92(%esp)
-.L261:
-	movl	88(%esp), %ecx
+	movl	%eax, (%esp)
+	movl	$5, 48(%esp)
+.L248:
+	movl	44(%esp), %edx
 	movl	%esi, %ebp
 	addl	$4, %esi
-	cmpl	$9, %ebx
-	movl	4(%ecx), %edi
-	jg	.L248
+	cmpl	$7, %ebx
+	movl	4(%edx), %edi
+	jg	.L235
+	movl	(%esp), %ecx
 	movl	%ebx, %edx
-	movl	8(%esp), %ecx
 	movl	$in, %eax
 	call	fillbits
+	movl	in+4, %ecx
 	movl	%eax, %ebx
-	movl	in+4, %eax
-	movl	%eax, 8(%esp)
-.L248:
-	subl	$10, %ebx
-	movl	8(%esp), %eax
+	movl	%ecx, (%esp)
+.L235:
+	subl	$8, %ebx
+	movl	(%esp), %eax
 	movb	%bl, %cl
 	sarl	%cl, %eax
-	andl	$1023, %eax
-	movl	%eax, 116(%esp)
+	andl	$255, %eax
+	movl	%eax, 96(%esp)
 	movl	388(%edi,%eax,4), %edx
 	testb	%dl, %dl
-	jns	.L249
+	jns	.L236
 	movl	%edx, %eax
 	sarl	$8, %edx
 	andl	$127, %eax
 	addl	%eax, %ebx
 	movl	%edx, %eax
 	andl	$15, %eax
-	movl	%eax, 116(%esp)
+	movl	%eax, 96(%esp)
 	movl	%edx, %eax
 	sarl	$8, %eax
-	jmp	.L250
-.L427:
+	jmp	.L237
+.L356:
 	leal	(%esi,%ebp,4), %esi
-	jmp	.L252
-.L249:
+	jmp	.L239
+.L236:
 	movl	%ebx, in+8
-	movl	8(%esp), %ebx
+	movl	(%esp), %ebx
 	pushl	%edx
 	pushl	%eax
-	leal	124(%esp), %ecx
+	leal	104(%esp), %ecx
 	movl	%edi, %edx
 	movl	$in, %eax
 	movl	%ebx, in+4
@@ -1311,34 +1281,34 @@ jpeg_decode:
 	popl	%edi
 	movl	in+4, %edi
 	movl	in+8, %ebx
-	movl	%edi, 8(%esp)
-.L250:
-	movl	88(%esp), %edx
+	movl	%edi, (%esp)
+.L237:
+	movl	44(%esp), %edx
 	addl	(%edx), %eax
 	movl	%eax, (%edx)
 	movl	%eax, (%ebp)
 	movl	8(%edx), %edi
 	movl	$63, %ebp
-.L259:
-	cmpl	$9, %ebx
-	jg	.L255
-	movl	8(%esp), %ecx
+.L246:
+	cmpl	$7, %ebx
+	jg	.L242
+	movl	(%esp), %ecx
 	movl	%ebx, %edx
 	movl	$in, %eax
 	call	fillbits
 	movl	in+4, %ecx
 	movl	%eax, %ebx
-	movl	%ecx, 8(%esp)
-.L255:
-	subl	$10, %ebx
-	movl	8(%esp), %eax
+	movl	%ecx, (%esp)
+.L242:
+	subl	$8, %ebx
+	movl	(%esp), %eax
 	movb	%bl, %cl
 	sarl	%cl, %eax
-	andl	$1023, %eax
-	movl	%eax, 116(%esp)
+	andl	$255, %eax
+	movl	%eax, 96(%esp)
 	movl	388(%edi,%eax,4), %edx
 	testb	%dl, %dl
-	jns	.L256
+	jns	.L243
 	movl	%edx, %eax
 	sarl	$8, %edx
 	andl	$127, %eax
@@ -1346,14 +1316,14 @@ jpeg_decode:
 	movl	%edx, %eax
 	sarl	$8, %edx
 	andl	$15, %eax
-	movl	%eax, 116(%esp)
-	jmp	.L257
-.L256:
+	movl	%eax, 96(%esp)
+	jmp	.L244
+.L243:
 	movl	%ebx, in+8
-	movl	8(%esp), %ebx
+	movl	(%esp), %ebx
 	pushl	%edx
 	pushl	%eax
-	leal	124(%esp), %ecx
+	leal	104(%esp), %ecx
 	movl	%edi, %edx
 	movl	$in, %eax
 	movl	%ebx, in+4
@@ -1363,74 +1333,93 @@ jpeg_decode:
 	movl	%eax, %edx
 	movl	in+4, %eax
 	movl	in+8, %ebx
-	movl	%eax, 8(%esp)
-.L257:
+	movl	%eax, (%esp)
+.L244:
 	testl	%edx, %edx
-	jne	.L258
-	cmpl	$0, 116(%esp)
-	je	.L427
-.L258:
-	movl	116(%esp), %eax
+	jne	.L245
+	cmpl	$0, 96(%esp)
+	je	.L356
+.L245:
+	movl	96(%esp), %eax
 	subl	%eax, %ebp
 	leal	(%esi,%eax,4), %esi
 	leal	-1(%ebp), %ebp
 	movl	%edx, (%esi)
 	addl	$4, %esi
 	testl	%ebp, %ebp
-	jg	.L259
-.L252:
-	movl	84(%esp), %edx
+	jg	.L246
+.L239:
+	movl	40(%esp), %edx
 	movl	$64, %eax
 	subl	%ebp, %eax
-	movl	88(%esp), %ecx
+	movl	44(%esp), %ecx
 	movl	%eax, (%edx)
-	movl	92(%esp), %edi
+	movl	48(%esp), %edi
 	addl	$4, %edx
 	cmpl	12(%ecx), %edi
-	movl	%edx, 84(%esp)
-	jne	.L244
+	movl	%edx, 40(%esp)
+	jne	.L231
 	addl	$28, %ecx
-	movl	%ecx, 88(%esp)
-.L244:
-	movl	92(%esp), %eax
-	decl	92(%esp)
+	movl	%ecx, 44(%esp)
+.L231:
+	movl	48(%esp), %eax
+	decl	48(%esp)
 	testl	%eax, %eax
-	jg	.L261
-	movl	8(%esp), %eax
-	movl	192(%esp), %esi
+	jg	.L248
+	movl	(%esp), %eax
+	movl	56(%esp), %edx
+	movl	52(%esp), %ecx
+	cmpl	%edx, 76(%esp)
+	movl	%eax, in+4
 	movl	%ebx, in+8
-	movl	192(%esp), %ebx
-	pushl	120(%esp)
+	setge	%dl
+	cmpl	%ecx, 76(%esp)
+	setle	%al
+	andl	%edx, %eax
+	testb	$1, %al
+	je	.L224
+	movl	64(%esp), %ebx
+	movl	60(%esp), %edi
+	cmpl	%ebx, 80(%esp)
+	setge	%dl
+	cmpl	%edi, 80(%esp)
+	setle	%al
+	andl	%edx, %eax
+	testb	$1, %al
+	je	.L224
+	movl	160(%esp), %ebx
+	movl	160(%esp), %esi
+	pushl	100(%esp)
 	addl	$3136, %ebx
 	pushl	$263168
 	addl	$1600, %esi
+	movl	168(%esp), %eax
 	movl	%ebx, %ecx
-	movl	%eax, in+4
 	movl	%esi, %edx
-	movl	200(%esp), %eax
 	call	idct
 	movl	%ebx, %ecx
-	pushl	132(%esp)
+	pushl	112(%esp)
 	pushl	$263168
-	movl	208(%esp), %edi
-	leal	1856(%edi), %edx
-	leal	256(%edi), %eax
+	movl	176(%esp), %eax
+	leal	1856(%eax), %edx
+	addl	$256, %eax
 	call	idct
 	movl	%ebx, %ecx
-	pushl	144(%esp)
+	pushl	124(%esp)
+	pushl	$263168
+	movl	184(%esp), %edi
 	leal	2112(%edi), %edx
-	pushl	$263168
 	leal	512(%edi), %eax
 	call	idct
 	movl	%ebx, %ecx
-	pushl	156(%esp)
+	pushl	136(%esp)
 	leal	2368(%edi), %edx
 	pushl	$263168
 	leal	768(%edi), %eax
 	movl	%edi, %ebx
 	call	idct
 	addl	$32, %esp
-	pushl	136(%esp)
+	pushl	116(%esp)
 	addl	$2624, %ebx
 	pushl	$1024
 	leal	3392(%edi), %ecx
@@ -1438,541 +1427,373 @@ jpeg_decode:
 	leal	1024(%edi), %eax
 	call	idct
 	leal	3648(%edi), %ecx
-	pushl	148(%esp)
+	pushl	128(%esp)
 	leal	2880(%edi), %edx
 	pushl	$1024
 	leal	1280(%edi), %eax
 	call	idct
 	addl	$16, %esp
-	cmpl	$16, 188(%esp)
-	je	.L329
-	movl	$15, %edx
-	cmpl	$24, 188(%esp)
-	jne	.L175
-	movl	96(%esp), %eax
-	movl	176(%esp), %ecx
-	imull	108(%esp), %eax
-	sall	$4, %eax
-	movl	%esi, 60(%esp)
-	addl	100(%esp), %eax
-	movl	%ebx, 56(%esp)
-	imull	$48, %eax, %eax
-	imull	$48, 108(%esp), %edx
-	leal	(%eax,%ecx), %ebp
-	movl	%edx, 80(%esp)
-	addl	%ebp, %edx
-	movl	$2, 76(%esp)
-	movl	%edx, 64(%esp)
-.L327:
-	movl	$4, 72(%esp)
-.L326:
-	movl	64(%esp), %ebx
-	movl	$0, 68(%esp)
-	movl	%ebx, 16(%esp)
-	xorl	%esi, %esi
-	movl	%ebp, 12(%esp)
-.L325:
-	movl	68(%esp), %eax
-	movl	56(%esp), %edx
-	movl	256(%edx,%eax,4), %ecx
-	movl	(%edx,%eax,4), %edi
-	imull	$50, %edi, %edx
-	imull	$130, %ecx, %eax
-	movl	%ecx, 4(%esp)
-	leal	128(%eax,%edx), %ecx
-	movl	68(%esp), %eax
-	sarl	$8, %ecx
-	movl	$4, %edx
-	movl	%edx, %ebx
-	cltd
-	idivl	%ebx
-	movl	68(%esp), %edx
-	movl	%eax, (%esp)
-	andl	$3, %edx
-	movl	60(%esp), %ebx
-	sall	$5, %eax
-	addl	%eax, %edx
-	movl	%edx, 52(%esp)
-	movl	(%ebx,%edx,8), %edx
-	movb	4(%esp), %bl
-	leal	(%ebx,%edx), %eax
-	movb	%al, (%ebp,%esi)
-	movl	4(%esp), %ebx
-	leal	(%ebx,%edx), %eax
-	cmpl	$255, %eax
-	jbe	.L278
-	sarl	$31, %eax
-	notl	%eax
-	movb	%al, (%ebp,%esi)
-.L278:
-	movb	%dl, %al
-	subb	%cl, %al
-	movb	%al, 1(%ebp,%esi)
-	movl	%edx, %eax
-	subl	%ecx, %eax
-	cmpl	$255, %eax
-	jbe	.L282
-	sarl	$31, %eax
-	movl	12(%esp), %ebx
-	notl	%eax
-	movb	%al, 1(%ebx)
-.L282:
-	leal	(%edi,%edx), %eax
-	movb	%al, 2(%ebp,%esi)
-	leal	(%edi,%edx), %eax
-	cmpl	$255, %eax
-	jbe	.L286
-	sarl	$31, %eax
+	movl	$tmp_img, 20(%esp)
+	movl	$tmp_img+32, 16(%esp)
+	movl	%ebx, 12(%esp)
+	movl	$2, 28(%esp)
+.L305:
+	movl	$4, 24(%esp)
+.L304:
+	xorl	%edi, %edi
+.L303:
 	movl	12(%esp), %edx
-	notl	%eax
-	movb	%al, 2(%edx)
-.L286:
-	movl	52(%esp), %ebx
-	movl	60(%esp), %eax
-	movl	4(%eax,%ebx,8), %edx
-	movb	4(%esp), %bl
-	leal	(%ebx,%edx), %eax
-	movb	%al, 3(%ebp,%esi)
-	movl	4(%esp), %ebx
-	leal	(%ebx,%edx), %eax
-	cmpl	$255, %eax
-	jbe	.L290
-	sarl	$31, %eax
-	movl	12(%esp), %ebx
-	notl	%eax
-	movb	%al, 3(%ebx)
-.L290:
-	movb	%dl, %al
-	subb	%cl, %al
-	movb	%al, 4(%ebp,%esi)
-	movl	%edx, %eax
-	subl	%ecx, %eax
-	cmpl	$255, %eax
-	jbe	.L294
-	sarl	$31, %eax
-	movl	12(%esp), %ebx
-	notl	%eax
-	movb	%al, 4(%ebx)
-.L294:
-	leal	(%edi,%edx), %eax
-	movb	%al, 5(%ebp,%esi)
-	leal	(%edi,%edx), %eax
-	cmpl	$255, %eax
-	jbe	.L298
-	sarl	$31, %eax
-	movl	12(%esp), %edx
-	notl	%eax
-	movb	%al, 5(%edx)
-.L298:
-	movl	52(%esp), %ebx
-	movl	60(%esp), %eax
-	movl	32(%eax,%ebx,8), %edx
-	movb	4(%esp), %bl
-	leal	(%ebx,%edx), %eax
-	movl	64(%esp), %ebx
-	movb	%al, (%ebx,%esi)
-	movl	4(%esp), %ebx
-	leal	(%ebx,%edx), %eax
-	cmpl	$255, %eax
-	jbe	.L302
-	sarl	$31, %eax
-	movl	64(%esp), %ebx
-	notl	%eax
-	movb	%al, (%ebx,%esi)
-.L302:
-	movb	%dl, %al
-	movl	64(%esp), %ebx
-	subb	%cl, %al
-	movb	%al, 1(%ebx,%esi)
-	movl	%edx, %eax
-	subl	%ecx, %eax
-	cmpl	$255, %eax
-	jbe	.L306
-	sarl	$31, %eax
-	movl	16(%esp), %ebx
-	notl	%eax
-	movb	%al, 1(%ebx)
-.L306:
-	movl	64(%esp), %ebx
-	leal	(%edi,%edx), %eax
-	movb	%al, 2(%ebx,%esi)
-	leal	(%edi,%edx), %eax
-	cmpl	$255, %eax
-	jbe	.L310
-	sarl	$31, %eax
-	movl	16(%esp), %edx
-	notl	%eax
-	movb	%al, 2(%edx)
-.L310:
-	movl	52(%esp), %ebx
-	movl	60(%esp), %eax
-	movl	36(%eax,%ebx,8), %edx
-	movb	4(%esp), %bl
-	leal	(%ebx,%edx), %eax
-	movl	64(%esp), %ebx
-	movb	%al, 3(%ebx,%esi)
-	movl	4(%esp), %ebx
-	leal	(%ebx,%edx), %eax
-	cmpl	$255, %eax
-	jbe	.L314
-	sarl	$31, %eax
-	movl	16(%esp), %ebx
-	notl	%eax
-	movb	%al, 3(%ebx)
-.L314:
-	movb	%dl, %al
-	movl	64(%esp), %ebx
-	subb	%cl, %al
-	movb	%al, 4(%ebx,%esi)
-	movl	%edx, %eax
-	subl	%ecx, %eax
-	cmpl	$255, %eax
-	jbe	.L318
-	sarl	$31, %eax
-	movl	16(%esp), %ecx
-	notl	%eax
-	movb	%al, 4(%ecx)
-.L318:
-	movl	64(%esp), %ebx
-	leal	(%edi,%edx), %eax
-	movb	%al, 5(%ebx,%esi)
-	leal	(%edi,%edx), %eax
-	cmpl	$255, %eax
-	jbe	.L275
-	sarl	$31, %eax
-	movl	16(%esp), %edi
-	notl	%eax
-	movb	%al, 5(%edi)
-.L275:
-	incl	68(%esp)
-	addl	$6, %esi
-	addl	$6, 12(%esp)
-	addl	$6, 16(%esp)
-	cmpl	$7, 68(%esp)
-	jle	.L325
-	decl	72(%esp)
-	movl	80(%esp), %eax
-	addl	%eax, %eax
-	addl	$32, 56(%esp)
-	addl	$64, 60(%esp)
-	addl	%eax, %ebp
-	addl	%eax, 64(%esp)
-	cmpl	$0, 72(%esp)
-	jg	.L326
-	decl	76(%esp)
-	addl	$256, 60(%esp)
-	cmpl	$0, 76(%esp)
-	jg	.L327
-	jmp	.L228
-.L329:
-	movl	96(%esp), %eax
-	movl	176(%esp), %ecx
-	imull	108(%esp), %eax
-	sall	$4, %eax
-	movl	108(%esp), %edx
-	addl	100(%esp), %eax
-	movl	%esi, %edi
-	sall	$5, %eax
-	movl	%ebx, 32(%esp)
-	sall	$5, %edx
-	movl	$2, 44(%esp)
-	leal	(%eax,%ecx), %ebp
-	movl	%edx, 48(%esp)
-	addl	%ebp, %edx
-	movl	%edx, 36(%esp)
-.L384:
-	movl	$4, 40(%esp)
-.L383:
-	xorl	%esi, %esi
-.L382:
-	movl	32(%esp), %ebx
-	movl	32(%esp), %eax
-	movl	(%ebx,%esi,4), %ebx
-	movl	256(%eax,%esi,4), %eax
-	imull	$50, %ebx, %edx
-	movl	%eax, 28(%esp)
-	movl	%ebx, 20(%esp)
-	imull	$130, %eax, %eax
-	leal	128(%eax,%edx), %eax
+	movl	12(%esp), %eax
+	movl	256(%edx,%edi,4), %edx
+	movl	(%eax,%edi,4), %eax
+	movl	%edx, 8(%esp)
+	movl	%eax, 4(%esp)
+	imull	$50, %eax, %edx
+	imull	$130, 8(%esp), %eax
+	leal	128(%eax,%edx), %ebp
 	movl	$4, %edx
-	sarl	$8, %eax
+	movl	%edi, %eax
 	movl	%edx, %ebx
-	movl	%eax, 24(%esp)
-	movl	%esi, %eax
 	cltd
 	idivl	%ebx
 	movl	%eax, %ecx
-	movl	%esi, %edx
+	movl	%edi, %edx
 	sall	$5, %ecx
 	andl	$3, %edx
+	sarl	$8, %ebp
 	leal	(%edx,%ecx), %eax
-	movl	28(%esp), %ecx
-	movl	(%edi,%eax,8), %edx
-	leal	7(%ecx,%edx), %eax
+	movl	8(%esp), %edx
+	movl	(%esi,%eax,8), %ebx
+	leal	7(%edx,%ebx), %eax
 	cmpl	$255, %eax
-	ja	.L342
+	ja	.L263
 	movl	%eax, %ecx
 	andl	$248, %ecx
 	sall	$8, %ecx
-	jmp	.L343
-.L342:
+	jmp	.L264
+.L263:
 	movl	%eax, %ecx
 	sarl	$31, %ecx
 	notl	%ecx
 	andl	$63488, %ecx
-.L343:
-	movl	%edx, %eax
-	subl	24(%esp), %eax
-	addl	$3, %eax
-	cmpl	$255, %eax
-	ja	.L346
-	andl	$252, %eax
-	leal	0(,%eax,8), %ebx
-	orl	%ecx, %ebx
-	jmp	.L347
-.L346:
-	movl	%ecx, %ebx
-	testl	%eax, %eax
-	js	.L347
-	orl	$2016, %ebx
-.L347:
-	movl	20(%esp), %eax
-	leal	7(%eax,%edx), %edx
-	cmpl	$255, %edx
-	ja	.L349
-	movl	%edx, %eax
-	sarl	$3, %eax
-	orl	%ebx, %eax
-	jmp	.L350
-.L349:
+.L264:
 	movl	%ebx, %eax
+	subl	%ebp, %eax
+	leal	3(%eax), %edx
+	cmpl	$255, %edx
+	ja	.L267
+	andl	$252, %edx
+	leal	0(,%edx,8), %eax
+	orl	%ecx, %eax
+	jmp	.L268
+.L267:
+	movl	%ecx, %eax
 	testl	%edx, %edx
-	js	.L350
-	orl	$31, %eax
-.L350:
+	js	.L268
+	orl	$2016, %eax
+.L268:
+	movl	4(%esp), %edx
+	leal	7(%edx,%ebx), %ecx
+	cmpl	$255, %ecx
+	ja	.L270
+	movl	%ecx, %edx
+	sarl	$3, %edx
+	orl	%eax, %edx
+	jmp	.L271
+.L270:
 	movl	%eax, %edx
+	testl	%ecx, %ecx
+	js	.L271
+	orl	$31, %edx
+.L271:
+	movl	20(%esp), %ecx
+	movl	%edx, %eax
 	sarl	$8, %eax
-	movb	%dl, 1(%ebp,%esi,4)
-	movb	%al, (%ebp,%esi,4)
+	movb	%al, (%ecx,%edi,4)
+	movb	%dl, 1(%ecx,%edi,4)
+	movl	%edi, %eax
 	movl	$4, %edx
-	movl	%esi, %eax
 	movl	%edx, %ebx
 	cltd
 	idivl	%ebx
 	movl	%eax, %ecx
-	movl	%esi, %edx
+	movl	%edi, %edx
 	sall	$5, %ecx
 	andl	$3, %edx
 	leal	(%edx,%ecx), %eax
-	movl	28(%esp), %ecx
-	movl	4(%edi,%eax,8), %edx
-	leal	1(%ecx,%edx), %eax
+	movl	8(%esp), %edx
+	movl	4(%esi,%eax,8), %ebx
+	leal	1(%edx,%ebx), %eax
 	cmpl	$255, %eax
-	ja	.L352
+	ja	.L273
 	andl	$248, %eax
 	sall	$8, %eax
-	jmp	.L353
-.L352:
+	jmp	.L274
+.L273:
 	sarl	$31, %eax
 	notl	%eax
 	andl	$63488, %eax
-.L353:
-	movl	%edx, %ebx
-	subl	24(%esp), %ebx
-	cmpl	$255, %ebx
-	ja	.L356
-	andl	$252, %ebx
-	leal	0(,%ebx,8), %ecx
-	orl	%eax, %ecx
-	jmp	.L357
-.L356:
-	movl	%eax, %ecx
-	testl	%ebx, %ebx
-	js	.L357
-	orl	$2016, %ecx
-.L357:
-	movl	20(%esp), %ebx
-	leal	1(%ebx,%edx), %edx
+.L274:
+	movl	%ebx, %edx
+	subl	%ebp, %edx
 	cmpl	$255, %edx
-	ja	.L359
+	ja	.L277
+	andl	$252, %edx
+	leal	0(,%edx,8), %ecx
+	orl	%eax, %ecx
+	jmp	.L278
+.L277:
+	movl	%eax, %ecx
+	testl	%edx, %edx
+	js	.L278
+	orl	$2016, %ecx
+.L278:
+	movl	4(%esp), %eax
+	leal	1(%eax,%ebx), %edx
+	cmpl	$255, %edx
+	ja	.L280
 	movl	%edx, %eax
 	sarl	$3, %eax
 	orl	%ecx, %eax
-	jmp	.L360
-.L359:
+	jmp	.L281
+.L280:
 	movl	%ecx, %eax
 	testl	%edx, %edx
-	js	.L360
+	js	.L281
 	orl	$31, %eax
-.L360:
-	movl	%eax, %edx
+.L281:
+	movl	20(%esp), %edx
+	movl	%eax, %ebx
 	sarl	$8, %eax
-	movb	%dl, 3(%ebp,%esi,4)
-	movb	%al, 2(%ebp,%esi,4)
+	movb	%al, 2(%edx,%edi,4)
+	movb	%bl, 3(%edx,%edi,4)
+	movl	%edi, %eax
 	movl	$4, %edx
-	movl	%esi, %eax
 	movl	%edx, %ebx
 	cltd
 	idivl	%ebx
 	movl	%eax, %ecx
-	movl	%esi, %edx
+	movl	%edi, %edx
 	sall	$5, %ecx
 	andl	$3, %edx
 	leal	(%edx,%ecx), %eax
-	movl	28(%esp), %ecx
-	movl	32(%edi,%eax,8), %edx
-	leal	3(%ecx,%edx), %eax
+	movl	8(%esp), %edx
+	movl	32(%esi,%eax,8), %ebx
+	leal	3(%edx,%ebx), %eax
 	cmpl	$255, %eax
-	ja	.L362
+	ja	.L283
 	movl	%eax, %ecx
 	andl	$248, %ecx
 	sall	$8, %ecx
-	jmp	.L363
-.L362:
+	jmp	.L284
+.L283:
 	movl	%eax, %ecx
 	sarl	$31, %ecx
 	notl	%ecx
 	andl	$63488, %ecx
-.L363:
-	movl	%edx, %eax
-	subl	24(%esp), %eax
-	incl	%eax
-	cmpl	$255, %eax
-	ja	.L366
-	andl	$252, %eax
-	leal	0(,%eax,8), %ebx
-	orl	%ecx, %ebx
-	jmp	.L367
-.L366:
-	movl	%ecx, %ebx
-	testl	%eax, %eax
-	js	.L367
-	orl	$2016, %ebx
-.L367:
-	movl	20(%esp), %eax
-	leal	3(%eax,%edx), %edx
-	cmpl	$255, %edx
-	ja	.L369
-	movl	%edx, %eax
-	sarl	$3, %eax
-	orl	%ebx, %eax
-	jmp	.L370
-.L369:
+.L284:
 	movl	%ebx, %eax
+	subl	%ebp, %eax
+	leal	1(%eax), %edx
+	cmpl	$255, %edx
+	ja	.L287
+	andl	$252, %edx
+	leal	0(,%edx,8), %eax
+	orl	%ecx, %eax
+	jmp	.L288
+.L287:
+	movl	%ecx, %eax
 	testl	%edx, %edx
-	js	.L370
-	orl	$31, %eax
-.L370:
-	movl	36(%esp), %ecx
+	js	.L288
+	orl	$2016, %eax
+.L288:
+	movl	4(%esp), %edx
+	leal	3(%edx,%ebx), %ecx
+	cmpl	$255, %ecx
+	ja	.L290
+	movl	%ecx, %edx
+	sarl	$3, %edx
+	orl	%eax, %edx
+	jmp	.L291
+.L290:
 	movl	%eax, %edx
+	testl	%ecx, %ecx
+	js	.L291
+	orl	$31, %edx
+.L291:
+	movl	16(%esp), %ecx
+	movl	%edx, %eax
 	sarl	$8, %eax
-	movb	%al, (%ecx,%esi,4)
-	movb	%dl, 1(%ecx,%esi,4)
-	movl	%esi, %eax
+	movb	%al, (%ecx,%edi,4)
+	movb	%dl, 1(%ecx,%edi,4)
+	movl	%edi, %eax
 	movl	$4, %edx
 	movl	%edx, %ebx
 	cltd
 	idivl	%ebx
 	movl	%eax, %ecx
-	movl	%esi, %edx
+	movl	%edi, %edx
 	sall	$5, %ecx
 	andl	$3, %edx
 	leal	(%edx,%ecx), %eax
-	movl	28(%esp), %ecx
-	movl	36(%edi,%eax,8), %edx
-	leal	5(%ecx,%edx), %eax
+	movl	8(%esp), %edx
+	movl	36(%esi,%eax,8), %ebx
+	leal	5(%edx,%ebx), %eax
 	cmpl	$255, %eax
-	ja	.L372
+	ja	.L293
 	movl	%eax, %ecx
 	andl	$248, %ecx
 	sall	$8, %ecx
-	jmp	.L373
-.L372:
+	jmp	.L294
+.L293:
 	movl	%eax, %ecx
 	sarl	$31, %ecx
 	notl	%ecx
 	andl	$63488, %ecx
-.L373:
-	movl	%edx, %eax
-	subl	24(%esp), %eax
-	addl	$2, %eax
-	cmpl	$255, %eax
-	ja	.L376
-	andl	$252, %eax
-	leal	0(,%eax,8), %ebx
-	orl	%ecx, %ebx
-	jmp	.L377
-.L376:
-	movl	%ecx, %ebx
-	testl	%eax, %eax
-	js	.L377
-	orl	$2016, %ebx
-.L377:
-	movl	20(%esp), %ecx
-	leal	5(%ecx,%edx), %eax
-	cmpl	$255, %eax
-	ja	.L379
-	movl	%eax, %ecx
+.L294:
+	movl	%ebx, %eax
+	subl	%ebp, %eax
+	leal	2(%eax), %edx
+	cmpl	$255, %edx
+	ja	.L297
+	andl	$252, %edx
+	leal	0(,%edx,8), %eax
+	orl	%ecx, %eax
+	jmp	.L298
+.L297:
+	movl	%ecx, %eax
+	testl	%edx, %edx
+	js	.L298
+	orl	$2016, %eax
+.L298:
+	movl	4(%esp), %ecx
+	leal	5(%ecx,%ebx), %edx
+	cmpl	$255, %edx
+	ja	.L300
+	movl	%edx, %ecx
 	sarl	$3, %ecx
-	orl	%ebx, %ecx
-	jmp	.L380
-.L379:
-	movl	%ebx, %ecx
-	testl	%eax, %eax
-	js	.L380
+	orl	%eax, %ecx
+	jmp	.L301
+.L300:
+	movl	%eax, %ecx
+	testl	%edx, %edx
+	js	.L301
 	orl	$31, %ecx
-.L380:
-	movl	36(%esp), %ebx
+.L301:
+	movl	16(%esp), %ebx
 	movl	%ecx, %eax
 	sarl	$8, %eax
-	movb	%al, 2(%ebx,%esi,4)
-	movb	%cl, 3(%ebx,%esi,4)
-	incl	%esi
-	cmpl	$7, %esi
-	jle	.L382
-	movl	48(%esp), %eax
-	decl	40(%esp)
-	addl	%eax, %eax
-	addl	$64, %edi
-	addl	%eax, %ebx
-	addl	%eax, %ebp
-	addl	$32, 32(%esp)
-	movl	%ebx, 36(%esp)
-	cmpl	$0, 40(%esp)
-	jg	.L383
-	decl	44(%esp)
-	addl	$256, %edi
-	cmpl	$0, 44(%esp)
-	jg	.L384
-.L228:
-	incl	100(%esp)
-	movl	108(%esp), %edi
-	cmpl	%edi, 100(%esp)
-	jl	.L388
-.L401:
-	incl	96(%esp)
-	movl	104(%esp), %eax
-	cmpl	%eax, 96(%esp)
-	jl	.L389
-.L399:
-	movl	$in, %eax
-	call	dec_readmarker
+	movb	%al, 2(%ebx,%edi,4)
+	movb	%cl, 3(%ebx,%edi,4)
+	incl	%edi
+	cmpl	$7, %edi
+	jle	.L303
+	decl	24(%esp)
+	addl	$64, %ebx
+	addl	$32, 12(%esp)
+	addl	$64, %esi
+	movl	%ebx, 16(%esp)
+	addl	$64, 20(%esp)
+	cmpl	$0, 24(%esp)
+	jg	.L304
+	decl	28(%esp)
+	addl	$256, %esi
+	cmpl	$0, 28(%esp)
+	jg	.L305
+	movl	56(%esp), %edi
 	xorl	%edx, %edx
-	cmpl	$217, %eax
-	sete	%dl
-	decl	%edx
-	andl	$13, %edx
-.L175:
-	addl	$152, %esp
+	cmpl	%edi, 76(%esp)
+	jne	.L308
+	movl	76(%esp), %eax
+	movl	172(%esp), %edx
+	sall	$4, %eax
+	subl	%eax, %edx
+.L308:
+	movl	52(%esp), %eax
+	movl	$16, 32(%esp)
+	cmpl	%eax, 76(%esp)
+	jne	.L310
+	movl	76(%esp), %eax
+	movl	176(%esp), %ecx
+	sall	$4, %eax
+	subl	%eax, %ecx
+	movl	%ecx, 32(%esp)
+.L310:
+	movl	%edx, %ebx
+	cmpl	32(%esp), %edx
+	jge	.L224
+	movl	%edx, %ebp
+	sall	$4, %ebp
+.L324:
+	movl	76(%esp), %eax
+	xorl	%edx, %edx
+	sall	$4, %eax
+	subl	172(%esp), %eax
+	leal	(%ebx,%eax), %edi
+	movl	168(%esp), %eax
+	subl	164(%esp), %eax
+	imull	%eax, %edi
+	movl	64(%esp), %eax
+	cmpl	%eax, 80(%esp)
+	jne	.L316
+	movl	80(%esp), %eax
+	movl	164(%esp), %edx
+	sall	$4, %eax
+	subl	%eax, %edx
+.L316:
+	movl	60(%esp), %ecx
+	movl	$16, 36(%esp)
+	cmpl	%ecx, 80(%esp)
+	jne	.L318
+	movl	80(%esp), %eax
+	movl	168(%esp), %ecx
+	sall	$4, %eax
+	subl	%eax, %ecx
+	movl	%ecx, 36(%esp)
+.L318:
+	movl	%edx, %esi
+	cmpl	36(%esp), %edx
+	jge	.L351
+.L323:
+	movl	80(%esp), %eax
+	movl	164(%esp), %edx
+	sall	$5, %eax
+	addl	%edx, %edx
+	addl	156(%esp), %eax
+	leal	(%edi,%esi), %ecx
+	subl	%edx, %eax
+	leal	(%esi,%ebp), %edx
+	incl	%esi
+	movw	tmp_img(%edx,%edx), %dx
+	cmpl	36(%esp), %esi
+	movw	%dx, %fs:(%eax,%ecx,2)
+	jl	.L323
+.L351:
+	incl	%ebx
+	addl	$16, %ebp
+	cmpl	32(%esp), %ebx
+	jl	.L324
+.L224:
+	incl	80(%esp)
+	movl	88(%esp), %ebx
+	cmpl	%ebx, 80(%esp)
+	jl	.L325
+.L337:
+	incl	76(%esp)
+	movl	84(%esp), %edi
+	cmpl	%edi, 76(%esp)
+	jl	.L326
+.L335:
+	xorl	%edx, %edx
+.L173:
+	addl	$132, %esp
 	movl	%edx, %eax
 	popl	%ebx
 	popl	%esi
 	popl	%edi
 	popl	%ebp
 	ret
-	.size	jpeg_decode, .-jpeg_decode
-.globl jpeg_get_size
-	.type	jpeg_get_size, @function
+
 jpeg_get_size:
 	pushl	%esi
 	pushl	%ebx
@@ -1988,31 +1809,14 @@ jpeg_get_size:
 	call	getbyte
 	call	getword
 	testl	%ebx, %ebx
-	je	.L429
+	je	.L358
 	movl	%eax, (%ebx)
-.L429:
+.L358:
 	call	getword
 	testl	%esi, %esi
-	je	.L428
+	je	.L357
 	movl	%eax, (%esi)
-.L428:
+.L357:
 	popl	%ebx
 	popl	%esi
 	ret
-	.size	jpeg_get_size, .-jpeg_get_size
-	.local	datap
-	.comm	datap,4,4
-	.local	info
-	.comm	info,20,4
-	.local	comps
-	.comm	comps,48,32
-	.local	dscans
-	.comm	dscans,112,32
-	.local	quant
-	.comm	quant,256,32
-	.local	dhuff
-	.comm	dhuff,17936,32
-	.local	in
-	.comm	in,24,4
-	.section	.note.GNU-stack,"",@progbits
-	.ident	"GCC: (GNU) 3.3.4 (pre 3.3.5 20040809)"

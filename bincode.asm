@@ -1,5 +1,7 @@
 			bits 16
 
+			extern jpeg_get_size
+
 			global _start
 
 %define			debug 1
@@ -2995,7 +2997,7 @@ find_mode_90:
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
-; Activate an image from file.
+; Activate image from file.
 ;
 ;  eax:		lin ptr to image
 ;
@@ -3004,16 +3006,38 @@ find_mode_90:
 ;
 image_init:
 		push eax
+
+		call pcx_init
+		jnc image_init_90
+
+		call jpg_init
+
+image_init_90:
+		pop eax
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; Activate pcx image from file.
+;
+;  eax:		lin ptr to image
+;
+; return:
+;  CY:		error
+;
+pcx_init:
+		push eax
 		lin2segofs eax,es,bx
 		cmp dword [es:bx],0801050ah
-		jnz image_init_90
+		jnz pcx_init_90
 
 		mov cx,[es:bx+8]
 		inc cx
-		jz image_init_80
+		jz pcx_init_80
 		mov dx,[es:bx+10]
 		inc dx
-		jz image_init_80
+		jz pcx_init_80
 
 		push eax
 		push cx
@@ -3028,13 +3052,13 @@ image_init:
 		pop edi
 
 		cmp eax,381h
-		jb image_init_80
+		jb pcx_init_80
 
 		lea esi,[eax+edi-301h]
 		lin2segofs esi,fs,si
 
 		cmp byte [fs:si],12
-		jnz image_init_80
+		jnz pcx_init_80
 
 		mov byte [image_type],1		; pcx
 
@@ -3078,11 +3102,11 @@ image_init:
 		mov [pals],ax
 
 		clc
-		jmp image_init_90
+		jmp pcx_init_90
 		
-image_init_80:
+pcx_init_80:
 		stc
-image_init_90:
+pcx_init_90:
 		pop eax
 		ret
 
@@ -10329,10 +10353,10 @@ chk_64bit_90:
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 prim_xxx:
-		mov eax,9
-		jmp $
-		call gfx_cb
-		jmp pr_getint
+		call pr_setptr_or_none
+		; eax
+		call jpg_size
+		clc
 		ret
 
 
@@ -10425,4 +10449,70 @@ find_file_ext_80:
 find_file_ext_90:
 		ret
 
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; Activate jpg image from file.
+;
+;  eax:		lin ptr to image
+;
+; return:
+;  CY:		error
+;
+jpg_init:
+		push eax
+		lin2segofs eax,es,bx
+		cmp dword [es:bx],0e0ffd8ffh
+		jnz jpg_init_90
+
+
+
+
+		mov byte [image_type],2		; jpg
+
+		mov [image],edi
+
+
+		mov [image_width],cx
+		mov [image_height],dx
+
+		clc
+		
+jpg_init_80:
+		stc
+
+jpg_init_90:
+		pop eax
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; eax:	jpg image
+;
+jpg_size:
+		jmp $
+
+		push ds
+		lin2es eax,eax
+		push es
+		pop ds
+
+		movzx esp,sp
+
+		xor edx,edx
+
+		push edx
+		push edx
+		push eax
+		
+		call dword jpeg_get_size
+
+		add sp,12
+
+		pop ds
+
+		call lin_es_off
+
+		ret
 

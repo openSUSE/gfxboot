@@ -43,41 +43,22 @@
   def
 } def
 
-dtrace
-/msg "message" findfile def
-msg length pop
-msg 0x1 get pop 
 
 
-640 480 8 findmode setmode not { false .end } if
+800 600 8 findmode setmode not { false .end } if
 
-"jaguar.pcx" findfile setimage loadpalette
+/max_image_colors 0 def
 
-/max_image_colors image.colors def
-
-/black               0x000000          newcolor
-/white               0xffffff          newcolor
+/black 0x000000 newcolor
+/white 0xffffff newcolor
 
 white settextmodecolor
 
-0 0 moveto 0 0 image.size image
-
-/screen1 0 200 moveto 200 100 savescreen def
-
-200 200 moveto screen1 restorescreen
-
-screen1
+"jaguar.jpg" findfile
 
 dtrace
 
-3 setmode
-7 settextmodecolor
+xxx
 
-dumpmem
-
-trace
-
-pop
-
-true
+dtrace
 
