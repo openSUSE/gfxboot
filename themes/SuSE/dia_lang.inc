@@ -30,6 +30,7 @@
   [ "ja" "日本語" ]
   [ "hu" "Magyar" ]
   [ "nl" "Nederlands" ]
+  [ "nb" "Norsk" ]
   [ "ro" "Romanian" ]
   [ "ru" "Русский" ]
   [ "sk" "Slovenčina" ]
