@@ -1,3 +1,11 @@
+31/1/2005:	v3.0.1
+	- support symlinks in cpio archive
+	- lots of minor fixes
+	- renamed files to stick to 8.3 scheme
+	- much improved test script
+	- use bold font
+	- use 800x600, 16bit color
+
 25/1/2005:	v3.0.0
 	- jpeg decoding works
 

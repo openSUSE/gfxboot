@@ -158,6 +158,11 @@ vbe_buffer		dd 0		; (seg:ofs) buffer for vbe calls
 vbe_mode_list		dd 0		; (seg:ofs) list with vbe modes
 infobox_buffer		dd 0		; (lin) temp buffer for InfoBox messages
 
+local_stack		dd 0		; (seg:ofs) local stack (8k)
+old_stack		dd 0		; store old ss:sp value
+stack_size		dw 0		; in bytes
+tmp_stack_val		dw 0		; needed for stack switching
+
 pscode_start		dd 0		; (lin)
 pscode_size		dd 0
 pscode_instr		dd 0		; (lin) current instruction (rel. to pscode_start)
@@ -185,7 +190,6 @@ pstack_ptr		dw 0
 rstack			dd 0		; (seg:ofs)
 rstack_size		dw 0		; entries
 rstack_ptr		dw 0
-
 
 image			dd 0		; (lin) current image
 image_width		dw 0
@@ -221,6 +225,13 @@ font_height		dw 0
 font_line_height	dw 0
 font_properties		db 0		; bit 0: pw mode (show '*')
 font_res1		db 0		; alignment
+
+; console font
+cfont			dd 0		; (seg:ofs) to bitmap
+cfont_height		dw 0
+con_x			dw 0		; cursor pos in pixel
+con_y			dw 0		; cursor pos in pixel, *must* follow con_x
+
 
 ; current char description
 chr_bitmap		dw 0		; ofs rel. to [font]
@@ -276,6 +287,7 @@ line_y0			dd 0
 line_x1			dd 0
 line_y1			dd 0
 line_tmp		dd 0
+line_tmp2		dd 0
 
 			align 4, db 0
 gfx_color		dd 0		; current color
@@ -283,7 +295,7 @@ gfx_color0		dd 0		; color #0 (normal color))
 gfx_color1		dd 0		; color #1 (highlight color)
 gfx_color2		dd 0		; color #2 (link color)
 gfx_color3		dd 0		; color #3 (selected link color)
-transparent_color	dw -1
+transparent_color	dd -1
 char_eot		dd 0		; 'end of text' char
 last_label		dw 0		; ofs, seg = [row_start_seg]
 page_title		dw 0		; ofs, seg = [row_start_seg]
@@ -643,6 +655,18 @@ gfx_init_20:
 
 		; now the ps interpreter is ready to run
 
+		; allocate 8k local stack
+		mov eax,8 << 10
+		mov [stack_size],ax
+		call malloc
+		cmp eax,byte 1
+		jc gfx_init_90
+		push eax
+		call lin2so
+		pop dword [local_stack]
+		mov ax,[stack_size]
+		add [local_stack],ax
+
 		; jpg decoding buffer
 		call jpg_setup
 
@@ -670,6 +694,9 @@ gfx_init_20:
 		push eax
 		call lin2so
 		pop dword [vbe_mode_list]
+
+		; get console font
+		call cfont_init
 
 		; ok, we've done it, now continue the setup
 
@@ -2729,11 +2756,13 @@ lin_seg_off:
 ;
 ; return:
 ;  eax		file start (lin)
+;   bl		0/1: file/symlink 
 ;
 ; Note: use find_mem_size to find out the file size
 ;
 find_file:
 		lin2segofs eax,fs,si
+		mov al,0
 		mov ebp,[mem_archive]
 		or ebp,ebp
 		jz find_file_80
@@ -2741,6 +2770,10 @@ find_file_20:
 		lin2segofs ebp,es,bx
 		cmp word [es:bx],71c7h
 		jnz find_file_80
+		mov al,[es:bx+7]
+		and al,0f0h
+		cmp al,0a0h
+		setz al
 		mov cx,[es:bx+20]	; file name size (incl. final 0)
 		movzx edx,cx
 		inc dx
@@ -2753,7 +2786,8 @@ find_file_20:
 		fs rep cmpsb
 		pop si
 		jnz find_file_50
-		xchg eax,ebp
+		mov bl,al
+		mov eax,ebp
 		jmp find_file_90
 find_file_50:
 		mov ecx,[es:bx+22]	; data size
@@ -2767,6 +2801,7 @@ find_file_50:
 		jb find_file_20
 find_file_80:
 		xor eax,eax
+		mov bl,al
 find_file_90:
 		ret
 
@@ -3533,18 +3568,54 @@ write_char_50:
 		jnz write_char_60
 		push ax
 		mov al,0dh
-		mov bx,7
-		mov ah,0eh
-		int 10h
+		call write_cons_char
 		pop ax
 write_char_60:
-		movzx bx,byte [textmode_color]
-		mov ah,0eh
-		int 10h
-
+		call write_cons_char
 write_char_90:
 		popad
 		pop es
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; al		char
+;
+write_cons_char:
+		push gs
+		push fs
+
+		; vesa mode?
+		cmp byte [gfx_mode+1],0
+		jnz write_cons_char_20
+		mov bx,7
+		mov ah,0eh
+		int 10h
+		jmp write_cons_char_90
+write_cons_char_20:
+		cmp al,0ah
+		jnz write_cons_char_30
+		mov cx,[cfont_height]
+		add [con_y],cx
+		jmp write_cons_char_90
+write_cons_char_30:
+		cmp al,0dh
+		jnz write_cons_char_40
+		and word [con_x],0
+		jmp write_cons_char_90
+write_cons_char_40:
+		stc
+		sbb ebx,ebx		; -1
+		cmp byte [pixel_bits],8
+		ja write_cons_char_50
+		mov bl,[textmode_color]
+write_cons_char_50:
+		call con_char_xy
+write_cons_char_90:
+
+		pop fs
+		pop gs
 		ret
 
 
@@ -3638,7 +3709,7 @@ number_90:
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ps_status_info:
 		xor dx,dx
-		call cons_xy
+		call con_xy
 
 		mov si,msg_13
 		call printf
@@ -3851,10 +3922,11 @@ get_time:
 ;
 ; return:
 ;
-cons_xy:
+con_xy:
 		mov bh,0
 		mov ah,2
 		int 10h
+		and dword [con_x],0
 		ret
 
 
@@ -4736,8 +4808,12 @@ prim_index_90:
 
 
 prim_exec:
-		mov dl,t_dict_idx
+		mov dl,t_none
 		call pr_setobj_or_none
+		cmp dl,t_dict_idx
+		jz prim_exec_50
+		jmp pr_getobj
+prim_exec_50:
 		mov [pscode_eval],eax
 		ret
 
@@ -5759,6 +5835,7 @@ prim_getpixel:
 		mov si,di
 		xor eax,eax
 		call [getpixel]
+		call decode_color
 		jmp pr_getint
 
 
@@ -5877,24 +5954,20 @@ prim_image:
 
 		sub word [pstack_ptr],byte 4
 
-		; clip image width
-		; note: image height is handled in draw_image
 		mov edx,[line_x0]
 		add edx,ecx
-		movzx ebx,word [image_width]
-		sub edx,ebx
-		jle prim_image_40
-		sub ecx,edx
-prim_image_40:
+		mov [line_x1],edx
 
-		cmp ecx,byte 0
-		jle prim_image_90
-		cmp eax,byte 0
-		jz prim_image_90
-		mov [line_x1],ecx
-		mov [line_y1],eax
+		mov edx,[line_y0]
+		add edx,eax
+		mov [line_y1],edx
+
+		call clip_image
+		cmc
+		jnc prim_image_90
+
 		push dword [gfx_cur]
-		call draw_image
+		call show_image
 		pop dword [gfx_cur]
 
 		clc
@@ -5939,25 +6012,23 @@ prim_imageunpack:
 
 		sub word [pstack_ptr],byte 3
 
-		; clip image width
-		; note: image height is handled in draw_image
 		mov edx,[line_x0]
 		add edx,ecx
-		movzx ebx,word [image_width]
-		sub edx,ebx
-		jle prim_imageunpack_40
-		sub ecx,edx
-prim_imageunpack_40:
+		mov [line_x1],edx
+		mov edx,[line_y0]
+		add edx,eax
+		mov [line_y1],edx
 
-		cmp ecx,byte 0
-		jle prim_imageunpack_70
-		cmp eax,byte 0
-		jz prim_imageunpack_70
-		mov [line_x1],ecx
-		mov [line_y1],eax
+		call clip_image
+
+		jc prim_imageunpack_70
+
+		mov eax,[line_y1]
+		mov ecx,[line_x1]
 
 		sub eax,[line_y0]
 		sub ecx,[line_x0]
+
 		call alloc_fb
 		or eax,eax
 		jz prim_imageunpack_70
@@ -5977,19 +6048,6 @@ prim_imageunpack_80:
 		xor cx,cx
 		call set_pstack_tos
 prim_imageunpack_90:
-		ret
-
-
-unpack_image:
-		cmp byte [image_type],1
-		jnz unpack_image_20
-		; call pcx_unpack
-		jmp unpack_image_90
-unpack_image_20:
-		cmp byte [image_type],2
-		jnz unpack_image_90
-		call jpg_unpack
-unpack_image_90:
 		ret
 
 
@@ -6104,34 +6162,21 @@ prim_getpalette_90:
 
 prim_settransparentcolor:
 		call pr_setint
-		mov [transparent_color],ax
+		mov [transparent_color],eax
 		ret
 
 
 prim_savescreen:
-%if 0
 		mov dx,t_int + (t_int << 8)
 		call get_2args
 		jc prim_savescreen_90
-		push ax
-		push cx
-		mul ecx
-		mul dword [pixel_bytes]
-		pop dx
-		pop cx
-		mov bp,pserr_invalid_image_size
-		add eax,4
-		jc prim_savescreen_90
-		push cx
-		push dx
-		call malloc
-		pop dx
-		pop cx
+		call alloc_fb
 		or eax,eax
 		jz prim_savescreen_50
 		lin2es eax,edi
 		mov [es:edi],dx
 		mov [es:edi+2],cx
+		call lin_seg_off
 		push eax
 		lea edi,[eax+4]
 		call save_bg
@@ -6146,35 +6191,6 @@ prim_savescreen_50:
 prim_savescreen_70:
 		call set_pstack_tos
 prim_savescreen_90:
-		ret
-
-
-%endif
-prim_xsavescreen:
-		mov dx,t_int + (t_int << 8)
-		call get_2args
-		jc prim_xsavescreen_90
-		call alloc_fb
-		or eax,eax
-		jz prim_xsavescreen_50
-		lin2es eax,edi
-		mov [es:edi],dx
-		mov [es:edi+2],cx
-		call lin_seg_off
-		push eax
-		lea edi,[eax+4]
-		call save_bg
-		pop eax
-prim_xsavescreen_50:
-		dec word [pstack_ptr]
-		xor cx,cx
-		mov dl,t_ptr
-		or eax,eax
-		jnz prim_xsavescreen_70
-		mov dl,t_none
-prim_xsavescreen_70:
-		call set_pstack_tos
-prim_xsavescreen_90:
 		ret
 
 
@@ -6629,9 +6645,12 @@ prim_findfile:
 		mov dl,t_string
 		call get_1arg
 		jc prim_findfile_90
+prim_findfile_10:
 		push eax
 		call find_file
 		pop ecx
+		cmp bl,1
+		jz prim_findfile_10		; symlink
 		mov dl,t_ptr
 		or eax,eax
 		jnz prim_findfile_20
@@ -7855,7 +7874,7 @@ edit_char:
 		mov cx,[gfx_cur_x]
 		sub cx,[edit_x]
 		imul cx,[pixel_bytes]
-		movzx ecx,cx
+		movsx ecx,cx
 		add edi,ecx
 
 		mov dx,[chr_width]
@@ -8084,6 +8103,7 @@ inc_winseg:
 ; 	al	= window segment
 ;
 set_win:
+		push edi
 		cmp byte [cs:vbe_active],0
 		jz set_win_90
 		cmp [cs:mapped_window],al
@@ -8105,6 +8125,7 @@ set_win_50:
 		int 10h
 		popa
 set_win_90:
+		pop edi
 		ret
 
 
@@ -8114,18 +8135,18 @@ set_win_90:
 ; Go to current cursor position.
 ;
 ; return:
-;  di		offset
+;  edi		offset
 ;  correct gfx segment is mapped
 ;
 ; Notes:
-;  - changes no regs other than di
+;  - changes no regs other than edi
 ;  - does not require ds == cs
 ;
 goto_xy:
 		push ax
 		push dx
 		mov ax,[cs:gfx_cur_y]
-		mov di,[cs:gfx_cur_x]
+		movzx edi,word [cs:gfx_cur_x]
 		imul di,[pixel_bytes]
 		mul word [cs:screen_line_len]
 		add ax,di
@@ -8173,23 +8194,43 @@ encode_color_90:
 		ret
 
 
+decode_color:
+		cmp byte [pixel_bits],16
+		jnz decode_color_90
+		push edx
+		xor edx,edx
+		shl eax,16
+		shld edx,eax,5
+		shld edx,eax,3
+		shl eax,5
+		shld edx,eax,6
+		shld edx,eax,2
+		shl eax,6
+		shld edx,eax,5
+		shld edx,eax,3
+		mov eax,edx
+		pop edx
+decode_color_90:
+		ret
+
+
 ;  ax		palette index
 ;
 ; return:
 ;  eax		color
 ;
 pal_to_color:
-		push fs
+		push gs
 		push si
-		lfs si,[gfx_pal]
+		lgs si,[gfx_pal]
 		add si,ax
 		add si,ax
 		add si,ax
-		mov eax,[fs:si]
+		mov eax,[gs:si]
 		bswap eax
 		shr eax,8
 		pop si
-		pop fs
+		pop gs
 		ret
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -8312,7 +8353,11 @@ line_pp:
 		mov eax,edi
 		shr eax,16
 		call set_win
-		jmp [setpixel_t]
+		push edi
+		and edi,0xffff
+		call [setpixel_t]
+		pop edi
+		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -8323,21 +8368,21 @@ setpixel_8:
 		mov al,[gfx_color]
 
 setpixel_a_8:
-		mov [es:di],al
+		mov [es:edi],al
 		ret
 
 setpixel_16:
 		mov ax,[gfx_color]
 
 setpixel_a_16:
-		mov [es:di],ax
+		mov [es:edi],ax
 		ret
 
 setpixel_32:
 		mov eax,[gfx_color]
 
 setpixel_a_32:
-		mov [es:di],eax
+		mov [es:edi],eax
 		ret
 
 
@@ -8346,28 +8391,31 @@ setpixel_t_16:
 		mov ax,[gfx_color]
 
 setpixel_ta_16:
-		mov [es:di],ax
+		cmp dword [transp],0
+		jz setpixel_a_16
+		call decode_color
+		push ecx
+		xchg eax,ecx
+		mov ax,[fs:edi]
+		call decode_color
+		xchg eax,ecx
+		call enc_transp
+		pop ecx
+		call encode_color
+		mov [es:edi],ax
 		ret
 
 setpixel_t_32:
 		mov eax,[gfx_color]
 
 setpixel_ta_32:
-		cmp word [transp],0
+		cmp dword [transp],0
 		jz setpixel_a_32
 		push ecx
-		mov ecx,[fs:di]
-		ror ecx,16
-		ror eax,16
-		call add_transp
-		rol ecx,8
-		rol eax,8
-		call add_transp
-		rol ecx,8
-		rol eax,8
-		call add_transp
-		mov [es:di],ecx
+		mov ecx,[fs:edi]
+		call enc_transp
 		pop ecx
+		mov [es:edi],eax
 		ret
 
 ; cl, al -> cl
@@ -8395,6 +8443,20 @@ add_transp_20:
 		ret
 
 
+enc_transp:
+		ror ecx,16
+		ror eax,16
+		call add_transp
+		rol ecx,8
+		rol eax,8
+		call add_transp
+		rol ecx,8
+		rol eax,8
+		call add_transp
+		mov eax,ecx
+		ret
+
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ; Get pixel from fs:si.
@@ -8409,6 +8471,20 @@ getpixel_16:
 
 getpixel_32:
 		mov eax,[fs:si]
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; initialize console font (used for debug output)
+;
+cfont_init:
+		; 3: 8x8, 2: 8x14, 6: 8x16
+		mov bh,2
+		mov ax,1130h
+		int 10h
+		mov [cfont],bp
+		mov [cfont+2],es
+		mov byte [cfont_height],14
 		ret
 
 
@@ -9231,114 +9307,76 @@ char_width_90:
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
-; Draw part of an image.
+; Write a char at the current console cursor position.
 ;
-draw_image:
-		push gs
-		push fs
+;  al		char
+;  ebx		color
+;
+; return:
+;  console cursor position gets advanced
+;
+con_char_xy:
+		push dword [gfx_color]
 
-		mov es,[window_seg_w]
+		push word [gfx_cur_x]
+		push word [gfx_cur_y]
 
-		lin2segofs dword [pcx_line_starts],gs,bp
+		mov [gfx_color],ebx
 
-		mov ax,[line_y0]
-		cmp ax,[image_height]
-		jae draw_image_90
+		push word [con_x]
+		pop word [gfx_cur_x]
 
-		mov bx,ax
-		add ax,[line_y1]	; length!
-		sub ax,[image_height]
-		jbe draw_image_10
-		sub [line_y1],ax
-draw_image_10:
-		shl bx,2
-		add bp,bx
+		push word [con_y]
+		pop word [gfx_cur_y]
 
-draw_image_20:
 		call goto_xy
 
-		lfs si,[gs:bp]
+		call screen_segs
 
-		mov cx,[line_x0]
-		neg cx
+		lgs si,[cfont]
 
-		; draw one line
-draw_image_30:
-		fs lodsb
+		mul byte [cfont_height]
+		add si,ax
 
-		mov ah,0
-		cmp al,0c0h
-		jb draw_image_70
+		xor dx,dx
 
-		; repeat count
-
-		and ax,3fh
-		mov dx,ax
-		fs lodsb
-
-		add cx,dx
-		js draw_image_80
-		jnc draw_image_40
-		mov dx,cx
-
-draw_image_40:
-		mov bx,cx
-		sub bx,[line_x1]
-		jle draw_image_50
-		sub dx,bx
-draw_image_50:
-		or dx,dx
-		jz draw_image_80
-		dec dx
-		cmp ax,[transparent_color]
-		jz draw_image_55
-		cmp byte [pixel_bytes],1
-		jbe draw_image_54
-		push ax
-		call pal_to_color
-		call encode_color
+con_char_xy_20:
+		mov cx,7
+con_char_xy_30:
+		bt [gs:si],cx
+		mov eax,[gfx_color]
+		jc con_char_xy_40
+		xor  eax,eax
+con_char_xy_40:
 		call [setpixel_a]
-		pop ax
-		jmp draw_image_55
-draw_image_54:
-		mov [es:di],al
-draw_image_55:
 		add di,[pixel_bytes]
-		jnc draw_image_50
+		jnc con_char_xy_50
 		call inc_winseg
-		jmp draw_image_50
+con_char_xy_50:
+		dec cx
+		jns con_char_xy_30
 
-draw_image_70:
-		inc cx
-		cmp cx,byte 0
-		jle draw_image_80
-		cmp ax,[transparent_color]
-		jz draw_image_75
-		cmp byte [pixel_bytes],1
-		jbe draw_image_74
-		call pal_to_color
-		call encode_color
-		call [setpixel_a]
-		jmp draw_image_75
-draw_image_74:
-		mov [es:di],al
-draw_image_75:
-		add di,[pixel_bytes]
-		jnc draw_image_80
+		inc si
+
+		mov ax,[screen_line_len]
+		mov bx,8
+		imul bx,[pixel_bytes]
+		sub ax,bx
+		add di,ax
+		jnc con_char_xy_60
 		call inc_winseg
-draw_image_80:
-		cmp cx,[line_x1]
-		jl draw_image_30
+con_char_xy_60:
+		inc dx
+		cmp dx,[cfont_height]
+		jnz con_char_xy_20
 
-		inc word [gfx_cur_y]
+		add word [con_x],8
 
-		add bp,4
-		dec word [line_y1]
-		jnz draw_image_20
+		pop word [gfx_cur_y]
+		pop word [gfx_cur_x]
 
-draw_image_90:
-		pop fs
-		pop gs
+		pop dword [gfx_color]
+
 		ret
 
 
@@ -10654,6 +10692,347 @@ find_file_ext_90:
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
+; Clip image area.
+;
+; [line_x0]		left, incl
+; [line_x1]		right, excl
+; [line_y0]		top, incl
+; [line_y1]		bottom, excl
+;
+; return:
+;  CF			1 = empty area
+;  If CF = 0		Area adjusted to fit within [line_*].
+;  If CF = 1		Undefined values in [line_*].
+;
+clip_image:
+		movzx edx,word [image_width]
+		mov eax,[line_x0]
+		mov ecx,[line_x1]
+
+		call clip_image_10
+		jc clip_image_90
+
+		mov [line_x0],eax
+		mov [line_x1],ecx
+
+		movzx edx,word [image_height]
+		mov eax,[line_y0]
+		mov ecx,[line_y1]
+
+		call clip_image_10
+
+		mov [line_y0],eax
+		mov [line_y1],ecx
+
+		jmp clip_image_90
+
+clip_image_10:
+		cmp eax,0
+		jge clip_image_20
+		xor eax,eax
+clip_image_20:
+		cmp ecx,edx
+		jle clip_image_30
+		mov ecx,edx
+clip_image_30:
+		cmp ecx,eax
+		jle clip_image_80
+		cmp eax,edx
+		jge clip_image_80
+		clc
+		jmp clip_image_90
+clip_image_80:
+		stc
+clip_image_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; Unpack image to buffer.
+;
+; eax			drawing buffer
+; [image]		image
+; dword [line_x0]	x0	; upper left
+; dword [line_y0]	y0
+; dword [line_x1]	x1	; lower right
+; dword [line_y1]	y1
+;
+unpack_image:
+		cmp byte [image_type],1
+		jnz unpack_image_20
+		call pcx_unpack
+		jmp unpack_image_90
+unpack_image_20:
+		cmp byte [image_type],2
+		jnz unpack_image_90
+		call jpg_unpack
+unpack_image_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; Draw image on screen.
+;
+; [image]		image
+; dword [line_x0]	x0	; upper left
+; dword [line_y0]	y0
+; dword [line_x1]	x1	; lower right
+; dword [line_y1]	y1
+;
+show_image:
+		cmp byte [image_type],1
+		jnz show_image_20
+		call pcx_show
+		jmp show_image_90
+show_image_20:
+		cmp byte [image_type],2
+		jnz show_image_90
+		call jpg_show
+show_image_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; eax			drawing buffer
+; [image]		pcx image
+; dword [line_x0]	x0	; uppper left
+; dword [line_y0]	y0
+; dword [line_x1]	x1	; lower right
+; dword [line_y1]	y1
+;
+pcx_unpack:
+		push gs
+		push fs
+
+		lin2segofs dword [pcx_line_starts],gs,bp
+
+		add eax,4
+		lin2es eax,edi
+
+		mov ax,[line_x0]
+		sub [line_x1],ax
+
+		mov ax,[line_y0]
+		sub [line_y1],ax
+
+		shl ax,2
+		add bp,ax
+
+pcx_unpack_20:
+		lfs si,[gs:bp]
+
+		mov cx,[line_x0]
+		neg cx
+
+		; draw one line
+pcx_unpack_30:
+		fs lodsb
+
+		mov ah,0
+		cmp al,0c0h
+		jb pcx_unpack_70
+
+		; repeat count
+
+		and ax,3fh
+		mov dx,ax
+		fs lodsb
+
+		add cx,dx
+		js pcx_unpack_80
+		jnc pcx_unpack_40
+		mov dx,cx
+
+pcx_unpack_40:
+		mov bx,cx
+		sub bx,[line_x1]
+		jle pcx_unpack_50
+		sub dx,bx
+pcx_unpack_50:
+		or dx,dx
+		jz pcx_unpack_80
+		dec dx
+		cmp byte [pixel_bytes],1
+		jbe pcx_unpack_54
+		push ax
+		call pal_to_color
+		call encode_color
+		call [setpixel_a]
+		pop ax
+		jmp pcx_unpack_55
+pcx_unpack_54:
+		mov [es:edi],al
+pcx_unpack_55:
+		add edi,[pixel_bytes]
+		jmp pcx_unpack_50
+
+pcx_unpack_70:
+		inc cx
+		cmp cx,byte 0
+		jle pcx_unpack_80
+		cmp byte [pixel_bytes],1
+		jbe pcx_unpack_74
+		call pal_to_color
+		call encode_color
+pcx_unpack_74:
+		call [setpixel_a]
+		add edi,[pixel_bytes]
+pcx_unpack_80:
+		cmp cx,[line_x1]
+		jl pcx_unpack_30
+
+		add bp,4
+		dec word [line_y1]
+		jnz pcx_unpack_20
+
+pcx_unpack_90:
+		call lin_seg_off
+
+		pop fs
+		pop gs
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; Draw part of pcx image.
+;
+; [image]		pcx image
+; dword [line_x0]	x0	; uppper left
+; dword [line_y0]	y0
+; dword [line_x1]	x1	; lower right
+; dword [line_y1]	y1
+;
+pcx_show:
+		push gs
+		push fs
+
+		mov es,[window_seg_w]
+
+		lin2segofs dword [pcx_line_starts],gs,bp
+
+		mov ax,[line_x0]
+		sub [line_x1],ax
+
+		mov ax,[line_y0]
+		sub [line_y1],ax
+pcx_show_10:
+		shl ax,2
+		add bp,ax
+
+pcx_show_20:
+		call goto_xy
+
+		lfs si,[gs:bp]
+
+		mov cx,[line_x0]
+		neg cx
+
+		; draw one line
+pcx_show_30:
+		fs lodsb
+
+		mov ah,0
+		cmp al,0c0h
+		jb pcx_show_70
+
+		; repeat count
+
+		and ax,3fh
+		mov dx,ax
+		fs lodsb
+
+		add cx,dx
+		js pcx_show_80
+		jnc pcx_show_40
+		mov dx,cx
+
+pcx_show_40:
+		mov bx,cx
+		sub bx,[line_x1]
+		jle pcx_show_50
+		sub dx,bx
+pcx_show_50:
+		or dx,dx
+		jz pcx_show_80
+		dec dx
+		cmp ax,[transparent_color]
+		jz pcx_show_55
+		cmp byte [pixel_bytes],1
+		jbe pcx_show_54
+		push ax
+		call pal_to_color
+		call encode_color
+		call [setpixel_a]
+		pop ax
+		jmp pcx_show_55
+pcx_show_54:
+		mov [es:di],al
+pcx_show_55:
+		add di,[pixel_bytes]
+		jnc pcx_show_50
+		call inc_winseg
+		jmp pcx_show_50
+
+pcx_show_70:
+		inc cx
+		cmp cx,byte 0
+		jle pcx_show_80
+		cmp ax,[transparent_color]
+		jz pcx_show_75
+		cmp byte [pixel_bytes],1
+		jbe pcx_show_74
+		call pal_to_color
+		call encode_color
+		call [setpixel_a]
+		jmp pcx_show_75
+pcx_show_74:
+		mov [es:di],al
+pcx_show_75:
+		add di,[pixel_bytes]
+		jnc pcx_show_80
+		call inc_winseg
+pcx_show_80:
+		cmp cx,[line_x1]
+		jl pcx_show_30
+
+		inc word [gfx_cur_y]
+
+		add bp,4
+		dec word [line_y1]
+		jnz pcx_show_20
+
+pcx_show_90:
+		pop fs
+		pop gs
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; allocate static buffer
+;
+jpg_setup:
+		cmp word [jpg_static_buf_seg], 0
+		jnz jpg_setup_90
+
+		mov eax,jpg_data_size + 16
+		call calloc
+		or eax,eax
+		jz jpg_setup_90
+		add eax,15
+		shr eax,4
+
+		mov [jpg_static_buf_seg],ax
+jpg_setup_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
 ; Activate jpg image from file.
 ;
 ;  eax:		lin ptr to image
@@ -10670,6 +11049,19 @@ jpg_init:
 
 		cmp word [jpg_static_buf_seg],0
 		jz jpg_init_80
+
+		push eax
+		call find_mem_size
+		mov ecx,eax
+		pop eax
+
+		or ecx,ecx
+		jz jpg_init_80
+		cmp byte [pm_ok],0
+		jnz jpg_init_40
+		shr ecx,16
+		jnz jpg_init_80
+jpg_init_40:
 
 		lin2segofs eax,es,bx
 		cmp dword [es:bx],0e0ffd8ffh
@@ -10697,22 +11089,6 @@ jpg_init_90:
 		pop eax
 		ret
 
-; alloc static buffer
-jpg_setup:
-		cmp word [jpg_static_buf_seg], 0
-		jnz jpg_setup_90
-
-		mov eax,jpg_data_size + 16
-		call calloc
-		or eax,eax
-		jz jpg_setup_90
-		add eax,15
-		shr eax,4
-
-		mov [jpg_static_buf_seg],ax
-jpg_setup_90:
-		ret
-
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
@@ -10722,6 +11098,8 @@ jpg_setup_90:
 ;  CF		error
 ;
 jpg_size:
+		call use_local_stack
+
 		lin2es eax,eax
 
 		movzx esp,sp
@@ -10736,6 +11114,8 @@ jpg_size:
 		pop ds
 
 		call lin_seg_off
+
+		call use_old_stack
 
 		or eax,eax
 		jnz jpg_size_90
@@ -10753,10 +11133,15 @@ jpg_size_90:
 ; dword [line_x1]	x1
 ; dword [line_y1]	y1
 ;
-; return:
-;  CF		error
+; note:
+;  [line_*] are unchanged
 ;
 jpg_unpack:
+		cmp byte [pixel_bytes],2
+		jnz jpg_unpack_90
+
+		call use_local_stack
+
 		movzx esp,sp
 
 		push dword [line_y1]
@@ -10780,5 +11165,147 @@ jpg_unpack:
 
 		call lin_seg_off
 
+		call use_old_stack
+
+jpg_unpack_90:
 		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; Draw part of jpg image.
+;
+; [image]		jpg image
+; dword [line_x0]	x0	; uppper left
+; dword [line_y0]	y0
+; dword [line_x1]	x1	; lower right
+; dword [line_y1]	y1
+;
+jpg_show:
+		xor eax,eax
+		call memsize
+		push edi
+		mov eax,1
+		call memsize
+		pop eax
+		cmp edi,eax
+		jae jpg_show_20
+		mov edi,eax
+jpg_show_20:
+		; edi: largest free mem block
+
+		sub edi,4		; fb header size
+		jc jpg_show_90
+
+		cmp byte [pm_ok],0
+		jnz jpg_show_25
+		cmp edi,60000
+		jbe jpg_show_25
+		mov edi,60000
+jpg_show_25:
+
+		mov ebx,[line_y1]
+		sub ebx,[line_y0]
+
+		mov ecx,[line_x1]
+		sub ecx,[line_x0]
+
+		mov eax,[pixel_bytes]
+		mul ecx
+		xchg eax,edi
+		div edi
+
+		; fb height
+
+		cmp eax,ebx
+		jbe jpg_show_30
+		mov eax,ebx
+jpg_show_30:
+		mov [line_tmp],eax
+
+		or eax,eax
+		jz jpg_show_90
+
+		; eax, ecx, height, width
+		call alloc_fb
+		or eax,eax
+		jz jpg_show_90
+
+		mov [line_tmp2],eax
+
+jpg_show_40:
+		mov eax,[line_y1]
+		sub eax,[line_y0]
+		jle jpg_show_70
+		mov ebp,[line_tmp]
+		cmp eax,ebp
+		jle jpg_show_50
+		mov eax,ebp
+jpg_show_50:
+		mov bp,ax
+		add eax,[line_y0]
+		xchg eax,[line_y1]
+
+		push eax
+		mov eax,[line_tmp2]
+		push bp
+		call jpg_unpack
+		pop bp
+
+		lin2es dword [line_tmp2],edi
+		mov dx,[es:edi]
+		mov cx,[es:edi+2]
+		call lin_seg_off
+
+		cmp cx,bp
+		jbe jpg_show_60
+		mov cx,bp
+jpg_show_60:
+
+		mov edi,[line_tmp2]
+		add edi,4
+		mov bx,dx
+		imul bx,[pixel_bytes]
+		call restore_bg
+
+		mov eax,[line_y1]
+		mov ecx,eax
+		sub ecx,[line_y0]
+		mov [line_y0],eax
+
+		add [gfx_cur_y],cx
+
+		pop eax
+
+		mov [line_y1],eax
+		jmp jpg_show_40
+
+jpg_show_70:
+
+		mov eax,[line_tmp2]
+		call free
+
+jpg_show_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; Switch to local stack.
+;
+use_local_stack:
+		pop word [tmp_stack_val]
+		mov [old_stack],sp
+		mov [old_stack+2],ss
+		lss sp,[local_stack]
+		jmp [tmp_stack_val]
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; Switch back to system wide stack.
+;
+use_old_stack:
+		pop word [tmp_stack_val]
+		lss sp,[old_stack]
+		jmp [tmp_stack_val]
 

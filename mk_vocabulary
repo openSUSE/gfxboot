@@ -47,7 +47,6 @@
   currenttitle
 
   videomodes getvideomode
-  xsavescreen
 
   usleep notimeout
   time

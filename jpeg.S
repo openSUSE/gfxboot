@@ -1449,31 +1449,33 @@ jpeg_decode:
 	# 76(%esp) = %ss:stack+896
 	movl	76(%esp), %ecx
 	sarl	$4, %eax
-	# 72(%esp) = %ss:stack+892
-	movl	72(%esp), %ebx
+	addl	$15, %ecx
 	# 68(%esp) = %ss:stack+888
 	movl	%eax, 68(%esp)
 	# 168(%esp) = %ss:stack+988
 	movl	168(%esp), %eax
 	addl	$15, %eax
+	# 72(%esp) = %ss:stack+892
+	movl	72(%esp), %ebx
+	sarl	$4, %eax
+	addl	$15, %ebx
+	decl	%eax
 	# 172(%esp) = %ss:stack+992
 	movl	172(%esp), %edx
-	sarl	$4, %eax
 	sarl	$4, %ecx
-	decl	%eax
 	# 64(%esp) = %ss:stack+884
 	movl	%eax, 64(%esp)
 	# 176(%esp) = %ss:stack+996
 	movl	176(%esp), %eax
-	addl	$15, %eax
 	# 92(%esp) = %ss:stack+912
 	movl	%ecx, 92(%esp)
-	sarl	$4, %eax
 	sarl	$4, %ebx
-	sarl	$4, %edx
-	leal	-1(%eax), %ecx
+	addl	$15, %eax
+	sarl	$4, %eax
 	# 88(%esp) = %ss:stack+908
 	movl	%ebx, 88(%esp)
+	sarl	$4, %edx
+	leal	-1(%eax), %ecx
 	# 60(%esp) = %ss:stack+880
 	movl	%edx, 60(%esp)
 	# 56(%esp) = %ss:stack+876

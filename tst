@@ -3,22 +3,29 @@
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-function tst_cdrom {
+function tst_isolinux {
+  bin="test/syslinux.rpm"
   src="test/$1"
   dst="$tmp/$1"
-  img="$tmp/cd.iso"
+  img="$tmp/$1.iso"
   dosrc="$tmp/.dosemurc.cdrom"
   vm_src=test/vm
-  vm_tmp=tmp/vm.cdrom
+  vm_tmp=tmp/$1.vm
+  isolx=$bin/usr/share/syslinux/isolinux.bin
 
+  if [ -z "$program" -o "$program" = dosemu -o "$program" = xdos ] ; then
+   isolx=test/isolinux-dosemu.bin
+  fi
+
+  rm -rf $dst $vm_tmp
   rm -f $img $dosrc
-  rm -rf $vm_tmp
 
   isodir=boot/loader
   mkdir -p $dst/$isodir
-  test/pisolinux /$isodir <test/isolinux.bin >$dst/$isodir/isolinux.bin
+  test/pisolinux /$isodir <$isolx >$dst/$isodir/isolinux.bin
   cp -a $src/* $dst/$isodir
   cp -a $logo $dst/$isodir/bootlogo
+  test/unpack_bootlogo $dst/$isodir
 
   echo "$dst/$isodir/isolinux.bin 1" >$tmp/cd_sort
 
@@ -29,39 +36,41 @@ function tst_cdrom {
 
   rm -f $tmp/cd_sort
 
-  if [ "$program" = dosemu ] ; then
-    perl -p -e "s:<image>:`pwd`/$img:g" test/dosemurc.cdrom >$dosrc
-    xdosemu -Q -f $dosrc "$@"
-  elif [ "$program" = vmware ] ; then
+  if [ "$program" = vmware ] ; then
     cp -a $vm_src $vm_tmp
-    perl -pi -e "s:<image>:`pwd`/$img:g" $vm_tmp/gfxboot.vmx
+    perl -pi -e "s/^\s*#\s*(floppy0.startConnected)/\$1/" $vm_tmp/gfxboot.vmx
+    perl -pi -e "s:<isoimage>:`pwd`/$img:g" $vm_tmp/gfxboot.vmx
     vmware -qx $vm_tmp/gfxboot.vmx
-  elif [ "$program" = olddosemu ] ; then
-
+  elif [ "$program" = xdos ] ; then
     sw 0 ln -snf /etc/dosemu.conf.cdrom /etc/dosemu.conf
     ln -snf /var/lib/dosemu/global.conf.cdrom /var/lib/dosemu/global.conf
     ln -snf `pwd`/$img /var/lib/dosemu/cdrom
-
     xdos $*
-
-#    rm -f /var/lib/dosemu/cdrom
-
+    rm -f /var/lib/dosemu/cdrom
     ln -snf /var/lib/dosemu/global.conf.normal /var/lib/dosemu/global.conf
     sw 0 ln -snf /etc/dosemu.conf.normal /etc/dosemu.conf
-
+  else
+    if [ -n "$program" -a "$program" != dosemu ] ; then
+      echo -e "\n***  Warning: $program not supported - using dosemu  ***\n"
+    fi
+    perl -p -e "s:<image>:`pwd`/$img:g" test/dosemurc.cdrom >$dosrc
+    xdosemu -Q -f $dosrc "$@"
   fi
-
 }
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-function tst_boot {
+function tst_lilo {
+  bin="test/lilo.rpm"
   src="test/$1"
   dst="$tmp/$1"
-  img="$tmp/floppy.img"
+  img="$tmp/$1.img"
   dosrc="$tmp/.dosemurc.floppy"
+  vm_src=test/vm
+  vm_tmp=tmp/$1.vm
 
+  rm -rf $dst $vm_tmp
   rm -f $img $dosrc
 
   mkdir -p $dst
@@ -74,43 +83,117 @@ function tst_boot {
   sw 0 mount -oloop=/dev/loop7 "$img" /mnt
   sw 0 cp -a $dst/* /mnt
   sw 0 rmdir /mnt/lost+found
-  sw 0 test/lilo -C $src/lilo.conf -m /mnt/map
+  sw 0 $bin/sbin/lilo -C $src/lilo.conf -m /mnt/map
   sw 0 umount /mnt
   sw 0 losetup -d /dev/loop7 2>/dev/null
 
-  if [ "$program" = dosemu ] ; then
+  if [ "$program" = vmware ] ; then
+    cp -a $vm_src $vm_tmp
+    perl -pi -e "s/^\s*#\s*(ide1:0.startConnected)/\$1/" $vm_tmp/gfxboot.vmx
+    perl -pi -e "s:<floppyimage>:`pwd`/$img:g" $vm_tmp/gfxboot.vmx
+    vmware -qx $vm_tmp/gfxboot.vmx
+  elif [ "$program" = xdos ] ; then
+    sw 0 ln -snf /etc/dosemu.conf.floppy /etc/dosemu.conf
+    ln -snf `pwd`/$img /var/lib/dosemu/floppyimg
+    xdos $*
+    rm -f /var/lib/dosemu/floppyimg
+    sw 0 ln -snf /etc/dosemu.conf.normal /etc/dosemu.conf
+  else
+    if [ -n "$program" -a "$program" != dosemu ] ; then
+      echo -e "\n***  Warning: $program not supported - using dosemu  ***\n"
+    fi
     perl -p -e "s:<image>:`pwd`/$img:g" test/dosemurc.floppy >$dosrc
     xdosemu -f $dosrc "$@"
   fi
-
 }
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-function tst_floppy {
-  src="test/cdrom"
+function tst_grub {
+  bin="test/grub.rpm"
+  src="test/$1"
   dst="$tmp/$1"
-  img="$tmp/floppy.img"
-  dosrc="$tmp/.dosemurc.floppy"
+  img="$tmp/$1.img"
+  vm_src=test/vm
+  vm_tmp=tmp/$1.vm
 
-  rm -f $img $tmp/bootdisk* $dosrc
+  rm -rf $dst $vm_tmp
+  rm -f $img
+
+  mkdir -p $dst
+  cp -a $src $dst/grub
+  cp $bin/usr/lib/grub/{fat_stage1_5,stage1,stage2} $dst/grub
+  cp -a $logo $dst/grub/bootlogo
+  sh -c "echo '(fd0) $img' >$dst/grub/device.map"
+
+  test/dosimg $img
+
+  sw 0 mount -oloop "$img" /mnt
+  sw 0 cp -r $dst/* /mnt
+  echo "setup --prefix=/grub (fd0) (fd0)" | \
+  sw 0 $bin/usr/sbin/grub --batch --config-file=/mnt/grub/menu.lst --device-map=/mnt/grub/device.map
+  echo
+
+  sw 0 umount /mnt
+
+  if [ -n "$program" -a "$program" != vmware ] ; then
+    echo -e "\n***  Warning: $program not supported - using vmware  ***\n"
+  fi
+  cp -a $vm_src $vm_tmp
+  perl -pi -e "s/^\s*#\s*(ide1:0.startConnected)/\$1/" $vm_tmp/gfxboot.vmx
+  perl -pi -e "s:<floppyimage>:`pwd`/$img:g" $vm_tmp/gfxboot.vmx
+  vmware -qx $vm_tmp/gfxboot.vmx
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+function tst_syslinux {
+  bin="test/syslinux.rpm"
+  src="test/$1"
+  dst="$tmp/$1"
+  img="$tmp/$1.img"
+  dosrc="$tmp/.dosemurc.floppy"
+  vm_src=test/vm
+  vm_tmp=tmp/$1.vm
+  syslx=$bin/usr/bin/syslinux
+
+  if [ -z "$program" -o "$program" = dosemu -o "$program" = xdos ] ; then
+    syslx=test/syslinux-dosemu
+  fi
+
+  rm -rf $dst $vm_tmp
+  rm -f $img* $dosrc
 
   mkdir -p $dst
   cp -a $src/* $dst
   cp -a $logo $dst/bootlogo
 
-  sw 0 test/mkbootdisk --syslinux=test/syslinux --out=$tmp/bootdisk $dst
+  sw 0 test/mkbootdisk --syslinux=$syslx --out=${img}_ $dst
 
-  sw 0 chown --reference=tmp $tmp/bootdisk*
+  sw 0 chown --reference=tmp $img*
 
-  ln -snf bootdisk1 $img
+  ln -snf $1.img_1 $img
 
-  if [ "$program" = dosemu ] ; then
+  if [ "$program" = vmware ] ; then
+    cp -a $vm_src $vm_tmp
+    perl -pi -e "s/^\s*#\s*(ide1:0.startConnected)/\$1/" $vm_tmp/gfxboot.vmx
+    perl -pi -e "s:<floppyimage>:`pwd`/$img:g" $vm_tmp/gfxboot.vmx
+    vmware -qx $vm_tmp/gfxboot.vmx
+  elif [ "$program" = xdos ] ; then
+    sw 0 ln -snf /etc/dosemu.conf.floppy /etc/dosemu.conf
+    ln -snf `pwd`/$img /var/lib/dosemu/floppyimg
+    xdos $*
+    rm -f /var/lib/dosemu/floppyimg
+    sw 0 ln -snf /etc/dosemu.conf.normal /etc/dosemu.conf
+  else
+    if [ -n "$program" -a "$program" != dosemu ] ; then
+      echo -e "\n***  Warning: $program not supported - using dosemu  ***\n"
+    fi
     perl -p -e "s:<image>:`pwd`/$img:g" test/dosemurc.floppy >$dosrc
     xdosemu -f $dosrc "$@"
   fi
-
 }
 
 
@@ -118,7 +201,7 @@ function tst_floppy {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 function usage {
-  echo "usage: tst what [theme] [program]"
+  echo "usage: tst [-b] [-i] [-p program] [-t theme] what [theme]"
   exit 1
 }
 
@@ -146,17 +229,20 @@ done
 shift $(($OPTIND - 1))
 
 [ "$what" ] || what=$1
-[ "$what" ] || what=cdrom
+[ "$what" ] || what=isolinux
 
 [ "$theme" ] || theme=$2
 [ "$theme" ] || theme=SuSE
 
-[ "$program" ] || program=$3
-[ "$program" ] || program=dosemu
+[ "$what" = cdrom ] && what=isolinux
+[ "$what" = cd ] && what=isolinux
+[ "$what" = floppy ] && what=syslinux
+
+[ "$program" = xdosemu ] && program=dosemu
 
 if [ ! "$logo" ] ; then
   logo=boot
-  [ "$what" = install -o "$what" = cdrom ] && logo=install
+  [ "$what" = syslinux -o "$what" = isolinux ] && logo=install
 fi
 
 [ "$logo" = "boot" ] && logo="themes/$theme/boot/message"
@@ -167,24 +253,33 @@ fi
   exit 2
 }
 
+if [ ! "$what" ] ; then
+  echo "What is "\""$what"\""?"
+  usage
+fi
+
 make BINDIR=../../ -C themes/$theme || exit
 
 [ -f "$logo" ] || logo="themes/$theme/bootlogo"
 
-if [ ! "$what" -o ! -d "test/$what" -o ! -f "$logo" ] ; then
+if [ ! -f "$logo" ] ; then
+  echo "no such file: $logo"
   usage
 fi
 
 tmp=tmp
 mkdir -p "$tmp" || exit
-rm -rf "$tmp/$what" || exit
-mkdir "$tmp/$what"
 
-if [ "$what" = cdrom ] ; then
-  tst_cdrom cdrom
-elif [ "$what" = boot ] ; then
-  tst_boot boot
-elif [ "$what" = floppy ] ; then
-  tst_floppy floppy
+if [ "$what" = isolinux ] ; then
+  tst_isolinux syslinux
+elif [ "$what" = lilo ] ; then
+  tst_lilo lilo
+elif [ "$what" = syslinux ] ; then
+  tst_syslinux syslinux
+elif [ "$what" = grub ] ; then
+  tst_grub grub
+else
+  echo "What is "\""$what"\""?"
+  usage
 fi
 
