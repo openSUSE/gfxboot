@@ -1437,6 +1437,8 @@
 % Global variables.
 %
 
+% dtrace 0x11000 cvp getdword pop
+
 /clip.size { 640 480 } def
 
 640 480 8 findmode setmode not { false .end } if
@@ -1470,4 +1472,5 @@ bsplash.show
 /kroete.dir 0 def
 
 /debug 0 def
+
 

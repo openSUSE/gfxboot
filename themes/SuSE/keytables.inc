@@ -27,6 +27,7 @@
 
 % must not be empty
 /keymaps [
+  [ "ar" .undef    ]
   [ "cs" keymap.cs ]
   [ "en" .undef    ]
   [ "es" keymap.es ]

@@ -381,10 +381,11 @@ pm_gdt_ss		dd 0000ffffh		; 64k data segment
 			dd 00009300h
 pm_gdt_ds		dd 0000ffffh		; 64k data segment
 			dd 00009300h
-pm_gdb_es		dd 0000ffffh		; 4GB data segment, start at 0
+pm_gdt_es		dd 0000ffffh		; 4GB data segment, start at 0
 			dd 008f9300h
 pm_gdt_size		equ $-pm_gdt
 
+pm_ok			db 0			; 1: we can switch tp pm
 
 %if debug
 ; debug texts
@@ -524,6 +525,13 @@ gfx_init:
 		mov [mem_archive],edi
 		mov [boot_cs],dx
 		mov [boot_sysconfig],si
+
+		; setup gdt
+		segofs2lin cs,word pm_gdt,dword [pm_gdt+2]
+
+		mov eax,cr0
+		test al,1		; in prot mode (maybe vm86)?
+		setz byte [pm_ok]
 
 		; init malloc memory chain
 
@@ -2273,6 +2281,43 @@ pm_to_real_20:
 		sti
 		ret
 
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; Load gs with large segment.
+;
+; return:
+;
+;  gs		4GB segment selector
+;  IF		0 (interrupts off)
+;
+lin_gs:
+		cli
+		push eax
+
+		mov eax,cr0
+		test al,1		; in prot mode (maybe vm86)?
+		jz lin_gs_10
+		push word 0
+		pop gs
+		jmp lin_gs_90
+lin_gs_10:
+		or al,1
+
+		o32 lgdt [pm_gdt]
+
+		mov cr0,eax
+
+		push word pm_es
+		pop gs
+
+		and al,~1
+		mov cr0,eax
+
+lin_gs_90:
+		pop eax
+		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -6041,8 +6086,14 @@ prim_getdword:
 		mov dl,t_ptr
 		call get_1arg
 		jc prim_getdword_90
-		lin2segofs eax,es,bx
-		mov eax,[es:bx]
+		mov esi,eax
+		xor eax,eax
+		cmp byte [pm_ok],0
+		jz prim_getdword_70
+		call lin_gs
+		mov eax,[gs:esi]
+		sti
+prim_getdword_70:
 		mov dl,t_int
 		xor cx,cx
 		call set_pstack_tos
