@@ -8,7 +8,7 @@
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Some global vars.
 %
-/install.last    0 def
+/install.last 0 def
 
 /install.option 255 string def
 
@@ -32,7 +32,9 @@
 
   /xmenu xmenu.install def
 
-  xmenu .xm_current 0 put
+  /install.last usernote 5 shr 1 and def
+
+  xmenu .xm_current install.last put
 
   % see install types (.inst_*)
   xmenu .xm_list [ is_dvd { "DVD" } { "CD-ROM" } ifelse "SLP" "FTP" "HTTP" "NFS" "SMB" /txt_harddisk ] put
