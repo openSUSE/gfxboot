@@ -34,6 +34,8 @@
 
   /install.last usernote 5 shr 1 and def
 
+  install.option install.last .inst_cdrom eq { "" } { "install=slp" } ifelse strcpy
+
   xmenu .xm_current install.last put
 
   % see install types (.inst_*)
@@ -54,7 +56,7 @@
   xmenu .xm_current get dup .inst_cdrom eq exch .inst_slp eq or {
     /install.last xmenu .xm_current get def
 
-    install.option install.last .inst_cdrom eq { "" } { "install=slp://" } ifelse strcpy
+    install.option install.last .inst_cdrom eq { "" } { "install=slp" } ifelse strcpy
 
     /window.action actRedrawPanel def
 

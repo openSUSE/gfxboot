@@ -78,6 +78,7 @@ font:
 	-t help-install.ja.html \
 	-t po/ja.po -t po/zh_CN.po -t po/zh_TW.po \
 	-t install/log -t boot/log \
+	-t languages \
 	-f -efont-fixed-bold-r-normal--16-160-75-75-c-80-iso10646-1 \
 	-f -efont-fixed-bold-r-normal--16-160-75-75-c-160-iso10646-1 \
 	--fsize 16,5 -f '-freetype-haydar unicode-medium-r-normal--17-120-100-100-p-81-iso10646-1' \
@@ -85,6 +86,6 @@ font:
 
 clean:
 	make -C po clean
-	rm -f bootdir installdir *~
+	rm -f bootdir installdir *~ *.log
 	rm -rf boot install
 

@@ -1,3 +1,8 @@
+15/2/2005:	v3.0.6
+	- sync language list with yast2
+	- fixed making slp default
+
+14/2/2005:	v3.0.5
 	- allow selecting slp or cdrom as default install target
 
 8/2/2005:	v3.0.4
