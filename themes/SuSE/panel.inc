@@ -36,8 +36,7 @@
 
       livecd {
 
-        [ keyF3 0 "F3" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
-        [ keyF4 0 "F4" /panel.splash /panel.splash.width /panel.splash.update /splash.init ]
+        [ keyF3 0 "F3" /panel.splash /panel.splash.width /panel.splash.update /splash.init ]
 
       } {
 

@@ -56,7 +56,7 @@
   idle
   image.size
 
-  bootdrive reloadfs usernote eject poweroff reboot
+  bootdrive reloadfs usernote eject poweroff reboot biosmem
 
   getinfo 64bit
 

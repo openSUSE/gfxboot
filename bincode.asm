@@ -5978,6 +5978,13 @@ prim_usernote:
 		jmp pr_getint
 
 
+prim_biosmem:
+		mov es,[boot_cs]
+		mov si,[boot_sysconfig]
+		mov eax,[es:si+20]
+		jmp pr_getint
+
+
 prim_getinfo:
 		mov dl,t_int
 		call get_1arg

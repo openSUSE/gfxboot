@@ -51,6 +51,19 @@
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 %
+% Enough memory?
+%
+% ( ) ==> ( true|false )
+%
+/enough_mem {
+  biosmem 4 20 shl lt
+  biosmem 200 20 shl ge or
+  syslinux not or
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+%
 % input event handling
 %
 % ( key ) ==> ( input_buffer menu_entry action )
@@ -296,19 +309,27 @@
 
 %  fadein_logo
 
-  is_second_side {
+  enough_mem not livecd and {
 
-    notimeout dvd_popup
+    notimeout nomem_popup
 
   } {
 
-    do_64bit_check {
-      64bit {
-        64bit_source not { notimeout 32bit_popup } if
-      } {
-        64bit_source { notimeout 64bit_popup } if
-      } ifelse
-    } if
+    is_second_side {
+
+      notimeout dvd_popup
+
+    } {
+
+      do_64bit_check {
+        64bit {
+          64bit_source not { notimeout 32bit_popup } if
+        } {
+          64bit_source { notimeout 64bit_popup } if
+        } ifelse
+      } if
+
+    } ifelse
 
   } ifelse
 
@@ -864,8 +885,10 @@
   dup "memtest" eq over "memtest86" eq or { pop txt_memtest return } if
   syslinux {
     livecd {
-      dup "linux"     eq { pop txt_livecd return } if
+      dup "linux"     eq { pop "SUSE LINUX 9.1 LiveCD (english)" return } if
       dup "failsafe"  eq { pop txt_livecd_safe return } if
+      dup "linux2"    eq { pop "SUSE LINUX 9.1 LiveCD (deutsch)" return } if
+      dup "failsaf2"  eq { pop "LiveCD - Sichere Einstellungen" return } if
     } {
       dup "linux"     eq { pop txt_install        return } if
       dup "failsafe"  eq { pop txt_safe_install   return } if
@@ -1061,11 +1084,13 @@
 % ( key_in ) ==> ( key_out )
 %
 /debug.input {
-%  dup keyShiftF4 eq {
-%    0 0 moveto
-%    16 string dup dup "1234" ">%s<" 2 index sprintf show free
-%    pop 0
-%  } if
+  dup keyShiftF4 eq debug 3 ge and {
+    currentcolor black setcolor
+    currentpoint 0 0 moveto
+    64 string biosmem "mem = %u  " 2 index sprintf dup show free
+    moveto setcolor
+    pop 0
+  } if
 
   dup keyF7 eq syslinux and {
     "kroete.data" findfile kroete.dir idle
@@ -1220,6 +1245,28 @@
 
   dup .title "Cool software, but..." put
   dup .text "This is a 32-bit computer. You cannot use 64-bit software on it." put
+  dup .buttons [
+    button.reboot button.default actReboot actNoClose or button.setaction
+  ] put
+  dup window.init
+      window.show
+
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Warn that we don't have enough memory.
+%
+% ( ) ==> ( )
+%
+/nomem_popup {
+  window.dialog
+
+  dup .title "Cool computer, but..." put
+  dup .text
+%    "Sorry, but you need at least 128MB main memory to use SUSE LINUX 9.1 LiveCD."
+    "Sorry, but SUSE LINUX 9.1 LiveCD needs at least 256MB main memory."
+  put
   dup .buttons [
     button.reboot button.default actReboot actNoClose or button.setaction
   ] put
