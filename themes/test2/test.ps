@@ -28,6 +28,8 @@
 %
 /cvp { t_ptr settype } def
 
+/cvs { t_string settype } def
+
 
 % Allocate and define a new color.
 %
@@ -44,12 +46,34 @@
 } def
 
 
+% ( size ) ==> ( string )
+/string {
+  1 add malloc cvs
+} def
 
-800 600 16 findmode setmode not { false .end } if
-% 640 480 8 findmode setmode not { false .end } if
 
-"test.jpg" findfile
-% "test.pcx" findfile
+% ( obj_1 ... obj_n string_1 string_2 ) ==> ( )
+%
+/sprintf {
+  dup cvp length exch snprintf
+} def
+  
+
+% ( number ) ==> ( )
+%
+/number.print {
+  32 string
+  exch over
+  "%d" exch sprintf
+  dup show
+  free
+} def
+
+
+% 800 600 16 findmode setmode not { false .end } if
+640 480 8 findmode setmode not { false .end } if
+
+"test.pcx" findfile
 
 setimage loadpalette
 
@@ -60,19 +84,34 @@ setimage loadpalette
 
 white settextmodecolor
 
-image.size pop pop
+0 0 moveto 0 0 image.size image
 
-/w 400 def
-/h 200 def
+/mouse xxx def
 
-white setcolor
-10 200 moveto w 2 add h 2 add fillrect
-11 201 moveto
+"16x16.fnt" findfile setfont
 
-% 0 0 200 100 image.unpack dup restorescreen free
-0 400 w h image
-% 0 0 moveto 0 0 image.size image
+mouse .undef eq {
+  white setcolor
+  0 0 moveto "no mouse" show
+  trace
+} if
 
 
-dtrace
+{
+  black setcolor
+  0 0 moveto 100 60 fillrect
+  white setcolor
+  0 0 moveto
+  mouse getdword 16 shl 16 shr "x:  " show number.print
+  0 20 moveto
+  mouse getdword 16 shr "y:  " show number.print
+  0 40 moveto
+  mouse 4 add getdword 7 and
+  "b:  " show
+  dup 1 and { "l" show } if
+  dup 2 and { "r" show } if
+  dup 4 and { "m" show } if
+  pop
+  100000 usleep
+} loop
 

@@ -594,10 +594,17 @@ gfx_init_20:
 		pop dword [malloc.area + 4]
 
 		; 2MB - 3MB (to avoid A20 tricks)
-		push dword 200000h
-		pop dword [malloc.area + 8]
-		push dword 300000h
-		pop dword [malloc.area + 8 + 4]
+		; ##### FIXME: just evil workaround
+		mov es,[boot_cs]
+		mov bx,[boot_sysconfig]
+		mov eax,200000h
+		cmp byte [es:bx],1
+		jnz gfx_init_30
+		mov eax,1200000h
+gfx_init_30:
+		mov [malloc.area + 8],eax
+		add eax,100000h		; 1MB
+		mov [malloc.area + 8 + 4],eax
 
 		call malloc_init
 
@@ -10593,11 +10600,15 @@ chk_64bit_90:
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 prim_xxx:
-		call pr_setptr_or_none
+;		call pr_setptr_or_none
 		; eax
-		call jpg_size
-		clc
-		ret
+		call mouse_init
+		or ah,ah
+		mov eax,0
+		jnz prim_xxx_90
+		segofs2lin cs,word mouse_x,eax
+prim_xxx_90:
+		jmp pr_getptr_or_none
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -11308,4 +11319,36 @@ use_old_stack:
 		pop word [tmp_stack_val]
 		lss sp,[old_stack]
 		jmp [tmp_stack_val]
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+mouse_init:
+		push cs
+		pop es
+		mov bx,mouse_handler
+		mov ax,0c207h
+		int 15h
+		jc mouse_init_90
+		mov ax,0c200h
+		mov bh,1
+		int 15h
+		jc mouse_init_90
+		mov al,ah
+mouse_init_90:
+		ret
+
+
+mouse_x		dw 0
+mouse_y		dw 0
+mouse_button	dw 0
+mouse_xxx	dw 0
+
+mouse_handler:
+		movsx ax,byte [esp+6]
+		add [cs:mouse_y],ax
+		movsx ax,byte [esp+8]
+		add [cs:mouse_x],ax
+		mov ax,[esp+10]
+		mov [cs:mouse_button],ax
+
+		retf
 

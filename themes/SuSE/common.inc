@@ -1174,6 +1174,30 @@
     pop 0
   } if
 
+  dup keyF12 eq {
+    % mouse support testing
+    /mouse xxx def
+    red setcolor
+    mouse .undef eq {
+      700 580 moveto "no mouse" show
+    } {
+      {
+        mouse getdword 16 shl 16 shr screen.size pop 2 div add
+        mouse getdword 16 shr neg screen.size exch pop 2 div add
+        moveto 4 4 fillrect
+
+        mouse 4 add getdword 7 and
+        dup 1 and { red setcolor } if
+        dup 2 and { blue setcolor } if
+        dup 4 and { green setcolor } if
+
+        3 and 3 eq { exit } if
+
+      } loop
+    } ifelse
+    pop 0
+  } if
+
   dup keyShiftF12 eq {
     currenttransparency 0x10 add 0x100 min settransparency
     pop 0

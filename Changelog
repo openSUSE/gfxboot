@@ -1,3 +1,7 @@
+1/2/2005:	v3.0.2
+	- workaround to avoid memory corruption
+	- added experimental mouse code (for testing)
+
 31/1/2005:	v3.0.1
 	- support symlinks in cpio archive
 	- lots of minor fixes
