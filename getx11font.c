@@ -211,8 +211,8 @@ int main(int argc, char **argv)
               obuf_ptr = obuf;
               obuf_left = sizeof obuf;
               k = iconv(ic, &ibuf_ptr, &ibuf_left, &obuf_ptr, &obuf_left);
-              // fprintf(stderr, "k = %d, errno = %d, ibuf_left = %d, obuf_left = %d\n", k, errno, ibuf_left, obuf_left);
-              if(k >= 0 || (k == -1 && errno == E2BIG)) {
+              // fprintf(stderr, "k = %d, errno = %d, ibuf_left = %d, obuf_left = %d\n", k, k ? errno : 0, ibuf_left, obuf_left);
+              if(k >= 0 || (k == -1 && !obuf_left)) {
                 ok = 1;
                 if(!obuf_left) {
                   i = *(int *) obuf;
