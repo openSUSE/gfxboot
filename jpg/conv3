@@ -1,0 +1,41 @@
+#! /usr/bin/perl
+
+@f = (<>);
+
+$ofs = 0;
+
+for (@f) {
+  if(/^(\S*):/) {
+    $symbol = $1;
+    next;
+  }
+
+  if(/^\s*\.space\s+(\d+),\s*(\d+)/) {
+    $symbol{$symbol} = $ofs;
+    $ofs += $1;
+    undef $_;
+  }
+}
+
+
+for (@f) {
+  if(/^(\S*):/) {
+    $symbol = $1;
+
+    if(defined $symbol{$symbol}) {
+      undef $_;
+
+      if(!$datasize) {
+        $datasize = 1;
+        $size = "\t\tjpg_data_size\tequ $ofs\n";
+      }
+
+      $_ = "\t.equ\t$symbol, $symbol{$symbol}\n"
+    }
+    next;
+  }
+}
+
+print @f;
+
+print STDERR $size;

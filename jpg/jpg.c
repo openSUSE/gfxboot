@@ -1,5 +1,7 @@
 #include "jpg.h"
 
+#define __LITTLE_ENDIAN
+
 #define ERR_NO_SOI 1
 #define ERR_NOT_8BIT 2
 #define ERR_HEIGHT_MISMATCH 3
@@ -31,12 +33,9 @@
 #define M_EOF		0x80
 
 struct in {
-	unsigned char *p;
 	unsigned int bits;
 	int left;
 	int marker;
-
-	int (*func) __P((void *));
 	void *data;
 };
 
@@ -72,10 +71,16 @@ struct dec_hufftbl {
 	unsigned int llvals[1 << DECBITS];
 };
 
+struct jpeg_decdata {
+	int dcts[6 * 64 + 16];
+	int out[64 * 6];
+	int dquant[3][64];
+};
+
 static void decode_mcus __P((struct in *, int *, int, struct scan *, int *));
 static void dec_makehuff __P((struct dec_hufftbl *, int *, unsigned char *));
 
-static void setinput __P((struct in *, unsigned char *));
+static void setinput __P((struct in *));
 /*********************************/
 
 #undef PREC
@@ -91,6 +96,7 @@ static void initcol __P((PREC[][64]));
 
 // static void col221111 __P((int *, unsigned char *, int));
 static void col221111_16 __P((int *, unsigned char *, int));
+static unsigned char tmp_img[16*16*2];	/* size depends on color bits! */
 
 /*********************************/
 
@@ -106,7 +112,7 @@ static void col221111_16 __P((int *, unsigned char *, int));
 #define M_COM	0xfe
 
 static unsigned char *datap;
-static unsigned char tmp_img[16*16*2];
+static struct jpeg_decdata decdata;
 
 static void memset(void *p, int c, int n)
 {
@@ -235,7 +241,7 @@ static void dec_initscans(void)
 		dscans[i].dc = 0;
 }
 
-int jpeg_decode(unsigned char *buf, unsigned char *pic, struct jpeg_decdata *decdata, int x0, int x1, int y0, int y1)
+int jpeg_decode(unsigned char *buf, unsigned char *pic, int x0, int x1, int y0, int y1)
 {
 	int i, j, m, tac, tdc;
 	int mcusx, mcusy, mx, my;
@@ -243,8 +249,6 @@ int jpeg_decode(unsigned char *buf, unsigned char *pic, struct jpeg_decdata *dec
 	int width, height;
 	int mx0, mx1, my0, my1;
 
-	if (!decdata)
-		return -1;
 	datap = buf;
 	if (getbyte() != 0xff)
 		return ERR_NO_SOI;
@@ -326,11 +330,11 @@ int jpeg_decode(unsigned char *buf, unsigned char *pic, struct jpeg_decdata *dec
 
         if(my1 < mcusy) mcusy = my1 + 1;
 
-	idctqtab(quant[dscans[0].tq], decdata->dquant[0]);
-	idctqtab(quant[dscans[1].tq], decdata->dquant[1]);
-	idctqtab(quant[dscans[2].tq], decdata->dquant[2]);
-	initcol(decdata->dquant);
-	setinput(&in, datap);
+	idctqtab(quant[dscans[0].tq], decdata.dquant[0]);
+	idctqtab(quant[dscans[1].tq], decdata.dquant[1]);
+	idctqtab(quant[dscans[2].tq], decdata.dquant[2]);
+	initcol(decdata.dquant);
+	setinput(&in);
 
 	dec_initscans();
 
@@ -339,7 +343,7 @@ int jpeg_decode(unsigned char *buf, unsigned char *pic, struct jpeg_decdata *dec
 	dscans[2].next = 6 - 4 - 1 - 1;	/* 411 encoding */
 	for (my = 0; my < mcusy; my++) {
 		for (mx = 0; mx < mcusx; mx++) {
-			decode_mcus(&in, decdata->dcts, 6, dscans, max);
+			decode_mcus(&in, decdata.dcts, 6, dscans, max);
 
 			if(
 			  my >= my0 && my <= my1 &&
@@ -347,15 +351,15 @@ int jpeg_decode(unsigned char *buf, unsigned char *pic, struct jpeg_decdata *dec
 			) {
 				int i0, i1, j0, j1, yofs;
 
-				idct(decdata->dcts, decdata->out, decdata->dquant[0], IFIX(128.5), max[0]);
-				idct(decdata->dcts + 64, decdata->out + 64, decdata->dquant[0], IFIX(128.5), max[1]);
-				idct(decdata->dcts + 128, decdata->out + 128, decdata->dquant[0], IFIX(128.5), max[2]);
-				idct(decdata->dcts + 192, decdata->out + 192, decdata->dquant[0], IFIX(128.5), max[3]);
-				idct(decdata->dcts + 256, decdata->out + 256, decdata->dquant[1], IFIX(0.5), max[4]);
-				idct(decdata->dcts + 320, decdata->out + 320, decdata->dquant[2], IFIX(0.5), max[5]);
+				idct(decdata.dcts,       decdata.out,       decdata.dquant[0], IFIX(128.5), max[0]);
+				idct(decdata.dcts +  64, decdata.out +  64, decdata.dquant[0], IFIX(128.5), max[1]);
+				idct(decdata.dcts + 128, decdata.out + 128, decdata.dquant[0], IFIX(128.5), max[2]);
+				idct(decdata.dcts + 192, decdata.out + 192, decdata.dquant[0], IFIX(128.5), max[3]);
+				idct(decdata.dcts + 256, decdata.out + 256, decdata.dquant[1], IFIX(0.5),   max[4]);
+				idct(decdata.dcts + 320, decdata.out + 320, decdata.dquant[2], IFIX(0.5),   max[5]);
 
 //				if(my == my0 || my == my1 || mx == mx0 || mx == mx1) {
-				  col221111_16(decdata->out, tmp_img, 16 * 2);
+				  col221111_16(decdata.out, tmp_img, 16 * 2);
 
 				  j0 = my == my0 ? y0 - 16 * my : 0;
 				  j1 = my == my1 ? y1 - 16 * my : 16;
@@ -370,7 +374,7 @@ int jpeg_decode(unsigned char *buf, unsigned char *pic, struct jpeg_decdata *dec
 				  }
 //				}
 //				else {
-//				  col221111_16(decdata->out, pic + 2 * ((16 * my - y0) * (x1 - x0) + (16 * mx - x0)), 2 * (x1 - x0));
+//				  col221111_16(decdata.out, pic + 2 * ((16 * my - y0) * (x1 - x0) + (16 * mx - x0)), 2 * (x1 - x0));
 //				}
 			}
 		}
@@ -387,11 +391,9 @@ static int fillbits __P((struct in *, int, unsigned int));
 static int dec_rec2
 __P((struct in *, struct dec_hufftbl *, int *, int, int));
 
-static void setinput(in, p)
+static void setinput(in)
 struct in *in;
-unsigned char *p;
 {
-	in->p = p;
 	in->left = 0;
 	in->bits = 0;
 	in->marker = 0;
@@ -410,12 +412,8 @@ unsigned int bi;
 		return le;
 	}
 	while (le <= 24) {
-		b = *in->p++;
-		if (b == 0xff && (m = *in->p++) != 0) {
-			if (m == M_EOF) {
-				if (in->func && (m = in->func(in->data)) == 0)
-					continue;
-			}
+		b = getbyte();
+		if (b == 0xff && (m = getbyte()) != 0) {
 			in->marker = m;
 			if (le <= 16)
 				bi = bi << 16, le += 16;
@@ -937,18 +935,18 @@ int width;
 
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-void jpeg_get_size(unsigned char *buf, int *width, int *height)
+unsigned jpeg_get_size(unsigned char *buf)
 {
-  int i;
+  unsigned u;
 
   datap = buf;
   getbyte(); getbyte(); 
-  readtables(M_SOF0);
+  if(readtables(M_SOF0)) return 0;
   getword(); getbyte();
 
-  i = getword();
-  if(height) *height = i;
-  i = getword();
-  if(width) *width = i;
+  u = getword() << 16;
+  u += getword();
+
+  return u;
 }
 

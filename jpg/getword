@@ -1,0 +1,7 @@
+getword:
+	movl	datap, %edx
+	movzwl	(%edx), %eax
+	addl	$2, %edx
+	xchgb	%al, %ah
+	movl	%edx, datap
+	ret

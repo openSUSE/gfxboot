@@ -1,0 +1,1297 @@
+#! /usr/bin/perl
+
+# tack pointer usage and assign proper segment registers
+
+use Getopt::Long;
+Getopt::Long::Configure("bundling");
+
+sub add_prefix;
+sub get_arg;
+sub decode_instr;
+sub decode_arg;
+sub trace_it;
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+sub is_ref;
+sub is_reg;
+sub is_num;
+sub is_sym;
+sub const_add;
+sub const_eval;
+sub const_eval_addr;
+sub push_on_stack;
+sub pop_from_stack;
+sub start_trace;
+sub trace_it;
+sub clone_state;
+sub show_state;
+sub start_trace;
+sub set_state;
+sub del_state_context;
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+$re_reg = '%[a-z]+';
+$re_symbol = '[._a-zA-Z][\._a-zA-Z0-9]*';
+$re_num = '\-?\d+';
+
+%full_reg = (
+  '%al' => '%eax',
+  '%ah' => '%eax',
+  '%ax' => '%eax',
+  '%bl' => '%ebx',
+  '%bh' => '%ebx',
+  '%bx' => '%ebx',
+  '%cl' => '%ecx',
+  '%ch' => '%ecx',
+  '%cx' => '%ecx',
+  '%dl' => '%edx',
+  '%dh' => '%edx',
+  '%dx' => '%edx',
+  '%si' => '%esi',
+  '%di' => '%edi',
+  '%bp' => '%ebp',
+  '%sp' => '%esp',
+);
+
+
+$opt_verbose = 0;
+$opt_out_file = '-';
+
+GetOptions(
+  'v'   => sub { $opt_verbose++ },
+  'q'   => sub { $opt_verbose-- },
+  'o=s' => \$opt_out_file,
+);
+    
+
+while(<>) {
+  chomp;
+
+  $text{$.}{orig} = $_;
+
+  if(s/^\s*($re_symbol)://) {
+    $symbol{$1}{line} = $.;
+    $c = $1;
+    $context = $c unless $1 =~ /^\.L/;
+    $ofs = 0;
+  }
+
+  s/\s*#.*//;
+  s/^\s*//;
+
+  if(/^.globl\s+(\S+)$/) {
+    $global{$1} = $.;
+    undef $_;
+  }
+
+  if(defined($ofs) && /^\.(long|byte)\s+(\d+)$/) {
+    $ofs += 1 if $1 eq 'byte';
+    $ofs += 4 if $1 eq 'long';
+    if($context) {
+      $symbol{$context}{size} = $ofs;
+      $seg = $symbol{$context}{seg};
+      if($seg && $seg ne 'cs') {
+        warn "$.: moving $context from \"$seg\" to \"cs\"\n"
+      }
+      $symbol{$context}{seg} = "cs";
+    }
+    undef $_;
+  }
+  else {
+    undef $ofs unless /^\s*$/;
+  }
+
+  if(/^\.space\s+(\d+)\s*\,\s*(\d+)$/) {
+    if($2) {
+      warn "$.: $context has nonzero data\n";
+    }
+    if($context) {
+      $symbol{$context}{size} = $1;
+      $seg = $symbol{$context}{seg};
+      if($seg && $seg ne 'ds') {
+        warn "$.: moving $context from \"$seg\" to \"ds\"\n"
+      }
+      $symbol{$context}{seg} = "ds";
+    }
+    undef $_;
+  }
+
+  $text{$.}{op} = $_;
+  $text{$.}{context} = $context;
+}
+
+for (sort { $a <=> $b } keys %text) {
+  decode_instr $_;
+}
+
+trace_it;
+
+
+for (keys %text) {
+  add_prefix $_;
+}
+
+open F, ">$opt_out_file";
+
+for (sort { $a <=> $b } keys %text) {
+  if($text{$_}{new}) {
+    print F "\t# $text{$_}{new_comment}\n" if $opt_verbose >= 0 && $text{$_}{new_comment};
+    printf F "%s\n", $text{$_}{new};
+  }
+  else {
+    printf F "%s\n", $text{$_}{orig};
+  }
+  if($opt_verbose >= 2 && $text{$_}{instr}) {
+
+    if($opt_verbose >= 3) {
+      $state = $text{$_}{state};
+      print F "\t    #  $state->{'..ilog'}\n" if $state->{'..ilog'};
+      if($state->{'..addr'}) {
+        print F "\t    #  mem ref: " . join(', ', @{$state->{'..addr'}}) . "\n";
+      }
+      print F show_state("\t    #");
+    }
+  }
+}
+
+if($opt_verbose >= 2) {
+  print F "\n# symbols:\n";
+  for (sort { $symbol{$a}{line} <=> $symbol{$b}{line} } keys %symbol) {
+    printf F "#   %s (%sseg = %s, size %d)\n",
+      $_,
+      $global{$_} ? "global, " : "",
+      $symbol{$_}{seg},
+      $symbol{$_}{size};
+  }
+}
+
+close F;
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+sub add_prefix
+{
+  local $_;
+  my ($l, $state, $seg, $s, @i, $n, @a, $i, @c, $d);
+
+  $l = shift;
+
+  return if !($state = $text{$l}{state});
+
+  return unless $text{$l}{instr};
+
+  for (@{$state->{'..addr'}}) {
+    undef $s;
+    @i = split /\+/;
+    next if !$i[0];
+    $s = $symbol{$i[0]}{seg} if is_sym($i[0]) && $symbol{$i[0]}{seg};
+
+    if(!$s || ($seg && $s ne $seg)) {
+      warn "$l: can't determine segment\n"
+    }
+    $seg = $s if $s;
+  }
+
+  for ($i = 0; $i < @{$text{$l}{arg}}; $i++) {
+    if($seg && $state->{'..addr'}[$i]) {
+      $d = $text{$l}{arg}[$i]{seg};
+      $d = 'ds' unless $d;
+      $a[$i] = "%$seg:" if $seg ne $d;
+      push @c, "$text{$l}{arg}[$i]{orig} = %$seg:$state->{'..addr'}[$i]";
+    }
+    $a[$i] .= $text{$l}{arg}[$i]{orig};
+  }
+
+  $n = "\t$text{$l}{instr}";
+  $n .= "\t" . join(', ', @a) if @a;
+
+  $text{$l}{new_comment} = join(', ', @c) if @c;
+  $text{$l}{new} = $n;
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+sub get_arg
+{
+  local $_;
+
+  $_ = shift;
+
+  if(/^([^,()]*(\(.*?\))?[^,()]*)/) {
+    return $1;
+  }
+
+  return undef;
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+sub decode_instr
+{
+  local $_;
+  my ($l, $op, $instr, $arg1, $arg2, $arg3, @arg, $arg, $is_branch);
+
+  $l = shift;
+
+  $op = $text{$l}{op};
+
+  return unless $op =~ s/^(\S+)\s*//;
+
+  $instr = $1;
+
+  return if $instr =~ /^\.(file|text|code16gcc)$/;
+
+  $is_branch = 1 if $instr =~ /^(call|j)/;
+
+  $arg1 = get_arg $op;
+  substr($op, 0, length($arg1)) = "";
+  $op =~ s/^,\s*//;
+
+  $arg2 = get_arg $op;
+  substr($op, 0, length($arg2)) = "";
+  $op =~ s/^,\s*//;
+
+  $arg3 = get_arg $op;
+  substr($op, 0, length($arg3)) = "";
+  $op =~ s/^,\s*//;
+
+  if($op) {
+    warn "$l: error splitting args\n"
+  }
+
+#  print "[$instr] [$arg1] [$arg2] [$arg3]\n";
+
+  $text{$l}{instr} = $instr;
+
+  $. = $l;
+
+  if($arg1) {
+    $arg = decode_arg $arg1, $is_branch;
+    push @arg, $arg;
+  }
+
+  if($arg2) {
+    $arg = decode_arg $arg2, $is_branch;
+    push @arg, $arg;
+  }
+
+  if($arg3) {
+    $arg = decode_arg $arg3, $is_branch;
+    push @arg, $arg;
+  }
+
+  $text{$l}{arg} = [ @arg ];
+
+#  for $arg (@arg) {
+#    print "$arg->{orig},\tval = $arg->{val}\n";
+#  }
+
+#  print "$text{$l}{arg}[0]{orig}\n";
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+sub decode_arg
+{
+  local $_;
+  my ($is_branch, $arg, $p, $v, $seg, $l, @i);
+
+  $_ = shift;
+  $is_branch = shift;
+
+  $arg->{orig} = $_;
+
+  if(/^(\*?)($re_reg)$/o) {
+    $arg->{val} = $2;
+
+    if($1) {
+      warn "$.: arg with \"*\"?\n" unless $is_branch;
+    }
+
+    return $arg;
+  }
+
+  if(s/^([*\$]?)([^*,:%()]+)//) {
+    $p = $1;
+    $v = $2;
+    if($v =~ s/^($re_symbol)([\+\-])?//i) {
+      $v = "-$v" if $2 eq '-';
+      $l = $1;
+    }
+
+    if($v && $v !~ /^$re_num$/o) {
+      warn "$.: $v is not a number\n";
+    }
+
+    if($l) {
+      warn "$.: unknown symbol $l\n" unless $symbol{$l};
+      $v = "+$v" if $v;
+      $arg->{val} = "$l$v";
+    }
+    else {
+      $arg->{val} = $v;
+    }
+
+    if($is_branch) {
+      warn "$.: arg with \"$p\"?\n" if $p eq '$';
+      $arg->{val} = "*$arg->{val}" if $p eq '*';
+    }
+    else {
+      warn "$.: arg with \"$p\"?\n" if $p eq '*';
+      $arg->{val} = "*$arg->{val}" unless $p eq '$';
+    }
+  }
+
+  if(/^\(.+\)$/) {
+    s/(^\(|\)$)//g;
+    @i = split /\s*,\s*/;
+    $i[2] = 1 unless $i[2];
+    if($i[0] eq '%esp' || $i[0] eq '%ebp') {
+      $arg->{seg} = 'ss';
+    }
+    if($i[1] && $i[1] eq $i[0]) {
+      $i[0] = undef;
+      $i[2]++;
+    }
+
+    $arg->{val} = '*' unless $arg->{val};
+
+    $arg->{val} .= "+$i[0]" if $i[0];
+    $arg->{val} .= "+$i[1]" if $i[1];
+    $arg->{val} .= "*$i[2]" if $i[2] > 1;
+
+    $arg->{val} =~ s/^\*\+/*/;
+
+    return $arg;
+  }
+
+  warn "$.: don't understand \"$arg->{orig}\"\n" if $_;
+
+  return $arg;
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+sub is_ref
+{
+  return $_[0] =~ /^\*/o;
+}
+
+
+sub is_reg
+{
+  return $_[0] =~ /^$re_reg$/o;
+}
+
+
+sub is_num
+{
+  return $_[0] =~ /^$re_num$/o;
+}
+
+
+sub is_sym
+{
+  return $symbol{$_[0]};
+}
+
+
+sub const_add
+{
+  local $_;
+  my (@i, $i, $ok, $arg1, $arg2);
+
+  ($arg1, $arg2) = @_;
+
+  if($arg1 eq '?') {
+    ($arg2, $arg1) = ($arg1, $arg2);
+  }
+
+  if($symbol{$arg1}) {
+    ($arg2, $arg1) = ($arg1, $arg2);
+  }
+
+  if(is_num($arg1)) {
+    ($arg2, $arg1) = ($arg1, $arg2);
+  }
+
+  @i = split /\+/, $arg1;
+
+  if(is_num $arg2) {
+    for (@i) {
+      if(/^$re_num$/o) {
+        $_ += $arg2;
+        $ok = 1;
+        last;
+      }
+      elsif($_ eq '?') {
+        $ok = 1;
+        last;
+      }
+    }
+    push @i, $arg2 unless $ok;
+  }
+  elsif(is_sym $arg2) {
+    if(is_num $arg1) {
+      @i = ( $arg2 );
+      push @i, $arg1 if $arg1 != 0;
+    }
+    elsif($arg1 eq '?') {
+      @i = ( $arg2, '?' );
+    }
+    else {
+      @i = ( '?' );
+    }
+  }
+  elsif($arg2 eq '?') {
+    for (@i) {
+      if(/^$re_num$/o || $_ eq '?') {
+        $_ = '?';
+        $ok = 1;
+        last;
+      }
+    }
+    @i = ( '?' ) unless $ok;
+  }
+  else {
+    @i = ( '?' );
+  }
+
+  $i = join '+', @i;
+
+  # print ">>$arg1 + $arg2 = $i<<\n";
+
+  return $i;
+}
+
+
+sub const_eval
+{
+  local $_;
+  my ($arg, @i, @j, $sym, $val, $nosym, $ref, $i, $fact);
+
+  $arg = shift;
+
+  $val = 0;
+
+  $ref = 1 if $arg =~ s/^\*//;
+
+  @i = split /\+/, $arg;
+
+  for (@i) {
+    undef $fact;
+    if(/^%/ && s/\*(\d+)$//) {
+      $fact = $1;
+      undef $fact if $fact == 1;
+    }
+    if(is_reg($_) && defined($state->{$_})) {
+      if(is_num($state->{$_}) && defined($fact)) {
+        $fact *= $state->{$_};
+        push @j, "$fact";
+      }
+      elsif(!defined($fact)) {
+        push @j, split(/\+/, $state->{$_});
+      }
+      else {
+         push @j, '?';
+      }
+    }
+    else {
+      push @j, $_;
+    }
+  }
+
+  for (@j) {
+    if($symbol{$_}) {
+      $nosym = 1 if $sym;
+      $sym = $_;
+      next;
+    }
+
+    if(/^$re_num$/o) {
+      $val += $_ unless $val eq '?';
+      next;
+    }
+
+    $val = '?';
+  }
+
+  $i = '?';
+
+  if(!$nosym) {
+    if($sym && $val) {
+      $i = "$sym+$val";
+    }
+    elsif($sym) {
+      $i = $sym;
+    }
+    elsif(defined($val)) {
+      $i = "$val";
+    }
+  }
+
+  if($ref) {
+    if($state->{$i}) {
+      $i = $state->{$i};
+    }
+    else {
+      $i = '?';
+    }
+  }
+
+  return $i;
+}
+
+
+sub const_eval_addr
+{
+  local $_;
+
+  $_ = shift;
+
+  return $_ if /^${re_reg}$/;
+
+  $_ =~ s/^\*//;
+
+  return const_eval $_;
+}
+
+
+sub push_on_stack
+{
+  my ($new_sp);
+
+  $new_sp = const_add $state->{"%esp"}, -4;
+
+  $state->{"%esp"} = $new_sp;
+  $state->{"$new_sp"} = $_[0];
+}
+
+
+sub pop_from_stack
+{
+  my ($new_sp, $i);
+
+  $new_sp = const_add $state->{"%esp"}, 4;
+
+  $i = $state->{$state->{"%esp"}};
+
+  delete $state->{$state->{"%esp"}};
+  $state->{"%esp"} = $new_sp;
+
+  return $i;
+}
+
+
+sub trace_it
+{
+  undef @branch_states;
+
+  $symbol{stack}{size} = 1000;
+  $symbol{stack}{seg} = 'ss';
+
+  $symbol{jpg}{seg} = 'es';
+  $symbol{pic}{seg} = 'fs';
+
+  $state->{"%esp"} = "stack+1000";
+  push_on_stack "jpg";
+  push_on_stack "0+%cs";
+  $state->{"%eip"} = "$symbol{jpeg_get_size}{line}+%cs";
+  push @branch_states, clone_state($state);
+
+  $state->{"%esp"} = "stack+1000";
+  push_on_stack "111";
+  push_on_stack "11";
+  push_on_stack "222";
+  push_on_stack "22";
+  push_on_stack "pic";
+  push_on_stack "jpg";
+  push_on_stack "0+%cs";
+  $state->{"%eip"} = "$symbol{jpeg_decode}{line}+%cs";
+  push @branch_states, clone_state($state);
+
+  undef $state;
+
+  while($state = pop @branch_states) {
+    start_trace;
+  }
+}
+
+
+sub clone_state
+{
+  my ($new_state);
+
+  $new_state->{$_} = $state->{$_} for keys %{$state};
+
+  return $new_state;
+}
+
+
+sub show_state
+{
+  local $_;
+  my ($s);
+
+  for (sort keys %{$state}) {
+    $s .= "$_[0]  $_ = $state->{$_}\n" unless /^\.\./;
+  }
+
+  return $s;
+}
+
+
+sub start_trace
+{
+  local $_;
+  my ($op, $c, $ok, $opc, $br);
+
+  $pc = 0;
+
+  $br = @branch_states;
+
+  # print "starting at: $state->{'%eip'} ($br)\n";
+
+  $state->{'..stop'} = undef;
+
+  do {
+    $state->{'..addr'} = undef;
+    $state->{'..ilog'} = undef;
+
+    if($state->{"%eip"} =~ /^(${re_num})\+%cs$/) {
+      $pc = $1;
+    }
+    else {
+      warn "$state->{'%eip'}: oops, got lost\n";
+      return;
+    }
+
+    return if !$pc;
+
+    if(!exists($text{"$pc"})) {
+      warn "$state->{'%eip'}: oops, got lost\n";
+      return;
+    }
+
+    if($state->{"..%oeip"} =~ /^(${re_num})\+%cs$/) {
+      $opc = $1;
+    }
+    else {
+      $opc = 0;
+    }
+
+    $loc = "$opc->$pc";
+
+    $op = $text{"$pc"};
+
+    print "# $loc: $op->{orig}\n" if $opt_verbose >= 2;
+
+    $ok = 0;
+
+    $state->{"..%oeip"} = $state->{"%eip"};
+
+    $state->{"%eip"} = const_add $state->{"%eip"}, 1;
+
+    if($op->{instr}) {
+      if($c = $opcodes{$op->{instr}}) {
+        &$c($op);
+        $ok = 1;
+      }
+      else {
+        warn "$pc: unknown opcode: $op->{instr}\n";
+      }
+    }
+
+    $text{"$pc"}{state} = clone_state;
+
+    print "# $state->{'..ilog'}\n" if $opt_verbose >= 1;
+
+    if($opt_verbose >= 3) {
+      print show_state if $ok;
+    }
+
+  } while(!$state->{'..stop'});
+}
+
+
+sub set_state
+{
+  $state->{$_[0]} = "$_[1]";
+}
+
+
+sub del_state_context
+{
+  local $_;
+
+  return unless $_[0];
+
+  for (keys %text) {
+    undef $text{$_}{state} if $text{$_}{context} eq $_[0];
+  }
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+BEGIN {
+  %opcodes = (
+    pushl  => \&op_pushl,
+    popl   => \&op_popl,
+    movl   => \&op_movl,
+    movzbl => \&op_movl,
+    movzwl => \&op_movl,
+    movl   => \&op_movl,
+    movw   => \&op_movl,
+    movb   => \&op_movl,
+    xchgb  => \&op_xchgb,
+    leal   => \&op_leal,
+    xorl   => \&op_alu2,
+    sall   => \&op_alu2,
+    sarl   => \&op_alu2,
+    addl   => \&op_alu2,
+    subl   => \&op_alu2,
+    incl   => \&op_alu1,
+    decl   => \&op_alu1,
+    negl   => \&op_alu1,
+    notl   => \&op_alu1,
+    setg   => \&op_alu1,
+    setge  => \&op_alu1,
+    setl   => \&op_alu1,
+    setle  => \&op_alu1,
+    sete   => \&op_alu1,
+    setne  => \&op_alu1,
+    testl  => \&op_alu2,
+    cmpl   => \&op_alu2,
+    orl    => \&op_alu2,
+    andl   => \&op_alu2,
+    orb    => \&op_alu2,
+    testb  => \&op_alu2,
+    imull  => \&op_imull,
+    ret    => \&op_ret,
+    call   => \&op_jmp,
+    jmp    => \&op_jmp,
+    je     => \&op_jmp,
+    jne    => \&op_jmp,
+    jg     => \&op_jmp,
+    jng    => \&op_jmp,
+    jl     => \&op_jmp,
+    jnl    => \&op_jmp,
+    js     => \&op_jmp,
+    jns    => \&op_jmp,
+    ja     => \&op_jmp,
+    jna    => \&op_jmp,
+    jb     => \&op_jmp,
+    jnb    => \&op_jmp,
+    jle    => \&op_jmp,
+    jge    => \&op_jmp,
+    cltd   => \&op_cltd,
+    idivl  => \&op_idivl,
+  );
+}
+
+
+sub op_pushl
+{
+  my ($op, $args, $val1, $arg1);
+
+  $op = shift;
+
+  $args = @{$op->{arg}};
+
+  if($args != 1) {
+    warn "$pc: invalid number of arguments\n";
+    return;
+  }
+
+  $arg1 = $op->{arg}[0]->{val};
+
+  $val1 = const_eval $arg1;
+
+  $state->{'..addr'}[0] = const_eval_addr $arg1 if is_ref $arg1;
+
+  $state->{'..ilog'} = "$loc: $op->{instr} $arg {$val1}";
+
+  push_on_stack $val1;
+}
+
+
+sub op_popl
+{
+  my ($op, $args, $val1, $arg1);
+
+  $op = shift;
+
+  $args = @{$op->{arg}};
+
+  if($args != 1) {
+    warn "$pc: invalid number of arguments\n";
+    return;
+  }
+
+  $arg1 = $op->{arg}[0]->{val};
+
+  $val1 = const_eval_addr $arg1;
+
+  $state->{'..addr'}[0] = $val1 if is_ref $arg1;
+
+  set_state $val1, pop_from_stack;
+
+  $state->{'..ilog'} = "$loc: $op->{instr} $arg {$val1}";
+}
+
+
+sub op_movl
+{
+  my ($op, $args, $val1, $val2, $arg1, $arg2, $val3);
+
+  $op = shift;
+
+  $args = @{$op->{arg}};
+
+  if($args != 2) {
+    warn "$pc: invalid number of arguments\n";
+    return;
+  }
+
+  $arg1 = $op->{arg}[0]->{val};
+  $arg2 = $op->{arg}[1]->{val};
+
+  if($full_reg{$arg1}) {
+    $arg1 = $full_reg{$arg1};
+  }
+
+  if($full_reg{$arg2}) {
+    $arg2 = $full_reg{$arg2};
+  }
+
+  $val1 = const_eval $arg1;
+  $val2 = const_eval_addr $arg2;
+
+  $val3 = $val1;
+
+  if(
+    $op->{instr} eq 'movzbl' ||
+    $op->{instr} eq 'movzwl' ||
+    $op->{instr} eq 'movb' ||
+    $op->{instr} eq 'movw'
+  ) {
+    $val3 = '?';
+  }
+
+  $state->{'..addr'}[0] = const_eval_addr $arg1 if is_ref $arg1;
+  $state->{'..addr'}[1] = $val2 if is_ref $arg2;
+
+  set_state $val2, $val3;
+
+  $state->{'..ilog'} = "$loc: $op->{instr} $arg1 {$val1}, $arg2 {$val2}";
+}
+
+
+sub op_leal
+{
+  my ($op, $args, $val1, $val2, $arg1, $arg2);
+
+  $op = shift;
+
+  $args = @{$op->{arg}};
+
+  if($args != 2) {
+    warn "$pc: invalid number of arguments\n";
+    return;
+  }
+
+  $arg1 = $op->{arg}[0]->{val};
+  $arg2 = $op->{arg}[1]->{val};
+
+  $val1 = const_eval_addr $arg1;
+  $val2 = const_eval_addr $arg2;
+
+  set_state $val2, $val1;
+
+  # $state->{'..addr'}[0] = $val1;
+
+  $state->{'..ilog'} = "$loc: $op->{instr} $arg1 {$val1}, $arg2 {$val2}";
+}
+
+
+sub op_xchgb
+{
+  my ($op, $args, $val1, $val2, $arg1, $arg2, $val3);
+
+  $op = shift;
+
+  $args = @{$op->{arg}};
+
+  if($args != 2) {
+    warn "$pc: invalid number of arguments\n";
+    return;
+  }
+
+  $arg1 = $op->{arg}[0]->{val};
+  $arg2 = $op->{arg}[1]->{val};
+
+  if($full_reg{$arg1}) {
+    $arg1 = $full_reg{$arg1};
+  }
+
+  if($full_reg{$arg2}) {
+    $arg2 = $full_reg{$arg2};
+  }
+
+  $val1 = const_eval_addr $arg1;
+  $val2 = const_eval_addr $arg2;
+
+  $val3 = '?';
+
+  $state->{'..addr'}[0] = $val1 if is_ref $arg1;
+  $state->{'..addr'}[1] = $val2 if is_ref $arg2;
+
+  set_state $val1, $val3;
+  set_state $val2, $val3;
+
+  $state->{'..ilog'} = "$loc: $op->{instr} $arg1 {$val1}, $arg2 {$val2}";
+}
+
+
+sub op_alu2
+{
+  my ($op, $args, $val1, $val2, $val3, $arg1, $arg2, $arg3, $no_change);
+
+  $op = shift;
+
+  $args = @{$op->{arg}};
+
+  if($args != 2) {
+    warn "$pc: invalid number of arguments\n";
+    return;
+  }
+
+  $arg1 = $op->{arg}[0]->{val};
+  $arg2 = $op->{arg}[1]->{val};
+
+  if($full_reg{$arg1}) {
+    $arg1 = $full_reg{$arg1};
+  }
+
+  if($full_reg{$arg2}) {
+    $arg2 = $full_reg{$arg2};
+  }
+
+  $val1 = const_eval $arg1;
+  $val2 = const_eval $arg2;
+  $arg3 = const_eval_addr $arg2;
+
+  $val3 = '?';
+
+  if($op->{instr} eq 'sall') {
+    if(is_num($val1) && is_num($val2)) {
+      $val3 = $val2 << $val1;
+    }
+    elsif($arg1 eq '0') {
+      $val3 = $val2;
+    }
+  }
+  elsif($op->{instr} eq 'sarl') {
+    if(is_num($val1) && is_num($val2)) {
+      $val3 = $val2 >> $val1;
+    }
+    elsif($arg1 eq '0') {
+      $val3 = $val2;
+    }
+  }
+  elsif($op->{instr} eq 'xorl') {
+    if(is_num($val1) && is_num($val2)) {
+      $val3 = ($val1 + 0) ^ ($val2 + 0);
+      $val3 = $val3;
+    }
+    elsif($arg1 eq $arg2) {
+      $val3 = '0';
+    }
+  }
+  elsif($op->{instr} eq 'addl') {
+    if(is_num($val1) || is_num($val2)) {
+      $val3 = const_add $val1, $val2;
+    }
+    elsif($symbol{$val1} || $symbol{$val2}) {
+      $val3 = const_add $val1, $val2;
+    }
+    elsif($val1 eq '?' || $val2 eq '?') {
+      $val3 = const_add $val1, $val2;
+    }
+  }
+  elsif($op->{instr} eq 'subl') {
+    if(is_num($val1)) {
+      $val3 = const_add $val2, -$val1;
+    }
+  }
+  elsif($op->{instr} eq 'orl') {
+    if(is_num($val1) && is_num($val2)) {
+      $val3 = $val1 | $val2;
+    }
+    elsif($arg1 eq $arg2) {
+      $val3 = $val2;
+    }
+  }
+  elsif($op->{instr} eq 'andl') {
+    if(is_num($val1) && is_num($val2)) {
+      $val3 = $val1 & $val2;
+    }
+    elsif($arg1 eq $arg2) {
+      $val3 = $val2;
+    }
+  }
+  elsif($op->{instr} eq 'orb') {
+  }
+  elsif($op->{instr} eq 'cmpl' || $op->{instr} eq 'testl' || $op->{instr} eq 'testb') {
+    $no_change = 1;
+  }
+
+  $state->{'..addr'}[0] = const_eval_addr $arg1 if is_ref $arg1;
+  $state->{'..addr'}[1] = $arg3 if is_ref $arg2;
+
+  set_state $arg3, $val3 unless $no_change;
+
+  $state->{'..ilog'} = "$loc: $op->{instr} $arg1 {$val1}, $arg2 {$val2}";
+}
+
+
+sub op_alu1
+{
+  my ($op, $args, $val1, $val2, $arg1, $arg2);
+
+  $op = shift;
+
+  $args = @{$op->{arg}};
+
+  if($args != 1) {
+    warn "$pc: invalid number of arguments\n";
+    return;
+  }
+
+  $arg1 = $op->{arg}[0]->{val};
+
+  if($full_reg{$arg1}) {
+    $arg1 = $full_reg{$arg1};
+  }
+
+  $val1 = const_eval $arg1;
+  $arg2 = const_eval_addr $arg1;
+
+  $val2 = '?';
+
+  if($op->{instr} eq 'incl') {
+    $val2 = const_add $val1, 1;
+  }
+  elsif($op->{instr} eq 'decl') {
+    $val2 = const_add $val1, -1;
+  }
+  elsif(
+    $op->{instr} eq 'negl' ||
+    $op->{instr} eq 'notl' ||
+    $op->{instr} =~ /^set/
+  ) {
+    $val2 = '?';
+  }
+
+  $state->{'..addr'}[0] = $arg2 if is_ref $arg1;
+
+  set_state $arg2, $val2;
+
+  $state->{'..ilog'} = "$loc: $op->{instr} $arg1 {$val1}";
+}
+
+
+sub op_imull
+{
+  my ($op, $args, $val1, $val2, $val3, $arg1, $arg2, $arg3, $arg4, $fact);
+
+  $op = shift;
+
+  $args = @{$op->{arg}};
+
+  if($args != 2 && $args != 3) {
+    warn "$pc: invalid number of arguments\n";
+    return;
+  }
+
+  if($args == 2) {
+    $arg1 = $op->{arg}[0]->{val};
+    $arg2 = $op->{arg}[1]->{val};
+  }
+  else {
+    $arg1 = $op->{arg}[0]->{val};
+    $arg2 = $op->{arg}[1]->{val};
+    $arg3 = $op->{arg}[2]->{val};
+  }
+
+  if($full_reg{$arg1}) {
+    $arg1 = $full_reg{$arg1};
+  }
+
+  if($full_reg{$arg2}) {
+    $arg2 = $full_reg{$arg2};
+  }
+
+  $val1 = const_eval $arg1;
+  $val2 = const_eval $arg2;
+
+  if($args == 2) {
+    $arg4 = const_eval_addr $arg2;
+  }
+  else {
+    $arg4 = const_eval_addr $arg3;
+  }
+
+  $val3 = '?';
+
+  if(is_num($val1) && is_num($val2)) {
+    $val3 = $val1 * $val2;
+  }
+
+  if($args == 2) {
+    $state->{'..addr'}[0] = const_eval_addr $arg1 if is_ref $arg1;
+    $state->{'..addr'}[1] = $arg4 if is_ref $arg2;
+  }
+  else {
+    $state->{'..addr'}[0] = const_eval_addr $arg1 if is_ref $arg1;
+    $state->{'..addr'}[1] = const_eval_addr $arg2 if is_ref $arg2;
+    $state->{'..addr'}[1] = $arg4 if is_ref $arg3;
+  }
+
+  set_state $arg4, $val3;
+
+  $state->{'..ilog'} = "$loc: $op->{instr} $arg1 {$val1}, $arg2 {$val2}";
+}
+
+
+sub op_cltd
+{
+  my ($op, $args);
+
+  $op = shift;
+
+  $args = @{$op->{arg}};
+
+  if($args != 0) {
+    warn "$pc: invalid number of arguments\n";
+    return;
+  }
+
+  set_state "%edx", '?';
+
+  $state->{'..ilog'} = "$loc: $op->{instr}";
+}
+
+
+sub op_idivl
+{
+  my ($op, $args, $val1, $val2, $arg1, $arg2);
+
+  $op = shift;
+
+  $args = @{$op->{arg}};
+
+  if($args != 1) {
+    warn "$pc: invalid number of arguments\n";
+    return;
+  }
+
+  $arg1 = $op->{arg}[0]->{val};
+
+  $val1 = const_eval $arg1;
+  $arg2 = const_eval_addr $arg1;
+
+  $state->{'..addr'}[0] = $arg2 if is_ref $arg1;
+
+  set_state "%eax", '?';
+  set_state "%edx", '?';
+
+  $state->{'..ilog'} = "$loc: $op->{instr} $arg1 {$val1}";
+}
+
+
+sub op_ret
+{
+  my ($op, $args, $i);
+
+  $op = shift;
+
+  $args = @{$op->{arg}};
+
+  # no 'ret n' support
+  if($args != 0) {
+    warn "$pc: invalid number of arguments\n";
+    return;
+  }
+
+  $state->{'%eip'} = pop_from_stack;
+
+  $state->{'..ilog'} = "$loc: $op->{instr}";
+}
+
+
+sub op_jmp
+{
+  my ($op, $args, $val1, $arg1, $ns, $taken);
+
+  $op = shift;
+
+  $args = @{$op->{arg}};
+
+  if($args != 1) {
+    warn "$pc: invalid number of arguments\n";
+    return;
+  }
+
+  $arg1 = $op->{arg}[0]->{val};
+
+  $val1 = const_eval $arg1;
+
+  if($symbol{$val1}) {
+    $val1 = "$symbol{$val1}{line}+%cs";
+  }
+
+  $state->{'..ilog'} = "$loc: $op->{instr} $arg {$val1}";
+
+  if($op->{instr} eq 'call') {
+    if($val1 =~ /^(${re_num})\+%cs$/ && $text{$1}{state}) {
+      $taken = 1;
+    }
+
+ #    del_state_context $arg1;
+
+    # print ">> $loc: call $arg1\n";
+
+    # evil hack to avoid loops
+    if(!$taken) {
+      push_on_stack $state->{'%eip'};
+      $state->{'%eip'} = $val1;
+    }
+  }
+  else {
+    if($val1 =~ /^(${re_num})\+%cs$/ && $text{$1}{state}) {
+      $taken = 1;
+    }
+
+    if($op->{instr} eq 'jmp') {
+      # unconditional braches
+      if($taken) {
+        $state->{'..stop'} = 1;
+        # print "** $loc: stopped\n";
+      }
+      $state->{'%eip'} = $val1;
+    }
+    else {
+      # conditional branches
+
+      if(!$taken) {
+        $ns = clone_state;
+        $ns->{'%eip'} = $val1;
+
+        push @branch_states, $ns;
+      }
+    }
+  }
+}
+
+

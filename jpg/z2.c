@@ -13,7 +13,6 @@ int main(int argc, char **argv)
   int fd, i, width, height;
   unsigned char *jpg = malloc(1 << 20);
   unsigned char *img, *p;
-  struct jpeg_decdata jdd;
   unsigned bits = 16;
   unsigned char pixel[3];
   unsigned x;
@@ -33,23 +32,32 @@ int main(int argc, char **argv)
 
   jpg = realloc(jpg, i);
 
-  jpeg_get_size(jpg, &width, &height);
+  x = jpeg_get_size(jpg);
+
+  width = x & 0xffff;
+  height = x >> 16;
 
   fprintf(stderr, "size = %d bytes, width = %d, height = %d\n", i, width, height);
 
   img = malloc(width * height * 4);
 
-  x0 = 10;
-  x1 = 170;
-  y0 = 20;
-  y1 = 177;
+  x0 = 0;
+  x1 = 200;
+  y0 = 0;
+  y1 = 100;
 
-  i = jpeg_decode(jpg, img, &jdd, x0, x1, y0, y1);
+  i = jpeg_decode(jpg, img, x0, x1, y0, y1);
 
   width = x1 - x0;
   height = y1 - y0;
 
   fprintf(stderr, "decode = %d\n", i);
+
+  fprintf(stderr,
+    "%02x %02x %02x %02x %02x %02x %02x %02x\n",
+    img[0], img[1], img[2], img[3],
+    img[4], img[5], img[6], img[7]
+  );
 
   if(argc >= 3) {
 
@@ -70,7 +78,7 @@ int main(int argc, char **argv)
           pixel[2] = *p++;
         }
         else {
-          x = p[1] + (p[0] << 8);
+          x = p[0] + (p[1] << 8);
           p += 2;
 
           pixel[0] = ((x >> 11) & 0x1f) << 3;
