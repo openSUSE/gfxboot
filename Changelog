@@ -1,3 +1,7 @@
+21/2/2005:	v3.0.7
+	- 9.3 theme
+	- fixed color handling bug
+
 15/2/2005:	v3.0.6
 	- sync language list with yast2
 	- fixed making slp default

@@ -10,16 +10,20 @@
 
 % Boot loader splash areas to uncover.
 %
+%/bsplash.areas [
+%  [   0 146 640 166  true ]
+%  [  54  43 137  42 false ]
+%  [ 228  89 128  36 false ]
+%  [ 325  35 186  45 false ]
+%  [ 544  19  73 116 false ]
+%  [  19 353 172  62 false ]
+%  [ 199 406 104  41 false ]
+%  [ 308 327 134  42 false ]
+%  [ 427 384 177  42 false ]
+%] def
+
 /bsplash.areas [
-  [   0 146 640 166  true ]
-  [  54  43 137  42 false ]
-  [ 228  89 128  36 false ]
-  [ 325  35 186  45 false ]
-  [ 544  19  73 116 false ]
-  [  19 353 172  62 false ]
-  [ 199 406 104  41 false ]
-  [ 308 327 134  42 false ]
-  [ 427 384 177  42 false ]
+  [ 0 800 0 600 true ]
 ] def
 
 % start value
@@ -46,13 +50,13 @@
 /bsplash.show {
   currentimage
 
-  "splash.pcx" findfile /splash.file over def setimage loadpalette
+  "splash.jpg" findfile /splash.file over def setimage loadpalette
   /max_image_colors max_image_colors image.colors max def
 
-  0 0 moveto currentpoint 1 1 image getpixel setcolor screen.size fillrect
+%  0 0 moveto currentpoint 1 1 image getpixel setcolor screen.size fillrect
 
 %  7 0xffffff setpalette
-%  0 0 moveto 0 0 image.size image
+  0 0 moveto 0 0 image.size image
 
   % center image
   image.size screen.size exch 4 -1 roll sub 2 div 3 1 roll exch sub 2 div

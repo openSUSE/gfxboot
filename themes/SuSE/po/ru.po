@@ -148,10 +148,10 @@ msgstr ""
 #. txt_insert_disk3
 #, c-format
 msgid ""
-"This is not a SUSE LINUX 9.2 Boot Disk.\n"
+"This is not a SUSE LINUX 9.3 Boot Disk.\n"
 "Please insert Boot Disk %u."
 msgstr ""
-"\"Это не SUSE LINUX 9.2 загрузочный диск.\n"
+"\"Это не SUSE LINUX 9.3 загрузочный диск.\n"
 "Пожалуйста вставьте загрузочный диск %u."
 
 # password dialog title

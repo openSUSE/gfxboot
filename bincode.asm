@@ -5773,6 +5773,7 @@ prim_imagecolors_90:
 
 prim_setcolor:
 		call pr_setint
+		call encode_color
 		mov [gfx_color0],eax
 		call setcolor
 		ret
@@ -8211,7 +8212,6 @@ goto_xy:
 ;  Changed registers: eax
 ;
 setcolor:
-		call encode_color
 		mov [gfx_color],eax
 		ret
 

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2004-03-30 19.28+0200\n"
+"PO-Revision-Date: 2004-03-30 19.38+0200\n"
 "Last-Translator: Takekazu Okamoto <tokamoto@novell.com>\n"
 "Language-Team: Japanese <i18n@suse.de>\n"
 "MIME-Version: 1.0\n"
@@ -131,10 +131,10 @@ msgstr ""
 #. txt_insert_disk3
 #, c-format
 msgid ""
-"This is not a SUSE LINUX 9.2 Boot Disk.\n"
+"This is not a SUSE LINUX 9.3 Boot Disk.\n"
 "Please insert Boot Disk %u."
 msgstr ""
-"これはSUSE LINUX 9.2のブートディスクではありません。\n"
+"これはSUSE LINUX 9.3のブートディスクではありません。\n"
 "ブートディスク %u を挿入してください。"
 
 # password dialog title

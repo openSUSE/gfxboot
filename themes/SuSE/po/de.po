@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
-"PO-Revision-Date: 2004-03-09.28:37GMT\n"
+"PO-Revision-Date: 2004-03-09.38:37GMT\n"
 "Last-Translator: Antje Faber <afaber@suse.de>\n"
 "Language-Team: German <i18n@suse.de>\n"
 "MIME-Version: 1.0\n"
@@ -134,10 +134,10 @@ msgstr ""
 #. txt_insert_disk3
 #, c-format
 msgid ""
-"This is not a SUSE LINUX 9.2 Boot Disk.\n"
+"This is not a SUSE LINUX 9.3 Boot Disk.\n"
 "Please insert Boot Disk %u."
 msgstr ""
-"Dies ist keine SUSE LINUX 9.2-Bootdiskette.\n"
+"Dies ist keine SUSE LINUX 9.3-Bootdiskette.\n"
 "Legen Sie die Bootdiskette %u ein."
 
 # password dialog title

@@ -604,7 +604,7 @@
   menu.status {
     menu.bar.color
     setcolor menu.bar.width menu.bar.height
-    80 settransparency
+    70 settransparency
     fillrect
     0 settransparency
   } {
@@ -1039,26 +1039,27 @@
 
   /menu.text.xofs      10 def
   /menu.text.yofs       2 def
-  /menu.item.height    fontheight dup 3 div add def
+  /menu.item.height    fontheight dup 6 div add def
   /menu.bar.height     fontheight menu.text.yofs dup add add def
 
   font.normal setfont
 
-  /menu.text.normal    black             def
+  /menu.text.normal    somegreen         def
   /menu.text.select    white             def
   /boot.text.options   black             def
   /boot.text.normal    black             def
   /infobox.bg          lightgray         def
   /infobox.text.normal black             def
 
-  /menu.bar.color      fn_color       def
+%  /menu.bar.color      fn_color       def
+  /menu.bar.color      somegreen       def
 
   /frame1.pos  { 100  90 } def
   /frame1.size { 325 195 } def
 
   clip.size pop 800 eq {
-    /frame1.pos  { 230  90 } def
-    /frame1.size { 340 195 } def
+    /frame1.pos  { 190 203 } def
+    /frame1.size { 365 195 } def
   } if
 
   /frame4.pos  { 560  62 } def
@@ -1068,7 +1069,7 @@
   /menu.start.y frame1.pos exch pop 12 add def
 
   /menu.bar.width frame1.size pop 20 sub def
-  /menu.max.entries 7 def
+  /menu.max.entries 6 def
   /menu.scrollbar false def
 
   /boot.label.len 230 def
@@ -1432,6 +1433,8 @@ bsplash.show
 % /lightgray           0xa9bbcd          newcolor
 /dotcolor            0xa9bbcd          newcolor
 /lightdotcolor       0xeff2f6          newcolor
+/somegreen           0x004f40          newcolor
+
 
 %% include theme_colors.inc
 

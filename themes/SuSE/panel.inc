@@ -58,10 +58,10 @@
     } {
 
       [ keyF2 0 "F2" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
-      [ keyF3 0 "F3" /panel.splash /panel.splash.width /panel.splash.update /splash.init ]
+%      [ keyF3 0 "F3" /panel.splash /panel.splash.width /panel.splash.update /splash.init ]
       "profiles" findfile dup {
         /profile.data exch def
-        [ keyF4 0 "F4" /panel.profile /panel.profile.width /panel.profile.update /profile.init ]
+        [ keyF3 0 "F3" /panel.profile /panel.profile.width /panel.profile.update /profile.init ]
       } { pop } ifelse
 
     } ifelse
