@@ -1,8 +1,9 @@
 31/3/2004:	v2.4.7
 	- swedish texts
 	- added japanese texts
-	- fixed htmll viewer to work with japanese (allow line
+	- fixed html viewer to work with japanese (allow line
 	  breaks at any place)
+	- added hungarian, italian and french texts
 
 29/3/2004:	v2.4.6
 	- dutch help texts
