@@ -1,4 +1,4 @@
-9/8/2004:	v2.5
+9/8/2004:	v2.5.0
 	- add 32/64 dualboot code
 	- removed obsolete themes
 	- switch to 'installation' if some F-key has been used (#41097)
