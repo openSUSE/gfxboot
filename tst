@@ -113,7 +113,7 @@ function usage {
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-while getopts bhip: opt ; do
+while getopts bhip:t: opt ; do
   case $opt in
     \:|\?|h) usage
       ;;
@@ -122,6 +122,12 @@ while getopts bhip: opt ; do
       ;;
 
     i) logo=install
+      ;;
+
+    p) program=$OPTARG
+      ;;
+
+    t) theme=$OPTARG
       ;;
   esac
 done
