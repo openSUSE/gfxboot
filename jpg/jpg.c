@@ -318,8 +318,8 @@ int jpeg_decode(unsigned char *buf, unsigned char *pic, int x0, int x1, int y0, 
 	if (dscans[0].hv != 0x22 || dscans[1].hv != 0x11 || dscans[2].hv != 0x11)
 		return ERR_NOT_YCBCR_221111;
 
-	mcusx = width >> 4;
-	mcusy = height >> 4;
+	mcusx = (width + 15) >> 4;
+	mcusy = (height + 15) >> 4;
 
 	mx0 = x0 >> 4;
 	my0 = y0 >> 4;

@@ -42,9 +42,9 @@ int main(int argc, char **argv)
   img = malloc(width * height * 4);
 
   x0 = 0;
-  x1 = 200;
+  x1 = width;
   y0 = 0;
-  y1 = 100;
+  y1 = height;
 
   i = jpeg_decode(jpg, img, x0, x1, y0, y1);
 
