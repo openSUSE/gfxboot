@@ -9,6 +9,7 @@
 /keyEsc       0x0000001b def
 /keyEnter     0x0000000d def
 /keyTab       0x00000009 def
+/keyShiftTab  0x00800009 def
 /keyF1        0x3b000000 def
 /keyF2        0x3c000000 def
 /keyF3        0x3d000000 def

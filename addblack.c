@@ -17,6 +17,7 @@ typedef struct {
 void help(void);
 file_data_t read_file(char *name);
 int is_pcx(file_data_t *fd);
+int is_black(file_data_t *fd);
 void write_data(file_data_t *fd, char *name);
 void add_data(file_data_t *d, void *buffer, unsigned size);
 void add_black(file_data_t *new, file_data_t *old);
@@ -31,6 +32,11 @@ int main(int argc, char **argv)
   pcx_old = read_file(argv[1]);
 
   if(!is_pcx(&pcx_old)) return 2;
+
+  if(is_black(&pcx_old)) {
+    fprintf(stderr, "color 0 is black\n");
+    return 0;
+  }
 
   add_black(&pcx_new, &pcx_old);
 
@@ -93,6 +99,12 @@ int is_pcx(file_data_t *fd)
   ) return 0;
 
   return 1;
+}
+
+
+int is_black(file_data_t *fd)
+{
+  return !(fd->data[fd->size - 0x300] || fd->data[fd->size - 0x300 + 1] || fd->data[fd->size - 0x300 + 2]);
 }
 
 

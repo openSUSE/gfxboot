@@ -75,7 +75,8 @@
     /menu.shift menu.entry menu.texts length menu.visible.entries sub min def
   } if
 
-  frame2.pos moveto prog_frame_color dup prog_frame_color2 frame2.size drawborder3
+%  frame2.pos moveto frame_color dup dark_frame_color frame2.size drawborder3
+  frame2.pos moveto frame_color dark_frame_color frame2.size drawborder4
 
   menu.visible.entries menu.texts length lt menu.scrollbar and {
    /menu.bar.width frame1.size pop frame4.size pop sub def

@@ -14,7 +14,7 @@
 /button.cancel   { [ 0 0 85 25 txt_cancel   false keyEsc 0 ] } def
 /button.reboot   { [ 0 0 85 25 txt_reboot   false 0      0 ] } def
 /button.continue { [ 0 0 85 25 txt_continue false 0      0 ] } def
-/button.eject    { [ 0 0 85 25 "Eject"      false 0      0 ] } def
+% /button.eject    { [ 0 0 85 25 "Eject"      false 0      0 ] } def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

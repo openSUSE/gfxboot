@@ -292,7 +292,7 @@
     } if
 
     window.current .ed.list get {
-      dup keyDown eq {
+      dup keyDown eq over keyTab eq or {
         window.current .ed.focus get
         window.current .ed.list get over get edit.hidecursor
 
@@ -302,7 +302,7 @@
         pop 0
       } if
 
-      dup keyUp eq {
+      dup keyUp eq over keyShiftTab eq or {
         window.current .ed.focus get
         window.current .ed.list get over get edit.hidecursor
 
@@ -312,11 +312,11 @@
         pop 0
       } if
 
-      dup keyTab eq {
-        window.findselected 1 add window.buttons length mod
-        window.selectbutton
-        pop 0
-      } if
+%      dup keyTab eq {
+%        window.findselected 1 add window.buttons length mod
+%        window.selectbutton
+%        pop 0
+%      } if
 
     } {
       dup keyTab eq over keyRight eq or over keyDown eq or {

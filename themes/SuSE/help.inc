@@ -36,13 +36,6 @@
 /help.title.height 20 def
 /help.title.font font.normal def
 
-% /help.title.bg 0x299dcd newcolor
-% for dialogs, too
-/title.bg 0x317db4 newcolor
-% /title.bg 0x2d9e6b newcolor
-% /title.bg 0x2c9f84 newcolor
-% /title.bg 0x36b74e newcolor
-
 /help.hist.page 16 array def
 /help.hist.startrow help.hist.page length array def
 /help.hist.selectedlink help.hist.page length array def

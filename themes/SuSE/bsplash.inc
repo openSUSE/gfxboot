@@ -11,15 +11,15 @@
 % Boot loader splash areas to uncover.
 %
 /bsplash.areas [
-  [   0 130 640 220  true ]
-  [  20  20  50 100 false ]  
-  [ 120  30 150  30 false ]
-  [ 330  80 140  30 false ]
-  [ 420  20 170  30 false ]
-  [  30 420 110  40 false ]
-  [ 130 370 160  40 false ]
-  [ 310 440 160  30 false ]
-  [ 470 380 140  60 false ]
+  [ 214 161 209 145  true ]
+  [  62  67 140  40 false ]
+  [ 275  19 190  48 false ]
+  [ 466  98 138  46 false ]
+  [ 498 237 106  50 false ]
+  [ 395 347 179  75 false ]
+  [ 147 405 188  60 false ]
+  [  32 325 138  46 false ]
+  [  78 144  76 133 false ]
 ] def
 
 % start value
@@ -48,6 +48,8 @@
 
   "splash.pcx" findfile setimage loadpalette
   /max_image_colors max_image_colors image.colors max def
+
+  0 0 moveto currentpoint 1 1 image getpixel setcolor screen.size fillrect
 
 %  7 0xffffff setpalette
 %  0 0 moveto 0 0 image.size image

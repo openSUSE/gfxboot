@@ -36,6 +36,10 @@
   dup 0xff00 and 16 shl over 0xff and dup 0xe0 eq { pop 0 } if add /key exch def
   16 shr 0xffff and /keystat exch def
 
+  key keyTab eq keyStatus statusShift and 0 ne and {
+    /key keyShiftTab def
+  } if
+
   key
 
   config.keymap { mapkey } if
@@ -180,6 +184,13 @@
     } {
       pop
     } ifelse
+
+    config.lang {
+      config.lang "en" ne {
+        config.lang "lang=%s " bc.cmd dup length add sprintf
+      } if
+    } if
+
   } if
 
   do_driverupdate {
@@ -812,6 +823,7 @@
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % ( text ) == > ( new_text )
 /menuitemmap {
+  translate
   dup "memtest" eq over "memtest86" eq or { pop txt_memtest return } if
   syslinux {
     dup "linux"     eq { pop txt_install        return } if
@@ -881,6 +893,16 @@
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% ( color0 color1 width height ) ==> ( )
+/drawborder4 {
+  3 index 4 1 roll rot dup 3 index 3 index
+  currentpoint 6 2 roll
+  1 1 rmoveto drawborder
+  moveto drawborder
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % center text
 % ( text width height ) ==> ( )
 /centertext {
@@ -930,12 +952,13 @@
 
   % set default language
   "lang" findfile dup {
-    /tmp over length 1 add string def
+    /tmp over length 1 add 2 max string def
     tmp exch {
       dup ' ' eq over '\n' eq or { pop pop exit } if
       over exch 0 exch put
       1 add
     } forall
+    tmp 2 0 put % only short locale name
     tmp dup setlang pop setkeymap
   } {
     pop
@@ -957,9 +980,6 @@
   /boot.text.normal    white             def
   /infobox.bg          lightgray         def
   /infobox.text.normal black             def
-  /frame.darkcolor     grayb5            def
-  /frame.lightcolor    graye8            def
-  /frame.shadowcolor   mediumblue          def
 
   /menu.bar.color      fn_color       def
 
@@ -992,7 +1012,8 @@
 
   /update.pos { clip.size pop txt_dud_ready strsize pop sub 26 sub 360 } def
 
-  frame1.pos moveto prog_frame_color dup prog_frame_color2 frame1.size drawborder3
+%  frame1.pos moveto frame_color dup dark_frame_color frame1.size drawborder3
+  frame1.pos moveto frame_color dark_frame_color frame1.size drawborder4
 
 } def
 
@@ -1170,7 +1191,7 @@
   /timeout.buf        64 string def
 
   timeout.x timeout.y moveto
-  prog_frame_color dup
+  frame_color dup
   timeout.dx timeout.symbols mul timeout.size exch pop
   drawborder
 
@@ -1248,25 +1269,13 @@ bsplash.show
 
 /black               0x000000          newcolor
 /white               0xffffff          newcolor
-/mediumblue          0x566eb2          newcolor
-/mediumblue2         0x768cc5          newcolor
-/lightblue           0xd0d0ff          newcolor
-/lightblue2          0x2a73d3          newcolor
-/darkgray            0x4c4c4c          newcolor
-/grayb5              0xb5b5b5          newcolor
-/lightgray           0xececf4          newcolor
-/graye8              0xe8e8e8          newcolor
 /blue                0x0000a0          newcolor
-/yellow              0xffff20          newcolor
 /red                 0xc00000          newcolor
-/somered             0xe6373a          newcolor
-/loading_color       0x23449c          newcolor
 /green               0x009000          newcolor
-/fn_color            0x33449c          newcolor
-/fn_color2           0x53a53f          newcolor
-/prog_frame_color    lightblue def
-/prog_frame_color2   0x364c65          newcolor
-/dud_color           0x006f64          newcolor
+/yellow              0xffff20          newcolor
+/lightgray           0xececf4          newcolor
+
+%% include theme_colors.inc
 
 /font.normal "16x16.font" findfile def
 /font.large font.normal def

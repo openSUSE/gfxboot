@@ -19,9 +19,9 @@
     black setcolor
     currentfont font.normal setfont
     update.pos moveto currentpoint
-    prog_frame_color dup prog_frame_color2
+    frame_color dark_frame_color
     txt_dud_ready strsize 6 add exch 16 add exch
-    drawborder3
+    drawborder4
     moveto 8 3 rmoveto txt_dud_ready white setcolor show
     setfont
   } if

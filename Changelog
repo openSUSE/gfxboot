@@ -1,3 +1,9 @@
+28/3/2004:	v2.4.5
+	- menu texts localized via 'translations.<locale>'
+	- new boot graphics
+	- added Home theme
+	- fixed language setting (#37195)
+
 22/3/2004:	v2.4.4
 	- new boot graphics
 	- fixed japanese locale name (#36487)
