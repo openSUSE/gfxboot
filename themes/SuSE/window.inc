@@ -38,6 +38,7 @@
 %       actStart	- boot kernel
 %       actEject	- eject CD
 %       actPowerOff	- turn computer off
+%       actReboot	- reboot computer
 %       actRedraw	- redraw everything
 %       actNoClose	- don't close dialog (it's a flag)
 %
@@ -110,6 +111,7 @@
 /actRedrawPanel       8 def
 /actInstallOK         9 def
 /actInstallCancel    10 def
+/actReboot           11 def
 /actNoClose       0x100 def
 
 
@@ -248,6 +250,9 @@
       dup .ed get free
       dup .ed .undef put
     } if
+    dup .ed.list get dup {
+      { dup 2 get free 2 .undef put } forall
+    } { pop } ifelse
     pop
     % remove it from window list
     window.pop
@@ -521,7 +526,9 @@
   white black
   dialog.tmp .width get 2 add dialog.tmp .height get 2 add
   over over
-  dialog.tmp .ed.list get { xsavescreen } { savescreen } ifelse dialog.tmp .saved rot put
+  dialog.tmp .ed.list get .undef ne syslinux and
+    { xsavescreen } { savescreen } ifelse
+  dialog.tmp .saved rot put
   drawborder
 
   dialog.tmp .color.bg get setcolor
@@ -555,6 +562,9 @@
 
         dialog.tmp.buf {
           /dialog.tmp.doinit false def
+          dialog.tmp.buf 2
+            dialog.tmp .ed.width get fontheight 2 add savescreen
+          put
         } {
           /dialog.tmp.doinit true def
           /dialog.tmp.buf [
@@ -619,6 +629,10 @@
 
   dup actPowerOff eq {
     poweroff
+  } if
+
+  dup actReboot eq {
+    reboot
   } if
 
   dup actInstallOK eq {

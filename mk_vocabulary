@@ -56,9 +56,9 @@
   idle
   image.size
 
-  bootdrive reloadfs usernote eject poweroff
+  bootdrive reloadfs usernote eject poweroff reboot
 
-  getinfo
+  getinfo 64bit
 
   getbyte putbyte getdword putdword
   findfile

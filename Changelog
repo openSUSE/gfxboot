@@ -1,3 +1,10 @@
+2/4/2004:	v2.4.9
+	- added amd64 test
+	- fixed lilo password dialog
+	- use less memory for input dialogs
+	- modplayer should work again
+	- added russian texts
+
 31/3/2004:	v2.4.8
 	- take out romanian install help text; not enough space
 

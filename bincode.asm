@@ -9,7 +9,7 @@ fh_magic_id		equ 0
 fh_version		equ 4
 fh_res_1		equ 5
 fh_res_2		equ 6
-fh_file_entries		equ 7
+fh_res_3		equ 7
 fh_bincode		equ 8
 fh_bincode_size		equ 12
 fh_bincode_crc		equ 16
@@ -33,11 +33,6 @@ ch_ofs			equ 0
 ch_c			equ 2
 ch_size			equ 4
 sizeof_char_header_t	equ 8		; must be 8, otherwise change find_char
-
-; struct file_raw_t
-fi_raw_data		equ 0
-fi_raw_size		equ 4
-sizeof_file_raw_t	equ 8
 
 ; struct playlist
 pl_file			equ 0		; actually file index + 1
@@ -5995,6 +5990,13 @@ prim_getinfo_90:
 		ret
 
 
+prim_64bit:
+		call chk_64bit
+		sbb eax,eax
+		inc eax
+		jmp pr_getint
+
+
 prim_getbyte:
 		mov dl,t_ptr
 		call get_1arg
@@ -6193,6 +6195,16 @@ prim_poweroff_90:
 		ret
 
 
+prim_reboot:
+		mov word [472h],1234h
+		push word 0ffffh
+		push word 0
+		retf
+		int 19h
+		clc
+		ret
+
+
 prim_strstr:
 		mov dx,t_string + (t_string << 8)
 		call get_2args
@@ -6344,50 +6356,23 @@ prim_stest_90:
 %endif
 
 prim_modload:
-		mov dx,t_int + (t_int << 8)
+		mov dx,t_ptr + (t_int << 8)
 		call get_2args
 		jc prim_modload_90
 		sub word [pstack_ptr],byte 2
 		xchg eax,ecx
 
-		; ecx file
+		; ecx mod file
 		; eax player
 
-		push dword [mem]
-		call lin2so
-		pop bx
-		pop es
-		cmp cl,[es:bx+fh_file_entries]
-		cmc
-		jc prim_modload_80
-
-		xor esi,esi
-
-		imul dx,cx,sizeof_file_raw_t
-		add si,dx
-
-		add si,sizeof_file_header_t
-		add esi,[mem]
-
-		push esi
-		call lin2so
-		pop si
-		pop es
-
-		mov ebx,[es:si+fi_raw_data]
-		add ebx,[mem]
-
-		; ebx: mod file
-		; eax: player
-
 		push eax
-		push ebx
+		push ecx
 		call sound_init
-		pop ebx
+		pop ecx
 		pop eax
 		jc prim_modload_80
 
-		push ebx
+		push ecx
 		call lin2so
 		pop di
 		pop es
@@ -10074,8 +10059,12 @@ mod_setvolume_90:
 		ret
 
 
-; see if we have a time stamp counter
-chk_tsc:
+; Check for cpuid instruction.
+;
+; return:
+;  CF		0/1	yes/no
+;
+chk_cpuid:
 		mov ecx,1 << 21
 		pushfd
 		pushfd
@@ -10089,13 +10078,43 @@ chk_tsc:
 		xor eax,edx
 		cmp eax,ecx
 		stc
-		jz chk_tsc_90
+		jz chk_cpuid_90
+		clc
+chk_cpuid_90:
+		ret
+
+
+; Check for time stamp counter.
+;
+; return:
+;  CF		0/1	yes/no
+;
+chk_tsc:
+		call chk_cpuid
+		jc chk_tsc_90
 		mov eax,1
 		cpuid
 		test dl,1 << 4
 		jnz chk_tsc_90
 		stc
 chk_tsc_90:
+		ret
+
+
+; Check for 64 bit extension.
+;
+; return:
+;  CF		0/1	yes/no
+;
+chk_64bit:
+		call chk_cpuid
+		jc chk_64bit_90
+		mov eax,80000001h
+		cpuid
+		test edx,1 << 29
+		jnz chk_64bit_90
+		stc
+chk_64bit_90:
 		ret
 
 

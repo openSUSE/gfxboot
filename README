@@ -422,9 +422,9 @@ Language Reference
  - mod.load
    Asssign mod file to player.
 
-   stack: ( int_1 int_2 ) --> ( )
+   stack: ( int_1 ptr_1 ) --> ( )
    % int_1: player (0 .. 3)
-   % int_2: mod file
+   % ptr_1: mod file
 
  - mod.play
    Play mod.

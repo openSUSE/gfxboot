@@ -34,7 +34,7 @@
   xmenu .xm_current 0 put
 
   % see install types (.inst_*)
-  xmenu .xm_list [ "CD-ROM" "SLP" "FTP" "NFS" "SMB" txt_harddisk ] put
+  xmenu .xm_list [ is_dvd { "DVD" } { "CD-ROM" } ifelse "SLP" "FTP" "NFS" "SMB" txt_harddisk ] put
 
   pmenu.init
 } def

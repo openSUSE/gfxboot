@@ -7,6 +7,50 @@
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 %
+% look if we've been started from dvd side 2
+%
+% ( ) ==> ( true|false )
+%
+/is_second_side {
+  syslinux usernote 1 and 0 ne and
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+%
+% Should we check for 64bit?
+%
+% ( ) ==> ( true|false )
+%
+/do_64bit_check {
+  syslinux usernote 2 and 0 ne and
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+%
+% Install source is 64bit?
+%
+% ( ) ==> ( true|false )
+%
+/64bit_source {
+  syslinux usernote 4 and 0 ne and
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+%
+% Are we a dvd?
+%
+% ( ) ==> ( true|false )
+%
+/is_dvd {
+  syslinux usernote 8 and 0 ne and
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+%
 % input event handling
 %
 % ( key ) ==> ( input_buffer menu_entry action )
@@ -73,7 +117,10 @@
 
   window.action actPassword eq {
     /window.action actNothing def
-    password.buf -1 3 return
+    password.dialog {
+      password.dialog .ed.buffer.list get 0 get
+    } { "" } ifelse
+    -1 3 return
   } if
 
   window.action actStart eq {
@@ -249,9 +296,21 @@
 
 %  fadein_logo
 
-  syslinux usernote 0 ne and {
+  is_second_side {
+
     dvd_popup
-  } if
+
+  } {
+
+    do_64bit_check {
+      64bit {
+        64bit_source not { 32bit_popup } if
+      } {
+        64bit_source { 64bit_popup } if
+      } ifelse
+    } if
+
+  } ifelse
 
 } def
 
@@ -530,9 +589,8 @@
     ] put
   } ifelse
 
-  syslinux
-  info.type 2 eq and
-  usernote 0 ne and {
+  info.type 2 eq
+  is_second_side and {
     txt_dvd_warning info.msg
     over length info.msg length 1 add add "%s%s" exch
     dup string dup /info.msg exch def snprintf
@@ -760,8 +818,20 @@
 
   /dia window.dialog def
 
+  /password.dialog dia def
+
   dia .title txt_password_title put
-  dia .text txt_password put
+  dia .text "" put
+
+  % Must all be of same size!
+  dia .ed.list 1 array put
+  dia .ed.buffer.list [ 31 string ] put
+  dia .ed.text.list [ txt_password ] put
+
+  dia .ed.focus 0 put
+
+  dia .ed.width 200 put
+
   dia .buttons
     [ button.ok button.default actPassword button.setaction ]
   put
@@ -769,34 +839,6 @@
   dia window.init
   dia window.show
 
-  % add input field
-
-  % show only '*'
-  % dia .ed.font dia .font get 0x80 or put
-
-  dia .x get dia .y get moveto
-  dia .text.x get dia .text.y get 30 add rmoveto
-
-  /password.ed.width dia .width get 20 sub def
-  /password.ed.height dia .ed.font get setfont fontheight 2 add def
-
-  currentpoint over 1 sub over 2 sub moveto
-  black white password.ed.width password.ed.height 4 add drawborder
-  moveto
-
-  black setcolor
-
-  dia .ed [
-    currentpoint
-    password.ed.width password.ed.height savescreen
-    password.buf
-    password.buf.size
-    0
-    0
-    0
-  ] put
-
-  dia .ed get "" edit.init
 } def
 
 
@@ -1001,10 +1043,6 @@
   /ms.up       {   0 480 }  def
   /ms.down     {  23 480 }  def
 
-  % password buffer
-  /password.buf.size 32 def
-  /password.buf password.buf.size string def
-
   /update.pos { clip.size pop txt_dud_ready strsize pop sub 26 sub 360 } def
 
 %  frame1.pos moveto frame_color dup dark_frame_color frame1.size drawborder3
@@ -1142,6 +1180,44 @@
   dup .buttons [
 %    button.eject    button.default    actEject actNoClose or button.setaction
     button.continue button.default actNothing button.setaction
+  ] put
+  dup window.init
+      window.show
+
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Warn that we are about to install 32bit software on a 64bit system.
+%
+% ( ) ==> ( )
+%
+/32bit_popup {
+  window.dialog
+
+  dup .title "Cool computer, but..." put
+  dup .text "You are about to install 32-bit sofware on a 64-bit computer." put
+  dup .buttons [
+    button.continue button.default actNothing button.setaction
+  ] put
+  dup window.init
+      window.show
+
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Warn that we are about to install 64bit software on a 32bit system.
+%
+% ( ) ==> ( )
+%
+/64bit_popup {
+  window.dialog
+
+  dup .title "Cool software, but..." put
+  dup .text "This is a 32-bit computer. You cannot use 64-bit software on it." put
+  dup .buttons [
+    button.reboot button.default actReboot actNoClose or button.setaction
   ] put
   dup window.init
       window.show
