@@ -27,6 +27,7 @@
   [ "nl" "Nederlands" ]
   [ "ru" "\u0420\u0443\u0441\u0441\u043a\u0438\u0439" ]
   [ "sk" "Sloven\u010dina" ]
+  [ "sl" "Sloven\u0161\u010dina" ]
 ] def
 
 

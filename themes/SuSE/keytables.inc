@@ -19,6 +19,7 @@
 %% include keymap.ja.inc
 %% include keymap.hu.inc
 %% include keymap.sk.inc
+%% include keymap.sl.inc
 
 % must not be empty
 /keymaps [
@@ -32,6 +33,7 @@
 %  [ "ru" keymap.ru ]
   [ "hu" keymap.hu ]
   [ "sk" keymap.sk ]
+  [ "sl" keymap.sl ]
 ] def
 
 
