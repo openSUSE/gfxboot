@@ -113,7 +113,7 @@
 %
 /panel.input {
   panel { dup {
-    dup 0 get 2 index eq { 3 get exec pop 0 exit } { pop } ifelse
+    dup 0 get 2 index eq { over panel.extra pop 3 get exec pop 0 exit } { pop } ifelse
   } { pop } ifelse } forall
 } def
 
@@ -132,6 +132,33 @@
   panel.normal setcolor
 
   6 0 rmoveto
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Do some extra things.
+%
+% ( key ) => ( key )
+%
+/panel.extra {
+  % move down one menu entry; but only once
+  % see keyDown in main::main.input
+
+  % not for F1
+  dup keyF1 eq { return } if
+
+  panel.extra.fkey .undef eq
+  menu.entry 0 eq
+  menu.entry menu.texts length 1 sub lt
+  and and {
+    /panel.extra.fkey 1 def
+    menu.entry false MenuSelect
+    menu.visible.entries menu.entry menu.shift sub sub 1 eq {
+      /menu.shift menu.shift 1 add def redrawmenu
+    } if
+    /menu.entry menu.entry 1 add def
+    menu.entry true MenuSelect
+  } if
 } def
 
 

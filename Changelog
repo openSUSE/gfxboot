@@ -1,6 +1,7 @@
 9/8/2004:	v2.5
 	- add 32/64 dualboot code
 	- removed obsolete themes
+	- switch to 'installation' if some F-key has been used (#41097)
 
 2/8/2004:	v2.4.24
 	- added SLES-Live theme
