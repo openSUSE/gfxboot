@@ -1196,7 +1196,7 @@
   window.dialog
 
   dup .title "Cool computer, but..." put
-  dup .text "You are about to install 32-bit sofware on a 64-bit computer." put
+  dup .text "You are about to install 32-bit software on a 64-bit computer." put
   dup .buttons [
     button.continue button.default actNothing button.setaction
   ] put
