@@ -7950,8 +7950,12 @@ text_xy_10:
 		cmp word [line_wrap],byte 0
 		jz text_xy_60
 
+		cmp eax,3000h
+		jae text_xy_20
+
 		call is_space
 		jnz text_xy_60
+text_xy_20:
 
 		push si
 		mov si,di
@@ -8127,6 +8131,7 @@ word_width:
 
 		xor dx,dx
 		mov bl,0
+		mov bh,0
 
 word_width_10:
 		call utf8_dec
@@ -8138,17 +8143,28 @@ word_width_20:
 		cmp eax,0ah
 		jz word_width_90
 
-		cmp eax,12h
-		jnz word_width_30
-		mov bl,1
-word_width_30:
 		cmp eax,10h
-		jz word_width_40
-		cmp eax,13h
-		jnz word_width_50
-word_width_40:
+		jnz word_width_30
+		mov bh,0
 		mov bl,0
-word_width_50:
+word_width_30:
+		cmp eax,11h
+		jnz word_width_31
+		mov bh,1
+word_width_31:
+		cmp eax,12h
+		jnz word_width_32
+		mov bl,1
+word_width_32:
+		cmp eax,13h
+		jnz word_width_33
+		mov bh,1
+		mov bl,0
+word_width_33:
+		cmp eax,14h
+		jnz word_width_34
+		mov bh,1
+word_width_34:
 
 		or bl,bl
 		jnz word_width_70
@@ -8172,6 +8188,12 @@ word_width_70:
 		jz word_width_10
 
 		call utf8_dec
+
+		or bx,bx
+		jnz word_width_80
+		cmp eax,3000h
+		jae word_width_90
+word_width_80:
 
 		call is_space
 		jnz word_width_20

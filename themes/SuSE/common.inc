@@ -46,11 +46,6 @@
 
   dup 0xffffff and dup { exch } if pop
 
-  % for tests
-  dup keyShiftF1 eq { pop 0x00e4 } if
-  dup keyShiftF2 eq { pop 0x16d6 } if
-  dup keyShiftF3 eq { pop 0x8db3 } if
-
   debug 4 ge {
     % print mapped key somewhere
     -1 settransparentcolor

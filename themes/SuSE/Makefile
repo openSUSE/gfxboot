@@ -29,7 +29,7 @@ boot/help.%: help-boot.%.html boot
 install/help.%: help-install.%.html install
 	$(HELP2TXT) $< >$@
 
-.PHONY: all themes clean po
+.PHONY: all themes font clean po
 
 all: themes
 
@@ -59,6 +59,16 @@ ifdef DEFAULT_LANG
 endif
 	@sh -c 'cd install; echo $(FILES_INST) | sed -e "s/ /\n/g" | cpio --quiet -o >bootlogo'
 
+# add -c koi8-r to add russian
+font:
+	../../getx11font -v -l 18 -p 2,4 \
+	-c ISO-8859-15 -c ISO-8859-2 \
+	-t help-boot.ja.html \
+	-t help-install.ja.html \
+	-t install/log -t boot/log \
+	-f -efont-fixed-medium-r-normal--16-160-75-75-c-80-iso10646-1 \
+	-f -efont-fixed-medium-r-normal--16-160-75-75-c-160-iso10646-1 \
+	16x16.font >16x16.font.log
 
 clean:
 	make -C po clean
