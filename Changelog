@@ -1,3 +1,6 @@
+12/5/2004:	v2.4.21
+	- hide password in lilo (#40348)
+
 14/4/2004:	v2.4.20
 	- irqs might have been turned off in some cases
 	- new SLES pictures

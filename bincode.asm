@@ -195,6 +195,8 @@ font			dd 0		; (seg:ofs) to font header
 font_entries		dw 0		; chars in font
 font_height		dw 0
 font_line_height	dw 0
+font_properties		db 0		; bit 0: pw mode (show '*')
+font_res1		db 0		; alignment
 
 ; current char description
 chr_bitmap		dw 0		; ofs rel. to [font]
@@ -7886,6 +7888,10 @@ getpixel_32:
 ; eax		linear ptr to font header
 ;
 font_init:
+		mov edx,eax
+		shr edx,31
+		mov [font_properties],dl
+		and eax,~(1 << 31)
 		lin2segofs eax,es,bx
 		cmp dword [es:bx+foh_magic],0d2828e07h	; magic
 		jnz font_init_90
@@ -8593,9 +8599,15 @@ char_xy_90:
 ;
 find_char:
 		and eax,1fffffh
+		push eax
 		cmp dword [font],byte 0
 		stc
 		jz find_char_90
+
+		test byte [font_properties],1
+		jz find_char_10
+		mov eax,'*'
+find_char_10:
 
 		les bx,[font]
 		add bx,sizeof_font_header_t
@@ -8657,6 +8669,7 @@ find_char_80:
 
 		clc
 find_char_90:
+		pop eax
 		ret
 
 

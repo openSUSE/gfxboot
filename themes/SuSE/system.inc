@@ -263,3 +263,14 @@
 } def
 
 
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Set password mode font property.
+%
+% ( font ) ==> ( font )
+%
+/pwmode {
+   dup gettype t_ptr eq {
+     .value 0x80000000 or t_ptr settype
+   } if
+} def
+

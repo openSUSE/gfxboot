@@ -853,6 +853,8 @@
 
   dia .ed.width 200 put
 
+  dia .ed.font font.normal pwmode put
+
   dia .buttons
     [ button.ok button.default actPassword button.setaction ]
   put
