@@ -51,6 +51,17 @@
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 %
+% Install source is 32 & 64bit?
+%
+% ( ) ==> ( true|false )
+%
+/32+64bit_source {
+  syslinux usernote 16 and 0 ne and
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+%
 % Enough memory?
 %
 % ( ) ==> ( true|false )
@@ -219,15 +230,41 @@
 
   } ifelse
 
+  /add_suffix xmenu.bits .xm_current get bits.suffix exch get def
+
   bc.addkernel {
-    alt.kernel "" ne { alt.kernel } { bc.kernel } ifelse
-    "%s " bc.cmd sprintf
+    alt.kernel { alt.kernel } { bc.kernel } ifelse
+    dup "linux" eq add_suffix .undef ne and {
+      add_suffix exch "%s%s "
+    } {
+      "%s "
+    } ifelse
+    bc.cmd sprintf
   } {
     bc.cmd 0 0 put
   } ifelse
 
   cmdline.hidden "" ne {
-    cmdline.hidden "%s " bc.cmd dup length add sprintf
+    add_suffix {
+      /bc.tmp cmdline.hidden length add_suffix length add string def
+      cmdline.hidden "initrd" bootopt.find dup .undef ne {
+        skipnonspaces
+        dup
+        dup 0 get over 0 0 put
+        add_suffix cmdline.hidden "%s%s" bc.tmp sprintf
+        0 exch put
+        "%s" bc.tmp dup length add sprintf
+      } {
+        pop
+        bc.tmp cmdline.hidden strcpy pop
+      } ifelse
+
+      bc.tmp "%s " bc.cmd dup length add sprintf
+
+      bc.tmp free /bc.tmp .undef def
+    } {
+      cmdline.hidden "%s " bc.cmd dup length add sprintf
+    } ifelse
   } if
 
   syslinux {
@@ -322,11 +359,17 @@
     } {
 
       do_64bit_check {
-        64bit {
-          64bit_source not { notimeout 32bit_popup } if
-        } {
-          64bit_source { notimeout 64bit_popup } if
-        } ifelse
+
+        32+64bit_source not {
+
+          64bit {
+            64bit_source not { notimeout 32bit_popup } if
+          } {
+            64bit_source { notimeout 64bit_popup } if
+          } ifelse
+
+        } if
+
       } if
 
     } ifelse
@@ -363,11 +406,16 @@
 % no longer be needed).
 %
 /bootpromptmap {
-  /alt.kernel "" def
+  /alt.kernel .undef def
 
-%  syslinux {
-%    dup "apic"  eq { pop pop "apic" /alt.kernel "linux" def return } if
-%  } if
+  syslinux {
+    dup "failsafe" eq
+    over "noacpi" eq or
+    over "manual" eq or
+    over "rescue" eq or
+    { /alt.kernel "linux" def } if
+  } if
+
   pop
 
   /cmdline exch def
@@ -1094,13 +1142,13 @@
     pop 0
   } if
 
-  dup keyF7 eq syslinux and {
+  dup keyF8 eq syslinux and {
     "kroete.data" findfile kroete.dir idle
     /kroete.dir kroete.dir 1 xor def
     pop 0
   } if
 
-  dup keyF8 eq syslinux and {
+  dup keyF9 eq syslinux and {
     .undef 0 idle
     pop 0
   } if
@@ -1410,5 +1458,4 @@ bsplash.show
 /kroete.dir 0 def
 
 /debug 0 def
-
 

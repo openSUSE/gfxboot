@@ -45,6 +45,14 @@
         [ keyF5 0 "F5" /panel.splash /panel.splash.width /panel.splash.update /splash.init ]
         [ keyF6 0 "F6" /panel.dud /panel.dud.width /panel.dud.update .undef ]
 
+        do_64bit_check 32+64bit_source and {
+          64bit {
+            [ keyF7 0 "F7" /panel.bits /panel.bits.width /panel.bits.update /bits.init ]
+          } if
+        } if
+
+        xmenu.bits .undef eq { bits.init } if
+
       } ifelse
 
     } {
