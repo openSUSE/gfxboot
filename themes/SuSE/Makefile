@@ -1,55 +1,67 @@
-HELP2TXT   = $(BINDIR)help2txt
-MKBOOTMSG  = $(BINDIR)mkbootmsg
-BFLAGS     = -O -v -L ../..
-INCLUDES   = $(wildcard *.inc)
-HELPBOOT   = help-boot.en.txt help-boot.cs.txt help-boot.de.txt help-boot.sk.txt
-HELPINST   = help-install.en.txt help-install.de.txt
-TRANSL     = texts.en texts.cs texts.de texts.sk     
+HELP2TXT     = $(BINDIR)help2txt
+MKBOOTMSG    = $(BINDIR)mkbootmsg
+BFLAGS       = -O -v -L ../..
+INCLUDES     = $(wildcard *.inc)
+TRANSLATIONS = $(addprefix texts.,en $(notdir $(basename $(wildcard po/*.po))))
+HELPBOOT     = $(addprefix boot/help,$(suffix $(basename $(wildcard help-boot.*.html))))
+HELPINST     = $(addprefix install/help,$(suffix $(basename $(wildcard help-install.*.html))))
 
-FILES_INST = init languages $(TRANSL) help.en help.de \
-	     16x16.font kroete.data background.pcx splash.pcx
-FILES_BOOT = init languages $(TRANSL) help.en help.cs help.de help.sk 16x16.font background.pcx
+HELPBOOT_ALL = $(notdir $(HELPBOOT))
+HELPINST_ALL = $(notdir $(HELPINST))
 
-%.txt: %.html
+DEFAULT_LANG =
+
+FILES_INST   = init languages $(TRANSLATIONS) 16x16.font background.pcx \
+	       splash.pcx kroete.data \
+	       $(HELPINST_ALL)
+
+FILES_BOOT   = init languages $(TRANSLATIONS) 16x16.font background.pcx \
+	       $(HELPBOOT_ALL)
+
+ifdef DEFAULT_LANG
+FILES_INST += lang
+FILES_BOOT += lang
+endif
+
+boot/help.%: help-boot.%.html boot
+	$(HELP2TXT) $< >$@
+
+install/help.%: help-install.%.html install
 	$(HELP2TXT) $< >$@
 
 .PHONY: all themes clean po
 
 all: themes
 
+boot install: po
+	mkdir -p $@
+
 po:
 	make -C po
 
-themes: boot install
+themes: bootdir installdir
 
-boot install: po
+bootdir: boot.config $(INCLUDES) $(HELPBOOT)
+	@cp -a po/texts.* boot
+	@for i in $(FILES_BOOT) ; do [ -f $$i ] && cp $$i boot ; done ; true
+	$(MKBOOTMSG) $(BFLAGS) -l boot/log -c $< boot/init
+ifdef DEFAULT_LANG
+	@echo $(DEFAULT_LANG) >boot/lang
+endif
+	@sh -c 'cd boot; echo $(FILES_BOOT) | sed -e "s/ /\n/g" | cpio --quiet -o >message'
 
-boot: boot.config $(INCLUDES) $(HELPBOOT)
-	@mkdir -p $@
-	@cp -a po/texts.* .
-	$(MKBOOTMSG) $(BFLAGS) -l $@/log -c $< init
-	@cp help-$@.en.txt help.en
-	@cp help-$@.cs.txt help.cs
-	@cp help-$@.de.txt help.de
-	@cp help-$@.sk.txt help.sk
-	@echo $(FILES_BOOT) | sed -e 's/ /\n/g' | cpio --quiet -o >$@/message
-	@mv init help.en help.cs help.de help.sk $@
-	@mv texts.* $@
+installdir: install.config $(INCLUDES) $(HELPINST)
+	@cp -a po/texts.* install
+	@for i in $(FILES_INST) ; do [ -f $$i ] && cp $$i install ; done ; true
+	$(MKBOOTMSG) $(BFLAGS) -l install/log -c $< install/init
+ifdef DEFAULT_LANG
+	@echo $(DEFAULT_LANG) >install/lang
+endif
+	@sh -c 'cd install; echo $(FILES_INST) | sed -e "s/ /\n/g" | cpio --quiet -o >bootlogo'
 
-install: install.config $(INCLUDES) $(HELPINST)
-	@mkdir -p $@
-	@cp -a po/texts.* .
-	$(MKBOOTMSG) $(BFLAGS) -l $@/log -c $< init
-#	@echo de >lang
-	@cp help-$@.en.txt help.en
-	@cp help-$@.de.txt help.de
-	@echo $(FILES_INST) | sed -e 's/ /\n/g' | cpio --quiet -o >$@/bootlogo
-	@mv init help.en help.de $@
-	@mv texts.* $@
-#	@rm -f lang
 
 clean:
 	make -C po clean
-	rm -f *.txt *~
+	rm -f bootdir installdir *~
 	rm -rf boot install
 
