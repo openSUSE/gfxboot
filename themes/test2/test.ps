@@ -45,7 +45,7 @@
 
 
 
-800 600 8 findmode setmode not { false .end } if
+800 600 16 findmode setmode not { false .end } if
 
 /max_image_colors 0 def
 
@@ -54,11 +54,26 @@
 
 white settextmodecolor
 
-"jaguar.jpg" findfile
+"test.jpg" findfile
+
+setimage image.size
 
 dtrace
 
-xxx
+pop pop
+
+0 0 800 600 image.unpack
+
+/i exch def
+
+white setcolor
+0 0 moveto 300 300 fillrect
+
+0 0 moveto
+
+i
+
+restorescreen
 
 dtrace
 
