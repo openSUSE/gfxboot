@@ -1,3 +1,7 @@
+	- new boot graphics
+	- fixed japanese locale name (#36487)
+	- added spanish texts
+
 17/3/2004:	v2.4.3
 	- new/updated czech texts
 	- reworked themes Makefile

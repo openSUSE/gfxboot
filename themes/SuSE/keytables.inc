@@ -151,7 +151,7 @@
 ] def
 
 
-/keymap.jp [
+/keymap.ja [
   [ 0x03 0x32 0x22 0x00 ]
   [ 0x06 0x35 0x25 0x00 ]
   [ 0x07 0x36 0x26 0x00 ]
@@ -254,7 +254,7 @@
   [ "fr" keymap.fr ]
   [ "de" keymap.de ]
   [ "it" keymap.it ]
-  [ "jp" keymap.jp ]
+  [ "ja" keymap.ja ]
   [ "ru" keymap.ru ]
   [ "sk" keymap.sk ]
   [ "es" keymap.es ]
