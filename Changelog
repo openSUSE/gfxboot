@@ -1,4 +1,7 @@
+2/9/2004:	v2.5.2
 	- do the F-key-move-down magic only for syslinux (#44238)
+	- some text cleanup (9.1 -> 9.2, dropped unused liveeval msgs)
+	- integrated new splash picture
 
 18/9/2004:	v2.5.1
 	- basic arabic language support

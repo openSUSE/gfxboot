@@ -947,9 +947,9 @@
   dup "memtest" eq over "memtest86" eq or { pop txt_memtest return } if
   syslinux {
     livecd {
-      dup "linux"     eq { pop "SUSE LINUX 9.1 LiveCD (english)" return } if
-      dup "failsafe"  eq { pop txt_livecd_safe return } if
-      dup "linux2"    eq { pop "SUSE LINUX 9.1 LiveCD (deutsch)" return } if
+      dup "linux"     eq { pop "SUSE LINUX 9.2 LiveCD (english)" return } if
+      dup "failsafe"  eq { pop "LiveCD - Safe Settings" return } if
+      dup "linux2"    eq { pop "SUSE LINUX 9.2 LiveCD (deutsch)" return } if
       dup "failsaf2"  eq { pop "LiveCD - Sichere Einstellungen" return } if
     } {
       dup "linux"     eq { pop txt_install        return } if
@@ -1326,8 +1326,7 @@
 
   dup .title "Cool computer, but..." put
   dup .text
-%    "Sorry, but you need at least 128MB main memory to use SUSE LINUX 9.1 LiveCD."
-    "Sorry, but SUSE LINUX 9.1 LiveCD needs at least 256MB main memory."
+    "Sorry, but SUSE LINUX 9.2 LiveCD needs at least 256MB main memory."
   put
   dup .buttons [
     button.reboot button.default actReboot actNoClose or button.setaction

@@ -11,15 +11,15 @@
 % Boot loader splash areas to uncover.
 %
 /bsplash.areas [
-  [ 214 161 209 145  true ]
-  [  62  67 140  40 false ]
-  [ 275  19 190  48 false ]
-  [ 466  98 138  46 false ]
-  [ 498 237 106  50 false ]
-  [ 395 347 179  75 false ]
-  [ 147 405 188  60 false ]
-  [  32 325 138  46 false ]
-  [  78 144  76 133 false ]
+  [   0 146 640 166  true ]
+  [  54  43 137  42 false ]
+  [ 228  89 128  36 false ]
+  [ 325  35 186  45 false ]
+  [ 544  19  73 116 false ]
+  [  19 353 172  62 false ]
+  [ 199 406 104  41 false ]
+  [ 308 327 134  42 false ]
+  [ 427 384 177  42 false ]
 ] def
 
 % start value

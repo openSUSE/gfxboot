@@ -185,10 +185,6 @@ msgstr "電源オフ"
 msgid "Do you want to halt the system now?"
 msgstr "システムを停止させますか。"
 
-#. txt_driver_update
-msgid "Driver Update"
-msgstr "ドライバアップデート"
-
 # menu entry for hard disk installation
 #. txt_harddisk
 msgid "Hard Disk"
@@ -245,12 +241,8 @@ msgstr "SMB (Windows共有) インストール"
 msgid "HTTP Installation"
 msgstr "HTTPインストール"
 
-# LiveCD product name - don't translate
-#. txt_livecd
-msgid "SUSE Linux 9.1 LiveCD"
+# 'driver' as in '(hardware) driver update'
+#. txt_driver_update
+msgid "Driver"
 msgstr ""
-
-#. txt_livecd_safe
-msgid "LiveCD - Safe Settings"
-msgstr "LiveCD - セーフ設定"
 

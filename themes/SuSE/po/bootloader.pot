@@ -172,10 +172,6 @@ msgstr ""
 msgid "Do you want to halt the system now?"
 msgstr ""
 
-#. txt_driver_update
-msgid "Driver Update"
-msgstr ""
-
 # menu entry for hard disk installation
 #. txt_harddisk
 msgid "Hard Disk"
@@ -232,12 +228,8 @@ msgstr ""
 msgid "HTTP Installation"
 msgstr ""
 
-# LiveCD product name - don't translate
-#. txt_livecd
-msgid "SUSE Linux 9.1 LiveCD"
-msgstr ""
-
-#. txt_livecd_safe
-msgid "LiveCD - Safe Settings"
+# 'driver' as in '(hardware) driver update'
+#. txt_driver_update
+msgid "Driver"
 msgstr ""
 

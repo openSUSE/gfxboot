@@ -54,8 +54,7 @@
 % ( ) => ( width )
 %
 /panel.dud.width {
-  % txt_driver_update
-  "DUD" strsize pop
+  txt_driver_update strsize pop
 } def
 
 
@@ -67,8 +66,7 @@
 /panel.dud.update {
   panel.text.moveto
 
-  % txt_driver_update
-  "DUD" show
+  txt_driver_update show
 } def
 
 
