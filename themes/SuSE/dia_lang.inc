@@ -20,11 +20,13 @@
   [ "en" "English" ]
   [ "fr" "Fran\u00e7ais" ]
   [ "de" "Deutsch" ]
+  [ "es" "Espa\u00f1ol" ]
   [ "it" "Italiano" ]
   [ "ja" "\u65e5\u672c\u8a9e" ]
+  [ "hu" "Magyar" ]
+  [ "nl" "Nederlands" ]
   [ "ru" "\u0420\u0443\u0441\u0441\u043a\u0438\u0439" ]
   [ "sk" "Sloven\u010dina" ]
-  [ "es" "Espa\u00f1ol" ]
 ] def
 
 

@@ -40,7 +40,7 @@
   boot.text.options setcolor
   window.current .font get setfont
   frame3.pos moveto
-  currentpoint 200 fontheight image
+  currentpoint 300 fontheight image
   txt_bootoptions show
 
   redrawmenu
