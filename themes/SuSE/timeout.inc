@@ -1,3 +1,7 @@
+%
+% include before common.inc
+%
+
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % ( timeout time ) ==> ( )
 /Timeout {
@@ -21,6 +25,18 @@
     0 1 timeout.symbols 1 sub {
       timeout.clear { 2 } { 1 } ifelse drawtsymbol
     } for
+
+    % free memory
+    timeout.areas {
+      /to.tmp exch def
+
+      to.tmp .to_mask over over get free
+      to.tmp .to_mask .undef put
+
+      to.tmp .to_back over over get free
+      to.tmp .to_back .undef put
+
+    } forall
   } {
 
     black setcolor
@@ -50,14 +66,15 @@
 /drawtsymbol {
   /timeout.status exch def
 
-  /timeout.clean.color timeout.clean.x timeout.clean.y moveto getpixel def
-
   timeout.status 1 eq timeout.status 2 eq or {
-    timeout.areas exch get { } forall
-    timeout.clean.x timeout.clean.y
-    4 -2 roll 6 -2 roll moveto
-    % image
-    timeout.clean.color setcolor fillrect
+    timeout.areas exch get /to.tmp exch def
+
+    timeout.x to.tmp .to_x get add
+    timeout.y to.tmp .to_y get add
+    moveto
+
+    to.tmp .to_back get
+    restorescreen
   } if
 } def
 
@@ -75,51 +92,118 @@
 
   /timeout.time.x 195 def
   /timeout.time.y 295 def
+
+  timeout.areas {
+    /to.tmp exch def
+
+    timeout.x to.tmp .to_x get add
+    timeout.y to.tmp .to_y get add
+    moveto
+
+    currentpoint
+
+    /to.dot
+      to.tmp .to_w get
+      to.tmp .to_h get
+      savescreen
+    def
+
+    to.tmp .to_back
+      to.dot length dup malloc exch over exch to.dot exch memcpy
+    put
+
+    0x004f40 setcolor
+    0 0 moveto
+    to.tmp .to_mask get
+    to.dot
+
+    blend2
+
+    moveto
+
+    to.dot
+    restorescreen
+
+    to.dot free
+  } forall
+
 } def
 
 
-/timeout.clean.x 160 def
-/timeout.clean.y 250 def
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Even before init.
+%
+% ( ) ==> ( )
+%
+/timeout.preinit {
+  "dots.jpg" findfile setimage
+  timeout.areas {
+    /to.tmp exch def
+    to.tmp .to_mask
+
+    to.tmp .to_x get
+    to.tmp .to_y get
+    to.tmp .to_w get
+    to.tmp .to_h get
+    unpackimage
+
+    put
+  } forall
+
+} def
+
+
+/timeout.x 150 def
+/timeout.y 216 def
+
+% timeout.areas entries
+/.to_x 0 def
+/.to_y 1 def
+/.to_w 2 def
+/.to_h 3 def
+/.to_back 4 def
+/.to_mask 5 def
+
 
 /timeout.areas [
-  [ 183 219 4 4 ]
-  [ 188 219 4 4 ]
-  [ 193 220 4 4 ]
-  [ 197 223 4 4 ]
-  [ 201 226 4 4 ]
-  [ 205 230 4 4 ]
-  [ 208 234 4 4 ]
-  [ 210 239 4 4 ]
-  [ 211 244 4 4 ]
-  [ 211 250 4 4 ]
-  [ 211 255 4 4 ]
-  [ 210 260 4 4 ]
-  [ 208 264 4 4 ]
-  [ 204 268 4 4 ]
-  [ 201 272 4 4 ]
-  [ 197 275 4 4 ]
-  [ 193 278 4 4 ]
-  [ 188 280 4 4 ]
-  [ 183 280 4 4 ]
-  [ 178 280 4 4 ]
-  [ 173 279 4 4 ]
-  [ 168 278 4 4 ]
-  [ 163 275 4 4 ]
-  [ 159 272 4 4 ]
-  [ 156 268 4 4 ]
-  [ 153 264 4 4 ]
-  [ 151 259 4 4 ]
-  [ 150 255 4 4 ]
-  [ 149 249 4 4 ]
-  [ 150 244 4 4 ]
-  [ 150 239 4 4 ]
-  [ 153 234 4 4 ]
-  [ 155 230 4 4 ]
-  [ 159 226 4 4 ]
-  [ 163 223 4 4 ]
-  [ 168 221 4 4 ]
-  [ 173 219 4 4 ]
-  [ 178 219 4 4 ]
+  [ 33  0 4 4 .undef .undef ]
+  [ 38  0 4 4 .undef .undef ]
+  [ 43  2 4 4 .undef .undef ]
+  [ 47  4 4 4 .undef .undef ]
+  [ 51  8 4 4 .undef .undef ]
+  [ 55 11 4 4 .undef .undef ]
+  [ 57 15 4 4 .undef .undef ]
+  [ 60 20 4 4 .undef .undef ]
+  [ 60 25 4 4 .undef .undef ]
+  [ 60 30 4 4 .undef .undef ]
+  [ 60 36 4 4 .undef .undef ]
+  [ 60 41 4 4 .undef .undef ]
+  [ 58 45 4 4 .undef .undef ]
+  [ 55 49 4 4 .undef .undef ]
+  [ 51 53 4 4 .undef .undef ]
+  [ 47 56 4 4 .undef .undef ]
+  [ 43 59 4 4 .undef .undef ]
+  [ 38 60 4 4 .undef .undef ]
+  [ 33 60 4 4 .undef .undef ]
+  [ 28 60 4 4 .undef .undef ]
+  [ 23 60 4 4 .undef .undef ]
+  [ 18 59 4 4 .undef .undef ]
+  [ 13 56 4 4 .undef .undef ]
+  [  9 53 4 4 .undef .undef ]
+  [  6 49 4 4 .undef .undef ]
+  [  3 45 4 4 .undef .undef ]
+  [  1 41 4 4 .undef .undef ]
+  [  0 36 4 4 .undef .undef ]
+  [  0 30 4 4 .undef .undef ]
+  [  0 25 4 4 .undef .undef ]
+  [  1 20 4 4 .undef .undef ]
+  [  3 16 4 4 .undef .undef ]
+  [  6 11 4 4 .undef .undef ]
+  [  9  8 4 4 .undef .undef ]
+  [ 13  4 4 4 .undef .undef ]
+  [ 18  2 4 4 .undef .undef ]
+  [ 23  0 4 4 .undef .undef ]
+  [ 28  0 4 4 .undef .undef ]
 ] def
 
 

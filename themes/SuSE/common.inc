@@ -1417,6 +1417,8 @@
 
 /clip.size { screen.size } def
 
+timeout.preinit
+
 "back.jpg" findfile /background.file over def setimage loadpalette
 /max_image_colors image.colors def
 
