@@ -1,126 +1,126 @@
-# translation of de.po to German
+# translation of el.po to Hellenic
 # LANGUAGE translations for boot loader
 # Copyright (C) 2004 SUSE LINUX AG
-# Antje Faber <afaber@suse.de>, 2004.
+# Hellenic SuSE Translators Group <hstg@billg.gr>, 2004.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: de\n"
-"PO-Revision-Date: 2004-03-09.28:37GMT\n"
-"Last-Translator: Antje Faber <afaber@suse.de>\n"
-"Language-Team: German <i18n@suse.de>\n"
+"Project-Id-Version: el\n"
+"PO-Revision-Date: 2004-09-06 16:19+0300\n"
+"Last-Translator: Hellenic SuSE Translators Group <hstg@billg.gr>\n"
+"Language-Team: Hellenic <hstg@billg.gr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.0.2\n"
+"X-Generator: KBabel 1.3.1\n"
 
 # ok button label
 #. txt_ok
 msgid "OK"
-msgstr "Ok"
+msgstr "OK"
 
 # cancel button label
 #. txt_cancel
 msgid "Cancel"
-msgstr "Verwerfen"
+msgstr "Ακύρωση"
 
 # reboot button label
 #. txt_reboot
 msgid "Reboot"
-msgstr "Neustart"
+msgstr "Επανεκκίνηση"
 
 # continue button label
 #. txt_continue
 msgid "Continue"
-msgstr "Fortfahren"
+msgstr "Συνέχεια"
 
 #. txt_install
 msgid "Installation"
-msgstr "Installation"
+msgstr "Εγκατάσταση"
 
 #. txt_manual_install
 msgid "Manual Installation"
-msgstr "Manuelle Installation"
+msgstr "Χειροκίνητη Εγκατάσταση"
 
 #. txt_noacpi_install
 msgid "Installation - ACPI Disabled"
-msgstr "Installation - ACPI deaktiviert"
+msgstr "Εγκατάσταση - ACPI Απενεργοποιημένο"
 
 #. txt_safe_install
 msgid "Installation - Safe Settings"
-msgstr "Installation - Sichere Einstellungen"
+msgstr "Εγκατάσταση - Ασφαλείς Ρυθμίσεις"
 
 #. txt_safe_linux
 msgid "Linux - Safe Settings"
-msgstr "Linux - Sichere Einstellungen"
+msgstr "Linux - Ασφαλείς Ρυθμίσεις"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
-msgstr "Von Festplatte booten"
+msgstr "Εκκίνηση από το Σκληρό Δίσκο"
 
 #. txt_rescue
 msgid "Rescue System"
-msgstr "Rettungssystem"
+msgstr "Σύστημα Διάσωσης"
 
 #. txt_memtest
 msgid "Memory Test"
-msgstr "Speichertest"
+msgstr "Έλεγχος Μνήμης"
 
 #. txt_bootoptions
 msgid "Boot Options"
-msgstr "Bootoptionen"
+msgstr "Ρυθμίσεις Εκκίνησης"
 
 # window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
 msgid "Good bye..."
-msgstr "Tschüs..."
+msgstr "Αντίο..."
 
 #. txt_exit_dialog
 msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"Sie verlassen das grafische Bootmenü und\n"
-"kommen in den Textmodus."
+"Εγκαταλείπετε το μενού γραφικής εκκίνησης και\n"
+"ξεκινάτε το περιβάλλον κατάστασης κειμένου."
 
 #. txt_help
 msgid "Help"
-msgstr "Hilfe"
+msgstr "Βοήθεια"
 
 # window title for kernel loading (see txt_load_kernel)
 #. txt_load_kernel_title
 msgid "Starting..."
-msgstr "Starten..."
+msgstr "Εκκίνηση..."
 
 # Keep the three newlines!
 #. txt_load_kernel
 msgid "Loading Linux Kernel\n\n\n"
-msgstr "Laden des Linux-Kernels\n\n\n"
+msgstr "Ο Πυρήνας Linux Φορτώνεται\n\n\n"
 
 # Keep the three newlines!
 #. txt_load_memtest
 msgid "Loading memtest86\n\n\n"
-msgstr "Laden von memtest86\n\n\n"
+msgstr "Το memtest86 φορτώνεται\n\n\n"
 
 # info box title
 #. txt_info_title
 msgid "Boot loader"
-msgstr "Bootloader"
+msgstr "Φορτωτής Εκκίνησης"
 
 # error box title
 #. txt_error_title
 msgid "I/O error"
-msgstr "E/A-Fehler"
+msgstr "σφάλμα E/E"
 
 # boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr "Bootdiskette wechseln"
+msgstr "Αλλαγή Δίσκου Εκκίνησης"
 
 #. txt_insert_disk
 #, c-format
 msgid "Please insert Boot Disk %u."
-msgstr "Legen Sie Bootdiskette %u ein."
+msgstr "Παρακαλώ εισάγετε Δίσκο Εκκίνησης %u. "
 
 #. txt_insert_disk2
 #, c-format
@@ -128,36 +128,36 @@ msgid ""
 "This is Boot Disk %u.\n"
 "Please insert Boot Disk %u."
 msgstr ""
-"Dies ist die Bootdiskette %u.\n"
-"Legen Sie die Bootdiskette %u ein."
+"Αυτός είναι ο Δίσκος Εκκίνησης %u.\n"
+"Παρακαλώ εισάγετε το Δίσκο Εκκίνησης %u."
 
 #. txt_insert_disk3
 #, c-format
 msgid ""
-"This is not a SUSE LINUX 9.2 Boot Disk.\n"
+"This is not a SUSE LINUX 9.1 Boot Disk.\n"
 "Please insert Boot Disk %u."
 msgstr ""
-"Dies ist keine SUSE LINUX 9.2-Bootdiskette.\n"
-"Legen Sie die Bootdiskette %u ein."
+"Αυτός δεν είναι Δίσκος Εκκίνησης του SUSE LINUX 9.1.\n"
+"Παρακαλώ εισάγετε το Δίσκο Εκκίνησης %u."
 
 # password dialog title
 #. txt_password_title
 msgid "Password"
-msgstr "Passwort"
+msgstr "Κωδικός"
 
 # Keep the newlines and spaces after ':'!
 #. txt_password
 msgid "Please enter your password:   \n\n\n"
-msgstr "Bitte geben Sie Ihr Passwort ein:   \n\n\n"
+msgstr "Παρακαλώ εισάγετε τον κωδικό σας:   \n\n\n"
 
 #. txt_dud_ready
 msgid "Please get your Driver Update Floppy ready."
-msgstr "Halten Sie Ihre Treiber-Update-Diskette bereit."
+msgstr "Παρακαλώ ετοιμάστε την Δισκέτα Ενημέρωσης Οδηγών."
 
 # dvd warning title
 #. txt_dvd_warning_title
 msgid "You're almost there..."
-msgstr "Sie haben es fast geschafft."
+msgstr "Πλησιάζετε..."
 
 # Keep the newlines!
 #. txt_dvd_warning
@@ -165,84 +165,84 @@ msgid ""
 "\n\nIt appears that the system booted from the second side of the DVD.\n"
 "If so, turn the DVD over and try again."
 msgstr ""
-"\n\nEs scheint, dass das System von der zweiten Seite der DVD gestartet wurde.\n"
-"Falls dies zutrifft, drehen Sie die DVD um, und versuchen Sie es erneut."
+"\n\nΦαίνεται ότι το σύστημα ξεκίνησε από την δεύτερη επιφάνεια του DVD.\n"
+"Αν είναι έτσι, γυρίστε το DVD ανάποδα και ξαναδοκιμάστε."
 
 #. txt_dvd_warning2
 msgid ""
 "This is a two-sided DVD. You have booted from the second side.\n\n"
 "Please turn the DVD over, then continue."
 msgstr ""
-"Dies ist eine zweiseitige DVD. Sie haben von der zweiten Seite gebootet.\n\n"
-"Drehen Sie die DVD um, und fahren Sie dann fort."
+"Αυτό είναι DVD διπλής επιφάνειας. Έχετε εκκινήσει από την δεύτερη επιφάνεια.\n\n"
+"Παρακαλώ γυρίστε το DVD ανάποδα και συνεχίστε."
 
 # power off dialog title
 #. txt_power_off_title
 msgid "Power off"
-msgstr "Ausschalten"
+msgstr "Διακοπή Παροχής Ρεύματος"
 
 #. txt_power_off
 msgid "Do you want to halt the system now?"
-msgstr "Wollen Sie das System nun anhalten?"
+msgstr "Θέλετε να σταματήσετε το σύστημα τώρα;"
 
 # menu entry for hard disk installation
 #. txt_harddisk
 msgid "Hard Disk"
-msgstr "Festplatte"
+msgstr "Σκληρός Δίσκος"
 
 # dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "Festplatten-Installation"
+msgstr "Εγκατάσταση Σκληρού Δίσκου"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (scan all disks if empty)\n"
-msgstr "Plattengerät (Platten scannen, falls leer)\n"
+msgstr "Συσκευή Δίσκου (σάρωση όλων των δίσκων αν είναι κενοί)\n"
 
 #. txt_directory
 msgid "Directory\n"
-msgstr "Verzeichnis\n"
+msgstr "Κατάλογος\n"
 
 # dialog title for ftp installation
 #. txt_ftp_title
 msgid "FTP Installation"
-msgstr "FTP-Installation"
+msgstr "Εγκατάσταση FTP"
 
 #. txt_server
 msgid "Server\n"
-msgstr "Server\n"
+msgstr "Διακομιστής\n"
 
 #. txt_password
 msgid "Password\n"
-msgstr "Passwort\n"
+msgstr "Κωδικός\n"
 
 # label for ftp user input
 #. txt_user1
 msgid "User (anonymous login if empty)\n"
-msgstr "Benutzer (anonymous-Anmeldung, falls leer)\n"
+msgstr "Χρήστης (ανώνυμη σύνδεση εάν είναι κενός)\n"
 
 # dialog title for nfs installation
 #. txt_nfs_title
 msgid "NFS Installation"
-msgstr "NFS-Installation"
+msgstr "Εγκατάσταση NFS"
 
 # label for smb user input
 #. txt_user2
 msgid "User (using \"guest\" if empty)\n"
-msgstr "Benutzer (\"guest\" verwenden, falls leer)\n"
+msgstr "Χρήστης (χρήση \"guest\" αν είναι κενός)\n"
 
 # dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "SMB (Windows Share)-Installation"
+msgstr "Εγκατάσταση SMB (Windows Share)"
 
 # dialog title for http installation
 #. txt_http_title
 msgid "HTTP Installation"
-msgstr "HTTP-Installation"
+msgstr "Εγκατάσταση HTTP"
 
 # 'driver' as in '(hardware) driver update'
 #. txt_driver_update
 msgid "Driver"
-msgstr "Treiber"
+msgstr "Οδηγός"
 

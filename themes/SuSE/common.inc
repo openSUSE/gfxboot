@@ -1100,7 +1100,7 @@
 
   font.normal setfont
 
-  /menu.text.normal    white             def
+  /menu.text.normal    black             def
   /menu.text.select    white             def
   /boot.text.options   white             def
   /boot.text.normal    white             def
@@ -1109,8 +1109,8 @@
 
   /menu.bar.color      fn_color       def
 
-  /frame1.pos  { 160 100 } def
-  /frame1.size { 320 195 } def
+  /frame1.pos  { 100  90 } def
+  /frame1.size { 325 195 } def
   /frame2.pos  {  10 410 } def
   /frame2.size { 620  25 } def
   /frame3.pos  {  10 386 } def
@@ -1122,7 +1122,7 @@
   /menu.start.y frame1.pos exch pop 12 add def
 
   /menu.bar.width frame1.size pop 20 sub def
-  /menu.max.entries 8 def
+  /menu.max.entries 7 def
   /menu.scrollbar false def
 
   /boot.buf.size 256 def
@@ -1134,8 +1134,7 @@
 
   /update.pos { clip.size pop txt_dud_ready strsize pop sub 26 sub 360 } def
 
-%  frame1.pos moveto frame_color dup dark_frame_color frame1.size drawborder3
-  frame1.pos moveto frame_color dark_frame_color frame1.size drawborder4
+%  frame1.pos moveto frame_color dark_frame_color frame1.size drawborder4
 
 } def
 

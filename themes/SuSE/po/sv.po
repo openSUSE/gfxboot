@@ -134,10 +134,10 @@ msgstr ""
 #. txt_insert_disk3
 #, c-format
 msgid ""
-"This is not a SUSE LINUX 9.1 Boot Disk.\n"
+"This is not a SUSE LINUX 9.2 Boot Disk.\n"
 "Please insert Boot Disk %u."
 msgstr ""
-"Det här är inte en Suse Linux 9.1-startdisk.\n"
+"Det här är inte en Suse Linux 9.2-startdisk.\n"
 "Sätt i startdisk %u."
 
 # password dialog title

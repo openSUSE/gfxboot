@@ -17,6 +17,7 @@
 %% include keymap.es.inc
 %% include keymap.fr.inc
 %% include keymap.de.inc
+%% include keymap.el.inc
 %% include keymap.it.inc
 %% include keymap.ja.inc
 %% include keymap.hu.inc
@@ -28,11 +29,14 @@
 % must not be empty
 /keymaps [
   [ "ar" .undef    ]
+  [ "bn" .undef    ]
+  [ "bg" .undef    ]
   [ "cs" keymap.cs ]
   [ "en" .undef    ]
   [ "es" keymap.es ]
   [ "fr" keymap.fr ]
   [ "de" keymap.de ]
+  [ "el" keymap.el ]
   [ "it" keymap.it ]
   [ "ja" keymap.ja ]
   [ "hu" keymap.hu ]

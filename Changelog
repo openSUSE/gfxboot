@@ -1,3 +1,7 @@
+6/9/2004:	v2.5.3
+	- added new translations
+	- preliminary SuSE theme graphics
+
 2/9/2004:	v2.5.2
 	- do the F-key-move-down magic only for syslinux (#44238)
 	- some text cleanup (9.1 -> 9.2, dropped unused liveeval msgs)
