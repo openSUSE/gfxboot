@@ -92,15 +92,16 @@ white settextmodecolor
 /w 100 def
 /h 50 def
 
-100 y moveto w h savescreen /s0 exch def
-
-gray setcolor
-100 y moveto w h fillrect
-white setcolor "Text" show
 100 y moveto w h savescreen /s1 exch def
 
-0 settransparency
-0 0 moveto s0 s1 blend
+black setcolor
+100 y moveto w h fillrect
+white setcolor "Text" show
+100 y moveto w h savescreen /s0 exch def
+
+10 settransparency
+0x00ff00 setcolor
+0 0 moveto s0 s1 blend2
 
 300 y moveto s1 restorescreen
 

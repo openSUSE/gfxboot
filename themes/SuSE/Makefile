@@ -14,7 +14,7 @@ HELPINST_ALL = $(notdir $(HELPINST))
 DEFAULT_LANG =
 
 FILES_INST   = init languages $(TRANSLATIONS) 16x16.fnt back.jpg \
-	       splash.jpg kroete.dat \
+	       splash.jpg greeting.jpg kroete.dat \
 	       $(HELPINST_ALL)
 
 FILES_BOOT   = init languages $(TRANSLATIONS) 16x16.fnt back.jpg \
@@ -22,7 +22,7 @@ FILES_BOOT   = init languages $(TRANSLATIONS) 16x16.fnt back.jpg \
 
 FILES_BOOT_EN = init languages en.tr 16x16.fnt back.jpg en.hlp
 
-INST_EXT     = 16x16.fnt back.jpg splash.jpg kroete.dat *.hlp *.tr
+INST_EXT     = 16x16.fnt back.jpg splash.jpg greeting.jpg kroete.dat *.hlp *.tr
 
 ifdef DEFAULT_LANG
 FILES_INST += lang

@@ -49,10 +49,15 @@
 %
 /drawtsymbol {
   /timeout.status exch def
+
+  /timeout.clean.color timeout.clean.x timeout.clean.y moveto getpixel def
+
   timeout.status 1 eq timeout.status 2 eq or {
     timeout.areas exch get { } forall
     timeout.clean.x timeout.clean.y
-    4 -2 roll 6 -2 roll moveto image
+    4 -2 roll 6 -2 roll moveto
+    % image
+    timeout.clean.color setcolor fillrect
   } if
 } def
 
@@ -73,8 +78,8 @@
 } def
 
 
-/timeout.clean.x 30 def
-/timeout.clean.y 230 def
+/timeout.clean.x 160 def
+/timeout.clean.y 250 def
 
 /timeout.areas [
   [ 183 219 4 4 ]

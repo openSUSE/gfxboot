@@ -1408,7 +1408,7 @@
 
 % dtrace 0x11000 cvp getdword pop
 
-/transp 0 def
+/transp 0x30 def
 
 % 640 480 8 findmode setmode not { false .end } if
 800 600 16 findmode setmode not { false .end } if
@@ -1421,8 +1421,6 @@
 /max_image_colors image.colors def
 
 % 7 dup 0xffffff setpalette setcolor
-
-bsplash.show
 
 % color & font definitions must be global
 
@@ -1456,6 +1454,8 @@ bsplash.show
 /kroete.dir 0 def
 
 /debug 0 def
+
+bsplash.show
 
 
 

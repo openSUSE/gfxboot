@@ -252,8 +252,10 @@
 %
 /pmenu.update {
   xmenu .xm_panel_x get xmenu.hspace add panel.text.y moveto
-  xmenu .xm_panel_width get xmenu.hspace sub xmenu .xm_panel_height get
-  panel.bg setcolor fillrect
+
+% currently not needed - we're redrawing the whole panel anyway
+%  xmenu .xm_panel_width get xmenu.hspace sub xmenu .xm_panel_height get
+%  panel.bg setcolor fillrect
 
   panel.normal setcolor
   panel.font setfont

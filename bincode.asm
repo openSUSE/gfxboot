@@ -297,6 +297,7 @@ gfx_color0		dd 0		; color #0 (normal color))
 gfx_color1		dd 0		; color #1 (highlight color)
 gfx_color2		dd 0		; color #2 (link color)
 gfx_color3		dd 0		; color #3 (selected link color)
+gfx_color_rgb		dd 0		; current color (rgb)
 transparent_color	dd -1
 char_eot		dd 0		; 'end of text' char
 last_label		dw 0		; ofs, seg = [row_start_seg]
@@ -5808,6 +5809,7 @@ prim_imagecolors_90:
 
 prim_setcolor:
 		call pr_setint
+		mov [gfx_color_rgb],eax
 		call encode_color
 		mov [gfx_color0],eax
 		call setcolor
@@ -7581,6 +7583,36 @@ prim_blend_90:
 		ret
 
 
+prim_blend2:
+		mov dx,t_ptr + (t_ptr << 8)
+		call get_2args
+		jnc prim_blend2_20
+		cmp dx,t_ptr + (t_none << 8)
+		jz prim_blend2_20
+		cmp dx,t_none + (t_ptr << 8)
+		jz prim_blend2_20
+		cmp dx,t_none + (t_none << 8)
+		jz prim_blend2_20
+		stc
+		jmp prim_blend2_90
+prim_blend2_20:
+		sub word [pstack_ptr],2
+
+		; ecx + eax -> eax
+
+		lin2seg eax,es,edi
+		lin2seg ecx,fs,esi
+
+		call blend2
+
+		call lin_seg_off
+
+		clc
+
+prim_blend2_90:
+		ret
+
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ; Helper function that covers common cases.
@@ -7657,7 +7689,7 @@ pr_setobj_30:
 ;
 ;  fs:esi		src image
 ;  es:edi		dst image
-;  dword [transp]	transparency (0-256, 0: result = src, 256: result = dst)
+;  dword [transp]	transparency (0-256, 0: result = dst, 256: result = src)
 ;  word [gfx_cur_x]	ofs of dst relative to src
 ;  word [gfx_cur_y]	dto
 ;
@@ -7716,6 +7748,74 @@ blend_40:
 		jnz blend_20
 
 blend_90:
+		ret
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+;  fs:esi		src image
+;  es:edi		dst image
+;  dword [transp]	transparency (0-256, 0: result = src, 256: result = dst)
+;  word [gfx_cur_x]	ofs of dst relative to src
+;  word [gfx_cur_y]	dto
+;
+blend2:
+		push dword [transp]
+
+		cmp byte [pixel_bytes],2
+		jnz blend2_90
+
+		movzx ebp,word [fs:esi]		; width
+
+		add esi,4
+
+		movzx eax,word [gfx_cur_y]
+		mul ebp
+		movzx ecx,word [gfx_cur_x]
+		add eax,ecx
+		add eax,eax
+		add esi,eax
+
+		mov ebx,4
+
+		mov cx,[es:edi+2]
+
+blend2_20:
+		push cx
+
+		mov dx,[es:edi]
+
+blend2_40:
+		mov ax,[fs:esi]
+
+		call decode_color
+		movzx eax,ah
+		mov [transp],eax
+		mov ecx,[gfx_color_rgb]
+		mov ax,[es:edi+ebx]
+		call decode_color
+		call enc_transp
+		call encode_color
+
+		mov [es:edi+ebx],ax
+		add esi,2
+		add ebx,2
+
+		dec dx
+		jnz blend2_40
+
+		pop cx
+
+		movzx eax,word [es:edi]
+		sub eax,ebp
+		add eax,eax
+		sub esi,eax
+
+		dec cx
+		jnz blend2_20
+
+blend2_90:
+		pop dword [transp]
+
 		ret
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -8610,6 +8710,7 @@ add_transp_20:
 		ret
 
 
+; (1 - t) eax + t * ecx -> eax
 enc_transp:
 		ror ecx,16
 		ror eax,16

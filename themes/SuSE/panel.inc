@@ -8,7 +8,9 @@
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Some global vars.
 %
-/panel.text.y	{ clip.size exch pop 19 sub } def
+/panel.size     { clip.size pop 24 } def
+/panel.y        { clip.size exch pop panel.size exch pop sub } def
+/panel.text.y	{ panel.y 5 add } def
 /panel.font	font.normal def
 /panel.normal	black def
 /panel.high	fn_color def
@@ -22,6 +24,8 @@
 % ( ) ==> ( )
 %
 /panel.init {
+
+  /panel.back 0 panel.y moveto panel.size savescreen def
 
   % define panel layout
   /panel [
@@ -84,13 +88,17 @@
   panel.font setfont
 
   panel.bg setcolor
-  0 panel.text.y 5 sub moveto currentpoint
-  clip.size panel.text.y 5 sub sub fillrect
+  0 panel.y moveto currentpoint
+  panel.back restorescreen
+  currenttransparency
+  50 settransparency
+  panel.size fillrect
+  settransparency
   moveto
 
-  panel.border setcolor
-  0 -1 rmoveto
-  0 1 clip.size pop 3 div { pop putpixel 3 0 rmoveto } for
+%  panel.border setcolor
+%  0 -1 rmoveto
+%  0 1 clip.size pop 3 div { pop putpixel 3 0 rmoveto } for
 
   % don't change xmenu
   /xmenu xmenu
