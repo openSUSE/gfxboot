@@ -72,6 +72,7 @@ font:
 	-t install/log -t boot/log \
 	-f -efont-fixed-medium-r-normal--16-160-75-75-c-80-iso10646-1 \
 	-f -efont-fixed-medium-r-normal--16-160-75-75-c-160-iso10646-1 \
+	--fsize 16,5 -f '-freetype-haydar unicode-medium-r-normal--17-120-100-100-p-81-iso10646-1' \
 	16x16.font >16x16.font.log
 
 clean:

@@ -16,7 +16,8 @@
 /.la.locale 0 def
 /.la.name   1 def
 /lang.defaultnames [
-  [ "ar" "\u064a\u0628\u0631\u0639" ]
+%  [ "ar" "\u064a\u0628\u0631\u0639" ]
+  [ "ar" "\ufef2\ufe91\ufeae\ufecb" ]
   [ "cs" "\u010ce\u0161tina" ]
   [ "en" "English" ]
   [ "fr" "Fran\u00e7ais" ]

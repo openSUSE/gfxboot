@@ -24,6 +24,7 @@ struct option options[] = {
   { "add-charset", 1, NULL, 'c' },
   { "line-height", 1, NULL, 'l' },
   { "prop", 1, NULL, 'p' },
+  { "fsize", 1, NULL, 300 },
   { "test", 0, NULL, 999 },
   { }
 };
@@ -51,6 +52,8 @@ typedef struct {
   char *name;
   XFontStruct *x;
   unsigned used:1;		/* font actually used */
+  int height;
+  int yofs;
 } font_t;
 
 typedef struct char_data_s {
@@ -77,6 +80,9 @@ int opt_prop = 0;
 int opt_spacing = 0;
 int opt_space_width = 0;
 
+int opt_fsize_height = 0;
+int opt_fsize_yofs = 0;
+
 file_data_t font = {};
 
 font_t font_list[16];
@@ -96,6 +102,7 @@ static int empty_row(char_data_t *cd, int row);
 static int empty_column(char_data_t *cd, int column);
 static void add_bbox(char_data_t *cd);
 static void make_prop(char_data_t *cd);
+static int no_space(char_data_t *cd);
 static void encode_chars(font_header_t *fh);
 static void add_data(file_data_t *d, void *buffer, unsigned size);
 static void write_data(char *name);
@@ -126,6 +133,8 @@ int main(int argc, char **argv)
     switch(i) {
       case 'f':
         if(fonts < sizeof font_list / sizeof *font_list) {
+          font_list[fonts].height = opt_fsize_height;
+          font_list[fonts].yofs = opt_fsize_yofs;
           font_list[fonts++].name = optarg;
         }
         break;
@@ -247,6 +256,18 @@ int main(int argc, char **argv)
         opt_verbose++;
         break;
 
+      case 300:
+        str = optarg;
+        if(sscanf(str, "%i , %i%n", &i, &j, &k) == 2 && k == strlen(str)) {
+          opt_fsize_height = i;
+          opt_fsize_yofs = j;
+        }
+        else {
+          fprintf(stderr, "invalid font size spec: %s\n", str);
+          return 1;
+        }
+        break;
+
       case 999:
         opt_test++;
         break;
@@ -267,6 +288,7 @@ int main(int argc, char **argv)
       "  -p, --prop=n1,n2\n\tFake proportionally spaced Font.\n\tn1: spacing between chars; n2: space (char U+0020) width\n"
       "  -t, --add-text=samplefile\n\tAdd all chars used in this file. File must be UTF-8 encoded.\n"
       "  -v, --verbose\n\tDump font info.\n"
+      "      --fsize=height,yofs\n\tOverride font size.\n"
     );
     return 1;
   }
@@ -301,6 +323,7 @@ int main(int argc, char **argv)
   for(font_height = 0, i = 0; i < fonts; i++) {
     if(font_list[i].used) {
       j = font_list[i].x->max_bounds.ascent + font_list[i].x->max_bounds.descent;
+      if(font_list[i].height) j = font_list[i].height;
       if(j > font_height) font_height = j;
     }
   }
@@ -347,7 +370,7 @@ int main(int argc, char **argv)
     XSetFont(display, gc2, cd->font->x->fid);
 
     XFillRectangle(display, pixmap, gc1, 0, 0, font_width, font_height);
-    XDrawImageString16(display, pixmap, gc2, 0, cd->font->x->max_bounds.ascent, &xc, 1);
+    XDrawImageString16(display, pixmap, gc2, 0, cd->font->x->max_bounds.ascent - cd->font->yofs, &xc, 1);
 
     xi = XGetImage(display, pixmap, 0, 0, font_width, font_height, 1, XYPixmap);
 
@@ -533,6 +556,8 @@ void locate_char(char_data_t *cd)
         cd->index = j;
         cd->font = font_list + i;
         cd->width = xc->width;
+        /* work around broken font metric */
+        if(cd->font->name && strstr(cd->font->name, "haydar")) cd->width += 10;
         cd->ok = 1;
         font_list[i].used = 1;
         break;
@@ -632,8 +657,23 @@ void make_prop(char_data_t *cd)
 {
   if(!cd->ok) return;
 
-  cd->x_ofs = opt_spacing;
+  cd->x_ofs = no_space(cd) ? 0 : opt_spacing;
   cd->width = cd->x_ofs + (cd->real_width ?: opt_space_width);
+}
+
+
+int no_space(char_data_t *cd)
+{
+  int n = 0;
+
+  switch(cd->index) {
+    case 0xfecb:
+    case 0xfe91:
+      n = 1;
+      break;
+  }
+
+  return n;
 }
 
 
