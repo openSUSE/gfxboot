@@ -266,3 +266,8 @@ msgstr "Пользователь (если пусто - использовать
 msgid "SMB (Windows Share) Installation"
 msgstr "Установка по SMB (Windows Share)"
 
+# dialog title for http installation
+#. txt_http_title
+msgid "HTTP Installation"
+msgstr "Установка по HTTP"
+

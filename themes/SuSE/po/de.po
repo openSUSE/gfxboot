@@ -240,3 +240,8 @@ msgstr "Benutzer (\"guest\" verwenden, falls leer)\n"
 msgid "SMB (Windows Share) Installation"
 msgstr "SMB (Windows Share)-Installation"
 
+# dialog title for http installation
+#. txt_http_title
+msgid "HTTP Installation"
+msgstr "HTTP-Installation"
+

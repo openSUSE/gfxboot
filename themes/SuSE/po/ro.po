@@ -240,3 +240,8 @@ msgstr "Utilizator (utilizează \"guest\" dacă e gol)\n"
 msgid "SMB (Windows Share) Installation"
 msgstr "Instalare prin SMB (partajare Windows)"
 
+# dialog title for http installation
+#. txt_http_title
+msgid "HTTP Installation"
+msgstr "Instalare prin HTTP"
+

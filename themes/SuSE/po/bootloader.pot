@@ -227,3 +227,8 @@ msgstr ""
 msgid "SMB (Windows Share) Installation"
 msgstr ""
 
+# dialog title for http installation
+#. txt_http_title
+msgid "HTTP Installation"
+msgstr ""
+

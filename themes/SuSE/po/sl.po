@@ -241,3 +241,8 @@ msgstr "Uporabnik (če je polje prazno, uporabnik \"guest\")\n"
 msgid "SMB (Windows Share) Installation"
 msgstr "Namestitev preko SMB (Windows vir v skupini rabi)"
 
+# dialog title for http installation
+#. txt_http_title
+msgid "HTTP Installation"
+msgstr "Namestitev preko HTTP"
+

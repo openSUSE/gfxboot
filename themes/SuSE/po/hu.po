@@ -241,3 +241,8 @@ msgstr "Felhasználó (ha üres, akkor \"guest\")\n"
 msgid "SMB (Windows Share) Installation"
 msgstr "SMB telepítés (Windows megosztásról)"
 
+# dialog title for http installation
+#. txt_http_title
+msgid "HTTP Installation"
+msgstr "HTTP telepítés"
+

@@ -16,9 +16,10 @@
 /.inst_cdrom	0 def
 /.inst_slp	1 def
 /.inst_ftp	2 def
-/.inst_nfs	3 def
-/.inst_smb	4 def
-/.inst_hd	5 def
+/.inst_http	3 def
+/.inst_nfs	4 def
+/.inst_smb	5 def
+/.inst_hd	6 def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -34,7 +35,7 @@
   xmenu .xm_current 0 put
 
   % see install types (.inst_*)
-  xmenu .xm_list [ is_dvd { "DVD" } { "CD-ROM" } ifelse "SLP" "FTP" "NFS" "SMB" txt_harddisk ] put
+  xmenu .xm_list [ is_dvd { "DVD" } { "CD-ROM" } ifelse "SLP" "FTP" "HTTP" "NFS" "SMB" txt_harddisk ] put
 
   pmenu.init
 } def
@@ -155,6 +156,27 @@
     } ifelse
   } if
 
+  dup .inst_http eq {
+    input.dialog.http {
+      /dia input.dialog.http def
+    } {
+      /input.dialog.http window.dialog def
+      /dia input.dialog.http def
+
+      dia .dont_free 1 put
+
+      dia .title txt_http_title put
+      dia .text "" put
+
+      % Must all be of same size!
+      dia .ed.list 2 array put
+      dia .ed.buffer.list [ 63 string 127 string ] put
+      dia .ed.text.list [ txt_server txt_directory ] put
+
+      dia .ed.focus 0 put
+    } ifelse
+  } if
+
   dup .inst_nfs eq {
     input.dialog.nfs {
       /dia input.dialog.nfs def
@@ -248,6 +270,13 @@
     } if
 
     dup 1 get exch 0 get "%s/%s" install.option dup length add sprintf
+  } if
+
+  dup .inst_http eq {
+    input.dialog.http .ed.buffer.list get
+    dup 1 get dup 0 get '/' eq { 1 add } if
+    exch 0 get
+    "install=http://%s/%s" install.option sprintf
   } if
 
   dup .inst_nfs eq {

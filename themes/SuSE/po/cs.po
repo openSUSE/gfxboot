@@ -243,3 +243,8 @@ msgstr "Uživatel (při nevyplnění nastaveno na \"guest\")\n"
 msgid "SMB (Windows Share) Installation"
 msgstr "SMB instalace (sdílený adresář)"
 
+# dialog title for http installation
+#. txt_http_title
+msgid "HTTP Installation"
+msgstr "HTTP instalace"
+
