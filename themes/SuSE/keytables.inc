@@ -16,6 +16,8 @@
 %% include keymap.cs.inc
 %% include keymap.de.inc
 %% include keymap.es.inc
+%% include keymap.fr.inc
+%% include keymap.it.inc
 %% include keymap.ja.inc
 %% include keymap.hu.inc
 %% include keymap.sk.inc
@@ -26,10 +28,10 @@
 /keymaps [
   [ "cs" keymap.cs ]
   [ "en" .undef    ]
-%  [ "fr" keymap.fr ]
+  [ "fr" keymap.fr ]
   [ "de" keymap.de ]
   [ "es" keymap.es ]
-%  [ "it" keymap.it ]
+  [ "it" keymap.it ]
   [ "ja" keymap.ja ]
 %  [ "ru" keymap.ru ]
   [ "hu" keymap.hu ]
