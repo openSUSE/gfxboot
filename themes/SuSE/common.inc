@@ -828,65 +828,6 @@
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% ( timeout time ) ==> ( )
-/Timeout {
-  % first time
-  timeout.time .undef eq { timeout.init } if
-
-  dup /timeout.time exch def
-
-  over sub neg timeout.symbols mul exch div
-
-  dup timeout.current eq { pop return } if
-
-  /timeout.last timeout.current def
-  /timeout.current exch def
-
-  timeout.current timeout.symbols ge {
-    timeout.x timeout.time.y moveto
-    currentpoint timeout.dx timeout.symbols mul fontheight image
-    0 1 timeout.symbols 1 sub {
-      timeout.clear { 2 } { 1 } ifelse drawtsymbol
-    } for
-  } {
-    timeout.time.x timeout.time.y moveto
-    currentpoint currentpoint 100 fontheight image
-    moveto
-    white setcolor
-    timeout.time 10 mul 150 add 182 div "%ds" 64 timeout.buf snprintf timeout.buf show
-    timeout.last 1 timeout.current {
-      1 sub dup 0 ge {
-        1 drawtsymbol
-      } if
-    } for
-  } ifelse
-} def
-
-
-% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% draw a timeout symbol
-% ( index status ) ==> ()
-%
-% status: 0: init, 1: clear, 2: set
-%
-/drawtsymbol {
-  /timeout.status exch def
-  dup timeout.dx mul timeout.x add exch
-  timeout.dy mul timeout.y add
-  moveto currentpoint
-  timeout.status 2 eq {
-    currentpoint timeout.size image
-  } {
-    timeout.status 0 eq {
-      pop pop
-    } {
-      0 462 timeout.size image
-    } ifelse
-  } ifelse
-} def
-
-
-% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % ( time ) ==> ( )
 % /Timer { pop } def
 
@@ -1111,10 +1052,6 @@
 
   /frame1.pos  { 100  90 } def
   /frame1.size { 325 195 } def
-  /frame2.pos  {  10 410 } def
-  /frame2.size { 620  25 } def
-  /frame3.pos  {  10 386 } def
-  /frame3.size { 124  25 } def
   /frame4.pos  { 560  62 } def
   /frame4.size {  22 264 } def
 
@@ -1125,6 +1062,10 @@
   /menu.max.entries 7 def
   /menu.scrollbar false def
 
+  /boot.label.len 220 def
+
+  /boot.pos { boot.label.len 10 add 299 } def
+
   /boot.buf.size 256 def
   /boot.buf boot.buf.size string def
 
@@ -1132,9 +1073,7 @@
   /ms.up       {   0 480 }  def
   /ms.down     {  23 480 }  def
 
-  /update.pos { clip.size pop txt_dud_ready strsize pop sub 26 sub 360 } def
-
-%  frame1.pos moveto frame_color dark_frame_color frame1.size drawborder4
+  /update.pos { clip.size pop txt_dud_ready strsize pop sub 20 sub 425 } def
 
 } def
 
@@ -1357,34 +1296,6 @@
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Initialize timeout indicator.
-%
-% ( ) ==> ( )
-%
-/timeout.init {
-  /timeout.current    -1 def
-  /timeout.x         160 def
-  /timeout.y         340 def
-  /timeout.dx          1 def
-  /timeout.dy          0 def
-  /timeout.symbols   320 def
-  /timeout.clear    true def
-  /timeout.size      { 1 18 } def
-  /timeout.buf        64 string def
-
-  timeout.x timeout.y moveto
-  frame_color dup
-  timeout.dx timeout.symbols mul timeout.size exch pop
-  drawborder
-
-  timeout.x timeout.y 20 sub moveto
-  white setcolor
-  "booting in " show
-  currentpoint /timeout.time.y exch def /timeout.time.x exch def
-} def
-
-
-% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Search for option in cmdline.
 % Returns .undef if not found.
 %
@@ -1457,7 +1368,12 @@ bsplash.show
 /red                 0xc00000          newcolor
 /green               0x009000          newcolor
 /yellow              0xffff20          newcolor
-/lightgray           0xececf4          newcolor
+% /lightgray           0xececf4          newcolor
+% /lightgray           0x839db6          newcolor
+/lightgray           0xe0e6ed          newcolor
+% /lightgray           0xa9bbcd          newcolor
+/dotcolor            0xa9bbcd          newcolor
+/lightdotcolor       0xeff2f6          newcolor
 
 %% include theme_colors.inc
 

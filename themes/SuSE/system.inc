@@ -274,3 +274,24 @@
    } if
 } def
 
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Show string right aligned.
+%
+% ( string ) ==> ( )
+%
+/showright {
+  dup strsize pop neg 0 rmoveto show
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Show string centered.
+%
+% ( string ) ==> ( )
+%
+/showcenter {
+  dup strsize pop 2 div neg 0 rmoveto show
+} def
+
+

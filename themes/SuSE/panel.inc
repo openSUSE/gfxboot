@@ -13,7 +13,7 @@
 /panel.normal	black def
 /panel.high	fn_color def
 /panel.bg	lightgray def
-/panel.border	white def
+/panel.border	lightdotcolor def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -87,9 +87,10 @@
   0 panel.text.y 5 sub moveto currentpoint
   clip.size panel.text.y 5 sub sub fillrect
   moveto
+
   panel.border setcolor
-  currentpoint exch pop clip.size pop 1 sub exch
-  lineto
+  0 -1 rmoveto
+  0 1 clip.size pop 3 div { pop putpixel 3 0 rmoveto } for
 
   % don't change xmenu
   /xmenu xmenu

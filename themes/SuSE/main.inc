@@ -39,9 +39,9 @@
 /main.redraw {
   boot.text.options setcolor
   window.current .font get setfont
-  frame3.pos moveto
-  currentpoint 300 fontheight image
-  txt_bootoptions show
+  boot.pos moveto boot.label.len neg 0 rmoveto
+  currentpoint boot.label.len fontheight image
+  boot.pos moveto txt_bootoptions showright
 
   redrawmenu
   /keepbootoptions 1 def
@@ -75,9 +75,6 @@
     /menu.shift menu.entry menu.texts length menu.visible.entries sub min def
   } if
 
-%  frame2.pos moveto frame_color dup dark_frame_color frame2.size drawborder3
-  frame2.pos moveto frame_color dark_frame_color frame2.size drawborder4
-
   menu.visible.entries menu.texts length lt menu.scrollbar and {
    /menu.bar.width frame1.size pop frame4.size pop sub def
 
@@ -105,14 +102,18 @@
 
   window.current .font get setfont
 
-  frame3.pos moveto
-  txt_bootoptions show
+  boot.pos moveto
+  txt_bootoptions showright
 
-  /boot.ed.width frame2.size pop 10 sub def
+  /boot.ed.width screen.size pop boot.pos pop sub 20 sub def
   /boot.ed.height fontheight 2 add def
 
+  dotcolor setcolor
+  boot.pos moveto 10 boot.ed.height rmoveto
+  0 1 boot.ed.width 3 div { pop putpixel 3 0 rmoveto } for
+
   /boot.ed [
-    frame2.pos exch 5 add exch 4 add
+    boot.pos exch 10 add exch 1 sub
     over over moveto boot.ed.width boot.ed.height savescreen
     boot.buf
     boot.buf.size
