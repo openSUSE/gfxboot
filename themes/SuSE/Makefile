@@ -70,21 +70,18 @@ endif
 	@sh -c 'cd install; echo $(FILES_INST) | sed -e "s/ /\n/g" | cpio --quiet -o >bootlogo'
 
 font:
+	cat po/*.po *.html >tmp.txt
 	../../getx11font -v -l 18 -p 2,4 \
 	-c ISO-8859-15 -c ISO-8859-2 -c koi8-r \
 	`./keymapchars keymap.*.inc` \
-	-t po/el.po \
-	-t po/bg.po \
-	-t po/ru.po \
-	-t help-boot.ja.html \
-	-t help-install.ja.html \
-	-t po/ja.po -t po/zh_CN.po -t po/zh_TW.po \
+	-t tmp.txt \
 	-t install/log -t boot/log \
 	-t languages \
 	-f -efont-fixed-bold-r-normal--16-160-75-75-c-80-iso10646-1 \
 	-f -efont-fixed-bold-r-normal--16-160-75-75-c-160-iso10646-1 \
 	--fsize 16,5 -f '-freetype-haydar unicode-medium-r-normal--17-120-100-100-p-81-iso10646-1' \
 	16x16.fnt >16x16.fnt.log
+	rm -f tmp.txt
 
 clean:
 	make -C po clean
