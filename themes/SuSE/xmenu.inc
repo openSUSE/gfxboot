@@ -167,16 +167,35 @@
   dup xmenu .xm_current get eq { xmenu.selected.bg } { xmenu.normal.bg } ifelse
   setcolor xmenu.width xmenu.lheight fillrect
 
-  dup xmenu .xm_current get eq { xmenu.selected.fg } { xmenu.normal.fg } ifelse setcolor
-  xmenu.x xmenu.hspace add xmenu.pos.y xmenu.vspace add moveto
-  xmenu .xm_list get over get exec show
-
   dup xmenu .xm_current get eq {
     xmenu.x xmenu.pos.y moveto
     xmenu.dark xmenu.light xmenu.width xmenu.lheight drawborder
   } if
 
+  transp {
+    /xmemu.tmpbuf
+     xmenu.x xmenu.pos.y moveto xmenu.width xmenu.lheight
+     savescreen
+    def
+
+    currenttransparency transp settransparency
+
+    0 xmenu.pos.y xmenu.y sub moveto 1 1 rmoveto
+    xmenu.saved xmemu.tmpbuf blend
+
+    settransparency
+
+    xmenu.x xmenu.pos.y moveto xmemu.tmpbuf restorescreen
+
+    /xmemu.tmpbuf xmemu.tmpbuf free .undef def
+  } if
+
+  dup xmenu .xm_current get eq { xmenu.selected.fg } { xmenu.normal.fg } ifelse setcolor
+  xmenu.x xmenu.hspace add xmenu.pos.y xmenu.vspace add moveto
+  xmenu .xm_list get over get exec show
+
   pop
+
 
 } def
 

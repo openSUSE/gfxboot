@@ -203,6 +203,8 @@ jpg_static_buf_seg	dw 0		; seg
 
 screen_width		dw 0
 screen_height		dw 0
+screen_vheight		dw 0
+screen_mem		dw 0		; mem in 64k
 screen_line_len		dd 0
 
 setpixel		dw setpixel_8		; function that sets one pixel
@@ -2869,6 +2871,7 @@ set_mode:
 		; 320x200, 8 bit
 		mov word [screen_width],320
 		mov word [screen_height],200
+		mov word [screen_vheight],200
 		mov word [screen_line_len],320
 		mov byte [pixel_bits],8
 		mov byte [pixel_bytes],1
@@ -2885,6 +2888,8 @@ set_mode_20:
 		pop di
 		cmp ax,4fh
 		jnz set_mode_80
+		push word [es:di+12h]
+		pop word [screen_mem]
 		mov ax,4f01h
 		mov cx,[gfx_mode]
 		push di
@@ -2900,6 +2905,16 @@ set_mode_20:
 		pop word [screen_width]
 		push word [es:di+14h]
 		pop word [screen_height]
+
+		movzx eax,byte [es:di+1dh]
+		inc ax
+		movzx ecx,word [screen_height]
+		mul ecx
+		cmp eax,7fffh
+		jbe set_mode_25
+		mov ax,7fffh
+set_mode_25:
+		mov [screen_vheight],ax
 
 		mov al,[es:di+1bh]		; color mode (aka memory model)
 		mov ah,[es:di+19h]		; color depth
@@ -5742,6 +5757,26 @@ prim_screensize_90:
 		ret
 
 
+prim_vscreensize:
+		mov ax,[pstack_ptr]
+		inc ax
+		inc ax
+		cmp [pstack_size],ax
+		mov bp,pserr_pstack_overflow
+		jb prim_screensize_90
+		mov [pstack_ptr],ax
+		mov dl,t_int
+		movzx eax,word [screen_width]
+		mov cx,1
+		call set_pstack_tos
+		mov dl,t_int
+		movzx eax,word [screen_vheight]
+		xor cx,cx
+		call set_pstack_tos
+prim_vscreensize_90:
+		ret
+
+
 prim_imagesize:
 		mov ax,[pstack_ptr]
 		inc ax
@@ -5866,7 +5901,7 @@ prim_putpixel:
 prim_getpixel:
 		call goto_xy
 		call screen_seg_r
-		mov si,di
+		mov esi,edi
 		xor eax,eax
 		call [getpixel]
 		call decode_color
@@ -6207,15 +6242,12 @@ prim_savescreen:
 		call alloc_fb
 		or eax,eax
 		jz prim_savescreen_50
-		lin2seg eax,es,edi
-		mov [es:edi],dx
-		mov [es:edi+2],cx
-		call lin_seg_off
 		push eax
 		lea edi,[eax+4]
 		call save_bg
 		pop eax
 prim_savescreen_50:
+		call lin_seg_off
 		dec word [pstack_ptr]
 		xor cx,cx
 		mov dl,t_ptr
@@ -6727,7 +6759,7 @@ prim_setmode_60:
 		mov cx,[screen_width]
 		mov [clip_r],cx
 
-		mov cx,[screen_height]
+		mov cx,[screen_vheight]
 		mov [clip_b],cx
 
 		xor cx,cx
@@ -7519,6 +7551,36 @@ prim_keepmode:
 		ret
 
 
+prim_blend:
+		mov dx,t_ptr + (t_ptr << 8)
+		call get_2args
+		jnc prim_blend_20
+		cmp dx,t_ptr + (t_none << 8)
+		jz prim_blend_20
+		cmp dx,t_none + (t_ptr << 8)
+		jz prim_blend_20
+		cmp dx,t_none + (t_none << 8)
+		jz prim_blend_20
+		stc
+		jmp prim_blend_90
+prim_blend_20:
+		sub word [pstack_ptr],2
+
+		; ecx + eax -> eax
+
+		lin2seg eax,es,edi
+		lin2seg ecx,fs,esi
+
+		call blend
+
+		call lin_seg_off
+
+		clc
+
+prim_blend_90:
+		ret
+
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ; Helper function that covers common cases.
@@ -7589,6 +7651,72 @@ pr_setobj_30:
 ;
 ;
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+;  fs:esi		src image
+;  es:edi		dst image
+;  dword [transp]	transparency (0-256, 0: result = src, 256: result = dst)
+;  word [gfx_cur_x]	ofs of dst relative to src
+;  word [gfx_cur_y]	dto
+;
+blend:
+		cmp dword [transp],0
+		jz blend_90
+
+		cmp byte [pixel_bytes],2
+		jnz blend_90
+
+		movzx ebp,word [fs:esi]		; width
+
+		add esi,4
+
+		movzx eax,word [gfx_cur_y]
+		mul ebp
+		movzx ecx,word [gfx_cur_x]
+		add eax,ecx
+		add eax,eax
+		add esi,eax
+
+		mov ebx,4
+
+		mov cx,[es:edi+2]
+
+blend_20:
+		push cx
+
+		mov dx,[es:edi]
+
+blend_40:
+		mov ax,[fs:esi]
+
+		call decode_color
+		xchg eax,ecx
+		mov ax,[es:edi+ebx]
+		call decode_color
+		call enc_transp
+		call encode_color
+
+		mov [es:edi+ebx],ax
+		add esi,2
+		add ebx,2
+
+		dec dx
+		jnz blend_40
+
+		pop cx
+
+		movzx eax,word [es:edi]
+		sub eax,ebp
+		add eax,eax
+		sub esi,eax
+
+		dec cx
+		jnz blend_20
+
+blend_90:
+		ret
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
@@ -8501,15 +8629,15 @@ enc_transp:
 ; Get pixel from fs:si.
 ;
 getpixel_8:
-		mov al,[fs:si]
+		mov al,[fs:esi]
 		ret
 
 getpixel_16:
-		mov ax,[fs:si]
+		mov ax,[fs:esi]
 		ret
 
 getpixel_32:
-		mov eax,[fs:si]
+		mov eax,[fs:esi]
 		ret
 
 

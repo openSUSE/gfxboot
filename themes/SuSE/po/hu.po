@@ -269,6 +269,11 @@ msgstr "SMB telepítés (Windows megosztásról)"
 msgid "HTTP Installation"
 msgstr "HTTP telepítés"
 
+# 'driver' as in '(hardware) driver update'
+#. txt_driver_update
+msgid "Driver"
+msgstr ""
+
 # as in Windows Authentication Domain
 #. txt_domain
 msgid "Domain\n"

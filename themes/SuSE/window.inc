@@ -450,7 +450,7 @@
       dialog.tmp .ed.width get dialog.tmp .text.x get 1 add 2 mul add 8 add dialog.width max
     def
     {
-      strsize
+      exec strsize
       /dialog.height exch dialog.height add def
       /dialog.width exch dialog.tmp .text.x get 1 add 2 mul add dialog.width max def
     } forall
@@ -553,6 +553,7 @@
   dialog.tmp .ed.text.list get dup {
     /dialog.tmp.idx 0 def
     {
+      exec
       show
       dialog.tmp .ed.buffer.list get dialog.tmp.idx get
 

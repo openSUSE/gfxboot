@@ -73,6 +73,7 @@
 800 600 16 findmode setmode not { false .end } if
 % 640 480 8 findmode setmode not { false .end } if
 
+"16x16.fnt" findfile setfont
 "test.jpg" findfile
 
 setimage loadpalette
@@ -81,40 +82,27 @@ setimage loadpalette
 
 /black 0x000000 newcolor
 /white 0xffffff newcolor
+/gray  0x808080 newcolor
 
 white settextmodecolor
 
 0 0 moveto 0 0 image.size image
 
+/y 200 def
+/w 100 def
+/h 50 def
 
-dtrace
+100 y moveto w h savescreen /s0 exch def
 
-/mouse xxx def
+gray setcolor
+100 y moveto w h fillrect
+white setcolor "Text" show
+100 y moveto w h savescreen /s1 exch def
 
-"16x16.fnt" findfile setfont
+0 settransparency
+0 0 moveto s0 s1 blend
 
-mouse .undef eq {
-  white setcolor
-  0 0 moveto "no mouse" show
-  trace
-} if
+300 y moveto s1 restorescreen
 
-
-{
-  black setcolor
-  0 0 moveto 100 60 fillrect
-  white setcolor
-  0 0 moveto
-  mouse getdword 16 shl 16 shr "x:  " show number.print
-  0 20 moveto
-  mouse getdword 16 shr "y:  " show number.print
-  0 40 moveto
-  mouse 4 add getdword 7 and
-  "b:  " show
-  dup 1 and { "l" show } if
-  dup 2 and { "r" show } if
-  dup 4 and { "m" show } if
-  pop
-  100000 usleep
-} loop
+trace
 

@@ -605,11 +605,12 @@
 
   currentpoint
   menu.status {
-    menu.bar.color
-    setcolor menu.bar.width menu.bar.height
+    menu.bar.color setcolor
+    currenttransparency
     70 settransparency
+    menu.bar.width menu.bar.height
     fillrect
-    0 settransparency
+    settransparency
   } {
     currentpoint menu.bar.width menu.bar.height image
   } ifelse
@@ -1042,15 +1043,15 @@
 
   /menu.text.xofs      10 def
   /menu.text.yofs       2 def
-  /menu.item.height    fontheight dup 6 div add def
+  /menu.item.height    fontheight dup 5 div add def
   /menu.bar.height     fontheight menu.text.yofs dup add add def
 
   font.normal setfont
 
-  /menu.text.normal    somegreen         def
+  /menu.text.normal    black         def
   /menu.text.select    white             def
-  /boot.text.options   black             def
-  /boot.text.normal    black             def
+  /boot.text.options   white             def
+  /boot.text.normal    white             def
   /infobox.bg          lightgray         def
   /infobox.text.normal black             def
 
@@ -1061,7 +1062,7 @@
   /frame1.size { 325 195 } def
 
   clip.size pop 800 eq {
-    /frame1.pos  { 190 203 } def
+    /frame1.pos  { 265 191 } def
     /frame1.size { 365 195 } def
   } if
 
@@ -1075,7 +1076,7 @@
   /menu.max.entries 6 def
   /menu.scrollbar false def
 
-  /boot.label.len 230 def
+  /boot.label.len 243 def
 
   /boot.pos { boot.label.len 10 add 350 } def
 
@@ -1164,7 +1165,7 @@
   } if
 
   dup keyShiftF11 eq {
-    currenttransparency 0x10 sub 0 max settransparency
+    /transp transp 0x10 sub 0 max def
     pop 0
   } if
 
@@ -1214,7 +1215,7 @@
   } if
 
   dup keyShiftF12 eq {
-    currenttransparency 0x10 add 0x100 min settransparency
+    /transp transp 0x10 add 0x100 min def
     pop 0
   } if
 
@@ -1407,8 +1408,12 @@
 
 % dtrace 0x11000 cvp getdword pop
 
+/transp 0 def
+
 % 640 480 8 findmode setmode not { false .end } if
 800 600 16 findmode setmode not { false .end } if
+
+/with_transp vscreen.size exch pop screen.size exch pop div 1 gt colorbits 8 gt and def
 
 /clip.size { screen.size } def
 
@@ -1436,7 +1441,8 @@ bsplash.show
 % /lightgray           0xa9bbcd          newcolor
 /dotcolor            0xa9bbcd          newcolor
 /lightdotcolor       0xeff2f6          newcolor
-/somegreen           0x004f40          newcolor
+% /somegreen           0x738229          newcolor
+/somegreen           0x78a424          newcolor
 
 
 %% include theme_colors.inc
