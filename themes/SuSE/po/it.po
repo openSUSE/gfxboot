@@ -1,4 +1,5 @@
 # translation of it.po to 
+# translation of it.po to
 # translation of bootloader.po to
 # translation of bootloader.po to
 # LANGUAGE translations for boot loader
@@ -18,11 +19,12 @@
 # , 2004.
 # , 2004.
 # , 2004.
+# , 2005.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
-"PO-Revision-Date: 2004-09-13 14:38+0200\n"
+"PO-Revision-Date: 2005-03-12 11:38+0100\n"
 "Last-Translator: \n"
 "Language-Team:  <it@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -265,5 +267,5 @@ msgstr "Driver"
 # as in Windows Authentication Domain
 #. txt_domain
 msgid "Domain\n"
-msgstr ""
+msgstr "Domino\n"
 

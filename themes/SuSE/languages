@@ -1,7 +1,7 @@
 bn
 bg
 cs
-ds Dansk
+ds
 de
 en
 es
@@ -10,15 +10,15 @@ el
 it
 he
 ja
-ko 한글
-lt Lietuvių
+ko
+lt
 hu
-nl Nederlands
+nl
 nb
 pl
-pt_PT Português
+pt_PT
 pt_BR
-pa Punjabi
+pa
 ro
 ru
 zh_CN
@@ -26,6 +26,6 @@ sk
 sl
 sv
 zh_TW
-tr Türkçe
+tr
 uk
-cy_GB Welsh
+cy_GB

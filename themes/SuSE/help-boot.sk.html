@@ -3,126 +3,122 @@
 <!-- help=boot -->
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="help">Použitie pomocníka</a></h3>
+<h3><a name="help">Použitie systému nápovedy</a></h3>
 
-Pomocník pre správcu štartu je kontextový. Poskytuje informácie 
-o vybranej položke menu alebo sa v prípade, že opravujete voľby
-štartu, snaží o zobrazenie informácií o voľbe, na ktorej je
-práve kurzor.<br>
+Online nápoveda zavádzača je kontextová. Poskytuje informácie o zvolenej
+položke, alebo, ak upravujete nastavenia štartu, pokúsi sa vyhľadať
+informácie o nastavení, na ktorom je umiestnený kurzor.<br>
 <br>
-Navigácia klávesnicou<br><br>
+Klávesy pre pohyb<br><br>
 
-  <em>Šipka hore</em>: vybrať predchádzajúci odkaz<br>
-  <em>Šipka dolu</em>: vybrať nasledujúci odkaz<br>
-  <em>Šipka vľavo</em>, <em>Backspace</em>: návrat na prechádzajúci článok<br>
-  <em>Šipka vpravo</em>, <em>Enter</em>, <em>Space</em>: zobraziť odkaz<br>
-  <em>Page Up</em>: posunúť text o jednu stránku hore<br>
-  <em>Page Down</em>: posunúť text o jednu stránku dolu<br>
-  <em>Home</em>: prejsť na začiatok stránky<br>
-  <em>End</em>: prejsť na koniec stránky<br>
-  <em>Esc</em>: ukončiť pomocníka<br>
+  <em>Šípka nahor</em>: označiť predchádzajúcu linku<br>
+  <em>Šípka nadol</em>: označiť ďalšiu linku<br>
+  <em>Šípka doľava</em>, <em>Backspace</em>: návrat na predchádzajúcu tému<br>
+  <em>Šípka doprava</em>, <em>Enter</em>, <em>Space</em>: nasledovať linku<br>
+  <em>Page Up</em>: posun o stránku nahor<br>
+  <em>Page Down</em>: posun o stránku nadol<br>
+  <em>Home</em>: posun na začiatok<br>
+  <em>End</em>: posun na koniec<br>
+  <em>Esc</em>: opustiť nápovedu<br>
 
-<br>Návrat na <a href="#opt">Voľby štartu</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="keytable">Výber rozloženia klávesnice</a></h3>
-
-Stlačením <em>F2</em> sa zobrazí zoznam podporovaných
-klávesníc.<br><br>
-
-<br><br>Návrat na <a href="#opt">Voľby štartu</a>
+<br>Návrat na <a href="#opt">Možnosti štartu</a>
 
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="profile">Choose Profile</a></h3>
+<h3><a name="keytable">Výber jazyka a rozloženia klávesnice</a></h3>
 
-Press <em>F3</em> to select a profile. Your system will be started using the
-configuration saved in this profile.
+Stlačte <em>F2</em> pre zmenu jazyka a rozloženia klávesnice, používaných zavádzačom.
 
-<br><br>Return to <a href="#opt">Boot Options</a>
+<br><br>Návrat na <a href="#opt">Možnosti štartu</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="profile">Výber profilu</a></h3>
+
+Stlačte <em>F3</em> pre výber profilu. Váš systém bude spustený pomocou
+konfigurácie uloženej v tomto profile.
+
+<br><br>Návrat na <a href="#opt">Možnosti štartu</a>
 
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="opt">Voľby štartu</a></h3>
+<h3><a name="opt">Možnosti štartu</a></h3>
 
-  <a href="#o_splash">splash</a> -- ovplyvňuje zobrazovanie informácií počas štartu<br>
-  <a href="#o_apm">apm</a> -- prepne správu napájania<br>
-  <a href="#o_acpi">acpi</a> -- pokročilé rozhranie nastavenia a správy napájania (Advanced Configuration and Power Interface)<br>
-  <a href="#o_ide">ide</a> -- ovládanie IDE systému<br>
+  <a href="#o_splash">splash</a> -- nastavenia týkajúce sa splash screenu<br>
+  <a href="#o_apm">apm</a> -- vypnúť/zapnúť šetrenie energie<br>
+  <a href="#o_acpi">acpi</a> -- advanced configuration and power interface<br>
+  <a href="#o_ide">ide</a> -- ovládanie IDE subsystému<br>
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="o_splash">Voľby jadra: splash</a></h3>
+<h3><a name="o_splash">Možnosti kernelu: splash</a></h3>
 
-Splash je obrázok zobrazený pri štarte systému.<br>
+Splash screen je obrazovka, ktorú vidno počas štartovania systému.<br>
 <br>
 <em>splash=0</em><br>
-Obrázok je vypnutý. To sa môže hodiť na veľmi
-starých monitoroch alebo v prípade, že sa vyskytne
-nejaká chyba.<br>
+Splash screen je vypnutý. Toto sa môže zísť pri veľmi
+starých monitoroch, alebo v prípade nejakej chyby.<br>
 <br>
-<em>splash=verbose</em><br> Aktivuje obrázok, ale správy
-o štarte jadra a systému sa budú zobrazovať.<br>
+<em>splash=verbose</em><br> Aktivuje splash screen, text štartovania systému
+sa zobrazuje.<br>
 <br>
 <em>splash=silent</em><br>
-Aktivuje obrázok, ale bez správ. Namiesto nich sa zobrazí pruh
-priebehu.<br>
-
-<br>Návrat na <a href="#opt">Voľby štartu</a>
+Aktivuje splash screen, ale všetok text je skrytý. Vidno len indikátor priebehu.<br>
+<br>
+Návrat na <a href="#opt">Možnosti štartu</a>
 
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="o_apm">Voľby jadra: apm</a></h3>
+<h3><a name="o_apm">Možnosti kernelu: apm</a></h3>
 
-APM je jedna z dvoch technológií pre správu napájania
-pre súčasné počítače. Používa sa hlavne na prenosných
-počítačoch na uspávanie, ale dokáže aj vypnúť počítač. 
-APM vyžaduje správne fungujúci BIOS. Ak je BIOS 
-nesprávny, APM môže fungovať iba čiastočne alebo dokonca
-počítač môže prestať fungovať. V tom prípade budete možno
-musieť APM vypnúť pomocou parametra<br><br>
+APM je jedna z dvoch hlavných stratégií správy napájania používaných na
+dnešných počítačoch. Používa sa najme na prenosných počítačoch, na uspatie
+na disk, ale môže sa starať aj o vypínanie počítača po zastavení systému.
+APM vyžaduje správne fungujúci BIOS. Ak tento nefunguje správne, použitie
+APM môže byť značne obmedzené, alebo počítač s ním vôbec nemusí fungovať.
+Preto je možné vypnúť ho pomocou parametra
 
-  <em>apm=off</em>  -- úplne vypnúť APM<br><br>
+  <em>apm=off</em>  -- úplne vypne APM<br><br>
 
-Niektore nové počítač môžu využiť novšiu technológiu 
+Novšie počítače využijú viac novší
 <a href="#o_acpi">ACPI</a>.
 
-<br><br>Návrat na <a href="#opt">Voľby štartu</a>
+<br><br>Návrat na <a href="#opt">Možnosti štartu</a>
 
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="o_acpi">Voľby jadra: acpi</a></h3>
+<h3><a name="o_acpi">Možnosti kernelu: acpi</a></h3>
 
-ACPI (Advanced Configuration and Power Interface) je štandard,
-ktorý definuje rozhrania pre správu napájania a nastavenia počítača
-medzi BIOSom operačným systémom. Štandardne sa <em>acpi</em> 
-zapne, ak je BIOS novší než z roku 2000. Pre chovanie ACPI
-existuje niekoľko často používaných parametrov:<br>
+ACPI (Pokročilé rozhranie pre konfiguráciu a správu napájania) je štandard,
+ktorý definuje rozhrania pre správu napájania a konfigurácie medzi
+operačným systémom a BIOS-om. Štandardne je <em>acpi</em> zapnuté, ak je
+zistený BIOS, ktorý je novší ako z roku 2000. Toto sú bežne používané
+parametre pre nastavenie správania sa ACPI:<br>
+
 <br>
-  <em>pci=noacpi</em> -- nepoužívať ACPI pre správu prerušení PCI
-  <em>acpi=oldboot</em> -- aktivovať iba časti ACPI, ktoré sa týkajú
- štartu systému<br>
-  <em>acpi=off</em> -- vypnúť ACPI úplne<br>
-  <em>acpi=force</em> -- zapnúť ACPI aj v prípade, že je BIOS starší
- než z roku 2000<br>
+  <em>pci=noacpi</em> -- nepoužívať ACPI pre routovanie PCI prerušení
+  <em>acpi=oldboot</em> -- aktivovať len časti ACPI potrebné pre štart<br>
+  <em>acpi=off</em> -- úplne vypnúť ACPI<br>
+  <em>acpi=force</em> -- zapnúť ACPI aj v prípade, že máte BIOS spred
+roku 2000<br>
 <br>
-Hlavne na nových počítačoch nahradzuje systém 
-<a href="#o_apm">apm</a>.
+Najmä na novších počítačoch nahradzuje starší
+<a href="#o_apm">apm</a> systém.
 
 
-<br><br>Návrat na <a href="#opt">Voľby štartu</a>
+<br><br>Návrat na <a href="#opt">Možnosti štartu</a>
 
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="o_ide">Voľby jadra: ide</a></h3>
+<h3><a name="o_ide">Možnosti kernelu: ide</a></h3>
 
-IDE je rozhranie diskov často používané v pracovných staniciach.
-Aby sa zabránilo niektorým problémom s IDE zariadeniami, použite
-parameter jadra: <br><br> 
+IDE je, na rozdiel od SCSI, bežne používané v pracovných staniciach.
+Kvôli obídeniu niektorých hardwarových problémov, vyskytujúcich sa pri IDE
+systémoch, použíte tento parameter: <br><br>
 
-  <em>ide=nodma</em>  -- vypne DMA pre IDE zariadenia<br>
+  <em>ide=nodma</em>  -- vypne dma pre IDE zariadenia<br>
 
 
-<br><br>Návrat na <a href="#opt">Voľby štartu</a>
+
+<br><br>Návrat na <a href="#opt">Možnosti štartu</a>.
 
 </body></html>

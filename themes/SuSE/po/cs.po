@@ -2,12 +2,12 @@
 # translation of bootloader.po to cs_CZ
 # LANGUAGE translations for boot loader
 # Copyright (C) 2004 SUSE LINUX AG
-# Klara Cihlarova <koty@seznam.cz>, 2004.
+# Klara Cihlarova <koty@seznam.cz>, 2004, 2005.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
-"PO-Revision-Date: 2004-09-03 07:59+0200\n"
+"PO-Revision-Date: 2005-03-03 15:01+0100\n"
 "Last-Translator: Klara Cihlarova <koty@seznam.cz>\n"
 "Language-Team: cs_CZ <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -252,5 +252,5 @@ msgstr "Ovladač"
 # as in Windows Authentication Domain
 #. txt_domain
 msgid "Domain\n"
-msgstr ""
+msgstr "Doména\n"
 

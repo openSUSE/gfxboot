@@ -87,6 +87,7 @@ sub read_texts
 
   for (@txts) {
     $txt = $txts{$_};
+    $txt =~ s/\\"/"/g;
     $txt =~ s/\\\\/\\/g;
     $txt =~ s/\\n/\n/g;
     print "$txt\x00"

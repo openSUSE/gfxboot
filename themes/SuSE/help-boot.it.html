@@ -39,7 +39,7 @@ tastiera utilizzate dal boot loader.
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="profile">Seleziona profile</a></h3>
 
-Premete <em>F3</em> per selezionare un profilo.
+Premete <em>F3</em> per selezionare un profilo. Il vostro sistema si avvierà applicando la configurazione salvata in questo profilo.
 
 <br><br>Ritorna alle <a href="#opt">Opzioni di boot</a>
 
@@ -67,7 +67,7 @@ inoltre i messaggi del kernel e di boot.<br>
 <br>
 <em>splash=silent</em><br>
 Attiva lo splash screen, senza visualizzare dei messaggi. Viene mostrata
-invece una barra di avanzamento.<br>
+solo una barra di avanzamento.<br>
 <br>
 Ritorna alle <a href="#opt">Opzioni di boot</a>
 
@@ -77,13 +77,13 @@ Ritorna alle <a href="#opt">Opzioni di boot</a>
 
 APM è una delle due strategie da poter applicare in tema
 di risparmio energetico su computer comunemente diffusi.
-Si usa soprattutto con portatili per funzioni del tipo suspend
-to disk, ma può essere anche preposto allo spegnimento del
-computer dopo lo shutdown. APM si basa sul corretto funzionamento
-del BIOS. Se il BIOS non funziona a dovere, l'utilità dell'APM
-si riduce notevolmente o può addirittura compromettere il
-funzionamento del computer.  Per tale ragione avete la possibilità di
-disabilitarlo tramite questo parametro:
+Si usa soprattutto con portatili per funzioni del tipo sospensione 
+sul disco (ingl. suspend to disk), ma può essere anche preposto 
+allo spegnimento del computer dopo lo shutdown. APM si basa 
+sul corretto funzionamento del BIOS. Se il BIOS non funziona a 
+dovere, l'utilità dell'APM si riduce notevolmente o può addirittura 
+compromettere il funzionamento del computer.  Per tale ragione 
+avete la possibilità di disabilitarlo tramite questo parametro:
 <br><br>
 
   <em>apm=off</em>  -- disattiva completamente APM<br><br>
@@ -98,9 +98,9 @@ Su alcuni computer recentissimi si potrà trarre beneficio da
 <h3><a name="o_acpi">Opzioni per il kernel: acpi</a></h3>
 
 ACPI (Advanced Configuration and Power Interface) è uno
-standard di interfaccia posta tra sistema operativo e BIOS.
+standard che definisce le interfacce per l'amministrazione del consumo energetico e della configurazione poste tra sistema operativo e BIOS.
 Di default, <em>acpi</em> è attivata se è stato rilevato un BIOS
-del dopo 2000. Vi sono una serie d parametri per intervenire
+che non risale agli anni precedenti all'anno 2000. Vi sono una serie d parametri per intervenire
 sul comportamento dell' ACPI:<br>
 <br>
   <em>pci=noacpi</em> -- non utilizzare ACPI per gestire gli interrupt PCI

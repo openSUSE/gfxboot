@@ -1,18 +1,19 @@
+# translation of de.po to 
 # translation of de.po to German
 # LANGUAGE translations for boot loader
 # Copyright (C) 2004 SUSE LINUX AG
-# Antje Faber <afaber@suse.de>, 2004.
+# Antje Faber <afaber@suse.de>, 2004, 2005.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
-"PO-Revision-Date: 2004-03-09.38:37GMT\n"
-"Last-Translator: Antje Faber <afaber@suse.de>\n"
-"Language-Team: German <i18n@suse.de>\n"
+"PO-Revision-Date: 2005-03-11 18:31+0100\n"
+"Last-Translator: Antje Faber\n"
+"Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.0.2\n"
+"X-Generator: KBabel 1.9\n"
 
 # ok button label
 #. txt_ok
@@ -249,5 +250,5 @@ msgstr "Treiber"
 # as in Windows Authentication Domain
 #. txt_domain
 msgid "Domain\n"
-msgstr ""
+msgstr "Domain\n"
 

@@ -243,11 +243,8 @@ msgstr "HTTP 安装"
 msgid "Driver"
 msgstr "驱动程序" 
 
-
-
-
 # as in Windows Authentication Domain
 #. txt_domain
 msgid "Domain\n"
-msgstr ""
+msgstr "域\n" 
 
