@@ -59,10 +59,9 @@ ifdef DEFAULT_LANG
 endif
 	@sh -c 'cd install; echo $(FILES_INST) | sed -e "s/ /\n/g" | cpio --quiet -o >bootlogo'
 
-# add -c koi8-r to add russian
 font:
 	../../getx11font -v -l 18 -p 2,4 \
-	-c ISO-8859-15 -c ISO-8859-2 \
+	-c ISO-8859-15 -c ISO-8859-2 -c koi8-r \
 	-t help-boot.ja.html \
 	-t help-install.ja.html \
 	-t install/log -t boot/log \
