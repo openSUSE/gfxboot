@@ -33,7 +33,7 @@
   [ "nl" "Nederlands" ]
   [ "nb" "Norsk" ]
   [ "pl" "Polski" ]
-  [ "pt_BR" "Português" ]
+  [ "pt_BR" "Português (Brasil)" ]
   [ "ro" "Romanian" ]
   [ "ru" "Русский" ]
   [ "sk" "Slovenčina" ]
