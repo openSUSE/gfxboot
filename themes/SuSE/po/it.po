@@ -259,3 +259,12 @@ msgstr "Installazione SMB (share Windows)"
 msgid "HTTP Installation"
 msgstr "Installazione HTTP"
 
+# LiveCD product name - don't translate
+#. txt_livecd
+msgid "SUSE Linux 9.1 LiveCD"
+msgstr ""
+
+#. txt_livecd_safe
+msgid "SUSE Linux 9.1 LiveCD - Safe Settings"
+msgstr ""
+

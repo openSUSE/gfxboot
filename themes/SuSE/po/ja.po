@@ -245,3 +245,12 @@ msgstr "SMB (Windows共有) インストール"
 msgid "HTTP Installation"
 msgstr "HTTPインストール"
 
+# LiveCD product name - don't translate
+#. txt_livecd
+msgid "SUSE Linux 9.1 LiveCD"
+msgstr ""
+
+#. txt_livecd_safe
+msgid "LiveCD - Safe Settings"
+msgstr "LiveCD - セーフ設定"
+

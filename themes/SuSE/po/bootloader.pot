@@ -232,3 +232,12 @@ msgstr ""
 msgid "HTTP Installation"
 msgstr ""
 
+# LiveCD product name - don't translate
+#. txt_livecd
+msgid "SUSE Linux 9.1 LiveCD"
+msgstr ""
+
+#. txt_livecd_safe
+msgid "LiveCD - Safe Settings"
+msgstr ""
+

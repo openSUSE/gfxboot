@@ -863,14 +863,18 @@
   translate
   dup "memtest" eq over "memtest86" eq or { pop txt_memtest return } if
   syslinux {
-    dup "linux"     eq { pop txt_install        return } if
-    dup "failsafe"  eq { pop txt_safe_install   return } if
+    livecd {
+      dup "linux"     eq { pop txt_livecd return } if
+      dup "failsafe"  eq { pop txt_livecd_safe return } if
+    } {
+      dup "linux"     eq { pop txt_install        return } if
+      dup "failsafe"  eq { pop txt_safe_install   return } if
+    } ifelse
     dup "noacpi"    eq { pop txt_noacpi_install return } if
     dup "manual"    eq { pop txt_manual_install return } if
     dup "rescue"    eq { pop txt_rescue         return } if
     dup "hwcheck"   eq { pop "Hardware Check"   return } if
     dup "harddisk"  eq { pop txt_boot_harddisk  return } if
-    dup "eval"      eq { pop "LiveEval"         return } if
   } {
     dup "linux"     eq { pop "Linux"        return } if
     dup "failsafe"  eq { pop txt_safe_linux return } if

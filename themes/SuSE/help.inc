@@ -58,7 +58,7 @@
   dup "o_gateway" eq { pop "network" } if
   dup "o_pci" eq { pop "o_acpi" } if
 
-  syslinux not {
+  syslinux not livecd or {
     % only help, startup, keytable and option pages
     dup "o_" strstr 1 ne {
       dup "help" ne

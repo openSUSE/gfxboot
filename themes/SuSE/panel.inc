@@ -33,10 +33,20 @@
     syslinux {
 
       [ keyF2 0 "F2" /panel.video /panel.video.width /panel.video.update /video.init ]
-      [ keyF3 0 "F3" /panel.install /panel.install.width /panel.install.update /install.init ]
-      [ keyF4 0 "F4" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
-      [ keyF5 0 "F5" /panel.splash /panel.splash.width /panel.splash.update /splash.init ]
-      [ keyF6 0 "F6" /panel.dud /panel.dud.width /panel.dud.update .undef ]
+
+      livecd {
+
+        [ keyF3 0 "F3" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
+        [ keyF4 0 "F4" /panel.splash /panel.splash.width /panel.splash.update /splash.init ]
+
+      } {
+
+        [ keyF3 0 "F3" /panel.install /panel.install.width /panel.install.update /install.init ]
+        [ keyF4 0 "F4" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
+        [ keyF5 0 "F5" /panel.splash /panel.splash.width /panel.splash.update /splash.init ]
+        [ keyF6 0 "F6" /panel.dud /panel.dud.width /panel.dud.update .undef ]
+
+      } ifelse
 
     } {
 
