@@ -3,6 +3,7 @@
 	- add new 'biosmem' function
 	- live cd layout changes
 	- added live cd warning if there's not enough memory
+	- added SLES theme (copy of SuSE theme)
 
 7/4/2004:	v2.4.17
 	- add SuSE-Live theme
