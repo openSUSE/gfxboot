@@ -18,6 +18,9 @@ FILES_INST   = init languages $(TRANSLATIONS) 16x16.font background.pcx \
 FILES_BOOT   = init languages $(TRANSLATIONS) 16x16.font background.pcx \
 	       $(HELPBOOT_ALL)
 
+FILES_BOOT_EN = init languages texts.en 16x16.font background.pcx \
+	       help.en
+
 ifdef DEFAULT_LANG
 FILES_INST += lang
 FILES_BOOT += lang
@@ -44,11 +47,12 @@ themes: bootdir installdir
 bootdir: boot.config $(INCLUDES) $(HELPBOOT)
 	@cp -a po/texts.* boot
 	@for i in $(FILES_BOOT) ; do [ -f $$i ] && cp $$i boot ; done ; true
+	@echo en >boot/languages
 	$(MKBOOTMSG) $(BFLAGS) -l boot/log -c $< boot/init
 ifdef DEFAULT_LANG
 	@echo $(DEFAULT_LANG) >boot/lang
 endif
-	@sh -c 'cd boot; echo $(FILES_BOOT) | sed -e "s/ /\n/g" | cpio --quiet -o >message'
+	@sh -c 'cd boot; echo $(FILES_BOOT_EN) | sed -e "s/ /\n/g" | cpio --quiet -o >message'
 
 installdir: install.config $(INCLUDES) $(HELPINST)
 	@cp -a po/texts.* install
