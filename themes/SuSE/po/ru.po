@@ -1,0 +1,268 @@
+# translation of bootloader.po to Russian
+# LANGUAGE translations for boot loader
+# Copyright (C) 2004 SUSE LINUX AG
+# Copyright (C) 2004 Vdel CREC
+# Andrew Bogatov<bert@bert2.crec.mipt.ru>, 2004.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: bootloader\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2004-03-26 23:00+0300\n"
+"Last-Translator: Andrew <bert@bert2.crec.mipt.ru>\n"
+"Language-Team: Russian <ru@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.3\n"
+
+# ok button label
+#. txt_ok
+msgid "OK"
+msgstr "Успех"
+
+# cancel button label
+#. txt_cancel
+msgid "Cancel"
+msgstr "Отмена"
+
+# reboot button label
+#. txt_reboot
+msgid "Reboot"
+msgstr "Перезагрузка"
+
+# continue button label
+#. txt_continue
+msgid "Continue"
+msgstr "Продолжить"
+
+#. txt_install
+msgid "Installation"
+msgstr "Установка"
+
+#. txt_manual_install
+msgid "Manual Installation"
+msgstr "Ручная установка"
+
+#. txt_noacpi_install
+msgid "Installation - ACPI Disabled"
+msgstr "Установка - ACPI выключен"
+
+#. txt_safe_install
+msgid "Installation - Safe Settings"
+msgstr "Установка - безопасные параметры"
+
+#. txt_safe_linux
+msgid "Linux - Safe Settings"
+msgstr "Linux - безопасные параметры"
+
+#. txt_boot_harddisk
+msgid "Boot from Hard Disk"
+msgstr "Загрузка с жёсткого диска"
+
+#. txt_rescue
+msgid "Rescue System"
+msgstr "Спасательная система"
+
+#. txt_memtest
+msgid "Memory Test"
+msgstr "Тест памяти"
+
+#. txt_bootoptions
+msgid "Boot Options"
+msgstr "Параметры загрузки"
+
+# window title for exit dialog
+#. txt_exit_title (see txt_exit_dialog)
+msgid "Good bye..."
+msgstr "До свидания..."
+
+#. txt_exit_dialog
+msgid ""
+"You are leaving the graphical boot menu and\n"
+"starting the text mode interface."
+msgstr ""
+"Вы покинули графическое меню загрузки и\n"
+"запустили текстовый вариант интерфейса."
+
+#. txt_help
+msgid "Help"
+msgstr "Справка"
+
+# window title for kernel loading (see txt_load_kernel)
+#. txt_load_kernel_title
+msgid "Starting..."
+msgstr "Запуск..."
+
+# Keep the three newlines!
+#. txt_load_kernel
+msgid ""
+"Loading Linux Kernel\n"
+"\n"
+"\n"
+msgstr ""
+"Загрузка ядра Linux\n"
+"\n"
+"\n"
+
+# Keep the three newlines!
+#. txt_load_memtest
+msgid ""
+"Loading memtest86\n"
+"\n"
+"\n"
+msgstr ""
+"Загрузка memtest86\n"
+"\n"
+"\n"
+
+# info box title
+#. txt_info_title
+msgid "Boot loader"
+msgstr "Загрузчик MBR"
+
+# error box title
+#. txt_error_title
+msgid "I/O error"
+msgstr "Ошибка ввода/вывода"
+
+# boot disk change dialog title
+#. txt_change_disk_title
+msgid "Change Boot Disk"
+msgstr "Сменить загрузочный диск"
+
+#. txt_insert_disk
+#, c-format
+msgid "Please insert Boot Disk %u."
+msgstr "Пожалуйста вставьте загрузочный диск %u."
+
+#. txt_insert_disk2
+#, c-format
+msgid ""
+"This is Boot Disk %u.\n"
+"Please insert Boot Disk %u."
+msgstr ""
+"Это загрузочный диск %u.\n"
+"Пожалуйста вставьте загрузочный диск %u."
+
+#. txt_insert_disk3
+#, c-format
+msgid ""
+"This is not a SUSE LINUX 9.1 Boot Disk.\n"
+"Please insert Boot Disk %u."
+msgstr ""
+"\"Это не SUSE LINUX 9.1 загрузочный диск.\n"
+"Пожалуйста вставьте загрузочный диск %u."
+
+# password dialog title
+#. txt_password_title
+msgid "Password"
+msgstr "Пароль"
+
+# Keep the newlines and spaces after ':'!
+#. txt_password
+msgid ""
+"Please enter your password:   \n"
+"\n"
+"\n"
+msgstr ""
+"Введите ваш пароль:   \n"
+"\n"
+"\n"
+
+#. txt_dud_ready
+msgid "Please get your Driver Update Floppy ready."
+msgstr "Пожалуйста, держите ваш гибкий диск с обновлением драйвера наготове."
+
+# dvd warning title
+#. txt_dvd_warning_title
+msgid "You're almost there..."
+msgstr "Вы уже почти на месте..."
+
+# Keep the newlines!
+#. txt_dvd_warning
+msgid ""
+"\n"
+"\n"
+"It appears that the system booted from the second side of the DVD.\n"
+"If so, turn the DVD over and try again."
+msgstr ""
+"\n"
+"\n"
+"По-видимому система загружается со второй стороны DVD.\n"
+"Если так - переверните DVD и попробуйте снова."
+
+#. txt_dvd_warning2
+msgid ""
+"This is a two-sided DVD. You have booted from the second side.\n"
+"\n"
+"Please turn the DVD over, then continue."
+msgstr ""
+"Это двусторонний DVD диск. Вы загрузились со второй стороны.\n"
+"\n"
+"Переверните DVD и продолжайте."
+
+# power off dialog title
+#. txt_power_off_title
+msgid "Power off"
+msgstr "Выключить питание"
+
+#. txt_power_off
+msgid "Do you want to halt the system now?"
+msgstr "Желаете ли остановить систему сейчас?"
+
+#. txt_driver_update
+msgid "Driver Update"
+msgstr "Обновление драйвера"
+
+# menu entry for hard disk installation
+#. txt_harddisk
+msgid "Hard Disk"
+msgstr "Жёсткий диск"
+
+# dialog title for hard disk installation
+#. txt_harddisk_title
+msgid "Hard Disk Installation"
+msgstr "Установка жёсткого диска"
+
+#. txt_hd_diskdevice
+msgid "Disk Device (scan all disks if empty)\n"
+msgstr "Дисковое устройство (сканировать все диски, если пусто)\n"
+
+#. txt_directory
+msgid "Directory\n"
+msgstr "Каталог\n"
+
+# dialog title for ftp installation
+#. txt_ftp_title
+msgid "FTP Installation"
+msgstr "Установка по FTP"
+
+#. txt_server
+msgid "Server\n"
+msgstr "Сервер\n"
+
+#. txt_password
+msgid "Password\n"
+msgstr "Пароль\n"
+
+# label for ftp user input
+#. txt_user1
+msgid "User (anonymous login if empty)\n"
+msgstr "Пользователь (если пусто - использовать анонимный вход)\n"
+
+# dialog title for nfs installation
+#. txt_nfs_title
+msgid "NFS Installation"
+msgstr "Установка по NFS"
+
+# label for smb user input
+#. txt_user2
+msgid "User (using \"guest\" if empty)\n"
+msgstr "Пользователь (если пусто - использовать guest)\n"
+
+# dialog title for smb installation
+#. txt_smb_title
+msgid "SMB (Windows Share) Installation"
+msgstr "Установка по SMB (Windows Share)"
+
