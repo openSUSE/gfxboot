@@ -201,7 +201,7 @@ msgstr "ハードディスクインストール"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (scan all disks if empty)\n"
-msgstr "ディスクデバイス (全ディスクのスキャンは空白)\n"
+msgstr "ディスクデバイス (空白: 全ディスクのスキャン)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -223,7 +223,7 @@ msgstr "パスワード\n"
 # label for ftp user input
 #. txt_user1
 msgid "User (anonymous login if empty)\n"
-msgstr "ユーザ (匿名ログインは空白)\n"
+msgstr "ユーザ (空白: 匿名ログイン)\n"
 
 # dialog title for nfs installation
 #. txt_nfs_title
@@ -233,7 +233,7 @@ msgstr "NFSインストール"
 # label for smb user input
 #. txt_user2
 msgid "User (using \"guest\" if empty)\n"
-msgstr "ユーザ (\"guest\"は空白)\n"
+msgstr "ユーザ (空白: guest)\n"
 
 # dialog title for smb installation
 #. txt_smb_title
