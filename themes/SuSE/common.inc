@@ -1136,7 +1136,7 @@
   } if
 
   dup keyShiftF8 eq debug 3 ge and {
-    currentcolor black setcolor
+    currentcolor white setcolor
 
     currentpoint 300 0 moveto
     0 memsize print "/" print print "  " print

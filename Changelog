@@ -1,3 +1,7 @@
+8/3/2005:	v3.0.11
+	- fixed install source dialogs
+	- fixed some memory leaks
+
 7/3/2005:	v3.0.10
 	- translation fix (#66743)
 	- new splash graphics

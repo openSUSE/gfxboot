@@ -92,7 +92,6 @@
 /.ed.pw_field    newfield
 /.xmenu          newfield
 /.xmenu.update   newfield
-/.dont_free      newfield
 
 % window types
 /t_dialog 100 def
@@ -251,9 +250,11 @@
       dup .ed get free
       dup .ed .undef put
     } if
+    dup .ed.text.list get free
     dup .ed.list get dup {
-      { dup 2 get free 2 .undef put } forall
+      { dup 2 get free free } forall
     } { pop } ifelse
+    dup .ed.list get free
     pop
     % remove it from window list
     window.pop
@@ -268,7 +269,7 @@
       } if
       free
     % free window
-    dup .dont_free get { pop } { free } ifelse
+    free
   } if
 } def
 
@@ -450,14 +451,14 @@
       dialog.tmp .ed.width get dialog.tmp .text.x get 1 add 2 mul add 8 add dialog.width max
     def
     {
-      exec strsize
+      strsize
       /dialog.height exch dialog.height add def
       /dialog.width exch dialog.tmp .text.x get 1 add 2 mul add dialog.width max def
     } forall
   } { pop } ifelse
 
   dialog.tmp .ed.buffer.list get dup {
-    length lineheight 10 add mul /dialog.height exch dialog.height add def
+    length lineheight 20 add mul /dialog.height exch dialog.height add def
   } { pop } ifelse
 
   /window.buttons dialog.tmp .buttons get def
@@ -480,6 +481,11 @@
 
     dialog.width max /dialog.width exch def
   } if } if
+
+  % adjust to window size
+  dialog.tmp .ed.width get .undef ne {
+    dialog.tmp .ed.width over over get dialog.width 30 sub max put
+  } if
 
   /dialog.x screen.size pop dialog.width sub 2 div def
 
@@ -553,7 +559,6 @@
   dialog.tmp .ed.text.list get dup {
     /dialog.tmp.idx 0 def
     {
-      exec
       show
       dialog.tmp .ed.buffer.list get dialog.tmp.idx get
 
@@ -561,22 +566,12 @@
 
         3 7 rmoveto
 
-        /dialog.tmp.buf dialog.tmp .ed.list get dialog.tmp.idx get def
-
-        dialog.tmp.buf {
-          /dialog.tmp.doinit false def
-          dialog.tmp.buf 2
-            dialog.tmp .ed.width get fontheight 2 add savescreen
-          put
-        } {
-          /dialog.tmp.doinit true def
-          /dialog.tmp.buf [
-            currentpoint
-            dialog.tmp .ed.width get fontheight 2 add savescreen
-            0 0
-            0 0 0
-          ] def
-        } ifelse
+        /dialog.tmp.buf [
+          currentpoint
+          dialog.tmp .ed.width get fontheight 2 add savescreen
+          0 0
+          0 0 0
+        ] def
 
         dialog.tmp.buf 3 2 index put
         dialog.tmp.buf 4 rot cvp length put
@@ -586,21 +581,17 @@
         currentcolor
         currentpoint over 1 sub over 2 sub moveto
         black white dialog.tmp .ed.width get 2 add fontheight 5 add drawborder
-        moveto -3 lineheight 10 add 7 sub rmoveto
+        moveto -3 lineheight 20 add 7 sub rmoveto
         setcolor
 
-        dialog.tmp.doinit {
-          dialog.tmp.buf "" edit.init
-        } {
-          % we really need a redraw function...
-          currentfont
-          % hide text in password fields
-          dialog.tmp.idx dialog.tmp .ed.pw_field get eq {
-            dialog.tmp .ed.font get pwmode setfont
-          } if
-          dialog.tmp.buf dup 3 get edit.init
-          setfont
-        } ifelse
+        currentfont
+        % hide text in password fields
+        dialog.tmp.idx dialog.tmp .ed.pw_field get eq {
+          dialog.tmp .ed.font get pwmode setfont
+        } if
+        dialog.tmp.buf dup 3 get edit.init
+        setfont
+
         dialog.tmp .ed.focus get dialog.tmp.idx ne { dialog.tmp.buf edit.hidecursor } if
 
       } { pop } ifelse

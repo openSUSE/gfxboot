@@ -2389,7 +2389,12 @@ _free_90:
 ; dump memory chain
 dump_malloc:
 		pushad
+
+		xor dx,dx
+		call con_xy
+
 		xor bx,bx
+		xor bp,bp
 
 dump_malloc_10:
 		mov ecx,[malloc.area + bx]
@@ -2418,8 +2423,6 @@ dump_malloc_90:
 
 _dump_malloc:
 		mov ebx,[malloc.start]
-
-		xor bp,bp
 
 _dump_malloc_30:
 		lin2seg ebx,es,esi
@@ -2450,10 +2453,12 @@ _dump_malloc_40:
 		popad
 
 		inc bp
-		test bp,0fh
+		test bp,01fh
 		jnz _dump_malloc_60
 		pushad
 		call get_key
+		xor dx,dx
+		call con_xy
 		popad
 _dump_malloc_60:		
 
@@ -2476,7 +2481,9 @@ _dump_malloc_80:
 
 		call lin_seg_off
 
+		push bp
 		call printf
+		pop bp
 _dump_malloc_90:
 		ret
 %endif
