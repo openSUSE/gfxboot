@@ -1,3 +1,6 @@
+2/4/2004:	v2.4.10
+	- reset timeout if we show some popup during start
+
 2/4/2004:	v2.4.9
 	- added amd64 test
 	- fixed lilo password dialog

@@ -298,15 +298,15 @@
 
   is_second_side {
 
-    dvd_popup
+    notimeout dvd_popup
 
   } {
 
     do_64bit_check {
       64bit {
-        64bit_source not { 32bit_popup } if
+        64bit_source not { notimeout 32bit_popup } if
       } {
-        64bit_source { 64bit_popup } if
+        64bit_source { notimeout 64bit_popup } if
       } ifelse
     } if
 

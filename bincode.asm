@@ -308,6 +308,7 @@ pf_gfx_buf		dd 0
 pf_gfx_max		dd 0
 pf_gfx_cnt		dd 0
 
+input_notimeout		db 0
 			align 4, db 0
 input_timeout_start	dd 0
 input_timeout		dd 0
@@ -689,9 +690,12 @@ gfx_input:
 		pop ds
 		cld
 
+		cmp byte [input_notimeout],0
+		jnz gfx_input_10
 		movzx eax,ax
 		mov [input_timeout],eax
 		mov [input_timeout_start],eax
+gfx_input_10:
 
 		call clear_kbd_queue
 
@@ -6832,6 +6836,12 @@ prim_usleep_20:
 		cmp eax,ecx
 		jbe prim_usleep_20
 prim_usleep_90:
+		ret
+
+
+prim_notimeout:
+		mov byte [input_notimeout],1
+		clc
 		ret
 
 

@@ -49,7 +49,7 @@
   videomodes getvideomode
   xsavescreen
 
-  usleep
+  usleep notimeout
   time
   setbrightness currentbrightness
   fadein fade
