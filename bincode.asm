@@ -1,6 +1,7 @@
 			bits 16
 
 			extern jpeg_get_size
+			extern jpeg_decode
 
 			global _start
 
@@ -8,6 +9,7 @@
 
 %include		"vocabulary.inc"
 %include		"modplay_defines.inc"
+%include		"jpeg.inc"
 
 ; some type definitions from mkbootmsg.c
 ; struct file_header_t
@@ -193,6 +195,7 @@ image_pal		dd 0		; (seg:ofs)
 image_type		db 0		; 0:no image, 1: pcx, 2:jpeg
 
 pcx_line_starts		dd 0		; (lin) table of line starts
+jpg_static_buf_seg	dw 0		; seg
 
 screen_width		dw 0
 screen_height		dw 0
@@ -401,6 +404,7 @@ pm_gdt_size		equ $-pm_gdt
 
 pm_ok			db 0			; 1: we can switch tp pm
 pm_large_es		db 0			; es is 4GB segment
+pm_large_fs		db 0			; fs is 4GB segment
 
 %if debug
 ; debug texts
@@ -507,6 +511,13 @@ sizeof_fb_entry		equ 8
 %macro		lin2es 2
 		push %1
 		call _lin2es
+		pop %2
+%endmacro
+
+
+%macro		lin2fs 2
+		push %1
+		call _lin2fs
 		pop %2
 %endmacro
 
@@ -631,6 +642,9 @@ gfx_init_20:
 		mov [pscode_size],eax
 
 		; now the ps interpreter is ready to run
+
+		; jpg decoding buffer
+		call jpg_setup
 
 		; alloc memory for palette data
 		call pal_init
@@ -1510,7 +1524,7 @@ timer_90:
 ; Initialize parameter & return stack.
 ;
 ; return:
-;  CY		error
+;  CF		error
 ;
 stack_init:
 		mov ax,param_stack_size
@@ -1824,7 +1838,7 @@ set_rstack_tos_90:
 ; Setup initial dictionary.
 ;
 ; return:
-;  CY		error
+;  CF		error
 ;
 dict_init:
 		push fs
@@ -2024,7 +2038,7 @@ malloc_init_70:
 		cmp bx,malloc.areas * 8
 		jb malloc_init_10
 
-		call lin_es_off
+		call lin_seg_off
 
 		ret
 
@@ -2121,7 +2135,7 @@ malloc_70:
 
 malloc_90:
 
-		call lin_es_off
+		call lin_seg_off
 
 		ret
 
@@ -2264,7 +2278,7 @@ _free_70:
 		jb _free_10
 _free_90:
 
-		call lin_es_off
+		call lin_seg_off
 
 		ret
 
@@ -2295,7 +2309,7 @@ dump_malloc_70:
 		jb dump_malloc_10
 dump_malloc_90:
 
-		call lin_es_off
+		call lin_seg_off
 
 		popad
 		ret
@@ -2328,7 +2342,7 @@ _dump_malloc_40:
 		pf_arg_uint 4,eax
 		mov si,dmsg_03
 
-		call lin_es_off
+		call lin_seg_off
 
 		call printf
 		popad
@@ -2358,7 +2372,7 @@ _dump_malloc_70:
 		pf_arg_uint 1,ecx
 _dump_malloc_80:
 
-		call lin_es_off
+		call lin_seg_off
 
 		call printf
 _dump_malloc_90:
@@ -2423,7 +2437,7 @@ _memsize_50:
 		jb _memsize_30
 _memsize_90:
 
-		call lin_es_off
+		call lin_seg_off
 
 		ret
 
@@ -2453,7 +2467,7 @@ find_mem_size:
 
 find_mem_size_90:
 
-		call lin_es_off
+		call lin_seg_off
 
 		ret
 
@@ -2654,9 +2668,55 @@ lin_es_90:
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
+; Load fs with large segment.
 ;
-lin_es_off:
+; return:
+;
+;  fs		4GB segment selector (fs = 0 if failed)
+;  IF		0 (interrupts off)
+;
+lin_fs:
+		cli
+
+		cmp byte [pm_large_fs],0
+		jnz lin_fs_90
+
+		push eax
+
+		mov eax,cr0
+		test al,1		; in prot mode (maybe vm86)?
+		jz lin_fs_10
+		push word 0
+		pop fs
+		jmp lin_fs_80
+lin_fs_10:
+		or al,1
+
+		o32 lgdt [pm_gdt]
+
+		mov cr0,eax
+
+		push word pm_es
+		pop fs
+
+		and al,~1
+		mov cr0,eax
+
+		mov byte [pm_large_fs],1
+
+lin_fs_80:
+		pop eax
+
+lin_fs_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+;
+lin_seg_off:
 		mov byte [pm_large_es],0
+		mov byte [pm_large_fs],0
 		sti
 		ret
 
@@ -3002,7 +3062,7 @@ find_mode_90:
 ;  eax:		lin ptr to image
 ;
 ; return:
-;  CY:		error
+;  CF:		error
 ;
 image_init:
 		push eax
@@ -3024,13 +3084,13 @@ image_init_90:
 ;  eax:		lin ptr to image
 ;
 ; return:
-;  CY:		error
+;  CF:		error
 ;
 pcx_init:
 		push eax
 		lin2segofs eax,es,bx
 		cmp dword [es:bx],0801050ah
-		jnz pcx_init_90
+		jnz pcx_init_80
 
 		mov cx,[es:bx+8]
 		inc cx
@@ -3181,6 +3241,36 @@ _lin2es_50:
 		mov es,ax
 		and dword [esp + 6],0fh
 _lin2es_80:
+		pop eax
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; Convert 32bit linear address to fs:32_bit_ofs.
+;
+;  dword [esp + 2]:	linear address
+;
+; return:
+;  fs:			segment
+;  dword [esp + 2]:	ofs
+;
+; Notes:
+;  - changes no regs
+;  - may clear IF if ofs > 1MB
+;
+_lin2fs:
+		push eax
+		mov eax,[esp + 6]
+		cmp eax,1 << 20
+		jb _lin2fs_50
+		call lin_fs
+		jmp _lin2fs_80
+_lin2fs_50:
+		shr eax,4
+		mov fs,ax
+		and dword [esp + 6],0fh
+_lin2fs_80:
 		pop eax
 		ret
 
@@ -3467,7 +3557,7 @@ write_char_90:
 ; return:
 ;  cx		number
 ;  si		points past number
-;  CY		not a number
+;  CF		not a number
 ;
 get_number:
 
@@ -5564,7 +5654,11 @@ prim_imagesize_90:
 
 
 prim_imagecolors:
-		movzx eax,word [pals]
+		xor eax,eax
+		cmp byte [image_type],1
+		jnz prim_imagecolors_90
+		mov ax,[pals]
+prim_imagecolors_90:
 		jmp pr_getint
 
 
@@ -5815,6 +5909,90 @@ prim_loadpalette:
 		clc
 		ret
 
+
+; Unpack image region into buffer.
+;
+; ( x0 y1 width height ) ==> ( buffer )
+;
+prim_imageunpack:
+		mov bp,pserr_pstack_underflow
+		cmp word [pstack_ptr],byte 4
+		jc prim_imageunpack_90
+		mov cx,3
+		call get_pstack_tos
+		cmp dl,t_int
+		stc
+		mov bp,pserr_wrong_arg_types
+		jnz prim_imageunpack_90
+		mov [line_x0],eax
+		mov cx,2
+		push bp
+		call get_pstack_tos
+		pop bp
+		cmp dl,t_int
+		stc
+		jnz prim_imageunpack_90
+		mov [line_y0],eax
+		mov dx,t_int + (t_int << 8)
+		call get_2args
+		jc prim_imageunpack_90
+
+		sub word [pstack_ptr],byte 3
+
+		; clip image width
+		; note: image height is handled in draw_image
+		mov edx,[line_x0]
+		add edx,ecx
+		movzx ebx,word [image_width]
+		sub edx,ebx
+		jle prim_imageunpack_40
+		sub ecx,edx
+prim_imageunpack_40:
+
+		cmp ecx,byte 0
+		jle prim_imageunpack_70
+		cmp eax,byte 0
+		jz prim_imageunpack_70
+		mov [line_x1],ecx
+		mov [line_y1],eax
+
+		sub eax,[line_y0]
+		sub ecx,[line_x0]
+		call alloc_fb
+		or eax,eax
+		jz prim_imageunpack_70
+
+		push eax
+		call unpack_image
+		pop eax
+
+prim_imageunpack_60:
+		mov dl,t_ptr
+		or eax,eax
+		jnz prim_imageunpack_80
+prim_imageunpack_70:
+		mov dl,t_none
+		xor eax,eax
+prim_imageunpack_80:
+		xor cx,cx
+		call set_pstack_tos
+prim_imageunpack_90:
+		ret
+
+
+unpack_image:
+		cmp byte [image_type],1
+		jnz unpack_image_20
+		; call pcx_unpack
+		jmp unpack_image_90
+unpack_image_20:
+		cmp byte [image_type],2
+		jnz unpack_image_90
+		call jpg_unpack
+unpack_image_90:
+		ret
+
+
 prim_tint:
 		mov bp,pserr_pstack_underflow
 		cmp  word [pstack_ptr],byte 3
@@ -5931,6 +6109,7 @@ prim_settransparentcolor:
 
 
 prim_savescreen:
+%if 0
 		mov dx,t_int + (t_int << 8)
 		call get_2args
 		jc prim_savescreen_90
@@ -5970,30 +6149,18 @@ prim_savescreen_90:
 		ret
 
 
+%endif
 prim_xsavescreen:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
 		jc prim_xsavescreen_90
-		push ax
-		push cx
-		mul ecx
-		mul dword [pixel_bytes]
-		pop dx
-		pop cx
-		mov bp,pserr_invalid_image_size
-		add eax,4
-		jc prim_xsavescreen_90
-		push cx
-		push dx
-		call xmalloc
-		pop dx
-		pop cx
+		call alloc_fb
 		or eax,eax
 		jz prim_xsavescreen_50
 		lin2es eax,edi
 		mov [es:edi],dx
 		mov [es:edi+2],cx
-		call lin_es_off
+		call lin_seg_off
 		push eax
 		lea edi,[eax+4]
 		call save_bg
@@ -6011,6 +6178,41 @@ prim_xsavescreen_90:
 		ret
 
 
+; Allocate drawing buffer.
+;
+; eax		height
+; ecx		width
+;
+; return:
+;  eax		buffer (0: failed)
+;
+alloc_fb:
+		push ax
+		push cx
+		mul ecx
+		mul dword [pixel_bytes]
+		pop dx
+		pop cx
+		mov bp,pserr_invalid_image_size
+		add eax,4
+		jc alloc_fb_80
+		push cx
+		push dx
+		call xmalloc
+		pop dx
+		pop cx
+		or eax,eax
+		jz alloc_fb_90
+		lin2es eax,edi
+		mov [es:edi],dx
+		mov [es:edi+2],cx
+		call lin_seg_off
+		jmp alloc_fb_90
+alloc_fb_80:
+		xor eax,eax
+alloc_fb_90:
+		ret
+
 prim_restorescreen:
 		mov dl,t_ptr
 		call get_1arg
@@ -6026,7 +6228,7 @@ prim_restorescreen_20:
 		lin2es eax,edi
 		mov dx,[es:edi]
 		mov cx,[es:edi+2]
-		call lin_es_off
+		call lin_seg_off
 
 		lea edi,[eax+4]
 		mov bx,dx
@@ -6371,7 +6573,7 @@ prim_getbyte:
 prim_getbyte_30:
 		movzx eax,byte [es:esi]
 prim_getbyte_70:
-		call lin_es_off
+		call lin_seg_off
 		mov dl,t_int
 		xor cx,cx
 		call set_pstack_tos
@@ -6404,7 +6606,7 @@ prim_getdword:
 prim_getdword_30:
 		mov eax,[es:esi]
 prim_getdword_70:
-		call lin_es_off
+		call lin_seg_off
 		mov dl,t_int
 		xor cx,cx
 		call set_pstack_tos
@@ -7833,7 +8035,7 @@ edit_get_params:
 		mov [edit_width],ax
 		es a32 lodsw
 		mov [edit_height],ax
-		call lin_es_off
+		call lin_seg_off
 
 		mov cx,[font_height]
 		sub ax,cx
@@ -9607,7 +9809,7 @@ save_bg_30:
 		mov al,[fs:si]
 		inc si
 		jnz save_bg_40
-		call lin_es_off
+		call lin_seg_off
 		call inc_winseg
 		lin2es ebx,edi
 save_bg_40:
@@ -9624,7 +9826,7 @@ save_bg_50:
 		sub ax,dx
 		add si,ax
 		jnc save_bg_60
-		call lin_es_off
+		call lin_seg_off
 		call inc_winseg
 		lin2es ebx,edi
 save_bg_60:
@@ -9633,7 +9835,7 @@ save_bg_60:
 
 save_bg_90:
 
-		call lin_es_off
+		call lin_seg_off
 
 		pop fs
 		ret
@@ -9704,7 +9906,7 @@ restore_bg_40:
 		mov [fs:si],al
 		inc si
 		jnz restore_bg_50
-		call lin_es_off
+		call lin_seg_off
 		call inc_winseg
 		lin2es ebp,edi
 restore_bg_50:
@@ -9715,7 +9917,7 @@ restore_bg_50:
 		sub ax,dx
 		add si,ax
 		jnc restore_bg_60
-		call lin_es_off
+		call lin_seg_off
 		call inc_winseg
 		lin2es ebp,edi
 restore_bg_60:
@@ -9733,7 +9935,7 @@ restore_bg_70:
 restore_bg_90:
 		pop dword [gfx_cur]
 
-		call lin_es_off
+		call lin_seg_off
 
 		pop fs
 		ret
@@ -10457,62 +10659,126 @@ find_file_ext_90:
 ;  eax:		lin ptr to image
 ;
 ; return:
-;  CY:		error
+;  CF:		error
 ;
 jpg_init:
 		push eax
+
+		push eax
+		call jpg_setup
+		pop eax
+
+		cmp word [jpg_static_buf_seg],0
+		jz jpg_init_80
+
 		lin2segofs eax,es,bx
 		cmp dword [es:bx],0e0ffd8ffh
-		jnz jpg_init_90
+		jnz jpg_init_80
 
+		call jpg_size
+		jc jpg_init_90
 
-
+		mov [image_width],ax
+		shr eax,16
+		mov [image_height],ax
 
 		mov byte [image_type],2		; jpg
 
-		mov [image],edi
-
-
-		mov [image_width],cx
-		mov [image_height],dx
+		pop eax
+		push eax
+		mov [image],eax
 
 		clc
+		jmp jpg_init_90
 		
 jpg_init_80:
 		stc
-
 jpg_init_90:
 		pop eax
+		ret
+
+; alloc static buffer
+jpg_setup:
+		cmp word [jpg_static_buf_seg], 0
+		jnz jpg_setup_90
+
+		mov eax,jpg_data_size + 16
+		call calloc
+		or eax,eax
+		jz jpg_setup_90
+		add eax,15
+		shr eax,4
+
+		mov [jpg_static_buf_seg],ax
+jpg_setup_90:
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
-; eax:	jpg image
+; eax		jpg image
+;
+; return:
+;  CF		error
 ;
 jpg_size:
-		jmp $
-
-		push ds
 		lin2es eax,eax
-		push es
-		pop ds
 
 		movzx esp,sp
 
-		xor edx,edx
+		mov ds,[jpg_static_buf_seg]
 
-		push edx
-		push edx
 		push eax
-		
 		call dword jpeg_get_size
+		pop ecx
 
-		add sp,12
-
+		push cs
 		pop ds
 
-		call lin_es_off
+		call lin_seg_off
+
+		or eax,eax
+		jnz jpg_size_90
+		stc
+jpg_size_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; eax			drawing buffer
+; [image]		jpg image
+; dword [line_x0]	x0
+; dword [line_y0]	y0
+; dword [line_x1]	x1
+; dword [line_y1]	y1
+;
+; return:
+;  CF		error
+;
+jpg_unpack:
+		movzx esp,sp
+
+		push dword [line_y1]
+		push dword [line_y0]
+		push dword [line_x1]
+		push dword [line_x0]
+		add eax,4
+		lin2fs eax,eax
+		push eax
+		lin2es dword [image],eax
+		push eax
+
+		mov ds,[jpg_static_buf_seg]
+
+		call dword jpeg_decode
+
+		add sp,24
+
+		push cs
+		pop ds
+
+		call lin_seg_off
 
 		ret
 

@@ -25,7 +25,6 @@ function tst_cdrom {
   mkisofs -o $img -J -r -sort $tmp/cd_sort \
     -b $isodir/isolinux.bin -c $isodir/boot.catalog \
     -publisher "SUSE Products GmbH" \
-    -input-charset UTF-8 \
     -no-emul-boot -boot-load-size 4 -boot-info-table $dst
 
   rm -f $tmp/cd_sort
@@ -37,6 +36,19 @@ function tst_cdrom {
     cp -a $vm_src $vm_tmp
     perl -pi -e "s:<image>:`pwd`/$img:g" $vm_tmp/gfxboot.vmx
     vmware -qx $vm_tmp/gfxboot.vmx
+  elif [ "$program" = olddosemu ] ; then
+
+    sw 0 ln -snf /etc/dosemu.conf.cdrom /etc/dosemu.conf
+    ln -snf /var/lib/dosemu/global.conf.cdrom /var/lib/dosemu/global.conf
+    ln -snf `pwd`/$img /var/lib/dosemu/cdrom
+
+    xdos $*
+
+#    rm -f /var/lib/dosemu/cdrom
+
+    ln -snf /var/lib/dosemu/global.conf.normal /var/lib/dosemu/global.conf
+    sw 0 ln -snf /etc/dosemu.conf.normal /etc/dosemu.conf
+
   fi
 
 }

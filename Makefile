@@ -21,7 +21,7 @@ bincode.o:  bincode.asm vocabulary.inc modplay_defines.inc modplay.inc kroete.in
 	nasm -f elf -O10 -o $@ -l bincode.lst $<
 
 bincode: bincode.o jpeg.o
-	ld --section-start .text=0 --oformat binary -o $@ $^
+	ld --section-start .text=0 --oformat binary -Map bincode.map -o $@ $^
 
 bincode.h:  bincode bin2c
 	./bin2c bincode >bincode.h
@@ -45,7 +45,7 @@ install: all
 	cp -a themes $(DESTDIR)/usr/share/gfxboot
 
 clean: themes
-	@rm -f mkbootmsg bincode getx11font addblack bincode.h bin2c *.lst vocabulary.inc vocabulary.h *.o *~
+	@rm -f mkbootmsg bincode getx11font addblack bincode.h bin2c *.lst *.map vocabulary.inc vocabulary.h *.o *~
 	@rm -rf tmp
 
 themes:
