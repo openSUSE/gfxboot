@@ -1,3 +1,5 @@
 14/4/2004:	v2.4.1
 	- created Changelog
-	- lang menu constructed from 'languages' file
+	- lang menu build from 'languages' file
+	- corrected help text (#35630)
+	- added german & slovak translations
