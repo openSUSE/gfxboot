@@ -19,7 +19,7 @@
   gettype settype
   screen.size image.colors
   moveto currentpoint lineto setcolor currentcolor putpixel getpixel
-  setfont currentfont fontheight strsize show
+  setfont currentfont fontheight strsize show settextmodecolor
   image loadpalette tint settintcolor setpalette getpalette
   settransparentcolor
   savescreen restorescreen

@@ -99,13 +99,15 @@
   /lang.names [
 
     lang.items {
-      dup
 
-      dup length add
-      dup 0 0 put
-      1 add
+      dup dup length add
 
-      dup "" ne { exch pop } { pop lang.getdefname } ifelse
+      dup 0 get {
+        dup 0 0 put 1 add
+        exch pop
+      } {
+        pop lang.getdefname
+      } ifelse
 
     } forall
 

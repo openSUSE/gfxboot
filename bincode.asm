@@ -109,6 +109,12 @@ keyDel			equ 53h		; scan code
 
 max_text_rows		equ 128
 
+mhead.memsize		equ 0
+mhead.ip		equ 4
+mhead.used		equ 8		; bit 7
+mhead.rem		equ 8		; bit 0..6
+mhead.size		equ 9
+
 			section .text
 
 ; jmp table to interface functions
@@ -131,6 +137,12 @@ mem			dd 0		; (lin) data start address
 mem_free		dd 0		; (lin) start of free area for malloc
 mem_max			dd 0		; (lin) end address
 mem_archive		dd 0		; (lin) archive start address (0 -> none), ends at mem_free
+
+malloc.areas		equ 4
+malloc.start		dd 0
+malloc.end		dd 0
+			; start, end pairs
+malloc.area		times malloc.areas * 2 dd 0
 
 vbe_buffer		dd 0		; (seg:ofs) buffer for vbe calls
 vbe_mode_list		dd 0		; (seg:ofs) list with vbe modes
@@ -273,6 +285,8 @@ txt_state		db 0		; bit 0: 1 = skip text
 					; bit 1: 1 = text formatting only
 run_idle		db 0
 
+textmode_color		db 7		; fg color for text (debug) output
+
 			align 2, db 0
 row_start_seg		dw 0
 row_start_ofs		times max_text_rows dw 0
@@ -322,7 +336,7 @@ edit_x			dw 0
 edit_y			dw 0
 edit_width		dw 0
 edit_height		dw 0
-edit_bg			dd 0		; (seg:ofs)
+edit_bg			dd 0		; (lin)
 edit_buf		dd 0		; (seg:ofs)
 edit_buf_len		dw 0
 edit_buf_ptr		dw 0
@@ -366,35 +380,27 @@ tmp_var_2		dd 0
 tmp_var_3		dd 0
 
 ; gdt for pm switch
-pm_cs			equ 8
-pm_ss			equ 10h
-pm_ds			equ 18h
-pm_es			equ 20h
+pm_es			equ 8
 
 			align 4
 pm_gdt			dw pm_gdt_size-1	; gdt descriptor
 			dd 0			; for lgdt instruction
 			dw 0
-pm_gdt_cs		dd 0000ffffh		; 64k code segment
-			dd 00009b00h
-pm_gdt_ss		dd 0000ffffh		; 64k data segment
-			dd 00009300h
-pm_gdt_ds		dd 0000ffffh		; 64k data segment
-			dd 00009300h
 pm_gdt_es		dd 0000ffffh		; 4GB data segment, start at 0
 			dd 008f9300h
 pm_gdt_size		equ $-pm_gdt
 
 pm_ok			db 0			; 1: we can switch tp pm
+pm_large_es		db 0			; es is 4GB segment
 
 %if debug
 ; debug texts
-dmsg_01			db 'Memory: %p - %p, img data at %p', 10, 0
-dmsg_02			db 'Image: %u x %u (real: %u x %u)', 10, 0
-dmsg_03			db 'addr 0x%05x, size 0x%05x+4, %s', 10, 0
-dmsg_04			db 'oops: 0x%05x > 0x%05x', 10, 0
-dmsg_05			db 'oops: 0 size block', 10, 0
-dmsg_06			db 'addr 0x%05x', 10, 0
+dmsg_01			db 'static memory: %p - %p', 10, 0
+dmsg_02			db '     malloc %d: %p - %p', 10, 0
+dmsg_03			db '%3u: addr 0x%06x, size 0x%06x+%u, ip 0x%04x, %s', 10, 0
+dmsg_04			db 'oops: block at 0x%06x: size 0x%06x is too small', 10, 0
+dmsg_04a		db 'oops: 0x%06x > 0x%06x', 10, 0
+dmsg_06			db 'addr 0x%06x', 10, 0
 dmsg_07			db 'free', 0
 dmsg_08			db 'used', 0
 dmsg_09			db 'current dictionary', 10, 0
@@ -489,6 +495,13 @@ sizeof_fb_entry		equ 8
 		pop %3
 %endmacro
 
+%macro		lin2es 2
+		push %1
+		call _lin2es
+		pop %2
+%endmacro
+
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ; Interface functions.
@@ -535,19 +548,18 @@ gfx_init:
 
 		; init malloc memory chain
 
-                ; align 4
-		mov eax,[mem_free]
-		add eax,3
-		and eax,~3
-		mov [mem_free],eax
+		push dword [mem_free]
+		pop dword [malloc.area]
+		push dword [mem_max]
+		pop dword [malloc.area + 4]
 
-		push eax
-		call lin2so
-		pop bx   
-		pop es
-		mov edx,[mem_max]
-		sub edx,eax
-		mov [es:bx],edx
+		; 2MB - 3MB (to avoid A20 tricks)
+		push dword 200000h
+		pop dword [malloc.area + 8]
+		push dword 300000h
+		pop dword [malloc.area + 8 + 4]
+
+		call malloc_init
 
 %if debug
 		mov si,hello
@@ -565,11 +577,27 @@ gfx_init:
 		pf_arg_uint 0,eax
 		mov eax,[mem_max]
 		pf_arg_uint 1,eax
-		mov eax,[mem_free]
-		pf_arg_uint 2,eax
 
 		mov si,dmsg_01
 		call printf
+
+		xor ebx,ebx
+
+.malloc_deb:
+		pf_arg_uchar 0,bl
+		mov eax,[malloc.area + 8*ebx]
+		pf_arg_uint 1,eax
+		mov eax,[malloc.area + 8*ebx + 4]
+		pf_arg_uint 2,eax
+
+		push ebx
+		mov si,dmsg_02
+		call printf
+		pop ebx
+
+		inc bx
+		cmp bx,malloc.areas
+		jb .malloc_deb
 %endif
 
 		call dict_init
@@ -1933,6 +1961,49 @@ set_dict_entry_90:
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
+; Init malloc areas.
+;
+malloc_init:
+		xor bx,bx
+malloc_init_10:
+		mov eax,[malloc.area + bx]
+		mov edx,[malloc.area + bx + 4]
+		cmp eax,edx
+		jz malloc_init_70
+
+		cmp edx,eax
+		jb malloc_init_20
+
+		cmp edx,1 << 20
+		jbe malloc_init_30
+		cmp byte [pm_ok],0
+		jnz malloc_init_30
+malloc_init_20:
+		; we can't access it
+		mov [malloc.area + bx + 4],eax
+		jmp malloc_init_70
+
+malloc_init_30:
+		lin2es eax,esi
+
+		sub edx,eax
+		xor eax,eax
+		mov [es:esi + mhead.memsize],edx
+		mov [es:esi + mhead.ip],eax
+		mov [es:esi + mhead.used],al
+
+malloc_init_70:
+		add bx,8
+		cmp bx,malloc.areas * 8
+		jb malloc_init_10
+
+		call lin_es_off
+
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
 ; Get some memory.
 ;
 ;  eax          memory size
@@ -1949,12 +2020,35 @@ calloc:
 		jz calloc_90
 		push eax
 		lin2segofs eax,es,di
-		xor eax,eax
-		add ecx,byte 3
-		shr ecx,2
-		rep stosd
+		xor al,al
+		rep stosb
 		pop eax
 calloc_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; Get some memory (taken from extended memory, if possible).
+;
+;  eax          memory size
+;
+; return:
+;  eax          linear address  (0 if the request failed)
+;
+xmalloc:
+		mov bx,8		; start with mem area 1
+
+		push eax
+		call malloc_10
+		pop edx
+
+		or eax,eax
+		jnz xmalloc_90
+
+		mov eax,edx
+		jmp malloc
+xmalloc_90:
 		ret
 
 
@@ -1965,47 +2059,89 @@ calloc_90:
 ;  eax          memory size
 ;
 ; return:
-;  eax          linear address  (0 if the request failed)
+;  eax          linear address  (0 if request failed)
 ;
 malloc:
-		xor ebp,ebp
-		; only in 4-byte chunks
-		add eax,3
-		and eax,~3
-		jz malloc_90
-		add eax,4
-		mov ebx,[mem_free]
+		xor bx,bx
 
-malloc_20:
-		lin2segofs ebx,es,si
-		mov ecx,[es:si]
-		test cl,1
-		jnz malloc_60
-		and cl,~3
-		cmp ecx,eax
-		jb malloc_70
-		; mark as occupied
-		or byte [es:si],1
-		lea ebp,[ebx+4]
-		mov edi,ecx
-		sub edi,eax
-		cmp edi,byte 8
-		jb malloc_90
-		
-		add ebx,eax
-		or al,1
-		mov [es:si],eax
-		lin2segofs ebx,es,si
-		mov [es:si],edi
-		
-		jmp malloc_90
-malloc_60:
-		and cl,~3
+malloc_10:
+		mov ecx,[malloc.area + bx]
+		mov edx,[malloc.area + 4 + bx]
+
+		mov [malloc.start],ecx
+		mov [malloc.end],edx
+
+		cmp edx,ecx
+		jz malloc_70
+
+		push bx
+		push eax
+		call _malloc
+		pop edx
+		pop bx
+
+		or eax,eax
+		jnz malloc_90
+
+		mov eax,edx
+
 malloc_70:
-		add ebx,ecx
-		cmp ebx,[mem_max]
-		jb malloc_20
+		add bx,8
+		cmp bx,malloc.areas * 8
+		jb malloc_10
+
+		xor eax,eax
+
 malloc_90:
+
+		call lin_es_off
+
+		ret
+
+
+_malloc:
+		xor ebp,ebp
+		or eax,eax
+		jz _malloc_90
+		add eax,mhead.size
+		mov ebx,[malloc.start]
+
+_malloc_20:
+		lin2es ebx,esi
+		mov ecx,[es:esi + mhead.memsize]
+		test byte [es:esi + mhead.used],80h
+		jnz _malloc_70
+		cmp ecx,eax
+		jb _malloc_70
+		; mark as occupied
+		mov byte [es:esi + mhead.used],80h
+		push dword [pscode_instr]
+		pop dword [es:esi + mhead.ip]
+		lea ebp,[ebx + mhead.size]
+		mov edx,ecx
+		sub edx,eax
+		cmp edx,mhead.size
+		ja _malloc_60
+
+		add [es:esi + mhead.rem],dl
+
+		jmp _malloc_90
+
+_malloc_60:
+		mov [es:esi + mhead.memsize],eax
+		add ebx,eax
+		lin2es ebx,esi
+		mov [es:esi + mhead.memsize],edx
+		xor edx,edx
+		mov byte [es:esi + mhead.used],dl
+		mov [es:esi + mhead.ip],edx
+		
+		jmp _malloc_90
+_malloc_70:
+		add ebx,ecx
+		cmp ebx,[malloc.end]
+		jb _malloc_20
+_malloc_90:
 		xchg ebp,eax
 		ret
 
@@ -2017,71 +2153,92 @@ malloc_90:
 ;  eax          linear address
 ;
 free:
-		or eax,eax
-		jz free_90
-		test al,3
-		jnz free_90
+		xor bx,bx
 
-		; extended memory
-		cmp eax,100000h
-		jae xfree
-
-		sub eax,4
-
-		mov ebx,[mem_free]
-		mov ecx,ebx
 free_10:
-		cmp eax,ebx
-		jnz free_70
+		mov ecx,[malloc.area + bx]
+		mov edx,[malloc.area + 4 + bx]
 
-		lin2segofs ebx,es,si
-		test byte [es:si],1
-		jz free_90
+		cmp eax,ecx
+		jb free_70
+		cmp eax,edx
+		jae free_70
 
-		cmp ecx,ebx		; first block?
-		jz free_30
+		mov [malloc.start],ecx
+		mov [malloc.end],edx
 
-		lin2segofs ecx,es,si
-		mov edx,[es:si]
-		test dl,1
-		jnz free_30		; prev block is used
-
-		and dl,~3		; prev block is free -> join them
-		push es
-		lin2segofs ebx,es,di
-		add edx,[es:di]
-		and dl,~3
-		pop es
-		mov [es:si],edx
-		mov ebx,ecx
-
-free_30:
-		mov edx,ebx
-		lin2segofs ebx,es,si
-		and byte [es:si],~1	; mark block as free
-		add edx,[es:si]
-		and dl,~3
-		cmp edx,[mem_max]	; last block?
-		jae free_90
-
-		lin2segofs edx,es,si
-		mov edx,[es:si]
-		test dl,1
-		jnz free_90		; next block is used
-
-		and dl,~3		; next block is free -> join them
-		lin2segofs ebx,es,si
-		add [es:si],edx
-		jmp free_90
+		jmp _free
 
 free_70:
-		mov ecx,ebx
-		lin2segofs ebx,es,si
-		add ebx,[es:si]
-		and bl,~3
-		cmp ebx,[mem_max]
+		add bx,8
+		cmp bx,malloc.areas * 8
 		jb free_10
 free_90:
+		ret
+
+
+_free:
+		or eax,eax
+		jz _free_90
+
+		sub eax,mhead.size
+
+		mov ebx,[malloc.start]
+		mov ecx,ebx
+_free_10:
+		cmp eax,ebx
+		jnz _free_70
+
+		lin2es ebx,esi
+		test byte [es:esi + mhead.used],80h
+		jz _free_90
+
+		cmp ecx,ebx		; first block?
+		jz _free_30
+
+		lin2es ecx,esi
+		test byte [es:esi + mhead.used],80h
+		jnz _free_30		; prev block is used
+
+		; prev block is free -> join them
+		mov edx,[es:esi + mhead.memsize]
+
+		lin2es ebx,esi
+		add edx,[es:esi + mhead.memsize]
+
+		lin2es ecx,esi
+		mov [es:esi],edx
+		mov ebx,ecx
+
+_free_30:
+		mov edx,ebx
+		lin2es ebx,esi
+		mov byte [es:esi + mhead.used],0	; mark block as free
+		add edx,[es:esi + mhead.memsize]
+		cmp edx,[malloc.end]	; last block?
+		jae _free_90
+
+		lin2es edx,esi
+		test byte [es:esi + mhead.used],80h
+		jnz _free_90		; next block is used
+
+		; next block is free -> join them
+		mov edx,[es:esi + mhead.memsize]
+
+		lin2es ebx,esi
+		add [es:esi + mhead.memsize],edx
+		jmp _free_90
+
+_free_70:
+		mov ecx,ebx
+		lin2es ebx,esi
+		add ebx,[es:esi]
+		cmp ebx,[malloc.end]
+		jb _free_10
+_free_90:
+
+		call lin_es_off
+
 		ret
 
 
@@ -2089,48 +2246,104 @@ free_90:
 ; dump memory chain
 dump_malloc:
 		pushad
-		mov ebx,[mem_free]
+		xor bx,bx
 
-dump_malloc_30:
-		lin2segofs ebx,es,si
-		mov ecx,[es:si]
+dump_malloc_10:
+		mov ecx,[malloc.area + bx]
+		mov edx,[malloc.area + 4 + bx]
+
+		mov [malloc.start],ecx
+		mov [malloc.end],edx
+
+		cmp ecx,edx
+		jz dump_malloc_70
+
+		push bx
+		call _dump_malloc
+		pop bx
+
+dump_malloc_70:
+		add bx,8
+		cmp bx,malloc.areas * 8
+		jb dump_malloc_10
+dump_malloc_90:
+
+		call lin_es_off
+
+		popad
+		ret
+
+_dump_malloc:
+		mov ebx,[malloc.start]
+
+		xor bp,bp
+
+_dump_malloc_30:
+		lin2es ebx,esi
+		mov ecx,[es:esi + mhead.memsize]
 
 		pushad
 		mov ax,dmsg_07
-		test cl,1
-		jz dump_malloc_40
+		test byte [es:esi + mhead.used],80h
+		jz _dump_malloc_40
 		mov ax,dmsg_08
-dump_malloc_40:
-		pf_arg_ushort 2,ax
-		and cl,~3
-		sub ecx,4
-		pf_arg_uint 0,ebx
-		pf_arg_uint 1,ecx
+_dump_malloc_40:
+		pf_arg_ushort 5,ax
+		pf_arg_ushort 0,bp
+		sub ecx,mhead.size
+		movzx eax,byte [es:esi + mhead.rem]
+		and al,7fh
+		sub ecx,eax
+		pf_arg_uint 1,ebx
+		pf_arg_uint 2,ecx
+		pf_arg_uchar 3,al
+		mov eax,[es:esi + mhead.ip]
+		pf_arg_uint 4,eax
 		mov si,dmsg_03
+
+		call lin_es_off
+
 		call printf
 		popad
 
-		and ecx,byte ~3
-		mov si,dmsg_05
-		jz dump_malloc_80
+		inc bp
+		test bp,0fh
+		jnz _dump_malloc_60
+		pushad
+		call get_key
+		popad
+_dump_malloc_60:		
+
+		mov si,dmsg_04
+		cmp ecx,mhead.size
+		jbe _dump_malloc_70
 
 		add ebx,ecx
-		cmp ebx,[mem_max]
-		jz dump_malloc_90
-		jb dump_malloc_30
+		cmp ebx,[malloc.end]
+		jz _dump_malloc_90
+		jb _dump_malloc_30
 
+		mov ecx,[malloc.end]
+		mov si,dmsg_04a
+
+_dump_malloc_70:
 		pf_arg_uint 0,ebx
-		pf_arg_uint 1,edi
-		mov si,dmsg_04
-dump_malloc_80:
+		pf_arg_uint 1,ecx
+_dump_malloc_80:
+
+		call lin_es_off
+
 		call printf
-dump_malloc_90:
-		popad
+_dump_malloc_90:
 		ret
 %endif
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; Get memory size.
+;
+;  eax		memory area (0 ... malloc.areas - 1)
 ;
 ; return:
 ;  ebp		total free memory
@@ -2139,190 +2352,58 @@ dump_malloc_90:
 memsize:
 		xor ebp,ebp
 		xor edi,edi
-		mov ebx,[mem_free]
-memsize_30:
-		lin2segofs ebx,es,si
-		mov ecx,[es:si]
 
-		mov al,cl
-		and ecx,byte ~3
+		cmp eax,malloc.areas
+		jae memsize_90
+
+		imul bx,ax,8
+
+		mov ecx,[malloc.area + bx]
+		mov edx,[malloc.area + 4 + bx]
+
+		mov [malloc.start],ecx
+		mov [malloc.end],edx
+
+		cmp ecx,edx
 		jz memsize_90
-		test al,1
-		jnz memsize_50
 
-		lea eax,[ecx-4]
-		add ebp,eax
-		cmp eax,edi
-		jb memsize_50
-		mov edi,eax
-memsize_50:
-		add ebx,ecx
-		cmp ebx,[mem_max]
-		jb memsize_30
+		call _memsize
+
 memsize_90:
 		ret
 
 
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Get some memory (taken from extended memory).
-;
-;  eax          memory size
-;
-; return:
-;  eax          linear address  (0 if the request failed)
-;
-; !!! Currently a fake; it's just called _once_ anyway. !!!
-xmalloc:
-		; 2 - 3 MB, to avoid A20 handling
-		mov eax,200000h
+_memsize:
+		mov ebx,[malloc.start]
+_memsize_30:
+		lin2es ebx,esi
+		mov ecx,[es:esi + mhead.memsize]
+		cmp ecx,mhead.size
+		jb _memsize_90
+
+		test byte [es:esi + mhead.used],80h
+		jnz _memsize_50
+
+		mov eax,ecx
+		sub eax,mhead.size
+		add ebp,eax
+		cmp eax,edi
+		jb _memsize_50
+		mov edi,eax
+_memsize_50:
+		add ebx,ecx
+		cmp ebx,[malloc.end]
+		jb _memsize_30
+_memsize_90:
+
+		call lin_es_off
 
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
-; Free memory (extended memory area).
-;
-;  eax          linear address
-;
-xfree:
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Switch to protected mode.
-;
-; return:
-;  CF		error (can't switch)
-;
-real_to_pm:
-		cli
-		pushad
-
-		segofs2lin ds,word pm_gdt,dword [pm_gdt+2]
-
-		mov eax,9b00000h
-		mov ax,cs
-		; patch jmp instruction for later
-		mov [pm_to_real_20-2],ax
-		shl eax,4
-		mov [pm_gdt_cs+2],eax
-		
-		mov eax,9300000h
-		mov ax,ss
-		shl eax,4
-		mov [pm_gdt_ss+2],eax
-		
-		mov eax,9300000h
-		mov ax,ds
-		shl eax,4
-		mov [pm_gdt_ds+2],eax
-
-		mov eax,cr0
-		test al,1		; in prot mode (maybe vm86)?
-		jz real_to_pm_10
-		stc
-		sti
-		jmp real_to_pm_90
-real_to_pm_10:
-		or al,1
-
-		o32 lgdt [pm_gdt]
-
-		mov cr0,eax
-
-		jmp pm_cs:real_to_pm_20
-real_to_pm_20:
-
-		mov ax,pm_ss
-		mov ss,ax
-
-		mov ax,pm_ds
-		mov ds,ax
-
-		mov ax,pm_es
-		mov es,ax
-		mov fs,ax
-		mov gs,ax
-
-		clc
-real_to_pm_90:
-		popad
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Switch to real mode.
-;
-pm_to_real:
-		pushad
-
-		mov eax,cr0
-		and al,~1
-		mov cr0,eax
-
-		jmp 0:pm_to_real_20
-pm_to_real_20:
-
-		mov ax,cs
-		mov ds,ax
-		mov es,ax
-		mov fs,ax
-		mov gs,ax
-
-		mov eax,[pm_gdt_ss+2]
-		shr eax,4
-		mov ss,ax
-
-		popad
-		sti
-		ret
-
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Load gs with large segment.
-;
-; return:
-;
-;  gs		4GB segment selector
-;  IF		0 (interrupts off)
-;
-lin_gs:
-		cli
-		push eax
-
-		mov eax,cr0
-		test al,1		; in prot mode (maybe vm86)?
-		jz lin_gs_10
-		push word 0
-		pop gs
-		jmp lin_gs_90
-lin_gs_10:
-		or al,1
-
-		o32 lgdt [pm_gdt]
-
-		mov cr0,eax
-
-		push word pm_es
-		pop gs
-
-		and al,~1
-		mov cr0,eax
-
-lin_gs_90:
-		pop eax
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Find out size of memory block.
+; Calculate size of memory block.
 ;
 ;  eax		lin. address
 ;
@@ -2330,83 +2411,142 @@ lin_gs_90:
 ;  eax		size
 ;
 find_mem_size:
+		call fms_code
+		jnc find_mem_size_90
+
+		call fms_malloc
+		jnc find_mem_size_90
+
+		call fms_file
+		jnc find_mem_size_90
+
+		; some other area
+
+		xor eax,eax
+
+find_mem_size_90:
+
+		call lin_es_off
+
+		ret
+
+
+; string constants in ps code
+fms_code:
 		mov edx,[pscode_start]
 		cmp eax,edx
-		jb find_mem_size_10
+		jc fms_code_90
 		add edx,[pscode_size]
 		cmp eax,edx
-		jae find_mem_size_10
-
-		; string constant
+		cmc
+		jc fms_code_90
 
 		lin2segofs eax,es,di
 		mov cx,0ffffh
 		sub cx,di
 		movzx edx,cx
-		mov al,0
-		repnz scasb
 		xor eax,eax
-		jnz find_mem_size_90
+		repnz scasb
+		jnz fms_code_80
 		sub dx,cx
 		mov eax,edx
-		jmp find_mem_size_90
+fms_code_80:
+		clc
+fms_code_90:
+		ret
 
-find_mem_size_10:
-		cmp eax,[mem_free]
-		jb find_mem_size_40
-		cmp eax,[mem_max]
-		jae find_mem_size_40
 
-		; malloc area
+; check malloc areas
+fms_malloc:
+		xor bx,bx
+fms_malloc_10:
+		mov ecx,[malloc.area + bx]
+		mov edx,[malloc.area + 4 + bx]
 
-		mov ebx,[mem_free]
+		cmp eax,ecx
+		jb fms_malloc_20
+		cmp eax,edx
+		jae fms_malloc_20
 
-find_mem_size_20:
-		lin2segofs ebx,es,si
-		mov ecx,[es:si]
-		and ecx,~3
+		mov [malloc.start],ecx
+		mov [malloc.end],edx
+
+		jmp fms_malloc_30
+fms_malloc_20:
+		add bx,8
+		cmp bx,malloc.areas * 8
+		jb fms_malloc_10
+
+		stc
+
+		jmp fms_malloc_90
+
+fms_malloc_30:
+
+		cmp eax,[malloc.start]
+		jc fms_malloc_90
+		cmp eax,[malloc.end]
+		cmc
+		jc fms_malloc_90
+
+		mov ebx,[malloc.start]
+
+fms_malloc_40:
+		lin2es ebx,esi
+		mov ecx,[es:esi + mhead.memsize]
 		lea edx,[ebx+ecx]
 
 		cmp eax,edx
-		jae find_mem_size_30
+		jae fms_malloc_50
 
-		test byte [es:si],1
-		jz find_mem_size_80
+		test byte [es:esi + mhead.used],80h
+		jz fms_malloc_70		; free
 
 		sub eax,ebx
-		cmp eax,4
-		jb find_mem_size_80	; within header
+		cmp eax,mhead.size
+		jb fms_malloc_70		; within header
 
+		mov dl,[es:esi + mhead.rem]
+		and edx,7fh
+
+		add eax,edx
 		sub ecx,eax
+		jb fms_malloc_70		; in reserved area
 		xchg eax,ecx
-		jmp find_mem_size_90
+		jmp fms_malloc_90
 
-find_mem_size_30:
+fms_malloc_50:
 		mov ebx,edx
-		cmp ebx,[mem_max]
-		jb find_mem_size_20
-		jmp find_mem_size_80
+		cmp ebx,[malloc.end]
+		jb fms_malloc_40
 
-find_mem_size_40:
+fms_malloc_70:
+		xor eax,eax
+fms_malloc_90:
+		ret
+
+
+; some file in cpio archive
+fms_file:
 		mov ebp,[mem_archive]
 		or ebp,ebp
-		jz find_mem_size_70
+		stc
+		jz fms_file_90
 		cmp eax,ebp
-		jb find_mem_size_70
+		jc fms_file_90
 		cmp eax,[mem_free]
-		jae find_mem_size_70
+		cmc
+		jc fms_file_90
 
-		; cpio archive area
-
-find_mem_size_50:
+fms_file_10:
 		mov ecx,[mem_free]
 		sub ecx,26
 		cmp ebp,ecx
-		jae find_mem_size_80
+		jae fms_file_80
 
 		lin2segofs ebp,es,bx
 		cmp word [es:bx],71c7h
-		jnz find_mem_size_80
+		jnz fms_file_80
 
 		movzx ecx,word [es:bx+20]	; file name size
 		inc cx
@@ -2415,7 +2555,7 @@ find_mem_size_50:
 		lea ecx,[ecx+ebp+26]		; data start
 
 		cmp eax,ecx
-		jb find_mem_size_80		; within header area
+		jb fms_file_80			; within header area
 
 		mov edx,[es:bx+22]		; data size
 		rol edx,16			; strange word order
@@ -2428,22 +2568,69 @@ find_mem_size_50:
 		add ecx,edx
 
 		cmp eax,ebp
-		jae find_mem_size_50
+		jae fms_file_10
 
 		sub ecx,eax
-		jb find_mem_size_80		; within alignment area
-
 		xchg eax,ecx
-		jmp find_mem_size_90
 
-find_mem_size_70:
+		jnc fms_file_90			; not within alignment area
+fms_file_80:
+		xor  eax,eax
+fms_file_90:
+		ret
 
-		; some other area
 
-find_mem_size_80:
-		xor eax,eax
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; Load es with large segment.
+;
+; return:
+;
+;  es		4GB segment selector (es = 0 if failed)
+;  IF		0 (interrupts off)
+;
+lin_es:
+		cli
 
-find_mem_size_90:
+		cmp byte [pm_large_es],0
+		jnz lin_es_90
+
+		push eax
+
+		mov eax,cr0
+		test al,1		; in prot mode (maybe vm86)?
+		jz lin_es_10
+		push word 0
+		pop es
+		jmp lin_es_80
+lin_es_10:
+		or al,1
+
+		o32 lgdt [pm_gdt]
+
+		mov cr0,eax
+
+		push word pm_es
+		pop es
+
+		and al,~1
+		mov cr0,eax
+
+		mov byte [pm_large_es],1
+
+lin_es_80:
+		pop eax
+
+lin_es_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+;
+lin_es_off:
+		mov byte [pm_large_es],0
+		sti
 		ret
 
 
@@ -2528,6 +2715,7 @@ set_mode:
 		mov byte [pixel_bytes],1
 		call mode_init
 set_mode_102:
+		clc
 		jmp set_mode_90
 set_mode_20:
 		les di,[vbe_buffer]
@@ -2920,6 +3108,36 @@ so2lin:
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
+; Convert 32bit linear address to es:32_bit_ofs.
+;
+;  dword [esp + 2]:	linear address
+;
+; return:
+;  es:			segment
+;  dword [esp + 2]:	ofs
+;
+; Notes:
+;  - changes no regs
+;  - may clear IF if ofs > 1MB
+;
+_lin2es:
+		push eax
+		mov eax,[esp + 6]
+		cmp eax,1 << 20
+		jb _lin2es_50
+		call lin_es
+		jmp _lin2es_80
+_lin2es_50:
+		shr eax,4
+		mov es,ax
+		and dword [esp + 6],0fh
+_lin2es_80:
+		pop eax
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
 ; Write text to console.
 ;
 ; si		text (ACSIIZ)
@@ -3181,7 +3399,7 @@ write_char_50:
 		int 10h
 		pop ax
 write_char_60:
-		mov bx,7
+		movzx bx,byte [textmode_color]
 		mov ah,0eh
 		int 10h
 
@@ -5313,6 +5531,12 @@ prim_currentcolor:
 		jmp pr_getint
 
 
+prim_settextmodecolor:
+		call pr_setint
+		mov [textmode_color],al
+		ret
+
+
 prim_moveto:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
@@ -5670,9 +5894,6 @@ prim_savescreen:
 		mov bp,pserr_invalid_image_size
 		add eax,4
 		jc prim_savescreen_90
-		cmp eax,1 << 20
-		cmc
-		jc prim_savescreen_90
 		push cx
 		push dx
 		call malloc
@@ -5680,11 +5901,11 @@ prim_savescreen:
 		pop cx
 		or eax,eax
 		jz prim_savescreen_50
-		lin2segofs eax,es,di
-		mov [es:di],dx
-		mov [es:di+2],cx
-		add di,4
+		lin2es eax,edi
+		mov [es:edi],dx
+		mov [es:edi+2],cx
 		push eax
+		lea edi,[eax+4]
 		call save_bg
 		pop eax
 prim_savescreen_50:
@@ -5700,6 +5921,47 @@ prim_savescreen_90:
 		ret
 
 
+prim_xsavescreen:
+		mov dx,t_int + (t_int << 8)
+		call get_2args
+		jc prim_xsavescreen_90
+		push ax
+		push cx
+		mul ecx
+		mul dword [pixel_bytes]
+		pop dx
+		pop cx
+		mov bp,pserr_invalid_image_size
+		add eax,4
+		jc prim_xsavescreen_90
+		push cx
+		push dx
+		call xmalloc
+		pop dx
+		pop cx
+		or eax,eax
+		jz prim_xsavescreen_50
+		lin2es eax,edi
+		mov [es:edi],dx
+		mov [es:edi+2],cx
+		call lin_es_off
+		push eax
+		lea edi,[eax+4]
+		call save_bg
+		pop eax
+prim_xsavescreen_50:
+		dec word [pstack_ptr]
+		xor cx,cx
+		mov dl,t_ptr
+		or eax,eax
+		jnz prim_xsavescreen_70
+		mov dl,t_none
+prim_xsavescreen_70:
+		call set_pstack_tos
+prim_xsavescreen_90:
+		ret
+
+
 prim_restorescreen:
 		mov dl,t_ptr
 		call get_1arg
@@ -5711,32 +5973,17 @@ prim_restorescreen:
 		jmp prim_restorescreen_80
 
 prim_restorescreen_20:
-		cmp eax,100000h
-		jb prim_restorescreen_50
 
-		call real_to_pm
-		jc prim_restorescreen_80
+		lin2es eax,edi
+		mov dx,[es:edi]
+		mov cx,[es:edi+2]
+		call lin_es_off
 
-		mov dx,[es:eax]
-		mov cx,[es:eax+2]
-
-		call pm_to_real
-
-		mov bx,dx
-		imul bx,[pixel_bytes]
 		lea edi,[eax+4]
-
-		call xrestore_bg
-
-		jmp prim_restorescreen_80
-prim_restorescreen_50:
-		lin2segofs eax,es,di
-		mov dx,[es:di]
-		mov cx,[es:di+2]
-		add di,4
 		mov bx,dx
 		imul bx,[pixel_bytes]
 		call restore_bg
+
 prim_restorescreen_80:
 		dec word [pstack_ptr]
 		clc
@@ -5781,13 +6028,15 @@ prim_free_90:
 
 
 prim_memsize:
-		mov ax,[pstack_ptr]
-		inc ax
-		inc ax
-		cmp [pstack_size],ax
+		mov dl,t_int
+		call get_1arg
+		jc prim_memsize_90
+		mov cx,[pstack_ptr]
+		inc cx
+		cmp [pstack_size],cx
 		mov bp,pserr_pstack_overflow
 		jb prim_memsize_90
-		mov [pstack_ptr],ax
+		mov [pstack_ptr],cx
 		call memsize
 		mov dl,t_int
 		xchg eax,ebp
@@ -5909,8 +6158,9 @@ prim_editdone:
 		pop word [gfx_cur_y]
 		mov dx,[edit_width]
 		mov cx,[edit_height]
-		les di,[edit_bg]
-		add di,4
+		mov edi,[edit_bg]
+		add edi,4
+
 		mov bx,dx
 		imul bx,[pixel_bytes]
 		call restore_bg
@@ -6062,8 +6312,17 @@ prim_getbyte:
 		mov dl,t_ptr
 		call get_1arg
 		jc prim_getbyte_90
-		lin2segofs eax,es,bx
-		movzx eax,byte [es:bx]
+		lin2es eax,esi
+		xor eax,eax
+		cmp esi,0xfffc
+		jbe prim_getbyte_30
+		mov ax,es
+		or ax,ax
+		jz prim_getbyte_70
+prim_getbyte_30:
+		movzx eax,byte [es:esi]
+prim_getbyte_70:
+		call lin_es_off
 		mov dl,t_int
 		xor cx,cx
 		call set_pstack_tos
@@ -6086,14 +6345,17 @@ prim_getdword:
 		mov dl,t_ptr
 		call get_1arg
 		jc prim_getdword_90
-		mov esi,eax
+		lin2es eax,esi
 		xor eax,eax
-		cmp byte [pm_ok],0
+		cmp esi,0xfffc
+		jbe prim_getdword_30
+		mov ax,es
+		or ax,ax
 		jz prim_getdword_70
-		call lin_gs
-		mov eax,[gs:esi]
-		sti
+prim_getdword_30:
+		mov eax,[es:esi]
 prim_getdword_70:
+		call lin_es_off
 		mov dl,t_int
 		xor cx,cx
 		call set_pstack_tos
@@ -6755,53 +7017,6 @@ prim_currenttitle:
 		jmp pr_getobj
 
 
-prim_xsavescreen:
-		mov dx,t_int + (t_int << 8)
-		call get_2args
-		jc prim_xsavescreen_90
-		push ax
-		push cx
-		mul ecx
-		pop dx
-		pop cx
-		mov bp,pserr_invalid_image_size
-		add eax,4
-		jc prim_xsavescreen_90
-		cmp eax,1 << 20
-		cmc
-		jc prim_xsavescreen_90
-		push cx
-		push dx
-		call xmalloc
-		pop dx
-		pop cx
-		or eax,eax
-		stc
-		mov bp,pserr_no_memory
-		jz prim_xsavescreen_90
-
-		call real_to_pm
-		jc prim_xsavescreen_50
-
-		mov [es:eax],dx
-		mov [es:eax+2],cx
-
-		call pm_to_real
-
-		push eax
-		lea edi,[eax+4]
-		call xsave_bg
-		pop eax
-
-prim_xsavescreen_50:
-		dec word [pstack_ptr]
-		xor cx,cx
-		mov dl,t_ptr
-		call set_pstack_tos
-prim_xsavescreen_90:
-		ret
-
-
 prim_videomodes:
 		mov ax,[pstack_ptr]
 		inc ax
@@ -7332,10 +7547,13 @@ edit_redraw_50:
 		mov cx,[edit_height]
 		mov bx,[edit_width]
 		imul bx,[pixel_bytes]
-		les di,[edit_bg]
-		add di,4
-		add di,bx
-		sub di,ax
+		mov edi,[edit_bg]
+		add edi,4
+		movzx ebx,bx
+		movzx eax,ax
+		add edi,ebx
+		sub edi,eax
+
 		call restore_bg
 edit_redraw_90:
 		ret
@@ -7368,17 +7586,19 @@ edit_char:
 		cmp byte [chr_width],0
 		jz edit_char_80
 
-		les di,[edit_bg]
+		mov edi,[edit_bg]
+		add edi,4
 		mov bx,[edit_width]
 		imul bx,[pixel_bytes]
-		add di,4
 		mov ax,[edit_y_ofs]
 		imul bx
-		add di,ax
+		movzx eax,ax
+		add edi,eax
 		mov cx,[gfx_cur_x]
 		sub cx,[edit_x]
 		imul cx,[pixel_bytes]
-		add di,cx
+		movzx ecx,cx
+		add edi,ecx
 
 		mov dx,[chr_width]
 		mov cx,[font_height]
@@ -7401,13 +7621,14 @@ edit_char_90:
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 edit_hide_cursor:
-		les di,[edit_bg]
-		add di,4
+		mov edi,[edit_bg]
+		add edi,4
 		mov ax,[edit_cursor]
 		sub ax,[edit_shift]
 		mov cx,ax
 		imul cx,[pixel_bytes]
-		add di,cx
+		movzx ecx,cx
+		add edi,ecx
 		add ax,[edit_x]
 		mov [gfx_cur_x],ax
 		push word [edit_y]
@@ -7416,6 +7637,7 @@ edit_hide_cursor:
 		mov dx,1
 		mov bx,[edit_width]
 		imul bx,[pixel_bytes]
+
 		call restore_bg
 		ret
 
@@ -7522,7 +7744,6 @@ edit_get_params:
 		cmp byte [es:si+5*2],t_ptr
 		jnz edit_get_params_80
 		push dword [es:si+5*2+1]
-		call lin2so
 		pop dword [edit_bg]
 		
 		cmp byte [es:si+5*3],t_string
@@ -7551,11 +7772,12 @@ edit_get_params:
 		push word [es:si+5*7+1]
 		pop word [edit_shift]
 		
-		les si,[edit_bg]
-		es lodsw
+		lin2es dword [edit_bg],esi
+		es a32 lodsw
 		mov [edit_width],ax
-		es lodsw
+		es a32 lodsw
 		mov [edit_height],ax
+		call lin_es_off
 
 		mov cx,[font_height]
 		sub ax,cx
@@ -9300,21 +9522,19 @@ clip_it_90:
 ; save a screen region
 ;
 ;		dx,cx	= width, height
-;		es:di	= buffer
+;		edi	= buffer (linear address)
 ;
 save_bg:
 		push fs
 
-		push es
-		push di
+		push edi
 
 		call goto_xy
 
 		call screen_seg_r
 
 		mov si,di
-		pop di
-		pop es
+		pop ebx
 
 		or cx,cx
 		jz save_bg_90
@@ -9323,20 +9543,23 @@ save_bg:
 
 		imul dx,[pixel_bytes]
 
+		lin2es ebx,edi
+
 save_bg_20:
 		push dx
 save_bg_30:
 		mov al,[fs:si]
 		inc si
 		jnz save_bg_40
+		call lin_es_off
 		call inc_winseg
+		lin2es ebx,edi
 save_bg_40:
-		mov [es:di],al
+		mov [es:edi],al
+		inc ebx
 		inc di
 		jnz save_bg_50
-		mov bp,es
-		add bp,1000h
-		mov es,bp
+		lin2es ebx,edi
 save_bg_50:
 		dec dx
 		jnz save_bg_30
@@ -9345,12 +9568,17 @@ save_bg_50:
 		sub ax,dx
 		add si,ax
 		jnc save_bg_60
+		call lin_es_off
 		call inc_winseg
+		lin2es ebx,edi
 save_bg_60:
 		dec cx
 		jnz save_bg_20
 
 save_bg_90:
+
+		call lin_es_off
+
 		pop fs
 		ret
 
@@ -9361,7 +9589,7 @@ save_bg_90:
 ;
 ;  dx,cx	width, height
 ;  bx		bytes per line
-;  es:di	buffer
+;  edi		buffer (linear address)
 ;
 ; Does not change cursor positon.
 ;
@@ -9391,60 +9619,57 @@ restore_bg:
 		imul ecx,ebx
 		add ecx,ebp
 
-		push es
-		push di
-		call so2lin
-		add [esp],ecx
-		call lin2so
-		pop di
-		pop es
+		lea ebp,[edi+ecx]
 
 		mov dx,[gfx_width]
 		mov cx,[gfx_height]
 
-		push es
-		push di
-
 		call goto_xy
 
 		call screen_seg_w
-		
-		pop si
-		pop fs
 
+		push es
+		pop fs
+		mov si,di
+		
 		imul dx,[pixel_bytes]
+
+		lin2es ebp,edi
 
 restore_bg_20:
 		push dx
 restore_bg_30:
-		mov al,[fs:si]
-		inc si
-		jnz restore_bg_40
-		mov bp,fs
-		add bp,1000h
-		mov fs,bp
-restore_bg_40:
-		mov [es:di],al
+		mov al,[es:edi]
+		inc ebp
 		inc di
+		jnz restore_bg_40
+		lin2es ebp,edi
+restore_bg_40:
+		mov [fs:si],al
+		inc si
 		jnz restore_bg_50
+		call lin_es_off
 		call inc_winseg
+		lin2es ebp,edi
 restore_bg_50:
 		dec dx
 		jnz restore_bg_30
 		pop dx
 		mov ax,[screen_line_len]
 		sub ax,dx
-		add di,ax
+		add si,ax
 		jnc restore_bg_60
+		call lin_es_off
 		call inc_winseg
+		lin2es ebp,edi
 restore_bg_60:
 		mov ax,bx
 		sub ax,dx
-		add si,ax
+		movsx eax,ax
+		add ebp,eax
+		add di,ax
 		jnc restore_bg_70
-		mov bp,fs
-		add bp,1000h
-		mov fs,bp
+		lin2es ebp,edi
 restore_bg_70:
 		dec cx
 		jnz restore_bg_20
@@ -9452,142 +9677,9 @@ restore_bg_70:
 restore_bg_90:
 		pop dword [gfx_cur]
 
+		call lin_es_off
+
 		pop fs
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Save a screen region to extended memory.
-;
-;  dx,cx	width, height
-;  edi		buffer (linear address)
-;
-xsave_bg:
-		push edi
-
-		call goto_xy
-		mov ax,[window_seg_w]
-		cmp word [window_seg_r],byte 0
-		jz xsave_bg_10
-		mov ax,[window_seg_r]
-xsave_bg_10:
-		segofs2lin ax,di,esi
-
-		pop edi
-
-		or cx,cx
-		jz xsave_bg_90
-		or dx,dx
-		jz xsave_bg_90
-
-		call real_to_pm
-
-xsave_bg_20:
-		push dx
-xsave_bg_30:
-		mov al,[es:esi]
-		inc si
-		jnz xsave_bg_40
-		call pm_to_real
-		call inc_winseg
-		call real_to_pm
-xsave_bg_40:
-		mov [es:edi],al
-		inc edi
-		dec dx
-		jnz xsave_bg_30
-		pop dx
-		mov ax,[screen_line_len]
-		sub ax,dx
-		add si,ax
-		jnc xsave_bg_60
-		call pm_to_real
-		call inc_winseg
-		call real_to_pm
-xsave_bg_60:
-		dec cx
-		jnz xsave_bg_20
-
-		call pm_to_real
-
-xsave_bg_90:
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Restore a screen region from extended memory.
-;
-;  dx,cx	width, height
-;  bx		bytes per line
-;  edi		buffer (linear address)
-;
-;  note:
-;    bx must be >= dx
-;
-; Does not change cursor positon.
-;
-xrestore_bg:
-		push dword [gfx_cur]
-
-		mov [gfx_width],dx
-		mov [gfx_height],cx
-
-		call clip_it
-		jc restore_bg_90
-
-		mov dx,[gfx_width]
-		mov cx,[gfx_height]
-
-		push edi
-
-		call goto_xy
-		segofs2lin word [window_seg_w],di,edi
-		
-		pop esi
-
-		or cx,cx
-		jz xrestore_bg_90
-		or dx,dx
-		jz xrestore_bg_90
-
-		call real_to_pm
-
-xrestore_bg_20:
-		push dx
-xrestore_bg_30:
-		mov al,[es:esi]
-		inc esi
-		mov [es:edi],al
-		inc di
-		jnz xrestore_bg_50
-		call pm_to_real
-		call inc_winseg
-		call real_to_pm
-xrestore_bg_50:
-		dec dx
-		jnz xrestore_bg_30
-		pop dx
-		mov ax,[screen_line_len]
-		sub ax,dx
-		add di,ax
-		jnc xrestore_bg_60
-		call pm_to_real
-		call inc_winseg
-		call real_to_pm
-xrestore_bg_60:
-		movzx eax,bx
-		sub ax,dx
-		add esi,eax
-		dec cx
-		jnz xrestore_bg_20
-
-		call pm_to_real
-
-xrestore_bg_90:
-		pop dword [gfx_cur]
-
 		ret
 
 

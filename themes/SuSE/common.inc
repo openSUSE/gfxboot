@@ -1120,13 +1120,22 @@
   } if
 
   dup keyShiftF8 eq debug 3 ge and {
-    currentcolor black setcolor currentpoint 300 0 moveto
-    memsize print "/" print print "  " print
-    moveto setcolor
+    currentcolor black setcolor
+
+    currentpoint 300 0 moveto
+    0 memsize print "/" print print "  " print
+    moveto
+
+    currentpoint 300 20 moveto
+    1 memsize print "/" print print "  " print
+    moveto
+
+    setcolor
     pop 0
   } if
 
   dup keyShiftF9 eq debug 3 ge and {
+    dumpmem
     pop 0
   } if
 
