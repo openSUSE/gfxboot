@@ -230,7 +230,9 @@
 
   } ifelse
 
-  /add_suffix xmenu.bits .xm_current get bits.suffix exch get def
+  syslinux {
+    /add_suffix xmenu.bits .xm_current get bits.suffix exch get def
+  } if
 
   bc.addkernel {
     alt.kernel { alt.kernel } { bc.kernel } ifelse
