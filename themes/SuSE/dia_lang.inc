@@ -26,16 +26,20 @@
   [ "de" "Deutsch" ]
   [ "es" "Español" ]
   [ "el" "Ελληνικά" ]
+  [ "he" "תירבע" ]
   [ "it" "Italiano" ]
   [ "ja" "日本語" ]
   [ "hu" "Magyar" ]
   [ "nl" "Nederlands" ]
   [ "nb" "Norsk" ]
+  [ "pt_BR" "Português" ]
   [ "ro" "Romanian" ]
   [ "ru" "Русский" ]
   [ "sk" "Slovenčina" ]
   [ "sl" "Slovenščina" ]
   [ "sv" "Svenska" ]
+  [ "zh_CN" "简体中文" ]
+  [ "zh_TW" "繁體中文" ]
 ] def
 
 
@@ -124,6 +128,11 @@
 
   xmenu .xm_current lang.default put
   xmenu .xm_list lang.names put
+
+  % make menu smaller if there are more than 19 language entries
+  lang.items length 19 gt {
+    xmenu .xm_vspace 2 put
+  } if
 
   % start with current lang
 

@@ -38,6 +38,7 @@
   [ "fr" keymap.fr ]
   [ "de" keymap.de ]
   [ "el" keymap.el ]
+  [ "he" .undef    ]
   [ "it" keymap.it ]
   [ "ja" keymap.ja ]
   [ "hu" keymap.hu ]

@@ -72,7 +72,7 @@ font:
 	-t po/ru.po \
 	-t help-boot.ja.html \
 	-t help-install.ja.html \
-	-t po/ja.po \
+	-t po/ja.po -t po/zh_CN.po -t po/zh_TW.po \
 	-t install/log -t boot/log \
 	-f -efont-fixed-medium-r-normal--16-160-75-75-c-80-iso10646-1 \
 	-f -efont-fixed-medium-r-normal--16-160-75-75-c-160-iso10646-1 \

@@ -8,7 +8,7 @@
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Some global vars.
 %
-/xmenu.vspace		4 def
+/xmenu.vspace.default	4 def
 /xmenu.hspace		12 def
 /xmenu.light		white def
 /xmenu.dark		black def
@@ -32,7 +32,8 @@
 /.xm_panel_x		 6 def		% panel entry x pos
 /.xm_panel_width	 7 def		% panel entry width
 /.xm_panel_height	 8 def		% panel entry height
-/.xm_size		 9 def		% xmenu size
+/.xm_vspace		 9 def		% vspace per menu
+/.xm_size		10 def		% xmenu size
 
 
 % short hands
@@ -40,6 +41,8 @@
 /xmenu.y { xmenu .xm_y get } def
 /xmenu.width { xmenu .xm_width get } def
 /xmenu.height { xmenu .xm_height get } def
+
+/xmenu.vspace { xmenu .xm_vspace get dup { } { pop xmenu.vspace.default } ifelse } def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
