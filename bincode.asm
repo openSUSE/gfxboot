@@ -6007,6 +6007,42 @@ prim_strsize_90:
 		ret
 
 
+prim_memcpy:
+		mov bp,pserr_pstack_underflow
+		cmp word [pstack_ptr],byte 3
+		jc prim_memcpy_90
+
+		mov bp,pserr_wrong_arg_types
+		mov cx,2
+		call get_pstack_tos
+		cmp dl,t_ptr
+		stc
+		jnz prim_memcpy_90
+		push eax
+		mov dx,t_int + (t_ptr << 8)
+		call get_2args
+		pop ebx			; dst
+		jc prim_memcpy_90
+		xchg eax,ecx
+
+		; ecx: size
+		; eax: src
+		or ecx,ecx
+		jz prim_memcpy_80
+
+		lin2seg ebx,es,edi
+		lin2seg eax,fs,esi
+
+		fs a32 rep movsb
+
+		call lin_seg_off
+
+prim_memcpy_80:
+		sub word [pstack_ptr],byte 3
+prim_memcpy_90:
+		ret
+
+
 prim_image:
 		mov bp,pserr_pstack_underflow
 		cmp word [pstack_ptr],byte 4

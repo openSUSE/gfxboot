@@ -237,6 +237,7 @@
   window.current .undef ne {
     window.current dup .type get
     dup t_help eq { help.done } if
+    dup t_xmenu eq { xmenu.done } if
     pop
     % restore saved background and free bg image
     dup .saved get .undef ne {

@@ -144,6 +144,18 @@
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Close menu.
+%
+% ( ) ==> ( )
+%
+/xmenu.done {
+  /xmenu.tmpbuf xmenu.tmpbuf free .undef def
+  /xmenu.saved.normal xmenu.saved.normal free .undef def
+  /xmenu.saved.selected xmenu.saved.selected free .undef def
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Draw xmenu.
 %
 % ( window ) ==> ( )
@@ -164,30 +176,46 @@
   dup xmenu.lheight mul xmenu.y add /xmenu.pos.y exch def
 
   xmenu.x xmenu.pos.y moveto
-  dup xmenu .xm_current get eq { xmenu.selected.bg } { xmenu.normal.bg } ifelse
-  setcolor xmenu.width xmenu.lheight fillrect
 
-  dup xmenu .xm_current get eq {
-    xmenu.x xmenu.pos.y moveto
-    xmenu.dark xmenu.light xmenu.width xmenu.lheight drawborder
-  } if
+  dup xmenu .xm_current get eq { xmenu.saved.selected } { xmenu.saved.normal } ifelse
+
+  dup {
+    transp { pop } { restorescreen } ifelse
+  } {
+    pop
+
+    dup xmenu .xm_current get eq { xmenu.selected.bg } { xmenu.normal.bg } ifelse
+    setcolor xmenu.width xmenu.lheight fillrect
+
+    dup xmenu .xm_current get eq {
+      xmenu.x xmenu.pos.y moveto
+      xmenu.dark xmenu.light xmenu.width xmenu.lheight drawborder
+    } if
+
+    dup xmenu .xm_current get eq { /xmenu.saved.selected } { /xmenu.saved.normal } ifelse
+      xmenu.x xmenu.pos.y moveto
+      xmenu.width xmenu.lheight
+      savescreen
+    def
+  } ifelse
+
 
   transp {
-    /xmemu.tmpbuf
-     xmenu.x xmenu.pos.y moveto xmenu.width xmenu.lheight
-     savescreen
-    def
+    % copy entry to avoid reading the screen again
+    dup xmenu .xm_current get eq { xmenu.saved.selected } { xmenu.saved.normal } ifelse
+    xmenu.tmpbuf .undef eq {
+      dup length malloc /xmenu.tmpbuf exch def
+    } if
+    xmenu.tmpbuf exch dup length memcpy
 
     currenttransparency transp settransparency
 
     0 xmenu.pos.y xmenu.y sub moveto 1 1 rmoveto
-    xmenu.saved xmemu.tmpbuf blend
+    xmenu.saved xmenu.tmpbuf blend
 
     settransparency
 
-    xmenu.x xmenu.pos.y moveto xmemu.tmpbuf restorescreen
-
-    /xmemu.tmpbuf xmemu.tmpbuf free .undef def
+    xmenu.x xmenu.pos.y moveto xmenu.tmpbuf restorescreen
   } if
 
   dup xmenu .xm_current get eq { xmenu.selected.fg } { xmenu.normal.fg } ifelse setcolor

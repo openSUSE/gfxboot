@@ -108,9 +108,15 @@
   /boot.ed.width screen.size pop boot.pos pop sub 20 sub def
   /boot.ed.height fontheight 2 add def
 
-  dotcolor setcolor
+  currenttransparency
+  white setcolor
   boot.pos moveto 10 boot.ed.height rmoveto
-  0 1 boot.ed.width 3 div { pop putpixel 3 0 rmoveto } for
+  0xe0 settransparency
+  boot.ed.width 1 fillrect
+  settransparency
+
+%  0 1 boot.ed.width 3 div { pop putpixel 3 0 rmoveto } for
+
 
   /boot.ed [
     boot.pos exch 10 add exch 1 sub

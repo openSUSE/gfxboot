@@ -1413,7 +1413,7 @@
 % 640 480 8 findmode setmode not { false .end } if
 800 600 16 findmode setmode not { false .end } if
 
-/with_transp vscreen.size exch pop screen.size exch pop div 1 gt colorbits 8 gt and def
+% /with_transp vscreen.size exch pop screen.size exch pop div 1 gt colorbits 8 gt and def
 
 /clip.size { screen.size } def
 
@@ -1456,6 +1456,4 @@
 /debug 0 def
 
 bsplash.show
-
-
 
