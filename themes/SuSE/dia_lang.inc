@@ -39,6 +39,7 @@
   [ "sk" "Slovenčina" ]
   [ "sl" "Slovenščina" ]
   [ "sv" "Svenska" ]
+  [ "uk" "Українська" ]
   [ "zh_CN" "简体中文" ]
   [ "zh_TW" "繁體中文" ]
 ] def

@@ -49,6 +49,7 @@
   [ "sk" keymap.sk ]
   [ "sl" keymap.sl ]
   [ "sv" keymap.sv ]
+  [ "uk" .undef    ]
 ] def
 
 

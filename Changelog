@@ -1,3 +1,6 @@
+8/2/2005:	v3.0.4
+	- support ukrainian
+
 4/2/2005:	v3.0.3
 	- use 8x16 console font (8x14 does not always exist)
 	- avoid overlap with bootloader memory usage
