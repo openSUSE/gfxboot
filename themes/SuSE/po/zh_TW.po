@@ -246,3 +246,8 @@ msgstr "驅動程式"
 
 
 
+# as in Windows Authentication Domain
+#. txt_domain
+msgid "Domain\n"
+msgstr ""
+

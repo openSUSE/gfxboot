@@ -272,3 +272,8 @@ msgstr "Инсталиране от HTTP"
 msgid "Driver"
 msgstr "Драйвер"
 
+# as in Windows Authentication Domain
+#. txt_domain
+msgid "Domain\n"
+msgstr ""
+

@@ -218,12 +218,12 @@
       dia .text "" put
 
       % Must all be of same size!
-      dia .ed.list 4 array put
-      dia .ed.buffer.list [ 63 string 127 string 31 string 31 string ] put
-      dia .ed.text.list [ txt_server txt_directory txt_user2 txt_password ] put
+      dia .ed.list 5 array put
+      dia .ed.buffer.list [ 63 string 127 string 31 string 31 string 31 string ] put
+      dia .ed.text.list [ txt_server txt_directory txt_domain txt_user2 txt_password ] put
 
       dia .ed.font font.normal put
-      dia .ed.pw_field 3 put
+      dia .ed.pw_field 4 put
 
       dia .ed.focus 0 put
     } ifelse
@@ -231,7 +231,7 @@
 
   pop
 
-  dia .ed.width 240 put
+  dia .ed.width 300 put
 
   dia .buttons [
     button.ok button.default actInstallOK actNoClose or button.setaction
@@ -301,11 +301,16 @@
 
     "install=smb://" install.option sprintf
 
-    % add user name & password
+    % add domain
     dup 2 get "" ne {
-      dup 2 get "%s" install.option dup length add sprintf
-      dup 3 get "" ne {
-        dup 3 get ":%s" install.option dup length add sprintf
+      dup 2 get "%s;" install.option dup length add sprintf
+    } if
+
+    % add user name & password
+    dup 3 get "" ne {
+      dup 3 get "%s" install.option dup length add sprintf
+      dup 4 get "" ne {
+        dup 4 get ":%s" install.option dup length add sprintf
       } if
       "@" install.option dup length add sprintf
     } if

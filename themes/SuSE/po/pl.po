@@ -262,7 +262,8 @@ msgstr "Instalacja SMB (udział dyskowy Windows)"
 msgid "HTTP Installation"
 msgstr "Instalacja HTTP"
 
-# 'driver' as in '(hardware) driver update'
-#. txt_driver_update
-msgid "Driver"
-msgstr "Sterownik"
+# as in Windows Authentication Domain
+#. txt_domain
+msgid "Domain\n"
+msgstr ""
+

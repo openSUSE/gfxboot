@@ -249,3 +249,8 @@ msgstr "HTTP instalace"
 msgid "Driver"
 msgstr "Ovladač"
 
+# as in Windows Authentication Domain
+#. txt_domain
+msgid "Domain\n"
+msgstr ""
+

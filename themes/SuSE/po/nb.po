@@ -247,3 +247,8 @@ msgstr "HTTP Installasjon"
 msgid "Driver"
 msgstr "Driver"
 
+# as in Windows Authentication Domain
+#. txt_domain
+msgid "Domain\n"
+msgstr ""
+

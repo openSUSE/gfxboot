@@ -584,7 +584,7 @@
 
         currentcolor
         currentpoint over 1 sub over 2 sub moveto
-        black white dialog.tmp .ed.width get 2 add fontheight 4 add drawborder
+        black white dialog.tmp .ed.width get 2 add fontheight 5 add drawborder
         moveto -3 lineheight 10 add 7 sub rmoveto
         setcolor
 
