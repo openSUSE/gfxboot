@@ -6,26 +6,120 @@
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Some global vars.
+%
+
+% fallback if there is no "languages"
+/lang.items [ "en" ] def
+/lang.names [ "English" ] def
+
+/.la.locale 0 def
+/.la.name   1 def
+/lang.defaultnames [
+  [ "cs" "\u010ce\u0161tina" ]
+  [ "en" "English" ]
+  [ "fr" "Fran\u00e7ais" ]
+  [ "de" "Deutsch" ]
+  [ "it" "Italiano" ]
+  [ "jp" "\u65e5\u672c\u8a9e" ]
+  [ "ru" "\u0420\u0443\u0441\u0441\u043a\u0438\u0439" ]
+  [ "sk" "Sloven\u010dina" ]
+  [ "es" "Espa\u00f1ol" ]
+] def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Get language name.
+%
+% Returns locale if not found.
+%
+% ( locale ) ==> ( name )
+%
+/lang.getdefname {
+  lang.defaultnames {
+    dup .la.locale get 2 index eq { .la.name get exch pop exit } { pop } ifelse
+  } forall
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Parse "languages" file.
+%
+% ( ) ==> ( )
+%
+/lang.parsedata {
+  /lang.default 0 def
+
+  "languages" findfile dup { /lang.data exch def } { pop return } ifelse
+
+  /la.tmp.datalen lang.data length def
+  /la.tmp.str lang.data cvs def
+ 
+  la.tmp.datalen 0 eq { return } if
+  la.tmp.str la.tmp.datalen 1 sub get '\n' ne { return } if
+
+  '\n' seteotchar
+
+  /lang.items [
+
+    /la.tmp.len 0 def
+    /la.tmp.cnt 0 def
+    {
+      la.tmp.str la.tmp.len add strdup
+      dup dup length 0 put
+      /la.tmp.len over length 1 add la.tmp.len add def
+
+      dup 0 get '*' eq { 1 add /lang.default la.tmp.cnt def } if
+
+      la.tmp.len la.tmp.datalen ge { exit } if
+
+      /la.tmp.cnt inc
+    } loop
+
+  ] def
+
+  ' ' seteotchar
+
+  /lang.names [
+
+    lang.items {
+      dup
+
+      dup length add
+      dup 0 0 put
+      1 add
+
+      dup "" ne { exch pop } { pop lang.getdefname } ifelse
+
+    } forall
+
+  ] def
+
+  0 seteotchar
+
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Build language list.
 %
 % ( ) ==> ( )
 %
-/keytable.init {
-  /tmp.kt [ keymaps { 1 get } forall ] def
+/lang.init {
+  /xmenu.lang .xm_size array def
+  /xmenu xmenu.lang def
 
-  /xmenu.keytable .xm_size array def
+  lang.parsedata
 
-  /xmenu xmenu.keytable def
-
-  xmenu .xm_current keymaps.default put
-  xmenu .xm_list tmp.kt put
+  xmenu .xm_current lang.default put
+  xmenu .xm_list lang.names put
 
   % start with current lang
 
-  /tmp.kt 0 def
-  keymaps {
-    0 get config.lang eq { xmenu .xm_current tmp.kt put exit } if
-    /tmp.kt tmp.kt 1 add def
+  /la.tmp.cnt 0 def
+  lang.items {
+    config.lang eq { xmenu .xm_current la.tmp.cnt put exit } if
+    /la.tmp.cnt inc
   } forall
 
   pmenu.init
@@ -37,11 +131,13 @@
 %
 % ( ) ==> ( )
 %
-/keytable.update {
-  /xmenu xmenu.keytable def
+/lang.update {
+  /xmenu xmenu.lang def
 
-  keymaps xmenu .xm_current get get 0 get setlang { /window.action actRedraw def } if
-  /config.keymap keymaps xmenu .xm_current get get 2 get def
+  lang.items xmenu .xm_current get get
+  dup
+  setlang { /window.action actRedraw def } if
+  setkeymap
 
   % Why? --> see dia_install.inc; same there.
   window.action actRedraw eq { pmenu.update } if
@@ -53,12 +149,12 @@
 %
 % ( ) => ( )
 %
-/panel.keytable {
+/panel.lang {
   "keytable" help.setcontext
 
   window.xmenu
-  dup .xmenu xmenu.keytable put
-  dup .xmenu.update /keytable.update put
+  dup .xmenu xmenu.lang put
+  dup .xmenu.update /lang.update put
   dup window.init
       window.show
 } def
@@ -69,8 +165,8 @@
 %
 % ( ) => ( width )
 %
-/panel.keytable.width {
-  /xmenu xmenu.keytable def
+/panel.lang.width {
+  /xmenu xmenu.lang def
 
   pmenu.width
 } def
@@ -81,8 +177,8 @@
 %
 % ( panel ) => ( )
 %
-/panel.keytable.update {
-  /xmenu xmenu.keytable def
+/panel.lang.update {
+  /xmenu xmenu.lang def
 
   pmenu.panel.update
 } def

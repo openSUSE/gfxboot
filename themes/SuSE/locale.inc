@@ -8,7 +8,7 @@
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Set language.
 %
-% ( language ) ==> ( true|false )
+% ( locale ) ==> ( true|false )
 %
 /setlang {
   config.lang over eq { pop false return } if
@@ -20,6 +20,26 @@
   findtexts
 
   true
+} def
+
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Set keyboard map.
+%
+% ( locale ) ==> ( )
+%
+/setkeymap {
+  config.keymap.locale over eq { pop false return } if
+
+  /config.keymap.locale exch def
+
+  keymaps {
+    dup .km.locale get config.keymap.locale eq {
+      .km.map get /config.keymap exch def exit
+    } { pop } ifelse
+  } forall
+
 } def
 
 

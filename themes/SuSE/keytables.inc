@@ -244,20 +244,20 @@
 ] def
 
 
+/.km.locale 0 def
+/.km.map    1 def
+
 % must not be empty
 /keymaps [
-  [ "cs" "\u010ce\u0161tina"                          keymap.cs ]
-  [ "en" "English"                                    .undef    ]
-  [ "fr" "Fran\u00e7ais"                              keymap.fr ]
-  [ "de" "Deutsch"                                    keymap.de ]
-  [ "it" "Italiano"                                   keymap.it ]
-  [ "jp" "\u65e5\u672c\u8a9e"                         keymap.jp ]
-  [ "ru" "\u0420\u0443\u0441\u0441\u043a\u0438\u0439" keymap.ru ]
-  [ "sk" "Sloven\u010dina"                            keymap.sk ]
-  [ "es" "Espa\u00f1ol"                               keymap.es ]
+  [ "cs" keymap.cs ]
+  [ "en" .undef    ]
+  [ "fr" keymap.fr ]
+  [ "de" keymap.de ]
+  [ "it" keymap.it ]
+  [ "jp" keymap.jp ]
+  [ "ru" keymap.ru ]
+  [ "sk" keymap.sk ]
+  [ "es" keymap.es ]
 ] def
-
-% default entry
-/keymaps.default 1 def
 
 

@@ -936,10 +936,10 @@
       over exch 0 exch put
       1 add
     } forall
-    tmp setlang pop
+    tmp dup setlang pop setkeymap
   } {
     pop
-    "en" setlang pop
+    "en" dup setlang pop setkeymap
   } ifelse
 
   font.large setfont
