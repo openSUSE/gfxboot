@@ -10,26 +10,39 @@
 %
 % ( ) => ( )
 %
-/panel.dud {
-  do_driverupdate .undef eq {
-    /do_driverupdate 1 def
-    1 updatedisk
+/dud.redraw {
+  update.pos exch pop 0 exch moveto currentpoint
+  txt_dud_ready strsize 7 add exch pop clip.size pop exch
+  image
+
+  do_driverupdate {
     black setcolor
     currentfont font.normal setfont
     update.pos moveto currentpoint
     prog_frame_color dup prog_frame_color2
-    update.text strsize 6 add exch 16 add exch
+    txt_dud_ready strsize 6 add exch 16 add exch
     drawborder3
-    moveto 8 3 rmoveto update.text white setcolor show
+    moveto 8 3 rmoveto txt_dud_ready white setcolor show
     setfont
+  } if
+} def
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Toggle driver update.
+%
+% ( ) => ( )
+%
+/panel.dud {
+  do_driverupdate .undef eq {
+    /do_driverupdate 1 def
+    1 updatedisk
   }
   {
     /do_driverupdate .undef def
     0 updatedisk
-    update.pos moveto currentpoint
-    update.text strsize 7 add exch 17 add exch
-    image
   } ifelse
+
+  dud.redraw
 
   "driverupdate" help.setcontext
 } def

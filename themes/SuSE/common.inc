@@ -990,8 +990,7 @@
   /password.buf.size 32 def
   /password.buf password.buf.size string def
 
-  /update.text txt_dud_ready def
-  /update.pos { 260 383 } def
+  /update.pos { clip.size pop txt_dud_ready strsize pop sub 26 sub 360 } def
 
   frame1.pos moveto prog_frame_color dup prog_frame_color2 frame1.size drawborder3
 

@@ -49,6 +49,8 @@
   /keepbootoptions .undef def
 
   panel.show
+
+  dud.redraw
 } def
 
 
