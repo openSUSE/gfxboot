@@ -66,6 +66,7 @@ endif
 font:
 	../../getx11font -v -l 18 -p 2,4 \
 	-c ISO-8859-15 -c ISO-8859-2 -c koi8-r \
+	`./keymapchars keymap.*.inc` \
 	-t po/el.po \
 	-t po/bg.po \
 	-t po/ru.po \

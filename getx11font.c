@@ -116,7 +116,7 @@ int main(int argc, char **argv)
   XImage *xi;
   XChar2b xc;
   int i, j, k, font_width, font_height;
-  char *str, *str1;
+  char *str, *str1, *t;
   char_data_t *cd;
   iconv_t ic = (iconv_t) -1, ic2;
   char obuf[4], ibuf[6];
@@ -140,21 +140,23 @@ int main(int argc, char **argv)
         break;
 
       case 'a':
-        str = optarg;
-        if(sscanf(str, "%i - %i%n", &i, &j, &k) == 2 && k == strlen(str)) {
-          if(i < 0 || j < 0 || j < i || j - i >= 0x10000) {
-            fprintf(stderr, "invalid char range spec: %s\n", str);
-            return 1;
+        t = optarg;
+        while((str = strsep(&t, ","))) {
+          if(sscanf(str, "%i - %i%n", &i, &j, &k) == 2 && k == strlen(str)) {
+            if(i < 0 || j < 0 || j < i || j - i >= 0x10000) {
+              fprintf(stderr, "invalid char range spec: %s\n", str);
+              return 1;
+            }
+            while(i <= j) add_char(i++);
           }
-          while(i <= j) add_char(i++);
-        }
-        else {
-          i = strtol(str, &str1, 0);
-          if(*str1 || i < 0) {
-            fprintf(stderr, "invalid char number: %s\n", str);
-            return 1;
+          else {
+            i = strtol(str, &str1, 0);
+            if(*str1 || i < 0) {
+              fprintf(stderr, "invalid char number: %s\n", str);
+              return 1;
+            }
+            add_char(i);
           }
-          add_char(i);
         }
         break;
 
