@@ -1,3 +1,5 @@
+	- do the F-key-move-down magic only for syslinux (#44238)
+
 18/9/2004:	v2.5.1
 	- basic arabic language support
 

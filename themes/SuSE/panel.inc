@@ -144,6 +144,9 @@
   % move down one menu entry; but only once
   % see keyDown in main::main.input
 
+  % only for install CDs
+  syslinux not { return } if
+
   % not for F1
   dup keyF1 eq { return } if
 
