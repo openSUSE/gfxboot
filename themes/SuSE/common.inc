@@ -271,10 +271,20 @@
     xmenu.video 0 get 0 eq {
       "textmode=1 " bc.cmd dup length add sprintf
     } if
-    video.modes.list xmenu.video 0 get get 0 get dup {
-      "vga=0x%x " bc.cmd dup length add sprintf
-    } {
+
+    video.modes.list xmenu.video .xm_current get get
+    dup .vm_width get 640 eq
+    over .vm_height get 480 eq
+    and {
       pop
+      "x11i=vesa " bc.cmd dup length add sprintf
+    } {
+      .vm_mode get dup {
+        "vga=0x%x " bc.cmd dup length add sprintf
+      } {
+        pop
+      } ifelse
+
     } ifelse
 
     config.lang {

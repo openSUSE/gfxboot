@@ -2,6 +2,8 @@
 	- add 32/64 dualboot code
 	- removed obsolete themes
 	- switch to 'installation' if some F-key has been used (#41097)
+	- don't offer 640x480; instead, select x11 vesa driver
+	- assume monitor can display at least 800x600
 
 2/8/2004:	v2.4.24
 	- added SLES-Live theme

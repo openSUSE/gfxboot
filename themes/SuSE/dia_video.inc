@@ -8,6 +8,12 @@
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Some global vars.
 %
+% video mode array fields (as returned by getvideomode)
+/.vm_mode   0 def
+/.vm_width  1 def
+/.vm_height 2 def
+/.vm_ok     3 def	% monitor supports it
+
 % We have kernel splash images for at least these sizes.
 /video.splashsizes [
    640  480
@@ -25,8 +31,8 @@
 /vmsortindex {
   video.modes.list exch get
   dup
-  1 get 16 shl
-  exch 2 get add
+  .vm_width get 16 shl
+  exch .vm_height get add
 } def
 
 
@@ -55,7 +61,7 @@
 
   0 2 video.splashsizes length 1 sub {
     over over over
-    2 get rot 1 get rot video.splashsizes exch get eq
+    .vm_height get rot .vm_width get rot video.splashsizes exch get eq
     rot 1 add video.splashsizes exch get rot eq and
     { exch pop true exch exit } if
   } for
@@ -89,6 +95,14 @@
     } for
   } if
 
+  % always accept 800x600
+
+  video.modes.list {
+    dup .vm_width get 800 eq
+    over .vm_height get 600 eq
+    and { .vm_ok 1 put } { pop } ifelse
+  } forall
+
   % sort video.modes.list
 
   video.modes.list length 1 gt {
@@ -108,13 +122,19 @@
   0 1 video.modes.list length 1 sub {
     video.modes.text exch
     dup video.modes.list exch get
-    dup 1 get 0 eq {
+    dup .vm_width get 0 eq {
       pop "Text Mode" put
     } {
-      32 string dup rot
-      dup 2 get exch 1 get
-      "%d x %d" 32 5 -1 roll snprintf
-      put
+        dup .vm_width get 640 eq
+        over .vm_height get 480 eq
+        and {
+          pop "VESA" put
+      } {
+        32 string dup rot
+        dup .vm_height get exch .vm_width get
+        "%d x %d" 4 -1 roll sprintf
+        put
+      } ifelse
     } ifelse
   } for
 
@@ -125,7 +145,7 @@
 
   0 1 video.modes.list length 1 sub {
     video.modes.list over get
-    dup 3 get 0 gt exch video.havesplash and {
+    dup .vm_ok get 0 gt exch video.havesplash and {
       xmenu .xm_current rot put
     } {
       pop
