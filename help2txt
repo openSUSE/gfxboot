@@ -1,0 +1,78 @@
+#! /usr/bin/perl
+
+sub nospaces;
+
+if(!@ARGV) {
+  print "Usage: help2txt help_file\n" .
+  "Converts a help file from HTML to the format used by the boot loader.\n";
+  exit;
+}
+
+while(<>) {
+  s/\s*<\/?(hr|body|html|h\d+)\s*>//g;
+  s/\s*<!.*?>\s*//g;
+  s/<(em|strong)>/\x11/g;
+  s/<\/(em|strong)>/\x10/g;
+  while(/<a\s/) {
+    if(s/\<a\s+name=\"([^"]+)\">([^<]*)<\/a>\s*/\x04\x12$1\x14$2\x10/) {
+      if($anchor{$1}) {
+        die "line $.: anchor \"$1\" already exists\n";
+      }
+      else {
+        $anchor{$1} = 1;
+      }
+      die "line $.: label \"$1\" too long (max. 32)\n" if length $1 > 32;
+    }
+    elsif(s/<a\s+href=\"#([^"]+)\">([^<]*)<\/a>/"\x12" . $1 . "\x13" . nospaces($2) . "\x10"/e) {
+      $ref{$1}++;
+      die "line $.: label \"$1\" too long (max. 32)\n" if length $1 > 32;
+    }
+    else {
+      die "line $.: invalid 'A' element\n";
+    }
+  }
+
+  $txt .= $_;
+}
+
+$txt =~ s/\n( +)(?!\n)/"\n<!" . length($1) . ">"/seg;
+$txt =~ s/\s+/ /sg;
+$txt =~ s/\s*<br>\s*/\n/sg;
+$txt =~ s/<!(\d+)>/" " x $1/seg;
+$txt =~ s/(\x14.*?\x10)\s*/$1/sg;
+$txt =~ s/\s*(\x04|$)/$1/sg;
+
+print $txt, "\x00";
+
+$ref{help}++;
+
+for (keys %anchor) {
+  if(!$ref{$_}) {
+    $err = 1;
+    print STDERR "\"$_\" never referenced\n"
+  }
+}
+
+for (keys %ref) {
+  if(!$anchor{$_}) {
+    $err = 1;
+    print STDERR "\"$_\" never defined\n"
+  }
+}
+
+warn "*** inconsistencies detected ***\n" if $err;
+
+
+# \x1f looks like a space but is not a space. This is useful
+# to prevent automatic line breaks.
+sub nospaces
+{
+  local $_;
+
+  $_ = shift;
+
+  s/\s/\x1f/g;
+
+  $_
+}
+
