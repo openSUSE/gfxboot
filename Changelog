@@ -5,6 +5,7 @@
 	- much improved test script
 	- use bold font
 	- use 800x600, 16bit color
+	- added new help texts
 
 25/1/2005:	v3.0.0
 	- jpeg decoding works

@@ -9,12 +9,12 @@ if(!@ARGV) {
 }
 
 while(<>) {
-  s/\s*<\/?(hr|body|html|h\d+)\s*>//g;
+  s/\s*<\/?(hr|body|html|h\d+)\s*>//gi;
   s/\s*<!.*?>\s*//g;
-  s/<(em|strong)>/\x11/g;
-  s/<\/(em|strong)>/\x10/g;
+  s/<(em|strong)>/\x11/gi;
+  s/<\/(em|strong)>/\x10/gi;
   while(/<a\s/) {
-    if(s/\<a\s+name=\"([^"]+)\">([^<]*)<\/a>\s*/\x04\x12$1\x14$2\x10/) {
+    if(s/\<[aA]\s+name=\"([^"]+)\">([^<]*)<\/a>\s*/\x04\x12$1\x14$2\x10/) {
       if($anchor{$1}) {
         die "line $.: anchor \"$1\" already exists\n";
       }
@@ -23,7 +23,7 @@ while(<>) {
       }
       die "line $.: label \"$1\" too long (max. 32)\n" if length $1 > 32;
     }
-    elsif(s/<a\s+href=\"#([^"]+)\">([^<]*)<\/a>/"\x12" . $1 . "\x13" . nospaces($2) . "\x10"/e) {
+    elsif(s/<a\s+href=\"#([^"]+)\">([^<]*)<\/a>/"\x12" . $1 . "\x13" . nospaces($2) . "\x10"/ei) {
       $ref{$1}++;
       die "line $.: label \"$1\" too long (max. 32)\n" if length $1 > 32;
     }
@@ -37,7 +37,7 @@ while(<>) {
 
 $txt =~ s/\n( +)(?!\n)/"\n<!" . length($1) . ">"/seg;
 $txt =~ s/\s+/ /sg;
-$txt =~ s/\s*<br>\s*/\n/sg;
+$txt =~ s/\s*<br>\s*/\n/sgi;
 $txt =~ s/<!(\d+)>/" " x $1/seg;
 $txt =~ s/(\x14.*?\x10)\s*/$1/sg;
 $txt =~ s/\s*(\x04|$)/$1/sg;
