@@ -64,6 +64,7 @@ font:
 	-c ISO-8859-15 -c ISO-8859-2 -c koi8-r \
 	-t help-boot.ja.html \
 	-t help-install.ja.html \
+	-t po/ja.po \
 	-t install/log -t boot/log \
 	-f -efont-fixed-medium-r-normal--16-160-75-75-c-80-iso10646-1 \
 	-f -efont-fixed-medium-r-normal--16-160-75-75-c-160-iso10646-1 \

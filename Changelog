@@ -1,3 +1,7 @@
+3/4/2004:	v2.4.12
+	- new japanese translations (#38224)
+	- not all japanese chars were added to font (#38223)
+
 2/4/2004	v2.4.11
 	- new boot graphics
 
