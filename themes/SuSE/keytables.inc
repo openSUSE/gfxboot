@@ -22,6 +22,7 @@
 %% include keymap.ja.inc
 %% include keymap.hu.inc
 %% include keymap.nb.inc
+%% include keymap.pl.inc
 %% include keymap.ru.inc
 %% include keymap.sk.inc
 %% include keymap.sl.inc
@@ -43,6 +44,7 @@
   [ "ja" keymap.ja ]
   [ "hu" keymap.hu ]
   [ "nb" keymap.nb ]
+  [ "pl" keymap.pl ]
   [ "ru" keymap.ru ]
   [ "sk" keymap.sk ]
   [ "sl" keymap.sl ]

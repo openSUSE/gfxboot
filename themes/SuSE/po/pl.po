@@ -1,0 +1,268 @@
+# LANGUAGE translations for boot loader
+# Copyright (C) 2004 SUSE LINUX AG
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: bootloader\n"
+"PO-Revision-Date: 2004-09-28 12:40+0200\n"
+"Last-Translator: Jakub Kulesza <kontakt@7bulls.com>\n"
+"Language-Team: Polish <i18n@suse.de>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# ok button label
+#. txt_ok
+msgid "OK"
+msgstr "OK"
+
+# cancel button label
+#. txt_cancel
+msgid "Cancel"
+msgstr "Anuluj"
+
+# reboot button label
+#. txt_reboot
+msgid "Reboot"
+msgstr "Uruchom ponownie"
+
+# continue button label
+#. txt_continue
+msgid "Continue"
+msgstr "Kontynuuj"
+
+#. txt_install
+msgid "Installation"
+msgstr "Instalacja"
+
+#. txt_manual_install
+msgid "Manual Installation"
+msgstr "Instalacja manualna"
+
+#. txt_noacpi_install
+msgid "Installation - ACPI Disabled"
+msgstr "Instalacja - ACPI nieaktywne"
+
+#. txt_safe_install
+msgid "Installation - Safe Settings"
+msgstr "Instalacja - Bezpieczne ustawienia"
+
+#. txt_safe_linux
+msgid "Linux - Safe Settings"
+msgstr "Linux - Bezpieczne ustawienia"
+
+#. txt_boot_harddisk
+msgid "Boot from Hard Disk"
+msgstr "Uruchom z dysku twardego"
+
+#. txt_rescue
+msgid "Rescue System"
+msgstr "System ratunkowy"
+
+#. txt_memtest
+msgid "Memory Test"
+msgstr "Test Pamięci"
+
+#. txt_bootoptions
+msgid "Boot Options"
+msgstr "Opcje uruchamiania"
+
+# window title for exit dialog
+#. txt_exit_title (see txt_exit_dialog)
+msgid "Good bye..."
+msgstr "Do widzenia..."
+
+#. txt_exit_dialog
+msgid ""
+"You are leaving the graphical boot menu and\n"
+"starting the text mode interface."
+msgstr ""
+"Opuszczasz graficzne menu uruchamiania systemu i\n"
+"uruchamiasz interfejs tekstowy."
+
+#. txt_help
+msgid "Help"
+msgstr "Pomoc"
+
+# window title for kernel loading (see txt_load_kernel)
+#. txt_load_kernel_title
+msgid "Starting..."
+msgstr "Uruchamianie..."
+
+# Keep the three newlines!
+#. txt_load_kernel
+msgid ""
+"Loading Linux Kernel\n"
+"\n"
+"\n"
+msgstr ""
+"Ładowanie jądra Linuksa\n"
+"\n"
+"\n"
+
+# Keep the three newlines!
+#. txt_load_memtest
+msgid ""
+"Loading memtest86\n"
+"\n"
+"\n"
+msgstr ""
+"Ładowanie memtest86\n"
+"\n"
+"\n"
+
+# info box title
+#. txt_info_title
+msgid "Boot loader"
+msgstr "Boot loader"
+
+# error box title
+#. txt_error_title
+msgid "I/O error"
+msgstr "Błąd WE/WY"
+
+# boot disk change dialog title
+#. txt_change_disk_title
+msgid "Change Boot Disk"
+msgstr "Zmień dysk boot-ujący"
+
+#. txt_insert_disk
+#, c-format
+msgid "Please insert Boot Disk %u."
+msgstr "Proszę włożyć dysk boot-ujący %u."
+
+#. txt_insert_disk2
+#, c-format
+msgid ""
+"This is Boot Disk %u.\n"
+"Please insert Boot Disk %u."
+msgstr ""
+"To jest dysk boot-ujący %u.\n"
+"Proszę włożyć dysk boot-ujący %u."
+
+#. txt_insert_disk3
+#, c-format
+msgid ""
+"This is not a SUSE LINUX 9.2 Boot Disk.\n"
+"Please insert Boot Disk %u."
+msgstr ""
+"To nie jest dysk boot-ujący SUSE LINUX 9.2.\n"
+"Proszę włożyć dysk boot-ujący %u."
+
+# password dialog title
+#. txt_password_title
+msgid "Password"
+msgstr "Hasło"
+
+# Keep the newlines and spaces after ':'!
+#. txt_password
+msgid ""
+"Please enter your password:   \n"
+"\n"
+"\n"
+msgstr ""
+"Proszę wprowadzić hasło:      \n"
+"\n"
+"\n"
+
+#. txt_dud_ready
+msgid "Please get your Driver Update Floppy ready."
+msgstr "Proszę przygotować dyskietkę z uaktualnieniami sterowników."
+
+# dvd warning title
+#. txt_dvd_warning_title
+msgid "You're almost there..."
+msgstr "Już prawie koniec procesu..."
+
+# Keep the newlines!
+#. txt_dvd_warning
+msgid ""
+"\n"
+"\n"
+"It appears that the system booted from the second side of the DVD.\n"
+"If so, turn the DVD over and try again."
+msgstr ""
+"\n"
+"\n"
+"Wygląda na to, że system uruchomiony został z drugiej strony dysku DVD.\n"
+"Jeśli tak jest, odwróć dysk DVD i spróbuj ponownie."
+
+#. txt_dvd_warning2
+msgid ""
+"This is a two-sided DVD. You have booted from the second side.\n"
+"\n"
+"Please turn the DVD over, then continue."
+msgstr ""
+"To jest dwustronne DVD. Uruchomiłeś system z drugiej strony płyty.\n"
+"\n"
+"Proszę odwrócić płytę DVD, a potem kontynuować."
+
+# power off dialog title
+#. txt_power_off_title
+msgid "Power off"
+msgstr "Wyłącz"
+
+#. txt_power_off
+msgid "Do you want to halt the system now?"
+msgstr "Czy chcesz zatrzymać system teraz?"
+
+# menu entry for hard disk installation
+#. txt_harddisk
+msgid "Hard Disk"
+msgstr "Dysk twardy"
+
+# dialog title for hard disk installation
+#. txt_harddisk_title
+msgid "Hard Disk Installation"
+msgstr "Instalacja na dysku twardym"
+
+#. txt_hd_diskdevice
+msgid "Disk Device (scan all disks if empty)\n"
+msgstr "Urządzenie dyskowe (skanuj wszystkie dyski, jeśli puste)\n"
+
+#. txt_directory
+msgid "Directory\n"
+msgstr "Katalog\n"
+
+# dialog title for ftp installation
+#. txt_ftp_title
+msgid "FTP Installation"
+msgstr "Instalacja FTP"
+
+#. txt_server
+msgid "Server\n"
+msgstr "Serwer\n"
+
+#. txt_password
+msgid "Password\n"
+msgstr "Hasło\n"
+
+# label for ftp user input
+#. txt_user1
+msgid "User (anonymous login if empty)\n"
+msgstr "Użytkownik (\"anonymous\" jeśli puste)\n"
+
+# dialog title for nfs installation
+#. txt_nfs_title
+msgid "NFS Installation"
+msgstr "Instalacja NFS"
+
+# label for smb user input
+#. txt_user2
+msgid "User (using \"guest\" if empty)\n"
+msgstr "Użytkownik (\"guest\" jeśli puste)\n"
+
+# dialog title for smb installation
+#. txt_smb_title
+msgid "SMB (Windows Share) Installation"
+msgstr "Instalacja SMB (udział dyskowy Windows)"
+
+# dialog title for http installation
+#. txt_http_title
+msgid "HTTP Installation"
+msgstr "Instalacja HTTP"
+
+# 'driver' as in '(hardware) driver update'
+#. txt_driver_update
+msgid "Driver"
+msgstr "Sterownik"

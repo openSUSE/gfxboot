@@ -32,6 +32,7 @@
   [ "hu" "Magyar" ]
   [ "nl" "Nederlands" ]
   [ "nb" "Norsk" ]
+  [ "pl" "Polski" ]
   [ "pt_BR" "Português" ]
   [ "ro" "Romanian" ]
   [ "ru" "Русский" ]
@@ -131,7 +132,7 @@
 
   % make menu smaller if there are more than 19 language entries
   lang.items length 19 gt {
-    xmenu .xm_vspace 2 put
+    xmenu .xm_vspace 1 put
   } if
 
   % start with current lang
