@@ -27,6 +27,7 @@ INST_EXT     = 16x16.fnt back.jpg splash.jpg kroete.dat *.hlp *.tr
 ifdef DEFAULT_LANG
 FILES_INST += lang
 FILES_BOOT += lang
+FILES_BOOT_EN += lang $(DEFAULT_LANG).tr $(DEFAULT_LANG).hlp
 endif
 
 boot/%.hlp: help-boot.%.html boot
@@ -54,6 +55,7 @@ bootdir: boot.config $(INCLUDES) $(HELPBOOT)
 	$(MKBOOTMSG) $(BFLAGS) -l boot/log -c $< boot/init
 ifdef DEFAULT_LANG
 	@echo $(DEFAULT_LANG) >boot/lang
+	@echo $(DEFAULT_LANG) >>boot/languages
 endif
 	@sh -c 'cd boot; echo $(FILES_BOOT_EN) | sed -e "s/ /\n/g" | cpio --quiet -o >message'
 

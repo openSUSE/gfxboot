@@ -1,8 +1,7 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<head>
-</head>
-<body>
+<html><body>
+
+<!-- help=install -->
+
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="main">Aide relative au chargeur d'amorçage</a></h3>
 <em>SUSE LINUX 9.3</em> vous souhaite la bienvenue !<br>
@@ -37,12 +36,6 @@ performance telles que DMA pour les disques durs IDE. <br>
 <a href="#failsafe">Installation -- Mode sécurisé</a> :
 si vous n'avez pas réussi avec <em>Installation</em>, cette
 sélection pourrait résoudre votre problème.<br>
-<br>
-<a href="#manual">Installation manuelle</a> : cette option est
-réservée aux experts. Utilisez cette option pour avoir le
-contrôle le plus important possible. Utilisez-la également
-pour charger des modules supplémentaires,
-par exemple, avant le démarrage du système de secours.<br>
 <br>
 <a href="#rescue">Système de secours</a> : cette image
 d'amorçage démarre un petit système Linux dans le
@@ -80,11 +73,7 @@ permet de choisir la source d'installation.<br>
 définir la langue et la disposition du clavier utilisées
 par le chargeur d'amorçage.<br>
 <br>
-<a href="#startup">F5 Démarrage du noyau</a> : normalement, vous
-ne verrez aucun des messages du noyau. Utilisez <em>F5</em> pour les
-voir.<br>
-<br>
-<a href="#driverupdate">F6 Mise à jour de pilotes</a> : pour des
+<a href="#driverupdate">F5 Mise à jour de pilotes</a> : pour des
 ordinateurs très récents, il peut être
 nécessaire de procéder à une mise à jour
 des pilotes pour pouvoir installer le système.<br>
@@ -119,7 +108,7 @@ Retour à la <a href="#main">page de démarrage</a>
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="driverupdate">Mise à jour des pilotes</a></h3>
 Si vous nécessitez une disquette ou un CD de mise à jour
-des pilotes, pressez <em>F6</em>. Le chargeur d'amorçage vous
+des pilotes, pressez <em>F5</em>. Le chargeur d'amorçage vous
 demandera d'insérer le support de mise à jour des pilotes
 après le chargement du noyau Linux.<br>
 <br>
@@ -143,23 +132,6 @@ votre mode préféré manuellement.<br>
 Si votre système rencontre des problèmes avec la carte
 graphique lors de l'installation, le <em>mode textuel</em> peut vous
 permettre de contourner le problème.
-<br>
-<br>
-Retour à la <a href="#main">page de démarrage</a>
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="startup">Sélection du mode de démarrage (splash)</a></h3>
-<em>F5</em> vous permet de changer le mode de démarrage
-(splash). Vous pouvez utiliser directement l'option de noyau <a href="#o_splash">splash</a>,
-si vous préférez.<br>
-<br>
-<em>originel (native)</em> désactive l'écran de
-démarrage (comme splash=0)<br>
-<br>
-<em>prolixe (verbose)</em> affiche de belles images et les messages du
-noyau et d'amorçage<br>
-<br>
-<em>silencieux (silent)</em> supprime tous les messages du noyau et
-d'amorçage et affiche une barre de progession à la place<br>
 <br>
 <br>
 Retour à la <a href="#main">page de démarrage</a>
@@ -237,15 +209,6 @@ désactive DMA pour les périphériques IDE et toutes
 les fonctions de gestion de l'énergie.
 Voyez également les options de noyau pour <a href="#o_apm">apm</a>,
 <a href="#o_acpi">acpi</a> et <a href="#o_ide">ide</a>.
-<br>
-<br>
-Retour à la <a href="#main">page de démarrage</a>
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="manual">Installation manuelle</a></h3>
-L'<em>installation manuelle</em> permet aux utilisateurs professionnels
-de régler différents paramètres d'installation
-avant d'installer un système ou d'amorcer le
-<a href="#rescue">Système de secours</a>. Ceci est réservé aux experts.
 <br>
 <br>
 Retour à la <a href="#main">page de démarrage</a>
@@ -442,5 +405,13 @@ périphériques IDE<br>
 <br>
 <br>
 Retour aux <a href="#opt">options d'amorçage</a>
-</body>
-</html>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="bits">Software Type Selection</a></h3>
+
+You have the choice to install the 32-bit or 64-bit version of SUSE LINUX.
+
+<br><br>Return to <a href="#main">Start Page</a>
+
+
+</body></html>

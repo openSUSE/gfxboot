@@ -1,0 +1,79 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+
+<!-- help=boot -->
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="help">使用帮助系统</a></h3>
+
+Boot Loader 联机帮助是上下文相关的。它提供了有关选定菜单项的信息；或当您编辑引导选项时，它会尝试查找有关光标所在选项的信息。<br><br> 导航键<br><br>
+
+<em>上箭头键</em>：高亮显示上一个链接<br> <em>下箭头键</em>：高亮显示下一个链接<br> <em>左箭头键</em>、<em>Backspace 键</em>：返回到上一个主题<br> <em>右箭头键</em>、<em>Enter 键</em>和<em>空格键</em>：跟踪链接<br> <em>Page Up 键</em>：向上滚动一页<br> <em>Page Down 键</em>：向下滚动一页<br> <em>Home 键</em>：转到页首<br> <em>End 键</em>：转到页末<br> <em>Esc 键</em>：退出帮助<br>
+
+<br>返回到<a href="#opt">引导选项</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="keytable">语言和键盘布局选择</a></h3>
+
+按 <em>F2 键</em>更改 Boot Loader 使用的语言和键盘布局。
+
+<br><br>返回到<a href="#opt">引导选项</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="profile">选择简报</a></h3>
+
+按 <em>F3 键</em>选择简报。将使用此简报中保存的配置来启动您的系统。
+
+<br><br>返回到<a href="#opt">引导选项</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="opt">引导选项</a></h3>
+
+<a href="#o_splash">splash</a> － 影响启动屏幕的行为<br> <a href="#o_apm">apm</a> － 转换电源管理<br> <a href="#o_acpi">acpi</a> － 高级配置和电源接口<br> <a href="#o_ide">ide</a> － 控制 IDE 子系统<br>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_splash">内核选项：splash</a></h3>
+
+启动屏幕是在系统启动期间显示的图片。<br> <br> <em>splash=0</em><br> 关闭启动屏幕。这对于型号非常老的显示器或在出现某些错误时很有用。<br> <br> <em>splash=verbose</em><br> 激活启动屏幕，仍显示内核和引导讯息。<br> <br> <em>splash=silent</em><br> 激活启动屏幕，但不显示讯息。而是显示一个进度条。<br><br>返回到<a href="#opt">引导选项</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_apm">内核选项：apm</a></h3>
+
+APM 是当前计算机上使用的两种电源管理策略之一。它主要用于便携式计算机，以实现硬盘休眠等功能，但它也可以负责在关闭电源后关闭计算机。APM 依赖于正常工作的 BIOS。如果 BIOS 出现故障，则 APM 的用途可能有限，甚至会妨碍计算机工作。因此，可以用以下参数将其关闭：<br><br>
+
+<em>apm=off</em> － 完全关闭 APM <br><br>
+
+一些型号非常新的计算机可以更多地受益于较新的 <a href="#o_acpi">ACPI</a>。
+
+<br><br>返回到<a href="#opt">引导选项</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_acpi">内核选项：acpi</a></h3>
+
+ACPI （高级配置和电源接口）是一个用于定义操作系统和 BIOS 之间电源和配置管理接口的标准。默认情况下，如果检测到 BIOS 是 2000 年以后的版本，就会打开 <em>acpi</em>。几个常用的参数可以用来控制 ACPI 的行为：<br><br> <em>pci=noacpi</em> － 不使用 ACPI 来路由 PCI 中断 <em>acpi=oldboot</em> － 只有与引导相关的 ACPI 部分保持激活状态<br> <em>acpi=off</em> － 完全关闭 ACPI<br> <em>acpi=force</em> － 即使您的 BIOS 版本是 2000 年之前的版本，也打开 ACPI<br> <br>在新计算机上，它将取代以前的 <a href="#o_apm">apm</a> 系统。
+
+
+<br><br>返回到<a href="#opt">引导选项</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_ide">内核选项：ide</a></h3>
+
+与 SCSI 不同，IDE 通常用在大多数台式机工作站中。为了避免 IDE 系统发生的一些硬件问题，请使用以下内核参数： <br><br> 
+
+<em>ide=nodma</em> － 关闭 IDE 驱动器的 DMA<br>
+
+
+
+<br><br>返回到<a href="#opt">引导选项</a>。
+
+</body></html>

@@ -343,7 +343,10 @@
 /MenuInit {
   bsplash.done
 
-  0 setcolor 0 0 moveto screen.size fillrect loadpalette
+  colorbits 8 le {
+    0 setcolor 0 0 moveto screen.size fillrect loadpalette
+  } if
+
   init
 
   /menu.entry -1 def

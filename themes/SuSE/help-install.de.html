@@ -1,5 +1,7 @@
 <html><body>
 
+<!-- help=install -->
+
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="main">Bootloader Hilfe</a></h3>
 Willkommen zu <em>SUSE LINUX 9.3</em><br><br>
@@ -25,11 +27,6 @@ Kernel, aktiviert jedoch trotzdem viele Performance-Funktionen, wie DMA für IDE
 <a href="#failsafe">Installation -- Sichere Einstellungen</a>: Sollte 
 <em>Installation</em> keinen Erfolg zeigen, dann könnte diese Auswahl das
 Problem lösen.<br><br>
-
-<a href="#manual">Manuelle Installation</a>: Diese Option ist für Experten
-gedacht. Verwenden Sie sie nur, um eine möglichst große Kontrolle zu
-haben. Verwenden Sie sie auch zum Laden von Extramodulen, z.B. vor dem Starten
-des Rettungssystems.<br><br>
 
 <a href="#rescue">Rettungssystem</a>: Dieses Boot-Image startet ein kleines
 Linux-System im RAM. Dies ist dann nützlich, wenn das System nicht korrekt
@@ -57,10 +54,7 @@ ein Workaround für Sie sein.<br><br>
 <a href="#keytable">F4 Sprache</a>: Legen Sie die Sprach- und Tastaturzuordnung
 für den Bootloader fest.<br><br>
 
-<a href="#startup">F5 Kernel-Start</a>: Normalerweise werden Sie keine
-Kernel-Meldungen sehen. Verwenden Sie <em>F5</em>, um dies zu ändern.<br><br>
-
-<a href="#driverupdate">F6 Treiber-Update</a>: Für sehr neue Rechner
+<a href="#driverupdate">F5 Treiber-Update</a>: Für sehr neue Rechner
 könnte ein Treiber-Update zur Installation des Systems nötig sein.<br><br>
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -88,7 +82,7 @@ Navigationstasten<br><br>
 <h3><a name="driverupdate">Treiber-Update</a></h3>
 
 Benötigen Sie eine Diskette oder CD-ROM für ein Treiber-Update,
-drücken Sie <em>F6</em>. Der Bootloader fordert Sie auf, nach dem Laden
+drücken Sie <em>F5</em>. Der Bootloader fordert Sie auf, nach dem Laden
 des Linux-Kernels das Medium für das Treiber-Update einzulegen.<br><br>
 
 Ein Treiber-Update ist typischerweise eine Diskette mit neuen
@@ -112,22 +106,6 @@ Sollte Ihr System während der Installation Probleme mit der Grafikkarte
 haben, könnte der <em>Textmodus</em> eine Lösung sein.
 
 <br><br>Zur <a href="#main">Startseite</a> zurückgehen
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="startup">Splash-Modus-Auswahl</a></h3>
-
-Mit F5</em> können Sie den Modus Ihres Splash-Screens ändern. 
-Sie können auch die Kernel-Option <a href="#o_splash">Splash</a> direkt verwenden.<br>
-<br>
-<em>native</em> schaltet den Splash-Screen aus (wie splash=0)<br>
-<br>
-<em>verbose</em> zeigt nettes Bild und Kernel- und Boot-Meldungen<br>
-<br>
-<em>silent</em> unterdrückt alle Kernel- und Boot-Meldungen und zeigt
-stattdessen eine Fortschrittsanzeige an.<br>
-
-<br><br>Zurück zur <a href="#main">Startseite</a>
 
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -194,16 +172,6 @@ Wählen Sie <em>Installation -- ACPI deaktiviert</em>, wenn Sie Probleme beim St
 <h3><a name="failsafe">Installation -- Sichere Einstellungen</a></h3>
 
 Wählen Sie <em>Installation -- Sichere Einstellungen</em>, wenn die Installation hängt oder nicht nachvollziehbare Fehler auftreten. Diese Option deaktiviert DMA für die IDE-Treiber und alle Power-Management-Funktionen. Sehen Sie sich auch die Kernel-Optionen für <a href="#o_apm">apm</a>, <a href="#o_acpi">acpi</a> und <a href="#o_ide">ide</a> an.
-
-<br><br>Zurück zur <a href="#main">Startseite</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="manual">Manuelle Installation</a></h3>
-
-<em>Manuelle Installation</em> ist eine Expertenoption zur Feineinstellung
-verschiedener Installationsparameter vor der Installation eines Systems oder
-dem Starten eines <a href="#rescue">Rettungssystems</a>. 
 
 <br><br>Zurück zur <a href="#main">Startseite</a>
 

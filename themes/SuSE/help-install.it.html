@@ -1,5 +1,7 @@
 <html><body>
 
+<!-- help=install -->
+
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="main">Boot Loader Help</a></h3>
 Benvenuti a  <em>SUSE LINUX 9.3</em><br><br>
@@ -31,11 +33,6 @@ IDE.  <br><br>
 <em>Installazione</em> non ha portato al risultato sperato, questa voce 
 potrebbe risolvere il problema.<br><br>
 
-<a href="#manual">Installazione manuale</a>: Questa voce è indicata
-per utenti esperti. Con questa opzione "prendete" tutto nelle vostre mani. Utilizzatela
-per caricare dei moduli a parte, per esempio prima di avviare il sistema di
-salvataggio.<br><br>
-
 <a href="#rescue">Sistema di salvataggio</a>: Questa immagine di boot 
 avvia un piccolo sistema Linux nella RAM. Ciò è utile se il sistema non
 si avvia correttamente. Dopo il boot del sistema, eseguite il log in come root.
@@ -66,10 +63,7 @@ tastiera utilizzate dal boot loader.<br><br>
 <a href="#install_src">F4 Origine di installazione</a>: Selezionate l'origine di
 installazione.<br><br>
 
-<a href="#startup">F5 Avvio del kernel</a>: Normalmente non vengono mostrati
-i messaggi del kernel. Potete cambiare ciò con <em>F5</em>.<br><br>
-
-<a href="#driverupdate">F6 Aggiornamento driver</a>: Per pochissime macchine
+<a href="#driverupdate">F5 Aggiornamento driver</a>: Per pochissime macchine
 recenti potrebbe essere necessario un aggiornamento dei driver per poter installare
 il sistema.<br><br>
 
@@ -99,7 +93,7 @@ Tasti di navigazione<br><br>
 <h3><a name="driverupdate">Aggiornamento driver</a></h3>
 
 Se vi serve un dischetto o CD-Rom con aggiornamenti di driver,
-premete <em>F6</em>. Il boot loader vi chiederà di inserire il
+premete <em>F5</em>. Il boot loader vi chiederà di inserire il
 dispositivo dopo aver caricato il kernel di Linux.<br><br>
 
 Di solito si tratta di un dischetto con le nuove versioni dei
@@ -122,24 +116,6 @@ In questi casi, selezionate il vostro modo preferito manualmente.
 Se il vostro sistema incontra delle difficoltà con la scheda grafica
 durante il processo di installazione, il <em>modo testo</em> 
 potrebbe essere un modo utile per aggirare il problema.
-
-<br><br>Ritorna alla <a href="#main">Pagina iniziale</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="startup">Selezione modo splash</a></h3>
-
-Con <em>F5</em> potete intervenire sul modo splash screen.
-Se preferite, potete utilizzare direttamente l'opzione kernel
-<a href="#o_splash">splash</a>.<br>
-<br>
-<em>native</em> spegne lo splash screen  (corrisponde a splash=0)<br>
-<br>
-<em>verbose</em> mostra una grafica e i messaggi del kernel e di
-boot<br>
-<br>
-<em>silent</em> sopprime i messaggi del kernel e di boot, visualizzando
-invece una barra di avanzamento<br>
 
 <br><br>Ritorna alla <a href="#main">Pagina iniziale</a>
 
@@ -221,16 +197,6 @@ disabilita il DMA per drive IDE e tutte le feature in tema di risparmio
 energetico. Si vedano anche le opzioni del kernel per
 <a href="#o_apm">apm</a>, <a href="#o_acpi">acpi</a> e 
 <a href="#o_ide">ide</a>.
-
-<br><br>Ritorna alla <a href="#main">Pagina iniziale</a>
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="manual">Installazione manuale</a></h3>
-
-<em>Installazione manuale</em> consente ai professionisti di
-cesellare una serie di parametri di installazione prima di eseguire
-l'installazione del sistema o avviare il <a href="#rescue">Sistema di salvataggio</a>. Questa opzione è indicata solo per utenti
-esperti.
 
 <br><br>Ritorna alla <a href="#main">Pagina iniziale</a>
 

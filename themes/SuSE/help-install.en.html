@@ -1,5 +1,7 @@
 <html><body>
 
+<!-- help=install -->
+
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="main">Boot Loader Help</a></h3>
 Welcome to <em>SUSE LINUX 9.3</em><br><br>
@@ -28,12 +30,6 @@ hard disks.  <br><br>
 <a href="#failsafe">Installation -- Safe Settings</a>: If you were not
 successful with <em>Installation</em>, this selection might
 solve the issue.<br><br>
-
-<a href="#manual">Manual Installation</a>: This item is intended for
-experts. Use this
-option to have the most possible control. Also use it to load extra modules,
-for example, before starting the Rescue
-System.<br><br>
 
 <a href="#rescue">Rescue System</a>: This boot image starts a small
 Linux system in RAM. This is useful if the system does not start properly.
@@ -64,10 +60,7 @@ installation source.<br><br>
 <a href="#keytable">F4 Language</a>: Set language and keyboard mapping
 used by the boot loader.<br><br>
 
-<a href="#startup">F5 Kernel Startup</a>: Normally, you won't see
-any kernel messages. Use <em>F5</em> to change that.<br><br>
-
-<a href="#driverupdate">F6 Driver Update</a>: For very new machines, a
+<a href="#driverupdate">F5 Driver Update</a>: For very new machines, a
 driver update may be needed to install the system.<br><br>
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -95,7 +88,7 @@ Navigation Keys<br><br>
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="driverupdate">Driver Update</a></h3>
 
-If you need a driver update floppy or CD-ROM, press <em>F6</em>. The
+If you need a driver update floppy or CD-ROM, press <em>F5</em>. The
 boot loader asks you to insert the driver update medium after
 loading the Linux kernel.<br><br>
 
@@ -116,22 +109,6 @@ case, select your preferred mode manually.<br><br>
 
 If your system has problems with the graphics card during the
 installation, the <em>text mode</em> may be a usable work-around.
-
-<br><br>Return to <a href="#main">Start Page</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="startup">Splash Mode Selection</a></h3>
-
-<em>F5</em> lets you change the splash screen mode. You can
-use the <a href="#o_splash">splash</a> kernel option directly, if you prefer.<br>
-<br>
-<em>native</em> turns the splash screen off (same as splash=0)<br>
-<br>
-<em>verbose</em> shows nice picture and kernel and boot messages<br>
-<br>
-<em>silent</em> suppresses all kernel and boot messages and shows a progress
-bar instead<br>
 
 <br><br>Return to <a href="#main">Start Page</a>
 
@@ -208,17 +185,6 @@ while installing or irreproducible errors. This option disables DMA
 for IDE drives and all power management features.
 See also the kernel options for <a href="#o_apm">apm</a>,
 <a href="#o_acpi">acpi</a> and <a href="#o_ide">ide</a>.
-
-<br><br>Return to <a href="#main">Start Page</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="manual">Manual Installation</a></h3>
-
-<em>Manual Installation</em> enables the professional to tune several
-installation parameters before installing a system or booting the 
-<a href="#rescue">Rescue System</a>. This is intended for expert use
-only.
 
 <br><br>Return to <a href="#main">Start Page</a>
 

@@ -1,5 +1,7 @@
 <html><body>
 
+<!-- help=install -->
+
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="main">Nápověda zavaděče</a></h3>
 Vítejte v <em>SUSE LINUXu 9.3</em><br><br>
@@ -15,8 +17,6 @@ Tato volba je vhodná pro naprostou většinu počítačů. Pokud při instalaci
 
 <a href="#failsafe">Instalace -- bezpečné nastavení</a>: Pokud volba <em>Instalace</em> vedla k zatuhnutí systému nebo chybám, použijte tuto nabídku.<br><br>
 
-<a href="#manual">Ruční instalace</a>: Tato volba je určena pouze pro experty. S její pomocí získáte maximální kontrolu nad systémem a také možnost zavést některé moduly před spuštěním záchranného systému.<br><br>
-
 <a href="#rescue">Záchranný systém</a>: Spuštění malého linuxového systému přímo z  RAM. Použijte ho v případě vážných problémů s nainstalovaným systémem. Po spuštění se přihlaste jako uživatel root. <br><br>
 
 <a href="#memtest">Test paměti</a>: Test paměti je užitečný při zjišťování stavu paměťových modulů. Jde o zátěžový test. <br><br>
@@ -31,9 +31,7 @@ Tato volba je vhodná pro naprostou většinu počítačů. Pokud při instalaci
 
 <a href="#install_src">F4 Instalační zdroj</a>: Volba instalačního zdroje.<br><br>
 
-<a href="#startup">F5 Spouštění jádra</a>: Normálně jsou hlášení jádra zakryta. Stisknutím klávesy <em>F5</em> to můžete změnit.<br><br>
-
-<a href="#driverupdate">F6 Update ovladače</a>: U některých velmi nových systémů může být při instalaci potřeba updatovat ovladače.<br><br>
+<a href="#driverupdate">F5 Update ovladače</a>: U některých velmi nových systémů může být při instalaci potřeba updatovat ovladače.<br><br>
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="help">Používání systému nápovědy</a></h3>
@@ -57,7 +55,7 @@ Navigační klávesy<br><br>
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="driverupdate">Update ovladače</a></h3>
 
-V případě potřeby zavedení ovladače z diskety nebo CD stiskněte <em>F6</em>. Zavaděč vás po zavedené jádra požádá o médium s ovladačem.<br><br>
+V případě potřeby zavedení ovladače z diskety nebo CD stiskněte <em>F5</em>. Zavaděč vás po zavedené jádra požádá o médium s ovladačem.<br><br>
 
 Update ovladače je obvykle novější verzi ovladače potřebná pro průběh instalace.
 
@@ -72,21 +70,6 @@ Rozlišení a video režim můžete změnit pomocí klávesy <em>F2</em>. Jako v
 Může se stát, že váš monitor nelze automaticky detekovat. V takovém případě odpovídající režim zvolte ručně.<br><br>
 
 Pokud máte během instalace problémy s grafickou kartou, zvolte <em>textový režim</em>.
-
-<br>Návrat do <a href="#opt">startovací nabídky</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="startup">Výběr režimu splashe</a></h3>
-
-
-Splash režim můžete měnit pomocí klávesy <em>F5</em>. Použít můžete také parametr jádra <a href="#o_splash">splash</a>.<br>
-<br>
-<em>native</em> vypne splash screen (stejně jako splash=0)<br>
-<br>
-<em>silent</em> zakryje všechna hlášení jádra a zobrazí místo toho animaci znázorňující pokrok při stratu nebo ukončení systému<br>
-<br>
-<em>verbose</em> Zobrazí hlášení jádra na grafickém pozadí<br>
 
 <br>Návrat do <a href="#opt">startovací nabídky</a>
 
@@ -148,14 +131,6 @@ Pokud se při startu jádra objeví problémy, zvolte <em>Instalace -- bez ACPI<
 
 Pokud se při instalaci setkáte s problémy nebo zatuhnutím, zvolte <em>Instalace -- bezpečné nastavení</em>. Touto volbou zakážete DMA pro všechna IDE zařízení a používání všech typů správy napájení pro celý systém. Více informací získáte v nápovědě parametrů jádra <a href="#o_apm">apm</a>,
 <a href="#o_acpi">acpi</a> a <a href="#o_ide">ide</a>.
-
-<br>Návrat do <a href="#opt">startovací nabídky</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="manual">Ruční instalace</a></h3>
-
-<em>Ruční instalace</em> umožňuje pokročilejším uživatelům nastavit řadu parametrů ještě před samotnou instalací nebo spuštěním <a href="#rescue">Záchranný systém</a>. Tato volba je určena pouze pro pokročilejší uživatele.
 
 <br>Návrat do <a href="#opt">startovací nabídky</a>
 

@@ -10,6 +10,9 @@ if(!@ARGV) {
 
 while(<>) {
   s/\s*<\/?(hr|body|html|h\d+)\s*>//gi;
+  if(/<!--\s*help=(\S+)\s*-->/) {
+    $helptype = $1;
+  }
   s/\s*<!.*?>\s*//g;
   s/<(em|strong)>/\x11/gi;
   s/<\/(em|strong)>/\x10/gi;
@@ -44,7 +47,15 @@ $txt =~ s/\s*(\x04|$)/$1/sg;
 
 print $txt, "\x00";
 
-$ref{help}++;
+if($helptype eq 'boot') {
+  $ref{help}++;
+  $ref{keytable}++;
+  $ref{profile}++;
+}
+
+if($helptype eq 'install') {
+  $ref{bits}++;
+}
 
 for (keys %anchor) {
   if(!$ref{$_}) {

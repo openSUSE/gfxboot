@@ -1,5 +1,7 @@
 <html><body>
 
+<!-- help=install -->
+
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="main">Hjelp for oppstartslaster</a></h3>
 Velkommen til <em>SUSE LINUX 9.3</em><br><br>
@@ -15,8 +17,6 @@ Velg ønsket funksjon i denne menyen. Hvis du har problemer med å navigere i de
 
 <a href="#failsafe">Installasjon -- sikker modus</a>: Hvis installasjonen ikke var vellykket med valget <em>Installasjon</em>, kan dette valget løse problemet.<br><br>
 
-<a href="#manual">Manuell installasjon</a>: Dette valget er beregnet på avanserte brukere. Bruk dette alternativet hvis du ønsker maksimal kontroll. Det kan også brukes for å laste ekstra moduler, for eksempel før redningssystemet startes.<br><br>
-
 <a href="#rescue">Redningssystem</a>: Oppstartsdiskbildet starter et lite Linux-system i RAM. Dette er nyttig hvis systemet ikke starter opp som det skal. Logg inn som rot etter at dette systemet er startet opp. <br><br>
 
 <a href="#memtest">Minnekontroll</a>: Minnekontroll er nyttig for mer enn å søke etter nye minnemoduler ved installasjonen. Det er en viktig stresstest for datamaskinen som kan avsløre maskinvareproblemer. <br><br>
@@ -31,9 +31,7 @@ Velg ønsket funksjon i denne menyen. Hvis du har problemer med å navigere i de
 
 <a href="#keytable">F4 Språk</a>: Velg språk og tastaturoppsett som skal brukes av oppstartslasteren.<br><br>
 
-<a href="#startup">F5 Kjerneoppstart</a>: Normalt vil ingen meldinger fra kjernen vises. Bruk <em>F5</em> for å endre dette.<br><br>
-
-<a href="#driverupdate">F6 Driveroppgradering</a>: For helt nye maskiner trenger du kanskje en driveroppgradering for å installere systemet.<br><br>
+<a href="#driverupdate">F5 Driveroppgradering</a>: For helt nye maskiner trenger du kanskje en driveroppgradering for å installere systemet.<br><br>
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="help">Bruke hjelpesystemet</a></h3>
@@ -57,7 +55,7 @@ Navigasjonstaster<br><br>
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="driverupdate">Driveroppgradering</a></h3>
 
-Trykk <em>F6</em> hvis du trenger en oppgraderingsdiskett eller -CD-ROM. Oppstartslasteren ber deg om å sette inn mediet med driveroppgraderingen etter at Linux-kjernen er lastet.<br><br>
+Trykk <em>F5</em> hvis du trenger en oppgraderingsdiskett eller -CD-ROM. Oppstartslasteren ber deg om å sette inn mediet med driveroppgraderingen etter at Linux-kjernen er lastet.<br><br>
 
 En driveroppgradering er normalt en diskett med nye versjoner eller rettelser av feil i maskinvaredrivere som er nødvendige under installasjon.
 
@@ -72,20 +70,6 @@ Trykk <em>F2</em> for å vise listen over skjermmoduser som grafikkortet støtte
 I noen tilfeller blir ikke skjermen funnet automatisk. I så fall må du velge modus manuelt.<br><br>
 
 Hvis systemet har problemer med grafikkortet under installasjonen, kan <em>tekstmodus</em> løse problemet.
-
-<br><br>Gå tilbake til <a href="#main">startsiden</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="startup">Valg av oppstartsskjermbilde</a></h3>Med 
-
-<em>F5</em> kan du endre skjermbildet ved oppstart. Hvis du vil, kan du bruke kjernealternativet <a href="#o_splash">splash</a> (oppstartsbilde) direkte.<br>
-<br>
-<em>native</em> slår av oppstartsbildet (samme som splash=0)<br>
-<br>
-<em>verbose</em> viser et lekkert bakgrunnsbilde samt kjerne- og oppstartsmeldinger<br>
-<br>
-<em>silent</em> slår av alle kjerne- og oppstartsmeldinger og viser en fremdriftsindikator i stedet<br>
 
 <br><br>Gå tilbake til <a href="#main">startsiden</a>
 
@@ -149,13 +133,6 @@ Velg <em>Installasjon -- sikker modus</em> hvis installasjonen henger eller ufor
 <a href="#o_acpi">acpi</a> og <a href="#o_ide">ide</a>.
 
 <br><br>Gå tilbake til <a href="#main">startsiden</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="manual">Manuell installasjon</a></h3>Med 
-
-<em>Manuell installasjon</em> kan avanserte brukere finjustere ulike installasjonsparametere før systemet installeres eller 
-<a href="#rescue">redningssystemet</a> startes. Dette er kun beregnet på avanserte brukere. <br><br>Gå tilbake til <a href="#main">startsiden</a>
 
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -289,7 +266,14 @@ IDE er langt vanligere i skrivebordsmaskiner enn SCSI. For å løse maskinvarepr
   <em>ide=nodma</em> -- slå av DMA for IDE-stasjoner<br>
 
 
-
 <br><br>Gå tilbake til <a href="#opt">Oppstartsalternativer</a>.
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="bits">Software Type Selection</a></h3>
+
+You have the choice to install the 32-bit or 64-bit version of SUSE LINUX.
+
+<br><br>Return to <a href="#main">Start Page</a>
+
 
 </body></html>

@@ -1,5 +1,7 @@
 <html><body>
 
+<!-- help=install -->
+
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="main">Rendszertöltõ súgó</a></h3> Üdvözli a <em>SUSE LINUX 9.3!</em><BR><BR> Válassza ki a kívánt funkciót ebbõl a menübõl. Ha gondot okoz a súgórendszerben mozgás, az <em>F1</em> megnyomásával hívja elõ a súgórendszer <a href="#help">leírását.</a>  A menü legfontosabb funkciói:<BR><BR>
 
@@ -10,8 +12,6 @@
 <a href="#noacpi">Telepítés -- ACPI letiltva</a>: Nagyon sok mai számítógépen nem teljes vagy hibás az ACPI megvalósítása. Ez a menüpont letiltja a kernel ACPI-támogatását, ugyanakkor megtart számos további teljesítménynövelõ funkciót, például az IDE-merevlemezek DMA-támogatását. <BR><BR>
 
 <a href="#failsafe">Telepítés -- Biztonságos beállítások</a>: Ha a <em>Telepítés</em> mód nem bizonyult megfelelõnek, ez a mód lehet, hogy megoldja a problémát.<BR><BR>
-
-<a href="#manual">Kézi telepítés</a>: Ezt a menüpontot a szakértõknek szántuk. Ez a mód biztosítja a legnagyobb befolyást. Szintén ez használható extra modulok betöltésére, például a Rendszer-helyreállítás elindítása elõtt.<BR><BR>
 
 <a href="#rescue">Rendszer-helyreállítás</a>: Ez a rendszerkép egy kisméretû rendszert indít el RAM-ból. Akkor hasznos, ha a rendszer nem megfelelõen indul. A rendszer betöltése után jelentkezzen be root felhasználóként. <BR><BR>
 
@@ -27,9 +27,7 @@
 
 <a href="#keytable">F4 Nyelv</a>: Adja meg a rendszertöltõ által használt nyelvi és billentyûzetbeállításokat.<BR><BR>
 
-<a href="#startup">F5 Kernelindítás</a>: Normál esetben semmilyen kernelüzenet nem látható. Ez az <em>F5</em> billentyû megnyomásával változtatható meg.<BR><BR>
-
-<a href="#driverupdate">F6 Meghajtóprogram-frissítés</a>: Nagyon új gépek esetében szükséglehet egy meghajtóprogram frissítésére a rendszer telepítéséhez.<BR><BR>
+<a href="#driverupdate">F5 Meghajtóprogram-frissítés</a>: Nagyon új gépek esetében szükséglehet egy meghajtóprogram frissítésére a rendszer telepítéséhez.<BR><BR>
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="help">A súgórendszer használata</a></h3> A rendszertöltõ online súgója környezetérzékeny. Információt nyújt a kiválasztott menüelemrõl, vagy ha a a rendszerindítási paramétereket módosítja, akkor megpróbál információt adni arról a paraméterrõl, amelyen a kurzor éppen áll.<BR>
@@ -48,25 +46,11 @@
 <BR><BR>Visszatérés a <a href="#main">Kezdõoldalra</a>
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="driverupdate">Meghajtóprogram frissítése</a></h3> Ha egy meghajtóprogram-frissítõ hajlékonylemezt vagy CD-t kíván használni, nyomja meg az <em>F6</em> billentyût. A rendszertöltõ a Linux kernel betöltése után felszólítja a meghajtóprogram-frissítõ adathordozó behelyezésére.<BR><BR> A meghajtóprogram-frissítõ általában egy hajlékonylemez, amelyen a a telepítés során szükséges hardver-meghajtóprogram legújabb változata vagy hibajavítása található. <BR><BR>Visszatérés a <a href="#main">Kezdõoldalra</a>
+<h3><a name="driverupdate">Meghajtóprogram frissítése</a></h3> Ha egy meghajtóprogram-frissítõ hajlékonylemezt vagy CD-t kíván használni, nyomja meg az <em>F5</em> billentyût. A rendszertöltõ a Linux kernel betöltése után felszólítja a meghajtóprogram-frissítõ adathordozó behelyezésére.<BR><BR> A meghajtóprogram-frissítõ általában egy hajlékonylemez, amelyen a a telepítés során szükséges hardver-meghajtóprogram legújabb változata vagy hibajavítása található. <BR><BR>Visszatérés a <a href="#main">Kezdõoldalra</a>
 
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="videomode">Videomód kiválasztása</a></h3> Nyomja meg az <em>F2</em> gombot a grafikus kártya által támogatott videomódok listájának lekéréséhez. A monitor által támogatott legnagyobb felbontás alapértelmezésként ki van választva.<BR><BR> Elõfordulhat, hogy nem sikerül a monitor automatikus felismerése. Ebben az esetben válassza ki kézzel a preferált módot.<BR><BR> Ha gondok vannak a grafikus kártyával a telepítés során, a <em>szöveges mód</em> nyújthat kerülõ megoldást. <BR><BR>Visszatérés a <a href="#main">Kezdõoldalra</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="startup">Rendszerindító képernyõ kiválasztása</a></h3>
-
-<em>Az F5</em> billentyûvel változtatható meg a rendszerindító képernyõ mód. Ha akarja, használhatja közvetlenül a <a href="#o_splash">splash</a> kernelparamétert is.<BR>
-<BR>
-<em>A native</em> paraméter kikapcsolja a rendszerindító képernyõt (ua. mint splash=0)<BR>
-<BR>
-<em>A verbose</em> paraméter egy szép képet mutat, valamint a kernel- és a rendszerindítási üzeneteket<BR>
-<BR>
-<em>silent</em> módban semmilyen kernel- és a rendszerindítási üzenet nem látható, csak egy folyamatjelzõ sáv<BR><BR>
-
-<BR><BR>Visszatérés a <a href="#main">Kezdõoldalra</a>
 
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -98,12 +82,6 @@
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="failsafe">Telepítés -- Biztonságos beállítások</a></h3> Ha telepítés közben lefagyásokat vagy nem megismételhetõ hibákat észlel, válassza a <em>Telepítés -- Biztonságos beállítások</em> lehetõséget. Ez a beállítás letiltja az IDE-meghajtók DMA-támogatását és az összes tápellátás-felügyeleti funkciót. Tekintse meg továbbá az <a href="#o_apm">apm</a>, az <a href="#o_acpi">acpi</a> és az <a href="#o_ide">ide</a> paramétereket is. <BR><BR>Visszatérés a <a href="#main">Kezdõoldalra</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="manual">Kézi telepítés</a></h3>
-
-<em>A Kézi telepítés</em> lehetõvé teszi a szakemberek számára, hogy behangoljanak számos telepítési paramétert a rendszer telepítése, vagy a <a href="#rescue">Rendszer-helyreállítás</a> elindítása elõtt. E lehetõséget csak a szakembereknek ajánljuk <BR><BR>Visszatérés a <a href="#main">Kezdõoldalra</a>
 
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -185,6 +163,12 @@
 
   <em>ide=nodma</em> -- a DMA-kezelés kikapcsolása az IDE-meghajtók számára<BR><BR>
 
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="bits">Software Type Selection</a></h3>
+
+You have the choice to install the 32-bit or 64-bit version of SUSE LINUX.
+
+<br><br>Return to <a href="#main">Start Page</a>
 
 
 <BR><BR>Visszatérés a <a href="#opt">Rendszerindítási beállításokhoz.</a> </body></html>

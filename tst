@@ -208,7 +208,7 @@ function usage {
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-while getopts bhip:t: opt ; do
+while getopts bhil:p:t: opt ; do
   case $opt in
     \:|\?|h) usage
       ;;
@@ -217,6 +217,9 @@ while getopts bhip:t: opt ; do
       ;;
 
     i) logo=install
+      ;;
+
+    l) lang="DEFAULT_LANG=$OPTARG"
       ;;
 
     p) program=$OPTARG
@@ -258,7 +261,7 @@ if [ ! "$what" ] ; then
   usage
 fi
 
-make BINDIR=../../ -C themes/$theme || exit
+make BINDIR=../../ -C themes/$theme $lang || exit
 
 [ -f "$logo" ] || logo="themes/$theme/bootlogo"
 

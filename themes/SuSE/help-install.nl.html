@@ -1,5 +1,7 @@
 <html><body>
 
+<!-- help=install -->
+
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="main">Bootloader Help</a></h3>
 Welkom bij <em>SUSE LINUX 9.3</em><br><br>
@@ -29,11 +31,6 @@ bijvoorbeeld de DMA voor IDE harddisks.  <br><br>
 <em>Installatie</em> mislukt is, dan kan deze selectie het probleem
 misschien oplossen.<br><br>
 
-<a href="#manual">Handmatige installatie</a>: Deze selectie is bedoeld voor
-experts. Met deze optie heeft men de grootste controle over het installatie proces.
-Gebruik dit ook om bijvoorbeeld extra modules te laden, alvorens u
-het reddingssysteem gaat opstarten.<br><br>
-
 <a href="#rescue">Reddingssysteem</a>: Deze boot image start een klein
 Linux systeem in RAM op. Dit is handig in het geval het systeem niet goed wil opstarten.
 Nadat het systeem is opgestart kunt u als root inloggen. <br><br>
@@ -58,9 +55,7 @@ dan is de <em>tekst mode</em> waarschijnlijk een goede oplossing voor u.<br><br>
 
 <a href="#keytable">F4 Taal</a>: Instelling van de door de bootloader gebruikte taal en toetsenbord layout.<br><br>
 
-<a href="#startup">F5 Kernel startup</a>: Normaliter zult u geen kernel berichten zien. Gebruik <em>F5</em> om dat te veranderen.<br><br>
-
-<a href="#driverupdate">F6 Driver update</a>: Bij zeer nieuwe machines kan een driver update nodig zijn om het systeem te kunnen installeren.<br><br>
+<a href="#driverupdate">F5 Driver update</a>: Bij zeer nieuwe machines kan een driver update nodig zijn om het systeem te kunnen installeren.<br><br>
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="help">Informatie over het gebruik van het Help systeem</a></h3>
@@ -86,7 +81,7 @@ Navigatie toetsen<br><br>
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="driverupdate">Driver update</a></h3>
 
-Als u een driver update diskette of CD-ROM nodig heeft, druk dan op <em>F6</em>.
+Als u een driver update diskette of CD-ROM nodig heeft, druk dan op <em>F5</em>.
 De bootloader zal u, nadat de Linux kernel geladen is, vragen om het driver update
 medium te plaatsen.<br><br>
 
@@ -110,20 +105,6 @@ is het gebruik van de <em>tekst mode</em> een mogelijke oplossing.
 
 <br><br>Terug naar <a href="#main">Start pagina</a>
 
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="startup">Splash mode selectie</a></h3>
-
-<em>F5</em> biedt u de mogelijkheid om de opstartscherm mode te wijzigen. U kunt
-de <a href="#o_splash">splash</a> kernel optie ook direct gebruiken als u dat liever heeft.<br>
-<br>
-<em>native</em> opstartscherm uitschakelen (identiek aan splash=0)<br>
-<br>
-<em>verbose</em> toont een mooie afbeelding samen met de kernel- en boot berichten<br>
-<br>
-<em>silent</em> onderdrukt alle kernel- en boot berichten en toont hiervoor in de plaats een voortgangsbalk<br>
-
-<br>Terug naar <a href="#main">Start pagina</a>
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="keytable">Taal en toetsenbord layout selectie</a></h3>
@@ -195,16 +176,6 @@ tijdens het installeren vastloopt of als er vreemde fouten optreden.
 Deze optie schakelt de DMA optie van alle IDE drives uit als ook alle energiebeheer opties.
 Zie ook de kernel opties voor <a href="#o_apm">apm</a>,
 <a href="#o_acpi">acpi</a> en <a href="#o_ide">ide</a>.
-
-<br><br>Terug naar <a href="#main">Start pagina</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="manual">Handmatige installatie</a></h3>
-
-<em>Handmatige installatie</em> biedt de professional de mogelijkheid om diverse
-installatie parameters nader in te stellen voorafgaande aan de installatie van een systeem of
-het booten van een <a href="#rescue">Reddingssysteem</a>. Alleen voor experts!
 
 <br><br>Terug naar <a href="#main">Start pagina</a>
 
@@ -374,5 +345,13 @@ te voorkomen: <br><br>
   <em>ide=nodma</em>  -- dma voor IDE drives uitschakelen<br>
 
 <br>Terug naar <a href="#opt">Bootopties</a>.
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="bits">Software Type Selection</a></h3>
+
+You have the choice to install the 32-bit or 64-bit version of SUSE LINUX.
+
+<br><br>Return to <a href="#main">Start Page</a>
+
 
 </body></html>

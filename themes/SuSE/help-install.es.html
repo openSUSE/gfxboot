@@ -1,5 +1,7 @@
 <html><body>
 
+<!-- help=install -->
+
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="main">Ayuda del cargador de arranque</a></h3>
 Bienvenido a <em>SUSE LINUX 9.3</em><br><br>
@@ -25,10 +27,6 @@ prestaciones de rendimiento tales como DMA para los discos IDE.  <br><br>
 
 <a href="#failsafe">Instalación - configuración segura</a>: Si la opción <em>Instalación</em>
 no diese resultado, esta selección podría resolver el problema.<br><br>
-
-<a href="#manual">Instalación manual</a>: El uso de esta opción, que le proporciona
-el máximo control sobre la instalación, se recomienda sólo a expertos. Puede utilizarla
-por ejemplo para cargar módulos adicionales antes de iniciar el sistema de rescate.<br><br>
 
 <a href="#rescue">Sistema de rescate</a>: Esta imagen de arranque inicia un pequeño sistema
 Linux en la RAM, lo que resulta muy útil si el sistema no arranca correctamente. Una vez
@@ -56,10 +54,7 @@ de instalación.<br><br>
 <a href="#keytable">F4 idioma</a>: Seleccione el idioma y la distribución del teclado 
 empleados por el cargador de arranque.<br><br>
 
-<a href="#startup">F5 arranque del kernel</a>: Normalmente los mensajes del kernel no 
-son visibles. Con <em>F5</em> puede hacer que lo sean.<br><br>
-
-<a href="#driverupdate">F6 actualización de controladores</a>: En el caso de máquinas muy
+<a href="#driverupdate">F5 actualización de controladores</a>: En el caso de máquinas muy
 nuevas puede ser necesario actualizar los controladores para instalar el sistema.<br><br>
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -87,7 +82,7 @@ Teclas de navegación<br><br>
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="driverupdate">Actualización de controladores</a></h3>
 
-Pulse <em>F6</em> si necesita un disquete o CD-ROM de actualización de controladores. 
+Pulse <em>F5</em> si necesita un disquete o CD-ROM de actualización de controladores. 
 El cargador de arranque le pedirá que introduzca el medio de actualización de controladores
 después de cargar el kernel de Linux.<br><br>
 
@@ -109,23 +104,6 @@ de forma manual el modo que prefiera.<br><br>
 
 Utilice el <em>modo texto</em> como solución alternativa en caso de que el sistema tenga 
 problemas con la tarjeta gráfica durante la instalación.
-
-<br><br>Volver a la <a href="#main">página de inicio</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="startup">Selección de la pantalla de bienvenida</a></h3>
-
-Con <em>F5</em> puede cambiar el modo de la pantalla de bienvenida. Si lo prefiere,
-también puede utilizar directamente la opción <a href="#o_splash">splash</a> del kernel.<br>
-<br>
-<em>native</em> desactiva la pantalla de bienvenida (equivale a splash=0)<br>
-<br>
-<em>verbose</em> muestra una imagen y los mensajes de arranque y del kernel.<br>
-<br>
-<em>silent</em> suprime todos los mensajes de arranque y del kernel y muestra en su
-lugar una barra de progreso.<br>
-
 
 <br><br>Volver a la <a href="#main">página de inicio</a>
 
@@ -200,17 +178,6 @@ algunos componentes del sistema se cuelguen durante la instalación o se produzc
 errores imposibles de reproducir. Esta opción desactiva DMA para los discos IDE así
 como las funciones de gestión de energía. Vea también las opciones del kernel para
 <a href="#o_apm">apm</a>, <a href="#o_acpi">acpi</a> e <a href="#o_ide">ide</a>.
-
-<br><br>Volver a la <a href="#main">página de inicio</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="manual">Instalación manual</a></h3>
-
-La <em>Instalación manual</em> permite al usuario experto configurar diversos 
-parámetros de instalación antes de instalar un sistema o arrancar el 
-<a href="#rescue">sistema de rescate</a>. El uso de esta opción se recomienda
-exclusivamente a los usuarios expertos.  
 
 <br><br>Volver a la <a href="#main">página de inicio</a>
 
