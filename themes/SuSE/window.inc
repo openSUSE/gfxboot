@@ -89,6 +89,7 @@
 /.ed.text.list   newfield
 /.ed.width       newfield
 /.ed.focus       newfield
+/.ed.pw_field    newfield
 /.xmenu          newfield
 /.xmenu.update   newfield
 /.dont_free      newfield
@@ -357,7 +358,9 @@
   % maybe there are input fields
   dup 0 ne {
     window.current .ed.list get dup {
-      window.current .ed.font get setfont
+      window.current .ed.font get
+        window.current .ed.focus get window.current .ed.pw_field get eq { pwmode } if
+        setfont
       window.current .color.fg get setcolor
 
       window.current .ed.focus get get exch edit.input
@@ -590,7 +593,13 @@
           dialog.tmp.buf "" edit.init
         } {
           % we really need a redraw function...
+          currentfont
+          % hide text in password fields
+          dialog.tmp.idx dialog.tmp .ed.pw_field get eq {
+            dialog.tmp .ed.font get pwmode setfont
+          } if
           dialog.tmp.buf dup 3 get edit.init
+          setfont
         } ifelse
         dialog.tmp .ed.focus get dialog.tmp.idx ne { dialog.tmp.buf edit.hidecursor } if
 

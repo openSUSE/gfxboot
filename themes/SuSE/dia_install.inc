@@ -152,6 +152,9 @@
       dia .ed.buffer.list [ 63 string 127 string 31 string 31 string ] put
       dia .ed.text.list [ txt_server txt_directory txt_user1 txt_password ] put
 
+      dia .ed.font font.normal put
+      dia .ed.pw_field 3 put
+
       dia .ed.focus 0 put
     } ifelse
   } if
@@ -214,6 +217,9 @@
       dia .ed.list 4 array put
       dia .ed.buffer.list [ 63 string 127 string 31 string 31 string ] put
       dia .ed.text.list [ txt_server txt_directory txt_user2 txt_password ] put
+
+      dia .ed.font font.normal put
+      dia .ed.pw_field 3 put
 
       dia .ed.focus 0 put
     } ifelse
