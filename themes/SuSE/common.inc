@@ -1326,8 +1326,8 @@
 
 /clip.size { 640 480 } def
 
-640 480 8 findmode setmode not { false return } if
-% 800 600 8 findmode setmode not { false return } if
+640 480 8 findmode setmode not { false .end } if
+% 800 600 8 findmode setmode not { false .end } if
 
 "background.pcx" findfile setimage loadpalette
 /max_image_colors image.colors def

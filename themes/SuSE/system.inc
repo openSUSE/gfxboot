@@ -104,6 +104,7 @@
 
 /.value { t_int settype } def
 /.undef 0 t_none settype def
+/.end 0 t_end settype def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

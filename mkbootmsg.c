@@ -1436,7 +1436,8 @@ int optimize_code5(FILE *lf)
           c1->type == t_none ||
           c1->type == t_int ||
           c1->type == t_unsigned ||
-          c1->type == t_bool
+          c1->type == t_bool ||
+          c1->type == t_end
         ) &&
         c2->type == t_prim &&
         c2->value.u == p_def
@@ -1463,6 +1464,11 @@ int optimize_code5(FILE *lf)
               free(c->name);
               c->name = s;
             }
+            else if(c->type == t_end) {
+              asprintf(&s, ".end # %s", c->name);
+              free(c->name);
+              c->name = s;
+            }
           }
         }
 
@@ -1481,7 +1487,7 @@ int optimize_code5(FILE *lf)
 
 
 /*
- * Find .undef.
+ * Find ".undef" or ".end".
  */
 int optimize_code6(FILE *lf)
 {
@@ -1496,17 +1502,17 @@ int optimize_code6(FILE *lf)
     c2 = code + (j = next_code(j));
     if(
       c0->type == t_int && c0->value.u == 0 &&
-      c1->type == t_int && c1->value.u == 0 &&
+      c1->type == t_int && (c1->value.u == t_none || c1->value.u == t_end) &&
       c2->type == t_prim &&
       c2->value.u == p_settype
     ) {
-      c0->type = t_none;
+      c0->type = c1->value.u;
       c0->value.u = 0;
-      asprintf(&s, ".undef # %s", c0->name);
+      asprintf(&s, "%s # %s", c0->type ? ".end" : ".undef", c0->name);
       free(c0->name);
       c0->name = s;
 
-      if(verbose && lf) fprintf(lf, "#   constant expression: .undef (at %d)\n", i);
+      if(verbose && lf) fprintf(lf, "#   constant expression: %s (at %d)\n", c0->name, i);
       if(verbose && lf) fprintf(lf, "#   deleting code: %d - %d\n", i + 1, j);
       c1->type = c2->type = t_skip;
 
@@ -1872,6 +1878,38 @@ void decompile(unsigned char *data, unsigned size)
         else {
           sprintf(buf, "name_%d", val);
         }
+        s = add_to_line(buf);
+        printf("%s\n", s);
+        add_to_line("");
+        break;
+
+      case t_prim:
+        for(s = NULL, j = 0; j < sizeof prim_names / sizeof *prim_names; j++) {
+          if(val == prim_names[j].value) {
+            s = prim_names[j].name;
+            break;
+          }
+        }
+        if(s) {
+          sprintf(buf, "%s", s);
+        }
+        else {
+          sprintf(buf, "prim_<%d>", val);
+        }
+        s = add_to_line(buf);
+        printf("%s\n", s);
+        add_to_line("");
+        break;
+
+      case t_bool:
+        sprintf(buf, "%s", val ? "true" : "false");
+        s = add_to_line(buf);
+        printf("%s\n", s);
+        add_to_line("");
+        break;
+
+      case t_none:
+        sprintf(buf, ".undef");
         s = add_to_line(buf);
         printf("%s\n", s);
         add_to_line("");
