@@ -46,7 +46,7 @@
 /bsplash.show {
   currentimage
 
-  "splash.pcx" findfile setimage loadpalette
+  "splash.pcx" findfile /splash.file over def setimage loadpalette
   /max_image_colors max_image_colors image.colors max def
 
   0 0 moveto currentpoint 1 1 image getpixel setcolor screen.size fillrect
@@ -82,6 +82,8 @@
   } loop
 
   setimage
+
+  splash.file free /splash.file .undef def
 } def
 
 

@@ -55,11 +55,12 @@
 % ( ) ==> ( )
 %
 /findtexts {
-  16 string dup config.lang "texts.%s" 2 index sprintf findfile exch free
+  texts.file free /texts.file .undef def
+  16 string dup config.lang "%s.tr" 2 index sprintf findfile exch free
   dup .undef eq {
     config.lang length 2 gt {
       pop 16 string
-      dup config.lang 1 get config.lang 0 get "texts.%c%c" 3 index sprintf findfile exch free
+      dup config.lang 1 get config.lang 0 get "%c%c.tr" 3 index sprintf findfile exch free
       dup {
         /config.lang 2 string
           config.lang 1 get config.lang 0 get "%c%c" 3 index sprintf
@@ -67,7 +68,8 @@
       } if
     } if
   } if
-  dup .undef eq { pop "texts.en" findfile } if
+  dup .undef eq { pop "en.tr" findfile } if
+  /texts.file over def
   dup .undef eq { pop 0 cvp } if
   cvs
   /ft.len over cvp length def

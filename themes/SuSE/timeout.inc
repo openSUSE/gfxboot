@@ -68,13 +68,13 @@
   /timeout.clear    true def
   /timeout.buf        64 string def
 
-  /timeout.time.x 60 def
-  /timeout.time.y 215 def
+  /timeout.time.x 790 def
+  /timeout.time.y   5 def
 } def
 
 
 /timeout.clean.x 20 def
-/timeout.clean.y 140 def
+/timeout.clean.y 1140 def
 
 /timeout.areas [
   [ 53 150 2 2 ]

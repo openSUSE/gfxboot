@@ -1,14 +1,14 @@
 POFILES	= $(wildcard *.po)
-TEXTS	= $(addprefix texts.,$(basename $(wildcard *.po)))
+TEXTS	= $(addsuffix .tr,$(basename $(wildcard *.po)))
 
 all: text.inc $(TEXTS)
 
-texts.%: %.po text.inc
+%.tr: %.po text.inc
 	bin/po2txt $< >$@
 
-# texts.en uses msgids from bootloader.pot
-texts.en text.inc: bootloader.pot
-	bin/po2txt $< >texts.en
+# en.tr uses msgids from bootloader.pot
+en.tr text.inc: bootloader.pot
+	bin/po2txt $< >en.tr
 
 clean:
-	rm -f text.inc texts.* *~
+	rm -f text.inc *.tr *~

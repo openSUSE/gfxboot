@@ -1,0 +1,378 @@
+<html><body>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="main">Bootloader Help</a></h3>
+Welkom bij <em>SUSE LINUX 9.2</em><br><br>
+
+Gebruik dit menu voor het selecteren van de gewenste functie. Als u
+bij dit helpsysteem problemen heeft met de navigatie, druk dan op
+<em>F1</em> om de <a href="#help">beschrijving</a> van dit helpsysteem
+weer te geven. De hoofdfuncties in dit menu zijn:<br><br>
+
+<a href="#harddisk">Boot van de harddisk</a>: Deze selectie zal verder
+niets met het systeem doen. Het zal slechts een eerder geïnstalleerd
+operating systeem opstarten.<br><br>
+
+<a href="#linux">Installatie</a>:
+Deze installatie mode werkt bij de meeste machines. Als uw systeem
+tijdens het booten vastloopt of er problemen bij de detectie
+van uw hardware componenten optreden (zoals diskcontrollers of netwerkkaarten),
+probeert u dan één van de volgende installatie opties. <br><br>
+
+<a href="#noacpi">Installatie -- ACPI inactief</a>: Veel van de
+momenteel verkochte computers hebben incomplete of gebrekkige ACPI
+implementaties. Deze selectie schakelt de ACPI ondersteuning in de
+kernel uit, maar activeert de vele prestatie verhogende opties zoals
+bijvoorbeeld de DMA voor IDE harddisks.  <br><br>
+
+<a href="#failsafe">Installatie -- Veilige instellingen</a>: Als de gewone
+<em>Installatie</em> mislukt is, dan kan deze selectie het probleem
+misschien oplossen.<br><br>
+
+<a href="#manual">Handmatige installatie</a>: Deze selectie is bedoeld voor
+experts. Met deze optie heeft men de grootste controle over het installatie proces.
+Gebruik dit ook om bijvoorbeeld extra modules te laden, alvorens u
+het reddingssysteem gaat opstarten.<br><br>
+
+<a href="#rescue">Reddingssysteem</a>: Deze boot image start een klein
+Linux systeem in RAM op. Dit is handig in het geval het systeem niet goed wil opstarten.
+Nadat het systeem is opgestart kunt u als root inloggen. <br><br>
+
+<a href="#memtest">Geheugentest</a>: Een geheugentest is handig voor meer dan
+alleen het testen van nieuw geïnstalleerde geheugenmodules. Het is
+voor een groot deel van uw computersysteem een goede belastingstest en kan
+mogelijke hardware problemen naar boven halen. <br><br>
+
+<a href="#opt">Bootopties</a>: De bootopties kunnen het gedrag van
+het systeem compleet veranderen. Het zijn kernel instellingen.<br><br>
+
+<a href="#help">F1 Help</a>: Dit is context gevoelig. Het zal verschillede
+schermen laten zien afhankelijk van het actieve element van het
+bootscherm. Er is tevens een beschrijving van het helpsysteem beschikbaar.<br><br>
+
+<a href="#videomode">F2 Video mode</a>: Hier kunt u tijdens het installeren kiezen tussen
+de verschillende schermresoluties. Als u problemen tijdens de grafische installatie ondervindt,
+dan is de <em>tekst mode</em> waarschijnlijk een goede oplossing voor u.<br><br>
+
+<a href="#install_src">F3 Installatie bron</a>: Kies de installatie bron.<br><br>
+
+<a href="#keytable">F4 Taal</a>: Instelling van de door de bootloader gebruikte taal en toetsenbord layout.<br><br>
+
+<a href="#startup">F5 Kernel startup</a>: Normaliter zult u geen kernel berichten zien. Gebruik <em>F5</em> om dat te veranderen.<br><br>
+
+<a href="#driverupdate">F6 Driver update</a>: Bij zeer nieuwe machines kan een driver update nodig zijn om het systeem te kunnen installeren.<br><br>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="help">Informatie over het gebruik van het Help systeem</a></h3>
+
+De bootloader online help is context gevoelig.
+Het geeft informatie over het geselecteerde menu item of, indien u de bootopties aan het wijzigen bent,
+probeert informatie te vinden over de optie waar de cursor zich bij bevindt.<br>
+<br>
+Navigatie toetsen<br><br>
+
+ <em>Pijl omhoog</em>: vorige link benadrukken<br>
+ <em>Pijl omlaag</em>: volgende link benadrukken<br>
+ <em>Pijl naar links</em>, <em>Backspace</em>: keer terug naar vorige onderwerp<br>
+ <em>Pijl naar rechts</em>, <em>Enter</em>, <em>Spatiebalk</em>: volg link<br>
+ <em>Page Up</em>: scroll één pagina omhoog<br>
+ <em>Page Down</em>: scroll één pagina omlaag<br>
+ <em>Home</em>: ga naar het begin van de pagina<br>
+ <em>End</em>: ga naar het einde van de pagina<br>
+ <em>Esc</em>: help verlaten<br>
+
+<br>Terug naar <a href="#main">Start pagina</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="driverupdate">Driver update</a></h3>
+
+Als u een driver update diskette of CD-ROM nodig heeft, druk dan op <em>F6</em>.
+De bootloader zal u, nadat de Linux kernel geladen is, vragen om het driver update
+medium te plaatsen.<br><br>
+
+Een driver update is meestal een diskette met daarop de nieuwe versies van de hardware
+drivers of met bepaalde bugfixes die tijdens de installatie nodig zijn.
+
+<br><br>Terug naar <a href="#main">Start pagina</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="videomode">Video mode selectie</a></h3>
+
+Druk op <em>F2</em> om een lijst te krijgen van de video modes die uw grafische kaart
+ondersteunt. De hoogste mode die uw monitor aan kan is voorgeselecteerd.<br><br>
+
+Het is mogelijk dat uw monitor niet automatisch gedetecteerd kan worden. In dat geval
+dient u de door uw gewenste mode handmatig te selecteren.<br><br>
+
+Als uw systeem tijdens de installatie problemen met uw grafische kaart heeft, dan
+is het gebruik van de <em>tekst mode</em> een mogelijke oplossing.
+
+<br><br>Terug naar <a href="#main">Start pagina</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="startup">Splash mode selectie</a></h3>
+
+<em>F5</em> biedt u de mogelijkheid om de opstartscherm mode te wijzigen. U kunt
+de <a href="#o_splash">splash</a> kernel optie ook direct gebruiken als u dat liever heeft.<br>
+<br>
+<em>native</em> opstartscherm uitschakelen (identiek aan splash=0)<br>
+<br>
+<em>verbose</em> toont een mooie afbeelding samen met de kernel- en boot berichten<br>
+<br>
+<em>silent</em> onderdrukt alle kernel- en boot berichten en toont hiervoor in de plaats een voortgangsbalk<br>
+
+<br>Terug naar <a href="#main">Start pagina</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="keytable">Taal en toetsenbord layout selectie</a></h3>
+
+Druk op <em>F4</em> om de taal en het toetsenbord layout dat de bootloader gebruikt aan te passen.
+
+<br><br>Terug naar <a href="#main">Start pagina</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="install_src">Installatie bron</a></h3>
+
+Druk op <em>F3</em> om een installatie bron te kiezen.<br><br>
+
+Dit is hetzelfde als dat u de <a href="#o_install">installatie</a>
+bootoptie gebruikt.
+
+<br><br>Terug naar <a href="#main">Start pagina</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="linux">Installatie</a></h3>
+
+Selecteer <em>Installatie</em> om de standaard installatie te starten. De opgegeven
+<a href="#opt">bootopties</a> worden bij het opstarten gebruikt.
+Dit item activeert vele opties van de algemene beschikbare hardware. <br>
+
+<br>Terug naar <a href="#main">Start pagina</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="harddisk">Boot van de harddisk</a></h3>
+
+Selecteer <em>Boot geïnstalleerd OS</em> om het op uw harddisk geïnstalleerde systeem
+te booten. Dit systeem dient correct geïnstalleerd te zijn omdat alleen het
+MBR (Master Boot Record) op de eerste harddisk wordt opgestart.
+De apparaat ID van de eerste harddisk wordt door de BIOS van de computer opgegeven. <br><br>
+
+Gebruik dit in het geval u vergeten bent om de CD of DVD uit de drive te halen
+en u uw computer vanaf de harddisk wilt gaan opstarten.<br>
+
+<br>Terug naar <a href="#main">Start pagina</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="noacpi">Installatie -- ACPI inactief</a></h3>
+
+Enkele zeer nieuwe hardware zal
+soms ACPI nodig hebben om de interrupt afhandeling uit te kunnen voeren. ACPI vervangt
+het oude APM systeem dan ook volledig. <br><br>
+
+Selecteer <em>Installatie -- ACPI inactief</em> als u tijdens het booten van
+de kernel problemen ondervindt.  Bekende gevallen van machines
+die problemen met ACPI hebben zijn:
+<br><br>
+
+   * kernel loopt tijdens het booten vast<br>
+   * PCI kaarten worden niet gedetecteerd of initialiseren niet correct<br>
+
+
+<br>Terug naar <a href="#main">Start pagina</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="failsafe">Installatie -- Veilige instellingen</a></h3>
+
+Selecteer <em>Installatie -- Veilige instellingen</em> als de zaak
+tijdens het installeren vastloopt of als er vreemde fouten optreden.
+Deze optie schakelt de DMA optie van alle IDE drives uit als ook alle energiebeheer opties.
+Zie ook de kernel opties voor <a href="#o_apm">apm</a>,
+<a href="#o_acpi">acpi</a> en <a href="#o_ide">ide</a>.
+
+<br><br>Terug naar <a href="#main">Start pagina</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="manual">Handmatige installatie</a></h3>
+
+<em>Handmatige installatie</em> biedt de professional de mogelijkheid om diverse
+installatie parameters nader in te stellen voorafgaande aan de installatie van een systeem of
+het booten van een <a href="#rescue">Reddingssysteem</a>. Alleen voor experts!
+
+<br><br>Terug naar <a href="#main">Start pagina</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="rescue">Reddingssysteem</a></h3>
+
+Het <em>Reddingssysteem</em> is een klein, op RAM disk gebasseerd, systeem. Vanaf hier
+is het mogelijk om allerlei soorten wijzigingen aan het geïnstalleerde systeem aan
+te brengen. Aangezien er alleen low-level tools in dit systeem beschikbaar zijn, is dit meer
+iets voor experts.<br>
+
+<br>Terug naar <a href="#main">Start pagina</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="memtest">Geheugentest</a></h3>
+
+De inbegrepen <em>Geheugentest</em> biedt goede mogelijkheden
+om de hardware van het systeem goed te testen. Het hoofddoel is natuurlijk
+om een defecte geheugenbank (RAM) op te sporen, maar het test ook vele
+andere delen van het systeem. <br>
+
+Als er geen fouten gevonden zijn is dat nog geen garantie dat het geheugen helemaal in orde is,
+alhoewel de meeste geheugendefecten zeker gevonden zullen worden.<br>
+
+<br>Terug naar <a href="#main">Start pagina</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="opt">Bootopties</a></h3>
+
+Er zijn twee verschillende type bootopties: opties die het installatieprogramma beïnvloeden en
+er zijn specifieke kernel opties. Enkele van de meer algemene opties zijn: <br><br>
+a) installatieprogramma opties<br>
+<br>
+  <a href="#o_install">installatie</a> -- selecteert een installatie bron<br>
+  <a href="#network">netwerk opties</a> -- de netwerk opties<br>
+  <a href="#o_vnc">vnc opties</a> -- opties voor een installatie via VNC
+<br><br>
+b) kernel opties<br>
+<br>
+  <a href="#o_splash">splash</a> -- beïnvloedt het gedrag van het opstartscherm<br>
+  <a href="#o_apm">apm</a> -- toggle energiebeheer<br>
+  <a href="#o_acpi">acpi</a> -- geavanceerde configuratie en energie interface<br>
+  <a href="#o_ide">ide</a> -- IDE subsysteem besturing<br>
+
+<br>Terug naar <a href="#main">Start pagina</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_install">Installatieprogramma opties: installatie</a></h3>
+
+Standaard worden de locale CDROM's onderzocht op een installatie bron.
+Selecteer de <em>installatie</em> optie voor een netwerk installatie.
+Mogelijke installatie protocollen zijn<br>
+  * FTP<br>
+  * NFS<br>
+  * HTTP<br>
+De te gebruiken syntax is gelijk aan de standaard URL's. Als bijvoorbeeld
+uw server op 192.168.0.1 gevonden kan worden en u een op NFS-gebaseerde
+installatie van de directory /install op deze server wilt gaan doen, specificeer
+de bron dan als volgt:<br><br>
+
+  <em>install=nfs://192.168.0.1/install</em><br><br>
+
+De netwerkkaart zal of geconfigureerd worden met behulp van <em>dhcp</em> of u
+moet zelf de parameters specificeren zoals dat wordt beschreven bij de
+<a href="#network">netwerk opties</a>.<br>
+
+<br>Terug naar <a href="#opt">Bootopties</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_splash">Kernel opties: splash</a></h3>
+
+Het opstartscherm is de afbeelding wat tijdens het opstarten van het systeem zal worden weergegeven.<br>
+<br>
+<em>splash=0</em><br><br> Het opstartscherm is uitgezet. Soms zinvol bij erg oude monitoren of bij een opgetreden fout.<br>
+<br>
+<em>splash=verbose</em><br><br> Activeert opstartscherm, kernel- en boot-berichten blijven zichtbaar.<br>
+<br>
+<em>splash=silent</em><br><br>
+Activeert opstartscherm, geen berichten. In plaats daarvan wordt een voortgangsbalk zichtbaar.<br>
+
+<br>Terug naar <a href="#opt">Bootopties</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="network">Installatieprogramma opties: Netwerk opties</a></h3>
+
+Het is mogelijk om de netwerk interface nu direct te configureren. De
+hardware zal later door YaST2 worden gedetecteerd. Het minimum aan optie instellingen
+om uw netwerkkaart te configureren bestaat uit een host IP en een netmasker. Een voorbeeld:<br><br>
+
+  <em>hostip=192.168.0.10  netmask=255.255.255.0</em><br>
+<br>
+of in verkorte vorm:<br><br>
+
+  <em>hostip=192.168.0.10/24</em><br>
+<br>
+
+Als u <a href="#o_install">netwerk-gebaseerde installatie</a> gespecificeerd heeft en
+geen van beide opties heeft opgegeven, dan zal het installatieprogramma proberen om
+de network interface te configureren met behulp van <em>dhcp</em>. Als u een standaard
+gateway nodig heeft, specificeer deze dan met de optie <em>gateway</em>. Een voorbeeld:<br><br>
+
+  <em>gateway=192.168.0.8</em><br>
+
+<br>Terug naar <a href="#opt">Bootopties</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_vnc">Installatieprogramma opties: vnc</a></h3>
+
+Om de VNC installatie te activeren dient u de
+parameters vnc en vncpassword te specificeren:<br><br>
+
+  <em>vnc=1 vncpassword=voorbeeld</em><br><br>
+
+De VNC server zal worden opgestart en u kunt vervolgens van, via
+iedere remote systeem VNC cliënt, YaST2 gebruik maken.<br>
+
+<br>Terug naar <a href="#opt">Bootopties</a>.
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_apm">Kernel opties: apm</a></h3>
+
+APM is één van de twee energiebeheer strategieën die bij de computers
+van tegenwoordig gebruikt worden. Echter hoofdzakelijk bij laptops ten
+behoeve van functies zoals de slaapstand mode. Ook kan het
+verantwoordelijk zijn voor het uitschakelen van de computer bij
+een wegvallende voedingsspanning. APM heeft een correct werkende BIOS nodig.
+Bij een defecte BIOS zal APM slechts gedeeltelijk werken of zelfs de computer
+zo beïnvloeden dat deze niet meer werkt.
+Met de volgende parameter is het eventueel uit te schakelen:<br><br>
+
+  <em>apm=off</em>  -- APM geheel uitschakelen<br><br>
+
+Moderne computers hebben meer voordeel bij het nieuwere
+<a href="#o_acpi">ACPI</a>.
+
+
+<br><br>Terug naar <a href="#opt">Bootopties</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_acpi">Kernel opties: acpi</a></h3>
+
+ACPI (Advanced Configuration and Power Interface) is een standaard dat de energie
+en configuratie beheer interfaces definieert tussen het operating systeem en de BIOS.
+Standaard wordt <em>acpi</em> geactiveerd als er een BIOS is gedetecteerd dat na het jaar 2000
+gemaakt is. Er zijn diverse algemeen te gebruiken parameters die het gedrag van ACPI beïnvloeden:<br>
+<br>
+  <em>pci=noacpi</em> -- ACPI niet gebruiken om PCI interrupts af te handelen<br>
+  <em>acpi=oldboot</em> -- alleen die ACPI-onderdelen gebruiken die voor het booten relevant zijn<br>
+  <em>acpi=off</em> -- ACPI geheel uitschakelen<br>
+  <em>acpi=force</em> -- ACPI inschakelen, zelfs als uw BIOS voor 2000 gedateerd is<br>
+<br>
+Vooral bij nieuwe computers zal dit het oude <a href="#o_apm">apm</a> systeem prima vervangen.
+
+
+<br><br>Terug naar <a href="#opt">Bootopties</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_ide">Kernel opties: ide</a></h3>
+
+Gewoonlijk wordt IDE, in tegenstelling tot SCSI, bij de meeste desktop werkstations gebruikt.
+Gebruik de volgende kernel parameter om enkele hardware problemen, die bij IDE systemen zouden kunnen optreden,
+te voorkomen: <br><br>
+
+  <em>ide=nodma</em>  -- dma voor IDE drives uitschakelen<br>
+
+<br>Terug naar <a href="#opt">Bootopties</a>.
+
+</body></html>

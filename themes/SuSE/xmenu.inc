@@ -108,7 +108,7 @@
   put
 
   xmenu .xm_width
-    0 xmenu .xm_list get { strsize pop max } forall xmenu.hspace 2 mul add
+    0 xmenu .xm_list get { exec strsize pop max } forall xmenu.hspace 2 mul add
   put
 
 } def
@@ -169,7 +169,7 @@
 
   dup xmenu .xm_current get eq { xmenu.selected.fg } { xmenu.normal.fg } ifelse setcolor
   xmenu.x xmenu.hspace add xmenu.pos.y xmenu.vspace add moveto
-  xmenu .xm_list get over get show
+  xmenu .xm_list get over get exec show
 
   dup xmenu .xm_current get eq {
     xmenu.x xmenu.pos.y moveto
@@ -222,7 +222,7 @@
 
   % xmenu .xm_panel_width get xmenu.hspace 2 mul sub
 
-  xmenu .xm_list get xmenu .xm_current get get strsize pop
+  xmenu .xm_list get xmenu .xm_current get get exec strsize pop
 } def
 
 
@@ -241,7 +241,7 @@
   xmenu .xm_panel_x get xmenu.hspace add
   panel.text.y
   moveto
-  xmenu .xm_list get xmenu .xm_current get get show
+  xmenu .xm_list get xmenu .xm_current get get exec show
 } def
 
 

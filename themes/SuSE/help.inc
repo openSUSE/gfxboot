@@ -24,6 +24,13 @@
 /help.width 480 def
 /help.height 322 def
 
+clip.size pop 800 eq {
+  /help.x 120 def
+  /help.y  90 def
+  /help.width 560 def
+  /help.height 359 def
+} if
+
 /help.text.x help.x 10 add def
 /help.text.y help.y 30 add def
 
@@ -608,10 +615,7 @@
   help.light help.dark
   help.width 2 add help.height 2 add
   over over
-
-  % just for testing: lilo has enough low memory
-  lilo { savescreen } { xsavescreen } ifelse
-
+  savescreen
   help.tmp .saved rot put
   drawborder
 
@@ -675,10 +679,12 @@
   help.messages .undef eq {
     % find help texts
     /help.messages
-      16 string dup config.lang "help.%s" 2 index sprintf
+      help.file free /help.file .undef def
+      16 string dup config.lang "%s.hlp" 2 index sprintf
       findfile exch free
-      dup .undef eq { pop "help.en" findfile } if
+      dup .undef eq { pop "en.hlp" findfile } if
       dup .undef eq { pop "" } if
+      /help.file over def
       cvs
     def
   } if

@@ -1,0 +1,190 @@
+<html><body>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="main">Rendszertöltõ súgó</a></h3> Üdvözli a <em>SUSE LINUX 9.2!</em><BR><BR> Válassza ki a kívánt funkciót ebbõl a menübõl. Ha gondot okoz a súgórendszerben mozgás, az <em>F1</em> megnyomásával hívja elõ a súgórendszer <a href="#help">leírását.</a>  A menü legfontosabb funkciói:<BR><BR>
+
+<a href="#harddisk">Rendszerindítás merevlemezrõl</a>: Ez a lehetõség semmit nem módosít a rendszeren. Mindössze elindítja a már korábban telepített operációs rendszert.<BR><BR>
+
+<a href="#linux">Telepítés</a>: Ez a telepítési mód a legtöbb gépen mûködik. Ha rendszerindítás közben lefagyást észlel, vagy problémák jelentkeznek a hardverkomponensek (például lemezvezérlõk vagy hálózati kárták) felismerése során, akkor próbálkozzon meg az alábbi telepítési lehetõségekkel. <BR><BR>
+
+<a href="#noacpi">Telepítés -- ACPI letiltva</a>: Nagyon sok mai számítógépen nem teljes vagy hibás az ACPI megvalósítása. Ez a menüpont letiltja a kernel ACPI-támogatását, ugyanakkor megtart számos további teljesítménynövelõ funkciót, például az IDE-merevlemezek DMA-támogatását. <BR><BR>
+
+<a href="#failsafe">Telepítés -- Biztonságos beállítások</a>: Ha a <em>Telepítés</em> mód nem bizonyult megfelelõnek, ez a mód lehet, hogy megoldja a problémát.<BR><BR>
+
+<a href="#manual">Kézi telepítés</a>: Ezt a menüpontot a szakértõknek szántuk. Ez a mód biztosítja a legnagyobb befolyást. Szintén ez használható extra modulok betöltésére, például a Rendszer-helyreállítás elindítása elõtt.<BR><BR>
+
+<a href="#rescue">Rendszer-helyreállítás</a>: Ez a rendszerkép egy kisméretû rendszert indít el RAM-ból. Akkor hasznos, ha a rendszer nem megfelelõen indul. A rendszer betöltése után jelentkezzen be root felhasználóként. <BR><BR>
+
+<a href="#memtest">Memóriateszt</a>: A memóriatesztelés nemcsak az újonnan behelyezett memóriamodulok ellenõrzésére jó. Ez a nyúzóteszt a rendszer nagy részét leterheli és alkalmas lehet hardverproblémák kimutatására. <BR><BR>
+
+<a href="#opt">Rendszerindítási paraméterek</a>: A rendszerindítási paraméterek teljesen megváltoztathatják a rendszer viselkedését. Ezek a kernel beállításai.<BR><BR>
+
+<a href="#help">F1 súgó</a>: Környezetérzékeny súgó. A rendszerindítási képernyõ aktív elemétõl függõen más és más képernyõket jelenít meg. Magáról a súgórendszerrõl is található leírás.<BR><BR>
+
+<a href="#videomode">F2 Videomód</a>: Itt választhatja ki a telepítés során használt képernyõfelbontást. Ha probléma van a grafikus telepítéssel, lehet, hogy a <em>szöveges mód</em> kerülõ megoldást biztosít.<BR><BR>
+
+<a href="#install_src">F3 Telepítés forrása</a>: Válassza ki a telepítés forrását.<BR><BR>
+
+<a href="#keytable">F4 Nyelv</a>: Adja meg a rendszertöltõ által használt nyelvi és billentyûzetbeállításokat.<BR><BR>
+
+<a href="#startup">F5 Kernelindítás</a>: Normál esetben semmilyen kernelüzenet nem látható. Ez az <em>F5</em> billentyû megnyomásával változtatható meg.<BR><BR>
+
+<a href="#driverupdate">F6 Meghajtóprogram-frissítés</a>: Nagyon új gépek esetében szükséglehet egy meghajtóprogram frissítésére a rendszer telepítéséhez.<BR><BR>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="help">A súgórendszer használata</a></h3> A rendszertöltõ online súgója környezetérzékeny. Információt nyújt a kiválasztott menüelemrõl, vagy ha a a rendszerindítási paramétereket módosítja, akkor megpróbál információt adni arról a paraméterrõl, amelyen a kurzor éppen áll.<BR>
+<BR> Navigációs billentyûk<BR><BR>
+
+  <em>Felfelé nyíl</em>: az elõzõ hivatkozás kiemelése<BR>
+  <em>Lefelé nyíl</em>: a következõ hivatkozás kiemelése<BR>
+  <em>Bal nyíl</em>, <em>Backspace</em>: visszatérés az elõzõ témakörre<BR>
+  <em>Jobb nyíl,</em> <em>Enter</em>, <em>szóköz</em>: következõ hivatkozás<BR>
+  <em>Page Up</em>: egy oldallal feljebb ugrás<BR>
+  <em>Page Down</em>: egy oldallal lejjebb ugrás<BR>
+  <em>Home</em>: oldal elejére ugrás<BR>
+  <em>End</em>: oldal végére ugrás<BR>
+  <em>Esc</em>: kilépés a súgóból<BR>
+
+<BR><BR>Visszatérés a <a href="#main">Kezdõoldalra</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="driverupdate">Meghajtóprogram frissítése</a></h3> Ha egy meghajtóprogram-frissítõ hajlékonylemezt vagy CD-t kíván használni, nyomja meg az <em>F6</em> billentyût. A rendszertöltõ a Linux kernel betöltése után felszólítja a meghajtóprogram-frissítõ adathordozó behelyezésére.<BR><BR> A meghajtóprogram-frissítõ általában egy hajlékonylemez, amelyen a a telepítés során szükséges hardver-meghajtóprogram legújabb változata vagy hibajavítása található. <BR><BR>Visszatérés a <a href="#main">Kezdõoldalra</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="videomode">Videomód kiválasztása</a></h3> Nyomja meg az <em>F2</em> gombot a grafikus kártya által támogatott videomódok listájának lekéréséhez. A monitor által támogatott legnagyobb felbontás alapértelmezésként ki van választva.<BR><BR> Elõfordulhat, hogy nem sikerül a monitor automatikus felismerése. Ebben az esetben válassza ki kézzel a preferált módot.<BR><BR> Ha gondok vannak a grafikus kártyával a telepítés során, a <em>szöveges mód</em> nyújthat kerülõ megoldást. <BR><BR>Visszatérés a <a href="#main">Kezdõoldalra</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="startup">Rendszerindító képernyõ kiválasztása</a></h3>
+
+<em>Az F5</em> billentyûvel változtatható meg a rendszerindító képernyõ mód. Ha akarja, használhatja közvetlenül a <a href="#o_splash">splash</a> kernelparamétert is.<BR>
+<BR>
+<em>A native</em> paraméter kikapcsolja a rendszerindító képernyõt (ua. mint splash=0)<BR>
+<BR>
+<em>A verbose</em> paraméter egy szép képet mutat, valamint a kernel- és a rendszerindítási üzeneteket<BR>
+<BR>
+<em>silent</em> módban semmilyen kernel- és a rendszerindítási üzenet nem látható, csak egy folyamatjelzõ sáv<BR><BR>
+
+<BR><BR>Visszatérés a <a href="#main">Kezdõoldalra</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="keytable">Nyelv és billentyûzetkiosztás kiválasztása</a></h3> Az <em>F4</em> gombbal módosíthatja a rendszertöltõ által használt nyelvet és billentyûzetkiosztást. <BR><BR>Visszatérés a <a href="#main">Kezdõoldalra</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="install_src">Telepítés forrása</a></h3> Az <em>F3</em> megnyomásával választható ki a telepítés forrása.<BR><BR> Ez ugyanaz, mint az <a href="#o_install">install</a> paraméter használata. <BR><BR>Visszatérés a <a href="#main">Kezdõoldalra</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="linux">Telepítés</a></h3> A <em>Telepítés</em> lehetõség kiválasztásával indul az alapértelmezett telepítés. A beírt <a href="#opt">rendszerindítási paraméterek</a> alkalmazásra kerülnek. Ez a lehetõség a szokásosan elérhetõ hardvereszközök számos funkcióját aktiválja. <BR><BR><BR><BR>
+
+<BR><BR>Visszatérés a <a href="#main">Kezdõoldalra</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="harddisk">Indítás merevlemezrõl</a></h3> A <em>Telepített OS indítása</em> lehetõséggel indítható el a helyi merevlemezen telepített rendszer. A rendszert helyesen kell telepíteni, mert csak az elsõ merevlemez mester rendszerindító rekordja (MBR) kerül indításra. Az elsõ merevlemez eszközazonosítóját a számítógép BIOS-a biztosítja. <BR><BR> Ez akkor hasznos, ha bentfelejtett a CD-t vagy DVD-t a meghajtóban, és feltétlenül a merevlemezrõl kívánja elindítani a rendszert.<BR><BR><BR><BR>
+
+<BR><BR>Visszatérés a <a href="#main">Kezdõoldalra</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="noacpi">Telepítés -- ACPI letiltva</a></h3> A SuSE Linuxban a fejlesztõi 2.5-ös kernel ACPI támogatása elérhetõ a stabil 2.4-es kernelhez is. A nagyon friss hardvereszközök néha igénylik az ACPI meglétét a megszakítások kezeléséhez. Az ACPI teljesen felváltja a régi APM rendszert.. <BR><BR> Ha problémákba ütközik a kernel indítása során, válassza a <em>Telepítés -- ACPI letiltva</em> lehetõséget. Ismert problémák hibás ACPI-vel rendelkezõ gépek esetén: <BR><BR> * a kernel lefagy rendszerindítás közben<BR> * a PCI kártyák nem kerülnek felismerésre, vagy nem sikerül tökéletesen inicializálni õket.<BR><BR><BR><BR>
+
+
+<BR><BR>Visszatérés a <a href="#main">Kezdõoldalra</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="failsafe">Telepítés -- Biztonságos beállítások</a></h3> Ha telepítés közben lefagyásokat vagy nem megismételhetõ hibákat észlel, válassza a <em>Telepítés -- Biztonságos beállítások</em> lehetõséget. Ez a beállítás letiltja az IDE-meghajtók DMA-támogatását és az összes tápellátás-felügyeleti funkciót. Tekintse meg továbbá az <a href="#o_apm">apm</a>, az <a href="#o_acpi">acpi</a> és az <a href="#o_ide">ide</a> paramétereket is. <BR><BR>Visszatérés a <a href="#main">Kezdõoldalra</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="manual">Kézi telepítés</a></h3>
+
+<em>A Kézi telepítés</em> lehetõvé teszi a szakemberek számára, hogy behangoljanak számos telepítési paramétert a rendszer telepítése, vagy a <a href="#rescue">Rendszer-helyreállítás</a> elindítása elõtt. E lehetõséget csak a szakembereknek ajánljuk <BR><BR>Visszatérés a <a href="#main">Kezdõoldalra</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="rescue">Rendszer-helyreállítás</a></h3> A <em>Rendszer-helyreállítás</em> egy kisméretû, RAM-lemez alapú rendszer. Innen lehetséges egy már telepített rendszer mindenféle módosításainak elvégzése. Mivel ebben a rendszerben csak alacsonyszintû eszközök érhetõk el, használatát csak szakembereknek javasoljuk<BR><BR><BR><BR>
+
+<BR><BR>Visszatérés a <a href="#main">Kezdõoldalra</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="memtest">Memóriateszt</a></h3> A mellékelt <em>Memóriateszt</em> remek lehetõséget nyújt egy rendszer hardvereszközeinek nyúzótesztelésére. Elsõdleges célja természetesen a hibás RAM-modulok azonosítása, de a rendszer egyéb részeit is terheli. <BR> Az, hogy a rendszer nem talál hibát, még nem garancia a memória tökéletességére, bár a legtöbb hiba elõjön a vizsgálat során.<BR><BR>
+
+<BR><BR>Visszatérés a <a href="#main">Kezdõoldalra</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="opt">Rendszerindítási paraméterek</a></h3> Kétféle rendszerindítási paraméter használható. Egyes paraméterek a telepítõprogram mûködését befolyásolják. Mások pedig a kernel mûködését. Néhány a leggyakoribb paraméterek közül: <BR><BR> a) telepítési beállítások<BR>
+<BR>
+  <a href="#o_install">install</a> -- telepítési forrás megadása<BR>
+  <a href="#network">hálózati beállítások</a> -- a hálózati beállítások<BR>
+  <a href="#o_vnc">vnc beállítások</a> -- beállítások VNC-n keresztüli telepítéshez <BR><BR> b) kernelbeállítások<BR>
+<BR>
+  <a href="#o_splash">splash</a> -- a rendszerindító képernyõ viselkedésének beállítása<BR>
+  <a href="#o_apm">apm</a> -- tápellátás-felügyelet átkapcsolása<BR>
+  <a href="#o_acpi">acpi</a> -- Speciális beállítási és tápellátási felület (Advanced Configuration and Power Interface)<BR>
+  <a href="#o_ide">ide</a> -- az IDE-alrendszer szabályozása<BR><BR>
+
+<BR><BR>Visszatérés a <a href="#main">Kezdõoldalra</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_install">Telepítési beállítások: install</a></h3> Alapértelmezés szerint telepítési forrásként a helyi CD-olvasókat keresi végig a rendszer. Hálózati telepítéshez az <em>install</em> paramétert kell használni. A telepítéshez használható protokollok:<BR> * FTP<BR> * NFS<BR> * HTTP<BR> A szintaxis pontosan olyan, mint a szokásos URL-eké. Ha például a szerver a 192.168.0.1 címen található és a szerver /install könyvtárából kíván NFS alapú telepítést végrehajtani, akkor így kell megadni a forrást:<BR><BR>
+
+  <em>install=nfs://192.168.0.1/install</em><BR><BR> A hálózati kártya beállítása történhet <em>dhcp</em> segítségével, vagy a <a href="#network">hálózati beállítások</a> között bemutatott módon megadhatók kézzel a paraméterek.<BR>
+
+<BR><BR>Visszatérés a <a href="#opt">Rendszerindítási beállításokhoz</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_splash">Kernelbeállítások: splash</a></h3> A rendszerindító képernyõ az a kép, amelyet a rendszer indulás közben megjelenít.<BR>
+<BR>
+<em>splash=0</em><BR><BR> Nem látható rendszerindító képernyõ Ez nagyon régi monitorok esetén lehet hasznos, vagy egyes hibák elõfordulása esetén.<BR>
+<BR>
+<em>splash=verbose</em><BR><BR> A rendszerindító képernyõ, valamint a kernel- és rendszerindítási üzenetek egyaránt látszanak.<BR>
+<BR>
+<em>splash=silent</em><BR><BR> Megjelenik a rendszerindító képernyõ, de üzenetek nem láthatók. Ehelyett egy folyamatjelzõ jelenik meg a képernyõn.<BR><BR>
+<BR> Visszatérés a <a href="#opt">Rendszerindítási beállításokhoz</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="network">Telepítési beállítások: Hálózati beállítások</a></h3> Itt közvetlenül be lehet állítani a hálózati csatolót. A YaST2 a hardvert majd késõbb felismeri. A hálózat beállításának minimális szintje a gép IP-címének és alhálózati maszkjának megadása. Például:<BR><BR>
+
+  <em>hostip=192.168.0.10 netmask=255.255.255.0</em><BR>
+<BR> vagy rövidebb formában:<BR><BR>
+
+  <em>hostip=192.168.0.10/24</em><BR>
+<BR> Ha <a href="#o_install">hálózati alapú telepítést</a> ír elõ, de nem adja meg ezeket a paramétereket, akkor a telepítõprogram <em>dhcp</em> segítségével próbálja meg beállítani a hálózati csatolót. Ha szükséges, az alapértelmezett átjáró a <em>gateway</em> paraméterrel adható meg. Például:<BR><BR>
+
+  <em>gateway=192.168.0.8</em><BR><BR>
+
+<BR><BR>Visszatérés a <a href="#opt">Rendszerindítási beállításokhoz</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_vnc">Telepítési beállítások: vnc</a></h3> A VNC-telepítés bekapcsolásához a vnc és vncpassword paramétereket kell megadni:<BR><BR>
+
+  <em>vnc=1 vncpassword=mintajelszó</em><BR><BR> Elindul a VNC szerver és a YaST2 távolról, VNC-kliensen keresztül vezérelhetõ<BR><BR>
+
+<BR><BR>Visszatérés a <a href="#opt">Rendszerindítási beállításokhoz</a> <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_apm">Kernelbeállítások: apm</a></h3> Az APM a mai gépeken használt kétféle tápellátás-felügyeleti rendszer egyike. Általában noteszgépeken használatos olyan funkciókra, mint a rendszer felfüggesztése a memória lemezre írásával, de ez felelõs a kikapcsolás után a számítógép lekapcsolásáért is. Az APM használhatához egy helyesen mûködõ BIOS-ra van szükség. Ha a BIOS sérült, akkor elõfordulhat, hogy az APM csak korlátozott mértékben használható, sõt, az is, hogy miatta nem mûködik a számítógép. Éppen ezért kikapcsolható az alábbi paraméterrel:<BR><BR>
+
+  <em>apm=off</em> -- az APM teljes kikapcsolása<BR><BR> Néhány újabb számítógép a modernebb <a href="#o_acpi">ACPI</a> rendszert használja. <BR><BR>Visszatérés a <a href="#opt">Rendszerindítási beállításokhoz</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_acpi">Kernelbeállítások: acpi</a></h3> Az ACPI (Advanced Configuration and Power Interface) nevû szabvány az operációs rendszer és a BIOS közötti tápellátási és konfiguráció-felügyeleti illesztõket definiálja. Alapértelmezés szerint az <em>acpi</em> paraméter bekapcsolásra kerül, ha 2000-nél frissebb BIOS-t észlel a telepítõprogram. Az ACPI mûködése többféle módon is szabályozható:<BR>
+<BR>
+  <em>pci=noacpi</em> -- ne az ACPI irányítsa át a PCI-megszakításokat <em>acpi=oldboot</em> -- az ACPI-nek csak a rendszerindításhoz kapcsolódó részei kerülnek aktiválásrathat are relevant for booting remain activated<BR><BR>
+  <em>acpi=off</em> -- az ACPI teljes kikapcsolása<BR>
+  <em>acpi=force</em> -- az ACPI bekapcsolása még akkor is, ha a BIOS 2000-nél régebbi<BR>
+<BR> Különösen új számítógépeken az ACPI teljesen felváltja a régebbi <a href="#o_apm">apm</a> rendszert. <BR><BR>Visszatérés a <a href="#opt">Rendszerindítási beállításokhoz</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_ide">Kernelbeállítások: ide</a></h3> Szemben az SCSI illesztõvel, az IDE-felület szinte minden asztali munkaállomásban megtalálható. Az IDE-rendszerekkel kapcsolatban elõforduló esetleges hardverproblémák elkerüléséhez használható a következõ paraméter: <BR><BR> 
+
+  <em>ide=nodma</em> -- a DMA-kezelés kikapcsolása az IDE-meghajtók számára<BR><BR>
+
+
+
+<BR><BR>Visszatérés a <a href="#opt">Rendszerindítási beállításokhoz.</a> </body></html>

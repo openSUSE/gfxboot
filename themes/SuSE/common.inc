@@ -302,16 +302,16 @@
   } if
 
   % add splash only if an entry already exists
-  bc.cmd "splash" bootopt.find dup .undef ne {
-    % remove existing entry
-    dup skipnonspaces skipspaces strcpy pop
-
-    % append new entry
-    xmenu.splash .xm_current get splash.options exch get
-    "%s " bc.cmd dup length add sprintf
-  } {
-    pop
-  } ifelse
+%  bc.cmd "splash" bootopt.find dup .undef ne {
+%    % remove existing entry
+%    dup skipnonspaces skipspaces strcpy pop
+%
+%    % append new entry
+%    xmenu.splash .xm_current get splash.options exch get
+%    "%s " bc.cmd dup length add sprintf
+%  } {
+%    pop
+%  } ifelse
 
   xmenu.profile {
     profile.options xmenu.profile .xm_current get get dup "" ne {
@@ -603,7 +603,10 @@
   currentpoint
   menu.status {
     menu.bar.color
-    setcolor menu.bar.width menu.bar.height fillrect
+    setcolor menu.bar.width menu.bar.height
+    80 settransparency
+    fillrect
+    0 settransparency
   } {
     currentpoint menu.bar.width menu.bar.height image
   } ifelse
@@ -1043,8 +1046,8 @@
 
   /menu.text.normal    black             def
   /menu.text.select    white             def
-  /boot.text.options   white             def
-  /boot.text.normal    white             def
+  /boot.text.options   black             def
+  /boot.text.normal    black             def
   /infobox.bg          lightgray         def
   /infobox.text.normal black             def
 
@@ -1052,6 +1055,12 @@
 
   /frame1.pos  { 100  90 } def
   /frame1.size { 325 195 } def
+
+  clip.size pop 800 eq {
+    /frame1.pos  { 230  90 } def
+    /frame1.size { 340 195 } def
+  } if
+
   /frame4.pos  { 560  62 } def
   /frame4.size {  22 264 } def
 
@@ -1062,9 +1071,9 @@
   /menu.max.entries 7 def
   /menu.scrollbar false def
 
-  /boot.label.len 220 def
+  /boot.label.len 230 def
 
-  /boot.pos { boot.label.len 10 add 299 } def
+  /boot.pos { boot.label.len 10 add 350 } def
 
   /boot.buf.size 256 def
   /boot.buf boot.buf.size string def
@@ -1073,7 +1082,7 @@
   /ms.up       {   0 480 }  def
   /ms.down     {  23 480 }  def
 
-  /update.pos { clip.size pop txt_dud_ready strsize pop sub 20 sub 425 } def
+  /update.pos { clip.size pop txt_dud_ready strsize pop sub 20 sub clip.size exch pop 55 sub } def
 
 } def
 
@@ -1093,13 +1102,15 @@
   } if
 
   dup keyF8 eq syslinux and {
-    "kroete.data" findfile kroete.dir idle
+    kroete.file .undef eq { /kroete.file "kroete.dat" findfile def } if
+    kroete.file kroete.dir idle
     /kroete.dir kroete.dir 1 xor def
     pop 0
   } if
 
   dup keyF9 eq syslinux and {
     .undef 0 idle
+    kroete.file free /kroete.file .undef def
     pop 0
   } if
 
@@ -1357,12 +1368,12 @@
 
 % dtrace 0x11000 cvp getdword pop
 
-/clip.size { 800 600 } def
-
 % 640 480 8 findmode setmode not { false .end } if
-800 600 8 findmode setmode not { false .end } if
+800 600 16 findmode setmode not { false .end } if
 
-"background.pcx" findfile setimage loadpalette
+/clip.size { screen.size } def
+
+"back.jpg" findfile /background.file over def setimage loadpalette
 /max_image_colors image.colors def
 
 % 7 dup 0xffffff setpalette setcolor
@@ -1379,14 +1390,17 @@ bsplash.show
 /yellow              0xffff20          newcolor
 % /lightgray           0xececf4          newcolor
 % /lightgray           0x839db6          newcolor
-/lightgray           0xe0e6ed          newcolor
+
+% /lightgray           0xe0e6ed          newcolor
+/lightgray           0xd8deed          newcolor
+
 % /lightgray           0xa9bbcd          newcolor
 /dotcolor            0xa9bbcd          newcolor
 /lightdotcolor       0xeff2f6          newcolor
 
 %% include theme_colors.inc
 
-/font.normal "16x16.font" findfile def
+/font.normal "16x16.fnt" findfile def
 /font.large font.normal def
 
 /cmdline.hidden 256 string def
@@ -1395,5 +1409,6 @@ bsplash.show
 /kroete.dir 0 def
 
 /debug 0 def
+
 
 

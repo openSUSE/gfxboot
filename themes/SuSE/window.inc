@@ -529,8 +529,7 @@
   white black
   dialog.tmp .width get 2 add dialog.tmp .height get 2 add
   over over
-  dialog.tmp .ed.list get .undef ne syslinux and
-    { xsavescreen } { savescreen } ifelse
+  savescreen
   dialog.tmp .saved rot put
   drawborder
 

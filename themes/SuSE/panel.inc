@@ -8,7 +8,7 @@
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Some global vars.
 %
-/panel.text.y	461 def
+/panel.text.y	{ clip.size exch pop 19 sub } def
 /panel.font	font.normal def
 /panel.normal	black def
 /panel.high	fn_color def
@@ -42,12 +42,12 @@
 
         [ keyF3 0 "F3" /panel.install /panel.install.width /panel.install.update /install.init ]
         [ keyF4 0 "F4" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
-        [ keyF5 0 "F5" /panel.splash /panel.splash.width /panel.splash.update /splash.init ]
-        [ keyF6 0 "F6" /panel.dud /panel.dud.width /panel.dud.update .undef ]
+%        [ keyF5 0 "F5" /panel.splash /panel.splash.width /panel.splash.update /splash.init ]
+        [ keyF5 0 "F5" /panel.dud /panel.dud.width /panel.dud.update .undef ]
 
         do_64bit_check 32+64bit_source and {
           64bit {
-            [ keyF7 0 "F7" /panel.bits /panel.bits.width /panel.bits.update /bits.init ]
+            [ keyF6 0 "F6" /panel.bits /panel.bits.width /panel.bits.update /bits.init ]
           } if
         } if
 
