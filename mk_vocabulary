@@ -69,7 +69,9 @@
 
   settransparency currenttransparency
 
-  image.unpack
+  unpackimage
+
+  keepmode
 
   xxx
 

@@ -1141,6 +1141,10 @@
     1 memsize print "/" print print "  " print
     moveto
 
+    currentpoint 300 40 moveto
+    2 memsize print "/" print print "  " print
+    moveto
+
     setcolor
     pop 0
   } if
@@ -1160,12 +1164,16 @@
     pop 0
   } if
 
-  dup keyF11 eq {
+  dup keyF11 eq debug 1 ge and {
 
-    0 1 479 {
-      0 1 639 {
+    dtrace
+
+    0 1 screen.size exch pop {
+      0 1 screen.size pop {
         over moveto
-        currentpoint 3 div 8 shl exch 3 div add setcolor
+        currentpoint 8 shl screen.size exch pop div 8 shl exch 8 shl screen.size pop div add
+        screen.size add currentpoint add sub 8 shl screen.size add div 2 div 16 shl add
+        setcolor
         putpixel
       } for
       pop
@@ -1176,6 +1184,9 @@
 
   dup keyF12 eq {
     % mouse support testing
+
+    1 keepmode
+
     /mouse xxx def
     red setcolor
     mouse .undef eq {

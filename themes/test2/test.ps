@@ -70,10 +70,10 @@
 } def
 
 
-% 800 600 16 findmode setmode not { false .end } if
-640 480 8 findmode setmode not { false .end } if
+800 600 16 findmode setmode not { false .end } if
+% 640 480 8 findmode setmode not { false .end } if
 
-"test.pcx" findfile
+"test.jpg" findfile
 
 setimage loadpalette
 
@@ -85,6 +85,9 @@ setimage loadpalette
 white settextmodecolor
 
 0 0 moveto 0 0 image.size image
+
+
+dtrace
 
 /mouse xxx def
 
