@@ -1357,10 +1357,10 @@
 
 % dtrace 0x11000 cvp getdword pop
 
-/clip.size { 640 480 } def
+/clip.size { 800 600 } def
 
-640 480 8 findmode setmode not { false .end } if
-% 800 600 8 findmode setmode not { false .end } if
+% 640 480 8 findmode setmode not { false .end } if
+800 600 8 findmode setmode not { false .end } if
 
 "background.pcx" findfile setimage loadpalette
 /max_image_colors image.colors def

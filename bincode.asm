@@ -1,3 +1,7 @@
+			bits 16
+
+			global _start
+
 %define			debug 1
 
 %include		"vocabulary.inc"
@@ -117,6 +121,8 @@ mhead.size		equ 9
 
 			section .text
 
+_start:
+
 ; jmp table to interface functions
 jt_init			dw gfx_init
 jt_done			dw gfx_done
@@ -167,6 +173,7 @@ dict_size		dw 0		; dict entries
 
 boot_cs			dw 0		; seg
 boot_sysconfig		dw 0		; ofs
+boot_callback		dd 0 		; seg:ofs
 
 pstack			dd 0		; (seg:ofs)
 pstack_size		dw 0		; entries
@@ -538,6 +545,14 @@ gfx_init:
 		mov [mem_archive],edi
 		mov [boot_cs],dx
 		mov [boot_sysconfig],si
+
+		mov es,dx
+		mov ax,[es:si+9]
+		or ax,ax
+		jz gfx_init_20
+		mov [boot_callback+2],dx
+		mov [boot_callback],ax
+gfx_init_20:
 
 		; setup gdt
 		segofs2lin cs,word pm_gdt,dword [pm_gdt+2]
@@ -1384,6 +1399,16 @@ gfx_password_done_90:
 		pop fs
 		retf
 
+
+gfx_cb:
+		cmp dword [boot_callback],0
+		jz gfx_cb_90
+		push ds
+		call far [boot_callback]
+		pop ds
+
+gfx_cb_90:
+		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -6378,7 +6403,14 @@ prim_findfile:
 		mov dl,t_string
 		call get_1arg
 		jc prim_findfile_90
+		push eax
 		call find_file
+		pop ecx
+		mov dl,t_ptr
+		or eax,eax
+		jnz prim_findfile_20
+		xchg eax,ecx
+		call find_file_ext
 		mov dl,t_ptr
 		or eax,eax
 		jnz prim_findfile_20
@@ -10235,6 +10267,7 @@ mod_setvolume_90:
 		ret
 
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; Check for cpuid instruction.
 ;
 ; return:
@@ -10291,6 +10324,105 @@ chk_64bit:
 		jnz chk_64bit_90
 		stc
 chk_64bit_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+prim_xxx:
+		mov eax,9
+		jmp $
+		call gfx_cb
+		jmp pr_getint
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; Find (and read) file from file system.
+;
+;  eax		file name (lin)
+;
+; return:
+;  eax		file start (lin)
+;
+; Note: use find_mem_size to find out the file size
+find_file_ext:
+		mov dl,t_ptr
+		push eax
+		call get_length
+		xchg eax,ecx
+		pop eax
+		or ecx,ecx
+		jz find_file_ext_80
+		cmp ecx,64
+		jae find_file_ext_80
+
+		push cx
+
+		push eax
+		mov al,0
+		call gfx_cb			; get file name buffer address (edx)
+		call lin2so
+		pop si
+		pop fs
+		lin2segofs edx,es,di
+
+		pop cx
+
+		fs rep movsb
+		mov al,0
+		rep stosb
+
+		mov al,1
+		call gfx_cb			; open file (ecx size)
+		or al,al
+		jnz find_file_ext_80
+
+		mov eax,ecx
+		push ecx
+		call malloc
+		pop ecx
+		or eax,eax
+		jz find_file_ext_80
+
+		push ecx
+		push eax
+
+		mov ebx,eax
+
+find_file_ext_20:
+		push ebx
+		mov al,2
+		call gfx_cb			; read next chunk (edx buffer, ecx len)
+		pop ebx
+		or ecx,ecx
+		jz find_file_ext_50
+
+		lin2segofs edx,fs,si
+		lin2segofs ebx,es,di
+
+		add ebx,ecx
+
+		fs rep movsb
+
+		jmp find_file_ext_20
+
+find_file_ext_50:		
+
+		pop eax
+		pop ecx
+
+		; did we get everything...?
+		sub ebx,ecx
+		cmp eax,ebx
+		jz find_file_ext_90
+
+		; ... no -> read error
+		call free
+
+find_file_ext_80:
+		xor eax,eax
+find_file_ext_90:
 		ret
 
 

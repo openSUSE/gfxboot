@@ -17,8 +17,11 @@ mkbootmsg: mkbootmsg.c vocabulary.h bincode.h
 addblack: addblack.c
 	$(CC) $(CFLAGS) $< -o $@
 
-bincode:  bincode.asm vocabulary.inc modplay_defines.inc modplay.inc kroete.inc
-	nasm -f bin -O10 -o $@ -l $(@).lst $<
+bincode.o:  bincode.asm vocabulary.inc modplay_defines.inc modplay.inc kroete.inc
+	nasm -f elf -O10 -o $@ -l bincode.lst $<
+
+bincode: bincode.o jpeg.o
+	ld --section-start .text=0 --oformat binary -o $@ $^
 
 bincode.h:  bincode bin2c
 	./bin2c bincode >bincode.h
@@ -32,6 +35,9 @@ vocabulary.inc: mk_vocabulary
 vocabulary.h: mk_vocabulary
 	./mk_vocabulary -c >$@
 
+jpeg.o: jpeg.S
+	as -ahlsn=jpeg.lst -o $@ $<
+
 install: all
 	install -d -m 755 $(DESTDIR)/usr/sbin $(DESTDIR)/usr/share/gfxboot
 	install -m 755 mkbootmsg getx11font help2txt $(DESTDIR)/usr/sbin
@@ -39,7 +45,8 @@ install: all
 	cp -a themes $(DESTDIR)/usr/share/gfxboot
 
 clean: themes
-	@rm -f mkbootmsg bincode getx11font addblack bincode.h bin2c *.lst vocabulary.inc vocabulary.h *~
+	@rm -f mkbootmsg bincode getx11font addblack bincode.h bin2c *.lst vocabulary.inc vocabulary.h *.o *~
+	@rm -rf tmp
 
 themes:
 	@for i in $(THEMES) ; do make -C $$i BINDIR=../../ $(MAKECMDGOALS) ; done

@@ -1,0 +1,83 @@
+% bool values
+/true     0 0 eq def
+/false    0 0 ne def
+
+% type values
+/t_none          0 def
+/t_int           1 def
+/t_unsigned      2 def
+/t_bool          3 def
+/t_string        4 def
+/t_code          5 def
+/t_ret           6 def
+/t_prim          7 def
+/t_sec           8 def
+/t_dict_idx      9 def
+/t_array        10 def
+/t_end          11 def
+/t_ptr          12 def
+
+/.value { t_int settype } def
+/.undef 0 t_none settype def
+/.end 0 t_end settype def
+
+
+% Convert object to pointer.
+%
+% ( obj ) ==> ( ptr )
+%
+/cvp { t_ptr settype } def
+
+
+% Allocate and define a new color.
+%
+% ( palette ) ==> ( color )
+%
+/newcolor {
+  colorbits 8 le {
+    newcolor.count .undef eq { /newcolor.count 0 def } if
+    max_image_colors newcolor.count add
+    dup rot setpalette
+    /newcolor.count newcolor.count 1 add def
+  } if
+  def
+} def
+
+dtrace
+/msg "message" findfile def
+msg length pop
+msg 0x1 get pop 
+
+
+640 480 8 findmode setmode not { false .end } if
+
+"jaguar.pcx" findfile setimage loadpalette
+
+/max_image_colors image.colors def
+
+/black               0x000000          newcolor
+/white               0xffffff          newcolor
+
+white settextmodecolor
+
+0 0 moveto 0 0 image.size image
+
+/screen1 0 200 moveto 200 100 savescreen def
+
+200 200 moveto screen1 restorescreen
+
+screen1
+
+dtrace
+
+3 setmode
+7 settextmodecolor
+
+dumpmem
+
+trace
+
+pop
+
+true
+
