@@ -10950,7 +10950,7 @@ find_file_ext:
 
 		fs rep movsb
 		mov al,0
-		rep stosb
+		stosb
 
 		mov al,1
 		call gfx_cb			; open file (ecx size)
