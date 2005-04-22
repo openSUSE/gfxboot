@@ -903,6 +903,7 @@
       dup "linux"     eq { pop txt_install        return } if
       dup "failsafe"  eq { pop txt_safe_install   return } if
     } ifelse
+    dup "live"      eq { pop "SUSE LINUX 9.3 LiveCD" return } if
     dup "noacpi"    eq { pop txt_noacpi_install return } if
     dup "manual"    eq { pop txt_manual_install return } if
     dup "rescue"    eq { pop txt_rescue         return } if
