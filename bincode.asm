@@ -2929,7 +2929,9 @@ set_mode_25:
 		mov dh,ah
 		cmp al,6			; direct color
 		jnz set_mode_30
-		sub dh,[es:di+25h]		; reserved color bits
+		mov dh,[es:di+1fh]		; red
+		add dh,[es:di+21h]		; green
+		add dh,[es:di+23h]		; blue
 		jmp set_mode_40
 set_mode_30:
 		cmp al,4			; PL 8
@@ -3130,7 +3132,9 @@ find_mode_40:
 		jnz find_mode_60
 		cmp dh,32
 		jz find_mode_70
-		sub dh,[es:di+25h]		; reserved color bits
+		mov dh,[es:di+1fh]		; red
+		add dh,[es:di+21h]		; green
+		add dh,[es:di+23h]		; blue
 		jmp find_mode_70
 find_mode_60:
 		cmp dl,4			; PL8

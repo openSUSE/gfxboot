@@ -1,3 +1,6 @@
+22/4/2005:	v3.0.19
+	- fixed 16 bit color mode selection (#79312)
+
 21/4/2005:	v3.0.18
 	- added live cd entry
 
