@@ -909,6 +909,10 @@
     dup "rescue"    eq { pop txt_rescue         return } if
     dup "hwcheck"   eq { pop "Hardware Check"   return } if
     dup "harddisk"  eq { pop txt_boot_harddisk  return } if
+    dup "menu1"     eq { pop txt_inst_menu1     return } if
+    dup "menu2"     eq { pop txt_inst_menu2     return } if
+    dup "menu3"     eq { pop txt_inst_menu3     return } if
+    dup "menu4"     eq { pop txt_inst_menu4     return } if
   } {
     dup "linux"     eq { pop "Linux"        return } if
     dup "failsafe"  eq { pop txt_safe_linux return } if
@@ -1349,6 +1353,36 @@
   dup .buttons [
     button.ok     button.notdefault    actPowerOff actNoClose or button.setaction
     button.cancel button.default       actNothing                button.setaction
+  ] put
+  dup window.init
+      window.show
+
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Warn about something.
+%
+% ( ) ==> ( )
+%
+/show_warning {
+  menu.entry 0 lt { -1 return } if
+  menu.entry menu.texts length ge { -1 return } if
+
+  menu.texts menu.entry get
+  "menu1" eq not {
+    return
+  } if
+
+  /window.action actNothing def
+
+  window.dialog
+
+  dup .title txt_inst_warn_title put
+  dup .text txt_inst_warn put
+  dup .buttons [
+    button.ok     button.notdefault actStart    button.setaction
+    button.cancel button.default    actNothing  button.setaction
   ] put
   dup window.init
       window.show

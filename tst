@@ -54,6 +54,7 @@ function tst_isolinux {
       echo -e "\n***  Warning: $program not supported - using dosemu  ***\n"
     fi
     perl -p -e "s:<image>:`pwd`/$img:g" test/dosemurc.cdrom >$dosrc
+    [ "`echo $DISPLAY | head -c 1`" = ':' ] || echo '$_X_mitshm = (off)' >>$dosrc
     xdosemu -Q -f $dosrc "$@"
   fi
 }
@@ -103,6 +104,7 @@ function tst_lilo {
       echo -e "\n***  Warning: $program not supported - using dosemu  ***\n"
     fi
     perl -p -e "s:<image>:`pwd`/$img:g" test/dosemurc.floppy >$dosrc
+    [ "`echo $DISPLAY | head -c 1`" = ':' ] || echo '$_X_mitshm = (off)' >>$dosrc
     xdosemu -f $dosrc "$@"
   fi
 }
@@ -192,6 +194,7 @@ function tst_syslinux {
       echo -e "\n***  Warning: $program not supported - using dosemu  ***\n"
     fi
     perl -p -e "s:<image>:`pwd`/$img:g" test/dosemurc.floppy >$dosrc
+    [ "`echo $DISPLAY | head -c 1`" = ':' ] || echo '$_X_mitshm = (off)' >>$dosrc
     xdosemu -f $dosrc "$@"
   fi
 }

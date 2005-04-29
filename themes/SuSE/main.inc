@@ -169,6 +169,7 @@
 
   dup keyEnter eq {
     /window.action actStart def
+    show_warning
     pop 0
   } if
 

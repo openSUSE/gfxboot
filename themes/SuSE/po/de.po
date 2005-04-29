@@ -252,3 +252,27 @@ msgstr "Treiber"
 msgid "Domain\n"
 msgstr "Domain\n"
 
+#. txt_inst_warn
+msgid "WARNING: An existing Windows installation will be deleted!"
+msgstr "ACHTUNG: Falls Windows auf ihrer Festplatte\ninstalliert ist, wird dies gelöscht!"
+
+#. txt_inst_warn_title
+msgid "Vorsicht..."
+msgstr ""
+
+#. txt_inst_menu1
+msgid "Installation, \"Linux only\""
+msgstr "Installation, \"Linux only\""
+
+#. txt_inst_menu2
+msgid "Installation, \"Dual-Boot, 50/50\""
+msgstr "Installation, \"Dual-Boot, 50/50\""
+
+#. txt_inst_menu3
+msgid "Installation, \"Dual-Boot, 75/25\""
+msgstr "Installation, \"Dual-Boot, 75/25\""
+
+#. txt_inst_menu4
+msgid "Installation, \"Dual-Boot, 25/75\""
+msgstr "Installation, \"Dual-Boot, 25/75\""
+

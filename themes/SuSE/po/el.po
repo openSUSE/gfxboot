@@ -251,3 +251,27 @@ msgstr "Οδηγός"
 msgid "Domain\n"
 msgstr "Τομέας\n"
 
+#. txt_inst_warn
+msgid "WARNING: An existing Windows installation will be deleted!"
+msgstr ""
+
+#. txt_inst_warn_title
+msgid "Careful..."
+msgstr ""
+
+#. txt_inst_menu1
+msgid "Installation, \"Linux only\""
+msgstr ""
+
+#. txt_inst_menu2
+msgid "Installation, \"Dual-Boot, 50/50\""
+msgstr ""
+
+#. txt_inst_menu3
+msgid "Installation, \"Dual-Boot, 75/25\""
+msgstr ""
+
+#. txt_inst_menu4
+msgid "Installation, \"Dual-Boot, 25/75\""
+msgstr ""
+
