@@ -4,7 +4,7 @@ X11LIBS	 = /usr/X11/lib
 THEMES	 = $(wildcard themes/*)
 # LIBFILES = happysuse.mod system.inc
 
-.PHONY: all themes clean install
+.PHONY: all themes clean install doc
 
 all:	bin2c mkbootmsg bincode getx11font addblack
 
@@ -44,10 +44,13 @@ install: all
 #	install -m 644 $(LIBFILES) $(DESTDIR)/usr/share/gfxboot
 	cp -a themes $(DESTDIR)/usr/share/gfxboot
 
-clean: themes
+clean: themes doc
 	@rm -f mkbootmsg bincode getx11font addblack bincode.h bin2c *.lst *.map vocabulary.inc vocabulary.h *.o *~
 	@rm -rf tmp
 
 themes:
 	@for i in $(THEMES) ; do make -C $$i BINDIR=../../ $(MAKECMDGOALS) ; done
+
+doc:
+	make -C doc $(MAKECMDGOALS)
 

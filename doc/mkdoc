@@ -1,0 +1,202 @@
+#! /usr/bin/perl
+
+sub print_entry;
+sub word_sort;
+
+while(<>) {
+  chomp;
+
+  if(!/^;/) {
+    undef $word;
+
+    next;
+  }
+
+  if(/^;;\s*(\S+)\s*-\s*(.*?)\s*$/) {
+    $word = $1;
+    $descr->{$word} = $2;
+    $f_id->{$word} = sprintf "f_%04d", ++$f_id_cnt;
+
+    undef $para;
+    undef $ex;
+
+    next;
+  }
+
+  if(defined($word) && s/^;\s*//) {
+    s/\s*$//;
+
+    if($ex) {
+      push @{$example->{$word}}, $_;
+      next;
+    }
+
+    if(s/^group:\s*//) {
+      for $g (split /,\s*|\s+/) {
+        $group->{$g}{$word} = 1;
+        $group_r->{$word}{$g} = 1;
+      }
+      next;
+    }
+
+    if(/^\s*\(\s*((.*?)--(.*?))\s*\)\s*$/) {
+      for $p (split ' ', "$2 $3") {
+        $params->{$word}{$p} = 1 unless $p eq '|';
+      }
+      push @{$usage->{$word}}, $1;
+
+      next;
+    }
+
+    if($_ eq '') {
+      undef $para;
+
+      next;
+    }
+
+    if(!$para && /^\s*example/) {
+      $ex = 1;
+      next;
+    }
+
+    if(/^([A-Za-z_0-9]+):/ && $params->{$word}{$1}) {
+      undef $para;
+    }
+
+    if(!$para) {
+      $para = 1;
+      push @{$paras->{$word}}, $_;
+
+      next;
+    }
+    else {
+      ${$paras->{$word}}[-1] .= " $_";
+    }
+
+  }
+
+}
+
+
+print "<itemizedlist>\n";
+
+for $word (sort word_sort keys %$descr) {
+  print "  <listitem>\n";
+
+  print_entry $word;
+
+  print "  </listitem>\n"
+}
+
+print "</itemizedlist>\n";
+
+=head 0
+for $w (sort keys %$descr) {
+  print "$w - $descr->{$w}\n";
+  print "a: ", join(' ' , sort keys(%{$params->{$w}})), "\n";
+  for $u (@{$usage->{$w}}) {
+    print "u: $u\n";
+  }
+
+  for $x (@{$example->{$w}}) {
+    print "x: $x\n";
+  }
+
+  for $p (@{$paras->{$w}}) {
+    print "p: $p\n";
+  }
+
+  print "\n";
+}
+
+for $g (sort keys %$group) {
+  print "g $g: ", join(' ', sort keys(%{$group->{$g}})), "\n";
+}
+=cut
+
+sub print_entry
+{
+  local $_;
+  my ($word, $u, $v, %g, $l, $ml);
+
+  $word = shift;
+
+  print "    <para id=\"$f_id->{$word}\"><function>$word</function> &dash1; $descr->{$word}</para>\n";
+
+  for $u (@{$usage->{$word}}) {
+    $u =~ s/([A-Za-z_0-9]+)/<parameter>$1<\/parameter>/g;
+    $u =~ s/--/&dash2;/;
+
+    print "    <para>( $u )</para>\n";
+
+  }
+
+  for $u (@{$paras->{$word}}) {
+    $u =~ s/\s+/ /g;
+
+    $u =~ s/^note:\s*/<emphasis>Note:<\/emphasis> /i;
+
+    $u =~ s/([A-Za-z_0-9]+)/$params->{$word}{$1} ? "<parameter>$1<\/parameter>" : $1/ge;
+
+    $u =~ s/\@([A-Za-z_0-9\[\]\{\}.]+)/
+      $_ = $1,
+      s#\.$##,
+      $f_id->{$_} ? $_ eq $word ? "<function>$_<\/function>" : "<function><link linkend=\"$f_id->{$_}\">$_<\/link><\/function>" : $_
+    /ge;
+
+    print "    <para>$u</para>\n";
+  }
+
+  for $u (keys %{$group_r->{$word}}) {
+    for $v (keys %{$group->{$u}}) {
+      $g{$v} = 1 if $v ne $word;
+    }
+  }
+
+  if(%g) {
+    print "    <para><emphasis>See also:</emphasis> ";
+    $v = 0;
+    for $u (sort keys %g) {
+      print ", " if $v++;
+      print "<function><link linkend=\"$f_id->{$u}\">$u</link></function>";
+    }
+    print "</para>\n";
+  }
+
+  if($v = $example->{$word}) {
+    shift @$v while @$v && $v->[0] eq '';
+    pop @$v while @$v && $v->[-1] eq '';
+    print "    <example><title/><para><programlisting>\n";
+    for $u (@$v) {
+      if($u =~ /^(.*?)\s*%/) {
+        $l = length $1;
+      }
+      else {
+        $l = length $u;
+      }
+      $ml = $l if $l > $ml;
+    }
+
+    $ml = ($ml + 7 + 4) & ~7;
+
+    for $u (@$v) {
+      if($u =~ /^(.*?)\s*%(.*)$/) {
+        printf "  %-${ml}s%%%s\n", $1, $2;
+      }
+      else {
+        print "  $u\n";
+      }
+    }
+    print "    </programlisting></para></example>\n";
+  }
+}
+
+
+sub word_sort
+{
+  my $x = $a eq '{' || $a eq '}' ? " $a" : $a;
+  my $y = $b eq '{' || $b eq '}' ? " $b" : $b;;
+
+  return $x cmp $y;
+}
+

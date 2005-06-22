@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"
+[
+  <!ENTITY dash1 "&#8211;">
+  <!ENTITY dash2 "&#8212;">
+  <!ENTITY reference.xml SYSTEM "reference.xml">
+]
+>
+
+<article>
+  <articleinfo>
+    <title>gfxboot reference</title>
+
+    <abstract>
+      <para>
+        Creating bootloader graphics with gfxboot for syslinux/isolinux, lilo, and grub.
+      </para>
+    </abstract>
+  </articleinfo>
+
+  <sect1 id="overview">
+    <title>Overview</title>
+
+      <para>
+        To make a graphical boot screen you'll have to write a small script. Optionally you
+        might want font files, graphics files and sound files.
+      </para><para>
+        The script is written in a Postscript-like language.
+        You must program everything related to graphics output in it. That does
+        include e.g. drawing the background picture and in particular handling all kind
+        of user input.
+      </para><para>
+        Font files have a special format. Create them using
+        <link linkend="getx11font"><command>getx11font</command></link>.
+        Font dimensions must not exceed a size of 32x32. Maximum font file size is 64kB.
+      </para><para>
+        If you have written a script, convert it into byte code
+        using <link linkend="mkbootmsg"><command>mkbootmsg</command></link>.
+      </para><para>
+        Debugging this script is rather tedious. For this, <command>mkbootmsg -l</command>
+        will give you debug information that is useful together with the <function>dtrace</function>
+        command.
+      </para>
+
+  </sect1>
+
+  <sect1 id="utilities">
+    <title>Utilities</title>
+
+    <para>
+      Tools needed to build a boot graphics file.
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para id="mkbootmsg">mkbootmsg</para>
+        <para>
+           Compile source into byte code. The result (together with any
+           other files you might need) has to be put into a cpio archive. If
+           you are using <command>isolinux</command> or
+           <command>syslinux</command>, this is not required, as you can
+           read files directly from the filesystem. The compiled byte code,
+           however, always has to be put into the cpio archive.
+           <example><title/><para><programlisting>
+  # compile 'foo.ps' to 'foo', writing log to foo.log
+  # Note: '-O' turns on the optimizer. You'll always want to do this.
+  mkbootmsg -O -v -l foo.log -c foo.ps foo
+
+  # put it into a cpio archive
+  # we'll assume you need a picture 'foo.jpg' and are using font 'foo.fnt'
+  echo -e "foo\nfoo.jpg\nfoo.fnt" | cpio -o >bootlogo
+
+  # 'bootlogo' is ready to use, e.g.
+  # as 'gfxboot bootlogo' in isolinux.cfg
+           </programlisting></para></example>
+        </para>
+      </listitem><listitem>
+        <para id="getx11font">getx11font</para>
+        <para>
+           Build font file using glyphs from X11 fonts (no antialiasing).
+        </para>
+      </listitem><listitem>
+        <para id="help2txt">help2txt</para>
+        <para>
+          Convert html files into the internal online-help format.
+        </para>
+      </listitem>
+    </itemizedlist>
+
+  </sect1>
+
+  <sect1 id="reference">
+    <title>Reference</title>
+
+  <para>
+    Comments start with '%' and extend to the end of line.
+  </para>
+
+  <para>
+    To include some other source file, do:
+  </para>
+
+  <programlisting>%% include file</programlisting>
+
+  <para>
+    Numbers are always 32 bit signed integer. Numerical and string constants
+    are given in a C-like way (not as in Postscript).
+  </para>
+
+  <example><title/><para><programlisting>
+    123, -456
+    0x4567
+    "Hi there\n"
+    '\033', '\x1b', '\u20ac'
+  </programlisting></para></example>
+
+  <para>
+    But: chars have values in the range 0 .. 0x1fffff.
+  </para>
+
+  <para>
+    Strings are interpreted as utf8-sequences. Alternatively you can use
+    '\uXXXX' or '\UXXXXXXXX' to include Unicode characters.
+  </para>
+
+  <example><title/><para><programlisting>
+     "1 Euro = 1 €\n"
+     "1 Euro = 1 \u20ac\n"
+     "1 Euro = 1 \xe2\x82\xac\n"
+   </programlisting></para></example>
+
+  <para>
+    Logical operations return values of type 'bool'. They are not identical
+    with integers. There are no pre-defined constants 'true' and 'false'. But
+    you can define them yourself if you need them, e.g.: <programlisting>/true 0 0 eq def</programlisting>
+  </para>
+
+  <para>
+    Strings and arrays are effectively pointers. So duplicating them on the
+    stack does duplicate the pointer, not the object.
+  </para>
+
+  <para>
+    In addition, there is a unspecific pointer data type. You can use it to
+    construct arbitrary memory references.
+  </para>
+
+  <para>
+    Variable/constants/function names can consist of everything except
+    whitespace.
+  </para>
+
+    <sect2>
+      <title>Initialisation</title>
+
+       <para>
+          During initialization the config file in run. It must leave either an
+          empty stack or a boolean 'true' value at the TOS (top of stack) to indicate
+          the boot loader that everything worked fine. Otherwise the boot loader will
+          assume that some error occured and not continue in graphics mode.
+        </para>
+
+        <para>
+          If you want to handle input (as you probably do) you must define at least
+          the callback function <link linkend="cb_KeyEvent">KeyEvent</link>.
+       </para>
+
+    </sect2>
+
+    <sect2>
+      <title>Callbacks</title>
+
+      <para>
+         Communication with the boot loader is done via callback functions. You are
+         responsible to assign useful actions to them.
+         See config file examples for more documentation.
+      </para>
+
+      <itemizedlist>
+
+        <listitem><para><function id="cb_KeyEvent">KeyEvent</function></para>
+        <para>
+          Called if a key is pressed.
+        </para>
+        </listitem>
+
+        <listitem><para><function>MenuInit</function></para>
+        <para>
+          Should draw boot menu.
+        </para>
+        </listitem>
+
+        <listitem><para><function>InfoBoxInit</function></para>
+        <para>
+          Show message box (e.g. error messages).
+        </para>
+        </listitem>
+
+        <listitem><para><function>InfoBoxDone</function></para>
+        <para>
+          Hide message box.
+        </para>
+        </listitem>
+
+        <listitem><para><function>ProgressInit</function></para>
+        <para>
+          Initialize kernel load progress bar (syslinux/isolinux only).
+        </para>
+        </listitem>
+
+        <listitem><para><function>ProgressDone</function></para>
+        <para>
+           Hide progress bar.
+        </para>
+        </listitem>
+
+        <listitem><para><function>ProgressUpdate</function></para>
+        <para>
+           Advance progress bar.
+        </para>
+        </listitem>
+
+        <listitem><para><function>PasswordInit</function></para>
+        <para>
+           Show password dialog.
+        </para>
+        </listitem>
+
+        <listitem><para><function>PasswordDone</function></para>
+        <para>
+           Hide password dialog.
+        </para>
+        </listitem>
+
+        <listitem><para><function>Timeout</function></para>
+        <para>
+           Timeout counter; called every 18.3th second until timeout occurs.
+        </para>
+        </listitem>
+
+        <listitem><para><function>Timer</function></para>
+        <para>
+           Called every 18.3th second regardless of timeout.
+        </para>
+        </listitem>
+
+      </itemizedlist>
+    </sect2>
+
+    <sect2>
+      <title>Primary words</title>
+    &reference.xml;
+    </sect2>
+
+  </sect1>
+
+</article>
+

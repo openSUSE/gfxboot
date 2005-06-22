@@ -4532,6 +4532,47 @@ get_2args_90:
 ;
 ; Our primary functions.
 ;
+
+;; { - start code definition
+;
+; group: code
+;
+; ( -- code1 )
+;
+; code1:	code start marker
+;
+; After @{, no code is executed until a matching @} is found.
+;
+; example 
+;   /++ { 1 add } def	% define increment function '++'
+;
+
+
+;; } - complete code definition
+;
+; group: code
+;
+; ( -- )
+;
+; Note: @{ and @} are taken care of already during conversion into bytecode. This means that
+; redefining them does not work as you would expect.
+;
+; example 
+;   /dec { 1 sub } def	% define decrement function 'dec'
+;
+
+
+;; [ - start array
+;
+; group: arraydef
+;
+; ( -- mark1 )
+;
+; mark1:	array start marker
+;
+; example 
+;   [ 1 2 3 ]	% array with 3 elements
+;
 prim_astart:
 		mov ax,[pstack_ptr]
 		inc ax
@@ -4547,6 +4588,23 @@ prim_astart_90:
 		ret
 
 
+;; ] -  complete array definition
+;
+; group: arraydef, mem
+;
+; ( mark1 obj1 ... objN -- array1 )
+;
+; mark1:		array start marker
+;
+; obj1 ... objN:	some objects
+; array1:		N-dimensional array with obj1 ... objN
+;
+; Note: The array uses dynamically allocated memory which must be released using @free.
+;
+; example 
+;   /foo [ "some" "text" ] def	% array with 2 elements
+;   foo free			% free memory
+;
 prim_aend:
 		xor cx,cx
 prim_aend_10:
@@ -4612,6 +4670,26 @@ prim_aend_90:
 		ret
 
 
+;; get - get array, string or memory element
+;
+; group: get/put
+;
+; ( array1 int1  -- obj1 )
+; ( string1 int2  -- int3 )
+; ( ptr1 int4  -- int5 )
+;
+; obj1: int1-th element of array1
+; int3: int2-th byte of string1
+; int5: int4-th byte of ptr1
+;
+; Note: Returns the n-th byte of string1, not the n-th utf8 char. Sizes of string1 or ptr1
+; are not checked.
+;
+; example
+;   "abc" 1 get			% 'b'
+;
+;   [ 10 20 30 ] 2 get		% 30
+;
 prim_get:
 		mov dx,t_int + (t_array << 8)
 		call get_2args
@@ -4671,6 +4749,35 @@ p_get_80:
 p_get_90:
 		ret
 
+
+;; put - set an array, string or memory element
+;
+; group: get/put
+; 
+; ( array1 int1 obj1 -- )
+; ( string1 int2 int3 -- )
+; ( ptr1 int4 int5 -- )
+;
+; int1-th element of array1 = obj1
+;
+; int2-th byte of string1 = int3
+;
+; int4-th byte of ptr1 = int5
+;
+; Note: Sets the n-th byte of string1, not the n-th utf8 char. Sizes of string1 or ptr1
+; are not checked.
+;
+; example
+;   /foo [ 10 20 30 ] def
+;   foo 2 77 put		% foo = [ 10 20 77 ]
+;
+;   /foo 10 string def
+;   foo 0 'a' put
+;   foo 1 'b' put		% foo = "ab"
+;
+;   But don't do this:
+;   "abc" 1 'X' put		% modifies string constant "abc" to "aXc"!
+;
 prim_put:
 		mov bp,pserr_pstack_underflow
 		cmp word [pstack_ptr],byte 3
@@ -4725,6 +4832,29 @@ prim_put_90:
 		ret
 
 
+;; length - array, string or memory size
+;
+; group: mem
+;
+; ( array1 -- int1 )
+; ( string1 -- int1 )
+; ( ptr1 -- int1 )
+;
+; int1: size of array1 or string1 or ptr1
+;
+; Returns the length of string1 in bytes, not the number of Unicode chars. If ptr1
+; doesn't point at the start of a memory area, @length returns the number of remaining
+; bytes.
+;
+; example
+;   "abc" length	% 3
+;
+;   [ 0 1 ] length	% 2
+;
+;   /foo 10 malloc def
+;   foo length		% 10
+;   foo 3 add length	% 7
+;
 prim_length:
 		mov dl,t_none
 		call get_1arg
@@ -4774,6 +4904,22 @@ get_length_90:
 		ret
 
 
+;; array - create an empty array
+;
+; group: mem
+;
+; ( int1 -- array1 )
+;
+; int1:		array dimension
+; array1:	new array
+;
+; Note: Use @free to free array1.
+;
+; example 
+;   /foo 10 array def	% create array with 10 elements
+;   foo 4 123 put	% foo[4] = 123
+;   foo free		% free foo
+;
 prim_array:
 		mov dl,t_int
 		call get_1arg
@@ -4804,6 +4950,16 @@ prim_array_90:
 		ret
 
 
+;; pop - remove TOS
+;
+; group: stackbasic
+;
+; ( obj1 -- )
+;
+; example
+;   % status: true or false
+;   "bad" status { pop "ok" } if	% "bad" or "ok"
+;
 prim_pop:
 		cmp word [pstack_ptr],byte 1
 		mov bp,pserr_pstack_underflow
@@ -4812,6 +4968,20 @@ prim_pop:
 prim_pop_90:
 		ret
 
+
+;; dup - duplicate TOS
+;
+; group: stackbasic
+;
+; ( obj1 -- obj1 obj1 )
+;
+; example
+;   key		% key: some input value
+;   dup 'a' eq { do_a } if	% if key = 'a'
+;   dup 'b' eq { do_b } if	% if key = 'b'
+;   dup 'c' eq { do_c } if	% if key = 'c'
+;   pop
+;
 prim_dup:
 		mov cx,[pstack_ptr]
 		cmp cx,[pstack_size]
@@ -4829,6 +4999,12 @@ prim_dup_90:
 		ret
 
 
+;; over - copy TOS-1
+;
+; group: stackbasic
+;
+; ( obj1 obj2 -- obj1 obj2 obj1 )
+;
 prim_over:
 		mov cx,[pstack_ptr]
 		cmp cx,[pstack_size]
@@ -4846,6 +5022,18 @@ prim_over_90:
 		ret
 
 
+;; index - copy stack element
+;
+; group: stackbasic
+;
+; ( objN ... obj1 int1 -- objN ... obj1 objM )
+;
+; objM: M = int1 + 1
+;
+; example
+;   /dup { 0 index } def
+;   /over { 1 index } def
+;
 prim_index:
 		mov dl,t_int
 		call get_1arg
@@ -4867,6 +5055,27 @@ prim_index_90:
 		ret
 
 
+;; exec - evaluate object
+;
+; group: control
+;
+; ( dict1 -- )
+; ( obj1 -- obj1 )
+;
+; If obj1 is a dictionary entry, it is looked up and evaluated. If not, the stack is
+; left unchanged.
+;
+; Note: Unlike Postscript, no cvx is necessary. And it works only with
+; dictionary references.
+;
+; example
+;
+;   /foo [ /bar 100 "abc" ] def
+;   foo 0 get				% /bar
+;   exec				% run bar
+;   foo 2 get				% "abc"
+;   exec				% still "abc"
+;
 prim_exec:
 		mov dl,t_none
 		call pr_setobj_or_none
@@ -4878,6 +5087,25 @@ prim_exec_50:
 		ret
 
 
+;; add - addition
+;
+; group: arith
+;
+; ( int1 int2 -- int3 )
+; ( string1 int4 -- string2 )
+; ( ptr1 int5 -- ptr2 )
+;
+; int3: int1 + int2
+; string2: substring of string1 at offset int4
+;
+; Note: Strings are treated as byte sequences, not Unicode chars. Sizes of string1 and ptr1 are not
+; checked.
+;
+; example
+;   1 2 add		% 3
+;
+;   "abc" 1 add		% "bc"
+;
 prim_add:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
@@ -4897,6 +5125,26 @@ prim_add_90:
 		ret
 
 
+;; sub - subtraction
+;
+; group: arith
+;
+; ( int1 int2 -- int3 )
+; ( string1 int4 -- string2 )
+; ( ptr1 int5 -- ptr2 )
+;
+; int3: int1 - int2
+; string2: substring of string1 at offset -int4
+;
+; Note: Strings are treated as byte sequences, not Unicode chars. Boundaries of string1 and ptr1 are not
+; checked.
+;
+; example
+;   3 1 sub		% 2
+;
+;   "abcd" 3 add	% "d"
+;   2 sub		% "bcd"
+;
 prim_sub:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
@@ -4916,6 +5164,18 @@ prim_sub_50:
 prim_sub_90:
 		ret
 
+
+;; mul - multiplication
+;
+; group: arith
+;
+; ( int1 int2 -- int3 )
+;
+; int3: int1 * int2
+;
+; example
+;   2 3 mul	% 6
+;
 prim_mul:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
@@ -4929,6 +5189,17 @@ prim_mul_90:
 		ret
 
 
+;; div - division
+;
+; group: arith
+;
+; ( int1 int2 -- int3 )
+;
+; int3: int1 / int2
+;
+; example
+;   17 3 div	% 5
+;
 prim_div:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
@@ -4948,6 +5219,17 @@ prim_div_90:
 		ret
 
 
+;; mod - remainder
+;
+; group: arith
+;
+; ( int1 int2 -- int3 )
+;
+; int3: int1 % int2
+;
+; example
+;   17 3 mod	% 2
+;
 prim_mod:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
@@ -4967,6 +5249,18 @@ prim_mod:
 prim_mod_90:
 		ret
 
+
+;; neg - negation
+;
+; group: arith
+;
+; ( int1 -- int2 )
+;
+; int2: -int1
+;
+; example
+;   5 neg	% -5
+;
 prim_neg:
 		mov dl,t_int
 		call get_1arg
@@ -4977,6 +5271,18 @@ prim_neg:
 prim_neg_90:
 		ret
 
+
+;; abs - absolute value
+;
+; group: arith
+;
+; ( int1 -- int2 )
+;
+; int2: |int1|
+;
+; example
+;   -6 abs	% 6
+;
 prim_abs:
 		mov dl,t_int
 		call get_1arg
@@ -4990,6 +5296,18 @@ prim_abs_50:
 prim_abs_90:
 		ret
 
+
+;; min - minimum
+;
+; group: arith
+;
+; ( int1 int2 -- int3 )
+;
+; int3: min(int1, int2)
+;
+; example
+;   4 11 min	% 4
+;
 prim_min:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
@@ -5004,6 +5322,18 @@ prim_min_50:
 prim_min_90:
 		ret
 
+
+;; max - maximum
+;
+; group: arith
+;
+; ( int1 int2 -- int3 )
+;
+; int3: max(int1, int2)
+;
+; example
+;   4 11 max	% 11
+;
 prim_max:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
@@ -5043,6 +5373,26 @@ plog_args_90:
 		ret
 
 
+;; and - logical or arithmetical 'and'
+;
+; group: arith
+;
+; ( int1 int2 -- int3 )
+; ( bool1 bool2 -- bool3 )
+;
+; int3: int1 &amp; int2
+; bool3: bool1 &amp;&amp; bool2
+;
+; Note: Mixing boolean and integer argument types is possible, in this case integers are
+; converted to boolean first.
+;
+; example
+;   true false and	% false
+;
+;   3 6 and		% 2
+;
+;   10 true and		% gives true, but please avoid this
+;
 prim_and:
 		call plog_args
 		and eax,ecx
@@ -5052,16 +5402,74 @@ prim_and_50:
 		call set_pstack_tos
 		ret
 
+
+;; or - logical or arithmetical 'or'
+;
+; group: arith
+;
+; ( int1 int2 -- int3 )
+; ( bool1 bool2 -- bool3 )
+;
+; int3: int1 | int2
+; bool3: bool || bool2
+;
+; Note: Mixing boolean and integer argument types is possible, in this case integers are
+; converted to boolean first.
+;
+; example
+;   true false or	% true
+;
+;   3 6 or		% 7
+;
+;   10 true or		% gives true, but please avoid this
+;
 prim_or:
 		call plog_args
 		or eax,ecx
 		jmp prim_and_50
 
+
+;; xor - logical or arithmetical exclusive 'or'
+;
+; group: arith
+;
+; ( int1 int2 -- int3 )
+; ( bool1 bool2 -- bool3 )
+;
+; int3: int1 ^ int2
+; bool3: bool ^^ bool2
+;
+; Note: Mixing boolean and integer argument types is possible, in this case integers are
+; converted to boolean first.
+;
+; example
+;   true false xor	% true
+;
+;   3 6 xor		% 5
+;
+;   10 true xor		% gives false, but please avoid this
+;
 prim_xor:
 		call plog_args
 		xor eax,ecx
 		jmp prim_and_50
 
+
+;; not - logical or arithmetical 'not'
+;
+; group: arith
+;
+; ( int1 -- int2 )
+; ( bool1 -- bool2 )
+;
+; int2: -int1 - 1
+; bool2: !bool1
+;
+; example
+;   true not		% false
+;
+;   0 not		% -1
+;
 prim_not:
 		xor cx,cx
 		call get_pstack_tos
@@ -5082,6 +5490,17 @@ prim_not_90:
 		ret
 
 
+;; shl - shift left
+;
+; group: arith
+;
+; ( int1 int2 -- int3 )
+;
+; int3: int1 &lt;&lt; int2
+;
+; example
+;   5 2 shl	% 20
+;
 prim_shl:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
@@ -5099,6 +5518,17 @@ prim_shl_90:
 		ret
 
 
+;; shr - shift right
+;
+; group: arith
+;
+; ( int1 int2 -- int3 )
+;
+; int3: int1 >> int2
+;
+; example
+;   15 2 shr	% 3
+;
 prim_shr:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
@@ -5116,6 +5546,19 @@ prim_shr_90:
 		ret
 
 
+;; def - define new word
+;
+; group: code
+;
+; ( dict1 obj1  -- )
+;
+; dict1: is defined as obj1
+;
+; example
+;   /x 100 def		% define constant x as 100
+;
+;   /neg { -1 mul } def	% define 'neg' function
+;
 prim_def:
 		mov dx,t_none + (t_dict_idx << 8)
 		call get_2args
@@ -5133,6 +5576,26 @@ prim_def_90:
 		ret
 
 
+;; if - typical 'if'
+;
+; group: control
+;
+; ( bool1 code1 -- )
+; ( int1 code1 -- )
+; ( undef1 code1 -- )
+; ( obj1 code1 -- )
+;
+; bool1: contition
+; code1: code start marker (see @{)
+; int1: integer are automatically converted to boolean
+; undef1: the undefined value is treated as 'false'
+; obj1: strings, arrays, pointer are considered 'true'
+;
+; example
+;   10 4 gt { "10 > 4" show } if
+;
+;   "" { "is always true" show } if	% strings are always 'true'
+;
 prim_if:
 		mov dx,t_code + (t_bool << 8)
 		call get_2args
@@ -5173,6 +5636,25 @@ prim_if_90:
 		ret
 
 
+;; ifelse - typical 'if' / 'else'
+;
+; group: control
+;
+; ( bool1 code1 code2 -- )
+; ( int1 code1 code2 -- )
+; ( undef1 code1 code2 -- )
+; ( obj1 code1 code2 -- )
+;
+; bool1: contition
+; code1: code start marker (see @{) for 'true' branch
+; code2: code start marker (see @{) for 'false' branch
+; int1: integer are automatically converted to boolean
+; undef1: the undefined value is treated as 'false'
+; obj1: strings, arrays, pointer are considered 'true'
+;
+; example
+;   x1 x2 gt { "x1 > x2" } { "x1 &lt;= x2" } ifelse show
+;
 prim_ifelse:
 		mov cx,2
 		call get_pstack_tos
@@ -5318,6 +5800,28 @@ pcmp_false:
 		call set_pstack_tos
 		ret
 
+
+;; eq - equal
+;
+; group: cmp
+;
+; ( int1 int2 -- bool1 )
+; ( str1 str2 -- bool2 )
+; ( obj1 obj2 -- bool3 )
+;
+; bool1: true if int1 == int2
+; bool2: true if str1 == str2
+; bool3: true if obj1 and obj2 are identical
+;
+; example
+;
+;   1 3 eq		% false
+;   "abc" "abc" eq	% true
+;   /a [ 1 2 ] def
+;   /b a def
+;   a [ 1 2 ] eq	% false (not the same array)
+;   a b eq		% true
+;
 prim_eq:
 		mov bl,1
 		call pcmp_args
@@ -5325,6 +5829,28 @@ prim_eq:
 		jz pcmp_true
 		jmp pcmp_false
 
+
+;; ne - not equal
+;
+; group: cmp
+;
+; ( int1 int2 -- bool1 )
+; ( str1 str2 -- bool2 )
+; ( obj1 obj2 -- bool3 )
+;
+; bool1: false if int1 == int2
+; bool2: false if str1 == str2
+; bool3: false if obj1 and obj2 are identical
+;
+; example
+;
+;   1 3 ne		% true
+;   "abc" "abc" ne	% false
+;   /a [ 1 2 ] def
+;   /b a def
+;   a [ 1 2 ] ne        % true (not the same array)
+;   a b ne              % false
+;
 prim_ne:
 		mov bl,1
 		call pcmp_args
@@ -5332,6 +5858,26 @@ prim_ne:
 		jnz pcmp_true
 		jmp pcmp_false
 
+
+;; gt - greater than
+;
+; group: cmp
+;
+; ( int1 int2 -- bool1 )
+; ( str1 str2 -- bool2 )
+; ( ptr1 ptr2 -- bool3 )
+;
+; bool1: true if int1 > int2
+; bool2: true if str1 > str2
+; bool3: true if ptr1 > ptr2
+;
+; example
+;   7 4 gt		% true
+;   "abc" "abd" gt	% false
+;   /a 10 malloc def
+;   /b a + 2 def
+;   b a gt		% true
+;
 prim_gt:
 		mov bl,0
 		call pcmp_args
@@ -5339,6 +5885,26 @@ prim_gt:
 		jg pcmp_true
 		jmp pcmp_false
 
+
+;; ge - greater or equal
+;
+; group: cmp
+;
+; ( int1 int2 -- bool1 )
+; ( str1 str2 -- bool2 )
+; ( ptr1 ptr2 -- bool3 )
+;
+; bool1: true if int1 >= int2
+; bool2: true if str1 >= str2
+; bool3: true if ptr1 >= ptr2
+;
+; example
+;   7 4 ge		% true
+;   "abc" "abc" ge	% true
+;   /a 10 malloc def
+;   /b a + 2 def
+;   b a ge		% true
+;
 prim_ge:
 		mov bl,0
 		call pcmp_args
@@ -5346,6 +5912,26 @@ prim_ge:
 		jge pcmp_true
 		jmp pcmp_false
 
+
+;; lt - less than
+;
+; group: cmp
+;
+; ( int1 int2 -- bool1 )
+; ( str1 str2 -- bool2 )
+; ( ptr1 ptr2 -- bool3 )
+;
+; bool1: true if int1 &lt; int2
+; bool2: true if str1 &lt; str2
+; bool3: true if ptr1 &lt; ptr2
+;
+; example
+;   7 4 lt		% false
+;   "abc" "abd" lt	% true
+;   /a 10 malloc def
+;   /b a + 2 def
+;   b a lt		% false
+;
 prim_lt:
 		mov bl,0
 		call pcmp_args
@@ -5353,6 +5939,26 @@ prim_lt:
 		jl pcmp_true
 		jmp pcmp_false
 
+
+;; le - less or equal
+;
+; group: cmp
+;
+; ( int1 int2 -- bool1 )
+; ( str1 str2 -- bool2 )
+; ( ptr1 ptr2 -- bool3 )
+;
+; bool1: true if int1 &lt;= int2
+; bool2: true if str1 &lt;= str2
+; bool3: true if ptr1 &lt;= ptr2
+;
+; example
+;   7 7 le		% true
+;   "abc" "abd" le	% true
+;   /a 10 malloc def
+;   /b a + 2 def
+;   b a le		% false
+;
 prim_le:
 		mov bl,0
 		call pcmp_args
@@ -5361,6 +5967,16 @@ prim_le:
 		jmp pcmp_false
 
 
+;; exch - exchange TOS with TOS-1
+;
+; group: stackbasic
+;
+; ( obj1 obj2 -- obj2 obj1 )
+;
+; example
+;   8
+;   /a exch def		% a = 8
+;
 prim_exch:
 		mov cx,2
 		call rot_pstack_up
@@ -5368,6 +5984,17 @@ prim_exch:
 		ret
 
 
+;; rot - rotate TOS, TOS-1, TOS-2
+;
+; group: stackbasic
+;
+; ( obj1 obj2 obj3 -- obj2 obj3 obj1 )
+;
+; example
+;   /a 4 array def
+;   8
+;   a 1 rot put		% a[1] = 8
+;
 prim_rot:
 		mov cx,3
 		call rot_pstack_up
@@ -5375,6 +6002,21 @@ prim_rot:
 		ret
 
 
+;; roll - rotate stack elements
+;
+; group: stackbasic
+;
+; ( obj1 ... objN int1 int2 -- objX ... objY )
+;
+; int1: number of elements to rotate
+; int2: amount
+; objX: X = (1 - int2) mod int1
+; objY: Y = (N - int2) mod int1
+;
+; example
+;   /rot { 3 -1 roll } def
+;  1 2 3 4 5 5 2 roll		% leaves: 4 5 1 2 3
+;
 prim_roll:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
@@ -5416,16 +6058,51 @@ prim_roll_60:
 prim_roll_90:
 		ret
 
+
+;; dtrace - single step with debug window
+;
+; group: debug
+;
+; ( -- )
+;
+; Turn on @trace mode and show debug info in upper left screen corner.
+;
 prim_dtrace:
 		mov byte [single_step],1
 		mov byte [show_debug_info],1
 		ret
 
+
+;; trace - single step
+;
+; group: debug
+;
+; ( -- )
+;
+; Enter single step mode. Waits for a keypress after every instruction. 
+; Tab sets a temporary breakpoint after the current instruction and
+; continues until it reaches it. Leave this mode by pressing Esc.
+;
 prim_trace:
 		mov byte [single_step],1
 		mov byte [show_debug_info],0
 		ret
 
+
+;; return - leave current function
+;
+; group: control
+;
+; ( -- )
+;
+; example
+;   /x {		% expects key on TOS
+;     dup 'a' eq { pop do_a return } if
+;     dup 'b' eq { pop do_b return } if
+;     dup 'c' eq { pop do_c return } if
+;     pop
+;   } def
+; 
 prim_return:
 		xor cx,cx
 prim_return_10:
@@ -5444,6 +6121,16 @@ prim_return_90:
 		ret
 
 
+;; exit - leave loop/repeat/for/forall loop.
+;
+; group: control
+;
+; ( -- )
+;
+; example
+;
+;  0 1 100 { 56 eq { exit } if } for	% leave if counter == 56
+;
 prim_exit:
 		xor cx,cx
 prim_exit_10:
@@ -5484,6 +6171,16 @@ prim_exit_80:
 prim_exit_90:
 		ret
 
+;; loop - endless loop
+;
+; group: control
+;
+; ( code1 -- )
+;
+; example
+;
+;     /x 0 def { /x x 1 add def x 56 eq { exit } if } loop	% loop until x == 56
+;
 prim_loop:
 		xor cx,cx
 		call get_pstack_tos
@@ -5515,6 +6212,17 @@ prim_loop_90:
 		ret
 
 
+;; repeat - repeat code
+;
+; group: control
+;
+; ( int1 code1 -- )
+;
+; Repeat code1 int1 times.
+;
+; example
+;   3 { "X" show } repeat	% print "XXX"
+;
 prim_repeat:
 		mov dx,t_code + (t_int << 8)
 		call get_2args
@@ -5556,6 +6264,21 @@ prim_repeat_90:
 		ret
 
 
+;; for -- typical 'for' loop
+;
+; group: control
+;
+; ( int1 int2 int3 code1 -- )
+;
+; int1: start value
+; int2: step size
+; int3: final value (inclusive)
+;
+; Run code1 and put the current counter value onto the stack for every iteration.
+;
+; example
+;  0 1 4 { } for 	% leave 0 1 2 3 4 on the stack
+;
 prim_for:
 		mov bp,pserr_pstack_underflow
 		cmp  word [pstack_ptr],byte 4
@@ -5628,6 +6351,22 @@ prim_for_90:
 		ret
 
 
+;; forall - loop over all array elements
+;
+; group: control
+;
+; ( array1 code 1 -- )
+; ( str1 code 1 -- )
+; ( ptr1 code 1 -- )
+;
+; Run code1 for every element of array1, str1 or ptr1 putting each element
+; on the stack in turn.
+;
+; Note: str1 is treated as a sequence of bytes, not utf8 chars.
+;
+; example
+;  [ 1 2 3 ] { } forall		% leave 1 2 3 on the stack
+;
 prim_forall:
 		mov dx,t_code + (t_array << 8)
 		call get_2args
@@ -5723,6 +6462,17 @@ prim_forall_90:
 		ret
 
 
+;; gettype - get object type
+;
+; group: arg
+;
+; ( obj1 -- int1 )
+;
+; Returns the object type.
+;
+; example
+;   "abc" gettype	% 4 (= string)
+;
 prim_gettype:
 		mov dl,t_none
 		call get_1arg
@@ -5735,6 +6485,19 @@ prim_gettype_90:
 		ret
 
 
+;; settype - set object type
+;
+; group: arg
+;
+; ( obj1 int1 -- obj2 )
+;
+; obj2: obj1 with type changed to int1.
+; 
+; example
+;						% PS-like 'string' function
+;   /string { 1 add malloc 4 settype } def	% 4 = string type
+;   10 string					% new empty string of length 10
+;
 prim_settype:
 		mov dx,t_int + (t_none << 8)
 		call get_2args
@@ -5749,6 +6512,19 @@ prim_settype_90:
 		ret
 
 
+;; screen.size - screen size in pixel
+;
+; group: gfx.screen
+;
+; ( -- int1 int2 )
+;
+; int1, int2: width, height
+;
+; example
+;
+; blue setcolor
+; 0 0 moveto screen.size fillrect	% draw blue screen
+;
 prim_screensize:
 		mov ax,[pstack_ptr]
 		inc ax
@@ -5769,6 +6545,18 @@ prim_screensize_90:
 		ret
 
 
+;; vscreen.size - virtual screen size
+;
+; group: gfx.screen
+;
+; ( -- int1 int2 )
+;
+; int1, int2: virtual width and height
+;
+; You normally can expect the virtual height to be larger than the visible height returned by
+; @screen.size. That area is available e.g. for hidden drawing. Some kind of
+; scrolling is not implemented, however.
+;
 prim_vscreensize:
 		mov ax,[pstack_ptr]
 		inc ax
@@ -5789,6 +6577,20 @@ prim_vscreensize_90:
 		ret
 
 
+;; image.size - graphics image size
+;
+; group: image
+;
+; ( -- int1 int2 )
+;
+; int1, int2: image width and heigth. The image is specified with @setimage.
+; 
+; example
+;
+;  image.size screen.size
+;  exch 4 -1 roll sub 2 div 3 1 roll exch sub 2 div	% center image
+;  moveto 0 0 image.size image				% draw it
+;
 prim_imagesize:
 		mov ax,[pstack_ptr]
 		inc ax
@@ -5809,6 +6611,19 @@ prim_imagesize_90:
 		ret
 
 
+
+;; image.colors - image palette entries
+;
+; group: image
+;
+; ( -- int1 )
+;
+; int1: number of colors in 8-bit PCX image.
+;
+; 8-bit modes use a color palette. An image uses the first @image.colors
+; entries. If you want to define your own colors, use @image.colors to get
+; the first free palette entry. For 16/32-bit modes, 0 is returned.
+;
 prim_imagecolors:
 		xor eax,eax
 		cmp byte [image_type],1
@@ -5818,6 +6633,19 @@ prim_imagecolors_90:
 		jmp pr_getint
 
 
+;; setcolor - set active drawing color
+;
+; group: draw
+;
+; ( int1 -- )
+;
+; int1: palette index (8-bit mode) or 24-bit RGB-value (16/32-bit modes).
+;
+; example
+;  0xff0000 setcolor	% continue in red...
+;  0xff00 setcolor	% or green...
+;  0xff setcolor	% or blue
+;
 prim_setcolor:
 		call pr_setint
 		mov [gfx_color_rgb],eax
@@ -5827,17 +6655,50 @@ prim_setcolor:
 		ret
 
 
+;; currentcolor - current drawing color
+;
+; group: draw
+;
+; ( -- int1 )
+;
+; int1: palette index (8-bit mode) or 24-bit RGB-value (16/32-bit modes).
+;
+; example
+;   currentcolor not setcolor	% inverse color
+;
 prim_currentcolor:
 		mov eax,[gfx_color0]
 		jmp pr_getint
 
 
+
+;; settextmodecolor - set color to be used in text mode
+;
+; group: textmode
+; 
+; ( int1 -- )
+;
+; int1: text mode color
+;
+; Note: You only need this in case you're running in text mode (practically never).
+;
 prim_settextmodecolor:
 		call pr_setint
 		mov [textmode_color],al
 		ret
 
 
+;; moveto - set cursor position
+;
+; group: draw
+;
+; ( int1 int2 -- )
+;
+; int1, int2: x, y (upper left: 0, 0).
+;
+; example
+;   200 100 moveto "Hello" show		% print "Hello" at (200, 100)
+;
 prim_moveto:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
@@ -5849,6 +6710,19 @@ prim_moveto_90:
 		ret
 
 
+;; rmoveto - set relative cursor position
+;
+; group: draw
+;
+; ( int1 int2 -- )
+;
+; int1, int2: x-ofs, y-ofs.
+;
+; example
+;   200 100 moveto
+;   "Hello" show
+;   30 0 rmoveto "world!"	% "Hello    world!" (approx.)
+;
 prim_rmoveto:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
@@ -5861,6 +6735,14 @@ prim_rmoveto_90:
 		ret
 
 
+;; currentpoint - current cursor position
+;
+; group: draw
+;
+; ( -- int1 int2 )
+;
+; int1, int2: x, y (upper left: 0, 0)
+;
 prim_currentpoint:
 		mov ax,[pstack_ptr]
 		inc ax
@@ -5881,6 +6763,17 @@ prim_currentpoint_90:
 		ret
 
 
+;; lineto - draw line
+;
+; group: draw
+;
+; ( int1 int2 -- )
+;
+; int1, int2: line end
+;
+; example
+;   0 0 moveto screen.size lineto	% draw diagonal
+;
 prim_lineto:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
@@ -5903,6 +6796,19 @@ prim_lineto_90:
 		ret
 
 
+
+;; putpixel - draw single pixel
+;
+; group: draw
+;
+; ( -- )
+;
+; Draw pixel in current color at current cursor position.
+;
+; example
+;   blue setcolor
+;   0 0 moveto putpixel		% blue dot at upper left corner
+;
 prim_putpixel:
 		call goto_xy
 		call screen_segs
@@ -5911,6 +6817,18 @@ prim_putpixel:
 		ret
 
 
+;; getpixel - read pixel from graphics memory
+;
+; group: draw
+;
+; ( -- int1 )
+;
+; int1: color; either 8-bit palette index or 24-bit RGB-value, depending on
+; graphics mode.
+;
+; example
+;   getpixel not setcolor putpixel	% invert pixel color
+;
 prim_getpixel:
 		call goto_xy
 		call screen_seg_r
@@ -5921,12 +6839,46 @@ prim_getpixel:
 		jmp pr_getint
 
 
+;; setfont - set font
+;
+; group: font
+;
+; ( ptr1 -- )
+;
+; ptr1: font data (e.g. font file).
+;
+; Note: If bit 31 in ptr1 is set, font is in 'password-mode' - it prints only '*'s.
+;
+; example
+;   "16x16.fnt" findfile setfont	% set 16x16 font
+;
+;  /pwmode { 1 settype 0x80000000 or 12 settype } def
+;  currentfont pwmode setfont		% now in password mode
+;  "abc" show				% print "***"
+;
 prim_setfont:
 		call pr_setptr_or_none
 		call font_init
 		ret
 
 
+;; currentfont - get current font
+;
+; group: font
+;
+; ( -- ptr1 )
+;
+; ptr1: current font
+;
+; example
+;   currentfont				% save font
+;   "16x16_bold.fnt" findfile setfont	% set bold font
+;   "bold text" show			% write something in bold font
+;   setfont				% back to normal font
+;
+
+; FIXME: [font_properties] are lost
+;
 prim_currentfont:
 		push dword [font]
 		call so2lin
@@ -5934,33 +6886,90 @@ prim_currentfont:
 		jmp pr_getptr_or_none
 
 
+;; fontheight - font height
+;
+; group: font
+;
+; ( -- int1 )
+;
+; int1: font height
+;
+; example
+;   currentpoint
+;   "Hello" show			% print "Hello"
+;   moveto 0 fontheight rmoveto
+;   "world!"				% print "world!" below "Hello"
+;
 prim_fontheight:
 		movzx eax,word [font_height]
 		jmp pr_getint
 
 
+;; setimage - set active image
+;
+; group: image
+;
+; ( ptr1 -- )
+;
+; ptr1: image data. Either JPG or PCX file.
+;
+; Note: JPG is only supported in 16/32-bit modes.
+;
+; example
+;   "foo.jpg" findfile setimage		% load and use "foo.jpg"
+;
 prim_setimage:
 		call pr_setptr_or_none
 		call image_init
 		ret
 
 
+;; currentimage - currently used image
+;
+; group: image
+;
+; ( -- ptr1 )
+;
 prim_currentimage:
 		mov eax,[image]
 		jmp pr_getptr_or_none
 
 
+;; settransparency - set transparency
+;
+; group: blend
+;
+; ( int1 -- )
+;
+; int1: transparency for @blend and @blend2 operations; valid values are 0 - 256.
+;
 prim_settransparency:
 		call pr_setint
 		mov [transp],eax
 		ret
 
 
+;; currenttransparency - current transparency
+;
+; group: blend
+;
+; ( -- int1 )
+;
 prim_currenttransparency:
 		mov eax,[transp]
 		jmp pr_getint
 
 
+;; show - print text
+;
+; group: draw, text
+;
+; ( str1 -- )
+;
+; Print str1 in current color using current font.
+;
+; example
+;   "Hello world!" show		% print "Hello world!"
 prim_show:
 		mov dl,t_string
 		call get_1arg
@@ -5982,6 +6991,19 @@ prim_show_90:
 		ret
 
 
+;; strsize - text dimensions
+;
+; group: text
+;
+; ( str1 -- int1 int2 )
+;
+; int1, int2: width, height of str1.
+;
+; example
+;
+;   "Hi there!"
+;   dup strsize pop neg 0 rmoveto show		% print "Hi there!" right aligned
+;
 prim_strsize:
 		mov dl,t_string
 		call get_1arg
@@ -6011,6 +7033,22 @@ prim_strsize_90:
 		ret
 
 
+;; memcpy - copy memory
+;
+; group: mem
+;
+; ( ptr1 ptr2 int1 -- )
+;
+; ptr1: destination
+; ptr2: source
+; int1: size
+;
+; example
+;   /a 10 malloc def
+;   /b 10 malloc def
+;   a 1 100 put		% a[1] = 100
+;   b a 10 memcpy	% copy a to b
+;
 prim_memcpy:
 		mov bp,pserr_pstack_underflow
 		cmp word [pstack_ptr],byte 3
@@ -6047,6 +7085,20 @@ prim_memcpy_90:
 		ret
 
 
+;; image - show image region
+;
+; group: image
+;
+; ( int1 int2 int3 int4 -- )
+;
+; int1, int2: x, y position in image
+;
+; int3, int4: width, height of image region
+;
+; example
+;   "xxx.jpg" findfile setimage		% load and activate "xxx.jpg"
+;   0 0 image.size image		% draw whole image
+;
 prim_image:
 		mov bp,pserr_pstack_underflow
 		cmp word [pstack_ptr],byte 4
@@ -6093,6 +7145,14 @@ prim_image_90:
 		ret
 
 
+;; loadpalette - load current palette
+;
+; group: image
+;
+; ( -- )
+;
+; Activates current palette in 8-bit modes.
+;
 prim_loadpalette:
 		mov cx,100h
 		xor dx,dx
@@ -6101,9 +7161,29 @@ prim_loadpalette:
 		ret
 
 
-; Unpack image region into buffer.
+;; unpackimage -  unpack image region into buffer
 ;
-; ( x0 y1 width height ) ==> ( buffer )
+; group: image
+;
+; ( int1 int2 int3 int4 -- ptr1 )
+;
+; int1, int2: x, y position in image
+;
+; int3, int4: width, height of image region
+; ptr1: buffer with image data; use @free to free the buffer
+;
+; example
+;
+;   "xxx.jpg" findfile setimage		% load and activate "xxx.jpg"
+;   0 0 10 10 unpackimage		% unpack upper left 10x10 region
+;   /img exch def			% img = buffer
+;
+;  0 10 100 {
+;    0 exch moveto
+;    img restorescreen
+;  } for				% repeat image section horizontally 10 times
+;
+;  img free				% free it
 ;
 prim_unpackimage:
 		mov bp,pserr_pstack_underflow
@@ -6169,6 +7249,18 @@ prim_unpackimage_90:
 		ret
 
 
+;; tint - tint palette
+;
+; group: tint
+;
+; ( int1 int2 int3 -- )
+;
+; int1: source
+; int2: destination
+; int3: palette entries
+; 
+; Tint int3 palette entries starting at int1 and store them starting at int2.
+;
 prim_tint:
 		mov bp,pserr_pstack_underflow
 		cmp  word [pstack_ptr],byte 3
@@ -6201,6 +7293,15 @@ prim_tint_90:
 		ret
 
 
+;; settintcolor - set tint color
+;
+; group: tint
+;
+; ( int1 int2 -- )
+;
+; int1: RGB value
+; int2: opaqueness (individually for each R, G, B component)
+;
 prim_settintcolor:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
@@ -6223,6 +7324,19 @@ prim_settintcolor_90:
 		ret
 
 
+;; setpalette - set palette entry
+;
+; group: draw
+;
+; ( int1 int2 -- )
+;
+; int1: palette index
+; int2: RGB value
+;
+; example
+;   /red 11 0xff0000 def	% color 11 = red
+;   /yellow 12 0xffff00 def	% color 12 = yellow
+;
 prim_setpalette:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
@@ -6252,6 +7366,18 @@ prim_setpalette_90:
 		ret
 
 
+;; getpalette - get palette entry
+;
+; group: draw
+;
+; ( int1 -- int2 )
+;
+; int1: palette index
+; int2: RGB value
+;
+; example
+;   11 dup getpalette not setpalette	% invert color 11
+;
 prim_getpalette:
 		mov dl,t_int
 		call get_1arg
@@ -6278,12 +7404,36 @@ prim_getpalette_90:
 		ret
 
 
+;; settransparentcolor - set color used for transparency
+;
+; group: image
+;
+; ( int1 -- )
+;
+; When doing an @image operation, pixels with this color are not copied.
+; Something like an alpha channel, actually. Works only with PCX images.
+; Not at all related to @settransparency.
+;
 prim_settransparentcolor:
 		call pr_setint
 		mov [transparent_color],eax
 		ret
 
 
+;; savescreen - save screen area
+;
+; group: image
+;
+; ( int1 int2 -- ptr1 )
+;
+; int1, int2: width, height of screen area
+; ptr1: buffer with image data; use @free to free the buffer
+;
+; Note: width and height are stored in buffer.
+;
+; example
+;   0 0 moveto screen.size savescreen	% save entire screen
+;
 prim_savescreen:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
@@ -6344,6 +7494,23 @@ alloc_fb_80:
 alloc_fb_90:
 		ret
 
+
+;; restorescreen - restore screen area
+;
+; group: image
+;
+; ( ptr1 -- )
+;
+; ptr1: buffer with image data; use @free to free the buffer
+;
+; Note: width and height are taken from buffer. Does not actually
+; free ptr1 - use @free explicitly.
+;
+; example
+;   0 0 moveto 100 100 savescreen	% save upper left 100x100 section...
+;   300 200 moveto dup restorescreen	% and copy it to 300x200
+;   free				% free memory
+;
 prim_restorescreen:
 		mov dl,t_ptr
 		call get_1arg
@@ -6373,6 +7540,21 @@ prim_restorescreen_90:
 		ret
 
 
+;; malloc - allocate memory
+;
+; group: mem
+;
+; ( int1 -- ptr1 )
+;
+; int1:		memory size
+; ptr1:		pointer to memory area
+;
+; Note: Use @free to free ptr1.
+;
+; example 
+;   /foo 256 malloc def	% allocate 256 bytes...
+;   foo free		% and free it
+;
 prim_malloc:
 		mov dl,t_int
 		call get_1arg
@@ -6389,6 +7571,27 @@ prim_malloc_90:
 		ret
 
 
+;; free - free memory
+;
+; group: mem
+;
+; ( obj1 -- )
+;
+; obj1:		object to free, either array, string or pointer
+;
+; Note: There is no garbage collector implemented. You have to keep track of
+; memory usage yourself. If obj1 does not refer to some dynamically
+; allocated object, @free does nothing.
+;
+; example
+; 2 array		% create array with 2 elements...
+; free			% and free it
+;
+; 100 malloc		% allocate 100 bytes...
+; free			% and free it
+;
+; "Some Text" free	% free nothing
+;
 prim_free:
 		mov dl,t_string
 		call get_1arg
@@ -6409,6 +7612,24 @@ prim_free_90:
 		ret
 
 
+;; memsize - report available memory size
+;
+; group: mem
+;
+; ( int1 -- int2 int3 )
+;
+; int1: memory region (0 ... 3)
+; int2: total free memory
+; int3: size of largest free block
+;
+; Region 0 is memory in the low 640kB range. Region >= 1 are typically 1 MB extended memory
+; per region.
+;
+; Note: available memory depends on the boot loader.
+;
+; example
+;   0 memsize pop 1024 lt { "less than 1kB left" show } if
+;
 prim_memsize:
 		mov dl,t_int
 		call get_1arg
@@ -6439,6 +7660,19 @@ prim_dumpmem:
 		ret
 
 
+;; fillrect - fill rectangular area
+;
+; group: draw
+;
+; ( int1 int2 -- )
+;
+; int1, int2: width, height
+;
+; example
+;   0 0 moveto
+;   blue setcolor
+;   300 200 fillrect		% 300x200 blue rectangle
+;
 prim_fillrect:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
@@ -6452,6 +7686,30 @@ prim_fillrect_90:
 		ret
 
 
+;; snprintf - C-style snprintf
+;
+; group: mem
+;
+; ( obj1 ... objN str1 int1 ptr1 -- )
+;
+; ptr1: buffer
+; int1: buffer size
+; str1: format string
+;
+; obj1 ... objN: printf arguments
+;
+; Note: reversed argument order!
+;
+; example
+;
+; /sprintf {
+;   dup 12 settype length exch snprintf	% 12 = pointer type
+; } def
+;
+; /buf 100 string def
+; "bar" "foo" 3 "&#37;d &#37;s &#37;s" buf sprintf
+; buf show				% print "3 foo bar"
+; 
 prim_snprintf:
 		mov bp,pserr_pstack_underflow
 		cmp  word [pstack_ptr],byte 3
@@ -6494,6 +7752,24 @@ prim_snprintf_90:
 		ret
 
 
+;; edit.init -- setup and show an editable input field
+;
+; group: edit
+;
+; ( array1 str1 -- )
+;
+; str1: initial input string value
+; array1: 8-dimensional array: [ x y bg buf buf_size 0 0 0 ]. x, y: input field
+; position; bg: background pixmap (created with @savescreen) - this determines the
+; input field dimensions, too; buf: string buffer, large enough
+; for a string of length buf_size. The last 3 elements are used internally and must be 0.
+;
+; example
+;   50 100 moveto 200 20 savescreen /bg exch def
+;   /buf 100 string def
+;   /ed [ 50 100 bg buf 100 0 0 0 ] def
+;   ed "foo" edit.init
+;
 prim_editinit:
 		mov dx,t_string + (t_array << 8)
 		call get_2args
@@ -6524,6 +7800,19 @@ prim_editinit_90:
 		ret
 
 
+;; edit.done - restore input field background
+;
+; group: edit
+;
+; ( array1 -- )
+;
+; array1: see @edit.init
+;
+; Note: does not free any data associated with array1.
+;
+; example
+;   ed edit.done		% delete input field
+;
 prim_editdone:
 		mov dx,t_array
 		call get_1arg
@@ -6552,6 +7841,14 @@ prim_editdone_90:
 		ret
 
 
+;; edit.showcursor - show input field cursor
+;
+; group: edit
+;
+; ( array1 -- )
+;
+; array1: see @edit.init
+;
 prim_editshowcursor:
 		mov dx,t_array
 		call get_1arg
@@ -6571,6 +7868,14 @@ prim_editshowcursor_90:
 		ret
 
 
+;; edit.hidecursor - hide input field cursor
+;
+; group: edit
+;
+; ( array1 -- )
+;
+; array1: see @edit.init
+;
 prim_edithidecursor:
 		mov dx,t_array
 		call get_1arg
@@ -6590,6 +7895,20 @@ prim_edithidecursor_90:
 		ret
 
 
+;; edit.input - edit field input processing
+;
+; group: edit
+;
+; ( array1 int1 -- )
+;
+; array1: see @edit.init
+; int1: key (bits 0-23 Unicode char, bits 24-31 scan code)
+;
+; example
+;   /keyLeft 0x4b000000 def	% move cursor left
+;   ed 'a' edit.input
+;   ed keyLeft edit.input
+;
 prim_editinput:
 		mov dx,t_int + (t_array << 8)
 		call get_2args
@@ -6623,6 +7942,14 @@ prim_editinput_90:
 		ret
 
 
+;; updatedisk - request update disk
+;
+; group: system
+;
+; ( int1 -- )
+;
+; int1 = 1: tell boot loader to request a driver update disk (syslinux/isolinux only).
+;
 prim_updatedisk:
 		call pr_setint
 		mov es,[boot_cs]
@@ -6631,6 +7958,14 @@ prim_updatedisk:
 		ret
 
 
+;; bootloader - boot loader type
+;
+; group: system
+;
+; ( -- int1 )
+;
+; int1: boot loader type (0: lilo, 1:syslinux/isolinux, 2: grub)
+;
 prim_bootloader:
 		mov es,[boot_cs]
 		mov si,[boot_sysconfig]
@@ -6638,6 +7973,14 @@ prim_bootloader:
 		jmp pr_getint
 
 
+;; bootdrive - drive the BIOS booted from
+;
+; group: system
+;
+; ( -- int1 )
+;
+; int1: BIOS drive id
+;
 prim_bootdrive:
 		mov es,[boot_cs]
 		mov si,[boot_sysconfig]
@@ -6645,6 +7988,20 @@ prim_bootdrive:
 		jmp pr_getint
 
 
+;; reloadfs - reload file system data
+;
+; group: system
+;
+; ( int1 -- )
+;
+; int1 = 1: tell boot loader to reload file system data (e.g. after a CD
+; change).
+;
+; Note: obsolete.
+;
+
+; FIXME: drop it
+;
 prim_reloadfs:
 		call pr_setint
 		mov es,[boot_cs]
@@ -6653,6 +8010,18 @@ prim_reloadfs:
 		ret
 
 
+;; usernote - get special config value
+;
+; group: system
+;
+; ( -- int1 )
+;
+; int1: config word. This is the value set by a 'notice' entry in
+; syslinux.cfg/isolinux.cfg. Other boot loaders are not supported.
+;
+
+; FIXME: is actually word, not byte
+;
 prim_usernote:
 		mov es,[boot_cs]
 		mov si,[boot_sysconfig]
@@ -6660,6 +8029,14 @@ prim_usernote:
 		jmp pr_getint
 
 
+;; biosmem - BIOS reported memory size
+;
+; group: mem
+;
+; ( -- int1 )
+;
+; int1: total memory size according to BIOS
+;
 prim_biosmem:
 		mov es,[boot_cs]
 		mov si,[boot_sysconfig]
@@ -6667,6 +8044,16 @@ prim_biosmem:
 		jmp pr_getint
 
 
+;; getinfo - type of info box
+;
+; group: system
+;
+; ( -- int1 )
+;
+; int1: type of info box we have to show
+;
+; Note: really weird, should be replaced by something more obvious.
+;
 prim_getinfo:
 		mov dl,t_int
 		call get_1arg
@@ -6683,6 +8070,14 @@ prim_getinfo_90:
 		ret
 
 
+;; 64bit - test if we run on a 64-bit machine
+;
+; group: system
+;
+; ( -- int1 )
+;
+; int1 = 1: 64-bit architecture
+;
 prim_64bit:
 		call chk_64bit
 		sbb eax,eax
@@ -6690,6 +8085,14 @@ prim_64bit:
 		jmp pr_getint
 
 
+;; getbyte - get byte from memory
+;
+; group: system
+;
+; ( ptr1 -- int1 )
+;
+; int1: byte at ptr1
+;
 prim_getbyte:
 		mov dl,t_ptr
 		call get_1arg
@@ -6712,6 +8115,14 @@ prim_getbyte_90:
 		ret
 
 
+;; putbyte - write byte to memory 
+;
+; group: system
+;
+; ( ptr1 int1 -- )
+;
+; Write byte int1 at ptr1.
+;
 prim_putbyte:
 		mov dx,t_int + (t_ptr << 8)
 		call get_2args
@@ -6723,6 +8134,14 @@ prim_putbyte_90:
 		ret
 
 
+;; getdword - get dword from memory
+;
+; group: system
+;
+; ( ptr1 -- int1 )
+;
+; int1: dword at ptr1
+;
 prim_getdword:
 		mov dl,t_ptr
 		call get_1arg
@@ -6745,6 +8164,14 @@ prim_getdword_90:
 		ret
 
 
+;; putdword - write dword to memory 
+;
+; group: system
+;
+; ( ptr1 int1 -- )
+;
+; Write dword int1 at ptr1.
+;
 prim_putdword:
 		mov dx,t_int + (t_ptr << 8)
 		call get_2args
@@ -6756,6 +8183,24 @@ prim_putdword_90:
 		ret
 
 
+;; findfile - load file
+;
+; group: mem
+;
+; ( str1 -- ptr1 )
+;
+; str1: file name
+; ptr1: buffer with file data
+;
+; Note: ptr1 may or may not have to be free'd using @free, depending on whether it is
+; actually loaded from file system or is part of the bootlogo archive. To be on the safe
+; side, always free it.
+;
+; To get the file length, use @length on ptr1.
+;
+; example
+;   "xxx.jpg" findfile length		% file size of "xxx.jpg"
+;
 prim_findfile:
 		mov dl,t_string
 		call get_1arg
@@ -6782,6 +8227,18 @@ prim_findfile_90:
 		ret
 
 
+;; setmode - set video mode
+;
+; group: gfx.screen
+;
+; ( int1 -- bool1 )
+;
+; int1: VESA or VGA mode number
+; bool1: true = mode is set, false = failed
+;
+; Note: if video mode setting fails, the old mode is restored, but the
+; screen contents is undefined.
+;
 prim_setmode:
 		mov dl,t_int
 		call get_1arg
@@ -6823,11 +8280,32 @@ prim_setmode_90:
 		ret
 
 
+;; currentmode - current video mode
+;
+; group: gfx.screen
+;
+; ( -- int1 )
+;
+; int1: current video mode number
+;
 prim_currentmode:
 		movzx eax,word [gfx_mode]
 		jmp pr_getint
 
 
+;; findmode - find video mode number
+;
+; group: gfx.screen
+;
+; ( int1 int2 int3 -- int4 )
+;
+; int1, int2: width, height
+; int3: color bits
+; int4: mode number
+;
+; example
+;   1024 768 16 findmode setmode	% 1024x768, 16-bit color mode
+;
 prim_findmode:
 		mov bp,pserr_pstack_underflow
 		cmp word [pstack_ptr],byte 3
@@ -6870,11 +8348,30 @@ prim_findmode_90:
 		ret
 
 
+;; colorbits - current pixel size
+;
+; group: gfx.screen
+;
+; ( -- int1 )
+;
+; int1: pixel size in bits
+;
 prim_colorbits:
 		movzx eax,byte [color_bits]
 		jmp pr_getint
 
 
+;; eject  - eject CD-ROM
+;
+; group: system
+;
+; ( int1 -- int2 )
+;
+; int1: BIOS drive id
+; int2: BIOS error code
+;
+; Note: does not work with all BIOSes. (With very few, actually.)
+;
 prim_eject:
 		mov dl,t_int
 		call get_1arg
@@ -6890,6 +8387,14 @@ prim_eject_90:
 		ret
 
 
+;; poweroff  - switch computer off
+;
+; group: system
+;
+; ( -- )
+;
+; Note: uses APM, not ACPI.
+;
 prim_poweroff:
 		mov ax,5300h
 		xor bx,bx
@@ -6916,6 +8421,12 @@ prim_poweroff_90:
 		ret
 
 
+;; reboot  - reboot computer
+;
+; group: system
+;
+; ( -- )
+;
 prim_reboot:
 		mov word [472h],1234h
 		push word 0ffffh
@@ -6926,6 +8437,20 @@ prim_reboot:
 		ret
 
 
+;; strstr - find string in string
+;
+; group: string
+;
+; ( str1 str2 -- int1 )
+;
+; Search for str2 in str1.
+; int1: offset of str2 in str1 + 1 if found; otherwise 0.
+;
+; Note: a bit strange, I know.
+;
+; example
+;   "abcd" "c" strstr		% 3 (not 2)
+;
 prim_strstr:
 		mov dx,t_string + (t_string << 8)
 		call get_2args
@@ -6977,9 +8502,18 @@ prim_strstr_60:
 prim_strstr_90:
 		ret
 
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; sound primitives
 
+;; sound.getvolume - current sound volume
+;
+; group: sound
+;
+; ( -- int1 )
+;
+; int1: volume (0 .. 100)
+;
 prim_soundgetvolume:
 		mov ax,[pstack_ptr]
 		inc ax
@@ -6994,6 +8528,15 @@ prim_soundgetvolume:
 prim_sgv_90:
 		ret
 
+
+;; sound.setvolume - set sound volume
+;
+; group: sound
+;
+; ( int1 -- )
+;
+; int1: volume (0 .. 100)
+;
 prim_soundsetvolume:
 		mov dl,t_int
 		call get_1arg
@@ -7017,6 +8560,15 @@ prim_ssv_60:
 prim_ssv_90:
 		ret
 
+
+;; sound.getsamplerate - current sample rate
+;
+; group: sound
+;
+; ( -- int1 )
+;
+; int1: sample rate
+;
 prim_soundgetsamplerate:
 		mov ax,[pstack_ptr]
 		inc ax
@@ -7031,6 +8583,15 @@ prim_soundgetsamplerate:
 prim_sgsr_90:
 		ret
 
+
+;; sound.setsamplerate - set sample rate
+;
+; group: sound
+;
+; ( -- int1 )
+;
+; int1: sample rate
+;
 prim_soundsetsamplerate:
 		mov dl,t_int
 		call get_1arg
@@ -7045,6 +8606,14 @@ prim_sssr_90:
 		ret
 
 
+;; sound.play - play sound
+;
+; group: sound
+;
+; ( -- )
+;
+; Note: obsolete. Sounds are played using the PC speaker.
+;
 prim_soundplay:
 
 
@@ -7056,6 +8625,12 @@ prim_splay_90:
 		ret
 
 
+;; sound.done - turn off sound subsystem
+;
+; group: sound
+;
+; ( -- )
+;
 prim_sounddone:
 		call sound_done
 		clc
@@ -7076,6 +8651,16 @@ prim_stest_90:
 		ret
 %endif
 
+
+;; mod.load - assign mod file to player
+;
+; group: sound
+;
+; ( int1 ptr1 -- )
+;
+; int1: player
+; ptr1: mod file
+;
 prim_modload:
 		mov dx,t_ptr + (t_int << 8)
 		call get_2args
@@ -7106,6 +8691,17 @@ prim_modload_90:
 		ret
 
 
+;; mod.play - play mod file
+;
+; group: sound
+;
+; ( int1 int2 -- )
+;
+; int1: player
+; int2: song start
+;
+; Note: sounds are played using the PC speaker.
+;
 prim_modplay:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
@@ -7127,6 +8723,17 @@ prim_modplay_90:
 		ret
 
 
+;; mod.playsample - play mod sample
+;
+; group: sound
+;
+; ( int1 int2 int3 int4 -- )
+;
+; int1: player
+; int2: channel
+; int3: sample number
+; int4: pitch
+;
 prim_modplaysample:
 		mov bp,pserr_pstack_underflow
 		cmp  word [pstack_ptr],byte 4
@@ -7192,39 +8799,100 @@ prim_numtest_90:
 %endif
 
 
+;; settextwrap - set text wrap column
+;
+; group: text
+;
+; ( int1 -- )
+;
+; int1: text wrap column; set to 0 to turn text wrapping off.
+;
 prim_settextwrap:
 		call pr_setint
 		mov [line_wrap],ax
 		ret
 
 
+;; currenttextwrap - current text wrap column
+;
+; group: text
+;
+; ( -- int1 )
+;
+; int1: text wrap column
+;
 prim_currenttextwrap:
 		movzx eax,word [line_wrap]
 		jmp pr_getint
 
 
+;; seteotchar - set alternative end-of-text char
+;
+; group: text
+;
+; ( int1 -- )
+;
+; int1: eot char
+;
+; Normally strings are 0 terminated. @seteotchar lets you define an
+; additional char text functions recognize.
+;
 prim_seteotchar:
 		call pr_setint
 		mov [char_eot],eax
 		ret
 
 
+;; currenteotchar - current alternative end-of-text char
+;
+; group: text
+;
+; ( -- int1 )
+;
+; int1: eot char
+;
 prim_currenteotchar:
 		mov eax,[char_eot]
 		jmp pr_getint
 
 
+;; setmaxrows - maximum number of text rows to display
+;
+; group: text
+;
+; ( int1 -- )
+;
+; int1: maximum number of text rows to display in a single @show command.
+;
 prim_setmaxrows:
 		call pr_setint
 		mov [max_rows],ax
 		ret
 
 
+;; currentmaxrows -- current maxium number of text rows to display
+;
+; group: text
+;
+; ( -- int1 )
+;
+; int1: maxium number of text rows to display in a single @show command.
+;
 prim_currentmaxrows:
 		movzx eax,word [max_rows]
 		jmp pr_getint
 
 
+;; formattext -- format text
+;
+; group: text
+;
+; ( str1 -- )
+;
+; str1: text
+;
+; Preprocess text to find (and remember) line breaks, links and stuff.
+;
 prim_formattext:
 		mov dl,t_string
 		call get_1arg
@@ -7250,22 +8918,67 @@ prim_formattext_90:
 		ret
 
 
+;; gettextrows - number of text rows
+;
+; group: text
+;
+; ( -- int1 )
+;
+; int1: total number of text rows.
+;
+; Note: available after running @formattext.
+;
 prim_gettextrows:
 		movzx eax,word [cur_row2]
 		jmp pr_getint
 
 
+;; setstartrow - set start row
+;
+; group: text
+;
+; ( int1 -- )
+;
+; int1: start row for next @show command.
+;
+; Note: if a start row > 0 is set, the argument to @show is irrelevant.
+; Instead the internal data built during the last @formattext is used.
+;
 prim_setstartrow:
 		call pr_setint
 		mov [start_row],ax
 		ret
 
 
+
+;; getlinks -- number of links in text
+;
+; group: text
+;
+; ( -- int1 )
+;
+; int1: number of links in text.
+;
+; Note: available after running @formattext.
+;
 prim_getlinks:
 		movzx eax,word [cur_link]
 		jmp pr_getint
 
 
+;; settextcolors -- set text markup colors
+;
+; group: text
+;
+; ( int1 int2 int3 int4 -- )
+;
+; int1: normal color
+; int2: highlight color
+; int3: link color
+; int4: selected link color
+; 
+; Note: int1 can be changed using @setcolor, too.
+;
 prim_settextcolors:
 		mov bp,pserr_pstack_underflow
 		cmp word [pstack_ptr],byte 4
@@ -7300,6 +9013,17 @@ prim_settextcolors_90:
 		ret
 
 
+;; currenttextcolors - current text markup colors
+;
+; group: text
+;
+; ( -- int1 int2 int3 int4 )
+;
+; int1: normal color
+; int2: highlight color
+; int3: link color
+; int4: selected link color
+; 
 prim_currenttextcolors:
 		mov ax,[pstack_ptr]
 		add ax,4
@@ -7327,6 +9051,14 @@ prim_currenttextcolors_90:
 		ret
 
 
+;; setlink - select link
+;
+; group: text
+;
+; ( int1 -- )
+;
+; int1: link number
+;
 prim_setlink:
 		call pr_setint
 		mov dx,[cur_link]
@@ -7337,13 +9069,31 @@ prim_setlink_90:
 		ret
 
 
+;; currentlink - currently selected link
+;
+; group: text
+;
+; ( -- int1 )
+;
+; int1: selected link
+;
 prim_currentlink:
 		movzx eax,word [sel_link]
 		jmp pr_getint
 
 
+;; getlink -- get link information
 ;
-; label, text, x, row
+; group: text
+;
+; ( int1 -- str1 str2 int2 int3 )
+;
+; int1: link number
+; str1: link label
+; str2: link text
+; int1: link text x-offset
+; int2: link text row
+;
 prim_getlink:
 		mov dl,t_int
 		call get_1arg
@@ -7398,17 +9148,44 @@ prim_getlink_90:
 		ret
 
 
+;; lineheight - current line height
+;
+; group: font
+;
+; ( -- int1 )
+;
+; int1: line height
+;
 prim_lineheight:
 		movzx eax,word [font_line_height]
 		jmp pr_getint
 
 
+;; currenttitle - current page title
+;
+; group: text
+;
+; ( -- str1 )
+;
+; str1: page title
+;
+; Note: available after running @formattext.
+;
 prim_currenttitle:
 		segofs2lin word [row_start_seg],word [page_title],eax
 		mov dl,t_string
 		jmp pr_getobj
 
 
+;; videomodes - return number of boot loader video modes
+;
+; group: system
+;
+; ( -- int1 )
+;
+; int1: number of video modes the boot loader suggest for kernel
+; (syslinux/isolinux only).
+; 
 prim_videomodes:
 		mov ax,[pstack_ptr]
 		inc ax
@@ -7438,8 +9215,18 @@ prim_videomodes_90:
 		ret
 
 
+;; getvideomode - get mode from boot loader list
 ;
-; mode, width, height, ok
+; group: system
+;
+; ( int1 -- int2 int3 int4 int5 )
+;
+; int1: mode index (see @videomodes)
+; int2: BIOS mode number
+; int3: width
+; int4: height
+; int5: 1: with framebuffer support
+;
 prim_getvideomode:
 		mov dl,t_int
 		call get_1arg
@@ -7484,6 +9271,17 @@ prim_getvm_90:
 		ret
 
 
+;; usleep - sleep micro seconds
+;
+; group: system
+;
+; ( int1 -- )
+;
+; int1: micro seconds to sleep.
+;
+; Note: the actual granularity is 18Hz, so don't make up too sophisticated
+; timings.
+;
 prim_usleep:
 		call pr_setint
 
@@ -7509,27 +9307,73 @@ prim_usleep_90:
 		ret
 
 
+;; notimeout - turn off initial boot loader timeout
+;
+; group: system
+;
+; ( -- )
+;
+; Turns off any automatic booting.
+;
 prim_notimeout:
 		mov byte [input_notimeout],1
 		clc
 		ret
 
 
+;; time - get current time
+;
+; group: system
+;
+; ( -- int1 )
+;
+; int1: time in seconds since midnight.
+;
 prim_time:
 		call get_time
 		jmp pr_getint
 
 
+;; setbrightness - set brightness
+;
+; group: image
+;
+; ( int1 -- )
+;
+; int1: 0 .. 256 (0 = black, 256 = normal)
+;
+; Taken into account in @loadpalette. Maybe useful for fading effects.
+;
 prim_setbrightness:
 		call pr_setint
 		mov [brightness],ax
 		ret
 
+
+;; currentbrightness - current brightness
+;
+; group: image
+;
+; ( -- int1 )
+;
+; int1: 0 .. 256 (0 = black, 256 = normal)
+;
 prim_currentbrightness:
 		movzx eax,word [brightness]
 		jmp pr_getint
 
 
+;; fadein - some obscure thing
+;
+; group: obsolete
+;
+; ( str1 int1 -- )
+;
+; str1: palette
+; int1: some palette index
+;
+; Note: obsolete, forget it.
+;
 prim_fadein:
 		mov dx,t_int + (t_string << 8)
 		call get_2args
@@ -7545,6 +9389,14 @@ prim_fadein_90:
 		ret
 
 
+;; fade -- some obscure thing
+;
+; group: obsolete
+;
+; ( str1 int1 int2 -- )
+;
+; Note: obsolete, forget it.
+;
 prim_fade:
 		mov bp,pserr_pstack_underflow
 		cmp word [pstack_ptr],byte 3
@@ -7573,6 +9425,17 @@ prim_fade_90:
 		ret
 
 
+;; idle - run stuff when idle
+;
+; group: system
+;
+; ( ptr1 int1 -- )
+;
+; ptr1: 'kroete' data
+; int1: direction (0 or 1)
+;
+; Run 'kroete' animation while we're waiting for keyboard input.
+;
 prim_idle:
 		mov dx,t_int + (t_ptr << 8)
 		call get_2args
@@ -7594,12 +9457,36 @@ prim_idle_10:
 prim_idle_90:
 		ret
 
+
+;; keepmode - keep video mode
+;
+; group: system
+;
+; ( int1 -- )
+;
+; int1 = 1: keep video mode when starting kernel.
+;
 prim_keepmode:
 		call pr_setint
 		mov [keep_mode],al
 		ret
 
 
+;; blend -- blend two images together
+;
+; group: image
+;
+; ( ptr1 ptr2 -- )
+;
+; ptr1: source
+; ptr2: destination
+;
+; ptr2 is merged with a screen area from ptr1 using the current cursor
+; position as offset into ptr1. Transparency values (@settransparency) can
+; range from 0 (ptr2 is unchanged) to 256 (ptr2 is ptr1).
+;
+; Note: 16/32-bit modes only.
+;
 prim_blend:
 		mov dx,t_ptr + (t_ptr << 8)
 		call get_2args
@@ -7630,6 +9517,21 @@ prim_blend_90:
 		ret
 
 
+;; blend2 -- blend two images together, but differently
+;
+; group: image
+;
+; ( ptr1 ptr2 -- )
+;
+; ptr1: source
+; ptr2: destination
+;
+; The current color is blended into ptr2 using a screen area of ptr1 (using
+; the current cursor position as offset into ptr1) as transparency values.
+; Transparency values range from 0 (ptr2 unchanged) to 256 (current color).
+;
+; Note: 16/32-bit modes only.
+;
 prim_blend2:
 		mov dx,t_ptr + (t_ptr << 8)
 		call get_2args
