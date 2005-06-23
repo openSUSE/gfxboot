@@ -32,7 +32,7 @@ sub del_state_context;
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 $re_reg = '%[a-z]+';
 $re_symbol = '[._a-zA-Z][\._a-zA-Z0-9]*';
-$re_num = '\-?\d+';
+$re_num = '[\-\+]?\d+';
 
 %full_reg = (
   '%al' => '%eax',
@@ -761,12 +761,16 @@ BEGIN {
     setle  => \&op_alu1,
     sete   => \&op_alu1,
     setne  => \&op_alu1,
+    incb   => \&op_alu1,
+    decb   => \&op_alu1,
     testl  => \&op_alu2,
     cmpl   => \&op_alu2,
     orl    => \&op_alu2,
     andl   => \&op_alu2,
     orb    => \&op_alu2,
     subb   => \&op_alu2,
+    addb   => \&op_alu2,
+    cmpb   => \&op_alu2,
     testb  => \&op_alu2,
     imull  => \&op_imull,
     ret    => \&op_ret,
@@ -1043,11 +1047,12 @@ sub op_alu2
       $val3 = $val2;
     }
   }
-  elsif($op->{instr} eq 'orb') {
+  elsif($op->{instr} eq 'orb' || $op->{instr} eq 'subb' || $op->{instr} eq 'addb') {
   }
-  elsif($op->{instr} eq 'subb') {
-  }
-  elsif($op->{instr} eq 'cmpl' || $op->{instr} eq 'testl' || $op->{instr} eq 'testb') {
+  elsif(
+    $op->{instr} eq 'cmpl' || $op->{instr} eq 'testl' ||
+    $op->{instr} eq 'cmpb' || $op->{instr} eq 'testb'
+  ) {
     $no_change = 1;
   }
 
@@ -1093,6 +1098,8 @@ sub op_alu1
   elsif(
     $op->{instr} eq 'negl' ||
     $op->{instr} eq 'notl' ||
+    $op->{instr} eq 'incb' ||
+    $op->{instr} eq 'decb' ||
     $op->{instr} =~ /^set/
   ) {
     $val2 = '?';
