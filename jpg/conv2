@@ -600,6 +600,7 @@ sub trace_it
   push @branch_states, clone_state($state);
 
   $state->{"%esp"} = "stack+1000";
+  push_on_stack "32";
   push_on_stack "111";
   push_on_stack "11";
   push_on_stack "222";
@@ -765,6 +766,7 @@ BEGIN {
     orl    => \&op_alu2,
     andl   => \&op_alu2,
     orb    => \&op_alu2,
+    subb   => \&op_alu2,
     testb  => \&op_alu2,
     imull  => \&op_imull,
     ret    => \&op_ret,
@@ -782,6 +784,7 @@ BEGIN {
     jna    => \&op_jmp,
     jb     => \&op_jmp,
     jnb    => \&op_jmp,
+    jbe    => \&op_jmp,
     jle    => \&op_jmp,
     jge    => \&op_jmp,
     cltd   => \&op_cltd,
@@ -1041,6 +1044,8 @@ sub op_alu2
     }
   }
   elsif($op->{instr} eq 'orb') {
+  }
+  elsif($op->{instr} eq 'subb') {
   }
   elsif($op->{instr} eq 'cmpl' || $op->{instr} eq 'testl' || $op->{instr} eq 'testb') {
     $no_change = 1;

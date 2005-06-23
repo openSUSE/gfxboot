@@ -9647,7 +9647,11 @@ blend:
 		jz blend_90
 
 		cmp byte [pixel_bytes],2
+		jz blend_10
+		cmp byte [pixel_bytes],4
 		jnz blend_90
+
+blend_10:
 
 		movzx ebp,word [fs:esi]		; width
 
@@ -9657,7 +9661,7 @@ blend:
 		mul ebp
 		movzx ecx,word [gfx_cur_x]
 		add eax,ecx
-		add eax,eax
+		imul eax,[pixel_bytes]
 		add esi,eax
 
 		mov ebx,4
@@ -9669,7 +9673,11 @@ blend_20:
 
 		mov dx,[es:edi]
 
+		cmp byte [pixel_bytes],2
+		jnz blend_60
+
 blend_40:
+		; 16 bit
 		mov ax,[fs:esi]
 
 		call decode_color
@@ -9680,17 +9688,38 @@ blend_40:
 		call encode_color
 
 		mov [es:edi+ebx],ax
-		add esi,2
-		add ebx,2
+		add esi,[pixel_bytes]
+		add ebx,[pixel_bytes]
 
 		dec dx
 		jnz blend_40
+		jmp blend_70
+
+blend_60:
+		; 32 bit
+		mov eax,[fs:esi]
+
+		; call decode_color
+		xchg eax,ecx
+		mov eax,[es:edi+ebx]
+		; call decode_color
+		call enc_transp
+		; call encode_color
+
+		mov [es:edi+ebx],eax
+		add esi,4
+		add ebx,4
+
+		dec dx
+		jnz blend_60
+
+blend_70:
 
 		pop cx
 
 		movzx eax,word [es:edi]
 		sub eax,ebp
-		add eax,eax
+		imul eax,[pixel_bytes]
 		sub esi,eax
 
 		dec cx
@@ -9711,7 +9740,11 @@ blend2:
 		push dword [transp]
 
 		cmp byte [pixel_bytes],2
+		jz blend2_10
+		cmp byte [pixel_bytes],4
 		jnz blend2_90
+
+blend2_10:
 
 		movzx ebp,word [fs:esi]		; width
 
@@ -9721,7 +9754,7 @@ blend2:
 		mul ebp
 		movzx ecx,word [gfx_cur_x]
 		add eax,ecx
-		add eax,eax
+		imul eax,[pixel_bytes]
 		add esi,eax
 
 		mov ebx,4
@@ -9733,30 +9766,59 @@ blend2_20:
 
 		mov dx,[es:edi]
 
+		cmp byte [pixel_bytes],2
+		jnz blend2_60
+
 blend2_40:
+		; 16 bit
 		mov ax,[fs:esi]
 
 		call decode_color
 		movzx eax,ah
 		mov [transp],eax
 		mov ecx,[gfx_color_rgb]
+
 		mov ax,[es:edi+ebx]
 		call decode_color
 		call enc_transp
 		call encode_color
 
 		mov [es:edi+ebx],ax
-		add esi,2
-		add ebx,2
+		add esi,[pixel_bytes]
+		add ebx,[pixel_bytes]
 
 		dec dx
 		jnz blend2_40
+		jmp blend2_70
+
+blend2_60:
+		; 32 bit
+		mov eax,[fs:esi]
+
+		; call decode_color
+		movzx eax,ah
+		mov [transp],eax
+		mov ecx,[gfx_color_rgb]
+
+		mov eax,[es:edi+ebx]
+		; call decode_color
+		call enc_transp
+		; call encode_color
+
+		mov [es:edi+ebx],eax
+		add esi,4
+		add ebx,4
+
+		dec dx
+		jnz blend2_60
+
+blend2_70:
 
 		pop cx
 
 		movzx eax,word [es:edi]
 		sub eax,ebp
-		add eax,eax
+		imul eax,[pixel_bytes]
 		sub esi,eax
 
 		dec cx
@@ -13358,13 +13420,19 @@ jpg_size_90:
 ;  [line_*] are unchanged
 ;
 jpg_unpack:
-		cmp byte [pixel_bytes],2
+		movzx edx,byte [pixel_bits]
+		cmp dl,16
+		jz jpg_unpack_10
+		cmp dl,32
 		jnz jpg_unpack_90
+
+jpg_unpack_10:
 
 		call use_local_stack
 
 		movzx esp,sp
 
+		push dword edx
 		push dword [line_y1]
 		push dword [line_y0]
 		push dword [line_x1]
@@ -13379,7 +13447,7 @@ jpg_unpack:
 
 		call dword jpeg_decode
 
-		add sp,24
+		add sp,28
 
 		push cs
 		pop ds

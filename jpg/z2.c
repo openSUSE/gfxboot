@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -13,14 +14,28 @@ int main(int argc, char **argv)
   int fd, i, width, height;
   unsigned char *jpg = malloc(1 << 20);
   unsigned char *img, *p;
-  unsigned bits = 16;
   unsigned char pixel[3];
   unsigned x;
   unsigned x0, x1, y0, y1;
+  unsigned bits = 0;
 
-  if(argc < 2) return 1;
+  if(argc < 4) return 1;
 
-  fd = open(argv[1], O_RDONLY);
+  if(!strcmp(argv[1], "--16")) {
+    bits = 16;
+  }
+
+  if(!strcmp(argv[1], "--24")) {
+    bits = 24;
+  }
+
+  if(!strcmp(argv[1], "--32")) {
+    bits = 32;
+  }
+
+  if(!bits) return 10;
+
+  fd = open(argv[2], O_RDONLY);
 
   if(fd == -1) return 2;
 
@@ -46,7 +61,7 @@ int main(int argc, char **argv)
   y0 = 0;
   y1 = height;
 
-  i = jpeg_decode(jpg, img, x0, x1, y0, y1);
+  i = jpeg_decode(jpg, img, x0, x1, y0, y1, bits);
 
   width = x1 - x0;
   height = y1 - y0;
@@ -61,7 +76,7 @@ int main(int argc, char **argv)
 
   if(argc >= 3) {
 
-    fd = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    fd = open(argv[3], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 
     if(fd >= 0) {
       char *s = NULL;
@@ -73,9 +88,15 @@ int main(int argc, char **argv)
 
       for(i = 0, p = img; i < width * height; i++) {
         if(bits == 24) {
-          pixel[0] = *p++;
-          pixel[1] = *p++;
           pixel[2] = *p++;
+          pixel[1] = *p++;
+          pixel[0] = *p++;
+        }
+        else if(bits == 32) {
+          pixel[2] = *p++;
+          pixel[1] = *p++;
+          pixel[0] = *p++;
+          p++;
         }
         else {
           x = p[0] + (p[1] << 8);

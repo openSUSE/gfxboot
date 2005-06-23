@@ -1,7 +1,5 @@
 #include "jpg.h"
 
-#define __LITTLE_ENDIAN
-
 #define ERR_NO_SOI 1
 #define ERR_NOT_8BIT 2
 #define ERR_HEIGHT_MISMATCH 3
@@ -94,9 +92,8 @@ static void scaleidctqtab __P((PREC *, PREC));
 
 static void initcol __P((PREC[][64]));
 
-// static void col221111 __P((int *, unsigned char *, int));
-static void col221111_16 __P((int *, unsigned char *, int));
-static unsigned char tmp_img[16*16*2];	/* size depends on color bits! */
+static void col221111(int *out, unsigned char *pic, int width, int bits);
+static unsigned char tmp_img[16*16*4];		/* 16 x 16, 32 bit color */
 
 /*********************************/
 
@@ -116,7 +113,9 @@ static struct jpeg_decdata decdata;
 
 static void memset(void *p, int c, int n)
 {
-  while(n--) *((unsigned char *) p)++ = c;
+  unsigned char *x = p;
+
+  while(n--) *x++ = c;
 }
 
 
@@ -241,7 +240,7 @@ static void dec_initscans(void)
 		dscans[i].dc = 0;
 }
 
-int jpeg_decode(unsigned char *buf, unsigned char *pic, int x0, int x1, int y0, int y1)
+int jpeg_decode(unsigned char *buf, unsigned char *pic, int x0, int x1, int y0, int y1, int color_bits)
 {
 	int i, j, m, tac, tdc;
 	int mcusx, mcusy, mx, my;
@@ -358,24 +357,29 @@ int jpeg_decode(unsigned char *buf, unsigned char *pic, int x0, int x1, int y0, 
 				idct(decdata.dcts + 256, decdata.out + 256, decdata.dquant[1], IFIX(0.5),   max[4]);
 				idct(decdata.dcts + 320, decdata.out + 320, decdata.dquant[2], IFIX(0.5),   max[5]);
 
-//				if(my == my0 || my == my1 || mx == mx0 || mx == mx1) {
-				  col221111_16(decdata.out, tmp_img, 16 * 2);
+                                // color_bits * 2: actually 16 * (color_bits / 8)
+                                col221111(decdata.out, tmp_img, color_bits * 2, color_bits);
 
-				  j0 = my == my0 ? y0 - 16 * my : 0;
-				  j1 = my == my1 ? y1 - 16 * my : 16;
-				  for(j = j0; j < j1; j++) {
-				    yofs = (16 * my - y0 + j) * (x1 - x0);
-				    i0 = mx == mx0 ? x0 - 16 * mx : 0;
-				    i1 = mx == mx1 ? x1 - 16 * mx : 16;
-				    for(i = i0; i < i1; i++) {
-				      *((unsigned short *) pic + 16 * mx - x0 + i + yofs) =
-				      *((unsigned short *) tmp_img + 16 * j + i);
-				    }
-				  }
-//				}
-//				else {
-//				  col221111_16(decdata.out, pic + 2 * ((16 * my - y0) * (x1 - x0) + (16 * mx - x0)), 2 * (x1 - x0));
-//				}
+                                j0 = my == my0 ? y0 - 16 * my : 0;
+                                j1 = my == my1 ? y1 - 16 * my : 16;
+                                for(j = j0; j < j1; j++) {
+                                  yofs = (16 * my - y0 + j) * (x1 - x0);
+                                  i0 = mx == mx0 ? x0 - 16 * mx : 0;
+                                  i1 = mx == mx1 ? x1 - 16 * mx : 16;
+
+                                  if(color_bits == 16) {
+                                    for(i = i0; i < i1; i++) {
+                                      *((unsigned short *) pic + 16 * mx - x0 + i + yofs) =
+                                      *((unsigned short *) tmp_img + 16 * j + i);
+                                    }
+                                  }
+                                  else {
+                                    for(i = i0; i < i1; i++) {
+                                      *((unsigned *) pic + 16 * mx - x0 + i + yofs) =
+                                      *((unsigned *) tmp_img + 16 * j + i);
+                                    }
+                                  }
+                                }
 			}
 		}
 	}
@@ -753,8 +757,6 @@ PREC sc;
 /**************          color decoder            ***************/
 /****************************************************************/
 
-#define ROUND
-
 /*
  * YCbCr Color transformation:
  *
@@ -795,142 +797,80 @@ PREC q[][64];
 
 #define CLAMP(x) ((unsigned int)(x) >= 256 ? ((x) < 0 ? 0 : 255) : (x))
 
-#ifdef ROUND
-
-#define CBCRCG(yin, xin)			\
+#define CBCRCG(xin)				\
 (						\
-  cb = outc[0 +yin*8+xin],			\
-  cr = outc[64+yin*8+xin],			\
+  cb = outc[0  + xin],				\
+  cr = outc[64 + xin],				\
   cg = (50 * cb + 130 * cr + 128) >> 8		\
 )
-
-#else
-
-#define CBCRCG(yin, xin)			\
-(						\
-  cb = outc[0 +yin*8+xin],			\
-  cr = outc[64+yin*8+xin],			\
-  cg = (3 * cb + 8 * cr) >> 4			\
-)
-
-#endif
 
 #define PIC(yin, xin, p, xout)			\
 (						\
   y = outy[(yin) * 8 + xin],			\
-  STORECLAMP(p[(xout) * 3 + 0], y + cr),	\
-  STORECLAMP(p[(xout) * 3 + 1], y - cg),	\
-  STORECLAMP(p[(xout) * 3 + 2], y + cb)		\
+  STORECLAMP(p[(xout) * 4 + 0], y + cb),	\
+  STORECLAMP(p[(xout) * 4 + 1], y - cg),	\
+  STORECLAMP(p[(xout) * 4 + 2], y + cr)		\
 )
 
-#ifdef __LITTLE_ENDIAN
-#define PIC_16(yin, xin, p, xout, add)		 \
-(                                                \
-  y = outy[(yin) * 8 + xin],                     \
-  y = ((CLAMP(y + cr + add*2+1) & 0xf8) <<  8) | \
-      ((CLAMP(y - cg + add    ) & 0xfc) <<  3) | \
-      ((CLAMP(y + cb + add*2+1)       ) >>  3),  \
-  p[(xout) * 2 + 0] = y & 0xff,                  \
-  p[(xout) * 2 + 1] = y >> 8                     \
-)
-#else
-#ifdef CONFIG_PPC
-#define PIC_16(yin, xin, p, xout, add)		 \
-(                                                \
-  y = outy[(yin) * 8 + xin],                     \
-  y = ((CLAMP(y + cr + add*2+1) & 0xf8) <<  7) | \
-      ((CLAMP(y - cg + add*2+1) & 0xf8) <<  2) | \
-      ((CLAMP(y + cb + add*2+1)       ) >>  3),  \
-  p[(xout) * 2 + 0] = y >> 8,                    \
-  p[(xout) * 2 + 1] = y & 0xff                   \
-)
-#else
-#define PIC_16(yin, xin, p, xout, add)	 	 \
-(                                                \
-  y = outy[(yin) * 8 + xin],                     \
-  y = ((CLAMP(y + cr + add*2+1) & 0xf8) <<  8) | \
-      ((CLAMP(y - cg + add    ) & 0xfc) <<  3) | \
-      ((CLAMP(y + cb + add*2+1)       ) >>  3),  \
-  p[(xout) * 2 + 0] = y >> 8,                    \
-  p[(xout) * 2 + 1] = y & 0xff                   \
-)
-#endif
-#endif
-
-#define PIC221111(xin)						\
-(								\
-  CBCRCG(0, xin),						\
-  PIC(xin / 4 * 8 + 0, (xin & 3) * 2 + 0, pic0, xin * 2 + 0),	\
-  PIC(xin / 4 * 8 + 0, (xin & 3) * 2 + 1, pic0, xin * 2 + 1),	\
-  PIC(xin / 4 * 8 + 1, (xin & 3) * 2 + 0, pic1, xin * 2 + 0),	\
-  PIC(xin / 4 * 8 + 1, (xin & 3) * 2 + 1, pic1, xin * 2 + 1)	\
+#define PIC_16(yin, xin, p, xout, add)			\
+(							\
+  y = outy[(yin) * 8 + xin],				\
+  y = ((CLAMP(y + cr + add*2+1) & 0xf8) <<  8) |	\
+      ((CLAMP(y - cg + add    ) & 0xfc) <<  3) |	\
+      ((CLAMP(y + cb + add*2+1)       ) >>  3),		\
+  p[(xout) * 2 + 0] = y & 0xff,				\
+  p[(xout) * 2 + 1] = y >> 8				\
 )
 
-#define PIC221111_16(xin)                                               \
-(                                                               	\
-  CBCRCG(0, xin),                                               	\
-  PIC_16(xin / 4 * 8 + 0, (xin & 3) * 2 + 0, pic0, xin * 2 + 0, 3),     \
-  PIC_16(xin / 4 * 8 + 0, (xin & 3) * 2 + 1, pic0, xin * 2 + 1, 0),     \
-  PIC_16(xin / 4 * 8 + 1, (xin & 3) * 2 + 0, pic1, xin * 2 + 0, 1),     \
-  PIC_16(xin / 4 * 8 + 1, (xin & 3) * 2 + 1, pic1, xin * 2 + 1, 2)      \
+#define PIC221111x(xin, xin_4, xin_3)			\
+(							\
+  CBCRCG(xin),						\
+  PIC(xin_4 + 0, xin_3 + 0, pic0, xin * 2 + 0),		\
+  PIC(xin_4 + 0, xin_3 + 1, pic0, xin * 2 + 1),		\
+  PIC(xin_4 + 1, xin_3 + 0, pic1, xin * 2 + 0),		\
+  PIC(xin_4 + 1, xin_3 + 1, pic1, xin * 2 + 1)		\
 )
 
-#if 0
-static void col221111(out, pic, width)
-int *out;
-unsigned char *pic;
-int width;
+#define PIC221111_16x(xin, xin_4, xin_3)		\
+(							\
+  CBCRCG(xin),						\
+  PIC_16(xin_4 + 0, xin_3 + 0, pic0, xin * 2 + 0, 3),	\
+  PIC_16(xin_4 + 0, xin_3 + 1, pic0, xin * 2 + 1, 0),	\
+  PIC_16(xin_4 + 1, xin_3 + 0, pic1, xin * 2 + 0, 1),	\
+  PIC_16(xin_4 + 1, xin_3 + 1, pic1, xin * 2 + 1, 2)	\
+)
+
+
+static void col221111(int *out, unsigned char *pic, int width, int bits)
 {
-	int i, j, k;
-	unsigned char *pic0, *pic1;
-	int *outy, *outc;
-	int cr, cg, cb, y;
+  int i, j, k, k_4, k_3;
+  unsigned char *pic0, *pic1;
+  int *outy, *outc;
+  int cr, cg, cb, y;
 
-	pic0 = pic;
-	pic1 = pic + width;
-	outy = out;
-	outc = out + 64 * 4;
-	for (i = 2; i > 0; i--) {
-		for (j = 4; j > 0; j--) {
-			for (k = 0; k < 8; k++) {
-				PIC221111(k);
-			}
-			outc += 8;
-			outy += 16;
-			pic0 += 2 * width;
-			pic1 += 2 * width;
-		}
-		outy += 64 * 2 - 16 * 4;
-	}
-}
-#endif
-
-void col221111_16(out, pic, width)
-int *out;
-unsigned char *pic;
-int width;
-{
-	int i, j, k;
-	unsigned char *pic0, *pic1;
-	int *outy, *outc;
-	int cr, cg, cb, y;
-
-	pic0 = pic;
-	pic1 = pic + width;
-	outy = out;
-	outc = out + 64 * 4;
-	for (i = 2; i > 0; i--) {
-		for (j = 4; j > 0; j--) {
-			for (k = 0; k < 8; k++) {
-			    PIC221111_16(k);
-			}
-			outc += 8;
-			outy += 16;
-			pic0 += 2 * width;
-			pic1 += 2 * width;
-		}
-		outy += 64 * 2 - 16 * 4;
-	}
+  pic0 = pic;
+  pic1 = pic + width;
+  outy = out;
+  outc = out + 64 * 4;
+  for(i = 2; i > 0; i--) {
+    for(j = 4; j > 0; j--) {
+      for(k = 0; k < 8; k++) {
+        k_4 = (k >> 2) << 3;
+        k_3 = (k & 3) << 1;
+        if(bits == 16) {
+          PIC221111_16x(k, k_4, k_3);
+        }
+        else {
+          PIC221111x(k, k_4, k_3);
+        }
+      }
+      outc += 8;
+      outy += 16;
+      pic0 += 2 * width;
+      pic1 += 2 * width;
+    }
+    outy += 64 * 2 - 16 * 4;
+  }
 }
 
 

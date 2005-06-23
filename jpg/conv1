@@ -16,7 +16,7 @@ sub fix_getword;
 $getword = `cat getword`;
 
 for (@f) {
-  undef $_ if /^\s*\.(size|align|text|section|ident|local|data|file)/;
+  undef $_ if /^\s*\.(size|align|p2align|text|section|ident|local|data|file)/;
   $_ = "\n" if /^\s*\.type/;
   if(/^\s*\.globl/) {
     push @globl, "\t$_";

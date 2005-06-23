@@ -1412,7 +1412,10 @@
 /transp 0x30 def
 
 % 640 480 8 findmode setmode not { false .end } if
-800 600 16 findmode setmode not { false .end } if
+% 1024 768 32 findmode setmode not { false .end } if
+800 600 16 findmode setmode not {
+  800 600 32 findmode setmode not { false .end } if
+} if
 
 % /with_transp vscreen.size exch pop screen.size exch pop div 1 gt colorbits 8 gt and def
 

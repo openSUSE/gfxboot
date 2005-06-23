@@ -1,1 +1,1 @@
-		jpg_data_size	equ 10512
+		jpg_data_size	equ 11024
