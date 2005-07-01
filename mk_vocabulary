@@ -1,0 +1,144 @@
+#! /usr/bin/perl
+
+# Ensure that both mkbootmsg.c & bincode.asm talk about the same thing.
+
+@callback = qw (
+  KeyEvent MenuInit InfoBoxInit InfoBoxDone
+  ProgressInit ProgressDone ProgressUpdate
+  PasswordInit PasswordDone
+  Timeout Timer
+);
+
+@primary = qw (
+  [ ] def if ifelse loop repeat for forall exit return array get put length
+  dup pop exch rot roll over index exec
+  add sub mul div mod neg abs min max and or xor not shl shr
+  eq ne gt ge lt le
+  trace dtrace
+  malloc free memsize dumpmem
+  gettype settype
+  screen.size image.colors
+  moveto currentpoint lineto setcolor currentcolor putpixel getpixel
+  setfont currentfont fontheight strsize show
+  image loadpalette tint settintcolor setpalette getpalette
+  settransparentcolor
+  savescreen restorescreen
+  fillrect
+  snprintf
+  edit.init edit.done edit.input edit.showcursor edit.hidecursor
+  updatedisk rmoveto bootloader
+  strstr
+
+  sound.getvolume sound.setvolume
+  sound.getsamplerate sound.setsamplerate
+  sound.play sound.done
+  mod.load mod.play mod.playsample
+
+  settextwrap currenttextwrap
+  seteotchar currenteotchar
+  settextcolors currenttextcolors
+  setmaxrows currentmaxrows
+  formattext
+  gettextrows setstartrow
+  getlinks
+  setlink currentlink
+  getlink
+  lineheight
+  currenttitle
+
+  videomodes getvideomode
+  xsavescreen
+
+  usleep notimeout
+  time
+  setbrightness currentbrightness
+  fadein fade
+  idle
+  image.size
+
+  bootdrive reloadfs usernote eject poweroff reboot biosmem
+
+  getinfo 64bit
+
+  getbyte putbyte getdword putdword
+  findfile
+
+  setmode currentmode findmode
+  colorbits
+
+  setimage currentimage
+
+  settransparency currenttransparency
+
+);
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+sub canon_name;
+
+if($ARGV[0] eq '-a') {
+  printf "cb_functions\t\tequ %u\n", @callback + 0;
+  printf "prim_functions\t\tequ %u\n\n", @primary + 3;
+
+  $i = 0;
+  for (@callback) {
+    $c = canon_name $_;
+    $s = "";
+    $s .= "\t" if length $c < 3;
+    $s .= "\t" if length $c < 11;
+    print "cb_$c$s\tequ $i\n";
+    $i++;
+  }
+
+  print "\n%macro\t\t\tprim_jump_table 0\n";
+  print "jt_p_none\t\tdw 0\t\t\t; 00h\njt_p_code\t\tdw 0\t\t\t; 01h\njt_p_ret\t\tdw 0\t\t\t; 02h\n";
+  $i = 3;
+  for (@primary) {
+    $c = canon_name $_;
+    $s = "";
+    $s .= "\t" if length $c < 3;
+    $s .= "\t" if length $c < 11;
+    $t = "";
+    $t .= "\t" if length $_ < 8;
+    print "jt_p_$c$s\tdw prim_$c$t\t; ";
+    printf "%02xh\n", $i++
+  }
+  print "%endmacro\n"
+}
+
+if($ARGV[0] eq '-c') {
+  print "typedef enum {\n";
+  print "  p_none,\n  p_code,\n  p_ret";
+  for (@primary) { $c = canon_name $_; print ",\n  p_$c" }
+  print "\n} prim_t;\n\n";
+
+  print "struct {\n  type_t type;\n  unsigned value;\n  char *name;\n} prim_names[] = {\n";
+
+  for (@callback) {
+    print "  { t_none, 0, \"$_\" },\n"
+  }
+
+  print "  { t_prim, p_code, \"{\" },\n";
+  print "  { t_prim, p_ret, \"{\" }";
+
+  for (@primary) {
+    $c = canon_name $_;
+    print ",\n  { t_prim, p_$c, \"$_\" }"
+  }
+
+  print "\n};\n"
+}
+
+
+sub canon_name
+{
+  local $_ = shift;
+
+  $_ = 'astart' if $_ eq '[';
+  $_ = 'aend' if $_ eq ']';
+  tr/.//d;
+
+  return $_
+}
+
+

@@ -1,0 +1,117 @@
+<html><body>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="help">Bruke hjelpesystemet</a></h3>
+
+Den elektroniske hjelpen for oppstartslasteren er kontekstf&oslash;lsom. Den gir informasjon om det valgte menypunktet, og n&aring;r du redigerer oppstartsalternativer, fors&oslash;ker hjelpeprogrammet &aring; s&oslash;ke etter informasjon om alternativet der skrivemerket befinner seg.<br>
+<br>
+Navigasjonstaster<br><br>
+
+  <em>Pil opp</em>: Merk forrige lenke<br>
+  <em>Pil ned</em>: Merk neste lenke<br>
+  <em>Pil venstre</em>, <em>Backspace</em>: G&aring; tilbake til forrige emne<br>
+  <em>Pil h&oslash;yre</em>, <em>Enter</em>, <em>Mellomrom</em>: F&oslash;lg lenke<br>
+  <em>Page Up</em>: Rull &eacute;n side oppover<br>
+  <em>Page Down</em>: Rull &eacute;n side nedover<br>
+  <em>Home</em>: G&aring; til begynnelsen av siden<br>
+  <em>End</em>: G&aring; til slutten av siden<br>
+  <em>Esc</em>: Avslutt hjelpen<br>
+
+<br>G&aring; tilbake til <a href="#opt">Oppstartsalternativer</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="startup">Valg av oppstartsskjermbilde</a></h3>Med 
+
+<em>F3</em> kan du endre skjermbildet ved oppstart. Hvis du vil, kan du bruke kjernealternativet <a href="#o_splash">splash</a> (oppstartsbilde) direkte.<br>
+<br>
+<em>native</em> sl&aring;r av oppstartsbildet (samme som splash=0)<br>
+<br>
+<em>silent</em> sl&aring;r av alle kjerne- og oppstartsmeldinger og viser en fremdriftsindikator i stedet<br>
+<br>
+<em>verbose</em> viser et lekkert bakgrunnsbilde samt kjerne- og oppstartsmeldinger<br>
+
+<br>G&aring; tilbake til <a href="#opt">Oppstartsalternativer</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="keytable">Valg av spr&aring;k og tastaturoppsett</a></h3>
+
+Trykk <em>F2</em> for &aring; endre spr&aring;ket og tastaturoppsettet som oppstartslasteren bruker.
+
+<br><br>G&aring; tilbake til <a href="#opt">Oppstartsalternativer</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="profile">Velg profil</a></h3>
+
+Trykk <em>F4</em> for &aring; velge en profil. Systemet vil starte opp med konfigurasjonen som er lagret i denne profilen.
+
+<br><br>G&aring; tilbake til <a href="#opt">Oppstartsalternativer</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="opt">Oppstartsalternativer </a></h3>
+
+  <a href="#o_splash">splash</a> -- p&aring;virker oppstartsskjermbildet<br>
+  <a href="#o_apm">apm</a> -- sl&aring;r str&oslash;msparing av og p&aring;<br>
+  <a href="#o_acpi">acpi</a> -- avanserte konfigurasjons- og str&oslash;msparefunksjoner<br>
+  <a href="#o_ide">ide</a> -- styrer IDE-undersystemet<br>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_splash">Kjernealternativer: splash</a></h3>
+
+Dette er bakgrunnsbildet som vises under oppstart av systemet.<br>
+<br>
+<em>splash=0</em><br>
+Bakgrunnsbildet er sl&aring;tt av. Dette kan v&aelig;re nyttig for sv&aelig;rt gamle skjermmodeller eller hvis det oppst&aring;r en feil.<br>
+<br>
+<em>splash=verbose</em><br> Aktiverer bakgrunnsbilde ved oppstart, men kjerne- og oppstartsmeldinger vises likevel.<br>
+<br>
+<em>splash=silent</em><br>
+Aktiverer bakgrunnsbilde ved oppstart uten meldinger. En fremdriftsindikator vises i stedet.<br>
+<br>
+G&aring; tilbake til <a href="#opt">Oppstartsalternativer</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_apm">Kjernealternativer: apm</a></h3>
+
+APM er en av de to strategiene for str&oslash;msparing som benyttes av moderne datamaskiner. APM brukes hovedsakelig av b&aelig;rbare maskiner, f.eks. for diskdvalemodus, men kan ogs&aring; sl&aring; av maskinen p&aring; en sikker m&aring;te n&aring;r str&oslash;mmen blir brutt. APM er avhengig av at BIOS er riktig konfigurert. Hvis BIOS ikke fungerer riktig, er bruksomr&aring;det til APM begrenset, og funksjonen kan til og med hindre at maskinen starter opp riktig. Derfor kan APM sl&aring;s av med parameteren<br><br>
+
+  <em>apm=off</em> -- sl&aring; av APM helt<br><br>
+
+Noen moderne datamaskiner kan ha nytte av det nyere
+<a href="#o_acpi">ACPI</a>-systemet.
+
+<br><br>G&aring; tilbake til <a href="#opt">Oppstartsalternativer</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_acpi">Kjernealternativer: acpi</a></h3>
+
+ACPI (Advanced Configuration and Power Interface) er en standard for kommunikasjonen mellom operativsystemet og BIOS i forbindelse med konfigurasjons- og str&oslash;msparefunksjoner. Som standard er <em>acpi</em> sl&aring;tt p&aring; n&aring;r en BIOS produsert etter &aring;r 2000 er registrert. ACPI-funksjonene kan styres ved hjelp av en del vanlige parametere:<br>
+<br>
+  <em>pci=noacpi</em> -- Ikke bruk ACPI for &aring; rute PCI-avbrudd <em>acpi=oldboot</em> -- bare ACPI -funksjoner i forbindelse med oppstart er aktivert<br>
+  <em>acpi=off</em> -- sl&aring; av ACPI helt<br>
+  <em>acpi=force</em> -- sl&aring; p&aring; ACPI selv om BIOS er produsert f&oslash;r 2000<br>
+<br>
+Spesielt i nye maskiner benyttes acpi i stedet for
+<a href="#o_apm">apm</a>.
+
+
+<br><br>G&aring; tilbake til <a href="#opt">Oppstartsalternativer</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_ide">Kjernealternativer: ide</a></h3>
+
+IDE er langt vanligere i skrivebordsmaskiner enn SCSI. For &aring; l&oslash;se maskinvareproblemer som kan oppst&aring; i IDE-systemer, kan f&oslash;lgende kjerneparameter brukes: <br><br> 
+
+  <em>ide=nodma</em> -- sl&aring; av dma for IDE-disker<br>
+
+
+
+<br><br>G&aring; tilbake til <a href="#opt">Oppstartsalternativer</a>.
+
+</body></html>

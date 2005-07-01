@@ -1,0 +1,84 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="help">使用說明系統</a></h3>
+
+開機載入器的線上說明可根據使用者的工作內容來提供協助。 此說明系統可提供所選功能表項目的資訊。如果您正在編輯開機選項，說明系統可針對游標停留的選項，提供相關的資訊。<br> <br> 導覽鍵<br><br>
+
+  <em>向上鍵</em>： 反白顯示上一個連結<br> <em>向下鍵</em>： 反白顯示下一個連結<br> <em>向左鍵</em>、<em>退格鍵</em>： 返回前一個主題<br> <em>向右鍵</em>、<em>Enter</em>、<em>空格鍵</em>： 進入連結的主題<br> <em>Page Up</em>： 捲動至上一頁<br> <em>Page Down</em>： 捲動至下一頁<br> <em>Home</em>： 移至頁面開頭<br> <em>End</em>： 移至頁面結尾<br> <em>Esc</em>： 離開說明系統<br>
+
+<br>回到<a href="#opt">開機選項</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="startup">開機顯示畫面模式選項</a></h3>
+
+<em>F3</em> 可變更開機顯示畫面的模式。 您可以直接使用 <a href="#o_splash">splash</a> 核心選項。<br> <br> <em>native</em> 可關閉開機顯示畫面 (功能與 splash=0 相同)<br> <br> <em>silent</em> 將不顯示所有的核心與開機訊息，僅顯示進度列<br> <br> <em>verbose</em> 將顯示圖片，以及核心與開機訊息<br>
+
+<br>回到<a href="#opt">開機選項</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="keytable">語言與鍵盤配置選項</a></h3>
+
+按 <em>F2</em> 鍵可變更開機載入器所使用的語言與鍵盤配置。
+
+<br><br>回到<a href="#opt">開機選項</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="profile">選擇設定檔</a></h3>
+
+按 <em>F4</em> 鍵可選取設定檔。 您的系統將使用在此設定檔所儲存的組態來開機。
+
+<br><br>回到<a href="#opt">開機選項</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="opt">開機選項</a></h3>
+
+  <a href="#o_splash">splash</a> -- 設定開機顯示畫面的模式<br> <a href="#o_apm">apm</a> -- 切換電源管理<br> <a href="#o_acpi">acpi</a> -- 進階組態與電源介面<br> <a href="#o_ide">ide</a> -- 控制 IDE 子系統<br>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_splash">核心選項： splash</a></h3>
+
+開機顯示畫面為系統開機時所顯示的圖片。<br> <br> <em>splash=0</em><br> 關閉開機顯示畫面。 若是使用很舊的螢幕，或是發生任何錯誤，可考慮使用此選項。<br> <br> <em>splash=verbose</em><br> 啟用開機顯示畫面，同時也一併顯示核心與開機訊息。<br> <br> <em>splash=silent</em><br> 啟用開機顯示畫面，但不顯示訊息。 僅顯示進度列。<br> <br>回到<a href="#opt">開機選項</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_apm">核心選項： apm</a></h3>
+
+APM 為目前電腦所用的兩種電源管理策略之一。 APM 主要用於筆記型電腦，可提供磁碟休眠 (suspend to disk) 等功能，同時也可負責停電時關閉電腦的功能。 APM 必須搭配適當的 BIOS。 若 BIOS 故障，APM 只能提供有限的功能，或甚至使得電腦無法運作。 在此狀況下，可利用此參數來關閉 APM 功能<br><br>
+
+  <em>apm=off</em>  -- 關閉 APM 全部的功能<br><br>
+
+部分新型電腦可能採用較新的 <a href="#o_acpi">ACPI</a>。
+
+<br><br>回到<a href="#opt">開機選項</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_acpi">核心選項： acpi</a></h3>
+
+ACPI (進階組態與電源介面) 為業界標準，定義作業系統與 BIOS 之間的電源與組態管理介面。 根據預設，若偵測到 BIOS 為西元 2000 年之後的版本，將會啟用 <em>acpi</em>。以下是控制 ACPI 功能常用的幾個參數：<br> <br> <em>pci=noacpi</em> -- 不使用 ACPI 來遞送 PCI 中斷要求 <em>acpi=oldboot</em> -- 只啟用與開機有關的部分 ACPI<br> <em>acpi=off</em> -- 關閉 ACPI 全部的功能<br> <em>acpi=force</em> -- 即使 BIOS 為西元 2000 年前的版本，仍舊啟用 ACPI<br> <br> 特別是在新的電腦上，可取代舊式的 <a href="#o_apm">apm</a> 系統。
+
+
+<br><br>回到<a href="#opt">開機選項</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_ide">核心選項： ide</a></h3>
+
+IDE 與 SCSI 的差異在於 IDE 比 SCSI 更廣泛地運用在大部分桌上型電腦。 為了避免 IDE 系統相關的硬體問題，請使用下列核心參數： <br><br> 
+
+  <em>ide=nodma</em>  -- 關閉 IDE 磁碟機或光碟機的 DMA 功能<br>
+
+
+
+<br><br>回到<a href="#opt">開機選項</a>。
+
+</body></html>

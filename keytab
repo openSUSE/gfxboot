@@ -1,0 +1,80 @@
+#! /usr/bin/perl
+
+use Encode;
+use Getopt::Long;
+
+sub get_table;
+sub do_enc;
+
+$opt_all = 0;
+$opt_enc = undef;
+
+GetOptions(
+  'all' => \$opt_all,
+  'enc=s' => \$opt_enc
+);
+
+$keytable = shift;
+
+@us_map{get_table "us"} = () unless $opt_all;
+@map = get_table $keytable;
+
+for (keys %us_map) {
+  delete $us_map{$_} if /\[\s*0x56/;
+}
+
+
+print "/keymap.$keytable [\n";
+for (@map) {
+  print $_ unless exists $us_map{$_};
+}
+print "] def\n";
+
+
+sub get_table
+{
+  local $_;
+  my ($kt, $map_idx, @map, @psmap, $x, $n, $s, $a);
+
+  $kt = shift;
+
+  open F, "loadkeys -m $kt |";
+  while(<F>) {
+    $map_idx = 0 if /u_short/;
+    if(/u_short\s+plain_map\[/) { $map_idx = 1; $key_idx = 0 }
+    if(/u_short\s+shift_map\[/) { $map_idx = 2; $key_idx = 0 }
+    if(/u_short\s+altgr_map\[/) { $map_idx = 3; $key_idx = 0 }
+    if($map_idx) {
+      while(/(0xf\S{3}),/g) {
+        $x = $1;
+        $map[$key_idx][0] = $key_idx;
+        $map[$key_idx][$map_idx] = hex($x) & 0xff if $x =~ /0xf[0b]/;
+        $key_idx++;
+      }
+    }
+  }
+  close F;
+
+  for (@map) {
+    ($n, $s, $a) = ($_->[1], $_->[2], $_->[3]);
+    $a = 0 if $a == $n || $a == $s;
+    if($n || $s || $a) {
+      push @psmap, sprintf("  [ 0x%02x 0x%02x 0x%02x 0x%02x ]\n", $_->[0], do_enc($n), do_enc($s), do_enc($a));
+    }
+  }
+
+  @psmap;
+}
+
+
+sub do_enc
+{
+  my ($c);
+
+  $c = shift;
+
+  return $c unless $opt_enc;
+
+  return unpack("V", encode("utf32le", decode($opt_enc, chr($c))));
+}
+

@@ -1,0 +1,146 @@
+19/10/2004:	v2.5.11
+	- chinese translations added
+	- removed kroete to make room for the above
+
+5/10/2004:	v2.5.10
+	- added help text for '64bit' switch (#46806)
+
+1/10/2004	v2.5.9
+	- new blue theme
+
+1/10/2004:	v2.5.8
+	- polish translations
+	- back to blue theme
+
+30/9/2004:	v2.5.7
+	- new theme
+	- hide passwords (#46094)
+
+27/9/2004:	v2.5.6
+	- more translations
+
+20/9/2004:	v2.5.5
+	- minor i18n fixes
+
+13/9/2004:	v2.5.4
+	- final graphics
+	- norsk translations
+
+6/9/2004:	v2.5.3
+	- added new translations
+	- preliminary SuSE theme graphics
+
+2/9/2004:	v2.5.2
+	- do the F-key-move-down magic only for syslinux (#44238)
+	- some text cleanup (9.1 -> 9.2, dropped unused liveeval msgs)
+	- integrated new splash picture
+
+18/9/2004:	v2.5.1
+	- basic arabic language support
+
+9/8/2004:	v2.5.0
+	- add 32/64 dualboot code
+	- removed obsolete themes
+	- switch to 'installation' if some F-key has been used (#41097)
+	- don't offer 640x480; instead, select x11 vesa driver
+	- assume monitor can display at least 800x600
+
+2/8/2004:	v2.4.24
+	- added SLES-Live theme
+
+9/6/2004	v2.4.23
+	- added SuSE-NLD theme
+
+21/5/2004:	v2.4.22
+	- new SLES pictures
+
+12/5/2004:	v2.4.21
+	- hide password in lilo (#40348)
+
+14/4/2004:	v2.4.20
+	- irqs might have been turned off in some cases
+	- new SLES pictures
+
+14/4/2004:	v2.4.19
+	- font creation missed some chars (#38223)
+
+8/4/2004:	v2.4.18
+	- use 'install=slp://' (#36982)
+	- add new 'biosmem' function
+	- live cd layout changes
+	- added live cd warning if there's not enough memory
+	- added SLES theme (copy of SuSE theme)
+
+7/4/2004:	v2.4.17
+	- add SuSE-Live theme
+
+6/4/2004:	v2.4.16
+	- handle case where we can't set graphics mode (#35806)
+
+5/4/2004:	v2.4.15
+	- add HTTP install option
+
+5/4/2004:	v2.4.14
+	- add only english to boot/message (#38339)
+
+5/4/2004:	v2.4.13
+	- japanese translations, again
+	- new boot graphics, again
+
+3/4/2004:	v2.4.12
+	- new japanese translations (#38224)
+	- not all japanese chars were added to font (#38223)
+
+2/4/2004	v2.4.11
+	- new boot graphics
+
+2/4/2004:	v2.4.10
+	- reset timeout if we show some popup during start
+
+2/4/2004:	v2.4.9
+	- added amd64 test
+	- fixed lilo password dialog
+	- use less memory for input dialogs
+	- modplayer should work again
+	- added russian texts
+
+31/3/2004:	v2.4.8
+	- take out romanian install help text; not enough space
+
+31/3/2004:	v2.4.7
+	- swedish texts
+	- added japanese texts
+	- fixed html viewer to work with japanese (allow line
+	  breaks at any place)
+	- added hungarian, italian and french texts
+
+29/3/2004:	v2.4.6
+	- dutch help texts
+	- slovene & romanian texts
+
+28/3/2004:	v2.4.5
+	- menu texts localized via 'translations.<locale>'
+	- new boot graphics
+	- added Home theme
+	- fixed language setting (#37195)
+	- pass lang info to yast (#35841)
+
+22/3/2004:	v2.4.4
+	- new boot graphics
+	- fixed japanese locale name (#36487)
+	- added spanish texts
+	- added dutch & hungarian texts
+	- localized driver update text
+
+17/3/2004:	v2.4.3
+	- new/updated czech texts
+	- reworked themes Makefile
+
+16/3/2004:	v2.4.2
+	- added german translations
+
+14/4/2004:	v2.4.1
+	- created Changelog
+	- lang menu build from 'languages' file
+	- corrected help text (#35630)
+	- added german & slovak translations
