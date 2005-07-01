@@ -1,0 +1,304 @@
+<html><body>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="main">Nápověda zavaděče</a></h3>
+Vítejte v <em>SUSE LINUXu 9.1</em><br><br>
+
+K výběru požadované funkce použijte tuto nabídku. Pokud máte problém s pohybem po systému nápovědy, stiskněte klávesu <em>F1</em>. Tak vstoupíte do <a href="#help">popisu</a> systému nápovědy. Hlavní funkce této nabídky jsou:<br><br>
+
+<a href="#harddisk">Spustit z disku</a>: Tato volba nevede k žádným operacím se systémem. Pouze spustí již nainstalovaný systém.<br><br>
+
+<a href="#linux">Instalace</a>: 
+Tato volba je vhodná pro naprostou většinu počítačů. Pokud při instalaci dojde k zatuhnutí nebo špatné detekci některých zařízení, vyzkoušejte některou z dalších voleb.<br><br>
+
+<a href="#noacpi">Instalace -- bez ACPI</a>: řada současných počítačů stále ještě neobsahuje implementaci ACPI nebo je tato implementace vadná. Tímto výběrem zakážete podporu ACPI v jádře, ale stále budete mít k dispozici řadu dalších funkcí jako například DMA pro IDE zařízení.<br><br>
+
+<a href="#failsafe">Instalace -- bezpečné nastavení</a>: Pokud volba <em>Instalace</em> vedla k zatuhnutí systému nebo chybám, použijte tuto nabídku.<br><br>
+
+<a href="#manual">Ruční instalace</a>: Tato volba je určena pouze pro experty. S její pomocí získáte maximální kontrolu nad systémem a také možnost zavést některé moduly před spuštěním záchranného systému.<br><br>
+
+<a href="#rescue">Záchranný systém</a>: Spuštění malého linuxového systému přímo z  RAM. Použijte ho v případě vážných problémů s nainstalovaným systémem. Po spuštění se přihlaste jako uživatel root. <br><br>
+
+<a href="#memtest">Test paměti</a>: Test paměti je užitečný při zjišťování stavu paměťových modulů. Jde o zátěžový test. <br><br>
+
+<a href="#opt">Parametry startu</a>: Startovací parametry mohou ovlivnit chování systému.<br><br>
+
+<a href="#help">F1 Nápověda</a>: Nápověda zavaděče je citlivá na obsah. Poskytuje informace o zvolené nabídce nebo pokud editujete parametry jádra, snaží se poskytnout informace o dané volbě. Obsahuje také popis samotného systému nápovědy.<br><br>
+
+<a href="#videomode">F2 Video režim</a>: Zde můžete nastavit různá rozlišení. V případě problémů zvolte <em>textový režim</em>.<br><br>
+
+<a href="#keytable">F3 Jazyk</a>: Nastavení jazyka a rozložení kláves během používání zavaděče.<br><br>
+
+<a href="#install_src">F4 Instalační zdroj</a>: Volba instalačního zdroje.<br><br>
+
+<a href="#startup">F5 Spouštění jádra</a>: Normálně jsou hlášení jádra zakryta. Stisknutím klávesy <em>F5</em> to můžete změnit.<br><br>
+
+<a href="#driverupdate">F6 Update ovladače</a>: U některých velmi nových systémů může být při instalaci potřeba updatovat ovladače.<br><br>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="help">Používání systému nápovědy</a></h3>
+
+Nápověda zavaděče je citlivá na obsah. Poskytuje informace o zvolené nabídce nebo pokud editujete parametry jádra, snaží se poskytnout informace o dané volbě.<br>
+<br>
+Navigační klávesy<br><br>
+
+ <em>Up Arrow</em>: návrat na předešlý odkaz<br>
+  <em>Down Arrow</em>: přechod na následující odkaz<br>
+  <em>Left Arrow</em>, <em>Backspace</em>: návrat k předešlému tématu<br>
+  <em>Right Arrow</em>, <em>Enter</em>, <em>Space</em>: přejít na označený odkaz<br>
+  <em>Page Up</em>: o stránku nahoru<br>
+  <em>Page Down</em>: o stránku dolů<br>
+  <em>Home</em>: přechod na začátek stránky<br>
+  <em>End</em>: přechod na konec stránky<br>
+  <em>Esc</em>: ukončení nápovědy<br>
+
+<br>Návrat do <a href="#opt">startovací nabídky</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="driverupdate">Update ovladače</a></h3>
+
+V případě potřeby zavedení ovladače z diskety nebo CD stiskněte <em>F6</em>. Zavaděč vás po zavedené jádra požádá o médium s ovladačem.<br><br>
+
+Update ovladače je obvykle novější verzi ovladače potřebná pro průběh instalace.
+
+<br>Návrat do <a href="#opt">startovací nabídky</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="videomode">Výběr video režimu</a></h3>
+
+Rozlišení a video režim můžete změnit pomocí klávesy <em>F2</em>. Jako výchozí je nastavené nejvyšší dostupné rozlišení.<br><br>
+
+Může se stát, že váš monitor nelze automaticky detekovat. V takovém případě odpovídající režim zvolte ručně.<br><br>
+
+Pokud máte během instalace problémy s grafickou kartou, zvolte <em>textový režim</em>.
+
+<br>Návrat do <a href="#opt">startovací nabídky</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="startup">Výběr režimu splashe</a></h3>
+
+
+Splash režim můžete měnit pomocí klávesy <em>F5</em>. Použít můžete také parametr jádra <a href="#o_splash">splash</a>.<br>
+<br>
+<em>native</em> vypne splash screen (stejně jako splash=0)<br>
+<br>
+<em>silent</em> zakryje všechna hlášení jádra a zobrazí místo toho animaci znázorňující pokrok při stratu nebo ukončení systému<br>
+<br>
+<em>verbose</em> Zobrazí hlášení jádra na grafickém pozadí<br>
+
+<br>Návrat do <a href="#opt">startovací nabídky</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="keytable">Jazyk a výběr klávesové mapy</a></h3>
+
+Stisknutím <em>F4</em> můžete změnit jazyk a rozložení klávesové mapy. 
+<br>Návrat do <a href="#opt">startovací nabídky</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="install_src">Instalační zdroj</a></h3>
+
+Stisknutím <em>F3</em> můžete zvolit instalační zdroj.<br><br>
+
+Tato volba má stejný význam jako parametr <a href="#o_install">install</a>.
+
+<br>Návrat do <a href="#opt">startovací nabídky</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="linux">Instalace</a></h3>
+
+Výběrem <em>Instalace</em> spustíte výchozí nastavení instalace. Při startu můžete vybírat z dalších
+<a href="#opt">startovacích nabídek</a>. Výchozí volbou aktivujete řadu funkcí běžně dostupného hardwaru. <br><br>
+
+<br>Návrat do <a href="#opt">startovací nabídky</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="harddisk">Spustit z disku</a></h3>
+
+Volbou <em>Spustit z disku</em> spustíte systém nainstalovaný na lokálním disku. Systém musí být nainstalován správně, protože ke spuštění se použijte pouze MBR (Master Boot Record) prvního disku.
+ID zařízení prvního disku je předáváno systému BIOSem počítače. <br><br>
+
+Použijte tuto volbu v případě, že zapomenete instalační CD nebo DVD v mechanice a chcete spustit nainstalovaný systém.<br><br>
+
+<br>Návrat do <a href="#opt">startovací nabídky</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="noacpi">Instalace -- bez ACPI</a></h3>
+
+V SUSE LINUXu byla podpora ACPI portována z vývojových jader řady 2.5 portována již do řady 2.4 kernel. Velmi nový hardware může ACPI vyžadovat pro správu přerušení. ACPI kompletně nahrazuje starší systém APM. <br><br>
+
+Pokud se při startu jádra objeví problémy, zvolte <em>Instalace -- bez ACPI</em>.  Nejobvyklejší příznaky problémů s ACPI:
+<br><br>
+
+   * jádro při stratu zamrzne<br>
+   * PCI karty nejsou správně detekovány nebo inicializovány<br><br>
+
+
+<br>Návrat do <a href="#opt">startovací nabídky</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="failsafe">Instalace -- bezpečné nastavení</a></h3>
+
+Pokud se při instalaci setkáte s problémy nebo zatuhnutím, zvolte <em>Instalace -- bezpečné nastavení</em>. Touto volbou zakážete DMA pro všechna IDE zařízení a používání všech typů správy napájení pro celý systém. Více informací získáte v nápovědě parametrů jádra <a href="#o_apm">apm</a>,
+<a href="#o_acpi">acpi</a> a <a href="#o_ide">ide</a>.
+
+<br>Návrat do <a href="#opt">startovací nabídky</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="manual">Ruční instalace</a></h3>
+
+<em>Ruční instalace</em> umožňuje pokročilejším uživatelům nastavit řadu parametrů ještě před samotnou instalací nebo spuštěním <a href="#rescue">Záchranný systém</a>. Tato volba je určena pouze pro pokročilejší uživatele.
+
+<br>Návrat do <a href="#opt">startovací nabídky</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="rescue">Záchranný systém</a></h3>
+
+<em>Záchranný systém</em> je malý systém uložený přímo v RAM. Z tohoto systému je možné provádět změny na systému již nainstalovaném. V tomto systému jsou dostupné pouze textové nástroje a je určen pouze pro pokročilejší uživatele.<br><br>
+
+<br>Návrat do <a href="#opt">startovací nabídky</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="memtest">Test paměti</a></h3>
+
+S nabídkou <em>Test paměti</em> získáváte vynikající nástroj na test paměti. Hlavním účelem tohoto programu je kontrola paměti RAM, ale dá se použít i pro jiné části systému.<br>
+
+Bezproblémový průběh testu nezaručuji stoprocentní nezávadnost paměti. Měl by však najít naprostou většinu vad.<br>
+
+<br>Návrat do <a href="#opt">startovací nabídky</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="opt">Parametry startu</a></h3>
+
+Existují dva typy parametrů. První ovlivňují chování instalátoru, druhé jádra. Mezi nejčastěji používané patří: <br><br>
+a) parametry instalátoru<br>
+<br>
+  <a href="#o_install">install</a> -- volba instalačního zdroje<br>
+  <a href="#network">síťové nastavení</a> -- síťové volby<br>
+  <a href="#o_vnc">vnc</a> -- parametr pro instalaci přes VNC
+<br><br>
+b) parametry jádra<br>
+<br>
+<a href="#o_splash">splash</a> -- ovládá splash screen<br>
+  <a href="#o_apm">apm</a> -- nastavení správy napájení<br>
+  <a href="#o_acpi">acpi</a> -- advanced configuration and power interface<br>
+  <a href="#o_ide">ide</a> -- ovládání IDE subsystému<br>
+
+
+<br>Návrat do <a href="#opt">startovací nabídky</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_install">Parametry instalátoru: install</a></h3>
+
+Jako výchozí instalační zdroj je nastaven CD-ROM. Pokud chcete instalovat ze sítě, použijte parametr
+<em>install</em>. Možné protokoly jsou<br>
+  * FTP<br>
+  * NFS<br>
+  * HTTP<br>
+Syntaxe je podobná zadání URL. Například pokud máte server na adrese a chcete provést instalaci přes NFS adresář /install, zadáte zdroj takto:<br><br>
+
+  <em>install=nfs://192.168.0.1/install</em><br><br>
+
+Síťová karta bude nastavena pomocí <em>dhcp</em> nebo musíte zadat síťové parametry tak, jak je uvedenov části <a href="#network">síťové nastavení</a>.<br>
+
+<br><br>Návrat na <a href="#opt">Parametry startu</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_splash">Parametry jádra: splash</a></h3>
+
+Splash screen je obrázek znázorňující průběh spouštění a vypínání.<br>
+<br>
+<em>splash=0</em><br>
+Splash screen je vypnutý. Tato volba je velmi užitečná pro staré monitory a v případě problémů.<br>
+<br>
+<em>splash=verbose</em><br> Splash screen je puštěný, ale stále vidíte hlášení jádra.<br>
+<br>
+<em>splash=silent</em><br>
+Splash screen je puštěný a zcela zakrývá hlášení jádra.<br>
+<br>
+Návrat na <a href="#opt">Parametry startu</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="network">Parametry instalátoru: síťové nastavení</a></h3>
+
+Přímo při instalaci je možné nastavit síťové rozhraní. Hardware bude detekován později pomocí programu YaST2. Minimální nastavení se skládá z IP počítače a masky sítě. Například:<br><br>
+
+  <em>hostip=192.168.0.10  netmask=255.255.255.0</em><br>
+<br>
+nebo kratší forma:<br><br>
+
+  <em>hostip=192.168.0.10/24</em><br>
+<br>
+
+Pokud zvolíte <a href="#o_install">síťovou instalaci</a>, ale nezadáte žádnou volbu, použije se nastavení pomocí <em>dhcp</em>. Jestliže potřebujete zadat také bránu, použijte parametr <em>gateway</em>. Například:<br><br>
+
+  <em>gateway=192.168.0.8</em><br>
+
+<br><br>Návrat na <a href="#opt">Parametry startu</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_vnc">Parametry instalátoru: vnc</a></h3>
+
+Abyste povolili VNC instalaci, zadejte parametry vnc a vncpassword:<br><br>
+
+  <em>vnc=1 vncpassword=example</em><br><br>
+
+Spustí se VNC server a vy můžete YaST2 ovládat z libovolného VNC klienta na vzdáleném systému.<br>
+
+<br><br>Návrat na <a href="#opt">Parametry startu</a>.
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_apm">Parametry jádra: apm</a></h3>
+
+
+
+APM je jedním ze standardů správy napájení používaných na současných počítačích. Obvykle je používán například pro uspání na disk u notebooků a také je odpovědný za vypnutí počítače po ukončení operačního systému. APM je závislé na správně fungujícím BIOSu. V případě poškození BIOSu by měla být funkce APM omezena. Z toho důvodu můžete APM vypnout parametrem:<br><br>
+
+  <em>apm=off</em>  -- kompletní vypnutí APM<br><br>
+
+Některé velmi nové počítače místo APM používají
+<a href="#o_acpi">ACPI</a>.
+
+
+<br><br>Návrat na <a href="#opt">Parametry startu</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_acpi">Parametry jádra: acpi</a></h3>
+
+ACPI (Advanced Configuration and Power Interface) je standard definující nastavení napájení a správu zařízení mezi operačním systémem a BIOSem. Ve výchozím nastavení je <em>acpi</em> zapnuto v případě, že jde o BIOS vydaný po roce 2000. Nejčastěji používané nastavení:<br>
+
+<br>
+  <em>pci=noacpi</em> -- nepoužívat ACPI k předávání PCI přerušení
+  <em>acpi=oldboot</em> -- aktivní zůstane pouze ta část ACPI, která je potřebná pro start systému<br>
+  <em>acpi=off</em> -- vypnutí ACPI<br>
+  <em>acpi=force</em> -- zapnutí ACPI i pro BIOS vydaný před rokem 2000<br>
+<br>
+Na nových počítačích nahrazuje starší <a href="#o_apm">apm</a> systém.
+
+
+<br><br>Návrat na <a href="#opt">Parametry startu</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_ide">Parametry jádra: ide</a></h3>
+
+IDE je na rozdíl od SCSI obvykle používáno na pracovních stanicích.
+V případě výskytu problémů s IDE systémem můžete použít parametr: <br><br> 
+
+  <em>ide=nodma</em>  -- vypnutí DMA pro IDE zařízení<br>
+
+
+
+<br><br>Návrat na <a href="#opt">Parametry startu</a>.
+
+</body></html>

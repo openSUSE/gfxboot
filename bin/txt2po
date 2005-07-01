@@ -1,0 +1,179 @@
+#! /usr/bin/perl
+
+# convert old linuxrc *.txt files to *.po files
+
+sub read_texts;
+sub join_msg;
+
+%pmap = (
+  "brasil", "pt_BR",
+  "breton", "br",
+  "czech", "cs",
+  "dutch", "nl",
+  "english", "en",
+  "french", "fr",
+  "german", "de",
+  "greek", "el",
+  "hungarian", "hu",
+  "indonesia", "id",
+  "italian", "it",
+  "polish", "pl",
+  "portuguese", "pt",
+  "romanian", "ro",
+  "russian", "ru",
+  "slovak", "sk",
+  "spanish", "es"
+);
+
+%po2lang = (
+  "pt_BR", "Brasil",
+  "br", "Breton",
+  "cs", "Czech",
+  "nl", "Dutch",
+  "en", "LANGUAGE",
+  "fr", "French",
+  "de", "German",
+  "el", "Hellenic",
+  "hu", "Hungarian",
+  "id", "Indonesian",
+  "it", "Italian",
+  "pl", "Polish",
+  "pt", "Portugese",
+  "ro", "Romanian",
+  "ru", "Russian",
+  "sk", "Slovak",
+  "es", "Spanish"
+);
+
+%po2charset = (
+  "pt_BR", "iso-8859-1",
+  "br", "iso-8859-1",
+  "cs", "iso-8859-2",
+  "nl", "iso-8859-1",
+  "en", "ascii",
+  "fr", "iso-8859-1",
+  "de", "iso-8859-1",
+  "el", "iso-8859-7",
+  "hu", "iso-8859-2",
+  "id", "iso-8859-1",
+  "it", "iso-8859-1",
+  "pl", "iso-8859-2",
+  "pt", "iso-8859-1",
+  "ro", "iso-8859-2",
+  "ru", "koi8-r",
+  "sk", "iso-8859-2",
+  "es", "iso-8859-1"
+);
+
+read_texts "english", 1;
+
+for $lang (@ARGV) {
+  $lang =~ s/\.txt$//;
+  read_texts $lang;
+}
+
+
+sub read_texts
+{
+  local $_;
+
+  my ($lang, @f, %txt, $txt, $t, $ids);
+
+  $lang = shift;
+  $ids = shift;
+
+  open F, "${lang}.txt";
+  @f = (<F>);
+  close F;
+
+  for (@f) {
+    s/^\{?\s*//;
+    next if /^\}|^static|^\s*$/;
+    if(s/^(TXT_\S+?),\s*//) {
+      $txt = $1;
+      push @txts, $txt if $ids;
+    }
+    s/\s*(\},?)?\s*$//;
+    if(!/^\".*\"$/) {
+      die "format error in $lang.txt:\n$txt: >>$_<<\n"
+    }
+    push @{$txt{$txt}}, $_;
+#    print "$txt: >>$_<<\n"
+  }
+
+  if($ids) {
+    %txt_en = %txt;
+  }
+  else {
+    $f = $pmap{$lang} ? "$pmap{$lang}.po" : "$lang.po";
+    $f = "linuxrc.pot" if $lang eq 'english';
+    open W, ">$f";
+
+    print W "# $po2lang{$pmap{$lang}} translations for linuxrc.\n";
+    print W "# Copyright (C) 2001 SuSE GmbH.\n#\n";
+    print W "msgid \"\"\n";
+    print W "msgstr \"\"\n";
+    print W "\"Project-Id-Version: linuxrc\\n\"\n";
+    print W "\"PO-Revision-Date: 2001-08-03 12:00+0200\\n\"\n";
+    print W "\"Last-Translator: FULL NAME <EMAIL\@ADDRESS>\\n\"\n";
+    print W "\"Language-Team: $po2lang{$pmap{$lang}} <i18n\@suse.de>\\n\"\n";
+    print W "\"MIME-Version: 1.0\\n\"\n";
+    print W "\"Content-Type: text/plain; charset=$po2charset{$pmap{$lang}}\\n\"\n";
+    print W "\"Content-Transfer-Encoding: 8bit\\n\"\n\n";
+
+    for (@txts) {
+      print W "#. $_\n";
+      $x = join_msg $txt_en{$_};
+      if($x =~ /%/) {
+        print W "#, c-format\n";
+      }
+
+      if(@{$txt_en{$_}} == 1) {
+        print W "msgid ${$txt_en{$_}}[0]\n"
+      }
+      else {
+        print W "msgid \"\"\n";
+        for $t (@{$txt_en{$_}}) {
+          print W "$t\n"
+        }
+      }
+
+      if(join_msg($txt{$_}) eq join_msg($txt_en{$_})) {
+        print W "msgstr \"\"\n";
+      }
+      else {
+        if(@{$txt{$_}} == 1) {
+          print W "msgstr ${$txt{$_}}[0]\n"
+        }
+        else {
+          print W "msgstr \"\"\n";
+          for $t (@{$txt{$_}}) {
+            print W "$t\n"
+          }
+        }
+      }
+      print W "\n"
+    }
+    close W;
+  }
+
+}
+
+
+sub join_msg
+{
+  local $_;
+  my ($s, $msg, $m);
+
+  $msg = shift;
+
+  for $s (@{$msg}) {
+    $_ = $s;
+    s/^\"(.*)\"$/$1/;
+    $m .= $_;
+  }
+
+  return $m;
+}
+
+

@@ -1,0 +1,18 @@
+#! /usr/bin/perl
+
+use Encode;
+use HTML::PullParser;
+
+sub enc_ent;
+
+
+while(<>) {
+  s/(&[^;]+;)/enc_ent($1)/ge;
+  print
+}
+
+
+sub enc_ent
+{
+  encode_utf8(HTML::PullParser->new(doc => \$_[0], text => 'dtext')->get_token->[0]);
+}

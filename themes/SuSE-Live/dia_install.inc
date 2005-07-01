@@ -1,0 +1,1 @@
+../SuSE/dia_install.inc

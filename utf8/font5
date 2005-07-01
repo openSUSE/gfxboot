@@ -1,0 +1,1 @@
+./getx11font -v -l 18 -p 2,4 -c koi8-r -c ISO-8859-15 -c ISO-8859-2 -t utf8/utf_sample -t themes/SuSE/install/log -f `cat utf8/uf1` -f `cat utf8/uf2` 16x16.font

@@ -1,0 +1,1 @@
+../SuSE/./xmenu.inc

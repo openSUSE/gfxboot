@@ -1,0 +1,1 @@
+./getx11font -v -l 18 -p 2,4 -c latin1 -c latin2 -a 0x20ac -t utf8/utf_sample -f `cat utf8/uf1` -f `cat utf8/uf2` themes/SuSE/16x16.font

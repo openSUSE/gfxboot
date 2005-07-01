@@ -1,0 +1,248 @@
+# LANGUAGE translations for boot loader
+# Copyright (C) 2004 SUSE LINUX AG
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: bootloader\n"
+"PO-Revision-Date: 2004-03-30 19.18+0200\n"
+"Last-Translator: Takekazu Okamoto <tokamoto@novell.com>\n"
+"Language-Team: Japanese <i18n@suse.de>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# ok button label
+#. txt_ok
+msgid "OK"
+msgstr "OK"
+
+# cancel button label
+#. txt_cancel
+msgid "Cancel"
+msgstr "キャンセル"
+
+# reboot button label
+#. txt_reboot
+msgid "Reboot"
+msgstr "再起動"
+
+# continue button label
+#. txt_continue
+msgid "Continue"
+msgstr "続ける"
+
+#. txt_install
+msgid "Installation"
+msgstr "インストール"
+
+#. txt_manual_install
+msgid "Manual Installation"
+msgstr "手動インストール"
+
+#. txt_noacpi_install
+msgid "Installation - ACPI Disabled"
+msgstr "インストール - ACPI無効"
+
+#. txt_safe_install
+msgid "Installation - Safe Settings"
+msgstr "インストール - セーフ設定"
+
+#. txt_safe_linux
+msgid "Linux - Safe Settings"
+msgstr "Linux - セーフ設定"
+
+#. txt_boot_harddisk
+msgid "Boot from Hard Disk"
+msgstr "ハードディスクから起動"
+
+#. txt_rescue
+msgid "Rescue System"
+msgstr "レスキューシステム"
+
+#. txt_memtest
+msgid "Memory Test"
+msgstr "メモリテスト"
+
+#. txt_bootoptions
+msgid "Boot Options"
+msgstr "起動オプション"
+
+# window title for exit dialog
+#. txt_exit_title (see txt_exit_dialog)
+msgid "Good bye..."
+msgstr "さようなら..."
+
+#. txt_exit_dialog
+msgid ""
+"You are leaving the graphical boot menu and\n"
+"starting the text mode interface."
+msgstr ""
+"グラフィックブートメニューから\n"
+"テキストモードに切替えます。"
+
+#. txt_help
+msgid "Help"
+msgstr "ヘルプ"
+
+# window title for kernel loading (see txt_load_kernel)
+#. txt_load_kernel_title
+msgid "Starting..."
+msgstr "起動中..."
+
+# Keep the three newlines!
+#. txt_load_kernel
+msgid "Loading Linux Kernel\n\n\n"
+msgstr "Linuxカーネルを読み込み中\n\n\n"
+
+# Keep the three newlines!
+#. txt_load_memtest
+msgid "Loading memtest86\n\n\n"
+msgstr "memtest86を読み込み中\n\n\n"
+
+# info box title
+#. txt_info_title
+msgid "Boot loader"
+msgstr "ブートローダ"
+
+# error box title
+#. txt_error_title
+msgid "I/O error"
+msgstr "I/Oエラー"
+
+# boot disk change dialog title
+#. txt_change_disk_title
+msgid "Change Boot Disk"
+msgstr "ブートディスクの変更"
+
+#. txt_insert_disk
+#, c-format
+msgid "Please insert Boot Disk %u."
+msgstr "ブートディスク %u を挿入してください。"
+
+#. txt_insert_disk2
+#, c-format
+msgid ""
+"This is Boot Disk %u.\n"
+"Please insert Boot Disk %u."
+msgstr ""
+"これはブートディスク %u です。\n"
+"ブートディスク %u を挿入してください。"
+
+#. txt_insert_disk3
+#, c-format
+msgid ""
+"This is not a SUSE LINUX 9.1 Boot Disk.\n"
+"Please insert Boot Disk %u."
+msgstr ""
+"これはSUSE LINUX 9.1のブートディスクではありません。\n"
+"ブートディスク %u を挿入してください。"
+
+# password dialog title
+#. txt_password_title
+msgid "Password"
+msgstr "パスワード"
+
+# Keep the newlines and spaces after ':'!
+#. txt_password
+msgid "Please enter your password:   \n\n\n"
+msgstr "パスワードの入力:   \n\n\n"
+
+#. txt_dud_ready
+msgid "Please get your Driver Update Floppy ready."
+msgstr "ドライバアップデートフロッピーを用意してください。"
+
+# dvd warning title
+#. txt_dvd_warning_title
+msgid "You're almost there..."
+msgstr "確認..."
+
+# Keep the newlines!
+#. txt_dvd_warning
+msgid ""
+"\n\nIt appears that the system booted from the second side of the DVD.\n"
+"If so, turn the DVD over and try again."
+msgstr ""
+"\n"
+"\n"
+"DVDの第2面からブートしたようです。\n"
+"DVDをひっくり返してもう一度ブートしてください。"
+
+#. txt_dvd_warning2
+msgid ""
+"This is a two-sided DVD. You have booted from the second side.\n\n"
+"Please turn the DVD over, then continue."
+msgstr ""
+"これは表裏のあるDVDです。そして、第2面からブートしました。\n"
+"\n"
+"DVDをひっくり返してもう一度ブートしてください。"
+
+# power off dialog title
+#. txt_power_off_title
+msgid "Power off"
+msgstr "電源オフ"
+
+#. txt_power_off
+msgid "Do you want to halt the system now?"
+msgstr "システムを停止させますか。"
+
+# menu entry for hard disk installation
+#. txt_harddisk
+msgid "Hard Disk"
+msgstr "ハードディスク"
+
+# dialog title for hard disk installation
+#. txt_harddisk_title
+msgid "Hard Disk Installation"
+msgstr "ハードディスクインストール"
+
+#. txt_hd_diskdevice
+msgid "Disk Device (scan all disks if empty)\n"
+msgstr "ディスクデバイス (空白: 全ディスクのスキャン)\n"
+
+#. txt_directory
+msgid "Directory\n"
+msgstr "ディレクトリ\n"
+
+# dialog title for ftp installation
+#. txt_ftp_title
+msgid "FTP Installation"
+msgstr "FTPインストール"
+
+#. txt_server
+msgid "Server\n"
+msgstr "サーバ\n"
+
+#. txt_password
+msgid "Password\n"
+msgstr "パスワード\n"
+
+# label for ftp user input
+#. txt_user1
+msgid "User (anonymous login if empty)\n"
+msgstr "ユーザ (空白: 匿名ログイン)\n"
+
+# dialog title for nfs installation
+#. txt_nfs_title
+msgid "NFS Installation"
+msgstr "NFSインストール"
+
+# label for smb user input
+#. txt_user2
+msgid "User (using \"guest\" if empty)\n"
+msgstr "ユーザ (空白: guest)\n"
+
+# dialog title for smb installation
+#. txt_smb_title
+msgid "SMB (Windows Share) Installation"
+msgstr "SMB (Windows共有) インストール"
+
+# dialog title for http installation
+#. txt_http_title
+msgid "HTTP Installation"
+msgstr "HTTPインストール"
+
+# 'driver' as in '(hardware) driver update'
+#. txt_driver_update
+msgid "Driver"
+msgstr ""
+

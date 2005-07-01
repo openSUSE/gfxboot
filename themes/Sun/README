@@ -1,0 +1,21 @@
+See bootloader-src-SLES-8.1 for png images src and how to configure them.
+
+this code was originally taken from SuSE boot theme package and it was then
+modified a good bit ;)
+
+*.inc contain the pseudo postscript code for the grub menu and the boot
+splash image.
+
+to compile everything as root do: make
+
+two directories are created :
+- boot, holds all the files needed for the splash and grub menu 
+  to be installed (in bootloader theme directory or in /boot)
+  
+- install, holds all the files needed for the boot CD splash and grub menu
+
+
+see /usr/share/doc/packages/gfxboot/README in the gfxboot rpm for a description
+of the language.
+
+2004-10-08 Erwann Chenede - <erwann.chenede@sun.com>
