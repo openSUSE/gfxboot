@@ -1,10 +1,10 @@
 # LANGUAGE translations for boot loader
-# Copyright (C) 2004 SUSE LINUX AG
+# Copyright (C) 2005 SUSE Linux GmbH
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2004-03-01 12:00+0200\n"
+"PO-Revision-Date: 2005-07-27 11:49+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <i18n@suse.de>\n"
 "MIME-Version: 1.0\n"
@@ -40,15 +40,15 @@ msgid "Manual Installation"
 msgstr ""
 
 #. txt_noacpi_install
-msgid "Installation - ACPI Disabled"
+msgid "Installation--ACPI Disabled"
 msgstr ""
 
 #. txt_safe_install
-msgid "Installation - Safe Settings"
+msgid "Installation--Safe Settings"
 msgstr ""
 
 #. txt_safe_linux
-msgid "Linux - Safe Settings"
+msgid "Linux--Safe Settings"
 msgstr ""
 
 #. txt_boot_harddisk
@@ -69,7 +69,7 @@ msgstr ""
 
 # window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
-msgid "Good bye..."
+msgid "Exiting..."
 msgstr ""
 
 #. txt_exit_dialog
@@ -114,21 +114,22 @@ msgstr ""
 
 #. txt_insert_disk
 #, c-format
-msgid "Please insert Boot Disk %u."
+msgid "Insert boot disk %u."
 msgstr ""
 
 #. txt_insert_disk2
 #, c-format
 msgid ""
-"This is Boot Disk %u.\n"
-"Please insert Boot Disk %u."
+"This is boot disk %u.\n"
+"Insert boot disk %u."
 msgstr ""
 
+# <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
 #, c-format
 msgid ""
-"This is not a SUSE LINUX 9.3 Boot Disk.\n"
-"Please insert Boot Disk %u."
+"This is not a <product> boot disk.\n"
+"Please insert boot disk %u."
 msgstr ""
 
 # password dialog title
@@ -138,16 +139,16 @@ msgstr ""
 
 # Keep the newlines and spaces after ':'!
 #. txt_password
-msgid "Please enter your password:   \n\n\n"
+msgid "Enter your password:   \n\n\n"
 msgstr ""
 
 #. txt_dud_ready
-msgid "Please get your Driver Update Floppy ready."
+msgid "Get your driver update floppy ready."
 msgstr ""
 
 # dvd warning title
 #. txt_dvd_warning_title
-msgid "You're almost there..."
+msgid "DVD Error"
 msgstr ""
 
 # Keep the newlines!
@@ -159,17 +160,18 @@ msgstr ""
 
 #. txt_dvd_warning2
 msgid ""
-"This is a two-sided DVD. You have booted from the second side.\n\n"
-"Please turn the DVD over, then continue."
+"This is a two-sided DVD. You have booted from the second side.\n"
+"\n"
+"Turn the DVD over then continue."
 msgstr ""
 
 # power off dialog title
 #. txt_power_off_title
-msgid "Power off"
+msgid "Power Off"
 msgstr ""
 
 #. txt_power_off
-msgid "Do you want to halt the system now?"
+msgid "Halt the system now?"
 msgstr ""
 
 # menu entry for hard disk installation

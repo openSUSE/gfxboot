@@ -1,6 +1,14 @@
 #! /usr/bin/perl
 
+use Getopt::Long;
+
 sub nospaces;
+
+$opt_product = "SUSE Linux";
+
+GetOptions(
+  'product=s' => \$opt_product
+);
 
 if(!@ARGV) {
   print "Usage: help2txt help_file\n" .
@@ -13,9 +21,10 @@ while(<>) {
   if(/<!--\s*help=(\S+)\s*-->/) {
     $helptype = $1;
   }
-  s/\s*<!.*?>\s*//g;
+  s/\s*<(!|meta).*?>\s*//g;
   s/<(em|strong)>/\x11/gi;
   s/<\/(em|strong)>/\x10/gi;
+  s/&product;/$opt_product/gi;
   while(/<a\s/) {
     if(s/\<[aA]\s+name=\"([^"]+)\">([^<]*)<\/a>\s*/\x04\x12$1\x14$2\x10/) {
       if($anchor{$1}) {

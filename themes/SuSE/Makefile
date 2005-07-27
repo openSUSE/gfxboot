@@ -1,5 +1,7 @@
 BINDIR      := $(shell [ -x ../../mkbootmsg ] && echo ../../ )
 
+PRODUCT      = "SUSE Linux 10.0"
+
 HELP2TXT     = $(BINDIR)help2txt
 MKBOOTMSG    = $(BINDIR)mkbootmsg
 BFLAGS       = -O -v -L ../..
@@ -31,10 +33,10 @@ FILES_BOOT_EN += lang $(DEFAULT_LANG).tr $(DEFAULT_LANG).hlp
 endif
 
 boot/%.hlp: help-boot.%.html boot
-	$(HELP2TXT) $< >$@
+	$(HELP2TXT) --product=$(PRODUCT) $< >$@
 
 install/%.hlp: help-install.%.html install
-	$(HELP2TXT) $< >$@
+	$(HELP2TXT) --product=$(PRODUCT) $< >$@
 
 .PHONY: all themes font clean po
 

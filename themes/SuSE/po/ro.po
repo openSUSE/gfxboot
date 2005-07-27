@@ -43,15 +43,18 @@ msgid "Manual Installation"
 msgstr "Instalare manuală"
 
 #. txt_noacpi_install
-msgid "Installation - ACPI Disabled"
+#, fuzzy
+msgid "Installation--ACPI Disabled"
 msgstr "Instalare - ACPI dezactivat"
 
 #. txt_safe_install
-msgid "Installation - Safe Settings"
+#, fuzzy
+msgid "Installation--Safe Settings"
 msgstr "Instalare - Setări sigure"
 
 #. txt_safe_linux
-msgid "Linux - Safe Settings"
+#, fuzzy
+msgid "Linux--Safe Settings"
 msgstr "Linux - Setări sigure"
 
 #. txt_boot_harddisk
@@ -72,8 +75,8 @@ msgstr "Opţiuni de pornire"
 
 # window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
-msgid "Good bye..."
-msgstr "La revedere..."
+msgid "Exiting..."
+msgstr ""
 
 #. txt_exit_dialog
 msgid ""
@@ -94,13 +97,25 @@ msgstr "Pornesc..."
 
 # Keep the three newlines!
 #. txt_load_kernel
-msgid "Loading Linux Kernel\n\n\n"
-msgstr "Încarc kernelul Linux\n\n\n"
+msgid ""
+"Loading Linux Kernel\n"
+"\n"
+"\n"
+msgstr ""
+"Încarc kernelul Linux\n"
+"\n"
+"\n"
 
 # Keep the three newlines!
 #. txt_load_memtest
-msgid "Loading memtest86\n\n\n"
-msgstr "Încarc memtest86\n\n\n"
+msgid ""
+"Loading memtest86\n"
+"\n"
+"\n"
+msgstr ""
+"Încarc memtest86\n"
+"\n"
+"\n"
 
 # info box title
 #. txt_info_title
@@ -118,26 +133,27 @@ msgid "Change Boot Disk"
 msgstr "Modificare disc de pornire"
 
 #. txt_insert_disk
-#, c-format
-msgid "Please insert Boot Disk %u."
+#, fuzzy, c-format
+msgid "Insert boot disk %u."
 msgstr "Vă rog să introduceţi discul de pornire %u."
 
 #. txt_insert_disk2
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"This is Boot Disk %u.\n"
-"Please insert Boot Disk %u."
+"This is boot disk %u.\n"
+"Insert boot disk %u."
 msgstr ""
 "Aceasta este discul de pornire %u.\n"
 "Vă rog să introduceţi discul de pornire %u."
 
+# <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"This is not a SUSE LINUX 9.3 Boot Disk.\n"
-"Please insert Boot Disk %u."
+"This is not a <product> boot disk.\n"
+"Please insert boot disk %u."
 msgstr ""
-"Acesta nu este un disc de pornire SUSE LINUX 9.3.\n"
+"Acesta nu este un disc de pornire <product>.\n"
 "Inseraţi discul %u."
 
 # password dialog title
@@ -147,42 +163,59 @@ msgstr "Parolă"
 
 # Keep the newlines and spaces after ':'!
 #. txt_password
-msgid "Please enter your password:   \n\n\n"
-msgstr "Introduceţi parola:   \n\n\n"
+#, fuzzy
+msgid ""
+"Enter your password:   \n"
+"\n"
+"\n"
+msgstr ""
+"Introduceţi parola:   \n"
+"\n"
+"\n"
 
 #. txt_dud_ready
-msgid "Please get your Driver Update Floppy ready."
+#, fuzzy
+msgid "Get your driver update floppy ready."
 msgstr "Pregătiţi discheta cu driver-e actualizate."
 
 # dvd warning title
 #. txt_dvd_warning_title
-msgid "You're almost there..."
-msgstr "Este aproape gata..."
+msgid "DVD Error"
+msgstr ""
 
 # Keep the newlines!
 #. txt_dvd_warning
 msgid ""
-"\n\nIt appears that the system booted from the second side of the DVD.\n"
+"\n"
+"\n"
+"It appears that the system booted from the second side of the DVD.\n"
 "If so, turn the DVD over and try again."
 msgstr ""
-"\n\nSe pare că sistemul a fost pornit de pe faţa a doua a DVD-ului.\n"
+"\n"
+"\n"
+"Se pare că sistemul a fost pornit de pe faţa a doua a DVD-ului.\n"
 "Dacă este aşa, întoarceţi DVD-ul şi încercaţi din nou."
 
 #. txt_dvd_warning2
+#, fuzzy
 msgid ""
-"This is a two-sided DVD. You have booted from the second side.\n\n"
-"Please turn the DVD over, then continue."
+"This is a two-sided DVD. You have booted from the second side.\n"
+"\n"
+"Turn the DVD over then continue."
 msgstr ""
-"Acesta este un DVD cu două feţe. Aţi pornit sistemul de pe "
-"faţa a doua.\n\n Întoarceţi DVD-ul şi apoi continuaţi."
+"Acesta este un DVD cu două feţe. Aţi pornit sistemul de pe faţa a doua.\n"
+"\n"
+" Întoarceţi DVD-ul şi apoi continuaţi."
 
 # power off dialog title
 #. txt_power_off_title
-msgid "Power off"
+#, fuzzy
+msgid "Power Off"
 msgstr "Oprire"
 
 #. txt_power_off
-msgid "Do you want to halt the system now?"
+#, fuzzy
+msgid "Halt the system now?"
 msgstr "Doriţi să opresc sistemul acum?"
 
 # menu entry for hard disk installation

@@ -48,15 +48,18 @@ msgid "Manual Installation"
 msgstr "Installation manuelle"
 
 #. txt_noacpi_install
-msgid "Installation - ACPI Disabled"
+#, fuzzy
+msgid "Installation--ACPI Disabled"
 msgstr "Installation - ACPI désactivé"
 
 #. txt_safe_install
-msgid "Installation - Safe Settings"
+#, fuzzy
+msgid "Installation--Safe Settings"
 msgstr "Installation - Mode sécurisé"
 
 #. txt_safe_linux
-msgid "Linux - Safe Settings"
+#, fuzzy
+msgid "Linux--Safe Settings"
 msgstr "Linux - Mode sécurisé"
 
 #. txt_boot_harddisk
@@ -77,8 +80,8 @@ msgstr "Options d'amorçage"
 
 # window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
-msgid "Good bye..."
-msgstr "Au revoir..."
+msgid "Exiting..."
+msgstr ""
 
 #. txt_exit_dialog
 msgid ""
@@ -99,13 +102,25 @@ msgstr "Démarrage..."
 
 # Keep the three newlines!
 #. txt_load_kernel
-msgid "Loading Linux Kernel\n\n\n"
-msgstr "Chargement du noyau Linux\n\n\n"
+msgid ""
+"Loading Linux Kernel\n"
+"\n"
+"\n"
+msgstr ""
+"Chargement du noyau Linux\n"
+"\n"
+"\n"
 
 # Keep the three newlines!
 #. txt_load_memtest
-msgid "Loading memtest86\n\n\n"
-msgstr "Chargement de memtest86\n\n\n"
+msgid ""
+"Loading memtest86\n"
+"\n"
+"\n"
+msgstr ""
+"Chargement de memtest86\n"
+"\n"
+"\n"
 
 # info box title
 #. txt_info_title
@@ -123,26 +138,27 @@ msgid "Change Boot Disk"
 msgstr "Changer la disquette d'amorçage"
 
 #. txt_insert_disk
-#, c-format
-msgid "Please insert Boot Disk %u."
+#, fuzzy, c-format
+msgid "Insert boot disk %u."
 msgstr "Veuillez insérer la disquette d'amorçage %u."
 
 #. txt_insert_disk2
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"This is Boot Disk %u.\n"
-"Please insert Boot Disk %u."
+"This is boot disk %u.\n"
+"Insert boot disk %u."
 msgstr ""
 "Ceci est la disquette d'amorçage %u.\n"
 "Veuillez insérer la disquette d'amorçage %u."
 
+# <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"This is not a SUSE LINUX 9.3 Boot Disk.\n"
-"Please insert Boot Disk %u."
+"This is not a <product> boot disk.\n"
+"Please insert boot disk %u."
 msgstr ""
-"Ceci n'est pas une disquette d'amorçage SUSE LINUX 9.3.\n"
+"Ceci n'est pas une disquette d'amorçage <product>.\n"
 "Veuillez insérer la disquette d'amorçage %u."
 
 # password dialog title
@@ -152,42 +168,59 @@ msgstr "Mot de passe"
 
 # Keep the newlines and spaces after ':'!
 #. txt_password
-msgid "Please enter your password:   \n\n\n"
-msgstr "Veuillez entrer votre mot de passe :   \n\n\n"
+#, fuzzy
+msgid ""
+"Enter your password:   \n"
+"\n"
+"\n"
+msgstr ""
+"Veuillez entrer votre mot de passe :   \n"
+"\n"
+"\n"
 
 #. txt_dud_ready
-msgid "Please get your Driver Update Floppy ready."
+#, fuzzy
+msgid "Get your driver update floppy ready."
 msgstr "Veuillez préparer votre disquette de mise à jour des pilotes."
 
 # dvd warning title
 #. txt_dvd_warning_title
-msgid "You're almost there..."
-msgstr "Vous y êtes presque..."
+msgid "DVD Error"
+msgstr ""
 
 # Keep the newlines!
 #. txt_dvd_warning
 msgid ""
-"\n\nIt appears that the system booted from the second side of the DVD.\n"
+"\n"
+"\n"
+"It appears that the system booted from the second side of the DVD.\n"
 "If so, turn the DVD over and try again."
 msgstr ""
-"\n\nApparemment, le système a amorcé depuis la face deux du DVD.\n"
+"\n"
+"\n"
+"Apparemment, le système a amorcé depuis la face deux du DVD.\n"
 "Si c'est le cas, retournez le DVD et recommencez."
 
 #. txt_dvd_warning2
+#, fuzzy
 msgid ""
-"This is a two-sided DVD. You have booted from the second side.\n\n"
-"Please turn the DVD over, then continue."
+"This is a two-sided DVD. You have booted from the second side.\n"
+"\n"
+"Turn the DVD over then continue."
 msgstr ""
-"Ceci est un DVD double-face. Vous avez amorcé depuis la face deux du DVD.\n\n"
+"Ceci est un DVD double-face. Vous avez amorcé depuis la face deux du DVD.\n"
+"\n"
 "Retournez le DVD et continuez."
 
 # power off dialog title
 #. txt_power_off_title
-msgid "Power off"
+#, fuzzy
+msgid "Power Off"
 msgstr "Arrêt"
 
 #. txt_power_off
-msgid "Do you want to halt the system now?"
+#, fuzzy
+msgid "Halt the system now?"
 msgstr "Voulez-vous arrêter le système maintenant ?"
 
 # menu entry for hard disk installation

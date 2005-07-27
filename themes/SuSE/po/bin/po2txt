@@ -4,15 +4,23 @@
 # usage: po2txt lang.po >texts.lang
 # Note: en.po ist treated specially!
 
+use Getopt::Long;
+
 sub read_texts;
 sub join_msg;
+
+$opt_product = "SUSE Linux";
+
+GetOptions(
+  'product=s' => \$opt_product
+);
+
 
 for $lang (@ARGV) {
   $lang = 'en' if $lang eq 'bootloader.pot';
   $lang =~ s/\.po$//;
   read_texts $lang;
 }
-
 
 sub read_texts
 {
@@ -32,6 +40,8 @@ sub read_texts
   open F, $file;
   @f = (<F>);
   close F;
+
+  map { s/<product>/$opt_product/g; } @f;
 
   $_ = $lang;
   s/.*\///;
