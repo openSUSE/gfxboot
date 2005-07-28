@@ -287,3 +287,13 @@ msgstr "Драйвер"
 msgid "Domain\n"
 msgstr "Домейн\n"
 
+# button label for other/more options
+#. txt_other_options
+msgid "Other Options"
+msgstr ""
+
+# label for language selection
+#. txt_language
+msgid "Language"
+msgstr ""
+

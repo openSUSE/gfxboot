@@ -285,3 +285,13 @@ msgstr "Treiber"
 msgid "Domain\n"
 msgstr "Domain\n"
 
+# button label for other/more options
+#. txt_other_options
+msgid "Other Options"
+msgstr "Weitere Optionen"
+
+# label for language selection
+#. txt_language
+msgid "Language"
+msgstr "Sprache"
+

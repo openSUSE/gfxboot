@@ -281,3 +281,13 @@ msgstr "驱动程序"
 msgid "Domain\n"
 msgstr "域\n"
 
+# button label for other/more options
+#. txt_other_options
+msgid "Other Options"
+msgstr ""
+
+# label for language selection
+#. txt_language
+msgid "Language"
+msgstr ""
+
