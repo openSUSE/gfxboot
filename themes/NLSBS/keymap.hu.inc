@@ -1,0 +1,1 @@
+../SuSE/./keymap.hu.inc

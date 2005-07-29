@@ -1,0 +1,1 @@
+../SuSE/./window.inc
