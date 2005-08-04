@@ -2771,7 +2771,7 @@ lin_seg_40:
 		test byte [pm_seg_mask],(1 << 3)
 		jz lin_seg_50
 		push word pm_seg
-		pop fs
+		pop gs
 lin_seg_50:
 
 		and al,~1
@@ -9562,6 +9562,119 @@ prim_blend2_90:
 		ret
 
 
+;; blend3 -- blend image with alpha channel
+;
+; group: image
+;
+; ( obj1 obj2 ptr3 -- )
+;
+; obj1: pointer to source image or color value
+; obj2: pointer to alpha channel or transparency value
+; ptr3: destination
+;
+; An image section of obj1 is copied to ptr3 using obj2 as alpha channel.
+; obj1 may be a color value or an unpacked image (@unpackimage, @savescreen).
+; obj2 may be a transparency value (0..255) or an unpacked image used as alpha channel.
+; The current cursor position is used as offset into obj1 and obj2 if they are images.
+; If both obj1 and obj2 are images, they must have the same dimensions.
+;
+; Note: 16/32-bit modes only.
+;
+prim_blend3:
+		mov bp,pserr_pstack_underflow
+		cmp word [pstack_ptr],byte 3
+		jc prim_blend3_90
+
+		and dword [tmp_var_0],0
+
+		mov cx,2
+		call get_pstack_tos
+		cmp dl,t_none
+		jnz prim_blend3_21
+		xor eax,eax
+		mov dl,t_int
+prim_blend3_21:
+		cmp dl,t_ptr
+		jz prim_blend3_23
+		or byte [tmp_var_0],1
+		cmp dl,t_int
+		jz prim_blend3_23
+prim_blend3_22:
+		stc
+		mov bp,pserr_wrong_arg_types
+		jmp prim_blend3_90
+prim_blend3_23:
+		mov [tmp_var_1],eax
+
+		mov cx,1
+		call get_pstack_tos
+		cmp dl,t_none
+		jnz prim_blend3_31
+		xor eax,eax
+		mov dl,t_int
+prim_blend3_31:
+		cmp dl,t_ptr
+		jz prim_blend3_33
+		or byte [tmp_var_0],2
+		cmp dl,t_int
+		jnz prim_blend3_22
+prim_blend3_33:
+		mov [tmp_var_2],eax
+
+		xor cx,cx
+		call get_pstack_tos
+		cmp dl,t_none
+		jz prim_blend3_90
+		cmp dl,t_ptr
+		jnz prim_blend3_22
+
+		mov [tmp_var_3],eax
+
+		sub word [pstack_ptr],3
+
+		; tmp_var_0: bit 0, 1 = src, alpha type
+		; tmp_var_1: src
+		; tmp_var_2: alpha
+		; tmp_var_3: dst
+
+		mov esi,[tmp_var_1]
+		mov ebx,[tmp_var_2]
+
+		mov al,[tmp_var_0]
+		test al,1
+		jnz prim_blend3_40
+		lin2seg esi,fs,esi
+prim_blend3_40:
+		test al,2
+		jnz prim_blend3_50
+		lin2seg ebx,gs,ebx
+prim_blend3_50:
+		or al,al
+		jnz prim_blend3_60
+
+		; check image domensions
+		mov ecx,[fs:esi]
+		cmp ecx,[gs:ebx]
+		jz prim_blend3_60
+
+		call lin_seg_off
+
+		jmp prim_blend3_22
+prim_blend3_60:
+
+		lin2seg dword [tmp_var_3],es,edi
+
+		; invalidates tmp_var_*
+		call blend3
+
+		call lin_seg_off
+
+		clc
+
+prim_blend3_90:
+		ret
+
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ; Helper function that covers common cases.
@@ -9728,6 +9841,7 @@ blend_70:
 blend_90:
 		ret
 
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ;  fs:esi		src image
@@ -9827,6 +9941,234 @@ blend2_70:
 blend2_90:
 		pop dword [transp]
 
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+;  al			arg type; bit 0, 1: src, alpha is int (1) or ptr (0)
+;  fs:esi		src
+;  gs:ebx		alpha
+;  es:edi		dst
+;  word [gfx_cur_x]	offset into src
+;  word [gfx_cur_y]	dto
+;
+blend3:
+		push dword [transp]
+
+		cmp byte [pixel_bytes],2
+		jz blend3_10
+		cmp byte [pixel_bytes],4
+		jnz blend3_90
+
+blend3_10:
+		mov ebp,[es:edi]
+		test al,2
+		jnz blend3_12
+		mov ebp,[gs:ebx]
+blend3_12:
+		test al,1
+		jnz blend3_14
+		mov ebp,[fs:esi]
+blend3_14:
+
+		mov [tmp_var_0],al
+		mov [tmp_var_1],ebp		; width, height (src)
+
+		push dword [es:edi]
+		pop dword [tmp_var_2]		; width, height (dst)
+
+		mov [tmp_var_3],esi		; color
+
+		movzx eax,bl
+		mov [transp],eax		; alpha transp
+
+		movzx ebp,bp			; src width
+
+		movzx eax,word [gfx_cur_y]
+		mul ebp
+		movzx ecx,word [gfx_cur_x]
+		add eax,ecx
+		imul eax,[pixel_bytes]
+		add eax,4
+
+		test byte [tmp_var_0],1
+		jnz blend3_16
+		add esi,eax
+blend3_16:
+		test byte [tmp_var_0],2
+		jnz blend3_17
+		add ebx,eax
+blend3_17:
+
+		add edi,4
+
+		mov edx,blend_pixel_16
+		cmp byte [pixel_bytes],2
+		jz blend3_18
+		mov edx,blend_pixel_32
+blend3_18:
+		movzx ecx,byte [tmp_var_0]
+		and cl,3
+		push dword [edx+ecx*4]
+		pop dword [blend_pixel]
+
+		mov cx,[tmp_var_2 + 2]		; dst height
+
+blend3_20:
+		push cx
+
+		mov dx,[tmp_var_2]		; dst width
+
+blend3_40:
+		call [blend_pixel]
+
+		add esi,[pixel_bytes]
+		add ebx,[pixel_bytes]
+		add edi,[pixel_bytes]
+
+		dec dx
+		jnz blend3_40
+
+		pop cx
+
+		movzx eax,word [tmp_var_2]	; dst width
+		sub eax,ebp			; src width
+		imul eax,[pixel_bytes]
+
+		sub esi,eax
+		sub ebx,eax
+
+		dec cx
+		jnz blend3_20
+
+blend3_90:
+		pop dword [transp]
+
+		ret
+
+blend_pixel	dd 0
+
+blend_pixel_16	dd blend_pixel_00_16
+		dd blend_pixel_01_16
+		dd blend_pixel_10_16
+		dd blend_pixel_11_16
+
+blend_pixel_32	dd blend_pixel_00_32
+		dd blend_pixel_01_32
+		dd blend_pixel_10_32
+		dd blend_pixel_11_32
+
+; src: image, alpha: image
+blend_pixel_00_16:
+		mov ax,[gs:ebx]
+		call decode_color
+
+		movzx eax,ah
+		mov [transp],eax
+
+		mov ax,[fs:esi]
+		call decode_color
+		xchg ecx,eax
+
+		mov ax,[es:edi]
+		call decode_color
+		call enc_transp
+		call encode_color
+
+		mov [es:edi],ax
+		ret
+
+; src: color, alpha: image
+blend_pixel_01_16:
+		mov ax,[gs:ebx]
+		call decode_color
+
+		movzx eax,ah
+		mov [transp],eax
+
+		mov ecx,[tmp_var_3]
+
+		mov ax,[es:edi]
+		call decode_color
+		call enc_transp
+		call encode_color
+
+		mov [es:edi],ax
+		ret
+
+; src: image, alpha: fixed
+blend_pixel_10_16:
+		mov ax,[fs:esi]
+		call decode_color
+		xchg eax,ecx
+
+		mov ax,[es:edi]
+		call decode_color
+		call enc_transp
+		call encode_color
+
+		mov [es:edi],ax
+		ret
+
+; src: color, alpha: fixed
+blend_pixel_11_16:
+		mov ecx,[tmp_var_3]
+
+		mov ax,[es:edi]
+		call decode_color
+		call enc_transp
+		call encode_color
+
+		mov [es:edi],ax
+		ret
+
+; src: image, alpha: image
+blend_pixel_00_32:
+		mov eax,[gs:ebx]
+		movzx eax,ah
+		mov [transp],eax
+
+		mov ecx,[fs:esi]
+
+		mov eax,[es:edi]
+		call enc_transp
+
+		mov [es:edi],eax
+		ret
+
+; src: color, alpha: image
+blend_pixel_01_32:
+		mov eax,[gs:ebx]
+		movzx eax,ah
+		mov [transp],eax
+
+		mov ecx,[tmp_var_3]
+
+		mov eax,[es:edi]
+		call enc_transp
+
+		mov [es:edi],eax
+		ret
+
+; src: image, alpha: fixed
+blend_pixel_10_32:
+		mov ecx,[fs:esi]
+
+		mov eax,[es:edi]
+		call enc_transp
+
+		mov [es:edi],eax
+		ret
+
+; src: color, alpha: fixed
+blend_pixel_11_32:
+		mov ecx,[tmp_var_3]
+
+		mov eax,[es:edi]
+		call enc_transp
+
+		mov [es:edi],eax
 		ret
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
