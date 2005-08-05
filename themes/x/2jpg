@@ -1,0 +1,57 @@
+#! /bin/sh
+
+function png2jpg {
+  convert -geometry "$p%" "$1" - | pngtopnm $mix -background black | cjpeg -optimize -quality 80 >"$2"
+}
+
+function png2pcx {
+  convert -geometry "$p%" "$1" - | pngtopnm $mix -background black | pnmquant 256 2>/dev/null | ppmtopcx 2>/dev/null >"$2"
+}
+
+function png2jpg_a {
+  convert -geometry "$p%" "$1" - | pngtopnm -alpha | cjpeg -optimize -quality 80 >"$2"
+}
+
+function png2pcx_a {
+  convert -geometry "$p%" "$1" - | pngtopnm -alpha | pnmquant 256 2>/dev/null | ppmtopcx 2>/dev/null >"$2"
+}
+
+size=$1
+
+[ "$size" ] || exit 1
+
+if [ "$size" = 640 ] ; then
+  export p=40
+  export g=640x480
+elif [ "$size" = 800 ] ; then
+  export p=50
+  export g=800x600
+elif [ "$size" = 1024 ] ; then
+  export p=64
+  export g=1024x768
+elif [ "$size" = 1600 ] ; then
+  export p=100
+  export g=1600x1200
+else
+  exit 2
+fi
+
+mkdir -p "$g" || exit 3
+
+echo $g
+
+# merge with alpha channel
+# mix="-mix"
+mix=
+
+for i in src/*.png ; do
+  name=`basename $i .png`
+
+  png2jpg "src/$name.png" "$g/$name.jpg"
+#  png2jpg_a "src/$name.png" "$g/${name}_a.jpg"
+
+#  png2pcx "src/$name.png" "$g/$name.pcx"
+  png2pcx_a "src/$name.png" "$g/${name}_a.pcx"
+
+done
+

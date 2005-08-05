@@ -402,13 +402,19 @@
 /bootoptions.init {
   window.current .color.fg get setcolor
   window.current .ed.font get setfont
+
   boot.ed edit.hidecursor
   menu.args menu.entry get
   menu.texts menu.entry get
   bootpromptmap
-  dup
-  boot.ed exch edit.init
-  "" ne { boot.ed ' ' edit.input } if
+
+  boot.show {
+    boot.ed over edit.init
+    "" ne { boot.ed ' ' edit.input } if
+  } {
+    "%s" boot.ed 3 get sprintf
+  } ifelse
+
 } def
 
 
@@ -1022,8 +1028,41 @@
 } def
 
 
+% ( pic pic_a x y -- )
+/showlogo {
+  4 2 roll  
+
+  findfile setimage 0 0 image.size unpackimage /tmp.pic.a exch def
+  findfile setimage 0 0 image.size unpackimage /tmp.pic exch def
+
+  exch screen.size 4 -1 roll mul 10 shr 3 1 roll mul 10 shr exch moveto
+
+  /tmp.sc image.size savescreen def
+
+  currentpoint
+  0 0 moveto tmp.pic tmp.pic.a tmp.sc blend3
+  moveto tmp.sc restorescreen
+
+  tmp.pic tmp.pic.a tmp.sc free free free
+} def
+
+
+
 /init {
   0 0 moveto currentpoint clip.size image
+
+  screen.size exch 300 mul 10 shr /head.x exch def 371 mul 10 shr /head.y exch def
+
+  timeout.init
+
+  currentimage
+
+  "rdots.jpg" "rdots_a.pcx" 780 0 showlogo
+  "vdots.jpg" "vdots_a.pcx" 500 240 showlogo
+  "ldots.jpg" "ldots_a.pcx" 0 940 showlogo
+  "head.jpg" "head_a.pcx" 300 371 showlogo
+
+  setimage
 
   % set default language
   "lang" findfile dup {
@@ -1044,26 +1083,25 @@
 
   /menu.text.xofs      10 def
   /menu.text.yofs       2 def
-  /menu.item.height    fontheight dup 5 div add def
+  /menu.item.height    fontheight dup 3 div add def
   /menu.bar.height     fontheight menu.text.yofs dup add add def
 
   font.normal setfont
 
-  /menu.text.normal    black         def
-  /menu.text.select    white             def
+  /menu.text.normal    white             def
+  /menu.text.select    black             def
   /boot.text.options   white             def
   /boot.text.normal    white             def
   /infobox.bg          lightgray         def
   /infobox.text.normal black             def
 
-%  /menu.bar.color      fn_color       def
-  /menu.bar.color      somegreen       def
+  /menu.bar.color      white       def
 
   /frame1.pos  { 100  90 } def
   /frame1.size { 325 195 } def
 
   clip.size pop 800 eq {
-    /frame1.pos  { 265 191 } def
+    /frame1.pos  { 415 192 } def
     /frame1.size { 365 195 } def
   } if
 
@@ -1079,16 +1117,19 @@
 
   /boot.label.len 243 def
 
-  /boot.pos { boot.label.len 10 add 350 } def
+  /boot.pos { boot.label.len 10 add 490 } def
 
   /boot.buf.size 256 def
   /boot.buf boot.buf.size string def
+
+  % no boot options line initially
+  /boot.show false def
 
   /ms.size     {  22  22 } def
   /ms.up       {   0 480 }  def
   /ms.down     {  23 480 }  def
 
-  /update.pos { clip.size pop txt_dud_ready strsize pop sub 20 sub clip.size exch pop 55 sub } def
+  /update.pos { clip.size pop txt_dud_ready strsize pop sub 20 sub clip.size exch pop 75 sub } def
 
 } def
 
@@ -1421,8 +1462,6 @@
 
 /clip.size { screen.size } def
 
-timeout.preinit
-
 "back.jpg" findfile /background.file over def setimage loadpalette
 /max_image_colors image.colors def
 
@@ -1436,18 +1475,12 @@ timeout.preinit
 /red                 0xc00000          newcolor
 /green               0x009000          newcolor
 /yellow              0xffff20          newcolor
-% /lightgray           0xececf4          newcolor
-% /lightgray           0x839db6          newcolor
-
-% /lightgray           0xe0e6ed          newcolor
 /lightgray           0xd8deed          newcolor
-
-% /lightgray           0xa9bbcd          newcolor
 /dotcolor            0xa9bbcd          newcolor
 /lightdotcolor       0xeff2f6          newcolor
-% /somegreen           0x738229          newcolor
 /somegreen           0x78a424          newcolor
 
+/lightblue 0x7da3d1 def
 
 %% include theme_colors.inc
 

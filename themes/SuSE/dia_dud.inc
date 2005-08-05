@@ -16,10 +16,9 @@
   image
 
   do_driverupdate {
-    black setcolor
-    currentfont font.normal setfont
-    update.pos moveto currentpoint
-    moveto 8 3 rmoveto txt_dud_ready white setcolor show
+    currentfont
+    font.normal setfont
+    update.pos moveto 8 3 rmoveto txt_dud_ready lightblue setcolor show
     setfont
   } if
 } def

@@ -33,7 +33,8 @@
 /.xm_panel_width	 7 def		% panel entry width
 /.xm_panel_height	 8 def		% panel entry height
 /.xm_vspace		 9 def		% vspace per menu
-/.xm_size		10 def		% xmenu size
+/.xm_title              10 def          % xmenu title
+/.xm_size		11 def		% xmenu size
 
 
 % short hands
@@ -269,7 +270,10 @@
 
   % xmenu .xm_panel_width get xmenu.hspace 2 mul sub
 
-  xmenu .xm_list get xmenu .xm_current get get exec strsize pop
+  xmenu .xm_title get dup .undef eq {
+    pop xmenu .xm_list get xmenu .xm_current get get
+  } if
+  exec strsize pop
 } def
 
 
@@ -290,7 +294,10 @@
   xmenu .xm_panel_x get xmenu.hspace add
   panel.text.y
   moveto
-  xmenu .xm_list get xmenu .xm_current get get exec show
+  xmenu .xm_title get dup .undef eq {
+    pop xmenu .xm_list get xmenu .xm_current get get
+  } if
+  exec show
 } def
 
 

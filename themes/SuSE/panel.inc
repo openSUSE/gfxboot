@@ -9,14 +9,15 @@
 % Some global vars.
 %
 /panel.size     { clip.size pop 24 } def
-/panel.y        { clip.size exch pop panel.size exch pop sub } def
+/panel.y        { clip.size exch pop panel.size exch pop sub 10 sub } def
 /panel.text.y	{ panel.y 5 add } def
 /panel.font	font.normal def
-/panel.normal	black def
-/panel.high	fn_color def
+/panel.normal	lightblue def
+/panel.high	white def
 /panel.bg	lightgray def
 /panel.border	lightdotcolor def
 
+/panel.expert   false def
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Init panel.
@@ -28,7 +29,7 @@
   /panel.back 0 panel.y moveto panel.size savescreen def
 
   % define panel layout
-  /panel [
+  /panel.full [
 
     % [ key x label show_func width_func update_func init_func ]
 
@@ -36,17 +37,16 @@
 
     syslinux {
 
-      [ keyF2 0 "F2" /panel.video /panel.video.width /panel.video.update /video.init ]
-
       livecd {
 
+        [ keyF2 0 "F2" /panel.video /panel.video.width /panel.video.update /video.init ]
         [ keyF3 0 "F3" /panel.splash /panel.splash.width /panel.splash.update /splash.init ]
 
       } {
 
-        [ keyF3 0 "F3" /panel.install /panel.install.width /panel.install.update /install.init ]
-        [ keyF4 0 "F4" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
-%        [ keyF5 0 "F5" /panel.splash /panel.splash.width /panel.splash.update /splash.init ]
+        [ keyF2 0 "F2" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
+        [ keyF3 0 "F3" /panel.video /panel.video.width /panel.video.update /video.init ]
+        [ keyF4 0 "F4" /panel.install /panel.install.width /panel.install.update /install.init ]
         [ keyF5 0 "F5" /panel.dud /panel.dud.width /panel.dud.update .undef ]
 
         do_64bit_check 32+64bit_source and {
@@ -62,7 +62,6 @@
     } {
 
       [ keyF2 0 "F2" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
-%      [ keyF3 0 "F3" /panel.splash /panel.splash.width /panel.splash.update /splash.init ]
       "profiles" findfile dup {
         /profile.data exch def
         [ keyF3 0 "F3" /panel.profile /panel.profile.width /panel.profile.update /profile.init ]
@@ -73,7 +72,24 @@
   ] def
 
   % initialize all
-  panel { 6 get dup .undef ne { exec } { pop } ifelse } forall
+  panel.full { 6 get dup .undef ne { exec } { pop } ifelse } forall
+
+  syslinux {
+    /panel.short [
+      [ keyF1 0 "F1" /panel.help /panel.help.width /panel.help.update .undef ]
+      [ keyF2 0 "F2" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
+      [ keyF3 0 "F3" /panel.options /panel.options.width /panel.options.update .undef ]
+    ] def
+
+    /panel panel.short def
+  } {
+    /panel.short [
+      [ keyF1 0 "F1" /panel.help /panel.help.width /panel.help.update .undef ]
+      [ keyF2 0 "F2" /panel.options /panel.options.width /panel.options.update .undef ]
+    ] def
+
+    /panel panel.short def
+  } ifelse
 
   panel.show
 } def
@@ -87,14 +103,15 @@
 /panel.show {
   panel.font setfont
 
-  panel.bg setcolor
-  0 panel.y moveto currentpoint
+%  panel.bg setcolor
+  0 panel.y moveto
+%  currentpoint
   panel.back restorescreen
-  currenttransparency
-  50 settransparency
-  panel.size fillrect
-  settransparency
-  moveto
+%  currenttransparency
+%  50 settransparency
+%  panel.size fillrect
+%  settransparency
+%  moveto
 
 %  panel.border setcolor
 %  0 -1 rmoveto

@@ -6,7 +6,6 @@
 % ( timeout time ) ==> ( )
 /Timeout {
   % first time
-  timeout.time .undef eq { timeout.init } if
 
   dup /timeout.time exch def
 
@@ -30,16 +29,13 @@
     timeout.areas {
       /to.tmp exch def
 
-      to.tmp .to_mask over over get free
-      to.tmp .to_mask .undef put
-
       to.tmp .to_back over over get free
       to.tmp .to_back .undef put
 
     } forall
   } {
 
-    black setcolor
+    white setcolor
 
     timeout.time.x timeout.time.y moveto -30 0 rmoveto
     currentpoint 30 fontheight image
@@ -75,6 +71,7 @@
 
     to.tmp .to_back get
     restorescreen
+
   } if
 } def
 
@@ -90,8 +87,8 @@
   /timeout.clear    true def
   /timeout.buf        64 string def
 
-  /timeout.time.x 195 def
-  /timeout.time.y 295 def
+  /timeout.time.x timeout.x 60 add def
+  /timeout.time.y timeout.y 120 add def
 
   timeout.areas {
     /to.tmp exch def
@@ -100,110 +97,63 @@
     timeout.y to.tmp .to_y get add
     moveto
 
-    currentpoint
-
-    /to.dot
-      to.tmp .to_w get
-      to.tmp .to_h get
-      savescreen
-    def
-
     to.tmp .to_back
-      to.dot length dup malloc exch over exch to.dot exch memcpy
+      6 6 savescreen
     put
 
-    0x004f40 setcolor
-    0 0 moveto
-    to.tmp .to_mask get
-    to.dot
-
-    blend2
-
-    moveto
-
-    to.dot
-    restorescreen
-
-    to.dot free
   } forall
 
 } def
 
 
-% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Even before init.
-%
-% ( ) ==> ( )
-%
-/timeout.preinit {
-  "dots.jpg" findfile setimage
-  timeout.areas {
-    /to.tmp exch def
-    to.tmp .to_mask
-
-    to.tmp .to_x get
-    to.tmp .to_y get
-    to.tmp .to_w get
-    to.tmp .to_h get
-    unpackimage
-
-    put
-  } forall
-
-} def
-
-
-/timeout.x 150 def
-/timeout.y 216 def
+/timeout.x { head.x } def
+/timeout.y { head.y } def
 
 % timeout.areas entries
 /.to_x 0 def
 /.to_y 1 def
-/.to_w 2 def
-/.to_h 3 def
-/.to_back 4 def
-/.to_mask 5 def
+/.to_back 2 def
 
 
 /timeout.areas [
-  [ 33  0 4 4 .undef .undef ]
-  [ 38  0 4 4 .undef .undef ]
-  [ 43  2 4 4 .undef .undef ]
-  [ 47  4 4 4 .undef .undef ]
-  [ 51  8 4 4 .undef .undef ]
-  [ 55 11 4 4 .undef .undef ]
-  [ 57 15 4 4 .undef .undef ]
-  [ 60 20 4 4 .undef .undef ]
-  [ 60 25 4 4 .undef .undef ]
-  [ 60 30 4 4 .undef .undef ]
-  [ 60 36 4 4 .undef .undef ]
-  [ 60 41 4 4 .undef .undef ]
-  [ 58 45 4 4 .undef .undef ]
-  [ 55 49 4 4 .undef .undef ]
-  [ 51 53 4 4 .undef .undef ]
-  [ 47 56 4 4 .undef .undef ]
-  [ 43 59 4 4 .undef .undef ]
-  [ 38 60 4 4 .undef .undef ]
-  [ 33 60 4 4 .undef .undef ]
-  [ 28 60 4 4 .undef .undef ]
-  [ 23 60 4 4 .undef .undef ]
-  [ 18 59 4 4 .undef .undef ]
-  [ 13 56 4 4 .undef .undef ]
-  [  9 53 4 4 .undef .undef ]
-  [  6 49 4 4 .undef .undef ]
-  [  3 45 4 4 .undef .undef ]
-  [  1 41 4 4 .undef .undef ]
-  [  0 36 4 4 .undef .undef ]
-  [  0 30 4 4 .undef .undef ]
-  [  0 25 4 4 .undef .undef ]
-  [  1 20 4 4 .undef .undef ]
-  [  3 16 4 4 .undef .undef ]
-  [  6 11 4 4 .undef .undef ]
-  [  9  8 4 4 .undef .undef ]
-  [ 13  4 4 4 .undef .undef ]
-  [ 18  2 4 4 .undef .undef ]
-  [ 23  0 4 4 .undef .undef ]
-  [ 28  0 4 4 .undef .undef ]
+  [  54   0 .undef ]
+  [  62   0 .undef ]
+  [  70   3 .undef ]
+  [  77   7 .undef ]
+  [  84  12 .undef ]
+  [  89  18 .undef ]
+  [  94  25 .undef ]
+  [  97  33 .undef ]
+  [  99  41 .undef ]
+  [ 100  50 .undef ]
+  [  99  58 .undef ]
+  [  97  66 .undef ]
+  [  94  74 .undef ]
+  [  89  81 .undef ]
+  [  83  87 .undef ]
+  [  77  92 .undef ]
+  [  69  96 .undef ]
+  [  62  99 .undef ]
+  [  54 100 .undef ]
+  [  45 100 .undef ]
+  [  37  99 .undef ]
+  [  29  96 .undef ]
+  [  21  92 .undef ]
+  [  15  87 .undef ]
+  [   9  81 .undef ]
+  [   4  73 .undef ]
+  [   1  66 .undef ]
+  [   0  58 .undef ]
+  [   0  49 .undef ]
+  [   0  41 .undef ]
+  [   1  33 .undef ]
+  [   4  25 .undef ]
+  [   9  18 .undef ]
+  [  15  12 .undef ]
+  [  21   7 .undef ]
+  [  29   2 .undef ]
+  [  37   0 .undef ]
+  [  45   0 .undef ]
 ] def
 
 

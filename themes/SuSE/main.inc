@@ -37,11 +37,14 @@
 % ( window ) ==> ( )
 %
 /main.redraw {
-  boot.text.options setcolor
-  window.current .font get setfont
-  boot.pos moveto boot.label.len neg 0 rmoveto
-  currentpoint boot.label.len fontheight image
-  boot.pos moveto txt_bootoptions showright
+
+  boot.show {
+    boot.text.options setcolor
+    window.current .font get setfont
+    boot.pos moveto boot.label.len neg 0 rmoveto
+    currentpoint boot.label.len fontheight image
+    boot.pos moveto txt_bootoptions showright
+  } if
 
   redrawmenu
   /keepbootoptions 1 def
@@ -51,6 +54,23 @@
   panel.show
 
   dud.redraw
+} def
+
+
+/boot.setup {
+  boot.show not { return } if
+
+  boot.window .ed boot.ed put
+
+  boot.pos moveto
+  txt_bootoptions showright
+
+  currenttransparency
+  white setcolor
+  boot.pos moveto 10 boot.ed.height rmoveto
+  0xe0 settransparency
+  boot.ed.width 1 fillrect
+  settransparency
 } def
 
 
@@ -102,21 +122,10 @@
 
   window.current .font get setfont
 
-  boot.pos moveto
-  txt_bootoptions showright
-
   /boot.ed.width screen.size pop boot.pos pop sub 20 sub def
   /boot.ed.height fontheight 2 add def
 
-  currenttransparency
-  white setcolor
-  boot.pos moveto 10 boot.ed.height rmoveto
-  0xe0 settransparency
-  boot.ed.width 1 fillrect
-  settransparency
-
-%  0 1 boot.ed.width 3 div { pop putpixel 3 0 rmoveto } for
-
+  /boot.window window.current def
 
   /boot.ed [
     boot.pos exch 10 add exch 1 sub
@@ -128,7 +137,7 @@
     0
   ] def
 
-  window.current .ed boot.ed put
+  boot.setup
 
   redrawmenu
   menu.entry true MenuSelect
