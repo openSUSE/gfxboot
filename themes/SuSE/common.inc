@@ -1057,10 +1057,10 @@
 
   currentimage
 
-  "rdots.jpg" "rdots_a.pcx" 780 0 showlogo
-  "vdots.jpg" "vdots_a.pcx" 500 240 showlogo
-  "ldots.jpg" "ldots_a.pcx" 0 940 showlogo
-  "head.jpg" "head_a.pcx" 300 371 showlogo
+  "rdots.jpg" "rdots_a.jpg" 780 0 showlogo
+  "vdots.jpg" "vdots_a.jpg" 500 240 showlogo
+  "ldots.jpg" "ldots_a.jpg" 0 940 showlogo
+  "head.jpg" "head_a.jpg" 300 371 showlogo
 
   setimage
 

@@ -9,7 +9,7 @@ function png2pcx {
 }
 
 function png2jpg_a {
-  convert -geometry "$p%" "$1" - | pngtopnm -alpha | cjpeg -optimize -quality 80 >"$2"
+  convert -geometry "$p%" "$1" - | pngtopnm -alpha | pgmtoppm white | cjpeg -optimize -quality 80 >"$2"
 }
 
 function png2pcx_a {
@@ -48,10 +48,10 @@ for i in src/*.png ; do
   name=`basename $i .png`
 
   png2jpg "src/$name.png" "$g/$name.jpg"
-#  png2jpg_a "src/$name.png" "$g/${name}_a.jpg"
+  png2jpg_a "src/$name.png" "$g/${name}_a.jpg"
 
 #  png2pcx "src/$name.png" "$g/$name.pcx"
-  png2pcx_a "src/$name.png" "$g/${name}_a.pcx"
+#  png2pcx_a "src/$name.png" "$g/${name}_a.pcx"
 
 done
 
