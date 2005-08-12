@@ -1,3 +1,6 @@
+	- fixed Dansk locale (#104084)
+	- new translations added
+
 5/8/2005:	v3.1.0
 	- support images with alpha channel
 	- new theme

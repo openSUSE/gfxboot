@@ -22,7 +22,7 @@
   [ "bg" "Български" ]
   [ "cs" "Čeština" ]
   [ "cy_GB" "Welsh" ]
-  [ "ds" "Dansk" ]
+  [ "da" "Dansk" ]
   [ "en" "English" ]
   [ "fr" "Français" ]
   [ "de" "Deutsch" ]
