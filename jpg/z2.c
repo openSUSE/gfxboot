@@ -15,11 +15,15 @@ int main(int argc, char **argv)
   unsigned char *jpg = malloc(1 << 20);
   unsigned char *img, *p;
   unsigned char pixel[3];
-  unsigned x;
+  unsigned x, z;
   unsigned x0, x1, y0, y1;
   unsigned bits = 0;
 
   if(argc < 4) return 1;
+
+  if(!strcmp(argv[1], "--8")) {
+    bits = 8;
+  }
 
   if(!strcmp(argv[1], "--16")) {
     bits = 16;
@@ -86,31 +90,64 @@ int main(int argc, char **argv)
 
       free(s);
 
-      for(i = 0, p = img; i < width * height; i++) {
-        if(bits == 24) {
-          pixel[2] = *p++;
-          pixel[1] = *p++;
-          pixel[0] = *p++;
-        }
-        else if(bits == 32) {
-          pixel[2] = *p++;
-          pixel[1] = *p++;
-          pixel[0] = *p++;
-          p++;
-        }
-        else {
-          x = p[0] + (p[1] << 8);
-          p += 2;
+      switch(bits) {
+        case 8:
+          for(i = 0, p = img; i < width * height; i++) {
+            x = *p++;
+            // 2 3 3
 
-          pixel[0] = ((x >> 11) & 0x1f) << 3;
-          pixel[0] += pixel[0] >> 5;
-          pixel[1] = ((x >> 5) & 0x3f) << 2;
-          pixel[1] += pixel[1] >> 6;
-          pixel[2] = (x & 0x1f) << 3;
-          pixel[2] += pixel[2] >> 5;
-        }
+            z = x >> (4 + 2);
+            pixel[0] = z * 0x55;
 
-        write(fd, &pixel, 3);
+            z = (x >> 3) & 0x07;
+            pixel[1] = z * 0x24 + (z >> 1);
+
+            z = x & 0x7;
+            pixel[2] = z * 0x24 + (z >> 1);
+
+            write(fd, &pixel, 3);
+          }
+          break;
+
+        case 16:
+          for(i = 0, p = img; i < width * height; i++) {
+            x = p[0] + (p[1] << 8);
+            p += 2;
+
+            // 5 6 5
+
+            pixel[0] = ((x >> 11) & 0x1f) << 3;
+            pixel[0] += pixel[0] >> 5;
+            pixel[1] = ((x >> 5) & 0x3f) << 2;
+            pixel[1] += pixel[1] >> 6;
+            pixel[2] = (x & 0x1f) << 3;
+            pixel[2] += pixel[2] >> 5;
+
+            write(fd, &pixel, 3);
+          }
+          break;
+
+        case 24:
+          for(i = 0, p = img; i < width * height; i++) {
+            pixel[2] = *p++;
+            pixel[1] = *p++;
+            pixel[0] = *p++;
+
+            write(fd, &pixel, 3);
+          }
+          break;
+
+        case 32:
+          for(i = 0, p = img; i < width * height; i++) {
+            pixel[2] = *p++;
+            pixel[1] = *p++;
+            pixel[0] = *p++;
+            p++;
+
+            write(fd, &pixel, 3);
+          }
+          break;
+
       }
 
       close(fd);

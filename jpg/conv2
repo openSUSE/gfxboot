@@ -749,6 +749,8 @@ BEGIN {
     xorl   => \&op_alu2,
     sall   => \&op_alu2,
     sarl   => \&op_alu2,
+    shll   => \&op_alu2,
+    shrl   => \&op_alu2,
     addl   => \&op_alu2,
     subl   => \&op_alu2,
     incl   => \&op_alu1,
@@ -990,7 +992,7 @@ sub op_alu2
 
   $val3 = '?';
 
-  if($op->{instr} eq 'sall') {
+  if($op->{instr} eq 'sall' || $op->{instr} eq 'shll') {
     if(is_num($val1) && is_num($val2)) {
       $val3 = $val2 << $val1;
     }
@@ -998,9 +1000,14 @@ sub op_alu2
       $val3 = $val2;
     }
   }
-  elsif($op->{instr} eq 'sarl') {
+  elsif($op->{instr} eq 'sarl' || $op->{instr} eq 'shrl') {
     if(is_num($val1) && is_num($val2)) {
-      $val3 = $val2 >> $val1;
+      if($val1 >= 1 && $op->{instr} eq 'shrl') {
+        $val3 = ($val2 & (1 << 31)) >> $val1;
+      }
+      else {
+        $val3 = $val2 >> $val1;
+      }
     }
     elsif($arg1 eq '0') {
       $val3 = $val2;

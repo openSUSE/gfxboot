@@ -367,17 +367,27 @@ int jpeg_decode(unsigned char *buf, unsigned char *pic, int x0, int x1, int y0, 
                                   i0 = mx == mx0 ? x0 - 16 * mx : 0;
                                   i1 = mx == mx1 ? x1 - 16 * mx : 16;
 
-                                  if(color_bits == 16) {
-                                    for(i = i0; i < i1; i++) {
-                                      *((unsigned short *) pic + 16 * mx - x0 + i + yofs) =
-                                      *((unsigned short *) tmp_img + 16 * j + i);
-                                    }
-                                  }
-                                  else {
-                                    for(i = i0; i < i1; i++) {
-                                      *((unsigned *) pic + 16 * mx - x0 + i + yofs) =
-                                      *((unsigned *) tmp_img + 16 * j + i);
-                                    }
+                                  switch(color_bits) {
+                                    case 8:
+                                      for(i = i0; i < i1; i++) {
+                                        *((unsigned char *) pic + 16 * mx - x0 + i + yofs) =
+                                        *((unsigned char *) tmp_img + 16 * j + i);
+                                      }
+                                      break;
+
+                                    case 16:
+                                      for(i = i0; i < i1; i++) {
+                                        *((unsigned short *) pic + 16 * mx - x0 + i + yofs) =
+                                        *((unsigned short *) tmp_img + 16 * j + i);
+                                      }
+                                      break;
+
+                                    case 32:
+                                      for(i = i0; i < i1; i++) {
+                                        *((unsigned *) pic + 16 * mx - x0 + i + yofs) =
+                                        *((unsigned *) tmp_img + 16 * j + i);
+                                      }
+                                      break;
                                   }
                                 }
 			}
@@ -812,16 +822,6 @@ PREC q[][64];
   STORECLAMP(p[(xout) * 4 + 2], y + cr)		\
 )
 
-#define PIC_16(yin, xin, p, xout, add)			\
-(							\
-  y = outy[(yin) * 8 + xin],				\
-  y = ((CLAMP(y + cr + add*2+1) & 0xf8) <<  8) |	\
-      ((CLAMP(y - cg + add    ) & 0xfc) <<  3) |	\
-      ((CLAMP(y + cb + add*2+1)       ) >>  3),		\
-  p[(xout) * 2 + 0] = y & 0xff,				\
-  p[(xout) * 2 + 1] = y >> 8				\
-)
-
 #define PIC221111x(xin, xin_4, xin_3)			\
 (							\
   CBCRCG(xin),						\
@@ -831,15 +831,66 @@ PREC q[][64];
   PIC(xin_4 + 1, xin_3 + 1, pic1, xin * 2 + 1)		\
 )
 
+#define PIC_16(yin, xin, p, xout, add)			\
+(							\
+  y = outy[(yin) * 8 + xin],				\
+  *(unsigned short *) (p + (xout) * 2)  = store_16(CLAMP(y + cr), CLAMP(y - cg), CLAMP(y + cb), add)	\
+)
+
 #define PIC221111_16x(xin, xin_4, xin_3)		\
 (							\
   CBCRCG(xin),						\
-  PIC_16(xin_4 + 0, xin_3 + 0, pic0, xin * 2 + 0, 3),	\
-  PIC_16(xin_4 + 0, xin_3 + 1, pic0, xin * 2 + 1, 0),	\
-  PIC_16(xin_4 + 1, xin_3 + 0, pic1, xin * 2 + 0, 1),	\
-  PIC_16(xin_4 + 1, xin_3 + 1, pic1, xin * 2 + 1, 2)	\
+  PIC_16(xin_4 + 0, xin_3 + 0, pic0, xin * 2 + 0, 3 * 0x55),	\
+  PIC_16(xin_4 + 0, xin_3 + 1, pic0, xin * 2 + 1, 0 * 0x55),	\
+  PIC_16(xin_4 + 1, xin_3 + 0, pic1, xin * 2 + 0, 1 * 0x55),	\
+  PIC_16(xin_4 + 1, xin_3 + 1, pic1, xin * 2 + 1, 2 * 0x55)	\
 )
 
+#define PIC_8(yin, xin, p, xout, add)			\
+(							\
+  y = outy[(yin) * 8 + xin],				\
+  p[(xout)]  = store_8(CLAMP(y + cr), CLAMP(y - cg), CLAMP(y + cb), add)	\
+)
+
+#define PIC221111_8x(xin, xin_4, xin_3)		\
+(							\
+  CBCRCG(xin),						\
+  PIC_8(xin_4 + 0, xin_3 + 0, pic0, xin * 2 + 0, 3 * 0x55),	\
+  PIC_8(xin_4 + 0, xin_3 + 1, pic0, xin * 2 + 1, 0 * 0x55),	\
+  PIC_8(xin_4 + 1, xin_3 + 0, pic1, xin * 2 + 0, 1 * 0x55),	\
+  PIC_8(xin_4 + 1, xin_3 + 1, pic1, xin * 2 + 1, 2 * 0x55)	\
+)
+
+
+static unsigned store_16(unsigned r, unsigned g, unsigned b, unsigned add)
+{
+  unsigned rgb;
+
+  rgb  = (((r << 5) - r + add) >> 8) << 11;
+  rgb += (((g << 6) - g + add) >> 8) << 5;
+  rgb +=  ((b << 5) - b + add) >> 8;
+
+  return rgb;
+}
+
+static unsigned store_8(unsigned r, unsigned g, unsigned b, unsigned add)
+{
+  unsigned rgb;
+
+#if 0
+  r = ((r << 2) - r + add) >> 8;
+  g = ((g << 3) - g + add) >> 8;
+  b = ((b << 3) - b + add) >> 8;
+
+  rgb = (r << 6) + (g << 3) + b;
+#endif
+
+  rgb  = (((r << 2) - r + add) >> 8) << 6;
+  rgb += (((g << 3) - g + add) >> 8) << 3;
+  rgb +=  ((b << 3) - b + add) >> 8;
+
+  return rgb;
+}
 
 static void col221111(int *out, unsigned char *pic, int width, int bits)
 {
@@ -857,11 +908,16 @@ static void col221111(int *out, unsigned char *pic, int width, int bits)
       for(k = 0; k < 8; k++) {
         k_4 = (k >> 2) << 3;
         k_3 = (k & 3) << 1;
-        if(bits == 16) {
-          PIC221111_16x(k, k_4, k_3);
-        }
-        else {
-          PIC221111x(k, k_4, k_3);
+        switch(bits) {
+          case 8:
+            PIC221111_8x(k, k_4, k_3);
+            break;
+          case 16:
+            PIC221111_16x(k, k_4, k_3);
+            break;
+          case 32:
+            PIC221111x(k, k_4, k_3);
+            break;
         }
       }
       outc += 8;
