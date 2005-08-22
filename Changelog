@@ -1,4 +1,7 @@
+22/8/2005:	v3.1.2
 	- prepare for jpeg decompression to 8-bit color space
+	- add penguin theme
+	- Dansk keymap added
 
 15/8/2005:	v3.1.1
 	- fixed Dansk locale (#104084)

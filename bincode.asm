@@ -3975,6 +3975,52 @@ get_time:
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
+; Convert 8 bit bcd to binary.
+;
+;  al		bcd
+;
+; return
+;  ax		binary
+;
+bcd2bin:
+		push dx
+		mov dl,al
+		shr al,4
+		and dl,0fh
+		mov ah,10
+		mul ah
+		add al,dl
+		pop dx
+		ret
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+get_date:
+		clc
+		mov ah,4
+		int 1ah
+		jnc get_date_10
+		xor dx,dx
+		xor cx,cx
+get_date_10:
+		mov al,ch
+		call bcd2bin
+		imul bx,ax,100
+		mov al,cl
+		call bcd2bin
+		add bx,ax
+		shl ebx,16
+		mov al,dh
+		call bcd2bin
+		mov bh,al
+		mov al,dl
+		call bcd2bin
+		add bx,ax
+		mov eax,ebx
+		ret
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
 ; Set console cursor position.
 ;
 ;  dh		row
@@ -9331,6 +9377,19 @@ prim_notimeout:
 ;
 prim_time:
 		call get_time
+		jmp pr_getint
+
+
+;; date - get current date
+;
+; group: system
+;
+; ( -- int1 )
+;
+; int1: date (bit 0-7: day, bit 8-15: month, bit 16-31: year)
+;
+prim_date:
+		call get_date
 		jmp pr_getint
 
 

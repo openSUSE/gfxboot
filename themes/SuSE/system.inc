@@ -295,3 +295,18 @@
 } def
 
 
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Generate pseudo random number.
+% Good enough for boot loader splash screen.
+%
+% ( ) ==> ( int )
+%
+/rand {
+  rand.start 59 mul 97 add 0x7fffffff and
+  /rand.start over def
+} def
+
+% start value
+/rand.start time def
+
+

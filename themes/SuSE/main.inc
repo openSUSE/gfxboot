@@ -122,7 +122,7 @@
 
   window.current .font get setfont
 
-  /boot.ed.width screen.size pop boot.pos pop sub 20 sub def
+  /boot.ed.width screen.size pop boot.pos pop sub ptheme { 60 } { 20 } ifelse sub def
   /boot.ed.height fontheight 2 add def
 
   /boot.window window.current def

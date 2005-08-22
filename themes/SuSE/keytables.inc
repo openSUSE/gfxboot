@@ -16,6 +16,7 @@
 %% include keymap.cs.inc
 %% include keymap.es.inc
 %% include keymap.fr.inc
+%% include keymap.da.inc
 %% include keymap.de.inc
 %% include keymap.el.inc
 %% include keymap.it.inc
@@ -37,6 +38,7 @@
   [ "en" .undef    ]
   [ "es" keymap.es ]
   [ "fr" keymap.fr ]
+  [ "da" keymap.da ]
   [ "de" keymap.de ]
   [ "el" keymap.el ]
   [ "he" .undef    ]

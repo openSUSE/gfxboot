@@ -49,7 +49,7 @@
   videomodes getvideomode
 
   usleep notimeout
-  time
+  time date
   setbrightness currentbrightness
   fadein fade
   idle

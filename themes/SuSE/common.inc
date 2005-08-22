@@ -121,6 +121,24 @@
     500 20 moveto dup print "  " print
   } if
 
+  ptheme {
+    % reverse direction
+    /p.xmas.dx p.xmas.dx neg def
+
+    key keyF9 eq
+    key keyF7 eq or {
+      % call super penguin
+      p.call.super
+    } {
+      key keyF1 ge
+      key keyF10 le and {
+        % read something
+        /p.read.timer rand 0x31 and neg -30 add def
+      } if
+    } ifelse
+
+  } if
+
   % some special keys
   debug.input
 
@@ -613,7 +631,7 @@
   menu.status {
     menu.bar.color setcolor
     currenttransparency
-    70 settransparency
+    ptheme { 120 } { 70 } ifelse settransparency
     menu.bar.width menu.bar.height
     fillrect
     settransparency
@@ -1032,8 +1050,8 @@
 /showlogo {
   4 2 roll  
 
-  findfile setimage 0 0 image.size unpackimage /tmp.pic.a exch def
-  findfile setimage 0 0 image.size unpackimage /tmp.pic exch def
+  findfile dup setimage 0 0 image.size unpackimage /tmp.pic.a exch def free
+  findfile dup setimage 0 0 image.size unpackimage /tmp.pic exch def free
 
   exch screen.size 4 -1 roll mul 10 shr 3 1 roll mul 10 shr exch moveto
 
@@ -1051,18 +1069,29 @@
 /init {
   0 0 moveto currentpoint clip.size image
 
-  screen.size exch 300 mul 10 shr /head.x exch def 371 mul 10 shr /head.y exch def
-
-  timeout.init
+  ptheme {
+    screen.size exch 40 mul 10 shr /head.x exch def 40 mul 10 shr /head.y exch def
+    timeout.init
+  } {
+    screen.size exch 300 mul 10 shr /head.x exch def 371 mul 10 shr /head.y exch def
+    timeout.init
+  } ifelse
 
   currentimage
 
-  "rdots.jpg" "rdots_a.jpg" 780 0 showlogo
-  "vdots.jpg" "vdots_a.jpg" 500 240 showlogo
-  "ldots.jpg" "ldots_a.jpg" 0 940 showlogo
-  "head.jpg" "head_a.jpg" 300 371 showlogo
+  ptheme {
+    "rdots.jpg" "rdots_a.jpg" 730 0 showlogo
+    "phead.jpg" "head_a.jpg" 40 40 showlogo
+  } {
+    "rdots.jpg" "rdots_a.jpg" 780 0 showlogo
+    "vdots.jpg" "vdots_a.jpg" 500 240 showlogo
+    "ldots.jpg" "ldots_a.jpg" 0 940 showlogo
+    "head.jpg" "head_a.jpg" 300 371 showlogo
+  } ifelse
 
   setimage
+
+  ptheme { ptheme.init } if
 
   % set default language
   "lang" findfile dup {
@@ -1083,7 +1112,7 @@
 
   /menu.text.xofs      10 def
   /menu.text.yofs       2 def
-  /menu.item.height    fontheight dup 3 div add def
+  /menu.item.height    fontheight dup ptheme { 2 } { 3 } ifelse div add def
   /menu.bar.height     fontheight menu.text.yofs dup add add def
 
   font.normal setfont
@@ -1105,6 +1134,11 @@
     /frame1.size { 365 195 } def
   } if
 
+  ptheme {
+    /frame1.pos  { 210 170 } def
+    /frame1.size { 365 195 } def
+  } if
+
   /frame4.pos  { 560  62 } def
   /frame4.size {  22 264 } def
 
@@ -1117,7 +1151,7 @@
 
   /boot.label.len 243 def
 
-  /boot.pos { boot.label.len 10 add 490 } def
+  /boot.pos { boot.label.len 10 add 480 } def
 
   /boot.buf.size 256 def
   /boot.buf boot.buf.size string def
@@ -1129,7 +1163,7 @@
   /ms.up       {   0 480 }  def
   /ms.down     {  23 480 }  def
 
-  /update.pos { clip.size pop txt_dud_ready strsize pop sub 20 sub clip.size exch pop 75 sub } def
+  /update.pos { clip.size pop txt_dud_ready strsize pop sub 60 sub clip.size exch pop 100 sub } def
 
 } def
 
@@ -1448,12 +1482,22 @@
 % Global variables.
 %
 
-% dtrace 0x11000 cvp getdword pop
+/ptheme false def
+
+syslinux {
+  rand 4 shr 0xffff and time 16 shr 20 gt { 4 } { 30 } ifelse mod 0 eq
+  0x417 cvp getbyte 0x40 and 0 ne or
+  {
+    /ptheme true def
+  } if
+
+} if
 
 /transp 0x30 def
 
-% 640 480 8 findmode setmode not { false .end } if
+% 640 480 32 findmode setmode not { false .end } if
 % 1024 768 32 findmode setmode not { false .end } if
+
 800 600 16 findmode setmode not {
   800 600 32 findmode setmode not { false .end } if
 } if
@@ -1462,7 +1506,7 @@
 
 /clip.size { screen.size } def
 
-"back.jpg" findfile /background.file over def setimage loadpalette
+ptheme { "pback.jpg" } { "back.jpg" } ifelse findfile /background.file over def setimage loadpalette
 /max_image_colors image.colors def
 
 % 7 dup 0xffffff setpalette setcolor
@@ -1494,5 +1538,9 @@
 
 /debug 0 def
 
-bsplash.show
+ptheme {
+  /bsplash.done { } def
+} {
+  bsplash.show
+} ifelse
 
