@@ -1,21 +1,19 @@
-# translation of da.po to 
 # translation of da.po to Dansk
 # translation of bootloader.pot_[g4TXCa].po to Dansk
 # LANGUAGE translations for boot loader
 # Copyright (C) 2005 SUSE Linux GmbH
 # Martin Møller <martin@martinm-76.dk>, 2005.
-# Ines Pozo <Ines.Pozo@novell.com>, 2005.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: da\n"
-"PO-Revision-Date: 2005-08-12 16:49+0200\n"
-"Last-Translator: Ines Pozo <Ines.Pozo@novell.com>\n"
-"Language-Team:  <de@li.org>\n"
+"PO-Revision-Date: 2005-08-12 16:33+0200\n"
+"Last-Translator: Martin Møller <martin@martinm-76.dk>\n"
+"Language-Team: Dansk <da@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.3.1\n"
+"X-Generator: KBabel 1.10.1\n"
 
 # ok button label
 #. txt_ok
@@ -141,13 +139,13 @@ msgid ""
 "This is not a <product> boot disk.\n"
 "Please insert boot disk %u."
 msgstr ""
-"Dette er ikke en <product> opstartsdisk.\n"
+"Dette er ikke en SUSE LINUX 10.0 opstartsdisk.\n"
 "Vær venlig at indsætte opstartsdisk %u."
 
 # password dialog title
 #. txt_password_title
 msgid "Password"
-msgstr "Kodeord"
+msgstr "Adgangskode"
 
 # Keep the newlines and spaces after ':'!
 #. txt_password
@@ -220,7 +218,7 @@ msgstr "Server\n"
 
 #. txt_password
 msgid "Password\n"
-msgstr "Kodeord\n"
+msgstr "Adgangskode\n"
 
 # label for ftp user input
 #. txt_user1

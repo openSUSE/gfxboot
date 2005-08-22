@@ -102,7 +102,7 @@
 
 See http://www.gamers.org/~quinet/lilo/.
 
-Modernized for openSUSE by me <snwint@suse.de>"
+Modernized for openSUSE by Steffen Winterfeldt <snwint@suse.de>"
 
   put
   dup .buttons [

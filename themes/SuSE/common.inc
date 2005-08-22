@@ -1151,7 +1151,7 @@
 
   /boot.label.len 243 def
 
-  /boot.pos { boot.label.len 10 add 480 } def
+  /boot.pos { boot.label.len 10 add ptheme { 480 } { 490 } ifelse } def
 
   /boot.buf.size 256 def
   /boot.buf boot.buf.size string def
@@ -1163,7 +1163,10 @@
   /ms.up       {   0 480 }  def
   /ms.down     {  23 480 }  def
 
-  /update.pos { clip.size pop txt_dud_ready strsize pop sub 60 sub clip.size exch pop 100 sub } def
+  /update.pos {
+    clip.size pop txt_dud_ready strsize pop sub ptheme { 60 } { 20 } ifelse sub
+    clip.size exch pop ptheme { 100 } { 75 } ifelse sub
+  } def
 
 } def
 
@@ -1263,7 +1266,7 @@
     pop 0
   } if
 
-  dup keyF12 eq {
+  dup keyF12 eq debug 3 ge and {
     % mouse support testing
 
     1 keepmode
