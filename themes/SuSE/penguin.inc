@@ -340,7 +340,6 @@ Modernized for openSUSE by Steffen Winterfeldt <snwint@suse.de>"
 %
 /p.timeout.animate {
   dup 0 le {
-    /p.super true def
     pop pop
 
     % it vanishes...
@@ -378,6 +377,8 @@ Modernized for openSUSE by Steffen Winterfeldt <snwint@suse.de>"
 
 % call super penguin
 /p.call.super {
+  p.super { return } if 
+
   /p.super true def
 
   p.fall.y 0 le {
