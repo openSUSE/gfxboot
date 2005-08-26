@@ -43,7 +43,7 @@
 /xmenu.width { xmenu .xm_width get } def
 /xmenu.height { xmenu .xm_height get } def
 
-/xmenu.vspace { xmenu .xm_vspace get dup { } { pop xmenu.vspace.default } ifelse } def
+/xmenu.vspace { xmenu .xm_vspace get dup .undef ne { } { pop xmenu.vspace.default } ifelse } def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

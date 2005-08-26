@@ -44,6 +44,7 @@
   [ "el"    keymap.el    ]
   [ "en"    .undef       ]
   [ "es"    keymap.es    ]
+  [ "fi"    .undef       ]
   [ "fr"    keymap.fr    ]
   [ "he"    .undef       ]
   [ "hu"    keymap.hu    ]
