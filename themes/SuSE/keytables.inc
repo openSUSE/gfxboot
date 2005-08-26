@@ -22,7 +22,6 @@
 %% include keymap.hu.inc
 %% include keymap.it.inc
 %% include keymap.ja.inc
-%% include keymap.lt.inc
 %% include keymap.nb.inc
 %% include keymap.pl.inc
 %% include keymap.pt_BR.inc
@@ -51,7 +50,7 @@
   [ "it"    keymap.it    ]
   [ "ja"    keymap.ja    ]
   [ "ko"    .undef       ]
-  [ "lt"    keymap.lt    ]
+  [ "lt"    .undef       ]
   [ "nb"    keymap.nb    ]
   [ "nl"    .undef       ]
   [ "pa"    .undef       ]
