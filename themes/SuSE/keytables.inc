@@ -14,44 +14,59 @@
 /.km.map    1 def
 
 %% include keymap.cs.inc
-%% include keymap.es.inc
-%% include keymap.fr.inc
 %% include keymap.da.inc
 %% include keymap.de.inc
 %% include keymap.el.inc
+%% include keymap.es.inc
+%% include keymap.fr.inc
+%% include keymap.hu.inc
 %% include keymap.it.inc
 %% include keymap.ja.inc
-%% include keymap.hu.inc
+%% include keymap.lt.inc
 %% include keymap.nb.inc
 %% include keymap.pl.inc
+%% include keymap.pt_BR.inc
+%% include keymap.pt_PT.inc
 %% include keymap.ru.inc
 %% include keymap.sk.inc
 %% include keymap.sl.inc
 %% include keymap.sv.inc
+%% include keymap.tr.inc
 
 % must not be empty
 /keymaps [
-  [ "ar" .undef    ]
-  [ "bn" .undef    ]
-  [ "bg" .undef    ]
-  [ "cs" keymap.cs ]
-  [ "en" .undef    ]
-  [ "es" keymap.es ]
-  [ "fr" keymap.fr ]
-  [ "da" keymap.da ]
-  [ "de" keymap.de ]
-  [ "el" keymap.el ]
-  [ "he" .undef    ]
-  [ "it" keymap.it ]
-  [ "ja" keymap.ja ]
-  [ "hu" keymap.hu ]
-  [ "nb" keymap.nb ]
-  [ "pl" keymap.pl ]
-  [ "ru" keymap.ru ]
-  [ "sk" keymap.sk ]
-  [ "sl" keymap.sl ]
-  [ "sv" keymap.sv ]
-  [ "uk" .undef    ]
+  [ "ar"    .undef       ]
+  [ "bg"    .undef       ]
+  [ "bn"    .undef       ]
+  [ "cs"    keymap.cs    ]
+  [ "cy_GB" .undef       ]
+  [ "da"    keymap.da    ]
+  [ "de"    keymap.de    ]
+  [ "el"    keymap.el    ]
+  [ "en"    .undef       ]
+  [ "es"    keymap.es    ]
+  [ "fr"    keymap.fr    ]
+  [ "he"    .undef       ]
+  [ "hu"    keymap.hu    ]
+  [ "it"    keymap.it    ]
+  [ "ja"    keymap.ja    ]
+  [ "ko"    .undef       ]
+  [ "lt"    keymap.lt    ]
+  [ "nb"    keymap.nb    ]
+  [ "nl"    .undef       ]
+  [ "pa"    .undef       ]
+  [ "pl"    keymap.pl    ]
+  [ "pt_BR" keymap.pt_BR ]
+  [ "pt_PT" keymap.pt_PT ]
+  [ "ro"    .undef       ]
+  [ "ru"    keymap.ru    ]
+  [ "sk"    keymap.sk    ]
+  [ "sl"    keymap.sl    ]
+  [ "sv"    keymap.sv    ]
+  [ "tr"    keymap.tr    ]
+  [ "uk"    .undef       ]
+  [ "zh_CN" .undef       ]
+  [ "zh_TW" .undef       ]
 ] def
 
 
