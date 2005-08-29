@@ -65,7 +65,7 @@ $txt =~ s/(\x14.*?\x10)\s*/$1/sg;
 $txt =~ s/\s*(\x04|$)/$1/sg;
 
 # FIXME: drop after 10.0
-$txt =~ s/(\bF[234]\b)/$help_key_rename{$1}/sg;
+$txt =~ s/(\bF[234]\b)/$help_key_rename{$1}/sg if $helptype eq 'install';
 
 print $txt, "\x00";
 
