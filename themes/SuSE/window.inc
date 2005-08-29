@@ -73,6 +73,7 @@
 /.color.bg       newfield
 /.font           newfield
 /.saved          newfield
+/.saved.areas    newfield
 /.title          newfield
 /.title.fg       newfield
 /.title.bg       newfield
@@ -244,6 +245,17 @@
       dup .x get 1 sub over .y get 1 sub moveto
       dup .saved get dup restorescreen free
       dup .saved .undef put
+    } if
+    % restore & free saved background areas
+    dup .saved.areas get .undef ne {
+      % list of [ x y screen ]
+      dup .saved.areas get {
+        dup { } forall
+        3 1 roll moveto dup restorescreen free
+        free
+      } forall
+      dup .saved.areas get free
+      dup .saved.areas .undef put
     } if
     % free input field memory
     dup .ed get .undef ne {

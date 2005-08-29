@@ -1,0 +1,127 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<body>
+
+<!-- help=boot -->
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="help">Używanie systemu pomocy</a></h3>
+
+Pomoc programu ładującego jest kontekstowa. Daje informacje o wybranym
+elemencie menu albo jeśli edytujesz opcje startowe,
+próbuje znaleźć informacje o opcji, w której znajduje się kursor.<br>
+<br>
+Klawisze nawygacyjne<br><br>
+
+  <em>Up Arrow</em>: podświetl poprzedni odsyłacz<br>
+  <em>Down Arrow</em>: podświetl następny odsyłacz<br>
+  <em>Left Arrow</em>, <em>Backspace</em>: wróć do poprzedniego tematu<br>
+  <em>Right Arrow</em>, <em>Enter</em>, <em>Spacja</em>: idź za odsyłaczem<br>
+  <em>Page Up</em>: przewiń stronę w górę<br>
+  <em>Page Down</em>: przewiń stronę w dół<br>
+  <em>Home</em>: idź na początek strony<br>
+  <em>End</em>: idź na koniec strony<br>
+  <em>Esc</em>: wyjdź z pomocy<br>
+
+<br>Wróć do <a href="#opt">Opcji startowych</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="keytable">Wybór języka i układu klawiatury</a></h3>
+
+Aby zmienić język i układ klawiatury używany przez program ładujący naciśnij <em>F2</em>.
+
+<br><br>Wróć do <a href="#opt">Opcji startowych</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="profile">Wybierz profil</a></h3>
+
+Naciśnij <em>F3</em> aby wybrać profil. System będzie uruchomiony z
+konfiguracją zapisaną w tym profilu.
+
+<br><br>Wróć do <a href="#opt">Opcji startowych</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="opt">Opcje startowe</a></h3>
+
+  <a href="#o_splash">splash</a> -- wpływa wygląd ekranu (splash screen)<br>
+  <a href="#o_apm">apm</a> -- włączenie zarządzania energią<br>
+  <a href="#o_acpi">acpi</a> -- zaawansowany interfejs konfiguracji zarządzania energią<br>
+  <a href="#o_ide">ide</a> -- zarządzanie podsystemem IDE<br>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_splash">Opcje jadra: splash</a></h3>
+
+Splash screen to obrazek pokazywany w czasie uruchamiania systemu.<br>
+<br>
+<em>splash=0</em><br>
+Wyłączenie splash screen. Może być przydatne na bardzo starych
+monitorach albo jeśli wystąpią błędy.<br>
+<br>
+<em>splash=verbose</em><br> Aktywacja splash screen, komunikaty jądra
+i startowe są widoczne.<br>
+<br>
+<em>splash=silent</em><br>
+Aktywacja splash screen, brak komunikatów. Pokazywany jest pasek postępu.<br>
+<br>
+Wróć do <a href="#opt">Opcji startowych</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_apm">Opcje jądra: apm</a></h3>
+
+APM jest jedną z dwóch strategii zarządzania energią używaną we
+współczesnych komputerach. Wykorzystywana jest głównie w komputerach
+przenośnych do takich funkcji jak usypianie na dysk ale może być także
+odpowiedzialny za wyłączanie komputera po zaniku zasilania. APM polega
+na poprawnie funkcjonującym BIOS-ie. Jeśli BIOS nie działa poprawnie,
+to APM ma ograniczone zastosowanie, może nawet uniemożliwiać pracę
+komputera. Dlatego można go wyłączyć parametrem<br><br>
+
+  <em>apm=off</em>  -- zupełnie wyłącz APM<br><br>
+
+Niektóre najnowsze komputery mogą skorzystać z nowszego standardu
+<a href="#o_acpi">ACPI</a>.
+
+<br><br>Wróć do <a href="#opt">Opcji startowych</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_acpi">Opcje jądra: acpi</a></h3>
+
+ACPI (Advanced Configuration and Power Interface) jest standardem
+definiującym interfejs między systemem operacyjnym i
+BIOS-em. Domyślnie <em>acpi</em> jest włączone po stwierdzeniu, że
+BIOS pochodzi z roku późniejszego niż 2000. Istnieje kilka typowo
+używanych parametrów sterujących działaniem ACPI:<br>
+<br>
+  <em>pci=noacpi</em> -- nie używaj ACPI nie przekierowuj przerwań PCI
+  <em>acpi=oldboot</em> -- aktywowane są tylko części ACPI dotyczące 
+procesu uruchamiania systemu <br>
+  <em>acpi=off</em> -- zupełne wyłączenie ACPI<br>
+  <em>acpi=force</em> -- włącz ACPI nawet, jeśli BIOS pochodzi sprzed
+roku 2000<br>
+<br>
+Zastępuje on stary system <a href="#o_apm">apm</a>, zwłaszcza na
+nowych komputerach.
+
+
+<br><br>Wróć do <a href="#opt">Opcji startowych</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_ide">Opcje jądra: ide</a></h3>
+
+IDE jest w przeciwieństwie do SCSI powszechnie wykorzystywane w
+stacjach roboczych. Dla zapobieżenie niektórym problemom pojawiającym
+się w systemach IDE użyj parametru jądra: <br><br> 
+
+  <em>ide=nodma</em>  -- wyłącz dma dla urządzeń IDE<br>
+
+
+
+<br><br>Wróć do <a href="#opt">Opcji startowych</a>
+
+</body></html>

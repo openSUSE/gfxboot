@@ -45,6 +45,7 @@
   [ "ru" "Русский" ]
   [ "sk" "Slovenčina" ]
   [ "sl" "Slovenščina" ]
+  [ "sr" "Serbian" ]
   [ "sv" "Svenska" ]
   [ "tr" "Türkçe" ]
   [ "uk" "Українська" ]
@@ -144,9 +145,9 @@
   xmenu .xm_title /txt_language put
 
   % make menu smaller if there are more than 19 language entries
-  lang.items length 19 gt {
-    xmenu .xm_vspace 0 put
-  } if
+  %lang.items length 19 gt {
+  %  xmenu .xm_vspace 2 put
+  %} if
 
   % start with current lang
 

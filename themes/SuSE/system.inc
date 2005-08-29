@@ -310,3 +310,16 @@
 /rand.start time def
 
 
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+%
+% ( date ) ==> ( weekday )
+%
+/weekday {
+  dup 8 shr 0xff and 1 sub
+  dup 3 mul over 2 div sub
+  exch 2 mul 0x11000a exch shr 3 and add
+  over 0xff and 6 add add
+  exch 16 shr add
+  7 mod
+} def
+

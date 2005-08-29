@@ -8,7 +8,7 @@
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Some global vars.
 %
-/xmenu.vspace.default	4 def
+/xmenu.vspace.default	{ xmenu .xm_list get length 15 ge { 2 } { 4 } ifelse } def
 /xmenu.hspace		12 def
 /xmenu.light		white def
 /xmenu.dark		black def
@@ -18,6 +18,11 @@
 /xmenu.selected.fg	white def
 /xmenu.selected.bg	0x6c6c6c newcolor
 
+small_layout {
+  /xmenu.maxlines	22 def
+} {
+  /xmenu.maxlines	28 def
+} ifelse
 
 % xmenu layout
 %
@@ -45,6 +50,7 @@
 
 /xmenu.vspace { xmenu .xm_vspace get dup .undef ne { } { pop xmenu.vspace.default } ifelse } def
 
+/xmenu.saved { xmenu.saved.areas xmenu.column get 2 get } def
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Create new xmenu.
@@ -79,12 +85,50 @@
   } if
 
   dup keyDown eq {
-    xmenu 0 get 1 add xmenu.select
+    xmenu .xm_current get 1 add xmenu.select
     pop 0
   } if 
 
   dup keyUp eq {
-    xmenu 0 get 1 sub xmenu.select
+    xmenu .xm_current get 1 sub xmenu.select
+    pop 0
+  } if 
+
+  dup keyPgDown eq {
+    xmenu .xm_current get 5 add
+    xmenu .xm_list get length 1 sub min xmenu.select
+    pop 0
+  } if 
+
+  dup keyPgUp eq {
+    xmenu .xm_current get 5 sub
+    0 max xmenu.select
+    pop 0
+  } if 
+
+  dup keyHome eq {
+    0 xmenu.select
+    pop 0
+  } if 
+
+  dup keyEnd eq {
+    xmenu .xm_list get length 1 sub xmenu.select
+    pop 0
+  } if 
+
+  dup keyRight eq {
+    xmenu .xm_current get
+    dup xmenu.maxlines div 1 add xmenu.columns mod xmenu.maxlines mul
+    exch xmenu.maxlines mod add
+    xmenu .xm_list get length 1 sub min xmenu.select
+    pop 0
+  } if 
+
+  dup keyLeft eq {
+    xmenu .xm_current get
+    dup xmenu.maxlines div xmenu.columns add 1 sub xmenu.columns mod xmenu.maxlines mul
+    exch xmenu.maxlines mod add
+    xmenu .xm_list get length 1 sub min xmenu.select
     pop 0
   } if 
 
@@ -104,8 +148,14 @@
 /xmenu.sizes {
   /xmenu.lheight xmenu.font setfont fontheight xmenu.vspace dup add add def
 
+  /xmenu.columns xmenu .xm_list get length xmenu.maxlines add 1 sub xmenu.maxlines div def
+
+  /xmenu.lastheight
+    xmenu .xm_list get length xmenu.maxlines xmenu.columns 1 sub mul sub xmenu.lheight mul
+  def
+
   xmenu .xm_height
-    xmenu .xm_list get length xmenu.lheight mul
+    xmenu .xm_list get length xmenu.maxlines min xmenu.lheight mul
   put
 
   xmenu .xm_width
@@ -127,19 +177,33 @@
 
   xmenu.sizes
 
-  xmenu.x 1 sub xmenu.y 1 sub moveto
-  xmenu.light xmenu.dark
-  xmenu.width 2 add xmenu.height 2 add
-  over over savescreen /xmenu.saved exch def
-  drawborder
+  dup .saved.areas xmenu.columns array /xmenu.saved.areas over def put
+
+  0 1 xmenu.columns 1 sub {
+    /xmenu.column exch def
+
+    dup .saved.areas get xmenu.column
+
+    [
+      xmenu.column xmenu.width 2 add mul xmenu.x add 1 sub xmenu.y 1 sub moveto
+      currentpoint
+
+      xmenu.light xmenu.dark
+      xmenu.width 2 add
+      xmenu.column 1 add xmenu.columns eq { xmenu.lastheight } { xmenu.height } ifelse 2 add
+      over over savescreen 5 1 roll
+      drawborder
+
+    ] put
+
+  } for
 
   0 1 xmenu .xm_list get length 1 sub { xmenu.viewentry } for
 
   /xmenu.oldentry xmenu .xm_current get def
 
   dup .x xmenu.x put
-  dup .y xmenu.y put
-      .saved xmenu.saved put
+      .y xmenu.y put
 
 } def
 
@@ -153,6 +217,7 @@
   /xmenu.tmpbuf xmenu.tmpbuf free .undef def
   /xmenu.saved.normal xmenu.saved.normal free .undef def
   /xmenu.saved.selected xmenu.saved.selected free .undef def
+  /xmenu.saved.areas .undef def
 } def
 
 
@@ -174,9 +239,12 @@
 /xmenu.viewentry {
   xmenu.font setfont
 
-  dup xmenu.lheight mul xmenu.y add /xmenu.pos.y exch def
+  dup xmenu.maxlines mod xmenu.lheight mul xmenu.y add /xmenu.pos.y exch def
 
-  xmenu.x xmenu.pos.y moveto
+  dup xmenu.maxlines div /xmenu.column over def
+  xmenu.width 2 add mul xmenu.x add /xmenu.pos.x exch def
+
+  xmenu.pos.x xmenu.pos.y moveto
 
   dup xmenu .xm_current get eq { xmenu.saved.selected } { xmenu.saved.normal } ifelse
 
@@ -189,12 +257,12 @@
     setcolor xmenu.width xmenu.lheight fillrect
 
     dup xmenu .xm_current get eq {
-      xmenu.x xmenu.pos.y moveto
+      xmenu.pos.x xmenu.pos.y moveto
       xmenu.dark xmenu.light xmenu.width xmenu.lheight drawborder
     } if
 
     dup xmenu .xm_current get eq { /xmenu.saved.selected } { /xmenu.saved.normal } ifelse
-      xmenu.x xmenu.pos.y moveto
+      xmenu.pos.x xmenu.pos.y moveto
       xmenu.width xmenu.lheight
       savescreen
     def
@@ -209,18 +277,14 @@
     } if
     xmenu.tmpbuf exch dup length memcpy
 
-    currenttransparency transp settransparency
-
     0 xmenu.pos.y xmenu.y sub moveto 1 1 rmoveto
-    xmenu.saved xmenu.tmpbuf blend
+    xmenu.saved transp xmenu.tmpbuf blend
 
-    settransparency
-
-    xmenu.x xmenu.pos.y moveto xmenu.tmpbuf restorescreen
+    xmenu.pos.x xmenu.pos.y moveto xmenu.tmpbuf restorescreen
   } if
 
   dup xmenu .xm_current get eq { xmenu.selected.fg } { xmenu.normal.fg } ifelse setcolor
-  xmenu.x xmenu.hspace add xmenu.pos.y xmenu.vspace add moveto
+  xmenu.pos.x xmenu.hspace add xmenu.pos.y xmenu.vspace add moveto
   xmenu .xm_list get over get exec show
 
   pop

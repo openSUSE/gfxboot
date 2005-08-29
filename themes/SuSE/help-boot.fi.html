@@ -1,0 +1,128 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<body>
+
+<!-- help=boot -->
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="help">Ohjeen käyttäminen</a></h3>
+
+Käynnistyslataajan ohje on asiayhteys riippuvainen. Se antaa tietoja
+valitusta valikkon kohdasta tai, jos muokkaat käynnistysvalintoja,
+se yrittää hakea tietoa valinnasta jolla kursori on.<br>
+<br>
+Ohjausnäppäimet<br><br>
+
+  <em>Nuoli ylöspäin</em>: valitsee aiemman linkin<br>
+  <em>Nuoli alaspäin</em>: highlight next link<br>
+  <em>Nuoli vasemmalle</em>, <em>Backspace</em>: palaa aiempaan ohjeeseen<br>
+  <em>Nuoli oikealle</em>, <em>Enter</em>, <em>Välilyönti</em>: seuraa linkkiä<br>
+  <em>Page Up</em>: rullaa yksi sivu ylöspäin<br>
+  <em>Page Down</em>: rullaa sivu alaspäin<br>
+  <em>Home</em>: mene aloitussivulle<br>
+  <em>End</em>: mene sivun loppuun<br>
+  <em>Esc</em>: lopeta ohje<br>
+
+<br>Palaa <a href="#opt">käynnistysvalintoihin</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="keytable">Kieli ja näppäimistökartta valinnat</a></h3>
+
+Paina <em>F2</em> vaihtaaksesi käytettävää käynnistyslataajan kieltä ja näppäimistökarttaa.
+
+<br><br>Palaa <a href="#opt">käynnistysvalintoihin</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="profile">Valitse profiili</a></h3>
+
+Paina <em>F3</em> valitaksesi käytettävän profiilin. Järjestelmäsi käynnistetään käyttäen profiiliin 
+tallennettua määritystä.
+
+<br><br>Palaa <a href="#opt">käynnistysvalintoihin</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="opt">Käynnistysvalinnat</a></h3>
+
+  <a href="#o_splash">splash</a> -- vaikuta splash screen käyttäytymiseen<br>
+  <a href="#o_apm">apm</a> -- vaihtaa virranhallintaa<br>
+  <a href="#o_acpi">acpi</a> -- advanced configuration and power interface<br>
+  <a href="#o_ide">ide</a> -- hallitse IDE alijärjestelmää<br>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_splash">Kernel valinnat: splash</a></h3>
+
+splash screen on kuva joka näytetään järjestelmän käynnistyksen yhteydessä.<br>
+<br>
+<em>splash=0</em><br>
+splash screen on poistettu käytöstä. Tämä voi olla käytännöllistä
+todella vanhojen monitoreiden kanssa tai jos virheitä ilmenee.<br>
+<br>
+<em>splash=verbose</em><br> Ottaa käyttöön splash-näytön, kernel- ja käynnistysviestit 
+näkyvät silti.<br>
+<br>
+<em>splash=silent</em><br>
+Ottaa käyttöön splash-näytön, mutta ei viestejä. Näiden sijasta käytetään etenemispalkkia.<br>
+<br>
+Palaa <a href="#opt">käynnistysvalintoihin</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_apm">Kernel valinnat: apm</a></h3>
+
+APM on toinen nykyisissä tietokoneissa käytettävistä virranhallinta 
+strategioista. Sitä käytetään pääasiassa kannettavissa tietokoneissa toiminnoissa kuten "suspend
+to disk", mutta se voi olla vastuussa myös tietokoneen sammuttamisesta virtakatkon 
+jälkeen. APM luottaa oikein toimivaan BIOSiin. Jos
+BIOS on rikkinäinen, APM:llä voi olla vain rajoitettua käyttöä tai se voi jopa estää
+tietokonetta toimimasta. Tämän takia, se voidaan poistaa käytöstä 
+parametrillä<br><br>
+
+  <em>apm=off</em>  -- poistaa APM toiminnon kokonaan<br><br>
+
+Osa uusimmista tietokoneista voivat hyötyä enemmän uudemmasta
+<a href="#o_acpi">ACPI</a>:sta.
+
+<br><br>Palaa <a href="#opt">käynnistysvalintoihin</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_acpi">Kernel valinnat: acpi</a></h3>
+
+ACPI (Advanced Configuration and Power Interface) on 
+standardi joka määrittää virta ja määrityshallinnan liittymän
+käyttöjärjestelmän ja BIOS välillä. Oletuksena, <em>acpi</em> otetaan
+käyttöön kun BIOS on tunnistettu uudemmaksi kuin vuosi
+2000. On muutamia yleisesti käytettyjä
+parametrejä ACPI:n käyttäytymisen ohjaamiseksi:<br>
+<br>
+  <em>pci=noacpi</em> -- älä käytä ACPI ohjaamaan PCI keskeytyksiä
+  <em>acpi=oldboot</em> -- vain osa ACPI:sta jotka kuuluvat
+käynnistykseen ovat käytössä<br>
+  <em>acpi=off</em> -- poistaa ACPI:n kokonaan käytöstä<br>
+  <em>acpi=force</em> -- käyttää ACPIa vaikka BIOS olisi päivätty
+ennen vuotta 2000<br>
+<br>
+Erityisesti uusille tietokoneille, korvaa vanhan
+<a href="#o_apm">apm</a> järjestelmän.
+
+
+<br><br>Palaa <a href="#opt">käynnistysvalintoihin</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_ide">Kernel valinnat: ide</a></h3>
+
+IDE, toisinkuin SCSI, on yleisesti käytetty useimmissa työpöytäkoneissa.
+Ohittaaksesi joitakin IDE-järjestelmien laitteisto-ongelmia, käytä
+kernel parametriä: <br><br> 
+
+  <em>ide=nodma</em>  -- poistaa dman IDE levyiltä<br>
+
+
+
+<br><br>Palaa <a href="#opt">käynnistysvalintoihin</a>.
+
+</body></html>

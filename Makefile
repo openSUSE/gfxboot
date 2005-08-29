@@ -1,5 +1,5 @@
 CC	 = gcc
-CFLAGS	 = -g -Wall -O2 -fomit-frame-pointer
+CFLAGS	 = -g -Wall -Wno-pointer-sign -O2 -fomit-frame-pointer
 X11LIBS	 = /usr/X11/lib
 THEMES	 = $(wildcard themes/*)
 # LIBFILES = happysuse.mod system.inc

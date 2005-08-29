@@ -86,13 +86,11 @@
 
   currentpoint
 
-  0x303030 setcolor
   0 0 moveto
-  b.mask b.back blend2
+  0x303030 b.mask b.back blend
 
-  white setcolor
   1 1 moveto
-  b.mask b.back blend2
+  white b.mask b.back blend
 
   moveto
   b.back restorescreen

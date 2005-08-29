@@ -241,12 +241,12 @@ Modernized for openSUSE by Steffen Winterfeldt <snwint@suse.de>"
 
   % copy background
   p.xmas.x p.xmas.xmin sub 0 moveto
-  p.xmas.back 0xff p.xmas.single blend3
+  p.xmas.back 0xff p.xmas.single blend
 
   % add penguin
   p.xmas.src.x p.xmas.src.w p.xmas.frame mul add
   p.xmas.src.y p.xmas.dx 0 gt { p.xmas.src.h add } if moveto
-  panim.img panim_a.img p.xmas.single blend3
+  panim.img panim_a.img p.xmas.single blend
 
   % draw
   p.xmas.x p.xmas.y moveto p.xmas.single restorescreen
@@ -283,7 +283,7 @@ Modernized for openSUSE by Steffen Winterfeldt <snwint@suse.de>"
 
   % copy background
   p.walk.x p.walk.xmin sub 0 moveto
-  p.walk.back 0xff p.walk.single blend3
+  p.walk.back 0xff p.walk.single blend
 
   p.read.timer 0 lt {
     % add penguin
@@ -295,7 +295,7 @@ Modernized for openSUSE by Steffen Winterfeldt <snwint@suse.de>"
     p.walk.src.y p.walk.dx 0 gt { p.walk.src.h add } if
   } ifelse
   moveto
-  panim.img panim_a.img p.walk.single blend3
+  panim.img panim_a.img p.walk.single blend
 
   % draw
   p.walk.x p.walk.y moveto p.walk.single restorescreen
@@ -321,12 +321,12 @@ Modernized for openSUSE by Steffen Winterfeldt <snwint@suse.de>"
 
   % copy background
   0 0 moveto
-  p.fall.back 0xff p.fall.single blend3
+  p.fall.back 0xff p.fall.single blend
 
   % add penguin
   p.fall.src.x
   p.fall.src.y p.fall.src.h p.fall.frame mul add moveto
-  panim.img panim_a.img p.fall.single blend3
+  panim.img panim_a.img p.fall.single blend
 
   % draw
   p.fall.x p.fall.y moveto p.fall.single restorescreen
@@ -362,12 +362,12 @@ Modernized for openSUSE by Steffen Winterfeldt <snwint@suse.de>"
 
   % copy background
   0 0 moveto
-  p.fall.back 0xff p.fall.single blend3
+  p.fall.back 0xff p.fall.single blend
 
   % add penguin
   p.fall.src.x p.fall.src.w p.fall.frame mul add
   p.fall.src.y moveto
-  panim.img panim_a.img p.fall.single blend3
+  panim.img panim_a.img p.fall.single blend
 
   % draw
   p.fall.x p.fall.y moveto p.fall.single restorescreen

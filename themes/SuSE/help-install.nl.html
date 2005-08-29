@@ -15,10 +15,10 @@ weer te geven. De hoofdfuncties in dit menu zijn:<br><br>
 
 <a href="#harddisk">Boot van de harddisk</a>: Deze selectie zal verder
 niets met het systeem doen. Het zal slechts een eerder geïnstalleerd
-operating systeem opstarten.<br><br>
+operating systeem vanaf de harde schijf opstarten.<br><br>
 
 <a href="#linux">Installatie</a>:
-Deze installatie mode werkt bij de meeste machines. Als uw systeem
+Deze installatie modus werkt bij de meeste machines. Als uw systeem
 tijdens het booten vastloopt of er problemen bij de detectie
 van uw hardware componenten optreden (zoals diskcontrollers of netwerkkaarten),
 probeert u dan één van de volgende installatie opties. <br><br>
@@ -27,14 +27,14 @@ probeert u dan één van de volgende installatie opties. <br><br>
 momenteel verkochte computers hebben incomplete of gebrekkige ACPI
 implementaties. Deze selectie schakelt de ACPI ondersteuning in de
 kernel uit, maar activeert de vele prestatie verhogende opties zoals
-bijvoorbeeld de DMA voor IDE harddisks.  <br><br>
+bijvoorbeeld DMA voor IDE harddisks.  <br><br>
 
 <a href="#failsafe">Installatie -- Veilige instellingen</a>: Als de gewone
 <em>Installatie</em> mislukt is, dan kan deze selectie het probleem
 misschien oplossen.<br><br>
 
 <a href="#rescue">Reddingssysteem</a>: Deze boot image start een klein
-Linux systeem in RAM op. Dit is handig in het geval het systeem niet goed wil opstarten.
+Linux systeem in het RAM geheugen op. Dit is handig in het geval het systeem niet goed wil opstarten.
 Nadat het systeem is opgestart kunt u als root inloggen. <br><br>
 
 <a href="#memtest">Geheugentest</a>: Een geheugentest is handig voor meer dan
@@ -45,7 +45,7 @@ mogelijke hardware problemen naar boven halen. <br><br>
 <a href="#opt">Bootopties</a>: De bootopties kunnen het gedrag van
 het systeem compleet veranderen. Het zijn kernel instellingen.<br><br>
 
-<a href="#help">F1 Help</a>: Dit is context gevoelig. Het zal verschillede
+<a href="#help">F1 Help</a>: Dit is context gevoelig. Het zal verschillende
 schermen laten zien afhankelijk van het actieve element van het
 bootscherm. Er is tevens een beschrijving van het helpsysteem beschikbaar.<br><br>
 
@@ -84,11 +84,11 @@ Navigatie toetsen<br><br>
 <h3><a name="driverupdate">Driver update</a></h3>
 
 Als u een driver update diskette of CD-ROM nodig heeft, druk dan op <em>F5</em>.
-De bootloader zal u, nadat de Linux kernel geladen is, vragen om het driver update
-medium te plaatsen.<br><br>
+De bootloader zal u, nadat de Linux kernel geladen is, vragen om de driver update
+diskette of CD-ROM te plaatsen.<br><br>
 
 Een driver update is meestal een diskette met daarop de nieuwe versies van de hardware
-drivers of met bepaalde bugfixes die tijdens de installatie nodig zijn.
+drivers die tijdens de installatie nodig zijn.
 
 <br><br>Terug naar <a href="#main">Start pagina</a>
 
@@ -97,10 +97,10 @@ drivers of met bepaalde bugfixes die tijdens de installatie nodig zijn.
 <h3><a name="videomode">Video mode selectie</a></h3>
 
 Druk op <em>F2</em> om een lijst te krijgen van de video modes die uw grafische kaart
-ondersteunt. De hoogste mode die uw monitor aan kan is voorgeselecteerd.<br><br>
+ondersteunt. De hoogste modus die uw monitor aan kan, is voorgeselecteerd.<br><br>
 
 Het is mogelijk dat uw monitor niet automatisch gedetecteerd kan worden. In dat geval
-dient u de door uw gewenste mode handmatig te selecteren.<br><br>
+dient u de door uw gewenste modus handmatig te selecteren.<br><br>
 
 Als uw systeem tijdens de installatie problemen met uw grafische kaart heeft, dan
 is het gebruik van de <em>tekst mode</em> een mogelijke oplossing.
@@ -173,7 +173,7 @@ die problemen met ACPI hebben zijn:
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="failsafe">Installatie -- Veilige instellingen</a></h3>
 
-Selecteer <em>Installatie -- Veilige instellingen</em> als de zaak
+Selecteer <em>Installatie -- Veilige instellingen</em> als uw computer
 tijdens het installeren vastloopt of als er vreemde fouten optreden.
 Deze optie schakelt de DMA optie van alle IDE drives uit als ook alle energiebeheer opties.
 Zie ook de kernel opties voor <a href="#o_apm">apm</a>,
@@ -185,8 +185,8 @@ Zie ook de kernel opties voor <a href="#o_apm">apm</a>,
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="rescue">Reddingssysteem</a></h3>
 
-Het <em>Reddingssysteem</em> is een klein, op RAM disk gebasseerd, systeem. Vanaf hier
-is het mogelijk om allerlei soorten wijzigingen aan het geïnstalleerde systeem aan
+Het <em>Reddingssysteem</em> is een klein, in het geheugen geïnstalleerd (RAM disk), systeem. Vanaf hier
+is het mogelijk om allerlei soorten wijzigingen aan de op de harde schijf geïnstalleerde systeem aan
 te brengen. Aangezien er alleen low-level tools in dit systeem beschikbaar zijn, is dit meer
 iets voor experts.<br>
 
@@ -221,7 +221,7 @@ a) installatieprogramma opties<br>
 b) kernel opties<br>
 <br>
   <a href="#o_splash">splash</a> -- beïnvloedt het gedrag van het opstartscherm<br>
-  <a href="#o_apm">apm</a> -- toggle energiebeheer<br>
+  <a href="#o_apm">apm</a> -- energiebeheer aan of uit<br>
   <a href="#o_acpi">acpi</a> -- geavanceerde configuratie en energie interface<br>
   <a href="#o_ide">ide</a> -- IDE subsysteem besturing<br>
 
@@ -230,21 +230,21 @@ b) kernel opties<br>
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="o_install">Installatieprogramma opties: installatie</a></h3>
 
-Standaard worden de locale CDROM's onderzocht op een installatie bron.
+Standaard worden de locale CD-ROM's onderzocht op een installatie bron.
 Selecteer de <em>installatie</em> optie voor een netwerk installatie.
-Mogelijke installatie protocollen zijn<br>
+De mogelijkheden zijn:<br>
   * FTP<br>
   * NFS<br>
   * HTTP<br>
 De te gebruiken syntax is gelijk aan de standaard URL's. Als bijvoorbeeld
 uw server op 192.168.0.1 gevonden kan worden en u een op NFS-gebaseerde
-installatie van de directory /install op deze server wilt gaan doen, specificeer
+installatie van de directory /install op deze server wilt uitvoeren, specificeer
 de bron dan als volgt:<br><br>
 
   <em>install=nfs://192.168.0.1/install</em><br><br>
 
 De netwerkkaart zal of geconfigureerd worden met behulp van <em>dhcp</em> of u
-moet zelf de parameters specificeren zoals dat wordt beschreven bij de
+moet zelf de parameters specificeren zoals die worden beschreven bij de
 <a href="#network">netwerk opties</a>.<br>
 
 <br>Terug naar <a href="#opt">Bootopties</a>
@@ -252,14 +252,14 @@ moet zelf de parameters specificeren zoals dat wordt beschreven bij de
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="o_splash">Kernel opties: splash</a></h3>
 
-Het opstartscherm is de afbeelding wat tijdens het opstarten van het systeem zal worden weergegeven.<br>
+Het opstartscherm is de afbeelding die tijdens het opstarten van het systeem zal worden weergegeven.<br>
 <br>
 <em>splash=0</em><br><br> Het opstartscherm is uitgezet. Soms zinvol bij erg oude monitoren of bij een opgetreden fout.<br>
 <br>
-<em>splash=verbose</em><br><br> Activeert opstartscherm, kernel- en boot-berichten blijven zichtbaar.<br>
+<em>splash=verbose</em><br><br> Activeert het opstartscherm, kernel- en boot-berichten blijven zichtbaar.<br>
 <br>
 <em>splash=silent</em><br><br>
-Activeert opstartscherm, geen berichten. In plaats daarvan wordt een voortgangsbalk zichtbaar.<br>
+Activeert het opstartscherm zonder berichten. In plaats daarvan wordt een voortgangsbalk zichtbaar.<br>
 
 <br>Terug naar <a href="#opt">Bootopties</a>
 
@@ -277,7 +277,7 @@ of in verkorte vorm:<br><br>
   <em>hostip=192.168.0.10/24</em><br>
 <br>
 
-Als u <a href="#o_install">netwerk-gebaseerde installatie</a> gespecificeerd heeft en
+Als u een <a href="#o_install">netwerk-gebaseerde installatie</a> gespecificeerd heeft en
 geen van beide opties heeft opgegeven, dan zal het installatieprogramma proberen om
 de network interface te configureren met behulp van <em>dhcp</em>. Als u een standaard
 gateway nodig heeft, specificeer deze dan met de optie <em>gateway</em>. Een voorbeeld:<br><br>
@@ -302,9 +302,9 @@ iedere remote systeem VNC cliënt, YaST2 gebruik maken.<br>
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="o_apm">Kernel opties: apm</a></h3>
 
-APM is één van de twee energiebeheer strategieën die bij de computers
-van tegenwoordig gebruikt worden. Echter hoofdzakelijk bij laptops ten
-behoeve van functies zoals de slaapstand mode. Ook kan het
+APM is de oudste van de twee energiebeheer strategieën die bij moderne computers
+gebruikt kan worden. Voornamelijk bij laptops ten
+behoeve van functies zoals de slaapstand mode. Ook kan APM
 verantwoordelijk zijn voor het uitschakelen van de computer bij
 een wegvallende voedingsspanning. APM heeft een correct werkende BIOS nodig.
 Bij een defecte BIOS zal APM slechts gedeeltelijk werken of zelfs de computer
@@ -344,14 +344,14 @@ Gewoonlijk wordt IDE, in tegenstelling tot SCSI, bij de meeste desktop werkstati
 Gebruik de volgende kernel parameter om enkele hardware problemen, die bij IDE systemen zouden kunnen optreden,
 te voorkomen: <br><br>
 
-  <em>ide=nodma</em>  -- dma voor IDE drives uitschakelen<br>
+  <em>ide=nodma</em>  -- DMA voor IDE drives uitschakelen<br>
 
 <br>Terug naar <a href="#opt">Bootopties</a>.
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="bits">Software Type Selection</a></h3>
 
-You have the choice to install the 32-bit or 64-bit version of SUSE LINUX.
+You have the choice to install the 32-bit or 64-bit version of SuSE LINUX.
 
 <br><br>Return to <a href="#main">Start Page</a>
 

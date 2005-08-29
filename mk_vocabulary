@@ -73,7 +73,7 @@
 
   keepmode
 
-  blend blend2 blend3
+  blend
 
   memcpy
 

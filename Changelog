@@ -1,4 +1,8 @@
+29/8/2005:	v3.1.5
 	- added more keymaps (#113265)
+	- long menus are wrapped
+	- added 640x480 fallback for i845-like boards
+	- new translations
 
 24/8/2005:	v3.1.4
 	- a different shade of blue

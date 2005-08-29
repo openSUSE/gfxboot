@@ -10,7 +10,7 @@ Bem-vido ao <em>&product;</em><br><br>
 
 Utilize este menu para escolher a função desejada. Se tem problemas com a navegação neste sistema de ajuda, prima <em>F1</em> para entrar na <a href="#help">descrição</a> do sistema de ajuda. As principais funções deste menu são:<br><br>
 
-<a href="#harddisk">Arrancar de Disco Rígido</a>: Esta selecção não fará nada ao sistema. Apenas inicia um sistema operativo previamente instalado.<br><br>
+<a href="#harddisk">Iniciar de Disco Rígido</a>: Esta selecção não fará nada ao sistema. Apenas inicia um sistema operativo previamente instalado.<br><br>
 
 <a href="#linux">Instalação</a>: 
 Este modo de instalação funciona com a maioria das máquinas. Se experimentar um congelamento do sistema durante o arranque, ou problemas com a detecção dos seus componentes de hardware, como controladores de discos ou placas de rede, tente uma das seguintes opções de instalação. <br><br>
@@ -57,7 +57,7 @@ Teclas de Navegação<br><br>
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="driverupdate">Driver de Actualização</a></h3>
 
-Se necessita de utilizar uma disque ou CD-ROM de actualização de driver, prima <em>F5</em>. A rotina de arranque pedir-lhe-á para introduzir o suporte com o driver de actualização, depois de carregar o kernel de Linux.<br><br>
+Se necessita de utilizar uma disquete ou CD-ROM com um driver de actualização, prima <em>F5</em>. A rotina de arranque pedir-lhe-á para introduzir o suporte com o driver de actualização depois de carregar o kernel de Linux.<br><br>
 
 Uma actualização de driver é tipicamente uma disquete com novas versões de drivers de hardware ou correcções de erros, necessários durante a instalação.
 
@@ -104,9 +104,9 @@ Escolha a <em>Instalação</em> para iniciar a instalação pré-definida. As
 
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="harddisk">Arrancar de Disco Rígido</a></h3>
+<h3><a name="harddisk">Iniciar de Disco Rígido</a></h3>
 
-Escolha <em>Arrancar o SO Instalado</em> para iniciar o sistema instalado no seu disco rígido local. Este sistema deve estar correctamente instalado, porque apenas o MBR (Registo Mestre de Arranque) do primeiro disco rígido é iniciado.
+Escolha <em>Iniciar de Disco Rígido</em> para iniciar o sistema instalado no seu disco rígido local. Este sistema deve estar correctamente instalado, porque apenas o MBR (Registo Mestre de Arranque) do primeiro disco rígido é iniciado.
 O ID do dispositivo do primeiro disco rígido é fornecido pela BIOS do computador. <br><br>
 
 Utilize esta selecção se se esqueceu de remover o CD ou DVD da unidade, e pretende iniciar o computador a partir de disco rígido.<br><br>
@@ -132,7 +132,7 @@ Escolha <em>Instalação -- ACPI Desactivado</em> se encontrar problemas durante
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="failsafe">Instalação -- Definições Seguras</a></h3>
 
-Escolha <em>Instalação -- Definições Seguras</em> se encontrar congelamentos durante a instalação, ou erros irreprodutíveis. Esta opção desactiva o DMA para unidades IDE, assim como todas as funcionalidades de gestão de energia. Veja também as opções de kernel para <a href="#o_apm">apm</a>,
+Escolha <em>Instalação -- Definições Seguras</em> se o computado encravar durante a instalação, ou surgiram erros irreprodutíveis. Esta opção desactiva o DMA para unidades IDE, assim como todas as funcionalidades de gestão de energia. Veja também as opções de kernel para <a href="#o_apm">apm</a>,
 <a href="#o_acpi">acpi</a> e <a href="#o_ide">ide</a>.
 
 <br><br>Voltar à <a href="#main">Página de Início</a>
@@ -141,7 +141,7 @@ Escolha <em>Instalação -- Definições Seguras</em> se encontrar congelamentos
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="rescue">Sistema de Recuperação</a></h3>
 
-O <em>Sistema de Recuperação</em> é um pequeno sistema em memória RAM. A partir daí, é possível realizar todo o tipo de alterações a um sistema instalado. Em cirtude de apenas existirem ferramentas de baixo nível disponíveis neste sistema, ele é orientado para utilizadores avançados.<br><br>
+O <em>Sistema de Recuperação</em> é um pequeno sistema em memória RAM. A partir daí, é possível realizar todo o tipo de alterações a um sistema instalado. Em virtude de apenas existirem ferramentas de baixo nível disponíveis neste sistema, ele é orientado para utilizadores avançados.<br><br>
 
 <br><br>Voltar à <a href="#main">Página de Início</a>
 
@@ -149,9 +149,9 @@ O <em>Sistema de Recuperação</em> é um pequeno sistema em memória RAM. A par
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="memtest">Teste de Memória</a></h3>
 
-O <em>Teste de Memória</em> incluído, fornece boas possibilidades para realizar um teste de stress ao hardware de um sistema. O seu principal objectivo é detectar RAM avariada, mas também esforça muitas outras partes do sistema. <br>
+O <em>Teste de Memória</em> incluído, fornece boas possibilidades para realizar um teste de stress ao hardware de um sistema. O seu principal objectivo é detectar memória RAM avariada, mas também testa e utiliza muitas outras partes do sistema. <br>
 
-Não existem garantias de que a memória se encontre em bom estado, se nenhum erro foi encontrado, apesar de que a maioria dos defeitos serão encontrados.<br>
+Não existem garantias de que a memória se encontre em bom estado, mesmo que nenhum erro tenha sido encontrado, apesar de que a maioria dos defeitos serão encontrados.<br>
 
 <br><br>Voltar à <a href="#main">Página de Início</a>
 
@@ -211,7 +211,7 @@ Voltar às <a href="#opt">Opções de Arranque</a>
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="network">Opções de Instalador: Opções de Rede</a></h3>
 
-É possível congurar a interface de rede agora mesmo. O hardware será detectado mais tarde pelo YaST2. O conjunto mínimo de opções para configurar a sua placa de rede consiste num endereço IP e uma máscara de rede. Por exemplo:<br><br>
+É possível configurar a interface de rede agora mesmo. O hardware será detectado mais tarde pelo YaST2. O conjunto mínimo de opções para configurar a sua placa de rede consiste num endereço IP e uma máscara de rede. Por exemplo:<br><br>
 
   <em>hostip=192.168.0.10  netmask=255.255.255.0</em><br>
 <br>
@@ -229,7 +229,7 @@ Se especificou uma <a href="#o_install">instalação baseada em rede</a> e não 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="o_vnc">Opções de Instalador: vnc</a></h3>
 
-Para activar a instalação por VNC, especifique os parâmetros vnc and vncpassword:<br><br>
+Para activar a instalação por VNC, especifique os parâmetros vnc e vncpassword:<br><br>
 
   <em>vnc=1 vncpassword=exemplo</em><br><br>
 
@@ -254,7 +254,7 @@ Alguns computadores muito novos podem beneficiar mais do novo
 <h3><a name="o_acpi">Opções de Kernel: acpi</a></h3>
 
 O ACPI (Advanced Configuration and Power Interface) é uma norma que define uma interface de gestão e configuração de consumo de energia entre o sistema operativo e a BIOS. Por pré-definição, o <em>acpi</em> é
-ligado quando a é detectada uma BIOS mais recente que o ano 2000. Existem vários parâmteros frequentemente utilizados para controlar o comportamento do ACPI:<br>
+ligado quando é detectada uma BIOS mais recente que o ano 2000. Existem vários parâmetros frequentemente utilizados para controlar o comportamento do ACPI:<br>
 <br>
   <em>pci=noacpi</em> -- não utilizar o ACPI para encaminhar as interrupções de PCI
   <em>acpi=oldboot</em> -- manter activadas apenas as partes do ACPI que são relevantes<br>
@@ -262,7 +262,7 @@ ligado quando a é detectada uma BIOS mais recente que o ano 2000. Existem vári
   <em>acpi=force</em> -- ligar o ACPI mesmo que a sua BIOS seja anterior ao ano 2000<br>
 <br>
 especialmente em computadores recentes, substitui o velho sistema
-<a href="#o_apm">apm</a> system.
+<a href="#o_apm">apm</a>.
 
 
 <br><br>Voltar às <a href="#opt">Opções de Arranque</a>
@@ -270,7 +270,7 @@ especialmente em computadores recentes, substitui o velho sistema
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="o_ide">Opções de Kernel: ide</a></h3>
 
-O IDE é, ao contrário do SCSI, habitual na maioria dos computadores de secretária.
+O IDE é habitual na maioria dos computadores de secretária (ao contrário do SCSI).
 Para contornar alguns problemas que ocorrem com os sistemas IDE, utilize o parâmetro de kernel: <br><br> 
 
   <em>ide=nodma</em>  -- desligar o dma para unidades IDE<br>

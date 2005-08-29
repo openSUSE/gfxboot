@@ -17,6 +17,10 @@ if(!@ARGV) {
 }
 
 while(<>) {
+  if(/^\xef\xbb\xbf/) {
+    print STDERR "BOM in line $. found\n";
+  }
+
   s/\s*<\/?(hr|body|html|h\d+)\s*>//gi;
   if(/<!--\s*help=(\S+)\s*-->/) {
     $helptype = $1;
