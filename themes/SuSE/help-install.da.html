@@ -8,7 +8,7 @@
 <h3><a name="main">Opstartsindlæser hjælp</a></h3>
 Velkommen til <em>&product;</em><br><br>
 
-Brug denne menu til at vælge den ønske funktion. Hvis du har
+Brug denne menu til at vælge den ønskede funktion. Hvis du har
 problemer med at nagivere i hjælpesystemet så tryk
 <em>F1</em> for at få <a href="#help">information</a> om hvordan
 hjælpesystemet fungerer. Hovedfunktionerne i denne menu er:<br><br>
@@ -89,7 +89,7 @@ Navigationstaster<br><br>
 Hvis du har en driveropdaterings diskette eller CD-ROM du skal bruge, så tryk <em>F5</em>. 
 Opstartsindlæsere vil bede dig om at indsætte dette medie efter Linuxkernen er blevet indlæst.<br><br>
 
-Normalt vil en driveropdaterin være en diskette med nye versioner af hardware
+Normalt vil en driveropdatering være en diskette med nye versioner af hardware
 drivere eller fejlrettelser der er påkræver for at kunne lave installationen.
 
 <br><br>Vend tilbage til <a href="#main">Startsiden</a>
@@ -99,7 +99,7 @@ drivere eller fejlrettelser der er påkræver for at kunne lave installationen.
 <h3><a name="videomode">Skærmopløsning</a></h3>
 
 Tryk <em>F3</em> for at se listen over skærmopløsninger som dit grafikkort
-understøtter. Den højeste opløsning din skærm understøtter vil som regel vøre forvalgt.<br><br>
+understøtter. Den højeste opløsning din skærm understøtter vil som regel være forvalgt.<br><br>
 
 Det er muligt at din skærm ikke kan genkendes korrekt. I så fald kan du 
 angive den ønskede tilstand manuelt.<br><br>
@@ -113,7 +113,7 @@ kan  <em>Text Mode</em> valget være en brugbar løsning i stedet.
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="keytable">Sprog og tastaturlayout</a></h3>
 
-Press <em>F2</em> for at vælge sprog og tastaturlayout for installationen.
+Tryk <em>F2</em> for at vælge sprog og tastaturlayout for installationen.
 
 <br><br>Vend tilbage til <a href="#main">Startsiden</a>
 
@@ -123,7 +123,7 @@ Press <em>F2</em> for at vælge sprog og tastaturlayout for installationen.
 
 Tryk <em>F4</em> for at vælge installationskilden.<br><br>
 
-Dette varer til at angive <a href="#o_install">install</a>
+Dette svarer til at angive <a href="#o_install">install</a>
 opstartsvalget.
 
 <br><br>Vend tilbage til <a href="#main">Startsiden</a>
@@ -134,7 +134,7 @@ opstartsvalget.
 
 Vælg <em>Begynd installation</em> for at lave en normal installation.
 <a href="#opt">opstartsmulighederne</a> der indtastes bruges under
-opstarten. Denne installationstype tilvælger mange at funktioner som
+opstarten. Denne installationstype tilvælger mange af de funktioner som
 plejer at være tilgængelige på nyere hardware. <br><br>
 
 <br><br>Vend tilbage til <a href="#main">Startsiden</a>
@@ -144,7 +144,7 @@ plejer at være tilgængelige på nyere hardware. <br><br>
 <h3><a name="harddisk">Indlæs fra harddisk</a></h3>
 
 Vælg <em>Indlæs fra harddisk</em> for at starte det allerede installerede
-operativsystem på din harddisk. Dette system skal være rigtigt installeret for
+operativsystem på din harddisk. Dette system skal være installeret korrekt for
 dette valg tjekker kun MBR (Master Boot Record) på den første harddisk der bliver
 fundet. Det er BIOSen der afgør hvilken disk det er.<br><br>
 
@@ -224,7 +224,7 @@ b) kerne tilvalg<br>
 <br>
   <a href="#o_splash">splash</a> -- bestemmer hvordan opstarten ser ud<br>
   <a href="#o_apm">apm</a> -- vælg eler fravælg strømstyring<br>
-  <a href="#o_acpi">acpi</a> -- advanceret opsætning af strømstyring<br>
+  <a href="#o_acpi">acpi</a> -- avanceret opsætning af strømstyring<br>
   <a href="#o_ide">ide</a> -- IDE subsystem indstillinger<br>
 
 <br><br>Vend tilbage til <a href="#main">Startsiden</a>
@@ -233,7 +233,7 @@ b) kerne tilvalg<br>
 <h3><a name="o_install">Installer Options: install</a></h3>
 
 Som standard vil CD-ROM/DVD drevet blive gennemsøgt for en installationskilde.
-Hvis du vil lave en netværksinstallation så vælge
+Hvis du vil lave en netværksinstallation så vælg
 <em>install</em> muligheden. Du kan vælge imellem følgende protokoller:<br>
   * FTP<br>
   * NFS<br>
@@ -245,7 +245,7 @@ kilden som følger:<br><br>
 
   <em>install=nfs://192.168.0.1/install</em><br><br>
 
-netkortet skal enten være opsat med <em>dhcp</em> eller også skal du
+netkortet skal enten være opsat med <em>DHCP</em> eller også skal du
 angive netværksparametrene selv som beskrevet i afsnittet 
 <a href="#network">netværksmuligheder</a>.<br>
 
@@ -285,10 +285,16 @@ eller endnu kortere:<br><br>
 
 Hvis du har valgt en <a href="#o_install">netværksbaseret installation</a> og du
 ikke angiver nogen af disse linier vil installationsprogrammet forsøge at 
-sætte netkortet op med <em>dhcp</em>. Hvis du har brug for en standard
+sætte netkortet op med <em>DHCP</em>. Hvis du har brug for en standard
 rute/gateway så angiv denne med <em>gateway</em> tilvalget. For eksempel:<br><br>
 
   <em>gateway=192.168.0.8</em><br>
+<br>
+Det er muligt at angive proxy instillinger for FTP og HTTP installationer med følgende valg:<br><br>
+
+  <em>proxy=ProxyIP proxyport=port</em> <br><br>
+
+Eksempel: <em>proxy=192.168.0.250 proxyport=3128</em>
 
 <br><br>Vend tilbage til <a href="#opt">Opstartsmuligheder</a>
 
@@ -309,17 +315,17 @@ installationen med et hvilket som helst VNC program fra et fjernsystem.<br>
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="o_apm">Kerne tilvalg: apm</a></h3>
 
-APM er en af de to strømsysrings strategier der bruges på moderne
+APM er en af de to strømstyrings strategier der bruges på moderne
 computere. Den bruges hovedsagelig på bærbare til ting som suspendering
 til disk, men kan bl.a. også bruges til at slukke maskinen.
 For at APM skal virke godt er en korrekt opsat BIOS en nødvendighed. 
 Hvis BIOSen er dårlig vil APM kun være af begrænset nytte eller måske endda
 forhindre computeren i at fungere korrekt.
-Det er derform muligt at slå APM fra med parametren<br><br>
+Det er derfor muligt at slå APM fra med parametren<br><br>
 
   <em>apm=off</em>  -- Deaktiverer APM fuldstændig<br><br>
 
-Visse rigtig nye computere kan have glæde af den nyere 
+Visse nye computere kan have glæde af den nyere 
 <a href="#o_acpi">ACPI</a>.
 
 <br><br>Vend tilbage til <a href="#opt">Opstartsmuligheder</a>
