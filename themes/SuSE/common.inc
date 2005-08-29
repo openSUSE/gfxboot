@@ -1560,7 +1560,7 @@ syslinux {
 
 /transp 0x30 def
 
-# /X { 0x417 cvp getbyte 0x10 and 0 ne } def
+% /X { 0x417 cvp getbyte 0x10 and 0 ne } def
 
 800 600 16 findmode setmode not {
   800 600 32 findmode setmode not {
