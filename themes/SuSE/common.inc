@@ -1535,12 +1535,10 @@
 /ptheme false def
 
 syslinux {
-  rand 4 shr 0xffff and time 16 shr 20 gt
-  {
-    4
-  } {
-    date weekday 5 lt { 30 } { 4 } ifelse
-  } ifelse mod 0 eq
+  rand pop rand 4 shr 11 div 0xffff and
+    date weekday 5 lt { 15 } { 3 } ifelse
+    date month dup 12 eq exch 1 eq or not { 1 add 2 div } if
+  mod 0 eq
 
   date
   dup 0x7d50c18 ge over 0x7d60101 le and

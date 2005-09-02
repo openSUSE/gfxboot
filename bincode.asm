@@ -6714,6 +6714,7 @@ prim_setcolor:
 ;
 prim_currentcolor:
 		mov eax,[gfx_color0]
+		call decode_color
 		jmp pr_getint
 
 
@@ -9035,6 +9036,7 @@ prim_settextcolors:
 		stc
 		mov bp,pserr_wrong_arg_types
 		jnz prim_settextcolors_90
+		call encode_color
 		mov [gfx_color0],eax
 		mov [gfx_color],eax
 		mov cx,2
@@ -9044,6 +9046,7 @@ prim_settextcolors:
 		cmp dl,t_int
 		stc
 		jnz prim_settextcolors_90
+		call encode_color
 		mov [gfx_color1],eax
 		mov dx,t_int + (t_int << 8)
 		call get_2args
@@ -9051,8 +9054,11 @@ prim_settextcolors:
 
 		sub word [pstack_ptr],byte 4
 
-		mov [gfx_color2],ecx
+		call encode_color
 		mov [gfx_color3],eax
+		mov eax,ecx
+		call encode_color
+		mov [gfx_color2],eax
 
 		clc
 prim_settextcolors_90:
@@ -9079,18 +9085,22 @@ prim_currenttextcolors:
 		mov [pstack_ptr],ax
 		mov dl,t_int
 		mov eax,[gfx_color3]
+		call decode_color
 		xor cx,cx
 		call set_pstack_tos
 		mov dl,t_int
 		mov eax,[gfx_color2]
+		call decode_color
 		mov cx,1
 		call set_pstack_tos
 		mov dl,t_int
 		mov eax,[gfx_color1]
+		call decode_color
 		mov cx,2
 		call set_pstack_tos
 		mov dl,t_int
 		mov eax,[gfx_color0]
+		call decode_color
 		mov cx,3
 		call set_pstack_tos
 prim_currenttextcolors_90:
@@ -9593,7 +9603,10 @@ prim_blend_33:
 		xor cx,cx
 		call get_pstack_tos
 		cmp dl,t_none
-		jz prim_blend_90
+		jnz prim_blend_35
+		sub word [pstack_ptr],3
+		jmp prim_blend_85
+prim_blend_35:
 		cmp dl,t_ptr
 		jnz prim_blend_22
 
@@ -9638,6 +9651,7 @@ prim_blend_60:
 
 		call lin_seg_off
 
+prim_blend_85:
 		clc
 
 prim_blend_90:

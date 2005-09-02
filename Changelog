@@ -1,3 +1,7 @@
+31/8/2005:	v3.1.6
+	- fix color handling bug (#72232)
+	- show penguins a bit more often
+
 29/8/2005:	v3.1.5
 	- added more keymaps (#113265)
 	- long menus are wrapped
