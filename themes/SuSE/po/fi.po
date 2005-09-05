@@ -1,3 +1,4 @@
+# translation of bootloader.fi.po to
 # translation of bootloader.po to
 # LANGUAGE translations for boot loader
 # Copyright (C) 2005 SUSE Linux GmbH
@@ -5,8 +6,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2005-08-25 22:14+0300\n"
+"Project-Id-Version: bootloader.fi\n"
+"PO-Revision-Date: 2005-09-03 14:52+0300\n"
 "Last-Translator: Jyri Palokangas <jmp@netti.fi>\n"
 "Language-Team:  <fi@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -95,7 +96,7 @@ msgstr "Käynnistetään..."
 # Keep the three newlines!
 #. txt_load_kernel
 msgid "Loading Linux Kernel\n\n\n"
-msgstr "Ladataan Linux Kernel\n\n\n"
+msgstr "Linux ytimen lataaminen\n\n\n"
 
 # Keep the three newlines!
 #. txt_load_memtest
@@ -252,7 +253,7 @@ msgstr "Ajuri"
 # as in Windows Authentication Domain
 #. txt_domain
 msgid "Domain\n"
-msgstr "Domain\n"
+msgstr "Toimialue\n"
 
 # button label for other/more options
 #. txt_other_options

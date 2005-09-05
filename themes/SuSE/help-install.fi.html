@@ -25,7 +25,7 @@ seuraavista asennus valinnoista. <br><br>
 
 <a href="#noacpi">Asennus -- ACPI pois käytöstä</a>: Useaissa nykyisin
 myytävistä tietokoneista on epätäydellinen tai viallinen ACPI
-toteutus. Tämä valinta poistaa ACPI tuen kernelistä,
+toteutus. Tämä valinta poistaa ACPI tuen ytimestä,
 mutta silti käyttää useita suorituskyky asetuksia, kuten DMA:ta IDE
 kiintolevyille.  <br><br>
 
@@ -43,7 +43,7 @@ suurelle osalle tietokonettasi ja se voi ilmoittaa laitteisto
 ongelmista. <br><br>
 
 <a href="#opt">Käynnistysvalinnat</a>: Käynnistysvalinnoissa voit muuttaa
-kokonaisuudessaan järjestelmäsi käyttäytymistä. Nämä ovat kernelin asetuksia.<br><br>
+kokonaisuudessaan järjestelmäsi käyttäytymistä. Nämä ovat ytimen asetuksia.<br><br>
 
 <a href="#help">F1 Ohje</a>: Tämä ohje on asiayhteus riippuvainen. Se
 näyttää eri näkymän riippuen valitusta kohdasta käynnistysruudulla
@@ -87,7 +87,7 @@ Navigointi näppäimet<br><br>
 <h3><a name="driverupdate">Ajurin päivitys</a></h3>
 
 Jos tarvitset päivitys levykettä tai CD-ROMia, paina <em>F5</em>.
-Käynnistyslataaja pytää syöttämään ajurin päivitys median Linux kernelin lataamisen jälkeen.<br><br>
+Käynnistyslataaja pyytää syöttämään ajurin päivitys median Linux ytimen lataamisen jälkeen.<br><br>
 
 Ajurin päivitys on yleensä levyke jossa on uusi versio laitteistoajurista 
 tai virheenkorjauksesta joka tarvitaan asennuksen aikana.
@@ -162,11 +162,11 @@ ACPIn hallitsemaan keskeytyksiä. ACPI korvaa täysin
 vanhan APM järjestelmän. <br><br>
 
 Valitse <em>Asennus -- ACPI pois käytöstä</em> jos kohtaat ongelmia
-kernelin latuksen aikana.  Tunnettuja ongelmia tietokoneissa joilla
+ytimen latuksen aikana.  Tunnettuja ongelmia tietokoneissa joilla
 on ongelmia ACPI kanssa ovat:
 <br><br>
 
-   * kernel pysähtyy käynnistyksessä<br>
+   * ydin pysähtyy käynnistyksessä<br>
    * PCI kortteja ei tunnisteta tai niitä ei alusteta oikein<br><br>
 
 
@@ -179,7 +179,7 @@ on ongelmia ACPI kanssa ovat:
 Valitse <em>Asennus -- Safe Settings</em> jos kohtaat pysähtymisiä
 asennuksen aikana tai toistamattomia virheitä. Tämä valinta poistaa DMAn 
 IDE asemien käytöstä ja kaikki virranhallinta toiminnot.
-Katso myös kernel valinnat <a href="#o_apm">apm</a>,
+Katso myös ytimen valinnat <a href="#o_apm">apm</a>,
 <a href="#o_acpi">acpi</a> ja <a href="#o_ide">ide</a>.
 
 <br><br>Palaa <a href="#main">Aloitussivulle</a>
@@ -211,7 +211,7 @@ Ei ole mitään takeita muisti olisi kunnossa jos virheitä ei löydy, vaikka yl
 <h3><a name="opt">Käynnistysvalinnat</a></h3>
 
 Käytettävissä on kahden tyyppisiä käynnistysvalintoja. Ensiksi, on valintoja
-jotka vaikuttavat asennusohjelmaan. Toiseksi, on kernelin
+jotka vaikuttavat asennusohjelmaan. Toiseksi, on ytimen
 valintoja. Jotkin yleisimmistä valinnoista ovat: <br><br>
 a) asennusvalintoja<br>
 <br>
@@ -219,7 +219,7 @@ a) asennusvalintoja<br>
   <a href="#network">verkkovalinnat</a> -- verkkovalinnat<br>
   <a href="#o_vnc">vnc valinnat</a> -- valinnat asennukseen VNC kautta
 <br><br>
-b) kernelin valinnat<br>
+b) ytimen valinnat<br>
 <br>
   <a href="#o_splash">splash</a> -- vaikuta splash-ruudun käyttäytymiseen<br>
   <a href="#o_apm">apm</a> -- vaihtele virranhallintaa<br>
@@ -259,7 +259,7 @@ splash-ruutu on kuva joka näytetään järjestelmän käynnistyksen yhteydessä
 <em>splash=0</em><br><br> splash-ruutu on poistettu käytöstä. Tämä voi olla käytännöllistä
 vahhoilla monitoreilla tai jos ongelmia ilmenee.<br>
 <br>
-<em>splash=verbose</em><br><br> Ottaa käyttöön splash-ruudun, kernelin- ja käynnistysviestit 
+<em>splash=verbose</em><br><br> Ottaa käyttöön splash-ruudun, ydin- ja käynnistysviestit 
 näkyvät silti.<br>
 <br>
 <em>splash=silent</em><br><br>
@@ -352,7 +352,7 @@ Erityisesti uusille tietokoneille, tämä korvaa vanhan
 
 IDE, toisinkuin SCSI, on yleisesti käytetty useimmissa työpöytäkoneissa.
 Ohittaaksesi joitakin IDE-järjestelmien laitteisto-ongelmia, käytä
-kernel parametriä: <br><br> 
+ytimen parametriä: <br><br> 
 
   <em>ide=nodma</em>  -- ottaa DMAn pois IDE asemien käytöstä<br>
 
