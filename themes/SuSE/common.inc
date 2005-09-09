@@ -1537,7 +1537,7 @@
 syslinux {
   rand pop rand 4 shr 11 div 0xffff and
     date weekday 5 lt { 15 } { 3 } ifelse
-    date month dup 12 eq exch 1 eq or not { 1 add 2 div } if
+    date month dup 12 eq exch 1 eq or { 1 add 2 div } if
   mod 0 eq
 
   date
