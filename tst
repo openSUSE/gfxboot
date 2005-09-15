@@ -41,6 +41,10 @@ function tst_isolinux {
     perl -pi -e "s/^\s*#\s*(floppy0.startConnected)/\$1/" $vm_tmp/gfxboot.vmx
     perl -pi -e "s:<isoimage>:`pwd`/$img:g" $vm_tmp/gfxboot.vmx
     vmware -qx $vm_tmp/gfxboot.vmx
+  elif [ "$program" = qemu ] ; then
+    qemu -cdrom $img
+  elif [ "$program" = bochs ] ; then
+    bochs -q 'boot: cdrom' "ata0-master: type=cdrom, path=$img, status=inserted" 'log: /dev/null' 'parport1: enabled=0'
   elif [ "$program" = xdos ] ; then
     sw 0 ln -snf /etc/dosemu.conf.cdrom /etc/dosemu.conf
     ln -snf /var/lib/dosemu/global.conf.cdrom /var/lib/dosemu/global.conf
@@ -93,6 +97,10 @@ function tst_lilo {
     perl -pi -e "s/^\s*#\s*(ide1:0.startConnected)/\$1/" $vm_tmp/gfxboot.vmx
     perl -pi -e "s:<floppyimage>:`pwd`/$img:g" $vm_tmp/gfxboot.vmx
     vmware -qx $vm_tmp/gfxboot.vmx
+  elif [ "$program" = qemu ] ; then
+    qemu -boot a -fda $img
+  elif [ "$program" = bochs ] ; then
+    bochs -q 'boot: a' "floppya: image=$img, status=inserted" 'log: /dev/null' 'ata0-master: type=disk, path=/dev/null' 'parport1: enabled=0'
   elif [ "$program" = xdos ] ; then
     sw 0 ln -snf /etc/dosemu.conf.floppy /etc/dosemu.conf
     ln -snf `pwd`/$img /var/lib/dosemu/floppyimg
@@ -139,13 +147,19 @@ function tst_grub {
 
   sw 0 umount /mnt
 
-  if [ -n "$program" -a "$program" != vmware ] ; then
-    echo -e "\n***  Warning: $program not supported - using vmware  ***\n"
+  if [ "$program" = vmware ] ; then
+    cp -a $vm_src $vm_tmp
+    perl -pi -e "s/^\s*#\s*(ide1:0.startConnected)/\$1/" $vm_tmp/gfxboot.vmx
+    perl -pi -e "s:<floppyimage>:`pwd`/$img:g" $vm_tmp/gfxboot.vmx
+    vmware -qx $vm_tmp/gfxboot.vmx
+  elif [ "$program" = bochs ] ; then
+    bochs -q 'boot: a' "floppya: image=$img, status=inserted" 'log: /dev/null' 'ata0-master: type=disk, path=/dev/null' 'parport1: enabled=0'
+  else
+    if [ -n "$program" -a "$program" != qemu ] ; then
+      echo -e "\n***  Warning: $program not supported - using qemu  ***\n"
+    fi
+    qemu -boot a -fda $img
   fi
-  cp -a $vm_src $vm_tmp
-  perl -pi -e "s/^\s*#\s*(ide1:0.startConnected)/\$1/" $vm_tmp/gfxboot.vmx
-  perl -pi -e "s:<floppyimage>:`pwd`/$img:g" $vm_tmp/gfxboot.vmx
-  vmware -qx $vm_tmp/gfxboot.vmx
 }
 
 
@@ -183,6 +197,10 @@ function tst_syslinux {
     perl -pi -e "s/^\s*#\s*(ide1:0.startConnected)/\$1/" $vm_tmp/gfxboot.vmx
     perl -pi -e "s:<floppyimage>:`pwd`/$img:g" $vm_tmp/gfxboot.vmx
     vmware -qx $vm_tmp/gfxboot.vmx
+  elif [ "$program" = qemu ] ; then
+    qemu -boot a -fda $img
+  elif [ "$program" = bochs ] ; then
+    bochs -q 'boot: a' "floppya: image=$img, status=inserted" 'log: /dev/null' 'ata0-master: type=disk, path=/dev/null' 'parport1: enabled=0'
   elif [ "$program" = xdos ] ; then
     sw 0 ln -snf /etc/dosemu.conf.floppy /etc/dosemu.conf
     ln -snf `pwd`/$img /var/lib/dosemu/floppyimg
