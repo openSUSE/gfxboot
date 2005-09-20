@@ -948,7 +948,7 @@ void parse_config(char *name, char *log_file)
       incl_level--;
       line = cfg[incl_level].line;
     }
-    word = next_word((char **) &cfg[incl_level].ptr);
+    word = next_word(&cfg[incl_level].ptr);
     if(!word || !*word) continue;
 
     if(word[0] == '%') {
