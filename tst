@@ -22,7 +22,8 @@ function tst_isolinux {
 
   isodir=boot/loader
   mkdir -p $dst/$isodir
-  test/pisolinux /$isodir <$isolx >$dst/$isodir/isolinux.bin
+  cp $isolx $dst/$isodir/isolinux.bin
+  test/syslinux.rpm/usr/bin/isolinux-config --base=$isodir $dst/$isodir/isolinux.bin
   cp -a $src/* $dst/$isodir
   cp -a $logo $dst/$isodir/bootlogo
   test/unpack_bootlogo $dst/$isodir
@@ -43,6 +44,8 @@ function tst_isolinux {
     vmware -qx $vm_tmp/gfxboot.vmx
   elif [ "$program" = qemu ] ; then
     qemu -cdrom $img
+  elif [ "$program" = bd ] ; then
+    bd $img
   elif [ "$program" = bochs ] ; then
     bochs -q 'boot: cdrom' "ata0-master: type=cdrom, path=$img, status=inserted" 'log: /dev/null' 'parport1: enabled=0'
   elif [ "$program" = xdos ] ; then

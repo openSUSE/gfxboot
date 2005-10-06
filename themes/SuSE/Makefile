@@ -1,6 +1,6 @@
 BINDIR      := $(shell [ -x ../../mkbootmsg ] && echo ../../ )
 
-PRODUCT      = "SUSE Linux 10.0"
+PRODUCT      = "SUSE Linux 10.1"
 
 HELP2TXT     = $(BINDIR)help2txt
 MKBOOTMSG    = $(BINDIR)mkbootmsg
