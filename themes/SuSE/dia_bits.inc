@@ -35,6 +35,11 @@
     } if
   } if
 
+  % no '64' suffix
+  32bit_boot_dir 64bit_boot_dir ne {
+    bits.suffix 1 .undef put
+  } if
+
   xmenu .xm_current bits.default put
 
   pmenu.init

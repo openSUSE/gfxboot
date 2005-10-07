@@ -35,6 +35,8 @@
 %
 /64bit_source {
   syslinux usernote 4 and 0 ne and
+
+  64bit_boot_dir 32bit_boot_dir ne 64bit_boot_dir .undef ne and or
 } def
 
 
@@ -57,6 +59,10 @@
 %
 /32+64bit_source {
   syslinux usernote 16 and 0 ne and
+
+  % uncomment next line to automatically warn about 32bit software on 64bit machines, too
+  % 64bit_boot_dir .undef ne and
+  32bit_boot_dir .undef ne and
 } def
 
 
@@ -70,6 +76,47 @@
   biosmem 4 20 shl lt
   biosmem 200 20 shl ge or
   syslinux not or
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+%
+% Check if there are boot directories for 32 & 64bit.
+%
+% Note: currently assumes /boot/<arch>/loader. Should be more flexible.
+%
+% ( ) ==> ( )
+%
+/check_arch_boot_dir {
+  getcwd dup .undef ne {
+    /64bit.tmp 256 string def
+
+    dup "i386" strstr 0 ne over "x86_64" strstr 0 ne or {
+      dup "i386" strstr {
+        /32bit_boot_dir exch def
+        /64bit_boot_dir "/boot/x86_64/loader"
+      } {
+        /64bit_boot_dir exch def
+        /32bit_boot_dir "/boot/i386/loader"
+      } ifelse
+
+      dup "%s/isolinux.cfg" 64bit.tmp sprintf
+      64bit.tmp filesize .undef ne { def } { pop pop } ifelse
+
+    } {
+      /32bit_boot_dir over def
+      /64bit_boot_dir exch def
+    } ifelse
+
+    64bit.tmp free
+
+    % font.normal setfont
+    % 0 400 moveto 32bit_boot_dir print
+    % 0 420 moveto 64bit_boot_dir print dtrace
+
+  } {
+    pop
+  } ifelse
 } def
 
 
@@ -250,7 +297,17 @@
 
   syslinux {
     /add_suffix xmenu.bits .xm_current get bits.suffix exch get def
+
+    % set new working directory
+    xmenu.bits .xm_current get 1 eq { 64bit_boot_dir } { 32bit_boot_dir } ifelse
+    dup .undef ne {
+      dup getcwd ne { chdir } { pop } ifelse
+    } {
+      pop
+    } ifelse
   } if
+
+  % getcwd 0 300 moveto show trace
 
   bc.addkernel {
     alt.kernel { alt.kernel } { bc.kernel } ifelse
@@ -1617,4 +1674,6 @@ ptheme small_layout or {
 } {
   bsplash.show
 } ifelse
+
+check_arch_boot_dir
 

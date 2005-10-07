@@ -1,6 +1,8 @@
 6/10/2005:	v3.2.1
 	- needs syslinux with updated gfx patch
 	- texts updated for 10.1
+	- implemented filesize, getcwd, chdir commands
+	- using new cd layout
 
 15/9/2005:	v3.2.0
 	- better testing script

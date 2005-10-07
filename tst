@@ -20,19 +20,35 @@ function tst_isolinux {
   rm -rf $dst $vm_tmp
   rm -f $img $dosrc
 
-  isodir=boot/loader
-  mkdir -p $dst/$isodir
-  cp $isolx $dst/$isodir/isolinux.bin
-  test/syslinux.rpm/usr/bin/isolinux-config --base=$isodir $dst/$isodir/isolinux.bin
-  cp -a $src/* $dst/$isodir
-  cp -a $logo $dst/$isodir/bootlogo
-  test/unpack_bootlogo $dst/$isodir
+  isodir32=boot/i386/loader
+  isodir64=boot/x86_64/loader
+  mkdir -p $dst/$isodir32 $dst/$isodir64
+  cp $isolx $dst/$isodir32/isolinux.bin
+  cp $isolx $dst/$isodir64/isolinux.bin
+  test/syslinux.rpm/usr/bin/isolinux-config --base=$isodir32 $dst/$isodir32/isolinux.bin
+  test/syslinux.rpm/usr/bin/isolinux-config --base=$isodir64 $dst/$isodir64/isolinux.bin
 
-  echo "$dst/$isodir/isolinux.bin 1" >$tmp/cd_sort
+  cp -a $src/* $dst/$isodir32
+  rm -f $dst/$isodir32/{linux,initrd}64
+  cp -a $logo $dst/$isodir32/bootlogo
+  test/unpack_bootlogo $dst/$isodir32
+
+  cp -a $src/* $dst/$isodir64
+  mv $dst/$isodir64/linux64 $dst/$isodir64/linux
+  mv $dst/$isodir64/initrd64 $dst/$isodir64/initrd
+  cp -a $logo $dst/$isodir64/bootlogo
+  test/unpack_bootlogo $dst/$isodir64
+
+  test/2hl --link --quiet $dst
+
+  echo "$dst/$isodir32/isolinux.bin 1" >$tmp/cd_sort
+  echo "$dst/$isodir64/isolinux.bin 1" >>$tmp/cd_sort
+
+  # rm -r $dst/boot/x86_64
 
   mkisofs -o $img -J -r -sort $tmp/cd_sort \
-    -b $isodir/isolinux.bin -c $isodir/boot.catalog \
-    -publisher "SUSE Products GmbH" \
+    -b $isodir32/isolinux.bin -c $isodir32/boot.catalog \
+    -publisher "SUSE LINUX Products GmbH" \
     -no-emul-boot -boot-load-size 4 -boot-info-table $dst
 
   rm -f $tmp/cd_sort

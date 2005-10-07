@@ -105,6 +105,7 @@ pserr_invalid_image_size	equ 0dh
 pserr_no_memory			equ 0eh
 pserr_invalid_data		equ 0fh
 pserr_nop			equ 10h
+pserr_invalid_function		equ 11h
 pserr_invalid_dict_entry	equ 200h
 pserr_invalid_prim		equ 201h
 
@@ -8274,6 +8275,136 @@ prim_findfile_90:
 		ret
 
 
+;; filesize - get file size
+;
+; group: mem
+;
+; ( str1 -- int1 )
+;
+; str1: file name
+; int1: file length (or .undef if not found)
+;
+; Note: Unlike @findfile, it doesn't load the file.
+;
+; example
+;   "xxx.jpg" filesize		% file size of "xxx.jpg"
+;
+prim_filesize:
+		mov dl,t_string
+		call get_1arg
+		jc prim_filesize_90
+prim_filesize_10:
+		push eax
+		call find_file
+		pop ecx
+		cmp bl,1
+		jz prim_filesize_10		; symlink
+		or eax,eax
+		jz prim_filesize_50
+		call find_mem_size
+prim_filesize_40:
+		mov dl,t_int
+		jmp prim_filesize_70
+prim_filesize_50:
+		xchg eax,ecx
+		call file_size_ext
+		cmp eax,-1
+		jnz prim_filesize_40
+		inc eax
+		mov dl,t_none
+prim_filesize_70:
+		xor cx,cx
+		call set_pstack_tos
+prim_filesize_90:
+		ret
+
+
+;; getcwd - get current working directory
+;
+; group: mem
+;
+; ( -- str1 )
+;
+; str1: file name
+;
+; example
+;   getcwd show		% print working directory
+;
+prim_getcwd:
+		mov al,3
+		call gfx_cb			; cwd (lin)
+		or al,al
+		jnz prim_getcwd_70
+		mov eax,edx
+		mov dl,t_string
+		jmp prim_getcwd_90
+prim_getcwd_70:
+		mov dl,t_none
+		xor eax,eax
+prim_getcwd_90:
+		jmp pr_getobj
+
+
+;; chdir - set current working directory
+;
+; group: mem
+;
+; ( str1 -- )
+;
+; str1: file name
+;
+; example
+;   "/foo/bar" chdir		% set working directory
+;
+prim_chdir:
+		mov dl,t_string
+		call get_1arg
+		jc prim_chdir_90
+		push eax
+		call get_length
+		xchg eax,ecx
+		pop eax
+		jc prim_chdir_60
+
+		or ecx,ecx
+		jz prim_chdir_60
+		cmp ecx,64
+		jae prim_chdir_60
+
+		push cx
+
+		push eax
+		mov al,0
+		call gfx_cb			; get file name buffer address (edx)
+		call lin2so
+		pop si
+		pop fs
+		lin2segofs edx,es,di
+
+		pop cx
+
+		fs rep movsb
+		mov al,0
+		stosb
+
+		mov al,4
+		call gfx_cb
+		or al,al
+
+		mov bp,pserr_invalid_function
+		jnz prim_chdir_70
+
+		dec word [pstack_ptr]
+		jmp prim_chdir_90
+
+prim_chdir_60:
+		mov bp,pserr_invalid_data
+prim_chdir_70:
+		stc
+prim_chdir_90:
+		ret
+
+
 ;; setmode - set video mode
 ;
 ; group: gfx.screen
@@ -13098,6 +13229,57 @@ find_file_ext_50:
 find_file_ext_80:
 		xor eax,eax
 find_file_ext_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; Find file from file system, returns size.
+;
+;  eax		file name (lin)
+;
+; return:
+;  eax		file size (-1: not found)
+;
+file_size_ext:
+		mov dl,t_string
+		push eax
+		call get_length
+		xchg eax,ecx
+		pop eax
+		or ecx,ecx
+		jz file_size_ext_80
+		cmp ecx,64
+		jae file_size_ext_80
+
+		push cx
+
+		push eax
+		mov al,0
+		call gfx_cb			; get file name buffer address (edx)
+		call lin2so
+		pop si
+		pop fs
+		lin2segofs edx,es,di
+
+		pop cx
+
+		fs rep movsb
+		mov al,0
+		stosb
+
+		mov al,1
+		call gfx_cb			; open file (ecx size)
+		or al,al
+		jnz file_size_ext_80
+
+		mov eax,ecx
+		jmp file_size_ext_90
+
+file_size_ext_80:
+		stc
+		sbb eax,eax
+file_size_ext_90:
 		ret
 
 

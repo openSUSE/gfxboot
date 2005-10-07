@@ -60,7 +60,7 @@
   getinfo 64bit
 
   getbyte putbyte getdword putdword
-  findfile
+  findfile filesize getcwd chdir
 
   setmode currentmode findmode
   colorbits

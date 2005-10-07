@@ -51,7 +51,12 @@
 
         do_64bit_check 32+64bit_source and {
           64bit {
-            [ keyF6 0 "F6" /panel.bits /panel.bits.width /panel.bits.update /bits.init ]
+            32bit_boot_dir .undef ne
+            64bit_boot_dir .undef ne
+            32bit_boot_dir 64bit_boot_dir ne
+            and and {
+              [ keyF6 0 "F6" /panel.bits /panel.bits.width /panel.bits.update /bits.init ]
+            } if
           } if
         } if
 
