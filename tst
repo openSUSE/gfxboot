@@ -41,6 +41,12 @@ function tst_isolinux {
     perl -pi -e "s/^\s*#\s*(floppy0.startConnected)/\$1/" $vm_tmp/gfxboot.vmx
     perl -pi -e "s:<isoimage>:`pwd`/$img:g" $vm_tmp/gfxboot.vmx
     vmware -qx $vm_tmp/gfxboot.vmx
+  elif [ "$program" = qemu ] ; then
+    qemu -cdrom $img
+  elif [ "$program" = bd ] ; then
+    bd $img
+  elif [ "$program" = bochs ] ; then
+    bochs -q 'boot: cdrom' "ata0-master: type=cdrom, path=$img, status=inserted" 'log: /dev/null' 'parport1: enabled=0'
   elif [ "$program" = xdos ] ; then
     sw 0 ln -snf /etc/dosemu.conf.cdrom /etc/dosemu.conf
     ln -snf /var/lib/dosemu/global.conf.cdrom /var/lib/dosemu/global.conf

@@ -1,3 +1,7 @@
+12/10/2005:	v2.4.29
+	- do only aligned dword reads from video memory - some ATI Radeon
+	  boards need this (#81046, #114804)
+
 29/7/2005:	v2.4.28
 	- mgfritch@novell.com:
 	  added Novell Linux Small Business Suite (NLSBS) theme
