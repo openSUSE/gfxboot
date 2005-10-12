@@ -12358,6 +12358,10 @@ clip_it_90:
 ;		dx,cx	= width, height
 ;		edi	= buffer (linear address)
 ;
+; Note: ensure we only make aligned dword reads from video memory. Else some
+; ATI 7000 boards will make problems (computer hangs).
+; As an added bonus, it really speeds things up.
+;
 save_bg:
 		push fs
 
@@ -12379,35 +12383,88 @@ save_bg:
 
 		lin2seg ebx,es,edi
 
-save_bg_20:
+save_bg_10:
+		push cx
+
 		push dx
-save_bg_30:
-		mov al,[fs:si]
-		inc si
-		jnz save_bg_40
-		call lin_seg_off
-		call inc_winseg
-		lin2seg ebx,es,edi
-save_bg_40:
+
+		mov bp,si
+		mov cx,si
+		and bp,~3
+		and cx,3
+
+		jz save_bg_30
+
+		shl cx,3
+		mov eax,[fs:bp]
+		shr eax,cl
+
+save_bg_20:
 		mov [es:edi],al
 		inc ebx
 		inc di
-		jnz save_bg_50
-		lin2seg ebx,es,edi
-save_bg_50:
+		inc si
+		shr eax,8
 		dec dx
+		jz save_bg_70
+		add cl,8
+		cmp cl,20h
+		jnz save_bg_20
+
+		or si,si
 		jnz save_bg_30
+		call lin_seg_off
+		call inc_winseg
+		lin2seg ebx,es,edi
+
+save_bg_30:
+		mov eax,[fs:si]
+		add si,4
+		jnz save_bg_35
+		call lin_seg_off
+		call inc_winseg
+		lin2seg ebx,es,edi
+save_bg_35:
+		cmp dx,4
+		jb save_bg_50
+		mov [es:edi],eax
+		add ebx,4
+		add di,4
+		jnc save_bg_40
+		lin2seg ebx,es,edi
+save_bg_40:
+		sub dx,4
+		jz save_bg_70
+		jmp save_bg_30
+save_bg_50:
+		sub si,4
+		add si,dx
+		cmp di,-4
+		jbe save_bg_60
+		lin2seg ebx,es,edi
+save_bg_60:
+		mov [es:edi],al
+		inc ebx
+		inc di
+		shr eax,8
+		dec dx
+		jnz save_bg_60
+
+save_bg_70:
+
 		pop dx
 		mov ax,[screen_line_len]
 		sub ax,dx
 		add si,ax
-		jnc save_bg_60
+		jnc save_bg_80
 		call lin_seg_off
 		call inc_winseg
 		lin2seg ebx,es,edi
-save_bg_60:
+save_bg_80:
+		pop cx
+
 		dec cx
-		jnz save_bg_20
+		jnz save_bg_10
 
 save_bg_90:
 
@@ -12415,7 +12472,6 @@ save_bg_90:
 
 		pop fs
 		ret
-
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;

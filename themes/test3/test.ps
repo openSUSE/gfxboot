@@ -54,35 +54,84 @@
   free
 } def
 
+% Allocate and define a new color.
+%
+% ( palette ) ==> ( color )
+%
+/newcolor {
+  colorbits 8 le {
+    newcolor.count .undef eq { /newcolor.count 0 def } if
+    newcolor.count
+    dup rot setpalette
+    /newcolor.count newcolor.count 1 add def
+  } if
+  def
+} def
 
-800 600 16 findmode setmode not { false .end } if
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% ( color0 color1 width height ) ==> ( )
+/drawborder {
+  currentpoint /db.y0 exch def /db.x0 exch def
+
+  /db.y1 exch 1 sub db.y0 add def
+  /db.x1 exch 1 sub db.x0 add def
+  /db.col1 exch def
+  /db.col0 exch def
+
+  db.x0 db.y1 moveto
+
+  db.col0 setcolor
+  db.x0 db.y0 lineto db.x1 db.y0 lineto
+
+  db.col1 setcolor
+  db.x1 db.y1 lineto db.x0 db.y1 lineto
+} def
+
+
+640 480 8 findmode setmode not { false .end } if
 
 "16x16.fnt" findfile setfont
 
-"head.jpg" findfile setimage 0 0 image.size unpackimage /head exch def
-"head_a.pcx" findfile setimage 0 0 image.size unpackimage /head_a exch def
+% "sky.jpg" findfile setimage
+% 0 0 moveto 0 0 image.size image
 
-image.size /i.h exch def /i.w exch def
+/black 0x000000 newcolor
+/white 0xffffff newcolor
+/gray  0x808080 newcolor
+/blue  0x0000c0 newcolor
+/green 0x00c000 newcolor
+/red   0xf00000 newcolor
+/yellow 0xe0e000 newcolor
 
-"sky.jpg" findfile setimage
-0 0 moveto 0 0 image.size image
-
-/black 0x000000 def
-/white 0xffffff def
-/gray  0x808080 def
-
-white settextmodecolor
-
-/y 200 def
-/w 100 def
+/x 300 def
+/y 100 def
+/w 90 def
 /h 50 def
 
-400 y moveto i.w i.h savescreen /s1 exch def
+/msg 200 string def
 
-0 0 moveto
-head head_a s1 blend3
+{
+  blue setcolor
+  0 0 moveto screen.size fillrect
 
-400 y moveto s1 restorescreen
+  h w y x "x %d, y %d, w %d, h %d" msg sprintf
 
-dtrace
+  0 0 moveto white setcolor msg show
 
+  x 1 sub y 1 sub moveto white white w 2 add h 2 add drawborder
+  green setcolor
+  x y moveto w h fillrect
+  x 1 add y 1 add moveto yellow yellow w 2 sub h 2 sub drawborder
+
+
+  x y moveto w h savescreen /s0 exch def
+
+
+  x 1 sub y 1 sub 200 add moveto red red w 2 add h 2 add drawborder
+  x y 200 add moveto s0 restorescreen
+
+  trace
+
+  /w w 1 sub def
+
+} loop

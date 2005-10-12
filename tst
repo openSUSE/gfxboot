@@ -34,8 +34,8 @@ function tst_isolinux {
   test/unpack_bootlogo $dst/$isodir32
 
   cp -a $src/* $dst/$isodir64
-  mv $dst/$isodir64/linux64 $dst/$isodir64/linux
-  mv $dst/$isodir64/initrd64 $dst/$isodir64/initrd
+  [ -f $dst/$isodir64/linux64 ] && mv $dst/$isodir64/linux64 $dst/$isodir64/linux
+  [ -f $dst/$isodir64/initrd64 ] && mv $dst/$isodir64/initrd64 $dst/$isodir64/initrd
   cp -a $logo $dst/$isodir64/bootlogo
   test/unpack_bootlogo $dst/$isodir64
 
