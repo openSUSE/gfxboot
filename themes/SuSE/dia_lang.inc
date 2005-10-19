@@ -32,6 +32,7 @@
   [ "he" "תירבע" ]
   [ "it" "Italiano" ]
   [ "ja" "日本語" ]
+  [ "hr" "Hrvatski" ]
   [ "hu" "Magyar" ]
   [ "ko" "한글" ]
   [ "lt" "Lietuvių" ]

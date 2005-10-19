@@ -1,3 +1,6 @@
+19/10/2005:	v3.2.3
+	- offer Croatian
+
 12/10/2005:	v3.2.2
 	- do only aligned dword reads from video memory - some ATI boards
 	  need this (#114804)
