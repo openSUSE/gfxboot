@@ -26,7 +26,7 @@
   fillrect
   snprintf
   edit.init edit.done edit.input edit.showcursor edit.hidecursor
-  updatedisk rmoveto bootloader
+  rmoveto bootloader
   strstr
 
   sound.getvolume sound.setvolume
@@ -55,7 +55,7 @@
   idle
   image.size
 
-  bootdrive reloadfs usernote eject poweroff reboot biosmem
+  bootdrive usernote eject poweroff reboot biosmem
 
   getinfo 64bit
 
@@ -75,7 +75,7 @@
 
   blend
 
-  memcpy
+  memcpy sectorsize
 
   xxx
 

@@ -32,11 +32,8 @@
 /panel.dud {
   do_driverupdate .undef eq {
     /do_driverupdate 1 def
-    1 updatedisk
-  }
-  {
+  } {
     /do_driverupdate .undef def
-    0 updatedisk
   } ifelse
 
   dud.redraw

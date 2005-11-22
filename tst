@@ -3,6 +3,22 @@
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+function switch_disk {
+  disk=$1
+  tmp=tmp
+
+  if [ -z "$disk" -o ! -f "$tmp/syslinux.img_$disk" ] ; then
+    echo "usage:"
+    echo "  tst -d disk_number"
+    exit 1
+  fi
+
+  dd if="$tmp/syslinux.img_$disk" of="$tmp/syslinux.img" conv=notrunc status=noxfer
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 function tst_isolinux {
   bin="test/syslinux.rpm"
   src="test/$1"
@@ -118,6 +134,8 @@ function tst_lilo {
     vmware -qx $vm_tmp/gfxboot.vmx
   elif [ "$program" = qemu ] ; then
     qemu -boot a -fda $img
+  elif [ "$program" = bd ] ; then
+    bd $img
   elif [ "$program" = bochs ] ; then
     bochs -q 'boot: a' "floppya: image=$img, status=inserted" 'log: /dev/null' 'ata0-master: type=disk, path=/dev/null' 'parport1: enabled=0'
   elif [ "$program" = xdos ] ; then
@@ -171,6 +189,10 @@ function tst_grub {
     perl -pi -e "s/^\s*#\s*(ide1:0.startConnected)/\$1/" $vm_tmp/gfxboot.vmx
     perl -pi -e "s:<floppyimage>:`pwd`/$img:g" $vm_tmp/gfxboot.vmx
     vmware -qx $vm_tmp/gfxboot.vmx
+  elif [ "$program" = qemu ] ; then
+    qemu -boot a -fda $img
+  elif [ "$program" = bd ] ; then
+    bd $img
   elif [ "$program" = bochs ] ; then
     bochs -q 'boot: a' "floppya: image=$img, status=inserted" 'log: /dev/null' 'ata0-master: type=disk, path=/dev/null' 'parport1: enabled=0'
   else
@@ -192,7 +214,7 @@ function tst_syslinux {
   dosrc="$tmp/.dosemurc.floppy"
   vm_src=test/vm
   vm_tmp=tmp/$1.vm
-  syslx=$bin/usr/bin/syslinux
+  syslx=$bin/usr/bin/syslinux-nomtools
 
   if [ -z "$program" -o "$program" = dosemu -o "$program" = xdos ] ; then
     syslx=test/syslinux-dosemu
@@ -209,7 +231,7 @@ function tst_syslinux {
 
   sw 0 chown --reference=tmp $img*
 
-  ln -snf $1.img_1 $img
+  cp $dst.img_1 $img
 
   if [ "$program" = vmware ] ; then
     cp -a $vm_src $vm_tmp
@@ -218,6 +240,8 @@ function tst_syslinux {
     vmware -qx $vm_tmp/gfxboot.vmx
   elif [ "$program" = qemu ] ; then
     qemu -boot a -fda $img
+  elif [ "$program" = bd ] ; then
+    bd $img
   elif [ "$program" = bochs ] ; then
     bochs -q 'boot: a' "floppya: image=$img, status=inserted" 'log: /dev/null' 'ata0-master: type=disk, path=/dev/null' 'parport1: enabled=0'
   elif [ "$program" = xdos ] ; then
@@ -248,12 +272,15 @@ function usage {
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-while getopts bhil:p:t: opt ; do
+while getopts bd:hil:p:t: opt ; do
   case $opt in
     \:|\?|h) usage
       ;;
 
     b) logo=boot
+      ;;
+
+    d) disk=$OPTARG
       ;;
 
     i) logo=install
@@ -270,6 +297,11 @@ while getopts bhil:p:t: opt ; do
   esac
 done
 shift $(($OPTIND - 1))
+
+if [ "$disk" ] ; then
+  switch_disk $disk
+  exit
+fi
 
 [ "$what" ] || what=$1
 [ "$what" ] || what=isolinux

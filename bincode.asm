@@ -637,11 +637,11 @@ gfx_init_20:
 		mov es,[boot_cs]
 		mov bx,[boot_sysconfig]
 		mov si,malloc.area + 8
-		cmp byte [es:bx],1
+		cmp byte [es:bx],1		; syslinux
 		jnz gfx_init_30
-		mov cx,2
+		mov cx,2			; 2 extended mem areas
 gfx_init_24:
-		mov ax,[es:bx+24]
+		mov ax,[es:bx+24]		; extended mem area pointer
 		or ax,ax
 		jz gfx_init_26
 		movzx edx,ax
@@ -7990,22 +7990,6 @@ prim_editinput_90:
 		ret
 
 
-;; updatedisk - request update disk
-;
-; group: system
-;
-; ( int1 -- )
-;
-; int1 = 1: tell boot loader to request a driver update disk (syslinux/isolinux only).
-;
-prim_updatedisk:
-		call pr_setint
-		mov es,[boot_cs]
-		mov si,[boot_sysconfig]
-		mov [es:si+1],al
-		ret
-
-
 ;; bootloader - boot loader type
 ;
 ; group: system
@@ -8036,28 +8020,6 @@ prim_bootdrive:
 		jmp pr_getint
 
 
-;; reloadfs - reload file system data
-;
-; group: system
-;
-; ( int1 -- )
-;
-; int1 = 1: tell boot loader to reload file system data (e.g. after a CD
-; change).
-;
-; Note: obsolete.
-;
-
-; FIXME: drop it
-;
-prim_reloadfs:
-		call pr_setint
-		mov es,[boot_cs]
-		mov si,[boot_sysconfig]
-		mov [es:si+6],al
-		ret
-
-
 ;; usernote - get special config value
 ;
 ; group: system
@@ -8068,12 +8030,10 @@ prim_reloadfs:
 ; syslinux.cfg/isolinux.cfg. Other boot loaders are not supported.
 ;
 
-; FIXME: is actually word, not byte
+; FIXME: obsolete, drop it
 ;
 prim_usernote:
-		mov es,[boot_cs]
-		mov si,[boot_sysconfig]
-		movzx eax,byte [es:si+7]
+		xor eax,eax
 		jmp pr_getint
 
 
@@ -8089,6 +8049,30 @@ prim_biosmem:
 		mov es,[boot_cs]
 		mov si,[boot_sysconfig]
 		mov eax,[es:si+20]
+		jmp pr_getint
+
+
+;; sectorsize - sector size
+;
+; group: mem system
+;
+; ( -- int1 )
+;
+; int1: sector size in bytes
+;
+prim_sectorsize:
+		mov es,[boot_cs]
+		mov si,[boot_sysconfig]
+		mov cl,[es:si+1]
+		cmp cl,20		; max 1MB
+		ja prim_sectorsize_10
+		or cl,cl
+		jnz prim_sectorsize_20
+prim_sectorsize_10:
+		mov cl,9
+prim_sectorsize_20:
+		mov eax,1
+		shl eax,cl
 		jmp pr_getint
 
 

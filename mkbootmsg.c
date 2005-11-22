@@ -16,7 +16,7 @@
 #include "bincode.h"
 
 #define MAGIC		0xb2d97f00
-#define VERSION 	6
+#define VERSION 	7
 #define DICT_SIZE	1000
 
 #define MAX_INCLUDE	10

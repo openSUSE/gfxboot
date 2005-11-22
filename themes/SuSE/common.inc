@@ -322,6 +322,15 @@
   } ifelse
 
   cmdline.hidden "" ne {
+    /add_suffix ",10240768.spl" def
+
+    % find out splash size for kernel loading progress bar
+    add_suffix 1 add filesize dup .undef ne {
+      sectorsize 1 sub add sectorsize div /progress_extra exch def
+    } {
+      pop
+    } ifelse
+
     add_suffix {
       /bc.tmp cmdline.hidden length add_suffix length add string def
       cmdline.hidden "initrd" bootopt.find dup .undef ne {
@@ -342,6 +351,14 @@
     } {
       cmdline.hidden "%s " bc.cmd dup length add sprintf
     } ifelse
+
+    % find out initrd size for kernel loading progress bar
+    "initrd" filesize dup .undef ne {
+      sectorsize 1 sub add sectorsize div /progress_extra exch progress_extra add def
+    } {
+      pop
+    } ifelse
+
   } if
 
   syslinux {
@@ -898,7 +915,12 @@
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % ( max current ) ==> ( )
+%
+% Note: max is just kernel size (in sectors).
+%
 /ProgressUpdate {
+  exch progress_extra add exch
+
   over over 100 mul exch 1 max div progress.percent
 
   progress.syms mul progress.syms 2 div add exch 1 max div
@@ -913,6 +935,9 @@
   pop
 
 } def
+
+% initrd size (in sectors)
+/progress_extra 0 def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1669,7 +1694,8 @@ dup .undef eq ptheme and { pop "back.jpg" findfile /ptheme false def } if
 
 /debug 0 def
 
-ptheme small_layout or {
+ptheme small_layout or
+true or {
   /bsplash.done { } def
 } {
   bsplash.show
