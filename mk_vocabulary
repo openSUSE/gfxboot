@@ -26,8 +26,7 @@
   fillrect
   snprintf
   edit.init edit.done edit.input edit.showcursor edit.hidecursor
-  rmoveto bootloader
-  strstr
+  rmoveto strstr
 
   sound.getvolume sound.setvolume
   sound.getsamplerate sound.setsamplerate
@@ -55,9 +54,9 @@
   idle
   image.size
 
-  bootdrive usernote eject poweroff reboot biosmem
+  usernote eject poweroff reboot
 
-  getinfo 64bit
+  64bit
 
   getbyte putbyte getdword putdword
   findfile filesize getcwd chdir
@@ -75,7 +74,7 @@
 
   blend
 
-  memcpy sectorsize
+  memcpy sysconfig
 
   xxx
 

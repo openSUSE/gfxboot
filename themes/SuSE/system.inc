@@ -79,9 +79,82 @@
 /statusShift  0x0003 def
 
 % boot loader
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% bootloader - boot loader type
+%
+% group: system
+%
+% ( -- int1 )
+%
+% int1: boot loader type (0: lilo, 1:syslinux/isolinux, 2: grub)
+%
+/bootloader sysconfig getbyte def
+
 /lilo     bootloader 0 eq def
 /syslinux bootloader 1 eq def
 /grub     bootloader 2 eq def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% bootdrive - drive the BIOS booted from
+%
+% group: system
+%
+% ( -- int1 )
+%
+% int1: BIOS drive id
+%
+/bootdrive sysconfig 5 add getbyte def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% biosmem - BIOS reported memory size
+%
+% group: mem
+%
+% ( -- int1 )
+%
+% int1: total memory size according to BIOS
+%
+/biosmem sysconfig 20 add getdword def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% sectorsize - sector size
+%
+% group: mem system
+%
+% ( -- int1 )
+%
+% int1: sector size in bytes
+%
+/sectorsize
+  1
+  sysconfig 1 add getbyte
+  20 min	% max. 1 MB
+  dup 0 eq { pop 9 } if
+  shl
+def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% getinfo - type of info box
+%
+% group: system
+%
+% ( int1 -- int2 )
+%
+% int1: type of info box we have to show
+% int2: some data
+%
+% Note: really weird, should be replaced by something more obvious.
+%
+/getinfo {
+  2 shl
+  sysconfig 12 add exch add getdword
+} def
+
 
 % bool values
 /true     0 0 eq def

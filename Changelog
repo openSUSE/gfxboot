@@ -1,4 +1,5 @@
 	- adjust to syslinux 3.11
+	- remove some primary words and reimplement them as bytecode
 
 19/10/2005:	v3.2.3
 	- offer Croatian

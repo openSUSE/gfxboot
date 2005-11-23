@@ -7990,34 +7990,17 @@ prim_editinput_90:
 		ret
 
 
-;; bootloader - boot loader type
+;; sysconfig - get pointer to boot loader config data
 ;
 ; group: system
 ;
-; ( -- int1 )
+; ( -- ptr1 )
 ;
-; int1: boot loader type (0: lilo, 1:syslinux/isolinux, 2: grub)
+; ptr1: boot loader config data (32 bytes)
 ;
-prim_bootloader:
-		mov es,[boot_cs]
-		mov si,[boot_sysconfig]
-		movzx eax,byte [es:si]
-		jmp pr_getint
-
-
-;; bootdrive - drive the BIOS booted from
-;
-; group: system
-;
-; ( -- int1 )
-;
-; int1: BIOS drive id
-;
-prim_bootdrive:
-		mov es,[boot_cs]
-		mov si,[boot_sysconfig]
-		movzx eax,byte [es:si+5]
-		jmp pr_getint
+prim_sysconfig:
+		segofs2lin word [boot_cs],word [boot_sysconfig],eax
+		jmp pr_getptr_or_none
 
 
 ;; usernote - get special config value
@@ -8035,71 +8018,6 @@ prim_bootdrive:
 prim_usernote:
 		xor eax,eax
 		jmp pr_getint
-
-
-;; biosmem - BIOS reported memory size
-;
-; group: mem
-;
-; ( -- int1 )
-;
-; int1: total memory size according to BIOS
-;
-prim_biosmem:
-		mov es,[boot_cs]
-		mov si,[boot_sysconfig]
-		mov eax,[es:si+20]
-		jmp pr_getint
-
-
-;; sectorsize - sector size
-;
-; group: mem system
-;
-; ( -- int1 )
-;
-; int1: sector size in bytes
-;
-prim_sectorsize:
-		mov es,[boot_cs]
-		mov si,[boot_sysconfig]
-		mov cl,[es:si+1]
-		cmp cl,20		; max 1MB
-		ja prim_sectorsize_10
-		or cl,cl
-		jnz prim_sectorsize_20
-prim_sectorsize_10:
-		mov cl,9
-prim_sectorsize_20:
-		mov eax,1
-		shl eax,cl
-		jmp pr_getint
-
-
-;; getinfo - type of info box
-;
-; group: system
-;
-; ( -- int1 )
-;
-; int1: type of info box we have to show
-;
-; Note: really weird, should be replaced by something more obvious.
-;
-prim_getinfo:
-		mov dl,t_int
-		call get_1arg
-		jc prim_getinfo_90
-		mov dl,t_int
-		mov es,[boot_cs]
-		mov si,[boot_sysconfig]
-		shl ax,2
-		add si,ax
-		mov eax,[es:si+12]
-		xor cx,cx
-		call set_pstack_tos
-prim_getinfo_90:
-		ret
 
 
 ;; 64bit - test if we run on a 64-bit machine
