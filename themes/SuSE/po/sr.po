@@ -158,17 +158,6 @@ msgstr "Припремите вашу дискету са освежењем д�
 msgid "DVD Error"
 msgstr "ДВД грешка"
 
-# Keep the newlines!
-#. txt_dvd_warning
-msgid ""
-"\n\nIt appears that the system booted from the second side of the DVD.\n"
-"If so, turn the DVD over and try again."
-msgstr ""
-"\n"
-"\n"
-"Чини се да је систем покренут са друге стране ДВД-а.\n"
-"Ако је тако, окрените ДВД и покушајте поново."
-
 #. txt_dvd_warning2
 msgid ""
 "This is a two-sided DVD. You have booted from the second side.\n"

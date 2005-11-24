@@ -182,19 +182,6 @@ msgstr "Houdt uw diskette met de stuurprogramma-update gereed."
 msgid "DVD Error"
 msgstr "DVD-fout"
 
-# Keep the newlines!
-#. txt_dvd_warning
-msgid ""
-"\n"
-"\n"
-"It appears that the system booted from the second side of the DVD.\n"
-"If so, turn the DVD over and try again."
-msgstr ""
-"\n"
-"\n"
-"Het lijkt er op dat het systeem met kant twee van de DVD opgestart is.\n"
-"Indien dit het geval is: draai de DVD om en probeer het nog eens."
-
 #. txt_dvd_warning2
 msgid ""
 "This is a two-sided DVD. You have booted from the second side.\n"

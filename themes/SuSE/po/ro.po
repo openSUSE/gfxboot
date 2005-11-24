@@ -183,19 +183,6 @@ msgstr "Pregătiţi discheta cu driver-e actualizate."
 msgid "DVD Error"
 msgstr ""
 
-# Keep the newlines!
-#. txt_dvd_warning
-msgid ""
-"\n"
-"\n"
-"It appears that the system booted from the second side of the DVD.\n"
-"If so, turn the DVD over and try again."
-msgstr ""
-"\n"
-"\n"
-"Se pare că sistemul a fost pornit de pe faţa a doua a DVD-ului.\n"
-"Dacă este aşa, întoarceţi DVD-ul şi încercaţi din nou."
-
 #. txt_dvd_warning2
 #, fuzzy
 msgid ""

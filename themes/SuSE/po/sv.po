@@ -179,19 +179,6 @@ msgstr "Ha disketten för drivrutinsuppdatering redo."
 msgid "DVD Error"
 msgstr "DVD fel"
 
-# Keep the newlines!
-#. txt_dvd_warning
-msgid ""
-"\n"
-"\n"
-"It appears that the system booted from the second side of the DVD.\n"
-"If so, turn the DVD over and try again."
-msgstr ""
-"\n"
-"\n"
-"Det verkar som systemet startade från DVD skivans andrasida.\n"
-"Om så är fallet, vänd på DVD skivan och försök igen."
-
 #. txt_dvd_warning2
 msgid ""
 "This is a two-sided DVD. You have booted from the second side.\n"

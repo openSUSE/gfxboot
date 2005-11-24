@@ -161,15 +161,6 @@ msgstr "Ota ajurin päivityslevyke valmiiksi."
 msgid "DVD Error"
 msgstr "DVD virhe"
 
-# Keep the newlines!
-#. txt_dvd_warning
-msgid ""
-"\n\nIt appears that the system booted from the second side of the DVD.\n"
-"If so, turn the DVD over and try again."
-msgstr ""
-"\n\nVaikuttaa että järjestelmä käynnistettiin DVD:n toiselta puolelta.\n"
-"Jos näin on, käännä DVD toisinpäin ja yritä uudelleen."
-
 #. txt_dvd_warning2
 msgid ""
 "This is a two-sided DVD. You have booted from the second side.\n"

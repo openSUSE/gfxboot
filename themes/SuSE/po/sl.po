@@ -182,19 +182,6 @@ msgstr "Prosim pripravite disketo za posodobitev gonilnikov."
 msgid "DVD Error"
 msgstr "Napaka na DVDju"
 
-# Keep the newlines!
-#. txt_dvd_warning
-msgid ""
-"\n"
-"\n"
-"It appears that the system booted from the second side of the DVD.\n"
-"If so, turn the DVD over and try again."
-msgstr ""
-"\n"
-"\n"
-"Izgleda, da je bil sistem zagnan z druge strani DVDja.\n"
-"Če je to res, obrnite DVD in poizkusite znova."
-
 #. txt_dvd_warning2
 msgid ""
 "This is a two-sided DVD. You have booted from the second side.\n"

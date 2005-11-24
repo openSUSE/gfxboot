@@ -187,19 +187,6 @@ msgstr "Prosím, pripravte si disketu s aktualizovanými ovládačmi."
 msgid "DVD Error"
 msgstr ""
 
-# Keep the newlines!
-#. txt_dvd_warning
-msgid ""
-"\n"
-"\n"
-"It appears that the system booted from the second side of the DVD.\n"
-"If so, turn the DVD over and try again."
-msgstr ""
-"\n"
-"\n"
-"Vyzerá to, že ste systém spustili z druhej strany DVD.\n"
-"Ak to tak je, otočte DVD médium a skúste to znovu."
-
 #. txt_dvd_warning2
 #, fuzzy
 msgid ""

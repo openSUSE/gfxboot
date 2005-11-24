@@ -185,19 +185,6 @@ msgstr "Будь ласка, підготуйте дискету з оновле
 msgid "DVD Error"
 msgstr ""
 
-# Keep the newlines!
-#. txt_dvd_warning
-msgid ""
-"\n"
-"\n"
-"It appears that the system booted from the second side of the DVD.\n"
-"If so, turn the DVD over and try again."
-msgstr ""
-"\n"
-"\n"
-"Схоже, що систему було завантажено з другого боку DVD.\n"
-"Якщо це так, переверніть DVD і спробуйте знов."
-
 #. txt_dvd_warning2
 #, fuzzy
 msgid ""

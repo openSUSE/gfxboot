@@ -175,19 +175,6 @@ msgstr "Verifique se o disquete de atualização de driver está pronto."
 msgid "DVD Error"
 msgstr "Erro de DVD"
 
-# Keep the newlines!
-#. txt_dvd_warning
-msgid ""
-"\n"
-"\n"
-"It appears that the system booted from the second side of the DVD.\n"
-"If so, turn the DVD over and try again."
-msgstr ""
-"\n"
-"\n"
-"Parece que o sistema foi inicializado a partir do segundo lado do DVD.\n"
-"Se esse for o caso, vire o DVD e tente novamente."
-
 #. txt_dvd_warning2
 msgid ""
 "This is a two-sided DVD. You have booted from the second side.\n"

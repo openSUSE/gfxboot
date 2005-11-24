@@ -151,13 +151,6 @@ msgstr ""
 msgid "DVD Error"
 msgstr ""
 
-# Keep the newlines!
-#. txt_dvd_warning
-msgid ""
-"\n\nIt appears that the system booted from the second side of the DVD.\n"
-"If so, turn the DVD over and try again."
-msgstr ""
-
 #. txt_dvd_warning2
 msgid ""
 "This is a two-sided DVD. You have booted from the second side.\n"

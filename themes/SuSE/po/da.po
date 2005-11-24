@@ -161,15 +161,6 @@ msgstr "Gør klar til at indlæse din opdateringsdisk."
 msgid "DVD Error"
 msgstr "DVD fejl"
 
-# Keep the newlines!
-#. txt_dvd_warning
-msgid ""
-"\n\nIt appears that the system booted from the second side of the DVD.\n"
-"If so, turn the DVD over and try again."
-msgstr ""
-"\n\nDet ser ud til at systemet startede op fra den modsatte side af DVD'en.\n"
-"Hvis dette er tilfældet så vend den venligst og prøv igen."
-
 #. txt_dvd_warning2
 msgid ""
 "This is a two-sided DVD. You have booted from the second side.\n"

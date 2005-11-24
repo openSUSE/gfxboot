@@ -175,19 +175,6 @@ msgstr "ドライバ更新のフロッピーディスクを準備してくださ
 msgid "DVD Error"
 msgstr "DVDエラー"
 
-# Keep the newlines!
-#. txt_dvd_warning
-msgid ""
-"\n"
-"\n"
-"It appears that the system booted from the second side of the DVD.\n"
-"If so, turn the DVD over and try again."
-msgstr ""
-"\n"
-"\n"
-"DVDの第2面からブートしたようです。\n"
-"DVDをひっくり返してもう一度ブートしてください。"
-
 #. txt_dvd_warning2
 msgid ""
 "This is a two-sided DVD. You have booted from the second side.\n"

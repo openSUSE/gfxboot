@@ -175,19 +175,6 @@ msgstr "准备好驱动程序更新软盘。"
 msgid "DVD Error"
 msgstr "DVD 错误"
 
-# Keep the newlines!
-#. txt_dvd_warning
-msgid ""
-"\n"
-"\n"
-"It appears that the system booted from the second side of the DVD.\n"
-"If so, turn the DVD over and try again."
-msgstr ""
-"\n"
-"\n"
-"系统似乎是从 DVD 的第二面引导。\n"
-"如果是这样，请翻转 DVD 然后重试。"
-
 #. txt_dvd_warning2
 msgid ""
 "This is a two-sided DVD. You have booted from the second side.\n"
