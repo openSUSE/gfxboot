@@ -489,6 +489,7 @@ def
 
   gfxconfig.data {
 
+    % overkill because string compare does not honour eotchar
     dup strdup dup 5 index eq {
       dup length exch free 1 add add exch pop exit
     } {
