@@ -28,7 +28,7 @@
 
   xmenu .xm_list [ "32bit" ] put
 
-  do_64bit_check 32+64bit_source and {
+  32+64bit_source {
     64bit {
       /bits.default 1 def
       xmenu .xm_list [ "32bit" "64bit" ] put

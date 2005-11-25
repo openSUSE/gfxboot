@@ -54,7 +54,7 @@
   idle
   image.size
 
-  usernote eject poweroff reboot
+  eject poweroff reboot
 
   64bit
 
@@ -74,7 +74,7 @@
 
   blend
 
-  memcpy sysconfig
+  memcpy sysconfig _readsector
 
   xxx
 

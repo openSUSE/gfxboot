@@ -8003,23 +8003,6 @@ prim_sysconfig:
 		jmp pr_getptr_or_none
 
 
-;; usernote - get special config value
-;
-; group: system
-;
-; ( -- int1 )
-;
-; int1: config word. This is the value set by a 'notice' entry in
-; syslinux.cfg/isolinux.cfg. Other boot loaders are not supported.
-;
-
-; FIXME: obsolete, drop it
-;
-prim_usernote:
-		xor eax,eax
-		jmp pr_getint
-
-
 ;; 64bit - test if we run on a 64-bit machine
 ;
 ; group: system
@@ -8304,6 +8287,41 @@ prim_chdir_60:
 prim_chdir_70:
 		stc
 prim_chdir_90:
+		ret
+
+
+;; _readsector - read sector
+;
+; group: system
+;
+; ( int1 -- ptr1 )
+;
+; int1: sector number
+; ptr1: sector data
+;
+; Note: internal function. Returns pointer to static buffer. Does not return
+; on error. Returns .undef if function is not implemented.
+;
+prim__readsector:
+		mov dl,t_int
+		call get_1arg
+		jc prim__readsector_90
+
+		mov edx,eax
+		mov al,5
+		call gfx_cb			; read sector (nr = edx)
+		or al,al
+		jz prim__readsector_50
+		mov dl,t_none
+		xor eax,eax
+		jmp prim__readsector_80
+prim__readsector_50:
+		mov eax,edx
+		mov dl,t_ptr
+prim__readsector_80:
+		xor cx,cx
+		call set_pstack_tos
+prim__readsector_90:
 		ret
 
 

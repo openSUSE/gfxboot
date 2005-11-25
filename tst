@@ -60,6 +60,8 @@ function tst_isolinux {
   echo "$dst/$isodir32/isolinux.bin 1" >$tmp/cd_sort
   echo "$dst/$isodir64/isolinux.bin 1" >>$tmp/cd_sort
 
+  rm `find $dst/boot -name \*~`
+
   # rm -r $dst/boot/x86_64
 
   mkisofs -o $img -J -r -sort $tmp/cd_sort \
@@ -226,6 +228,8 @@ function tst_syslinux {
   mkdir -p $dst
   cp -a $src/* $dst
   cp -a $logo $dst/bootlogo
+
+  rm -f $dst/*~
 
   sw 0 test/mkbootdisk --syslinux=$syslx --out=${img}_ $dst
 

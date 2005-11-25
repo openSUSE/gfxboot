@@ -109,6 +109,22 @@
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% mediatype - type of media we booted from
+%
+% group: system
+%
+% ( -- int1 )
+%
+% int1: media type (0 disk, 1 floppy, 2 cdrom)
+%
+/mediatype sysconfig 2 add getbyte def
+
+/m_disk   0 def
+/m_floppy 1 def
+/m_cdrom  2 def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % biosmem - BIOS reported memory size
 %
 % group: mem
@@ -422,4 +438,164 @@ def
 /year {
   16 shr
 } def
+
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% readsector - read sector
+%
+% group: system
+%
+% ( int1 -- ptr1 )
+%
+% int1: sector number
+% ptr1: buffer with sector data or .undef. Use @free to free the buffer.
+%
+% Note: does not return on error. Returns .undef if function is not implemented.
+%
+/readsector {
+  _readsector
+  dup .undef eq { return } if
+
+  sectorsize malloc dup rot over length memcpy
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% getgfxconfig - get gfxboot config file entry
+%
+% group: system
+%
+% ( str1 -- str2 )
+%
+% str1: key for config entry
+% str2: config string (or .undef)
+%
+/getgfxconfig {
+  gfxconfig.data .undef eq {
+    "gfxboot.cfg" findfile dup .undef ne {
+      dup dup length dup string dup cvp 4 2 roll memcpy exch free
+    } {
+      pop ""
+    } ifelse
+
+    /gfxconfig.data over '\n' split def free
+
+  } if
+
+  currenteotchar '=' seteotchar
+
+  .undef
+
+  gfxconfig.data {
+
+    dup strdup dup 5 index eq {
+      dup length exch free 1 add add exch pop exit
+    } {
+      free pop
+    } ifelse
+
+  } forall
+
+  exch seteotchar exch pop
+
+} def
+
+/gfxconfig.data .undef def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% split - split string
+%
+% group:
+%
+% ( str1 int1 -- array1 )
+%
+% str1: string
+% int1: char
+% array1: array of strings
+%
+/split {
+
+  currenteotchar exch seteotchar exch
+
+  [ exch
+
+    {
+      dup length 0 gt {
+        dup strdup exch
+        dup length add
+      } if
+
+      dup cvp length 1 le { pop exit } if
+
+      1 add
+
+    } loop
+
+  ]
+
+  exch seteotchar
+
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Skip leading non-spaces.
+%
+% ( string ) ==> ( string )
+%
+/skipnonspaces {
+  { dup 0 get dup 0 ne exch ' ' ne and { 1 add } { exit } ifelse } loop
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Skip leading spaces.
+%
+% ( string ) ==> ( string )
+%
+/skipspaces {
+  { dup 0 get ' ' eq { 1 add } { exit } ifelse } loop
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Drop spaces at string end.
+% Modifies string!
+%
+% ( string ) ==> ( )
+%
+/dropspaces {
+  dup length
+  dup 0 eq {
+    pop pop
+  } {
+    1 sub
+    -1 0 {
+      over over get ' ' eq { over exch 0 put } { pop exit } ifelse
+    } for
+    pop
+  } ifelse
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Test if string[ofs-1]/string[ofs] is a word boundary.
+%
+% ( string ofs ) ==> ( true|false )
+%
+% boundary is either space/non-space or non-space/(space|'=')
+%
+/iswordboundary {
+  dup 0 eq { pop pop true return } if
+
+  add dup 1 sub 0 get exch 0 get
+
+  over ' ' eq over ' ' gt and { pop pop true return } if
+  over ' ' gt over dup ' ' eq exch dup '=' eq exch 0 eq or or and { pop pop true return } if
+
+  pop pop false
+} def
+
 

@@ -1,5 +1,7 @@
+25/11/2005:	v3.2.4
 	- adjust to syslinux 3.11
 	- remove some primary words and reimplement them as bytecode
+	- read config options from 'gfxboot.cfg'
 
 19/10/2005:	v3.2.3
 	- offer Croatian

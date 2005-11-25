@@ -8,8 +8,6 @@
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Some global vars.
 %
-/install.last 0 def
-
 /install.option 255 string def
 
 % install types
@@ -21,6 +19,7 @@
 /.inst_smb	5 def
 /.inst_hd	6 def
 
+/install.last .inst_cdrom def
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Build install mode list.
@@ -32,7 +31,9 @@
 
   /xmenu xmenu.install def
 
-  /install.last usernote 5 shr 1 and def
+  "install" getgfxconfig "slp" eq {
+    /install.last .inst_slp def
+  } if
 
   install.option install.last .inst_cdrom eq { "" } { "install=slp" } ifelse strcpy
 

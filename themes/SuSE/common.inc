@@ -4,28 +4,8 @@
 %
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-
-% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-%
-% look if we've been started from dvd side 2
-%
-% ( ) ==> ( true|false )
-%
-/is_second_side {
-  syslinux usernote 1 and 0 ne and
-} def
-
-
-% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-%
-% Should we check for 64bit?
-%
-% ( ) ==> ( true|false )
-%
-/do_64bit_check {
-  syslinux usernote 2 and 0 ne and
-} def
-
+% max command line length
+/cmdlinelength 512 def
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 %
@@ -34,9 +14,9 @@
 % ( ) ==> ( true|false )
 %
 /64bit_source {
-  syslinux usernote 4 and 0 ne and
-
-  64bit_boot_dir 32bit_boot_dir ne 64bit_boot_dir .undef ne and or
+  % 64 bit dir exists and is != 32 bit dir
+  64bit_boot_dir 32bit_boot_dir ne
+  64bit_boot_dir .undef ne and
 } def
 
 
@@ -47,7 +27,21 @@
 % ( ) ==> ( true|false )
 %
 /is_dvd {
-  syslinux usernote 8 and 0 ne and
+  % check only once
+  is_dvd.result .undef ne { is_dvd.result return } if
+
+  /is_dvd.result
+    mediatype m_cdrom eq {
+      0x10 readsector
+      dup 0x50 add getdword exch free
+      9 shr % iso size in MB
+      720 gt % assume dvd if > 720 MB
+    } {
+      false
+    } ifelse
+  def
+
+  is_dvd.result return
 } def
 
 
@@ -58,11 +52,9 @@
 % ( ) ==> ( true|false )
 %
 /32+64bit_source {
-  syslinux usernote 16 and 0 ne and
-
+  32bit_boot_dir .undef ne
   % uncomment next line to automatically warn about 32bit software on 64bit machines, too
   % 64bit_boot_dir .undef ne and
-  32bit_boot_dir .undef ne and
 } def
 
 
@@ -241,7 +233,7 @@
 } def
 
 
-/bc.cmd 256 string def
+/bc.cmd cmdlinelength string def
 
 % ( option_string ) ==> ( cmdline menu_entry )
 %
@@ -459,27 +451,15 @@
 
   } {
 
-    is_second_side {
+    32+64bit_source not {
 
-      notimeout dvd_popup
+      64bit {
+        64bit_source not { notimeout 32bit_popup } if
+      } {
+        64bit_source { notimeout 64bit_popup } if
+      } ifelse
 
-    } {
-
-      do_64bit_check {
-
-        32+64bit_source not {
-
-          64bit {
-            64bit_source not { notimeout 32bit_popup } if
-          } {
-            64bit_source { notimeout 64bit_popup } if
-          } ifelse
-
-        } if
-
-      } if
-
-    } ifelse
+    } if
 
   } ifelse
 
@@ -536,12 +516,12 @@
   cmdline "showopts" getoption
   dup "" eq {
     cmdline.shown 0 0 put
-    pop cmdline "%s" 256 cmdline.shown snprintf
+    pop cmdline "%s" cmdline.shown sprintf
     cmdline.hidden 0 0 put
   } {
     "showopts" length add skipspaces
-    "%s" 256 cmdline.shown snprintf
-    cmdline "%s" 256 cmdline.hidden snprintf
+    "%s" cmdline.shown sprintf
+    cmdline "%s" cmdline.hidden sprintf
     cmdline.hidden "showopts" getoption 0 0 put
   } ifelse
 
@@ -549,65 +529,6 @@
   cmdline.hidden dropspaces
 
   cmdline.shown
-} def
-
-
-% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Skip leading non-spaces.
-%
-% ( string ) ==> ( string )
-%
-/skipnonspaces {
-  { dup 0 get dup 0 ne exch ' ' ne and { 1 add } { exit } ifelse } loop
-} def
-
-
-% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Skip leading spaces.
-%
-% ( string ) ==> ( string )
-%
-/skipspaces {
-  { dup 0 get ' ' eq { 1 add } { exit } ifelse } loop
-} def
-
-
-% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Drop spaces at string end.
-% Modifies string!
-%
-% ( string ) ==> ( )
-%
-/dropspaces {
-  dup length
-  dup 0 eq {
-    pop pop
-  } {
-    1 sub
-    -1 0 {
-      over over get ' ' eq { over exch 0 put } { pop exit } ifelse
-    } for
-    pop
-  } ifelse
-} def
-
-
-% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Test if string[ofs-1]/string[ofs] is a word boundary.
-%
-% ( string ofs ) ==> ( true|false )
-%
-% boundary is either space/non-space or non-space/(space|'=')
-%
-/iswordboundary {
-  dup 0 eq { pop pop true return } if
-
-  add dup 1 sub 0 get exch 0 get
-
-  over ' ' eq over ' ' gt and { pop pop true return } if
-  over ' ' gt over dup ' ' eq exch dup '=' eq exch 0 eq or or and { pop pop true return } if
-
-  pop pop false
 } def
 
 
@@ -774,13 +695,6 @@
 %      button.cancel button.notdefault actCloseInfo button.setaction
     ] put
   } ifelse
-
-  info.type 2 eq
-  is_second_side and {
-    txt_dvd_warning info.msg
-    over length info.msg length 1 add add "%s%s" exch
-    dup string dup /info.msg exch def snprintf
-  } if
 
   syslinux info.type 3 eq and {
     dup .title txt_change_disk_title put
@@ -1282,7 +1196,7 @@
 
   /boot.pos { boot.label.len 10 add ptheme { 480 } { small_layout { 380 } { 490 } ifelse } ifelse } def
 
-  /boot.buf.size 256 def
+  /boot.buf.size cmdlinelength def
   /boot.buf boot.buf.size string def
 
   % no boot options line initially
@@ -1687,8 +1601,8 @@ dup .undef eq ptheme and { pop "back.jpg" findfile /ptheme false def } if
 /font.normal "16x16.fnt" findfile def
 /font.large font.normal def
 
-/cmdline.hidden 256 string def
-/cmdline.shown 256 string def
+/cmdline.hidden cmdlinelength string def
+/cmdline.shown cmdlinelength string def
 
 /kroete.dir 0 def
 
