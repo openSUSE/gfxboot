@@ -600,3 +600,57 @@ def
 } def
 
 
+%% findmode - find video mode number
+%
+% group: gfx.screen
+%
+% ( int1 int2 int3 -- int4 )   
+%
+% int1, int2: width, height
+% int3: color bits
+% int4: mode number (or .undef)
+%
+% example
+%   1024 768 16 findmode setmode        % 1024x768, 16-bit color mode
+%
+/findmode {
+  0 1 videomodes {
+    videomodeinfo dup .undef eq {
+      pop pop pop pop
+    } {
+      % compare width, height, colors
+      6 index 4 index eq 6 index 4 index eq and 5 index 3 index eq and {
+        7 1 roll 6 { pop } repeat 0xbfff and return
+      } {
+        pop pop pop pop
+      } ifelse
+    } ifelse
+  } for
+
+  pop pop pop .undef
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+%
+% Replace substring. Returns newly allocated string.
+%
+% ( str key value ) ==> ( new_str )
+%
+% Replaces first occurence of 'key' in str with 'value'.
+%
+/strreplace {
+  2 index 2 index strstr dup 0 ne {
+    1 sub
+    over length 3 index length sub 4 index length add string
+    dup cvp 5 index cvp 3 index memcpy
+    dup 6 1 roll over add exch 5 -1 roll exch add
+    4 -1 roll length add 3 1 roll "%s%s" exch sprintf
+  } {
+    pop pop pop strdup
+  } ifelse
+
+
+} def
+
+

@@ -17,7 +17,7 @@
   trace dtrace
   malloc free memsize dumpmem
   gettype settype
-  screen.size image.colors vscreen.size
+  screen.size image.colors vscreen.size monitorsize
   moveto currentpoint lineto setcolor currentcolor putpixel getpixel
   setfont currentfont fontheight strsize show settextmodecolor
   image loadpalette tint settintcolor setpalette getpalette
@@ -45,8 +45,6 @@
   lineheight
   currenttitle
 
-  videomodes getvideomode
-
   usleep notimeout
   time date
   setbrightness currentbrightness
@@ -61,7 +59,7 @@
   getbyte putbyte getdword putdword
   findfile filesize getcwd chdir
 
-  setmode currentmode findmode
+  setmode currentmode videomodeinfo videomodes
   colorbits
 
   setimage currentimage

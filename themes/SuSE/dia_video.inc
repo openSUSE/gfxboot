@@ -8,15 +8,15 @@
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Some global vars.
 %
-% video mode array fields (as returned by getvideomode)
+% video mode array fields
 /.vm_mode   0 def
 /.vm_width  1 def
 /.vm_height 2 def
-/.vm_ok     3 def	% monitor supports it
 
 % We have kernel splash images for at least these sizes.
 /video.splashsizes [
-   640  480
+     0    0	% special: for text mode
+     1    0	% special: for VESA mode
    800  600
   1024  768
   1280 1024
@@ -81,31 +81,30 @@
 
   /xmenu xmenu.video def
 
-  videomodes 1 add dup array /video.modes.text exch def array /video.modes.list exch def
-  xmenu .xm_list video.modes.text put
+  % build list of video modes
+  /video.modes.list [
+    [ -1 0 0 ]	% special: text mode
+    [ -2 1 0 ]	% special: VESA mode (width = 1 to make it sort)
 
-  % add text mode entry
-
-  % [ mode width height supported ]
-  video.modes.list 0 [ 0 0 0 1 ] put
-
-  videomodes 0 gt {
-    0 1 videomodes 1 sub {
-      video.modes.list exch [ over getvideomode ] exch 1 add exch put
+    0 1 videomodes {
+      videomodeinfo dup .undef eq {
+        pop pop pop pop
+      } {
+        [
+          over 0xbfff and 6 2 roll
+          0x4000 and		% fb support
+          exch 0x10 eq and	% 16 color bits
+          over 600 ge and	% height >= 600
+          2 index 800 ge and	% width >= 800
+        { ] } { pop pop pop pop } ifelse
+      } ifelse
     } for
-  } if
 
-  % always accept 800x600
-
-  video.modes.list {
-    dup .vm_width get 800 eq
-    over .vm_height get 600 eq
-    and { .vm_ok 1 put } { pop } ifelse
-  } forall
+  ] def
 
   % sort video.modes.list
 
-  video.modes.list length 1 gt {
+  video.modes.list length 3 gt {
     0 1 video.modes.list length 2 sub {
       dup 1 add 1 video.modes.list length 1 sub {
         over vmsortindex over vmsortindex gt {
@@ -119,38 +118,42 @@
 
   % create mode strings
 
-  0 1 video.modes.list length 1 sub {
-    video.modes.text exch
-    dup video.modes.list exch get
-    dup .vm_width get 0 eq {
-      pop "Text Mode" put
-    } {
-        dup .vm_width get 640 eq
-        over .vm_height get 480 eq
-        and {
-          pop "VESA" put
+  /video.modes.text [
+    video.modes.list {
+      dup .vm_width get
+      dup 0 eq {
+        pop pop "Text Mode"
       } {
-        32 string dup rot
-        dup .vm_height get exch .vm_width get
-        "%d x %d" 4 -1 roll sprintf
-        put
+        dup 1 eq {
+          pop pop "VESA"
+        } {
+          exch .vm_height get exch "%d x %d" 32 string dup 5 1 roll sprintf
+        } ifelse
       } ifelse
-    } ifelse
-  } for
+    } forall
+  ] def
 
-  % select first mode
-  xmenu .xm_current 0 put
+  % add to menu
+
+  xmenu .xm_list video.modes.text put
 
   % select largest mode the monitor supports
 
-  0 1 video.modes.list length 1 sub {
-    video.modes.list over get
-    dup .vm_ok get 0 gt exch video.havesplash and {
-      xmenu .xm_current rot put
+  monitorsize exch 800 max exch 600 max		% at least 800x600
+
+  xmenu .xm_current -1 put
+  video.modes.list {
+    dup .vm_width get 3 index le
+    over .vm_height get 3 index le and
+    exch video.havesplash and {
+      xmenu .xm_current over over get 1 add put
     } {
-      pop
+      exit
     } ifelse
-  } for
+
+  } forall
+
+  pop pop
 
   pmenu.init
 } def

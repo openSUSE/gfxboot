@@ -75,7 +75,7 @@
 %
 % Check if there are boot directories for 32 & 64bit.
 %
-% Note: currently assumes /boot/<arch>/loader. Should be more flexible.
+% Assumes 32bit to be in *i386* and 64bit in *x86_64*.
 %
 % ( ) ==> ( )
 %
@@ -86,14 +86,14 @@
     dup "i386" strstr 0 ne over "x86_64" strstr 0 ne or {
       dup "i386" strstr {
         /32bit_boot_dir exch def
-        /64bit_boot_dir "/boot/x86_64/loader"
+        /64bit_boot_dir 32bit_boot_dir "i386" "x86_64" strreplace
       } {
         /64bit_boot_dir exch def
-        /32bit_boot_dir "/boot/i386/loader"
+        /32bit_boot_dir 64bit_boot_dir "x86_64" "i386" strreplace
       } ifelse
 
       dup "%s/isolinux.cfg" 64bit.tmp sprintf
-      64bit.tmp filesize .undef ne { def } { pop pop } ifelse
+      64bit.tmp filesize .undef ne { def } { free pop } ifelse
 
     } {
       /32bit_boot_dir over def
@@ -354,23 +354,14 @@
   } if
 
   syslinux {
-    xmenu.video 0 get 0 eq {
-      "textmode=1 " bc.cmd dup length add sprintf
-    } if
+    video.modes.list xmenu.video .xm_current get get .vm_mode get
 
-    video.modes.list xmenu.video .xm_current get get
-    dup .vm_width get 640 eq
-    over .vm_height get 480 eq
-    and {
-      pop
-      "x11i=vesa " bc.cmd dup length add sprintf
+    dup 0 ge {
+      0x200 add "vga=0x%x " bc.cmd dup length add sprintf
     } {
-      .vm_mode get dup {
-        "vga=0x%x " bc.cmd dup length add sprintf
-      } {
-        pop
-      } ifelse
-
+      -1 eq {
+        "textmode=1 " bc.cmd dup length add sprintf
+      } if
     } ifelse
 
     config.lang {
@@ -1616,4 +1607,6 @@ true or {
 } ifelse
 
 check_arch_boot_dir
+
+
 
