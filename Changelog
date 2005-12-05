@@ -1,3 +1,8 @@
+5/12/2005:	v3.2.5
+	- Colin Watson <cjwatson@ubuntu.com>: build fixes for x86-64
+	- fixed kernel splash loading
+	- include 'unpack_bootlogo' script in package
+
 30/11/2005:	v3.2.4
 	- adjust to syslinux 3.11
 	- remove some primary words and reimplement them as bytecode

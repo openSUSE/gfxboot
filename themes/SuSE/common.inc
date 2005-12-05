@@ -314,13 +314,20 @@
   } ifelse
 
   cmdline.hidden "" ne {
-    /add_suffix ",10240768.spl" def
+    /add_suffix 32 string def
+
+    video.modes.list xmenu.video .xm_current get get
+    dup .vm_mode get 0 ge {
+      dup .vm_height get exch .vm_width get
+      ",%04d%04d.spl" add_suffix sprintf
+    } { pop } ifelse
 
     % find out splash size for kernel loading progress bar
     add_suffix 1 add filesize dup .undef ne {
       sectorsize 1 sub add sectorsize div /progress_extra exch def
     } {
       pop
+      add_suffix 0 0 put	% empty string
     } ifelse
 
     add_suffix {

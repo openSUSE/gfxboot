@@ -1,0 +1,50 @@
+#! /usr/bin/perl
+
+sub unpack_bootlogo;
+
+$src = shift;
+$xdir = shift;
+
+unpack_bootlogo $src, $xdir;
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+sub unpack_bootlogo
+{
+  my ($dir, $tmp, $files, @files, @ext);
+  local $_;
+
+  $dir = shift;
+  $tmp = "$dir/bootlogo.unpacked";
+
+  mkdir "$tmp", 0755;
+  mkdir "$dir/$xdir", 0755 if $xdir;
+
+  @files = `cpio --quiet -t <$dir/bootlogo`;
+
+  system "cd $tmp; cpio --quiet -i <../bootlogo";
+
+  for (@files) {
+    chomp;
+    if(-k("$tmp/$_") && ! -l("$tmp/$_")) {
+      push @ext, $_;
+      undef $_;
+    }
+  }
+
+  if($xdir) {
+    system "chmod -t $tmp/$_ ; mv $tmp/$_ $dir/$xdir ; ln -s $xdir/$_ $tmp/$_" for @ext;
+  }
+  else {
+    system "chmod -t $tmp/$_ ; mv $tmp/$_ $dir" for @ext;
+  }
+
+  open P, "| cd $tmp; cpio --quiet -o >../bootlogo";
+  print P "$_\n" for grep $_, @files;
+  if($xdir) { print P "$_\n" for @ext }
+  close P;
+
+  system "rm -rf $tmp";
+
+  return ( 'bootlogo', @ext );
+}
+

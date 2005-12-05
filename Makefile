@@ -1,6 +1,12 @@
+ARCH    := $(shell uname -m)
+
 CC	 = gcc
 CFLAGS	 = -g -Wall -Wno-pointer-sign -O2 -fomit-frame-pointer
+ifeq "$(ARCH)" "x86_64"
+X11LIBS	 = /usr/X11/lib64
+else
 X11LIBS	 = /usr/X11/lib
+endif
 THEMES	 = $(wildcard themes/*)
 # LIBFILES = happysuse.mod system.inc
 
@@ -21,7 +27,7 @@ bincode.o:  bincode.asm vocabulary.inc modplay_defines.inc modplay.inc kroete.in
 	nasm -f elf -O10 -o $@ -l bincode.lst $<
 
 bincode: bincode.o jpeg.o
-	ld --section-start .text=0 --oformat binary -Map bincode.map -o $@ $^
+	ld -m elf_i386 --section-start .text=0 --oformat binary -Map bincode.map -o $@ $^
 
 bincode.h:  bincode bin2c
 	./bin2c bincode >bincode.h
@@ -36,7 +42,7 @@ vocabulary.h: mk_vocabulary
 	./mk_vocabulary -c >$@
 
 jpeg.o: jpeg.S
-	as -ahlsn=jpeg.lst -o $@ $<
+	as --32 -ahlsn=jpeg.lst -o $@ $<
 
 install: all
 	install -d -m 755 $(DESTDIR)/usr/sbin $(DESTDIR)/usr/share/gfxboot

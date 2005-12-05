@@ -47,13 +47,13 @@ function tst_isolinux {
   cp -a $src/* $dst/$isodir32
   rm -f $dst/$isodir32/{linux,initrd}64
   cp -a $logo $dst/$isodir32/bootlogo
-  test/unpack_bootlogo $dst/$isodir32
+  bin/unpack_bootlogo $dst/$isodir32
 
   cp -a $src/* $dst/$isodir64
   [ -f $dst/$isodir64/linux64 ] && mv $dst/$isodir64/linux64 $dst/$isodir64/linux
   [ -f $dst/$isodir64/initrd64 ] && mv $dst/$isodir64/initrd64 $dst/$isodir64/initrd
   cp -a $logo $dst/$isodir64/bootlogo
-  test/unpack_bootlogo $dst/$isodir64
+  bin/unpack_bootlogo $dst/$isodir64
 
   test/2hl --link --quiet $dst
 

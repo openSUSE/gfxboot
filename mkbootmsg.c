@@ -163,7 +163,7 @@ int main(int argc, char **argv)
   int opt_info = 0;
 
   if(sizeof (file_header_t) != 32) {
-    fprintf(stderr, "file_header_t has wrong size: %d\n", sizeof (file_header_t));
+    fprintf(stderr, "file_header_t has wrong size: %d\n", (int) sizeof (file_header_t));
     wrong_struct_size();
     return 1;
   }
