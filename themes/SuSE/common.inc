@@ -316,19 +316,21 @@
   cmdline.hidden "" ne {
     /add_suffix 32 string def
 
-    video.modes.list xmenu.video .xm_current get get
-    dup .vm_mode get 0 ge {
-      dup .vm_height get exch .vm_width get
-      ",%04d%04d.spl" add_suffix sprintf
-    } { pop } ifelse
+    syslinux {
+      video.modes.list xmenu.video .xm_current get get
+      dup .vm_mode get 0 ge {
+        dup .vm_height get exch .vm_width get
+        ",%04d%04d.spl" add_suffix sprintf
+      } { pop } ifelse
 
-    % find out splash size for kernel loading progress bar
-    add_suffix 1 add filesize dup .undef ne {
-      sectorsize 1 sub add sectorsize div /progress_extra exch def
-    } {
-      pop
-      add_suffix 0 0 put	% empty string
-    } ifelse
+      % find out splash size for kernel loading progress bar
+      add_suffix 1 add filesize dup .undef ne {
+        sectorsize 1 sub add sectorsize div /progress_extra exch def
+      } {
+        pop
+        add_suffix 0 0 put	% empty string
+      } ifelse
+    } if
 
     add_suffix {
       /bc.tmp cmdline.hidden length add_suffix length add string def
@@ -351,12 +353,14 @@
       cmdline.hidden "%s " bc.cmd dup length add sprintf
     } ifelse
 
-    % find out initrd size for kernel loading progress bar
-    "initrd" filesize dup .undef ne {
-      sectorsize 1 sub add sectorsize div /progress_extra exch progress_extra add def
-    } {
-      pop
-    } ifelse
+    syslinux {
+      % find out initrd size for kernel loading progress bar
+      "initrd" filesize dup .undef ne {
+        sectorsize 1 sub add sectorsize div /progress_extra exch progress_extra add def
+      } {
+        pop
+      } ifelse
+    } if
 
   } if
 
@@ -443,23 +447,25 @@
 
 %  fadein_logo
 
-  enough_mem not livecd and {
+  syslinux {
+    enough_mem not livecd and {
 
-    notimeout nomem_popup
+      notimeout nomem_popup
 
-  } {
+    } {
 
-    32+64bit_source not {
+      32+64bit_source not {
 
-      64bit {
-        64bit_source not { notimeout 32bit_popup } if
-      } {
-        64bit_source { notimeout 64bit_popup } if
-      } ifelse
+        64bit {
+          64bit_source not { notimeout 32bit_popup } if
+        } {
+          64bit_source { notimeout 64bit_popup } if
+        } ifelse
 
-    } if
+      } if
 
-  } ifelse
+    } ifelse
+  } if
 
 } def
 

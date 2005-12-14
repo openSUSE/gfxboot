@@ -1,3 +1,6 @@
+14/12/2005:	v3.2.6
+	- fixed to work correctly with grub & lilo
+
 5/12/2005:	v3.2.5
 	- Colin Watson <cjwatson@ubuntu.com>: build fixes for x86-64
 	- fixed kernel splash loading
