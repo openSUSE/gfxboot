@@ -327,6 +327,8 @@ fi
 [ "$logo" = "boot" ] && logo="themes/$theme/boot/message"
 [ "$logo" = "install" ] && logo="themes/$theme/install/bootlogo"
 
+[ "$BOOTLOGO" ] && logo=$BOOTLOGO
+
 [ -x mkbootmsg ] || {
   echo "error: mkbootmsg missing. Try make."
   exit 2

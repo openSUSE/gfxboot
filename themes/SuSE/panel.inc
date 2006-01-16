@@ -99,7 +99,7 @@
       [ keyF2 0 "F2" /panel.options /panel.options.width /panel.options.update .undef ]
     ] def
 
-    /panel panel.short def
+    /panel panel.full def
   } ifelse
 
   panel.show

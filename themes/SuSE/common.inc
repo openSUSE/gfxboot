@@ -1204,7 +1204,7 @@
   /boot.buf boot.buf.size string def
 
   % no boot options line initially
-  /boot.show false def
+  /boot.show syslinux not def
 
   /ms.size     {  22  22 } def
   /ms.up       {   0 480 }  def
@@ -1262,7 +1262,7 @@
   } if
 
   dup keyShiftF8 eq debug 3 ge and {
-    currentcolor white setcolor
+    currentcolor debug 1 and { white } { black } ifelse setcolor
 
     currentpoint 300 0 moveto
     0 memsize print "/" print print "  " print

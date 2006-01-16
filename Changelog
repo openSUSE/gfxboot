@@ -1,3 +1,7 @@
+16/1/2006:	v3.2.7
+	- show all options in grub/lilo (#136377)
+	- translations & font updated
+
 14/12/2005:	v3.2.6
 	- fixed to work correctly with grub & lilo
 

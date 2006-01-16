@@ -1,15 +1,18 @@
+# translation of fi.po to suomi
+# translation of fi.po to
 # translation of bootloader.fi.po to
 # translation of bootloader.po to
 # LANGUAGE translations for boot loader
 # Copyright (C) 2005 SUSE Linux GmbH
 # Jyri Palokangas <jmp@netti.fi>, 2005.
+# Janne Ahlskog <j.ahlskog@multi.fi>, 2006.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bootloader.fi\n"
-"PO-Revision-Date: 2005-09-03 14:52+0300\n"
-"Last-Translator: Jyri Palokangas <jmp@netti.fi>\n"
-"Language-Team:  <fi@li.org>\n"
+"Project-Id-Version: fi\n"
+"PO-Revision-Date: 2006-01-06 10:24+0200\n"
+"Last-Translator: Janne Ahlskog <j.ahlskog@multi.fi>\n"
+"Language-Team: suomi <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -41,7 +44,7 @@ msgstr "Asennus"
 
 #. txt_manual_install
 msgid "Manual Installation"
-msgstr "Manuaalinen asennus"
+msgstr "Käsin asennus"
 
 #. txt_noacpi_install
 msgid "Installation--ACPI Disabled"
@@ -106,7 +109,7 @@ msgstr "Ladataan memtest86\n\n\n"
 # info box title
 #. txt_info_title
 msgid "Boot loader"
-msgstr "Käynnistyslataaja"
+msgstr "Käynnistyslatain"
 
 # error box title
 #. txt_error_title
