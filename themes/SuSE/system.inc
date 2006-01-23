@@ -317,6 +317,16 @@ def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Concatenate strings.
+%
+% ( string1 string2 ) ==> ( string1 )
+%
+/strcat {
+  over dup length add exch strcpy pop
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Test for AltGr.
 %
 % ( )  ==> ( bool )
@@ -651,6 +661,90 @@ def
   } ifelse
 
 
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Search for option in cmdline.
+% Returns .undef if not found.
+%
+% ( cmdline option_name ) ==> ( option_start )
+%
+/bootopt.find {
+  /bo.opt exch def
+  /bo.cmdline exch def
+
+  {
+    bo.cmdline bo.opt strstr
+    dup {
+      dup 1 eq {
+        true
+      } {
+        dup 2 sub bo.cmdline exch get ' ' eq
+      } ifelse
+
+      {
+        bo.cmdline over bo.opt length add 1 sub get
+        dup '=' eq
+        over ' ' eq or
+        exch 0 eq or
+      } {
+        false
+      } ifelse
+
+      bo.cmdline rot add exch
+
+      {
+        1 sub exit
+      } {
+        /bo.cmdline exch def
+      } ifelse
+    } {
+      pop
+      .undef exit
+    } ifelse
+  } loop
+
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Search for second occurence of option in cmdline.
+% Returns .undef if not found.
+%
+% ( cmdline option_name ) ==> ( option_start )
+%
+/bootopt.find2 {
+  over over bootopt.find dup .undef eq {
+    pop pop pop .undef
+  } {
+    1 add rot pop exch bootopt.find
+  } ifelse
+} def
+
+
+% Remove option from cmdline. Returns removed option or .undef.
+%
+% cmdline is modified, option_entry is allocated dynamicyll and must be
+% freed later.
+%
+% ( cmdline option_name -- option_entry )
+%
+/bootopt.remove {
+  bootopt.find dup .undef ne {
+    dup
+    skipnonspaces dup skipspaces 2 index sub rot rot over sub string over strcpy
+    rot rot
+    {
+      over over exch get
+      over over 0 exch put {
+        1 add
+      } {
+        exit
+      } ifelse
+    } loop
+    pop pop
+  } if
 } def
 
 

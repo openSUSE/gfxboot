@@ -193,6 +193,12 @@
 
   window.action actCloseInfo eq {
     /window.action actNothing def
+    % cd change dialog
+    info.type 5 eq info.type 6 eq or {
+      % 'chdir' triggers fs metadata re-read
+      getcwd dup .undef ne { chdir } { pop } ifelse
+    } if
+
     "" -1 3 return
   } if
 
@@ -206,7 +212,41 @@
 
   window.action actStart eq {
     /window.action actNothing def
-    boot.buf buildcmdline 2 return
+    /load_error false def
+
+    % some tricks to make it possible to review the complete command line
+    debug 3 ge xxx.cmdline .undef eq and {
+      /window.action actNothing def
+
+      boot.buf buildcmdline /xxx.menu exch def /xxx.cmdline exch def
+
+      /dia window.dialog def
+      dia .title "Kernel command line" put
+      dia .text "" put
+      % Must all be of same size!
+      dia .ed.list 1 array put
+      dia .ed.buffer.list [ xxx.cmdline ] put
+      dia .ed.text.list [ "All options\n" ] put
+
+      dia .ed.focus 0 put
+      dia .ed.width 600 put
+      dia .ed.font font.normal put
+      dia .buttons
+        [ button.ok button.default actStart button.setaction ]
+      put
+      dia window.init
+      dia window.show
+
+      boot.buf menu.entry 0
+    } {
+      xxx.cmdline .undef ne {
+        xxx.cmdline xxx.menu
+        /xxx.cmdline .undef def
+      } {
+        boot.buf buildcmdline
+      } ifelse
+      2 return
+    } ifelse
   } if
 
   window.action actRedraw eq {
@@ -313,25 +353,25 @@
     bc.cmd 0 0 put
   } ifelse
 
+  /add_suffix 32 string def
+
+  syslinux {
+    video.modes.list xmenu.video .xm_current get get
+    dup .vm_mode get 0 ge {
+      dup .vm_height get exch .vm_width get
+      ",%04d%04d.spl" add_suffix sprintf
+    } { pop } ifelse
+
+    % find out splash size for kernel loading progress bar
+    add_suffix 1 add filesize dup .undef ne {
+      sectorsize 1 sub add sectorsize div /progress_extra exch def
+    } {
+      pop
+      add_suffix 0 0 put	% empty string
+    } ifelse
+  } if
+
   cmdline.hidden "" ne {
-    /add_suffix 32 string def
-
-    syslinux {
-      video.modes.list xmenu.video .xm_current get get
-      dup .vm_mode get 0 ge {
-        dup .vm_height get exch .vm_width get
-        ",%04d%04d.spl" add_suffix sprintf
-      } { pop } ifelse
-
-      % find out splash size for kernel loading progress bar
-      add_suffix 1 add filesize dup .undef ne {
-        sectorsize 1 sub add sectorsize div /progress_extra exch def
-      } {
-        pop
-        add_suffix 0 0 put	% empty string
-      } ifelse
-    } if
-
     add_suffix {
       /bc.tmp cmdline.hidden length add_suffix length add string def
       cmdline.hidden "initrd" bootopt.find dup .undef ne {
@@ -361,7 +401,6 @@
         pop
       } ifelse
     } if
-
   } if
 
   syslinux {
@@ -387,18 +426,6 @@
     "dud=1 " bc.cmd dup length add sprintf
   } if
 
-  % add splash only if an entry already exists
-%  bc.cmd "splash" bootopt.find dup .undef ne {
-%    % remove existing entry
-%    dup skipnonspaces skipspaces strcpy pop
-%
-%    % append new entry
-%    xmenu.splash .xm_current get splash.options exch get
-%    "%s " bc.cmd dup length add sprintf
-%  } {
-%    pop
-%  } ifelse
-
   xmenu.profile {
     profile.options xmenu.profile .xm_current get get dup "" ne {
       "%s " bc.cmd dup length add sprintf
@@ -411,14 +438,71 @@
     } if
   } if
 
-  bc.opts "%s " bc.cmd dup length add sprintf
+  % complete cmdline
+  bc.cmd bc.opts strcat " " strcat pop
 
+  % remove all but last 'vga' option
+  {
+    bc.cmd "vga" bootopt.find2 .undef eq { exit } if
+    bc.cmd "vga" bootopt.remove free
+  } loop
+
+  bc.cmd "driverupdate" bootopt.find dup .undef ne {
+    % exclude 'driverupdate=0 and driverupdate=1'
+    "driverupdate=" length get
+    dup '0' ne exch '1' ne and {
+
+      /bc.tmp bc.cmd "driverupdate" bootopt.remove def
+      bc.tmp .undef ne {
+        /bc.tmp bc.tmp "driverupdate=" length add ',' split bc.tmp free def
+        /bc.tmp2 cmdlinelength string def
+
+        bc.tmp2 "initrd=" strcpy pop
+
+        bc.tmp length 0 gt {
+          % add '+' to first arg unless it starts with '+' or '-'
+          bc.tmp 0 get 0 get
+          dup '-' eq {	% remove '-'
+            bc.tmp 0 get dup 1 add strdup exch free
+            bc.tmp exch 0 exch put
+            pop '+'
+          } if
+          '+' ne {		% add '+'
+            bc.tmp 0 get length 1 add string "+" strcat bc.tmp 0 get strcat
+            bc.tmp 0 get free bc.tmp exch 0 exch put
+          } if
+
+          bc.tmp length 1 sub -1 0 {
+            bc.tmp exch get
+            bc.tmp2 exch strcat "," strcat pop
+          } for
+        } if
+
+        bc.tmp dup { free } forall free
+
+        % last 'initrd' option
+        /bc.tmp .undef def
+        {
+          bc.cmd "initrd" bootopt.remove dup .undef ne {
+            bc.tmp free /bc.tmp exch def
+          } {
+            pop exit
+          } ifelse
+        } loop
+
+        % re-add new 'initrd' option
+        bc.tmp {
+          bc.tmp2 bc.tmp "initrd=" length add strcat pop
+          bc.tmp free
+          bc.cmd bc.tmp2 strcat " " strcat pop
+        } if
+      } if
+
+    } if
+  } { pop } ifelse
+
+  % remove final space
   bc.cmd dropspaces
-
-  debug 3 ge {
-    0 0 moveto black setcolor
-    bc.cmd print "<<  (press ESC) " print trace
-  } if
 
   bc.cmd menu.entry
 } def
@@ -671,12 +755,14 @@
 % errorcode:
 %   0	normal info
 %   1	fatal error
-%   2	missing kernel
+%   2	missing file
 %   3   disk change
 %   4   disk change failed
+%   5   ask for cd change
+%   6   change cd back to original
 %
 
-/info.tmpmsg 127 string def
+/info.tmpmsg 256 string def
 
 /InfoBoxInit {
   /info.type exch def
@@ -700,6 +786,13 @@
     ] put
   } ifelse
 
+  syslinux info.type 2 eq and {
+    dup .title "I/O Error" put
+    info.msg "File not found: %s" info.tmpmsg sprintf
+    /info.msg info.tmpmsg def
+    /load_error true def
+  } if
+
   syslinux info.type 3 eq and {
     dup .title txt_change_disk_title put
     0 getinfo 1 add txt_insert_disk info.tmpmsg sprintf
@@ -716,6 +809,17 @@
       txt_insert_disk2 info.tmpmsg sprintf
     } ifelse
     /info.msg info.tmpmsg def
+  } if
+
+  syslinux info.type 5 eq and {
+    dup .title "Driver Update" put
+    info.msg "Insert driver update CD-ROM for\n\"%s\"." info.tmpmsg sprintf
+    /info.msg info.tmpmsg def
+  } if
+
+  syslinux info.type 6 eq and {
+    dup .title "Driver Update" put
+    /info.msg "Put the SuSE Linux CD-ROM back into the drive." def
   } if
 
   dup .text info.msg put
@@ -828,6 +932,11 @@
 % ( ) ==> ( )
 /ProgressDone {
   window.done
+
+  load_error {
+    /load_error false def
+    boot.ed edit.showcursor
+  } if
 } def
 
 
@@ -1297,8 +1406,6 @@
 
   dup keyF11 eq debug 1 ge and {
 
-    dtrace
-
     0 1 screen.size exch pop {
       0 1 screen.size pop {
         over moveto
@@ -1477,50 +1584,6 @@
   ] put
   dup window.init
       window.show
-
-} def
-
-
-% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Search for option in cmdline.
-% Returns .undef if not found.
-%
-% ( cmdline option_name ) ==> ( option_start )
-%
-/bootopt.find {
-  /bo.opt exch def
-  /bo.cmdline exch def
-
-  {
-    bo.cmdline bo.opt strstr
-    dup {
-      dup 1 eq {
-        true
-      } {
-        dup 2 sub bo.cmdline exch get ' ' eq
-      } ifelse
-
-      {
-        bo.cmdline over bo.opt length add 1 sub get
-        dup '=' eq
-        over ' ' eq or
-        exch 0 eq or
-      } {
-        false
-      } ifelse
-
-      bo.cmdline rot add exch
-
-      {
-        1 sub exit
-      } {
-        /bo.cmdline exch def
-      } ifelse
-    } {
-      pop
-      .undef exit
-    } ifelse
-  } loop
 
 } def
 

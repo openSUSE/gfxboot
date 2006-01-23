@@ -1,3 +1,9 @@
+23/1/2005:	v3.2.8
+	- better monitor detection
+	- cjwatson@ubuntu.com: support big-endian cpio archives (#140119)
+	- support direct driverupdate loading from CD-ROM (feat #152)
+	- add new languages
+
 16/1/2006:	v3.2.7
 	- show all options in grub/lilo (#136377)
 	- translations & font updated

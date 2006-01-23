@@ -441,6 +441,8 @@ dmsg_10			db '  %2u: type %u, val 0x%x', 10, 0
 single_step		db 0
 show_debug_info		db 0
 
+fms_cpio_swab		db 0
+
 hello			db 10, 'Initializing gfx code...', 10, 0
 msg_10			db '|ip %4x:  %8x.%x           |', 10, 0
 msg_11			db '|%2x: %8x.%2x', 0
@@ -1103,7 +1105,9 @@ gfx_infobox_init:
 
 		lin2segofs dword [infobox_buffer],es,bp
 		or si,si
-		jz gfx_infobox_init_40
+		jnz gfx_infobox_init_20
+		inc bp
+		jmp gfx_infobox_init_40
 gfx_infobox_init_20:
 		fs lodsb
 		mov [es:bp],al
@@ -2698,10 +2702,19 @@ fms_file_10:
 		jae fms_file_80
 
 		lin2segofs ebp,es,bx
+		mov byte [fms_cpio_swab],0
 		cmp word [es:bx],71c7h
-		jnz fms_file_80
+		jz fms_file_20			; normal cpio record
+		cmp word [es:bx],0c771h		; maybe byte-swapped?
+		jnz fms_file_80			; no cpio record
+		mov byte [fms_cpio_swab],1
 
-		movzx ecx,word [es:bx+20]	; file name size
+fms_file_20:
+		push ax
+		mov ax,[es:bx+20]		; file name size
+		call cpio_swab
+		movzx ecx,ax
+		pop ax
 		inc cx
 		and cx,~1			; align
 
@@ -2710,8 +2723,13 @@ fms_file_10:
 		cmp eax,ecx
 		jb fms_file_80			; within header area
 
-		mov edx,[es:bx+22]		; data size
-		rol edx,16			; strange word order
+		push eax
+		mov eax,[es:bx+22]		; data size
+		call cpio_swab
+		rol eax,16			; strange word order
+		call cpio_swab
+		mov edx,eax
+		pop eax
 
 		mov ebp,edx
 		inc ebp
@@ -2730,6 +2748,24 @@ fms_file_10:
 fms_file_80:
 		xor  eax,eax
 fms_file_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; byte-swap cpio data if appropriate
+;
+;  ax:		word to swap
+;
+; return:
+;  ax:		swapped if [fms_cpio_swab], otherwise same as input
+;
+cpio_swab:
+		cmp byte [fms_cpio_swab],0
+		jz cpio_swab_90
+		xchg ah,al
+
+cpio_swab_90:
 		ret
 
 
@@ -2818,13 +2854,22 @@ find_file:
 		jz find_file_80
 find_file_20:
 		lin2segofs ebp,es,bx
-		cmp word [es:bx],71c7h
+		mov byte [fms_cpio_swab],0
+		cmp word [es:bx],71c7h		; little-endian archive
+		jz find_file_30
+		cmp word [es:bx],0c771h		; big-endian
 		jnz find_file_80
+		mov byte [fms_cpio_swab],1
+find_file_30:
 		mov al,[es:bx+7]
 		and al,0f0h
 		cmp al,0a0h
 		setz al
-		mov cx,[es:bx+20]	; file name size (incl. final 0)
+		push ax
+		mov ax,[es:bx+20]	; file name size (incl. final 0)
+		call cpio_swab
+		mov cx,ax
+		pop ax
 		movzx edx,cx
 		inc dx
 		and dx,~1		; align
@@ -2840,8 +2885,14 @@ find_file_20:
 		mov eax,ebp
 		jmp find_file_90
 find_file_50:
-		mov ecx,[es:bx+22]	; data size
-		rol ecx,16		; strange word order
+		push eax
+		mov eax,[es:bx+22]	; data size
+		call cpio_swab
+		rol eax,16		; strange word order
+		call cpio_swab
+		mov ecx,eax
+		pop eax
+
 		inc ecx
 		and ecx,byte ~1		; align
 		add ebp,ecx
@@ -5123,9 +5174,13 @@ prim_add_90:
 ; ( int1 int2 -- int3 )
 ; ( string1 int4 -- string2 )
 ; ( ptr1 int5 -- ptr2 )
+; ( string3 string4 -- int6 )
+; ( ptr2 ptr3 -- int7 )
 ;
 ; int3: int1 - int2
 ; string2: substring of string1 at offset -int4
+; int6: string3 - string4
+; int7: ptr2 - ptr3
 ;
 ; Note: Strings are treated as byte sequences, not Unicode chars. Boundaries of string1 and ptr1 are not
 ; checked.
@@ -5143,8 +5198,14 @@ prim_sub:
 		cmp dx,t_int + (t_string << 8)
 		jz prim_sub_50
 		cmp dx,t_int + (t_ptr << 8)
+		jz prim_sub_50
+		cmp dx,t_ptr + (t_ptr << 8)
+		jz prim_sub_40
+		cmp dx,t_string + (t_string << 8)
 		stc
 		jnz prim_sub_90
+prim_sub_40:
+		mov dh,t_int
 prim_sub_50:
 		xchg eax,ecx
 		sub eax,ecx
@@ -13969,6 +14030,7 @@ read_ddc:
 		cmp word [screen_mem],0
 		jz read_ddc_90
 
+%if 0
 		xor cx,cx
 		xor dx,dx
 		mov ax,4f15h
@@ -13976,7 +14038,12 @@ read_ddc:
 		int 10h
 		cmp ax,4fh
 		jnz read_ddc_90
+%endif
 
+		xor bp,bp
+
+read_ddc_20:
+		push bp
 		les di,[vbe_buffer]
 		push di
 		mov cx,40h
@@ -13985,13 +14052,22 @@ read_ddc:
 		pop di
 		mov ax,4f15h
 		mov bl,1
-		xor cx,cx
+		mov cx,bp
 		xor dx,dx
 		push di
 		int 10h
 		pop di
+		pop bp
 		cmp ax,4fh
-		jnz read_ddc_90
+		jz read_ddc_30
+
+		inc bp
+		cmp bp,4
+		jb read_ddc_20
+
+		jmp read_ddc_90
+
+read_ddc_30:
 
 		mov ax,[es:di+23h]
 		mov [ddc_timings],ax

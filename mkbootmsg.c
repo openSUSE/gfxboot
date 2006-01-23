@@ -95,6 +95,7 @@ file_data_t read_file(char *name);
 int is_pcx(file_data_t *fd);
 void fix_pal(unsigned char *pal, unsigned shade1, unsigned shade2, unsigned char *rgb);
 void write_data(char *name);
+void add_number_le(file_data_t *d, uint32_t u, unsigned usize);
 void add_data(file_data_t *d, void *buffer, unsigned size);
 code_t *new_code(void);
 dict_t *new_dict(void);
@@ -357,7 +358,17 @@ void write_data(char *name)
 
   // then, put everything together
 
-  add_data(&fd, &header, sizeof header);
+  add_number_le(&fd, header.magic_id, 4);
+  add_data(&fd, &header.version, 1);
+  add_data(&fd, &header.res_1, 1);
+  add_data(&fd, &header.res_2, 1);
+  add_data(&fd, &header.res_3, 1);
+  add_number_le(&fd, header.bincode, 4);
+  add_number_le(&fd, header.bincode_size, 4);
+  add_number_le(&fd, header.bincode_crc, 4);
+  add_number_le(&fd, header.dict, 4);
+  add_number_le(&fd, header.code, 4);
+  add_number_le(&fd, header.code_size, 4);
 
   add_data(&fd, bincode_data, sizeof bincode_data);
 
@@ -372,6 +383,25 @@ void write_data(char *name)
   }
 
   fclose(f);
+}
+
+
+/* Copy the least-significant usize bytes of u into enc, least-significant
+ * byte first.
+ */
+void copy_number_le(unsigned char *enc, unsigned u, unsigned usize)
+{
+  int i;
+  for (i = 0; i < usize; ++i)
+    enc[i] = (u >> (i * 8)) & 255;
+}
+
+
+void add_number_le(file_data_t *d, uint32_t u, unsigned usize)
+{
+  unsigned char buf[4];
+  copy_number_le(buf, u, usize);
+  add_data(d, buf, sizeof buf);
 }
 
 
@@ -443,6 +473,16 @@ unsigned number(char *value)
 }
 
 
+uint32_t read_uint32_le(file_data_t *fd, unsigned ofs)
+{
+  uint32_t word = 0;
+  int i;
+  for (i = 0; i < 4; ++i)
+    word += fd->data[ofs + i] << (i * 8);
+  return word;
+}
+
+
 void hexdump(file_data_t *fd, unsigned ofs, int len)
 {
   unsigned u, p;
@@ -500,7 +540,17 @@ void show_info(char *name)
   fd = read_file(name);
 
   if(fd.size >= sizeof header) {
-    memcpy(&header, fd.data, sizeof header);
+    header.magic_id = read_uint32_le(&fd, 0);
+    header.version = fd.data[4];
+    header.res_1 = fd.data[5];
+    header.res_2 = fd.data[6];
+    header.res_3 = fd.data[7];
+    header.bincode = read_uint32_le(&fd, 8);
+    header.bincode_size = read_uint32_le(&fd, 12);
+    header.bincode_crc = read_uint32_le(&fd, 16);
+    header.dict = read_uint32_le(&fd, 20);
+    header.code = read_uint32_le(&fd, 24);
+    header.code_size = read_uint32_le(&fd, 28);
     ofs += sizeof header;
   }
 
@@ -808,7 +858,7 @@ int translate(int pass)
           c->size = u2 + 1;
           c->enc = malloc(c->size);
           c->enc[0] = c->type + (u2 << 4);
-          if(u2) memcpy(c->enc + 1, &c->value.u, u2);
+          if(u2) copy_number_le(c->enc + 1, c->value.u, u2);
           break;
 
         case t_string:
@@ -817,7 +867,7 @@ int translate(int pass)
           c->size = u1 + u0 + 1;
           c->enc = malloc(c->size);
           c->enc[0] = c->type + (u0 << 4) + 0x80;
-          memcpy(c->enc + 1, &u1, u0);
+          copy_number_le(c->enc + 1, u1, u0);
           memcpy(c->enc + 1 + u0, c->value.p, u1);
           break;
 
@@ -841,7 +891,7 @@ int translate(int pass)
           c->size = u0 + 1;
           c->enc = malloc(c->size);
           c->enc[0] = c->type + (u0 << 4);
-          if(u0) memcpy(c->enc + 1, &c->value.u, u0);
+          if(u0) copy_number_le(c->enc + 1, c->value.u, u0);
           break;
 
         default:
@@ -871,7 +921,7 @@ int translate(int pass)
         if(c->enc) free(c->enc);
         c->enc = malloc(c->size);
         c->enc[0] = c->type + (u1 << 4);
-        if(u1) memcpy(c->enc + 1, &code[u0].ofs, u1);
+        if(u1) copy_number_le(c->enc + 1, code[u0].ofs, u1);
       }
 
       ofs += c->size;
@@ -892,15 +942,15 @@ void encode_dict()
     exit(6);
   }
 
-  add_data(&dict_file, &dict_size, 4);
+  add_number_le(&dict_file, dict_size, 4);
 
   u = 0;
 
   for(i = 0; i < dict_size; i++) {
     if(dict[i].type == t_none || dict[i].type == t_prim) continue;
-    add_data(&dict_file, &i, 2);
+    add_number_le(&dict_file, i, 2);
     add_data(&dict_file, &dict[i].type, 1);
-    add_data(&dict_file, &dict[i].value.u, 4);
+    add_number_le(&dict_file, dict[i].value.u, 4);
     u++;
   }
 
