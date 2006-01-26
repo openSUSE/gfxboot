@@ -1,4 +1,7 @@
-23/1/2005:	v3.2.8
+26/1/2006:	v3.2.9
+	- go for 8 bit framebuffer if there are no 16 bit modes (#144742)
+
+23/1/2006:	v3.2.8
 	- better monitor detection
 	- cjwatson@ubuntu.com: support big-endian cpio archives (#140119)
 	- support direct driverupdate loading from CD-ROM (feat #152)

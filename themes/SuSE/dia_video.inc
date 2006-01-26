@@ -86,19 +86,31 @@
     [ -1 0 0 ]	% special: text mode
     [ -2 1 0 ]	% special: VESA mode (width = 1 to make it sort)
 
-    0 1 videomodes {
-      videomodeinfo dup .undef eq {
-        pop pop pop pop
+    % first, try 16 bit
+    /vm_color_bits 16 def
+
+    {
+      0 1 videomodes {
+        videomodeinfo dup .undef eq {
+          pop pop pop pop
+        } {
+          [
+            over 0xbfff and 6 2 roll
+            0x4000 and			% fb support
+            exch vm_color_bits eq and	% color bits
+            over 600 ge and		% height >= 600
+            2 index 800 ge and		% width >= 800
+          { ] } { pop pop pop pop } ifelse
+        } ifelse
+      } for
+
+      % no modes added? -> try 8 bit
+      dup 0 get -2 eq vm_color_bits 8 ne and {
+        /vm_color_bits 8 def
       } {
-        [
-          over 0xbfff and 6 2 roll
-          0x4000 and		% fb support
-          exch 0x10 eq and	% 16 color bits
-          over 600 ge and	% height >= 600
-          2 index 800 ge and	% width >= 800
-        { ] } { pop pop pop pop } ifelse
+        exit
       } ifelse
-    } for
+    } loop
 
   ] def
 
