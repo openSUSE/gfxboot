@@ -1,0 +1,37 @@
+#! /usr/bin/perl
+
+while(<>) {
+  if(/^\s*\[\s*\S+\s*(\S+)\s*(\S+)\s*(\S+)\s*\]/) {
+    $k{hex $1} = 1;
+    $k{hex $2} = 1;
+    $k{hex $3} = 1;
+  }
+}
+
+delete $k{0};
+
+@f = sort { $a <=> $b } (keys %k);
+
+print "-a ";
+
+for (@f) {
+  if(!defined($i)) {
+    printf "0x%02x", $_;
+    $sep = ',';
+  }
+  elsif($_ == $i + 1) {
+    $sep = '-';
+  }
+  else {
+    printf "-0x%02x", $i if $sep eq '-';
+    printf ",0x%02x", $_;
+    $sep = ',';
+  }
+
+  $i = $_;
+}
+
+printf "-0x%02x", $i if $sep eq '-';
+
+print "\n";
+

@@ -1,0 +1,117 @@
+<html><body>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="help">Utiliser le système d'aide</a></h3>
+
+L'aide en ligne du chargeur d'amorçage est sensible au contexte. Elle donne des informations relatives à l'élément du menu sélectionné ou, si vous êtes en train de modifier des options d'amorçage, elle cherche à vous renseigner au sujet de l'option sur laquelle le curseur est positionné.<br>
+<br>
+Touches de navigation<br><br>
+
+  <em>Flèche vers le haut</em> : marquer le lien précédent<br>
+  <em>Flèche vers le bas</em> : marquer le lien suivant<br>
+  <em>Flèche vers la gauche</em>, <em>Effacement arrière</em> : retourner au sujet précédent<br>
+  <em>Flèche vers la droite</em>, <em>Retour</em>, <em>Espace</em> : suivre le lien<br>
+  <em>Page précédente</em> : faire défiler vers le haut (une page)<br>
+  <em>Page suivante</em> : faire défiler vers le bas (une page)<br>
+  <em>Début</em> : aller à la première page<br>
+  <em>Fin</em> : aller à la dernière page<br>
+  <em>Échap.</em> : quitter l'aide<br>
+
+<br>Retour aux <a href="#opt">Options d'amorçage</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="startup">Sélection du mode de démarrage</a></h3>
+
+<em>F3</em> vous laisse changer le mode de l'écran de démarrage (splash screen). Vous pouvez utiliser directement l'option <a href="#o_splash">splash</a> du noyau, si vous préférez.<br>
+<br>
+<em>originel (native)</em> désactive l'écran de démarrage (comme splash=0)<br>
+<br>
+<em>silencieux (silent)</em> supprime tous les messages du noyau et d'amorçage et affiche une barre de progession à la place<br>
+<br>
+<em>prolixe (verbose)</em> affiche de belles images et les messages du noyau et d'amorçage<br>
+
+<br>Retour aux <a href="#opt">Options d'amorçage</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="keytable">Sélection de la langue et de la disposition du clavier</a></h3>
+
+Pressez <em>F2</em> pour changer la langue et la disposition du clavier utilisée par le chargeur d'amorçage.<br>
+
+<br>Retour aux <a href="#opt">Options d'amorçage</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="profile">Choix du profil</a></h3>
+
+Pressez <em>F4</em> pour sélectionner un profil. Votre système démarrera en utilisant la configuration enregistrée dans ce profil.<br>
+
+<br>Retour aux <a href="#opt">Options d'amorçage</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="opt">Options d'amorçage</a></h3>
+
+  <a href="#o_splash">splash</a> -- comportement de l'écran de démarrage (splash screen)<br>
+  <a href="#o_apm">apm</a> -- gestion d'énergie<br>
+  <a href="#o_acpi">acpi</a> -- interface avancée de configuration et d'énergie<br>
+  <a href="#o_ide">ide</a> -- contrôle du sous-système IDE<br>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_splash">Options de noyau : splash</a></h3>
+
+L'écran de démarrage est l'image affichée durant l'amorçage du système.<br>
+<br>
+<em>splash=0</em><br>
+L'écran de démarrage est désactivé. Ceci peut être utile avec de très vieux moniteurs ou lorsqu'une erreur se produit.<br>
+<br>
+<em>splash=verbose</em><br> Active l'écran de démarrage, les messages de noyau et d'amorçage sont également affichés.<br>
+<br>
+<em>splash=silent</em><br>
+Active l'écran de démarrage, les messages ne sont pas affichés. À la place, une barre de progression est affichée.<br>
+<br>
+Retour aux <a href="#opt">Options d'amorçage</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_apm">Options de noyau : apm</a></h3>
+
+APM est l'une des stratégies de gestion de l'énergie utilisée sur les ordinateurs courants. Elle est utilisée principalement sur les ordinateurs portables pour des fonctions telles que la mise en veille, mais peut également être responsable de l'arrêt de l'ordinateur après sa mise hors tension. APM dépend d'un BIOS fonctionnant correctement. Si le BIOS est déterioré, APM peut n'être que d'une utilité limitée ou même empêcher votre ordinateur de fonctionner. Dans ce cas, il peut être désactivé à l'aide du paramètre<br><br>
+
+  <em>apm=off</em>  -- désactive APM complètement<br><br>
+
+Certains ordinateurs très récents peuvent être équipés du système plus récent
+<a href="#o_acpi">ACPI</a>.
+
+<br><br>Retour aux <a href="#opt">Options d'amorçage</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_acpi">Options de noyau : acpi</a></h3>
+
+ACPI (Advanced Configuration and Power Interface) est un standard qui définit les interfaces de gestion d'énergie et de configuration entre un système d'exploitation et le BIOS. Par défaut, <em>acpi</em> est activé lorsqu'un BIOS ultérieur à l'année 2000 est détecté. Il existe plusieurs paramètres utilisés couramment pour contrôler le comportement de ACPI.<br>
+<br>
+  <em>pci=noacpi</em> -- ne pas utiliser ACPI pour router les interruptions PCI<br>
+  <em>acpi=oldboot</em> -- uniquement les parties de ACPI qui relèvent de l'amorçage restent activées<br>
+  <em>acpi=off</em> -- désactiver ACPI complètement<br>
+  <em>acpi=force</em> -- activer ACPI même si votre BIOS est antérieur à 2000<br>
+<br>
+En particulier dans le cas d'ordinateurs récents, il remplace l'ancien système <a href="#o_apm">apm</a>.
+
+
+<br><br>Retour aux <a href="#opt">Options d'amorçage</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_ide">Options de noyau : ide</a></h3>
+
+À la différence de SCSI, IDE est utilisé couramment sur la plupart des stations de travail de bureau. Pour réduire certains problèmes matériels qui se produisent avec les systèmes IDE, utilisez le paramètre de noyau : <br><br>
+
+  <em>ide=nodma</em>  -- désactiver dma pour les pilotes IDE<br>
+
+
+
+<br><br>Retour aux <a href="#opt">Options d'amorçage</a>
+
+</body></html>

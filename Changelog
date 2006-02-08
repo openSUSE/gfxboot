@@ -1,3 +1,6 @@
+8/2/2006:	v2.4.30
+	- added Zen theme (#133704)
+
 12/10/2005:	v2.4.29
 	- do only aligned dword reads from video memory - some ATI Radeon
 	  boards need this (#81046, #114804)

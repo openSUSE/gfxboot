@@ -1,0 +1,24 @@
+boot loader translations
+------------------------
+
+o How do I add a new text?
+
+  - Use the gfxboot/po/bin/add_text script; example:
+
+      add_text help 'Help'
+
+    This will define txt_help; the 'txt_' prefix is optional.
+
+o How do I remove a text that's no longer needed?
+
+  - Use the gfxboot/po/bin/rm_text script; example:
+
+      rm_text help
+
+    This will remove txt_help; the removed lines are stored in the 'old'
+    directory.
+
+o How do I add a new language?
+
+  - Copy bootloader.pot to <lang>.po. Remember to get <lang>.po translated.
+

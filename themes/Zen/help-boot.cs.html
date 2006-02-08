@@ -1,0 +1,121 @@
+<html><body>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="help">Používání nápovědy</a></h3>
+
+Nápověda zavaděče je citlivá na obsah. Poskytuje informace o zvolené nabídce nebo pokud editujete parametry jádra, snaží se poskytnout informace o dané volbě.<br>
+<br>
+Navigační klávesy<br><br>
+
+  <em>Up Arrow</em>: návrat na předešlý odkaz<br>
+  <em>Down Arrow</em>: přechod na následující odkaz<br>
+  <em>Left Arrow</em>, <em>Backspace</em>: návrat k předešlému tématu<br>
+  <em>Right Arrow</em>, <em>Enter</em>, <em>Space</em>: přejít na označený odkaz<br>
+  <em>Page Up</em>: o stránku nahoru<br>
+  <em>Page Down</em>: o stránku dolů<br>
+  <em>Home</em>: přechod na začátek stránky<br>
+  <em>End</em>: přechod na konec stránky<br>
+  <em>Esc</em>: ukončení nápovědy<br>
+
+<br>Návrat do <a href="#opt">startovací nabídky</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="startup">Výběr režimu splashe</a></h3>
+
+Splash režim můžete měnit pomocí klávesy <em>F3</em>. Použít můžete také parametr jádra <a href="#o_splash">splash</a>.<br>
+<br>
+<em>native</em> vypne splash screen (stejně jako splash=0)<br>
+<br>
+<em>silent</em> zakryje všechna hlášení jádra a zobrazí místo toho animaci znázorňující pokrok při stratu nebo ukončení systému<br>
+<br>
+<em>verbose</em> Zobrazí hlášení jádra na grafickém pozadí<br>
+
+<br>Návrat do <a href="#opt">startovací nabídky</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="keytable">Výběr jazyka a klávesové mapy</a></h3>
+
+Stisknutím klávesy <em>F2</em> získáte seznam klávesových map a dostupných jazyků.<br><br>
+
+Tato volba je zatím experimentální a nemusí vždy fungovat.
+(Proto není <em>F2</em> v zobrazené nabídce.)
+
+<br><br>Návrat do <a href="#opt">startovací nabídky</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="profile">Volba profilu</a></h3>
+
+Stiknutím <em>F4</em> můžete zvolit profil. Systém se spustí s nastaveními uloženými v tomto profilu.
+
+<br><br>Návrat do <a href="#opt">startovací nabídky</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="opt">Parametry</a></h3>
+
+  <a href="#o_splash">splash</a> -- ovládá splash screen<br>
+  <a href="#o_apm">apm</a> -- nastavení správy napájení<br>
+  <a href="#o_acpi">acpi</a> -- advanced configuration and power interface<br>
+  <a href="#o_ide">ide</a> -- ovládání IDE subsystému<br>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_splash">Parametry jádra: splash</a></h3>
+
+Splash screen je obrázek znázorňující průběh spouštění a vypínání.<br>
+<br>
+<em>splash=0</em><br>
+Splash screen je vypnutý. Tato volba je velmi užitečná pro staré monitory a v případě problémů.<br>
+<br>
+<em>splash=verbose</em><br> Splash screen je puštěný, ale stále vidíte hlášení jádra.<br>
+<br>
+<em>splash=silent</em><br>
+Splash screen je puštěný a zcela zakrývá hlášení jádra.<br>
+<br>
+Návrat do <a href="#opt">startovací nabídky</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_apm">Parametry jádra: apm</a></h3>
+
+APM je jedním ze standardů správy napájení používaných na současných počítačích. Obvykle je používán například pro uspání na disk u notebooků a také je odpovědný za vypnutí počítače po ukončení operačního systému. APM je závislé na správně fungujícím BIOSu. V případě poškození BIOSu by měla být funkce APM omezena. Z toho důvodu můžete APM vypnout parametrem:<br><br>
+
+  <em>apm=off</em>  -- kompletní vypnutí APM<br><br>
+
+Některé velmi nové počítače místo APM používají
+<a href="#o_acpi">ACPI</a>.
+
+<br><br>Návrat do <a href="#opt">startovací nabídky</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_acpi">Parametry jádra: acpi</a></h3>
+
+ACPI (Advanced Configuration and Power Interface) je standard definující nastavení napájení a správu zařízení mezi operačním systémem a BIOSem. Ve výchozím nastavení je <em>acpi</em> zapnuto v případě, že jde o BIOS vydaný po roce 2000. Nejčastěji používané nastavení:<br>
+<br>
+  <em>pci=noacpi</em> -- nepoužívat ACPI k předávání PCI přerušení
+  <em>acpi=oldboot</em> -- aktivní zůstane pouze ta část ACPI, která je potřebná pro start systému<br>
+  <em>acpi=off</em> -- vypnutí ACPI<br>
+  <em>acpi=force</em> -- zapnutí ACPI i pro BIOS vydaný před rokem 2000<br>
+<br>
+Na nových počítačích nahrazuje starší <a href="#o_apm">apm</a> systém.
+
+
+<br><br>Návrat do <a href="#opt">startovací nabídky</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_ide">Parametry jádra: ide</a></h3>
+
+IDE je na rozdíl od SCSI obvykle používáno na pracovních stanicích.
+V případě výskytu problémů s IDE systémem můžete použít parametr: <br><br> 
+
+  <em>ide=nodma</em>  -- Vypnutí DMA pro všechna IDE zařízení<br>
+
+
+
+<br><br>Návrat do <a href="#opt">startovací nabídky</a>.
+
+</body></html>

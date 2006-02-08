@@ -1,0 +1,137 @@
+<html><body>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="help">Použitie pomocníka</a></h3>
+
+Pomocník pre správcu štartu je kontextový. Poskytuje informácie 
+o vybranej položke menu alebo sa v prípade, že opravujete voľby
+štartu, snaží o zobrazenie informácií o voľbe, na ktorej je
+práve kurzor.<br>
+<br>
+Navigácia klávesnicou<br><br>
+
+  <em>Šipka hore</em>: vybrať predchádzajúci odkaz<br>
+  <em>Šipka dolu</em>: vybrať nasledujúci odkaz<br>
+  <em>Šipka vľavo</em>, <em>Backspace</em>: návrat na prechádzajúci článok<br>
+  <em>Šipka vpravo</em>, <em>Enter</em>, <em>Space</em>: zobraziť odkaz<br>
+  <em>Page Up</em>: posunúť text o jednu stránku hore<br>
+  <em>Page Down</em>: posunúť text o jednu stránku dolu<br>
+  <em>Home</em>: prejsť na začiatok stránky<br>
+  <em>End</em>: prejsť na koniec stránky<br>
+  <em>Esc</em>: ukončiť pomocníka<br>
+
+<br>Návrat na <a href="#opt">Voľby štartu</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="startup">Výber režimu zobrazenia štartu</a></h3>
+
+<em>F2</em> umožňuje zmeniť režim zobrazenia počas štartu
+systému. Ak chcete, môžete priamo použiť voľbu jadra <a href="#o_splash">splash</a>.<br>
+<br>
+<em>native</em> bude zobrazovať všetky správy jadra a štartu systému (rovnaké 
+ako splash=0)<br>
+<br>
+<em>silent</em> zabráni zobrazeniu všetkých správ od jadra 
+a štartu systému. Namiesto nich zobrazí pruh priebehu<br>
+<br>
+<em>verbose</em> zobrazí obrázok a správy jadra a štartu systému<br>
+
+<br>Návrat na <a href="#opt">Voľby štartu</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="keytable">Výber rozloženia klávesnice</a></h3>
+
+Stlačením <em>F9</em> sa zobrazí zoznam podporovaných
+klávesníc.<br><br>
+
+Toto je experimentálna funkcia a nemusí fungovať správne.
+(Preto nie je <em>F9</em> zobrazené.)
+
+<br><br>Návrat na <a href="#opt">Voľby štartu</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="opt">Voľby štartu</a></h3>
+
+  <a href="#o_splash">splash</a> -- ovplyvňuje zobrazovanie informácií počas štartu<br>
+  <a href="#o_apm">apm</a> -- prepne správu napájania<br>
+  <a href="#o_acpi">acpi</a> -- pokročilé rozhranie nastavenia a správy napájania (Advanced Configuration and Power Interface)<br>
+  <a href="#o_ide">ide</a> -- ovládanie IDE systému<br>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_splash">Voľby jadra: splash</a></h3>
+
+Splash je obrázok zobrazený pri štarte systému.<br>
+<br>
+<em>splash=0</em><br>
+Obrázok je vypnutý. To sa môže hodiť na veľmi
+starých monitoroch alebo v prípade, že sa vyskytne
+nejaká chyba.<br>
+<br>
+<em>splash=verbose</em><br> Aktivuje obrázok, ale správy
+o štarte jadra a systému sa budú zobrazovať.<br>
+<br>
+<em>splash=silent</em><br>
+Aktivuje obrázok, ale bez správ. Namiesto nich sa zobrazí pruh
+priebehu.<br>
+
+<br>Návrat na <a href="#opt">Voľby štartu</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_apm">Voľby jadra: apm</a></h3>
+
+APM je jedna z dvoch technológií pre správu napájania
+pre súčasné počítače. Používa sa hlavne na prenosných
+počítačoch na uspávanie, ale dokáže aj vypnúť počítač. 
+APM vyžaduje správne fungujúci BIOS. Ak je BIOS 
+nesprávny, APM môže fungovať iba čiastočne alebo dokonca
+počítač môže prestať fungovať. V tom prípade budete možno
+musieť APM vypnúť pomocou parametra<br><br>
+
+  <em>apm=off</em>  -- úplne vypnúť APM<br><br>
+
+Niektore nové počítač môžu využiť novšiu technológiu 
+<a href="#o_acpi">ACPI</a>.
+
+<br><br>Návrat na <a href="#opt">Voľby štartu</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_acpi">Voľby jadra: acpi</a></h3>
+
+ACPI (Advanced Configuration and Power Interface) je štandard,
+ktorý definuje rozhrania pre správu napájania a nastavenia počítača
+medzi BIOSom operačným systémom. Štandardne sa <em>acpi</em> 
+zapne, ak je BIOS novší než z roku 2000. Pre chovanie ACPI
+existuje niekoľko často používaných parametrov:<br>
+<br>
+  <em>pci=noacpi</em> -- nepoužívať ACPI pre správu prerušení PCI
+  <em>acpi=oldboot</em> -- aktivovať iba časti ACPI, ktoré sa týkajú
+ štartu systému<br>
+  <em>acpi=off</em> -- vypnúť ACPI úplne<br>
+  <em>acpi=force</em> -- zapnúť ACPI aj v prípade, že je BIOS starší
+ než z roku 2000<br>
+<br>
+Hlavne na nových počítačoch nahradzuje systém 
+<a href="#o_apm">apm</a>.
+
+
+<br><br>Návrat na <a href="#opt">Voľby štartu</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_ide">Voľby jadra: ide</a></h3>
+
+IDE je rozhranie diskov často používané v pracovných staniciach.
+Aby sa zabránilo niektorým problémom s IDE zariadeniami, použite
+parameter jadra: <br><br> 
+
+  <em>ide=nodma</em>  -- vypne DMA pre IDE zariadenia<br>
+
+
+<br><br>Návrat na <a href="#opt">Voľby štartu</a>
+
+</body></html>
