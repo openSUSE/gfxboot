@@ -1675,8 +1675,7 @@ dup .undef eq ptheme and { pop "back.jpg" findfile /ptheme false def } if
 
 /debug 0 def
 
-ptheme small_layout or
-true or {
+ptheme small_layout or {
   /bsplash.done { } def
 } {
   bsplash.show

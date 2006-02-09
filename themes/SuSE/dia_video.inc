@@ -151,7 +151,8 @@
 
   % select largest mode the monitor supports
 
-  monitorsize exch 800 max exch 600 max		% at least 800x600
+  boot_failsafe 4 and { 0 0 } { monitorsize } ifelse
+  exch 800 max exch 600 max		% at least 800x600
 
   xmenu .xm_current -1 put
   video.modes.list {

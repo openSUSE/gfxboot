@@ -1,3 +1,7 @@
+9/2/2006:	v3.2.10
+	- more defensive monitor detection (#149578)
+	- monitor detection can be skipped
+
 26/1/2006:	v3.2.9
 	- go for 8 bit framebuffer if there are no 16 bit modes (#144742)
 

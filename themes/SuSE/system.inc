@@ -97,6 +97,21 @@
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% boot_failsafe - failsafe options the user selected (bitmask)
+%
+% group: system
+%
+% ( -- int1 )
+%
+% int1: option bitmask
+%   bit 0: SHIFT pressed
+%   bit 1: no graphics
+%   bit 2: no monitor detection
+%
+/boot_failsafe sysconfig 3 add getbyte def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % bootdrive - drive the BIOS booted from
 %
 % group: system

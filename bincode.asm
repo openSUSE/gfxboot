@@ -14062,7 +14062,7 @@ read_ddc_20:
 		jz read_ddc_30
 
 		inc bp
-		cmp bp,4
+		cmp bp,2		; some BIOSes don't like more (seen on a Packard Bell EasyNote)
 		jb read_ddc_20
 
 		jmp read_ddc_90
@@ -14165,3 +14165,19 @@ fsc_bits	dw 0, 0x0004, 0x4000, 0x0200, 0x0100, 0x0200, 0, 0x4000
 		dw 0x0200, 0, 0, 0, 0, 0, 0, 0
 
 
+%if 0
+xxx_setscreen:
+		push es
+		pushad
+		call encode_color
+		push word 0a000h
+		pop es
+		xor di,di
+		mov cx,4000h
+		rep stosd
+		call get_key
+		popad
+		pop es
+		ret
+
+%endif
