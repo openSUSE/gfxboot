@@ -592,6 +592,7 @@
   syslinux {
     dup "failsafe" eq
     over "noacpi" eq or
+    over "apic" eq or
     over "manual" eq or
     over "rescue" eq or
     { /alt.kernel "linux" def } if
@@ -1038,6 +1039,7 @@
     } ifelse
     dup "live"      eq { pop "SUSE Linux 10.1 LiveCD" return } if
     dup "noacpi"    eq { pop txt_noacpi_install return } if
+    dup "apic"      eq { pop txt_apic return } if
     dup "manual"    eq { pop txt_manual_install return } if
     dup "rescue"    eq { pop txt_rescue         return } if
     dup "hwcheck"   eq { pop "Hardware Check"   return } if
@@ -1302,7 +1304,7 @@
   /menu.start.y frame1.pos exch pop 12 add def
 
   /menu.bar.width frame1.size pop 20 sub def
-  /menu.max.entries 6 def
+  /menu.max.entries 7 def
   /menu.scrollbar false def
 
   /boot.label.len 243 def

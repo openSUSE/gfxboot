@@ -271,3 +271,7 @@ msgstr "Kiti parametrai"
 msgid "Language"
 msgstr "Kalba"
 
+#. txt_apic
+msgid "Installation--IOAPIC Enabled"
+msgstr ""
+

@@ -275,3 +275,7 @@ msgstr "Інші параметри"
 msgid "Language"
 msgstr "Мова"
 
+#. txt_apic
+msgid "Installation--IOAPIC Enabled"
+msgstr ""
+

@@ -269,3 +269,7 @@ msgstr "其他選項"
 #. txt_language
 msgid "Language"
 msgstr "語言"
+#. txt_apic
+msgid "Installation--IOAPIC Enabled"
+msgstr ""
+

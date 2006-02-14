@@ -276,3 +276,7 @@ msgstr "Další volby"
 msgid "Language"
 msgstr "Jazyk"
 
+#. txt_apic
+msgid "Installation--IOAPIC Enabled"
+msgstr ""
+
