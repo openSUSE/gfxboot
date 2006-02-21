@@ -268,7 +268,12 @@ msgstr "その他のオプション"
 #. txt_language
 msgid "Language"
 msgstr "言語"
+
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
 msgstr ""
+
+#. txt_noapic_install
+msgid "Installation--IOAPIC Disabled"
+msgstr "インストール -- IOAPIC無効"
 

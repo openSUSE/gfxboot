@@ -281,3 +281,7 @@ msgstr "Taal"
 msgid "Installation--IOAPIC Enabled"
 msgstr ""
 
+#. txt_noapic_install
+msgid "Installation--IOAPIC Disabled"
+msgstr "Installatie - IOAPIC uitgeschakeld"
+

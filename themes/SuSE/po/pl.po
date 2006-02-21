@@ -161,7 +161,10 @@ msgid ""
 "Enter your password:   \n"
 "\n"
 "\n"
-msgstr "Podaj hasło:      \n\n\n"
+msgstr ""
+"Podaj hasło:      \n"
+"\n"
+"\n"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
@@ -270,4 +273,8 @@ msgstr "Język"
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
 msgstr ""
+
+#. txt_noapic_install
+msgid "Installation--IOAPIC Disabled"
+msgstr "Instalacja--IOAPIC nieaktywne"
 

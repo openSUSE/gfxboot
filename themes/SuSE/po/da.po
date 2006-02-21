@@ -95,13 +95,25 @@ msgstr "Starter..."
 
 # Keep the three newlines!
 #. txt_load_kernel
-msgid "Loading Linux Kernel\n\n\n"
-msgstr "Indlæser Linuxkernen\n\n\n"
+msgid ""
+"Loading Linux Kernel\n"
+"\n"
+"\n"
+msgstr ""
+"Indlæser Linuxkernen\n"
+"\n"
+"\n"
 
 # Keep the three newlines!
 #. txt_load_memtest
-msgid "Loading memtest86\n\n\n"
-msgstr "Indlæser memtest86\n\n\n"
+msgid ""
+"Loading memtest86\n"
+"\n"
+"\n"
+msgstr ""
+"Indlæser memtest86\n"
+"\n"
+"\n"
 
 # info box title
 #. txt_info_title
@@ -149,8 +161,14 @@ msgstr "Adgangskode"
 
 # Keep the newlines and spaces after ':'!
 #. txt_password
-msgid "Enter your password:   \n\n\n"
-msgstr "Skiv dit kodeord her:   \n\n\n"
+msgid ""
+"Enter your password:   \n"
+"\n"
+"\n"
+msgstr ""
+"Skiv dit kodeord her:   \n"
+"\n"
+"\n"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
@@ -259,4 +277,8 @@ msgstr "Sprog"
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
 msgstr ""
+
+#. txt_noapic_install
+msgid "Installation--IOAPIC Disabled"
+msgstr "Installation uden IOAPIC understøttelse"
 

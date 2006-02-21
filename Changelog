@@ -1,3 +1,6 @@
+21/2/2006:	v3.2.12
+	- add noapic boot option (#150030)
+
 14/2/2006:	v3.2.11
 	- add apic boot option (#150030)
 

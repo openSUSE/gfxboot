@@ -95,13 +95,25 @@ msgstr "A Iniciar..."
 
 # Keep the three newlines!
 #. txt_load_kernel
-msgid "Loading Linux Kernel\n\n\n"
-msgstr "A Carregar o Kernel de Linux\n\n\n"
+msgid ""
+"Loading Linux Kernel\n"
+"\n"
+"\n"
+msgstr ""
+"A Carregar o Kernel de Linux\n"
+"\n"
+"\n"
 
 # Keep the three newlines!
 #. txt_load_memtest
-msgid "Loading memtest86\n\n\n"
-msgstr "A Carregar o memtest86\n\n\n"
+msgid ""
+"Loading memtest86\n"
+"\n"
+"\n"
+msgstr ""
+"A Carregar o memtest86\n"
+"\n"
+"\n"
 
 # info box title
 #. txt_info_title
@@ -149,8 +161,14 @@ msgstr "Palavra Passe"
 
 # Keep the newlines and spaces after ':'!
 #. txt_password
-msgid "Enter your password:   \n\n\n"
-msgstr "Digite a sua palavra passe:   \n\n\n"
+msgid ""
+"Enter your password:   \n"
+"\n"
+"\n"
+msgstr ""
+"Digite a sua palavra passe:   \n"
+"\n"
+"\n"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
@@ -259,4 +277,8 @@ msgstr "Idioma"
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
 msgstr ""
+
+#. txt_noapic_install
+msgid "Installation--IOAPIC Disabled"
+msgstr "Instalação -- IOAPIC Desactivado"
 

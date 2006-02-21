@@ -323,7 +323,7 @@
     pop
 
     % special case: option is identical to label
-    bc.kernel "apic" eq { /bc.addkernel true def } if
+    bc.kernel "apic" eq bc.kernel "noapic" eq or { /bc.addkernel true def } if
 
   } ifelse
 
@@ -592,6 +592,7 @@
   syslinux {
     dup "failsafe" eq
     over "noacpi" eq or
+    over "noapic" eq or
     over "apic" eq or
     over "manual" eq or
     over "rescue" eq or
@@ -1039,6 +1040,7 @@
     } ifelse
     dup "live"      eq { pop "SUSE Linux 10.1 LiveCD" return } if
     dup "noacpi"    eq { pop txt_noacpi_install return } if
+    dup "noapic"    eq { pop txt_noapic_install return } if
     dup "apic"      eq { pop txt_apic return } if
     dup "manual"    eq { pop txt_manual_install return } if
     dup "rescue"    eq { pop txt_rescue         return } if
