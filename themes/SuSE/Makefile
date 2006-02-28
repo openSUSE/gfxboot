@@ -25,7 +25,7 @@ FILES_INST   = init languages $(TRANSLATIONS) 16x16.fnt kroete.dat \
 FILES_BOOT   = init languages $(TRANSLATIONS) 16x16.fnt \
 	       $(PIC_COMMON) $(PIC_BOOT) $(HELPBOOT_ALL)
 
-FILES_BOOT_EN = init languages en.tr 16x16.fnt $(PIC_COMMON) $(PIC_BOOT) en.hlp
+FILES_BOOT_EN = init languages en.tr 16x16.fnt $(PIC_COMMON) back.jpg en.hlp
 
 INST_EXT     = 16x16.fnt $(PIC_COMMON) $(PIC_INSTALL) kroete.dat *.hlp *.tr
 
@@ -62,6 +62,7 @@ ifdef DEFAULT_LANG
 	@echo $(DEFAULT_LANG) >boot/lang
 	@echo $(DEFAULT_LANG) >>boot/languages
 endif
+	@mv boot/back-low.jpg boot/back.jpg
 	@sh -c 'cd boot; echo $(FILES_BOOT_EN) | sed -e "s/ /\n/g" | cpio --quiet -o >message'
 
 installdir: install.config $(INCLUDES) $(HELPINST)
