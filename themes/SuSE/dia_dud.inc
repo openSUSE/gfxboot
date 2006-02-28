@@ -6,49 +6,74 @@
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Show driver update.
+% Some global vars.
 %
-% ( ) => ( )
-%
-/dud.redraw {
-  update.pos exch pop 0 exch moveto currentpoint
-  txt_dud_ready strsize 7 add exch pop clip.size pop exch
-  image
+/dud.default 1 def
 
-  do_driverupdate {
-    currentfont
-    font.normal setfont
-    update.pos moveto 8 3 rmoveto txt_dud_ready
-    ptheme { white } { lightblue } ifelse setcolor show
-    setfont
-  } if
-} def
+/dud.options [
+  "dud=1"
+  ""
+] def
+
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Toggle driver update.
+% Build driver update menu.
+%
+% ( ) ==> ( )
+%
+/dud.init {
+  /xmenu.dud .xm_size array def
+
+  /xmenu xmenu.dud def
+
+  xmenu .xm_current dud.default put
+  xmenu .xm_list [ "Yes" "No" ] put
+
+  xmenu .xm_title /txt_driver_update put
+
+  pmenu.init
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Update driver update mode.
+%
+% ( ) ==> ( )
+%
+/dud.update {
+  /xmenu xmenu.dud def
+
+  /window.action actRedrawPanel def
+
+  pmenu.update
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Show driver update menu.
 %
 % ( ) => ( )
 %
 /panel.dud {
-  do_driverupdate .undef eq {
-    /do_driverupdate 1 def
-  } {
-    /do_driverupdate .undef def
-  } ifelse
-
-  dud.redraw
-
   "driverupdate" help.setcontext
+
+  window.xmenu
+  dup .xmenu xmenu.dud put
+  dup .xmenu.update /dud.update put
+  dup window.init
+      window.show
 } def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Return width of driver update entry.
+% Return width of panel entry.
 %
 % ( ) => ( width )
 %
 /panel.dud.width {
-  txt_driver_update strsize pop
+  /xmenu xmenu.dud def
+
+  pmenu.width
 } def
 
 
@@ -58,9 +83,9 @@
 % ( panel ) => ( )
 %
 /panel.dud.update {
-  panel.text.moveto
+  /xmenu xmenu.dud def
 
-  txt_driver_update show
+  pmenu.panel.update
 } def
 
 

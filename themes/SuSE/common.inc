@@ -422,8 +422,10 @@
 
   } if
 
-  do_driverupdate {
-    "dud=1 " bc.cmd dup length add sprintf
+  xmenu.dud {
+    dud.options xmenu.dud .xm_current get get dup "" ne {
+      "%s " bc.cmd dup length add sprintf
+    } { pop } ifelse
   } if
 
   xmenu.profile {
@@ -551,6 +553,8 @@
     } ifelse
   } if
 
+  fade_warning.init
+
 } def
 
 
@@ -651,34 +655,6 @@
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 /redrawmenu {
-  menu.visible.entries menu.texts length lt menu.scrollbar and {
-    /menu.vsb.height1
-      menu.shift
-      menu.sb.height mul menu.texts length div
-    def
-
-    /menu.vsb.height3
-      menu.texts length menu.visible.entries menu.shift add sub
-      menu.sb.height mul menu.texts length div
-    def
-
-    lightgray setcolor
-    menu.sb.x menu.sb.y menu.vsb.height1 add moveto
-    menu.sb.width menu.sb.height menu.vsb.height1 menu.vsb.height3 add sub
-    fillrect
-
-    menu.vsb.height1 0 ne {
-      menu.sb.x menu.sb.y moveto
-      currentpoint menu.sb.width menu.vsb.height1 image
-    } if
-
-    menu.vsb.height3 0 ne {
-      menu.sb.x menu.sb.y menu.sb.height menu.vsb.height3 sub add moveto
-      currentpoint menu.sb.width menu.vsb.height3 image
-    } if
-
-  } if
-
   menu.text.normal setcolor
 
   /x menu.start.x def
@@ -1196,60 +1172,15 @@
     /head.y 23 def
   } {
     small_layout {
-      /head.x 70 def
-      /head.y 173 def
+      /head.x 31 def
+      /head.y 23 def
     } {
-      /head.x 234 def
-      /head.y 217 def
+      /head.x -15 def
+      /head.y -30 def
     } ifelse
   } ifelse
 
   timeout.init
-
-  currentimage
-
-  ptheme {
-    /rdots "rdots.jpg" readimage def
-    /rdots_a "rdots_a.jpg" readimage def
-    /phead "phead.jpg" readimage def
-    /phead_a "head_a.jpg" readimage def
-
-      570   0 moveto rdots rdots_a showlogo
-       31  23 moveto phead phead_a showlogo
-
-    rdots free rdots_a free
-    phead free phead_a free
-  } {
-
-    /rdots "rdots.jpg" readimage def
-    /rdots_a "rdots_a.jpg" readimage def
-    /vdots "vdots.jpg" readimage def
-    /vdots_a "vdots_a.jpg" readimage def
-    /ldots "ldots.jpg" readimage def
-    /ldots_a "ldots_a.jpg" readimage def
-    /head "head.jpg" readimage def
-    /head_a "head_a.jpg" readimage def
-
-    small_layout {
-      450   0 moveto rdots rdots_a showlogo
-      206 103 moveto vdots vdots_a showlogo
-        0 440 moveto ldots ldots_a showlogo
-       70 173 moveto head  head_a  showlogo
-    } {
-      609   0 moveto rdots rdots_a showlogo
-      390 140 moveto vdots vdots_a showlogo
-        0 550 moveto ldots ldots_a showlogo
-      234 217 moveto head  head_a  showlogo
-    } ifelse
-
-    rdots free rdots_a free
-    vdots free vdots_a free
-    ldots free ldots_a free
-    head free head_a free
-
-  } ifelse
-
-  setimage
 
   ptheme { ptheme.init } if
 
@@ -1272,7 +1203,7 @@
 
   /menu.text.xofs      10 def
   /menu.text.yofs       2 def
-  /menu.item.height    fontheight dup ptheme { 2 } { 3 } ifelse div add def
+  /menu.item.height    fontheight dup ptheme { 2 } { 2 } ifelse div add def
   /menu.bar.height     fontheight menu.text.yofs dup add add def
 
   font.normal setfont
@@ -1288,26 +1219,22 @@
 
   small_layout {
     /frame1.pos  { 250 150 } def
-    /frame1.size { 365 195 } def
+    /frame1.width  365 def
   } {
-    /frame1.pos  { 415 192 } def
-    /frame1.size { 365 195 } def
+    /frame1.pos  { 200 192 } def
+    /frame1.width  400 def
   } ifelse
 
   ptheme {
     /frame1.pos  { 210 170 } def
-    /frame1.size { 365 195 } def
+    /frame1.width  365 def
   } if
-
-  /frame4.pos  { 560  62 } def
-  /frame4.size {  22 264 } def
 
   /menu.start.x frame1.pos pop 10 add def
   /menu.start.y frame1.pos exch pop 12 add def
 
-  /menu.bar.width frame1.size pop 20 sub def
+  /menu.bar.width frame1.width 20 sub def
   /menu.max.entries 7 def
-  /menu.scrollbar false def
 
   /boot.label.len 243 def
 
@@ -1317,11 +1244,7 @@
   /boot.buf boot.buf.size string def
 
   % no boot options line initially
-  /boot.show syslinux not def
-
-  /ms.size     {  22  22 } def
-  /ms.up       {   0 480 }  def
-  /ms.down     {  23 480 }  def
+  /boot.show true def
 
   /update.pos {
     clip.size pop txt_dud_ready strsize pop sub ptheme { 60 } { 20 } ifelse sub
@@ -1623,6 +1546,8 @@ syslinux {
 
 } if
 
+/ptheme false def
+
 /transp 0x30 def
 
 /testX { 0x417 cvp getbyte 0x10 and 0 ne } def
@@ -1646,7 +1571,7 @@ testX { /ptheme false def } if
 /small_layout screen.size pop 640 eq def
 
 ptheme { "pback.jpg" } { "back.jpg" } ifelse findfile
-dup .undef eq ptheme and { pop "back.jpg" findfile /ptheme false def } if
+dup .undef eq { pop "back-low.jpg" findfile } if
 /background.file over def setimage loadpalette
 /max_image_colors image.colors def
 
@@ -1682,10 +1607,57 @@ dup .undef eq ptheme and { pop "back.jpg" findfile /ptheme false def } if
 ptheme small_layout or {
   /bsplash.done { } def
 } {
-  bsplash.show
+  /bsplash.done { } def
+  % bsplash.show
 } ifelse
 
 check_arch_boot_dir
 
 
+/fade_warning false def
+
+% ( time ) ==> ( )
+/Timer {
+  fade_warning not { return } if
+
+  /fade.count fade.count 5 sub def
+
+  fade.count 0 lt {
+    /fade_warning false def
+    return
+  } if
+
+  fade.count 255 gt { return } if
+
+  % copy to fade.bg fade.buf
+  0 0 moveto fade.bg 0xff fade.buf blend
+  
+  0 0 moveto
+  fade.fg fade.count fade.buf blend
+  
+  fade.x fade.y moveto fade.buf restorescreen
+
+} def
+
+
+/fade_warning.init {
+  /fade.msg "Preliminary theming - no complaints!" def
+  fade.msg strsize /fade.height exch 1 add def /fade.width exch 1 add def
+  /fade.x clip.size pop fade.width sub 2 div def
+  /fade.y 420 def
+
+  /fade.bg fade.x fade.y moveto fade.width fade.height savescreen def
+
+  fade.x fade.y moveto 1 1 rmoveto
+  0x806080 setcolor fade.msg show
+  fade.x fade.y moveto
+  0xc04040 setcolor fade.msg show
+
+  /fade.fg fade.x fade.y moveto fade.width fade.height savescreen def
+  /fade.buf fade.x fade.y moveto fade.width fade.height savescreen def
+
+  /fade.count 0x200 def
+
+  /fade_warning true def
+} def
 

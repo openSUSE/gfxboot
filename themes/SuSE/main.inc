@@ -53,7 +53,7 @@
 
   panel.show
 
-  dud.redraw
+%  dud.redraw
 } def
 
 
@@ -93,29 +93,6 @@
 
   menu.entry menu.visible.entries sub 0 ge {
     /menu.shift menu.entry menu.texts length menu.visible.entries sub min def
-  } if
-
-  menu.visible.entries menu.texts length lt menu.scrollbar and {
-   /menu.bar.width frame1.size pop frame4.size pop sub def
-
-    -1 settransparentcolor
-
-    frame4.pos moveto black dup frame4.size drawborder
-    frame4.pos moveto
-    ms.up ms.size image
-    frame4.pos moveto frame4.size exch pop 0 exch ms.size exch pop 0 add sub rmoveto
-    ms.down ms.size image
-
-    /menu.sb.x frame4.pos pop 1 add def
-    /menu.sb.y frame4.pos exch pop 22 add def
-    /menu.sb.width frame4.size pop 2 sub def
-    /menu.sb.height frame4.size exch pop 22 2 mul sub def
-
-    menu.sb.x menu.sb.y 1 sub moveto
-    menu.sb.x menu.sb.width add menu.sb.y 1 sub lineto
-
-    menu.sb.x menu.sb.y menu.sb.height add moveto
-    menu.sb.x menu.sb.width add menu.sb.y menu.sb.height add lineto
   } if
 
   boot.text.options setcolor

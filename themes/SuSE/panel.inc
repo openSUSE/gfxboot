@@ -11,9 +11,10 @@
 /panel.size     { clip.size pop 24 } def
 /panel.y        { clip.size exch pop panel.size exch pop sub 10 sub } def
 /panel.text.y	{ panel.y 5 add } def
+/panel.text.Fy	0 def
 /panel.font	font.normal def
-/panel.normal	lightblue def
-/panel.high	white def
+/panel.normal	white def
+/panel.high	blue def
 /panel.bg	lightgray def
 /panel.border	lightdotcolor def
 
@@ -47,7 +48,7 @@
         [ keyF2 0 "F2" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
         [ keyF3 0 "F3" /panel.video /panel.video.width /panel.video.update /video.init ]
         [ keyF4 0 "F4" /panel.install /panel.install.width /panel.install.update /install.init ]
-        [ keyF5 0 "F5" /panel.dud /panel.dud.width /panel.dud.update .undef ]
+        [ keyF5 0 "F5" /panel.dud /panel.dud.width /panel.dud.update /dud.init ]
 
         32+64bit_source {
           64bit {
@@ -92,7 +93,7 @@
       [ keyF3 0 "F3" /panel.options /panel.options.width /panel.options.update .undef ]
     ] def
 
-    /panel ptheme { panel.penguin } { panel.short } ifelse def
+    /panel ptheme { panel.penguin } { panel.full } ifelse def
   } {
     /panel.short [
       [ keyF1 0 "F1" /panel.help /panel.help.width /panel.help.update .undef ]
@@ -164,11 +165,11 @@
   /panel.tmp.x over 1 get 10 add def
   /panel.tmp.F exch 2 get def
   
-  panel.tmp.x panel.text.y moveto
+  panel.tmp.x panel.text.y panel.text.Fy add moveto
   panel.high setcolor panel.tmp.F show
   panel.normal setcolor
 
-  6 0 rmoveto
+  6 panel.text.Fy neg rmoveto
 } def
 
 
