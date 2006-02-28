@@ -24,17 +24,12 @@ function tst_isolinux {
   src="test/$1"
   dst="$tmp/$1"
   img="$tmp/$1.iso"
-  dosrc="$tmp/.dosemurc.cdrom"
   vm_src=test/vm
   vm_tmp=tmp/$1.vm
   isolx=$bin/usr/share/syslinux/isolinux.bin
 
-  if [ -z "$program" -o "$program" = dosemu -o "$program" = xdos ] ; then
-   isolx=test/isolinux-dosemu.bin
-  fi
-
   rm -rf $dst $vm_tmp
-  rm -f $img $dosrc
+  rm -f $img
 
   isodir32=boot/i386/loader
   isodir64=boot/x86_64/loader
@@ -66,37 +61,28 @@ function tst_isolinux {
 
   mkisofs -o $img -J -r -sort $tmp/cd_sort \
     -b $isodir32/isolinux.bin -c $isodir32/boot.catalog \
-    -publisher "SUSE LINUX Products GmbH" \
+    -publisher "Tester" \
     -no-emul-boot -boot-load-size 4 -boot-info-table $dst
 
   rm -f $tmp/cd_sort
 
   if [ "$program" = vmware ] ; then
+    # vmware
     cp -a $vm_src $vm_tmp
     perl -pi -e "s/^\s*#\s*(floppy0.startConnected)/\$1/" $vm_tmp/gfxboot.vmx
     perl -pi -e "s:<isoimage>:`pwd`/$img:g" $vm_tmp/gfxboot.vmx
     vmware -qx $vm_tmp/gfxboot.vmx
   elif [ "$program" = qemu ] ; then
+    # qemu
     qemu -cdrom $img
   elif [ "$program" = bd ] ; then
+    # bochs debug wrapper
     bd $img
   elif [ "$program" = bochs ] ; then
+    # bochs
     bochs -q 'boot: cdrom' "ata0-master: type=cdrom, path=$img, status=inserted" 'log: /dev/null' 'parport1: enabled=0'
-  elif [ "$program" = xdos ] ; then
-    sw 0 ln -snf /etc/dosemu.conf.cdrom /etc/dosemu.conf
-    ln -snf /var/lib/dosemu/global.conf.cdrom /var/lib/dosemu/global.conf
-    ln -snf `pwd`/$img /var/lib/dosemu/cdrom
-    xdos $*
-    rm -f /var/lib/dosemu/cdrom
-    ln -snf /var/lib/dosemu/global.conf.normal /var/lib/dosemu/global.conf
-    sw 0 ln -snf /etc/dosemu.conf.normal /etc/dosemu.conf
   else
-    if [ -n "$program" -a "$program" != dosemu ] ; then
-      echo -e "\n***  Warning: $program not supported - using dosemu  ***\n"
-    fi
-    perl -p -e "s:<image>:`pwd`/$img:g" test/dosemurc.cdrom >$dosrc
-    [ "`echo $DISPLAY | head -c 1`" = ':' ] || echo '$_X_mitshm = (off)' >>$dosrc
-    xdosemu -Q -f $dosrc "$@"
+    echo -e "\n***  Error: $program not supported  ***\n"
   fi
 }
 
@@ -108,12 +94,11 @@ function tst_lilo {
   src="test/$1"
   dst="$tmp/$1"
   img="$tmp/$1.img"
-  dosrc="$tmp/.dosemurc.floppy"
   vm_src=test/vm
   vm_tmp=tmp/$1.vm
 
   rm -rf $dst $vm_tmp
-  rm -f $img $dosrc
+  rm -f $img
 
   mkdir -p $dst
   cp -a $src/* $dst
@@ -130,29 +115,22 @@ function tst_lilo {
   sw 0 losetup -d /dev/loop7 2>/dev/null
 
   if [ "$program" = vmware ] ; then
+    # vmware
     cp -a $vm_src $vm_tmp
     perl -pi -e "s/^\s*#\s*(ide1:0.startConnected)/\$1/" $vm_tmp/gfxboot.vmx
     perl -pi -e "s:<floppyimage>:`pwd`/$img:g" $vm_tmp/gfxboot.vmx
     vmware -qx $vm_tmp/gfxboot.vmx
   elif [ "$program" = qemu ] ; then
+    # qemu
     qemu -boot a -fda $img
   elif [ "$program" = bd ] ; then
+    # bochs debug wrapper
     bd $img
   elif [ "$program" = bochs ] ; then
+    # bochs
     bochs -q 'boot: a' "floppya: image=$img, status=inserted" 'log: /dev/null' 'ata0-master: type=disk, path=/dev/null' 'parport1: enabled=0'
-  elif [ "$program" = xdos ] ; then
-    sw 0 ln -snf /etc/dosemu.conf.floppy /etc/dosemu.conf
-    ln -snf `pwd`/$img /var/lib/dosemu/floppyimg
-    xdos $*
-    rm -f /var/lib/dosemu/floppyimg
-    sw 0 ln -snf /etc/dosemu.conf.normal /etc/dosemu.conf
   else
-    if [ -n "$program" -a "$program" != dosemu ] ; then
-      echo -e "\n***  Warning: $program not supported - using dosemu  ***\n"
-    fi
-    perl -p -e "s:<image>:`pwd`/$img:g" test/dosemurc.floppy >$dosrc
-    [ "`echo $DISPLAY | head -c 1`" = ':' ] || echo '$_X_mitshm = (off)' >>$dosrc
-    xdosemu -f $dosrc "$@"
+    echo -e "\n***  Error: $program not supported  ***\n"
   fi
 }
 
@@ -187,21 +165,22 @@ function tst_grub {
   sw 0 umount /mnt
 
   if [ "$program" = vmware ] ; then
+    # vmware
     cp -a $vm_src $vm_tmp
     perl -pi -e "s/^\s*#\s*(ide1:0.startConnected)/\$1/" $vm_tmp/gfxboot.vmx
     perl -pi -e "s:<floppyimage>:`pwd`/$img:g" $vm_tmp/gfxboot.vmx
     vmware -qx $vm_tmp/gfxboot.vmx
   elif [ "$program" = qemu ] ; then
+    # qemu
     qemu -boot a -fda $img
   elif [ "$program" = bd ] ; then
+    # bochs debug wrapper
     bd $img
   elif [ "$program" = bochs ] ; then
+    # bochs
     bochs -q 'boot: a' "floppya: image=$img, status=inserted" 'log: /dev/null' 'ata0-master: type=disk, path=/dev/null' 'parport1: enabled=0'
   else
-    if [ -n "$program" -a "$program" != qemu ] ; then
-      echo -e "\n***  Warning: $program not supported - using qemu  ***\n"
-    fi
-    qemu -boot a -fda $img
+    echo -e "\n***  Error: $program not supported  \n"
   fi
 }
 
@@ -213,17 +192,12 @@ function tst_syslinux {
   src="test/$1"
   dst="$tmp/$1"
   img="$tmp/$1.img"
-  dosrc="$tmp/.dosemurc.floppy"
   vm_src=test/vm
   vm_tmp=tmp/$1.vm
   syslx=$bin/usr/bin/syslinux-nomtools
 
-  if [ -z "$program" -o "$program" = dosemu -o "$program" = xdos ] ; then
-    syslx=test/syslinux-dosemu
-  fi
-
   rm -rf $dst $vm_tmp
-  rm -f $img* $dosrc
+  rm -f $img*
 
   mkdir -p $dst
   cp -a $src/* $dst
@@ -238,29 +212,22 @@ function tst_syslinux {
   cp $dst.img_1 $img
 
   if [ "$program" = vmware ] ; then
+    # vmware
     cp -a $vm_src $vm_tmp
     perl -pi -e "s/^\s*#\s*(ide1:0.startConnected)/\$1/" $vm_tmp/gfxboot.vmx
     perl -pi -e "s:<floppyimage>:`pwd`/$img:g" $vm_tmp/gfxboot.vmx
     vmware -qx $vm_tmp/gfxboot.vmx
   elif [ "$program" = qemu ] ; then
+    # qemu
     qemu -boot a -fda $img
   elif [ "$program" = bd ] ; then
+    # bochs debug wrapper
     bd $img
   elif [ "$program" = bochs ] ; then
+    # bochs
     bochs -q 'boot: a' "floppya: image=$img, status=inserted" 'log: /dev/null' 'ata0-master: type=disk, path=/dev/null' 'parport1: enabled=0'
-  elif [ "$program" = xdos ] ; then
-    sw 0 ln -snf /etc/dosemu.conf.floppy /etc/dosemu.conf
-    ln -snf `pwd`/$img /var/lib/dosemu/floppyimg
-    xdos $*
-    rm -f /var/lib/dosemu/floppyimg
-    sw 0 ln -snf /etc/dosemu.conf.normal /etc/dosemu.conf
   else
-    if [ -n "$program" -a "$program" != dosemu ] ; then
-      echo -e "\n***  Warning: $program not supported - using dosemu  ***\n"
-    fi
-    perl -p -e "s:<image>:`pwd`/$img:g" test/dosemurc.floppy >$dosrc
-    [ "`echo $DISPLAY | head -c 1`" = ':' ] || echo '$_X_mitshm = (off)' >>$dosrc
-    xdosemu -f $dosrc "$@"
+    echo -e "\n***  Error: $program not supported  ***\n"
   fi
 }
 
@@ -317,7 +284,7 @@ fi
 [ "$what" = cd ] && what=isolinux
 [ "$what" = floppy ] && what=syslinux
 
-[ "$program" = xdosemu ] && program=dosemu
+program=${program:-qemu}
 
 if [ ! "$logo" ] ; then
   logo=boot
