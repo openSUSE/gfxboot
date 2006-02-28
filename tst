@@ -236,7 +236,7 @@ function tst_syslinux {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 function usage {
-  echo "usage: tst [-b] [-i] [-p program] [-t theme] what [theme]"
+  echo "usage: tst [-b] [-i] [-p program] [-t theme] what"
   exit 1
 }
 
@@ -274,17 +274,16 @@ if [ "$disk" ] ; then
   exit
 fi
 
-[ "$what" ] || what=$1
-[ "$what" ] || what=isolinux
+theme=${theme:-SuSE}
 
-[ "$theme" ] || theme=$2
-[ "$theme" ] || theme=SuSE
+program=${program:-qemu}
+
+what=$1
+what=${what:-cdrom}
 
 [ "$what" = cdrom ] && what=isolinux
 [ "$what" = cd ] && what=isolinux
 [ "$what" = floppy ] && what=syslinux
-
-program=${program:-qemu}
 
 if [ ! "$logo" ] ; then
   logo=boot
