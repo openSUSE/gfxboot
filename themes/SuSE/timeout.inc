@@ -3,161 +3,121 @@
 %
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Boot timeout counter.
+%
 % ( timeout time ) ==> ( )
+%
+% timeout: total time in 18.2Hz steps, time: current value.
+%
+% The code below assumes we're showing seconds and some symbolic counter.
+%
 /Timeout {
   % first time
+  timeout.current .undef eq { over timeout.init } if
 
-  ptheme { over over p.timeout.animate } if
-
-  dup /timeout.time exch def
-
-  over sub neg timeout.symbols mul exch div
-
-  dup timeout.current eq { pop return } if
+  /timeout.s.last timeout.s.current def
+  /timeout.s.current over 10 mul 150 add 182 div def
 
   /timeout.last timeout.current def
+  over sub neg timeout.steps mul exch div
   /timeout.current exch def
 
-  timeout.current timeout.symbols ge {
-
-    timeout.time.x timeout.time.y moveto -30 0 rmoveto
-    currentpoint 30 fontheight image
-
-    0 1 timeout.symbols 1 sub {
-      timeout.clear { 2 } { 1 } ifelse drawtsymbol
-    } for
-
-    % free memory
-    timeout.areas {
-      /to.tmp exch def
-
-      to.tmp .to_back over over get free
-      to.tmp .to_back .undef put
-
-    } forall
+  timeout.current timeout.steps ge {
+    % last run
+    timeout.s.done
+    timeout.done
   } {
+    % 0 270 moveto timeout.last print "<" print timeout.current print "<" print
 
-    ptheme not {
-      white setcolor
+    timeout.s.last timeout.s.current ne { timeout.s.current timeout.s.update } if
 
-      timeout.time.x timeout.time.y moveto -30 0 rmoveto
-      currentpoint 30 fontheight image
-
-      timeout.time 10 mul 150 add 182 div "%ds" timeout.buf sprintf
-
-      timeout.time.x timeout.time.y moveto timeout.buf showright
+    timeout.last timeout.current ne {
+      timeout.last 1 add 1 timeout.current { timeout.update } for
     } if
 
-    timeout.last 1 timeout.current {
-      1 sub dup 0 ge {
-        1 drawtsymbol
-      } if
-    } for
   } ifelse
-} def
-
-
-% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% draw a timeout symbol
-% ( index status ) ==> ()
-%
-% status: 0: init, 1: clear, 2: set
-%
-/drawtsymbol {
-  /timeout.status exch def
-
-  timeout.status 1 eq timeout.status 2 eq or {
-    timeout.areas exch get /to.tmp exch def
-
-    timeout.x to.tmp .to_x get add
-    timeout.y to.tmp .to_y get add
-    moveto
-
-    to.tmp .to_back get
-    restorescreen
-
-  } if
 } def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Initialize timeout indicator.
 %
-% ( ) ==> ( )
+% ( time ) ==> ( )
 %
 /timeout.init {
-  /timeout.current    -1 def
-  /timeout.symbols timeout.areas length def
-  /timeout.clear    true def
-  /timeout.buf        64 string def
+  "timer_a.jpg" findfile dup .undef ne {
+    currentimage exch setimage
+    0 0 image.size unpackimage /timeout.image exch def
+    setimage
+  } { pop } ifelse
 
-  /timeout.time.x timeout.x 60 add def
-  /timeout.time.y timeout.y 120 add def
+  /timeout.steps 8 def
 
-  timeout.areas {
-    /to.tmp exch def
+  /timeout.buf 64 string def
 
-    timeout.x to.tmp .to_x get add
-    timeout.y to.tmp .to_y get add
-    moveto
+  /timeout.x 200 def
+  /timeout.y 100 def
 
-    to.tmp .to_back
-      6 6 savescreen
-    put
+  /timeout.time.x 100 def
+  /timeout.time.y 250 def
 
-  } forall
+  /timeout.s.current -1 def
+
+  /timeout.current 0 def
+  timeout.current timeout.update
+
+
+  pop
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Update timeout indicator.
+%
+% ( index ) ==> ( )
+%
+% index runs from 0 to timeout.steps - 1. It is guaranteed that index is
+% 1 larger than the last index. Never a step twice and no step is left out.
+%
+/timeout.update {
+  % 0 300 moveto print
+  pop
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Clear timeout indicator.
+%
+% ( ) ==> ( )
+%
+/timeout.done {
+
 
 } def
 
 
-/timeout.x { head.x } def
-/timeout.y { head.y } def
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Update seconds counter.
+%
+% ( time_in_s ) ==> ( )
+%
+/timeout.s.update {
+  white setcolor
+  timeout.time.x timeout.time.y moveto -30 0 rmoveto
+  currentpoint 30 fontheight image
+  "%ds" timeout.buf sprintf
+  timeout.time.x timeout.time.y moveto timeout.buf showright
+} def
 
-% timeout.areas entries
-/.to_x 0 def
-/.to_y 1 def
-/.to_back 2 def
 
-
-/timeout.areas [
-  [  54   0 .undef ]
-  [  62   0 .undef ]
-  [  70   3 .undef ]
-  [  77   7 .undef ]
-  [  84  12 .undef ]
-  [  89  18 .undef ]
-  [  94  25 .undef ]
-  [  97  33 .undef ]
-  [  99  41 .undef ]
-  [ 100  50 .undef ]
-  [  99  58 .undef ]
-  [  97  66 .undef ]
-  [  94  74 .undef ]
-  [  89  81 .undef ]
-  [  83  87 .undef ]
-  [  77  92 .undef ]
-  [  69  96 .undef ]
-  [  62  99 .undef ]
-  [  54 100 .undef ]
-  [  45 100 .undef ]
-  [  37  99 .undef ]
-  [  29  96 .undef ]
-  [  21  92 .undef ]
-  [  15  87 .undef ]
-  [   9  81 .undef ]
-  [   4  73 .undef ]
-  [   1  66 .undef ]
-  [   0  58 .undef ]
-  [   0  49 .undef ]
-  [   0  41 .undef ]
-  [   1  33 .undef ]
-  [   4  25 .undef ]
-  [   9  18 .undef ]
-  [  15  12 .undef ]
-  [  21   7 .undef ]
-  [  29   2 .undef ]
-  [  37   0 .undef ]
-  [  45   0 .undef ]
-] def
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Clear seconds counter.
+%
+% ( ) ==> ( )
+%
+/timeout.s.done {
+  timeout.time.x timeout.time.y moveto -30 0 rmoveto
+  currentpoint 30 fontheight image
+} def
 
 

@@ -15,7 +15,7 @@ HELPINST_ALL = $(notdir $(HELPINST))
 
 DEFAULT_LANG =
 
-PIC_COMMON   = 
+PIC_COMMON   = timer_a.jpg
 PIC_INSTALL  = back.jpg
 PIC_BOOT     = back-low.jpg
 

@@ -285,3 +285,7 @@ msgstr ""
 msgid "Installation--IOAPIC Disabled"
 msgstr "Installatie - IOAPIC uitgeschakeld"
 
+#. txt_nolapic_install
+msgid "Installation--Local APIC Disabled"
+msgstr ""
+

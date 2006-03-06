@@ -283,3 +283,7 @@ msgstr ""
 msgid "Installation--IOAPIC Disabled"
 msgstr "Εγκατάσταση--IOAPIC Απενεργοποιημένο"
 
+#. txt_nolapic_install
+msgid "Installation--Local APIC Disabled"
+msgstr ""
+

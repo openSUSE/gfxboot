@@ -285,3 +285,7 @@ msgstr ""
 msgid "Installation--IOAPIC Disabled"
 msgstr "Telepítés - IOAPIC támogatás nélkül"
 
+#. txt_nolapic_install
+msgid "Installation--Local APIC Disabled"
+msgstr ""
+
