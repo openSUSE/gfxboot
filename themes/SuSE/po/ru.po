@@ -1,25 +1,27 @@
+# translation of ru.po to Russian
 # translation of bootloader.po to Russian
 # LANGUAGE translations for boot loader
 # Copyright (C) 2004 SUSE LINUX AG
 # Copyright (C) 2004 Vdel CREC
 # Andrew Bogatov<bert@bert2.crec.mipt.ru>, 2004.
+# Aleksey Osipov <aliks-os@yandex.ru>, 2006.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2004-03-26 23:00+0300\n"
-"Last-Translator: Andrew <bert@bert2.crec.mipt.ru>\n"
-"Language-Team: Russian <ru@li.org>\n"
+"PO-Revision-Date: 2006-01-20 21:42+0300\n"
+"Last-Translator: Aleksey Osipov <aliks-os@yandex.ru>\n"
+"Language-Team: Russian <i18n@suse.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.3\n"
+"X-Generator: KBabel 1.10.2\n"
 
 # ok button label
 #. txt_ok
 msgid "OK"
-msgstr "Успех"
+msgstr "OK"
 
 # cancel button label
 #. txt_cancel
@@ -29,7 +31,7 @@ msgstr "Отмена"
 # reboot button label
 #. txt_reboot
 msgid "Reboot"
-msgstr "Перезагрузка"
+msgstr "Перезагрузить"
 
 # continue button label
 #. txt_continue
@@ -45,19 +47,16 @@ msgid "Manual Installation"
 msgstr "Ручная установка"
 
 #. txt_noacpi_install
-#, fuzzy
 msgid "Installation--ACPI Disabled"
 msgstr "Установка - ACPI выключен"
 
 #. txt_safe_install
-#, fuzzy
 msgid "Installation--Safe Settings"
-msgstr "Установка - безопасные параметры"
+msgstr "Установка - безопасные параметры настройки"
 
 #. txt_safe_linux
-#, fuzzy
 msgid "Linux--Safe Settings"
-msgstr "Linux - безопасные параметры"
+msgstr "Linux - безопасные параметры настройки"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
@@ -78,7 +77,7 @@ msgstr "Параметры загрузки"
 # window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
 msgid "Exiting..."
-msgstr ""
+msgstr "Выход..."
 
 #. txt_exit_dialog
 msgid ""
@@ -86,7 +85,7 @@ msgid ""
 "starting the text mode interface."
 msgstr ""
 "Вы покинули графическое меню загрузки и\n"
-"запустили текстовый вариант интерфейса."
+"запустили текстовый режим интерфейса."
 
 #. txt_help
 msgid "Help"
@@ -122,7 +121,7 @@ msgstr ""
 # info box title
 #. txt_info_title
 msgid "Boot loader"
-msgstr "Загрузчик MBR"
+msgstr "Загрузчик"
 
 # error box title
 #. txt_error_title
@@ -135,27 +134,27 @@ msgid "Change Boot Disk"
 msgstr "Сменить загрузочный диск"
 
 #. txt_insert_disk
-#, fuzzy, c-format
+#, c-format
 msgid "Insert boot disk %u."
-msgstr "Пожалуйста вставьте загрузочный диск %u."
+msgstr "Вставьте загрузочный диск %u."
 
 #. txt_insert_disk2
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is boot disk %u.\n"
 "Insert boot disk %u."
 msgstr ""
 "Это загрузочный диск %u.\n"
-"Пожалуйста вставьте загрузочный диск %u."
+"Вставьте загрузочный диск %u."
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is not a <product> boot disk.\n"
 "Please insert boot disk %u."
 msgstr ""
-"\"Это не <product> загрузочный диск.\n"
+"Это не <product> загрузочный диск.\n"
 "Пожалуйста вставьте загрузочный диск %u."
 
 # password dialog title
@@ -165,28 +164,25 @@ msgstr "Пароль"
 
 # Keep the newlines and spaces after ':'!
 #. txt_password
-#, fuzzy
 msgid ""
 "Enter your password:   \n"
 "\n"
 "\n"
 msgstr ""
-"Введите ваш пароль:   \n"
+"Введите пароль:   \n"
 "\n"
 "\n"
 
 #. txt_dud_ready
-#, fuzzy
 msgid "Get your driver update floppy ready."
-msgstr "Пожалуйста, держите ваш гибкий диск с обновлением драйвера наготове."
+msgstr "Пожалуйста, держите ваш гибкий диск с обновлением драйвера на готове."
 
 # dvd warning title
 #. txt_dvd_warning_title
 msgid "DVD Error"
-msgstr ""
+msgstr "Ошибка DVD"
 
 #. txt_dvd_warning2
-#, fuzzy
 msgid ""
 "This is a two-sided DVD. You have booted from the second side.\n"
 "\n"
@@ -194,18 +190,16 @@ msgid ""
 msgstr ""
 "Это двусторонний DVD диск. Вы загрузились со второй стороны.\n"
 "\n"
-"Переверните DVD и продолжайте."
+"Переверните DVD и продолжите."
 
 # power off dialog title
 #. txt_power_off_title
-#, fuzzy
 msgid "Power Off"
 msgstr "Выключить питание"
 
 #. txt_power_off
-#, fuzzy
 msgid "Halt the system now?"
-msgstr "Желаете ли остановить систему сейчас?"
+msgstr "Остановить сейчас  систему?"
 
 # menu entry for hard disk installation
 #. txt_harddisk
@@ -215,7 +209,7 @@ msgstr "Жёсткий диск"
 # dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "Установка жёсткого диска"
+msgstr "Установка с жёсткого диска"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (scan all disks if empty)\n"
@@ -251,12 +245,12 @@ msgstr "Установка по NFS"
 # label for smb user input
 #. txt_user2
 msgid "User (using \"guest\" if empty)\n"
-msgstr "Пользователь (если пусто - использовать guest)\n"
+msgstr "Пользователь (если пусто - использовать \"guest\")\n"
 
 # dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "Установка по SMB (Windows Share)"
+msgstr "Установка по SMB (Общий ресурс Windows)"
 
 # dialog title for http installation
 #. txt_http_title
@@ -266,22 +260,22 @@ msgstr "Установка по HTTP"
 # 'driver' as in '(hardware) driver update'
 #. txt_driver_update
 msgid "Driver"
-msgstr ""
+msgstr "Драйвер"
 
 # as in Windows Authentication Domain
 #. txt_domain
 msgid "Domain\n"
-msgstr ""
+msgstr "Домен\n"
 
 # button label for other/more options
 #. txt_other_options
 msgid "Other Options"
-msgstr ""
+msgstr "Другие параметры"
 
 # label for language selection
 #. txt_language
 msgid "Language"
-msgstr ""
+msgstr "Язык"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"

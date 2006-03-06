@@ -1,5 +1,4 @@
 # translation of fi.po to suomi
-# translation of fi.po to
 # translation of bootloader.fi.po to
 # translation of bootloader.po to
 # LANGUAGE translations for boot loader
@@ -10,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: fi\n"
-"PO-Revision-Date: 2006-01-06 10:24+0200\n"
+"PO-Revision-Date: 2006-02-04 18:19+0200\n"
 "Last-Translator: Janne Ahlskog <j.ahlskog@multi.fi>\n"
 "Language-Team: suomi <fi@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -44,7 +43,7 @@ msgstr "Asennus"
 
 #. txt_manual_install
 msgid "Manual Installation"
-msgstr "Käsin asennus"
+msgstr "Manuaalinen asennus"
 
 #. txt_noacpi_install
 msgid "Installation--ACPI Disabled"
@@ -52,11 +51,11 @@ msgstr "Asennus--ACPI pois käytöstä"
 
 #. txt_safe_install
 msgid "Installation--Safe Settings"
-msgstr "Asennus--Safe Settings"
+msgstr "Asennus--Turvalliset asetukset"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr "Linux--Safe Settings"
+msgstr "Linux--Turvalliset asetukset"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
@@ -121,7 +120,7 @@ msgstr ""
 # info box title
 #. txt_info_title
 msgid "Boot loader"
-msgstr "Käynnistyslatain"
+msgstr "Käynnistyslataaja"
 
 # error box title
 #. txt_error_title
