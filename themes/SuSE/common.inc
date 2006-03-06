@@ -1624,7 +1624,7 @@ check_arch_boot_dir
 /Timer {
   fade_warning not { return } if
 
-  /fade.count fade.count 5 sub def
+  /fade.count fade.count 10 sub def
 
   fade.count 0 lt {
     /fade_warning false def
@@ -1660,7 +1660,7 @@ check_arch_boot_dir
   /fade.fg fade.x fade.y moveto fade.width fade.height savescreen def
   /fade.buf fade.x fade.y moveto fade.width fade.height savescreen def
 
-  /fade.count 0x200 def
+  /fade.count 0x300 def
 
   /fade_warning true def
 } def
