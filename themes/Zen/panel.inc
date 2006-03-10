@@ -41,7 +41,7 @@
       } {
 
 %         [ keyF3 0 "F3" /panel.install /panel.install.width /panel.install.update /install.init ]
-%         [ keyF4 0 "F4" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
+        [ keyF4 0 "F4" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
         [ keyF5 0 "F5" /panel.splash /panel.splash.width /panel.splash.update /splash.init ]
 %        [ keyF6 0 "F6" /panel.dud /panel.dud.width /panel.dud.update .undef ]
 
