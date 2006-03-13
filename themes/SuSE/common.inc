@@ -1622,24 +1622,24 @@ check_arch_boot_dir
 
 % ( time ) ==> ( )
 /Timer {
-  fade_warning not { return } if
+%  fade_warning not { return } if
 
-  /fade.count fade.count 10 sub def
+%  /fade.count fade.count 10 sub def
 
-  fade.count 0 lt {
-    /fade_warning false def
-    return
-  } if
+%  fade.count 0 lt {
+%    /fade_warning false def
+%    return
+%  } if
 
-  fade.count 255 gt { return } if
+%  fade.count 255 gt { return } if
 
-  % copy to fade.bg fade.buf
-  0 0 moveto fade.bg 0xff fade.buf blend
+%  % copy to fade.bg fade.buf
+%  0 0 moveto fade.bg 0xff fade.buf blend
   
-  0 0 moveto
-  fade.fg fade.count fade.buf blend
+%  0 0 moveto
+%  fade.fg fade.count fade.buf blend
   
-  fade.x fade.y moveto fade.buf restorescreen
+%  fade.x fade.y moveto fade.buf restorescreen
 
 } def
 

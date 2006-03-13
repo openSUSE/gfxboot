@@ -15,6 +15,9 @@
   % first time
   timeout.current .undef eq { over timeout.init } if
 
+  % no counter
+  timeout.steps .undef eq { return } if
+
   /timeout.s.last timeout.s.current def
   /timeout.s.current over 10 mul 150 add 182 div def
 
@@ -45,27 +48,33 @@
 % ( time ) ==> ( )
 %
 /timeout.init {
-  "timer_a.jpg" findfile dup .undef ne {
+  "timer_a.jpg" findfile /timeout.file over def dup .undef ne {
     currentimage exch setimage
     0 0 image.size unpackimage /timeout.image exch def
     setimage
+
+    /timeout.steps timeout.image imgsize div def
+
+    /timeout.width timeout.image imgsize exch pop def
+
+    /timeout.x menu.start.x menu.bar.width add 24 sub def
+    /timeout.y menu.start.y 2 sub menu.entry menu.item.height mul add def
+
+    timeout.x timeout.y moveto
+    /timeout.bg timeout.width dup savescreen def
+    % just a few buffers
+    /timeout.img_buf timeout.width dup savescreen def
+    /timeout.alpha_buf timeout.width dup savescreen def
+
+    /timeout.current 0 def
+
+    timeout.current timeout.update
   } { pop } ifelse
 
-  /timeout.steps 8 def
-
-  /timeout.buf 64 string def
-
-  /timeout.x 200 def
-  /timeout.y 100 def
-
-  /timeout.time.x 100 def
-  /timeout.time.y 250 def
-
+  /timeout.s.buf 64 string def
+  /timeout.s.x 100 def
+  /timeout.s.y 250 def
   /timeout.s.current -1 def
-
-  /timeout.current 0 def
-  timeout.current timeout.update
-
 
   pop
 } def
@@ -80,8 +89,16 @@
 % 1 larger than the last index. Never a step twice and no step is left out.
 %
 /timeout.update {
-  % 0 300 moveto print
-  pop
+  timeout.width mul 0 moveto
+  timeout.image 255 timeout.alpha_buf blend
+
+  timeout.img_buf timeout.bg dup length memcpy
+
+  0 0 moveto
+  black timeout.alpha_buf timeout.img_buf blend
+
+  timeout.x timeout.y moveto
+  timeout.img_buf restorescreen
 } def
 
 
@@ -91,8 +108,14 @@
 % ( ) ==> ( )
 %
 /timeout.done {
+  timeout.x timeout.y moveto
+  timeout.bg restorescreen
 
-
+  /timeout.bg timeout.bg free .undef def
+  /timeout.img_buf timeout.img_buf free .undef def
+  /timeout.alpha_buf timeout.alpha_buf free .undef def
+  /timeout.image timeout.image free .undef def
+  /timeout.file timeout.file free .undef def
 } def
 
 
@@ -102,11 +125,12 @@
 % ( time_in_s ) ==> ( )
 %
 /timeout.s.update {
-  white setcolor
-  timeout.time.x timeout.time.y moveto -30 0 rmoveto
-  currentpoint 30 fontheight image
-  "%ds" timeout.buf sprintf
-  timeout.time.x timeout.time.y moveto timeout.buf showright
+%  white setcolor
+%  timeout.s.x timeout.s.y moveto -30 0 rmoveto
+%  currentpoint 30 fontheight image
+%  "%ds" timeout.s.buf sprintf
+%  timeout.s.x timeout.s.y moveto timeout.s.buf showright
+  pop
 } def
 
 
@@ -116,8 +140,8 @@
 % ( ) ==> ( )
 %
 /timeout.s.done {
-  timeout.time.x timeout.time.y moveto -30 0 rmoveto
-  currentpoint 30 fontheight image
+%  timeout.s.x timeout.s.y moveto -30 0 rmoveto
+%  currentpoint 30 fontheight image
 } def
 
 
