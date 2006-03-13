@@ -557,7 +557,7 @@
     } ifelse
   } if
 
-  fade_warning.init
+  % fade_warning.init
 
 } def
 

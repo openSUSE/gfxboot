@@ -93,7 +93,11 @@
       [ keyF3 0 "F3" /panel.options /panel.options.width /panel.options.update .undef ]
     ] def
 
-    /panel ptheme { panel.penguin } { panel.full } ifelse def
+    /panel ptheme {
+      panel.penguin
+    } {
+%% include panel.default
+    } ifelse def
   } {
     /panel.short [
       [ keyF1 0 "F1" /panel.help /panel.help.width /panel.help.update .undef ]

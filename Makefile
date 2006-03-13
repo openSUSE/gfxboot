@@ -8,7 +8,6 @@ else
 X11LIBS	 = /usr/X11/lib
 endif
 THEMES	 = $(wildcard themes/*)
-# LIBFILES = happysuse.mod system.inc
 
 .PHONY: all themes clean install doc
 
@@ -47,8 +46,8 @@ jpeg.o: jpeg.S
 install: all
 	install -d -m 755 $(DESTDIR)/usr/sbin $(DESTDIR)/usr/share/gfxboot
 	install -m 755 mkbootmsg getx11font help2txt $(DESTDIR)/usr/sbin
-#	install -m 644 $(LIBFILES) $(DESTDIR)/usr/share/gfxboot
 	cp -a themes $(DESTDIR)/usr/share/gfxboot
+	cp -a bin $(DESTDIR)/usr/share/gfxboot
 
 clean: themes doc
 	@rm -f mkbootmsg bincode getx11font addblack bincode.h bin2c *.lst *.map vocabulary.inc vocabulary.h *.o *~

@@ -1,6 +1,6 @@
 BINDIR      := $(shell [ -x ../../mkbootmsg ] && echo ../../ )
 
-PRODUCT      = "SUSE Linux 10.1"
+PRODUCT      = "SUSE Linux Enterprise Server"
 export PRODUCT
 
 HELP2TXT     = $(BINDIR)help2txt

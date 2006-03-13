@@ -305,6 +305,7 @@ if [ ! "$what" ] ; then
   usage
 fi
 
+make BINDIR=../../ -C themes/$theme prep
 make BINDIR=../../ -C themes/$theme $lang || exit
 
 [ -f "$logo" ] || logo="themes/$theme/bootlogo"

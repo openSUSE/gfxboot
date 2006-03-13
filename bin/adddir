@@ -1,0 +1,76 @@
+#! /bin/bash
+
+#
+# needs: chmod chown cp ln mktemp mv readlink rm
+#
+
+
+function read_dir {
+  local i
+
+  for i in `( cd "$1" && echo .* * )` ; do
+    [ "$i" = . -o "$i" = .. ] && continue
+    [ -e "$1/$i" -o -L "$1/$i" ] && echo "$i"
+  done
+}
+
+
+function add_dir {
+  local src dst tmp i
+
+  src="$1"
+  dst="$2"
+
+  # echo "adddir $src $dst"
+
+  for i in `read_dir $src` ; do
+    if [ -d "$src/$i" -a ! -L "$src/$i" ]; then
+      # add directory
+      # echo "  add dir $src/$i as $dst/$i"
+      if [ -d "$dst/$i" ] ; then
+        if [ -L "$dst/$i" ] ; then
+          tmp=`mktemp -d "$dst/adddir.XXXXXX"` || exit 2
+          chown --dereference --reference "$dst/$i" "$tmp" 2>/dev/null
+          chmod --reference "$dst/$i" "$tmp"
+          add_dir "`readlink $dst/$i`" "$tmp"
+          rm -f "$dst/$i"
+          mv "$tmp" "$dst/$i"
+        fi
+        add_dir "$src/$i" "$dst/$i"
+      else
+        rm -f "$dst/$i"
+        ln -s "`( cd $src ; pwd )`/$i" "$dst/$i"
+      fi
+    else
+      if [ ! -e "$dst/$i" ] ; then
+        # add non-directory
+        # echo "  add file $src/$i as $dst/$i"
+        if [ -d "$dst/$i" -a ! -L "$dst/$i" ] ; then
+          rm -rf "$dst/$i"
+        else
+          rm -f "$dst/$i"
+        fi
+        if [ -f "$src/$i" -a ! -L "$src/$i" ] ; then
+          ln -s "`( cd $src ; pwd )`/$i" "$dst/$i"
+        else
+          cp -a "$src/$i" "$dst/$i"
+        fi
+      fi
+    fi
+  done
+}
+
+
+src="$1"
+dst="$2"
+
+if [ ! \( -d "$src" -a -d "$dst" \) ] ; then
+  echo "Usage: adddir src_dir dst_dir"
+  echo "Adds (symlinks) everything that is in src_dir to dst_dir."
+  echo "Note: spaces in filenames are evil."
+  exit 1
+fi
+
+
+add_dir "$src" "$dst"
+
