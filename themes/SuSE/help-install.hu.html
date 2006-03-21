@@ -113,7 +113,7 @@
 <BR><BR>Visszatérés a <a href="#main">Kezdőoldalra</a>
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="o_install">Telepítési beállítások: install</a></h3> Alapértelmezés szerint telepítési forrásként a helyi CD-olvasókat keresi végig a rendszer. Hálózati telepítéshez az <em>install</em> paramétert kell használni. A telepítéshez használható protokollok:<BR> * FTP<BR> * NFS<BR> * HTTP<BR> A szintaxis pontosan olyan, mint a szokásos URL-eké. Ha például a szerver a 192.168.0.1 címen található és a szerver /install könyvtárából kíván NFS alapú telepítést végrehajtani, akkor így kell megadni a forrást:<BR><BR>
+<h3><a name="o_install">Telepítési beállítások: install</a></h3> Alapértelmezés szerint telepítési forrásként a helyi CD-olvasókat keresi végig a rendszer. Hálózati telepítéshez az <em>install</em> paramétert kell használni. A telepítéshez használható protokollok:<BR> * FTP<BR> * NFS<BR> * HTTP<BR> A szintaxis pontosan olyan, mint a szokásos URL-eké. Ha például a kiszolgáló a 192.168.0.1 címen található és a kiszolgáló /install könyvtárából kíván NFS alapú telepítést végrehajtani, akkor így kell megadni a forrást:<BR><BR>
 
   <em>install=nfs://192.168.0.1/install</em><BR><BR> A hálózati kártya beállítása történhet <em>dhcp</em> segítségével, vagy a <a href="#network">hálózati beállítások</a> között bemutatott módon megadhatók kézzel a paraméterek.<BR>
 
@@ -145,7 +145,7 @@
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="o_vnc">Telepítési beállítások: vnc</a></h3> A VNC-telepítés bekapcsolásához a vnc és vncpassword paramétereket kell megadni:<BR><BR>
 
-  <em>vnc=1 vncpassword=mintajelszó</em><BR><BR> Elindul a VNC szerver és a YaST2 távolról, VNC-kliensen keresztül vezérelhető<BR><BR>
+  <em>vnc=1 vncpassword=mintajelszó</em><BR><BR> Elindul a VNC-kiszolgáló és a YaST2 távolról, VNC-kliensen keresztül vezérelhető<BR><BR>
 
 <BR><BR>Visszatérés a <a href="#opt">Rendszerindítási beállításokhoz</a> <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="o_apm">Kernelbeállítások: apm</a></h3> Az APM a mai gépeken használt kétféle tápellátás-felügyeleti rendszer egyike. Általában noteszgépeken használatos olyan funkciókra, mint a rendszer felfüggesztése a memória lemezre írásával, de ez felelős a kikapcsolás után a számítógép lekapcsolásáért is. Az APM használhatához egy helyesen működő BIOS-ra van szükség. Ha a BIOS sérült, akkor előfordulhat, hogy az APM csak korlátozott mértékben használható, sőt, az is, hogy miatta nem működik a számítógép. Éppen ezért kikapcsolható az alábbi paraméterrel:<BR><BR>
@@ -168,7 +168,7 @@
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="bits">Szoftvertípus kiválasztása</a></h3>
 
-Telepítheti a SUSE Linux akár 32, akár 64 bites változatát.
+Telepítheti a SUSE LINUX akár 32, akár 64 bites változatát.
 
 <br><br>Visszatérés a <a href="#main">Kezdőoldalra</a>
 
