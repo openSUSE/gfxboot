@@ -3,16 +3,18 @@
 # translation of bootloader.po to hungarian
 # LANGUAGE translations for boot loader
 # Copyright (C) 2004 SUSE LINUX AG
+# Kéménczy Kálmán, 2006.
 # Marcel Hilzinger <marcel.hilzinger@suselinux.hu>, 2004.
 # Szabolcs Varga <shirokuma@shirokuma.hu>, 2004, 2005.
 # Kalman Kemenczy <kkemenczy@novell.com>, 2006.
+# Kéménczy Kálmán <kkemenczy@novell.com>, 2006.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2006-03-09 18:04+0100\n"
-"Last-Translator: Kalman Kemenczy <kkemenczy@novell.com>\n"
+"PO-Revision-Date: 2006-03-21 16:04+0100\n"
+"Last-Translator: Kéménczy Kálmán <kkemenczy@novell.com>\n"
 "Language-Team: Hungarian <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -280,7 +282,7 @@ msgstr "Nyelv"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr ""
+msgstr "Telepítés - IOAPIC támogatással"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
@@ -288,5 +290,5 @@ msgstr "Telepítés - IOAPIC támogatás nélkül"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr ""
+msgstr "Telepítés - Local APIC támogatás nélkül"
 

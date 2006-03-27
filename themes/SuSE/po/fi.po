@@ -3,19 +3,19 @@
 # translation of bootloader.po to
 # LANGUAGE translations for boot loader
 # Copyright (C) 2005 SUSE Linux GmbH
-# Jyri Palokangas <jmp@netti.fi>, 2005.
-# Janne Ahlskog <j.ahlskog@multi.fi>, 2006.
 #
+# Jyri Palokangas <jmp@netti.fi>, 2005.
+# Jami Saarikoski <jami.saarikoski@gmail.com>, 2006.
 msgid ""
 msgstr ""
 "Project-Id-Version: fi\n"
-"PO-Revision-Date: 2006-02-04 18:19+0200\n"
-"Last-Translator: Janne Ahlskog <j.ahlskog@multi.fi>\n"
-"Language-Team: suomi <fi@li.org>\n"
+"PO-Revision-Date: 2006-03-22 20:35+0200\n"
+"Last-Translator: Jami Saarikoski <jami.saarikoski@gmail.com>\n"
+"Language-Team: suomi <yast-trans-fi@kotoistaminen.novell.fi>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.10.2\n"
+"X-Generator: KBabel 1.11.2\n"
 
 # ok button label
 #. txt_ok
@@ -51,11 +51,11 @@ msgstr "Asennus--ACPI pois käytöstä"
 
 #. txt_safe_install
 msgid "Installation--Safe Settings"
-msgstr "Asennus--Turvalliset asetukset"
+msgstr "Asennus--Safe Settings"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr "Linux--Turvalliset asetukset"
+msgstr "Linux--Safe Settings"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
@@ -125,7 +125,7 @@ msgstr "Käynnistyslataaja"
 # error box title
 #. txt_error_title
 msgid "I/O error"
-msgstr "I/O virhe"
+msgstr "I/O-virhe"
 
 # boot disk change dialog title
 #. txt_change_disk_title

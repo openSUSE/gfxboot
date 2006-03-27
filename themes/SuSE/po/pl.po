@@ -1,16 +1,19 @@
+# translation of pl.po to 
 # LANGUAGE translations for boot loader
 # Copyright (C) 2004 SUSE LINUX AG
+# Wojciech Kapusta <wojciech@aviary.pl>, 2006.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bootloader\n"
+"Project-Id-Version: pl\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2006-02-20 23:00+0100\n"
-"Last-Translator: Wadim Dziedzic <nikdo@aviary.pl>\n"
-"Language-Team: Polish <i18n@suse.de>\n"
+"PO-Revision-Date: 2006-03-23 15:03+0100\n"
+"Last-Translator: Wojciech Kapusta <wojciech@aviary.pl>\n"
+"Language-Team:  <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.9.1\n"
 
 # ok button label
 #. txt_ok
@@ -71,14 +74,14 @@ msgstr "Opcje uruchamiania"
 # window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
 msgid "Exiting..."
-msgstr "Kończenie..."
+msgstr "Zamykanie..."
 
 #. txt_exit_dialog
 msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"Nastąpi zamknięcie graficznego menu startowego\n"
+"Nastąpi zamknięcie graficznego menu rozruchowego\n"
 "i uruchomienie interfejsu tekstowego."
 
 #. txt_help
@@ -97,7 +100,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Wczytywanie jądra sytemu Linux\n"
+"Wczytywane jądra systemu Linux\n"
 "\n"
 "\n"
 
@@ -108,7 +111,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Wczytywanie memtest86\n"
+"Wczytywane memtest86\n"
 "\n"
 "\n"
 
@@ -120,12 +123,12 @@ msgstr "Program rozruchowy"
 # error box title
 #. txt_error_title
 msgid "I/O error"
-msgstr "Błąd I/O"
+msgstr "Błąd we/wy"
 
 # boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr "Zmiana dysku startowego"
+msgstr "Zmiana dysku rozruchowego"
 
 #. txt_insert_disk
 #, c-format
@@ -239,7 +242,7 @@ msgstr "Instalacja NFS"
 # label for smb user input
 #. txt_user2
 msgid "User (using \"guest\" if empty)\n"
-msgstr "Użytkownik (\"guest\" jeśli puste)\n"
+msgstr "Użytkownik (\"guest\", jeśli puste)\n"
 
 # dialog title for smb installation
 #. txt_smb_title
