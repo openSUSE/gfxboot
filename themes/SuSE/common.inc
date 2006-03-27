@@ -802,7 +802,7 @@
 
   syslinux info.type 6 eq and {
     dup .title "Driver Update" put
-    /info.msg "Put the SuSE Linux CD-ROM back into the drive." def
+    /info.msg "Put the SUSE Linux CD-ROM back into the drive." def
   } if
 
   dup .text info.msg put
