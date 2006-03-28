@@ -8,19 +8,73 @@
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Some global vars.
 
-% Boot loader splash areas to uncover.
-%
-/bsplash.areas [
-  [ 327 230 144 108  true ]
-  [  82  68 131  35 false ]
-  [ 205 157 125  32 false ]
-  [ 431  77 173  37 false ]
-  [ 661 125  61 112 false ]
-  [  62 358 162  51 false ]
-  [ 204 461  95  36 false ]
-  [ 388 397 127  34 false ]
-  [ 560 450 169  39 false ]
+/.b_x		 0 def
+/.b_y		 1 def
+/.b_dx		 2 def
+/.b_dy		 3 def
+/.b_steps	 4 def
+/.b_mask	 5 def
+/.b_count	 6 def
+/.b_w		 7 def
+/.b_h		 8 def
+/.b_back	 9 def
+/.b_tmp1	10 def
+/.b_tmp2	11 def
+
+/bsplash.list [
+  [ 680  45 -5  0 100 "text2a.jpg"   -1 0 0 .undef .undef .undef  ]
+  [ 680  95 -5  0 100 "text2b.jpg"   -1 0 0 .undef .undef .undef  ]
+  [ 680 145 -5  0 100 "text2c.jpg"   -1 0 0 .undef .undef .undef  ]
+  [ 690 470 -5  0 100 "text1.jpg"   -50 0 0 .undef .undef .undef  ]
+  [  70  40  0  0 100 "text3.jpg"   -80 0 0 .undef .undef .undef  ]
+  [  90 425  0  2  50 "text4a.jpg" -150 0 0 .undef .undef .undef  ]
+  [  90 485  0  0  50 "text4b.jpg" -150 0 0 .undef .undef .undef  ]
+  [  90 535  0 -2  50 "text4c.jpg" -150 0 0 .undef .undef .undef  ]
 ] def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Init splash.
+%
+% ( ) ==> ( )
+%
+/bsplash.init {
+  bsplash.list {
+    dup .b_mask get readimage over .b_mask rot put
+    dup .b_mask get dup .undef ne {
+      imgsize
+      2 index .b_h rot put
+      over .b_w rot put
+
+      dup .b_x get over .b_y get moveto
+      dup .b_w get over .b_steps get 2 index .b_dx get abs mul add
+      over .b_h get 2 index .b_steps get 3 index .b_dy get abs mul add
+      savescreen over .b_back rot put
+
+      dup .b_w get over .b_h get savescreen over .b_tmp1 rot put
+      dup .b_w get over .b_h get savescreen over .b_tmp2 rot put
+    } {
+      pop
+    } ifelse
+    pop
+  } forall
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Free splash memory.
+%
+% ( ) ==> ( )
+%
+/bsplash.free {
+  bsplash.list {
+    dup .b_mask get free dup .b_mask .undef put
+    dup .b_back get free
+    dup .b_tmp1 get free
+    dup .b_tmp2 get free
+    pop
+  } forall
+} def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -31,72 +85,77 @@
 /bsplash.show {
   currentimage
 
-  "splash.jpg" findfile /splash.file over def setimage loadpalette
-  /max_image_colors max_image_colors image.colors max def
+  "welcome.jpg" findfile /splash.file over def setimage
 
-%  0 0 moveto currentpoint 1 1 image getpixel setcolor screen.size fillrect
-
-%  7 0xffffff setpalette
   0 0 moveto 0 0 image.size image
 
-  "greeting.jpg" findfile /splash.file2 over def setimage
+  bsplash.init
 
-  % center image
-  image.size screen.size exch 4 -1 roll sub 2 div 3 1 roll exch sub 2 div
-  /bsplash.y exch def
-  /bsplash.x exch def
-
-  bsplash.areas 0 get
-  dup 0 get over 1 get moveto currentpoint bsplash.x bsplash.y rmoveto
-  2 index 2 get 3 index 3 get 5 -1 roll pop blendit
-  700000 usleep
+  500000 usleep
 
   {
-    bsplash.areas rand over length mod get
-    dup 4 get {
-      pop
-    } {
-      dup 0 get over 1 get moveto currentpoint bsplash.x bsplash.y rmoveto
-      2 index 2 get 3 index 3 get 5 -1 roll 4 true put blendit
-      70000 usleep
-    } ifelse
-
-    true
-    0 1 bsplash.areas length 1 sub {
-      bsplash.areas exch get 4 get and
-    } for
-    { exit } if
+    0 usleep
+    bsplash.run { exit } if
   } loop
+
+  bsplash.free
 
   setimage
 
-  splash.file2 free /splash.file2 .undef def
   splash.file free /splash.file .undef def
+
 } def
 
 
-/blendit {
-  /b.w exch def
-  /b.h exch def
+% Run splash animations. Return 'true' when done.
+%
+% ( ) ==> ( true|false )
+%
+/bsplash.run {
+  true
 
-  moveto
+  bsplash.list {
+    dup .b_mask get .undef ne over .b_count get .undef ne and {
+      exch pop false exch
 
-  /b.back b.h b.w savescreen def
-  /b.mask currentpoint b.h 1 add b.w 1 add unpackimage def
+      dup .b_count get 1 add over .b_count rot put
 
-  currentpoint
+      % count runs from  0 ... steps inclusive
 
-  0 0 moveto
-  0x303030 b.mask b.back blend
+      dup .b_count get 0 ge {
 
-  1 1 moveto
-  white b.mask b.back blend
+        % copy background
+        dup .b_dx get over .b_count get mul 10 div
+          over .b_dx get 2 index .b_steps get mul 10 div neg 0 max add
+        over .b_dy get 2 index .b_count get mul 10 div
+          2 index .b_dy get 3 index .b_steps get mul 10 div neg 0 max add
+        moveto
+        dup .b_back get 0xff 2 index .b_tmp1 get blend
 
-  moveto
-  b.back restorescreen
+        % we need 2 copies
+        dup .b_tmp2 get over .b_tmp1 get over length memcpy
 
-  b.mask free
-  b.back free
+        % draw text
+        0 0 moveto white over .b_mask get 2 index .b_tmp1 get blend
+
+        % blend result with background
+        dup .b_tmp1 get over .b_count get 255 mul 2 index .b_steps get div 2 index .b_tmp2 get blend
+
+        % show result
+        dup .b_x get over .b_dx get 2 index .b_count get mul 10 div add
+          over .b_dx get 2 index .b_steps get mul 10 div neg 0 max add
+        over .b_y get 2 index .b_dy get 3 index .b_count get mul 10 div add
+          2 index .b_dy get 3 index .b_steps get mul 10 div neg 0 max add
+        moveto
+        dup .b_tmp2 get restorescreen
+
+      } if
+
+      dup .b_count get over .b_steps get eq { dup .b_count .undef put } if
+    } if
+    pop
+  } forall
+
 } def
 
 

@@ -535,8 +535,6 @@
   dup window.init
       window.show
 
-%  fadein_logo
-
   syslinux {
     enough_mem not livecd and {
 
@@ -556,8 +554,6 @@
 
     } ifelse
   } if
-
-  % fade_warning.init
 
 } def
 
@@ -1106,26 +1102,6 @@
 } def
 
 
-/fadeout_logo {
-  /cols 256 malloc def
-
-  0 1 255 { cols exch 0 put } for
-
-  10 1 150 {
-    10 1 100 {
-       over exch moveto getpixel
-       cols exch 1 put
-    } for
-    pop
-  } for
-  cols 10 10 moveto getpixel 0 fade
-} def
-
-/fadein_logo {
-  cols 10 10 moveto getpixel fadein
-} def
-
-
 % Allocate and define a new color.
 %
 % ( palette ) ==> ( color )
@@ -1166,7 +1142,9 @@
 
 % ( file_name ) ==> ( image )
 /readimage {
-  findfile dup setimage 0 0 image.size unpackimage exch free
+  findfile dup .undef ne {
+    dup setimage 0 0 image.size unpackimage exch free
+  } if
 } def
 
 
@@ -1611,57 +1589,8 @@ dup .undef eq { pop "back-low.jpg" findfile } if
 ptheme small_layout or {
   /bsplash.done { } def
 } {
-  /bsplash.done { } def
-  % bsplash.show
+  bsplash.show
 } ifelse
 
 check_arch_boot_dir
-
-
-/fade_warning false def
-
-% ( time ) ==> ( )
-/Timer {
-%  fade_warning not { return } if
-
-%  /fade.count fade.count 10 sub def
-
-%  fade.count 0 lt {
-%    /fade_warning false def
-%    return
-%  } if
-
-%  fade.count 255 gt { return } if
-
-%  % copy to fade.bg fade.buf
-%  0 0 moveto fade.bg 0xff fade.buf blend
-  
-%  0 0 moveto
-%  fade.fg fade.count fade.buf blend
-  
-%  fade.x fade.y moveto fade.buf restorescreen
-
-} def
-
-
-/fade_warning.init {
-  /fade.msg "Preliminary theming - no complaints!" def
-  fade.msg strsize /fade.height exch 1 add def /fade.width exch 1 add def
-  /fade.x clip.size pop fade.width sub 2 div def
-  /fade.y 420 def
-
-  /fade.bg fade.x fade.y moveto fade.width fade.height savescreen def
-
-  fade.x fade.y moveto 1 1 rmoveto
-  0x806080 setcolor fade.msg show
-  fade.x fade.y moveto
-  0xc04040 setcolor fade.msg show
-
-  /fade.fg fade.x fade.y moveto fade.width fade.height savescreen def
-  /fade.buf fade.x fade.y moveto fade.width fade.height savescreen def
-
-  /fade.count 0x300 def
-
-  /fade_warning true def
-} def
 
