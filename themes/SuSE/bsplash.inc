@@ -22,14 +22,14 @@
 /.b_tmp2	11 def
 
 /bsplash.list [
-  [ 680  45 -5  0 100 "text2a.jpg"   -1 0 0 .undef .undef .undef  ]
-  [ 680  95 -5  0 100 "text2b.jpg"   -1 0 0 .undef .undef .undef  ]
-  [ 680 145 -5  0 100 "text2c.jpg"   -1 0 0 .undef .undef .undef  ]
-  [ 690 470 -5  0 100 "text1.jpg"   -50 0 0 .undef .undef .undef  ]
-  [  70  40  0  0 100 "text3.jpg"   -80 0 0 .undef .undef .undef  ]
-  [  90 425  0  2  50 "text4a.jpg" -150 0 0 .undef .undef .undef  ]
-  [  90 485  0  0  50 "text4b.jpg" -150 0 0 .undef .undef .undef  ]
-  [  90 535  0 -2  50 "text4c.jpg" -150 0 0 .undef .undef .undef  ]
+  [ 680  45 -20   0 10 "text2a.pcx"  -1 0 0 .undef .undef .undef  ]
+  [ 680  95 -20   0 10 "text2b.pcx"  -1 0 0 .undef .undef .undef  ]
+  [ 680 145 -20   0 10 "text2c.pcx"  -1 0 0 .undef .undef .undef  ]
+  [ 690 470 -20   0 10 "text1.pcx"   -7 0 0 .undef .undef .undef  ]
+  [  70  40   0   0 10 "text3.pcx"  -10 0 0 .undef .undef .undef  ]
+  [  90 415   0  20 10 "text4a.pcx" -15 0 0 .undef .undef .undef  ]
+  [  90 485   0   0 10 "text4b.pcx" -15 0 0 .undef .undef .undef  ]
+  [  90 535   0 -20 10 "text4c.pcx" -15 0 0 .undef .undef .undef  ]
 ] def
 
 
@@ -51,8 +51,8 @@
       over .b_h get 2 index .b_steps get 3 index .b_dy get abs mul add
       savescreen over .b_back rot put
 
-      dup .b_w get over .b_h get savescreen over .b_tmp1 rot put
-      dup .b_w get over .b_h get savescreen over .b_tmp2 rot put
+      dup .b_w get 1 sub over .b_h get 1 sub savescreen over .b_tmp1 rot put
+      dup .b_w get 1 sub over .b_h get 1 sub savescreen over .b_tmp2 rot put
     } {
       pop
     } ifelse
@@ -136,10 +136,11 @@
         dup .b_tmp2 get over .b_tmp1 get over length memcpy
 
         % draw text
-        0 0 moveto white over .b_mask get 2 index .b_tmp1 get blend
+        0 0 moveto 0x333333 over .b_mask get 2 index .b_tmp1 get blend
+        1 1 moveto white over .b_mask get 2 index .b_tmp1 get blend
 
         % blend result with background
-        dup .b_tmp1 get over .b_count get 255 mul 2 index .b_steps get div 2 index .b_tmp2 get blend
+        0 0 moveto dup .b_tmp1 get over .b_count get 255 mul 2 index .b_steps get div 2 index .b_tmp2 get blend
 
         % show result
         dup .b_x get over .b_dx get 2 index .b_count get mul 10 div add

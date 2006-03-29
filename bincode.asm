@@ -9442,8 +9442,8 @@ prim_usleep:
 		add ecx,ecx
 		xor edx,edx
 		div ecx
-		or eax,eax
-		jz prim_usleep_90
+		; or eax,eax
+		; jz prim_usleep_90
 		mov ecx,eax
 		push ecx
 		call get_time
