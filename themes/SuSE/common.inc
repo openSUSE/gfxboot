@@ -1581,7 +1581,7 @@ dup .undef eq { pop "back-low.jpg" findfile } if
 
 /debug 0 def
 
-ptheme small_layout or CapsLock or 1 or {
+ptheme small_layout or CapsLock or {
   /bsplash.done { } def
 } {
   bsplash.show
