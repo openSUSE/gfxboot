@@ -427,9 +427,15 @@
   } if
 
   xmenu.dud {
-    dud.options xmenu.dud .xm_current get get dup "" ne {
-      "%s " bc.cmd dup length add sprintf
-    } { pop } ifelse
+    xmenu.dud .xm_current get .dud_file eq {
+      input.edit.dud_file 0 get dup "" ne {
+        "driverupdate=%s " bc.cmd dup length add sprintf
+      } { pop } ifelse
+    } {
+      dud.options xmenu.dud .xm_current get get dup "" ne {
+        "%s " bc.cmd dup length add sprintf
+      } { pop } ifelse
+    } ifelse
   } if
 
   xmenu.profile {
@@ -1011,6 +1017,8 @@
       dup "failsafe"  eq { pop "LiveCD - Safe Settings" return } if
       dup "linux2"    eq { pop "SUSE Linux 10.1 LiveCD (deutsch)" return } if
       dup "failsaf2"  eq { pop "LiveCD - Sichere Einstellungen" return } if
+      dup "kde"       eq { pop "LiveCD - KDE" return } if
+      dup "gnome"     eq { pop "LiveCD - GNOME" return } if
     } {
       dup "linux"     eq { pop txt_install        return } if
       dup "failsafe"  eq { pop txt_safe_install   return } if
@@ -1151,19 +1159,6 @@
 /init {
   0 0 moveto currentpoint clip.size image
 
-  ptheme {
-    /head.x 31 def
-    /head.y 23 def
-  } {
-    small_layout {
-      /head.x 31 def
-      /head.y 23 def
-    } {
-      /head.x -15 def
-      /head.y -30 def
-    } ifelse
-  } ifelse
-
   ptheme { ptheme.init } if
 
   % set default language
@@ -1200,8 +1195,8 @@
   /menu.bar.color      white       def
 
   small_layout {
-    /frame1.pos  { 250 150 } def
-    /frame1.width  365 def
+    /frame1.pos  { 120 110 } def
+    /frame1.width  400 def
   } {
     /frame1.pos  { 200 192 } def
     /frame1.width  400 def
@@ -1225,7 +1220,7 @@
   /boot.buf.size cmdlinelength def
   /boot.buf boot.buf.size string def
 
-  % no boot options line initially
+  % false: no boot options line initially
   /boot.show true def
 
   /update.pos {
@@ -1586,7 +1581,7 @@ dup .undef eq { pop "back-low.jpg" findfile } if
 
 /debug 0 def
 
-ptheme small_layout or {
+ptheme small_layout or CapsLock or 1 or {
   /bsplash.done { } def
 } {
   bsplash.show

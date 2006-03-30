@@ -8,11 +8,16 @@
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Some global vars.
 %
-/dud.default 1 def
+/.dud_yes	0 def
+/.dud_no	1 def
+/.dud_file	2 def
+
+/dud.default .dud_no def
 
 /dud.options [
   "dud=1"
   ""
+  .undef
 ] def
 
 
@@ -27,7 +32,7 @@
   /xmenu xmenu.dud def
 
   xmenu .xm_current dud.default put
-  xmenu .xm_list [ "Yes" "No" ] put
+  xmenu .xm_list [ "Yes" "No" "File" ] put
 
   xmenu .xm_title /txt_driver_update put
 
@@ -43,7 +48,11 @@
 /dud.update {
   /xmenu xmenu.dud def
 
-  /window.action actRedrawPanel def
+  xmenu .xm_current get dup .dud_file eq {
+    dud.dialog
+  } {
+    /window.action actRedrawPanel def
+  } ifelse
 
   pmenu.update
 } def
@@ -86,6 +95,51 @@
   /xmenu xmenu.dud def
 
   pmenu.panel.update
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+/dud.dialog {
+
+  /dia window.dialog def
+
+  dia .text "" put
+
+  xmenu .xm_current get
+
+  dup .dud_file eq {
+    input.edit.dud_file .undef eq {
+      /input.edit.dud_file [ 127 string ] def
+    } if
+
+    dia .title "Driver Update" put
+
+    % Must all be of same size!
+    dia .ed.list 1 array put
+    dia .ed.buffer.list input.edit.dud_file put
+    dia .ed.text.list [
+
+"To load driver updates directly from CD-ROM,
+enter the driver update file names (separated
+by commas ',') here:\n"
+
+    ] put
+
+  } if
+
+  pop
+
+  dia .ed.focus 0 put
+  dia .ed.width 300 put
+
+  dia .buttons [
+    button.ok button.default actNothing button.setaction
+    button.cancel button.notdefault actNothing button.setaction
+  ] put
+
+  dia window.init
+  dia window.show
+
 } def
 
 

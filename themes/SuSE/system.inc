@@ -78,6 +78,8 @@
 /statusCtrl   0x0104 def
 /statusShift  0x0003 def
 
+/CapsLock { 0x417 cvp getbyte 0x40 and 0 ne } def
+
 % boot loader
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

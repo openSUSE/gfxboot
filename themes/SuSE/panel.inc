@@ -97,6 +97,7 @@
       panel.penguin
     } {
 %% include panel.default
+      CapsLock { pop panel.full } if
     } ifelse def
   } {
     /panel.short [
