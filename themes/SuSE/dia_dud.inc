@@ -32,7 +32,7 @@
   /xmenu xmenu.dud def
 
   xmenu .xm_current dud.default put
-  xmenu .xm_list [ "Yes" "No" "File" ] put
+  xmenu .xm_list [ /txt_yes /txt_no /txt_file ] put
 
   xmenu .xm_title /txt_driver_update put
 

@@ -292,3 +292,21 @@ msgstr "Telepítés - IOAPIC támogatás nélkül"
 msgid "Installation--Local APIC Disabled"
 msgstr "Telepítés - Local APIC támogatás nélkül"
 
+#. txt_yes
+msgid "Yes"
+msgstr "Igen"
+
+#. txt_no
+msgid "No"
+msgstr "Nem"
+
+# menu item for selecting a file
+#. txt_file
+msgid "File"
+msgstr ""
+
+# input label: share as in "Windows share" (SMB)
+#. txt_share
+msgid "Share\n"
+msgstr ""
+

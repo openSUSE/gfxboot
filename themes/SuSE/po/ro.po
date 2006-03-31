@@ -276,10 +276,9 @@ msgstr ""
 msgid "Other Options"
 msgstr ""
 
-# label for language selection
 #. txt_language
 msgid "Language"
-msgstr ""
+msgstr "Limba"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
@@ -291,5 +290,23 @@ msgstr "Instalare - IOAPIC dezactivat"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
+msgstr ""
+
+#. txt_yes
+msgid "Yes"
+msgstr "Da"
+
+#. txt_no
+msgid "No"
+msgstr "Nu"
+
+# menu item for selecting a file
+#. txt_file
+msgid "File"
+msgstr ""
+
+# input label: share as in "Windows share" (SMB)
+#. txt_share
+msgid "Share\n"
 msgstr ""
 

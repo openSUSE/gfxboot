@@ -182,18 +182,18 @@
 
   dup .inst_smb eq {
     input.edit.smb .undef eq {
-      /input.edit.smb [ 63 string 127 string 31 string 31 string 31 string ] def
+      /input.edit.smb [ 63 string 31 string 127 string 31 string 31 string 31 string ] def
     } if
 
     dia .title txt_smb_title put
 
     % Must all be of same size!
-    dia .ed.list 5 array put
+    dia .ed.list 6 array put
     dia .ed.buffer.list input.edit.smb put
-    dia .ed.text.list [ txt_server txt_directory txt_domain txt_user2 txt_password ] put
+    dia .ed.text.list [ txt_server txt_share txt_directory txt_domain txt_user2 txt_password ] put
 
     dia .ed.font font.normal put
-    dia .ed.pw_field 4 put
+    dia .ed.pw_field 5 put
 
   } if
 
@@ -271,20 +271,22 @@
     "install=smb://" install.option sprintf
 
     % add domain
-    dup 2 get "" ne {
-      dup 2 get "%s;" install.option dup length add sprintf
+    dup 3 get "" ne {
+      dup 3 get "%s;" install.option dup length add sprintf
     } if
 
     % add user name & password
-    dup 3 get "" ne {
-      dup 3 get "%s" install.option dup length add sprintf
-      dup 4 get "" ne {
-        dup 4 get ":%s" install.option dup length add sprintf
+    dup 4 get "" ne {
+      dup 4 get "%s" install.option dup length add sprintf
+      dup 5 get "" ne {
+        dup 5 get ":%s" install.option dup length add sprintf
       } if
       "@" install.option dup length add sprintf
     } if
 
-    dup 1 get exch 0 get "%s/%s" install.option dup length add sprintf
+    dup 2 get dup 0 get '/' eq { 1 add } if
+    over 1 get rot 0 get
+    "%s/%s/%s" install.option dup length add sprintf
   } if
 
   pop

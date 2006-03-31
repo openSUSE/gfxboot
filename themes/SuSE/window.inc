@@ -482,7 +482,7 @@
     /dialog.height window.buttons 0 get 3 get dialog.button.y add 8 add def
   } if } if
 
-  /dialog.y screen.size exch pop dialog.tmp .position get mul 10 div dialog.height sub 2 div def
+  /dialog.y screen.size exch pop dialog.tmp .position get mul 10 div dialog.height sub 2 div 10 max def
 
   window.buttons .undef ne { window.buttons length {
     10

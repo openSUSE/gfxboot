@@ -287,3 +287,21 @@ msgstr "Instalación -- IOAPIC inhabilitado"
 msgid "Installation--Local APIC Disabled"
 msgstr ""
 
+#. txt_yes
+msgid "Yes"
+msgstr "Sí"
+
+#. txt_no
+msgid "No"
+msgstr "No"
+
+# menu item for selecting a file
+#. txt_file
+msgid "File"
+msgstr ""
+
+# input label: share as in "Windows share" (SMB)
+#. txt_share
+msgid "Share\n"
+msgstr ""
+

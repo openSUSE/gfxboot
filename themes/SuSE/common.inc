@@ -66,7 +66,7 @@
 %
 /enough_mem {
   biosmem 4 20 shl lt
-  biosmem 200 20 shl ge or
+  biosmem livecd.mem.check 20 shl ge or
   syslinux not or
 } def
 
@@ -1461,7 +1461,9 @@
 
   dup .title "Cool computer, but..." put
   dup .text
-    "Sorry, but SUSE Linux 10.1 LiveCD needs at least 256MB main memory."
+    livecd.mem.show
+    "Sorry, but SUSE Linux 10.1 LiveCD needs at least %dMB main memory."
+    dup length 32 add string dup 4 1 roll sprintf
   put
   dup .buttons [
     button.reboot button.default actReboot actNoClose or button.setaction

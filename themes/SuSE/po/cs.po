@@ -15,7 +15,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.10.2\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 # ok button label
 #. txt_ok
@@ -287,4 +288,22 @@ msgstr "Instalace -- bez IOAPIC"
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
 msgstr "Instalace -- bez local APIC"
+
+#. txt_yes
+msgid "Yes"
+msgstr "Ano"
+
+#. txt_no
+msgid "No"
+msgstr "Ne"
+
+# menu item for selecting a file
+#. txt_file
+msgid "File"
+msgstr ""
+
+# input label: share as in "Windows share" (SMB)
+#. txt_share
+msgid "Share\n"
+msgstr ""
 

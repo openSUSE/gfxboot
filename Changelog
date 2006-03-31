@@ -1,4 +1,9 @@
-20/3/2006:	v3.2.19
+31/3/2006:	v3.2.20
+	- added 'share' input field for smb install
+	- some more texts are translatable
+	- Live-CD preparations
+
+30/3/2006:	v3.2.19
 	- adjusted 640x480 fallback layout
 	- added driver update dialog that lets you enter the update file name
 

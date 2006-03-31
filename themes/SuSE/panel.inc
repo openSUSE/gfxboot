@@ -42,6 +42,7 @@
 
         [ keyF2 0 "F2" /panel.video /panel.video.width /panel.video.update /video.init ]
         [ keyF3 0 "F3" /panel.splash /panel.splash.width /panel.splash.update /splash.init ]
+        [ keyF4 0 "F4" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
 
       } {
 
@@ -61,9 +62,9 @@
           } if
         } if
 
-        xmenu.bits .undef eq { bits.init } if
-
       } ifelse
+
+      xmenu.bits .undef eq { bits.init } if
 
     } {
 
@@ -189,6 +190,9 @@
 
   % only for install CDs
   syslinux not { return } if
+
+  % not for live cd
+  livecd { return } if
 
   % not for F1
   dup keyF1 eq { return } if
