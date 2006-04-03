@@ -12346,9 +12346,9 @@ save_bg:
 
 		imul dx,[pixel_bytes]
 
+save_bg_10:
 		lin2seg ebx,es,edi
 
-save_bg_10:
 		push cx
 
 		push dx
@@ -12367,7 +12367,7 @@ save_bg_10:
 save_bg_20:
 		mov [es:edi],al
 		inc ebx
-		inc di
+		inc edi
 		inc si
 		shr eax,8
 		dec dx
@@ -12410,7 +12410,7 @@ save_bg_50:
 save_bg_60:
 		mov [es:edi],al
 		inc ebx
-		inc di
+		inc edi
 		shr eax,8
 		dec dx
 		jnz save_bg_60

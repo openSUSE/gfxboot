@@ -1,3 +1,6 @@
+3/4/2006:	v3.3.21
+	- fixed evil memory corruption bug
+
 31/3/2006:	v3.2.20
 	- added 'share' input field for smb install
 	- some more texts are translatable

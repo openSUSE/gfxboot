@@ -55,7 +55,7 @@ function tst_isolinux {
   echo "$dst/$isodir32/isolinux.bin 1" >$tmp/cd_sort
   echo "$dst/$isodir64/isolinux.bin 1" >>$tmp/cd_sort
 
-  rm `find $dst/boot -name \*~`
+  rm -f `find $dst/boot -name \*~`
 
   # rm -r $dst/boot/x86_64
 
