@@ -36,7 +36,7 @@
   [ "hi" "Hindi" ]
   [ "hr" "Hrvatski" ]
   [ "hu" "Magyar" ]
-  [ "km" "Khmer" ]
+  [ "km_KH" "Khmer" ]
   [ "ko" "한글" ]
   [ "lt" "Lietuvių" ]
   [ "nl" "Nederlands" ]
