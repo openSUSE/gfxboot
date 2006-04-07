@@ -4,13 +4,13 @@
 # LANGUAGE translations for boot loader
 # Copyright (C) 2005 SUSE Linux GmbH
 #
-# Jyri Palokangas <jmp@netti.fi>, 2005.
+# Jyri Palokangas <jmp@netti.fi>, 2005, 2006.
 # Jami Saarikoski <jami.saarikoski@gmail.com>, 2006.
 msgid ""
 msgstr ""
 "Project-Id-Version: fi\n"
-"PO-Revision-Date: 2006-03-22 20:35+0200\n"
-"Last-Translator: Jami Saarikoski <jami.saarikoski@gmail.com>\n"
+"PO-Revision-Date: 2006-04-03 09:28+0300\n"
+"Last-Translator: Jyri Palokangas <jmp@netti.fi>\n"
 "Language-Team: suomi <yast-trans-fi@kotoistaminen.novell.fi>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -51,11 +51,11 @@ msgstr "Asennus--ACPI pois käytöstä"
 
 #. txt_safe_install
 msgid "Installation--Safe Settings"
-msgstr "Asennus--Safe Settings"
+msgstr "Asennus--Turvalliset asetukset"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr "Linux--Safe Settings"
+msgstr "Linux--Turvalliset asetukset"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
@@ -278,7 +278,7 @@ msgstr "Kieli"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr ""
+msgstr "Asennus--IOAPIC käytössä"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
@@ -286,7 +286,7 @@ msgstr "Asennus--IOAPIC pois käytöstä"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr ""
+msgstr "Asennus--Paikallinen APIC pois käytöstä"
 
 #. txt_yes
 msgid "Yes"

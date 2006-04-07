@@ -22,10 +22,10 @@
 /.b_tmp2	11 def
 
 /bsplash.list [
-  [ 680  45 -20   0 10 "text2a.pcx"  -1 0 0 .undef .undef .undef  ]
-  [ 680  95 -20   0 10 "text2b.pcx"  -1 0 0 .undef .undef .undef  ]
-  [ 680 145 -20   0 10 "text2c.pcx"  -1 0 0 .undef .undef .undef  ]
-  [ 690 470 -20   0 10 "text1.pcx"   -7 0 0 .undef .undef .undef  ]
+  [ 680  45 -30   0 10 "text2a.pcx"  -1 0 0 .undef .undef .undef  ]
+  [ 680  95 -30   0 10 "text2b.pcx"  -1 0 0 .undef .undef .undef  ]
+  [ 680 145 -30   0 10 "text2c.pcx"  -1 0 0 .undef .undef .undef  ]
+  [ 690 470 -30   0 10 "text1.pcx"   -7 0 0 .undef .undef .undef  ]
   [  70  40   0   0 10 "text3.pcx"  -10 0 0 .undef .undef .undef  ]
   [  90 415   0  20 10 "text4a.pcx" -15 0 0 .undef .undef .undef  ]
   [  90 485   0   0 10 "text4b.pcx" -15 0 0 .undef .undef .undef  ]
@@ -91,7 +91,7 @@
 
   bsplash.init
 
-  500000 usleep
+  400000 usleep
 
   {
     0 usleep
@@ -166,7 +166,7 @@
 % ( ) ==> ( )
 %
 /bsplash.done {
-  3000000 usleep
+  1500000 usleep
 } def
 
 

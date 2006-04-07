@@ -1305,6 +1305,13 @@
 
   dup keyShiftF11 eq {
     /transp transp 0x10 sub 0 max def
+
+    % /player 0 def
+    % player "hapysuse.mod" findfile mod.load
+    % 50 sound.setvolume
+    % player 0 mod.play
+    % /player player 1 add 3 and def
+
     pop 0
   } if
 
