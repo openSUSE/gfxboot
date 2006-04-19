@@ -12371,6 +12371,7 @@ save_bg_20:
 		inc si
 		shr eax,8
 		dec dx
+		; ensure ch = 0
 		jz save_bg_70
 		add cl,8
 		cmp cl,20h
@@ -12399,11 +12400,15 @@ save_bg_35:
 		lin2seg ebx,es,edi
 save_bg_40:
 		sub dx,4
+		; ch = 0
 		jz save_bg_70
 		jmp save_bg_30
 save_bg_50:
-		sub si,4
-		add si,dx
+		mov cx,4
+		sub cx,dx
+		sub si,cx
+		; don't switch bank later: we've already done it
+		setc ch
 		cmp di,-4
 		jbe save_bg_60
 		lin2seg ebx,es,edi
@@ -12423,7 +12428,10 @@ save_bg_70:
 		add si,ax
 		jnc save_bg_80
 		call lin_seg_off
+		or ch,ch
+		jnz save_bg_75
 		call inc_winseg
+save_bg_75:
 		lin2seg ebx,es,edi
 save_bg_80:
 		pop cx
