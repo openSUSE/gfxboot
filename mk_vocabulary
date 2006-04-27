@@ -57,6 +57,7 @@
   64bit
 
   getbyte putbyte getdword putdword
+  inbyte outbyte
   findfile filesize getcwd chdir
 
   setmode currentmode videomodeinfo videomodes

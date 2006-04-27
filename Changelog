@@ -1,3 +1,6 @@
+27/4/2006:	v3.2.25
+	- implemented inbyte/outbyte to access i/o space (#170167)
+
 19/4/2006:	v3.2.24
 	- fix drawing bug (#166914)
 

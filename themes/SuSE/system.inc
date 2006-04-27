@@ -486,6 +486,17 @@ def
 } def
 
 
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+%
+% Read CMOS RAM.
+%
+% ( index ) ==> ( value )
+%
+/nvram {
+  0x70 exch outbyte
+  0x71 inbyte
+} def
+
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % readsector - read sector

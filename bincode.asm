@@ -8059,6 +8059,47 @@ prim_64bit:
 		jmp pr_getint
 
 
+;; inbyte - get byte from i/o port
+;
+; group: system
+;
+; ( int1 -- int2 )
+;
+; int2: byte from port int1
+;
+prim_inbyte:
+		mov dl,t_int
+		call get_1arg
+		jc prim_inbyte_90
+		xchg ax,dx
+		xor eax,eax
+		in al,dx
+		mov dl,t_int
+		xor cx,cx
+		call set_pstack_tos
+prim_inbyte_90:
+		ret
+
+
+;; outbyte - write byte to i/o port 
+;
+; group: system
+;
+; ( int1 int2 -- )
+;
+; Write byte int2 to port int1.
+;
+prim_outbyte:
+		mov dx,t_int + (t_int << 8)
+		call get_2args
+		jc prim_outbyte_90
+		mov dx,cx
+		out dx,al
+		sub word [pstack_ptr],byte 2
+prim_outbyte_90:
+		ret
+
+
 ;; getbyte - get byte from memory
 ;
 ; group: system
