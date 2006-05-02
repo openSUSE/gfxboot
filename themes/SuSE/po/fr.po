@@ -281,7 +281,7 @@ msgstr "Langue"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr ""
+msgstr "Installation - IOAPIC activé"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
@@ -289,14 +289,12 @@ msgstr "Installation - IOAPIC désactivé"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr ""
+msgstr "Installation - APIC local désactivé"
 
-# TLABEL linuxrc_2002_03_29_0036__2
 #. txt_yes
 msgid "Yes"
 msgstr "Oui"
 
-# TLABEL linuxrc_2002_03_29_0036__3
 #. txt_no
 msgid "No"
 msgstr "Non"

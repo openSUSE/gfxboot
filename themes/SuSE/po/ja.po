@@ -271,7 +271,7 @@ msgstr "言語"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr ""
+msgstr "インストール--IOAPIC有効"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
@@ -279,7 +279,7 @@ msgstr "インストール -- IOAPIC無効"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr ""
+msgstr "インストール--ローカルAPIC無効"
 
 #. txt_yes
 msgid "Yes"

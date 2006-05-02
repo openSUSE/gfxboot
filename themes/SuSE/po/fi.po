@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: fi\n"
-"PO-Revision-Date: 2006-04-03 09:28+0300\n"
+"PO-Revision-Date: 2006-04-18 10:06+0300\n"
 "Last-Translator: Jyri Palokangas <jmp@netti.fi>\n"
 "Language-Team: suomi <yast-trans-fi@kotoistaminen.novell.fi>\n"
 "MIME-Version: 1.0\n"
@@ -299,10 +299,10 @@ msgstr "Ei"
 # menu item for selecting a file
 #. txt_file
 msgid "File"
-msgstr ""
+msgstr "Tiedosto"
 
 # input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr ""
+msgstr "Jako\n"
 

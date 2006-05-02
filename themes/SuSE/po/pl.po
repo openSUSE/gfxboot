@@ -1,4 +1,5 @@
 # translation of pl.po to 
+# translation of pl.po to
 # LANGUAGE translations for boot loader
 # Copyright (C) 2004 SUSE LINUX AG
 # Wojciech Kapusta <wojciech@aviary.pl>, 2006.
@@ -7,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pl\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2006-03-23 15:03+0100\n"
+"PO-Revision-Date: 2006-04-07 14:27+0200\n"
 "Last-Translator: Wojciech Kapusta <wojciech@aviary.pl>\n"
 "Language-Team:  <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -57,7 +58,7 @@ msgstr "Linux (bezpieczne ustawienia)"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
-msgstr "Uruchom z dysku twardego"
+msgstr "Uruchomienie z dysku twardego"
 
 #. txt_rescue
 msgid "Rescue System"
@@ -100,7 +101,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Wczytywane jądra systemu Linux\n"
+"Wczytywanie jądra systemu Linux\n"
 "\n"
 "\n"
 
@@ -123,7 +124,7 @@ msgstr "Program rozruchowy"
 # error box title
 #. txt_error_title
 msgid "I/O error"
-msgstr "Błąd we/wy"
+msgstr "Błąd wejścia/wyjścia"
 
 # boot disk change dialog title
 #. txt_change_disk_title
@@ -133,7 +134,7 @@ msgstr "Zmiana dysku rozruchowego"
 #. txt_insert_disk
 #, c-format
 msgid "Insert boot disk %u."
-msgstr "Proszę włożyć dysk startowy %u."
+msgstr "Proszę umieścić w napędzie dysk startowy %u."
 
 #. txt_insert_disk2
 #, c-format
@@ -276,7 +277,7 @@ msgstr "Język"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr ""
+msgstr "Instalacja (z IOAPIC)"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
@@ -284,7 +285,7 @@ msgstr "Instalacja (bez IOAPIC)"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr ""
+msgstr "Instalacja (bez lokalnego APIC)"
 
 #. txt_yes
 msgid "Yes"

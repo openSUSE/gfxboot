@@ -1,3 +1,6 @@
+2/5/2006:	v3.2.26
+	- translations updated (#170561)
+
 27/4/2006:	v3.2.25
 	- implemented inbyte/outbyte to access i/o space (#170167)
 

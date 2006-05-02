@@ -20,22 +20,22 @@ installato in precedenza.<br><br>
 <a href="#linux">Installazione</a>:
 Questa modalità di installazione funziona sulla maggior parte delle
 macchine. Se il sistema si blocca durante il processo di boot o si verificano
-delle difficoltà in relazione al rilevamento delle vostre componenti hardware, 
+delle difficoltà in relazione al rilevamento delle vostre componenti hardware,
 come ad esempio controller di dischi o schede di rete, provate con una
 delle seguenti opzioni di installazione. <br><br>
 
 <a href="#noacpi">Installazione -- ACPI disabilitato</a>: Molti dei computer
 attualmente in commercio hanno delle implementazioni ACPI incomplete o
 errate. Questa selezione disabilita il supporto ACPI nel kernel, ma rimangono
-comunque abilitate tante caratteristiche interessanti da un punto di vista della 
+comunque abilitate tante caratteristiche interessanti da un punto di vista della
 performance, come ad esempio DMA per dischi rigidi
 IDE.  <br><br>
 
 <a href="#failsafe">Installazione -- Safe Settings</a>: Se la voce
-<em>Installazione</em> non ha portato al risultato sperato, questa voce 
+<em>Installazione</em> non ha portato al risultato sperato, questa voce
 potrebbe risolvere il problema.<br><br>
 
-<a href="#rescue">Sistema di salvataggio</a>: Questa immagine di boot 
+<a href="#rescue">Sistema di salvataggio</a>: Questa immagine di boot
 avvia un piccolo sistema Linux nella RAM. Ciò è utile se il sistema non
 si avvia correttamente. Dopo il boot del sistema, eseguite il log in come root.
  <br><br>
@@ -51,7 +51,7 @@ per il kernel.<br><br>
 
 <a href="#help">F1 Aiuto</a>: Si tratta di un tasto che risponde in base
 al contesto in cui viene utilizzato. Mostrerà differenti schermate in base
-all'elemento attivo della schermata di avvio. Vi è inoltre una descrizione 
+all'elemento attivo della schermata di avvio. Vi è inoltre una descrizione
 del sistema di aiuto.<br><br>
 
 <a href="#videomode">F2 Modo video</a>: Qui potete scegliere tra differenti
@@ -113,12 +113,12 @@ Premendo <em>F2</em> ottenete un elenco dei modi video supportati
 dalla vostra scheda grafica. E' preselezionato il modo più elevato
 supportato dal vostro schermo.<br><br>
 
-A volte succede che il monitor non venga rilevato automaticamente. 
+A volte succede che il monitor non venga rilevato automaticamente.
 In questi casi, selezionate il vostro modo preferito manualmente.
 <br><br>
 
 Se il vostro sistema incontra delle difficoltà con la scheda grafica
-durante il processo di installazione, il <em>modo testo</em> 
+durante il processo di installazione, il <em>modo testo</em>
 potrebbe essere un modo utile per aggirare il problema.
 
 <br><br>Ritorna alla <a href="#main">Pagina iniziale</a>
@@ -163,7 +163,7 @@ correttamente, perché viene lanciato solo l'MBR (Master Boot Record)
 sul primo disco rigido. L'ID di dispositivo del primo disco rigido
 viene fornito dal BIOS del computer. <br><br>
 
-Utilizzate questa opzione se avete dimenticato di estrarre il 
+Utilizzate questa opzione se avete dimenticato di estrarre il
 CD o DVD dal lettore e volete avviare il computer dal disco
 rigido.<br><br>
 
@@ -178,7 +178,7 @@ a volte l'ACPI per amministrare gli interrupt. L'ACPI prende il posto
 del più datato sistema APM. <br><br>
 
 Selezionate <em>Installazione -- ACPI disabilitata</em> se doveste
-incontrare delle difficoltà durante il processo di boot del kernel. 
+incontrare delle difficoltà durante il processo di boot del kernel.
 Le difficoltà risapute con macchine che non si sposano bene con
 ACPI sono:
 <br><br>
@@ -199,7 +199,7 @@ cui il sistema si blocchi durante il processo di installazione o
 si verificano degli errori per certi versi inspiegabili. Questa opzione
 disabilita il DMA per drive IDE e tutte le feature in tema di risparmio
 energetico. Si vedano anche le opzioni del kernel per
-<a href="#o_apm">apm</a>, <a href="#o_acpi">acpi</a> e 
+<a href="#o_apm">apm</a>, <a href="#o_acpi">acpi</a> e
 <a href="#o_ide">ide</a>.
 
 <br><br>Ritorna alla <a href="#main">Pagina iniziale</a>
@@ -220,7 +220,7 @@ esperti.<br><br>
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="memtest">Verifica della memoria</a></h3>
 
-La <em>Verifica della memoria</em> dà l'opportunità di 
+La <em>Verifica della memoria</em> dà l'opportunità di
 mettere a dura prova l'hardware del sistema.  Scopo principale della verifica
 è quello di rilevare disfunzioni della RAM, ma sottopone a dura prova
 anche altre componenti del sistema. <br>
@@ -262,7 +262,7 @@ Se eseguite l'installazione via rete, selezionate l'opzione
   * FTP<br>
   * NFS<br>
   * HTTP<br>
-La sintassi da utilizzare corrisponde a quella delle URL standard. 
+La sintassi da utilizzare corrisponde a quella delle URL standard.
 Ad esempio, se il vostro server ha l'indirizzo 192.168.0.1 e volete
 installare tramite NFS dalla directory /install che risiede su questo
 server, specificate l'origine di installazione nel modo seguente:<br><br>
@@ -298,7 +298,7 @@ Ritorna alle <a href="#opt">Opzioni di boot</a>
 
 Potete configurare l'interfaccia di rete adesso. L'hardware verrà rilevato
 in un secondo momento da YaST2. Per configurare la scheda di rete
-dovrete almeno impostare l'indirizzo IP dell'host e la maschera di rete. 
+dovrete almeno impostare l'indirizzo IP dell'host e la maschera di rete.
 Per esempio:<br><br>
 
   <em>hostip=192.168.0.10  netmask=255.255.255.0</em><br>
@@ -390,12 +390,13 @@ parametro del kernel: <br><br>
 
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="bits">Software Type Selection</a></h3>
+<h3><a name="bits">Selezione tipo di software</a></h3>
 
-You have the choice to install the 32-bit or 64-bit version of SUSE Linux.
+È possibile installare la versione di SUSE Linux a 32 o 64 bit.
 
-<br><br>Return to <a href="#main">Start Page</a>
+<br><br>Ritorna alle <a href="#main">Pagina iniziale</a>
 
 
 </body></html>
+
 

@@ -272,7 +272,7 @@ msgstr "語言"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr ""
+msgstr "安裝 -- 開啟 IOAPIC"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
@@ -280,7 +280,7 @@ msgstr "安裝 -- 關閉 IOAPIC"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr ""
+msgstr "安裝 -- 關閉 Local APIC"
 
 #. txt_yes
 msgid "Yes"
