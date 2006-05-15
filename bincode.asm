@@ -1522,11 +1522,13 @@ gfx_password_done_90:
 
 gfx_cb:
 		cmp dword [boot_callback],0
-		jz gfx_cb_90
+		jz gfx_cb_80
 		push ds
 		call far [boot_callback]
 		pop ds
-
+		jmp gfx_cb_90
+gfx_cb_80:
+		mov al,0ffh
 gfx_cb_90:
 		ret
 
@@ -8346,9 +8348,13 @@ prim_chdir:
 		call lin2so
 		pop si
 		pop fs
-		lin2segofs edx,es,di
 
 		pop cx
+
+		or al,al
+		jnz prim_chdir_60
+
+		lin2segofs edx,es,di
 
 		fs rep movsb
 		mov al,0
@@ -13241,9 +13247,13 @@ find_file_ext:
 		call lin2so
 		pop si
 		pop fs
-		lin2segofs edx,es,di
 
 		pop cx
+
+		or al,al
+		jnz find_file_ext_80
+
+		lin2segofs edx,es,di
 
 		fs rep movsb
 		mov al,0
@@ -13271,6 +13281,8 @@ find_file_ext_20:
 		mov al,2
 		call gfx_cb			; read next chunk (edx buffer, ecx len)
 		pop ebx
+		or al,al
+		jnz find_file_ext_50
 		or ecx,ecx
 		jz find_file_ext_50
 
@@ -13330,9 +13342,13 @@ file_size_ext:
 		call lin2so
 		pop si
 		pop fs
-		lin2segofs edx,es,di
 
 		pop cx
+
+		or al,al
+		jnz file_size_ext_80
+
+		lin2segofs edx,es,di
 
 		fs rep movsb
 		mov al,0

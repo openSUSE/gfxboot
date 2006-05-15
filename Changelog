@@ -1,3 +1,7 @@
+15/5/2006:	v3.2.27
+	- fix random memory corruption when trying to open a nonexistent
+	  file (#165846)
+
 2/5/2006:	v3.2.26
 	- translations updated (#170561)
 
