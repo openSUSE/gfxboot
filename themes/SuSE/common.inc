@@ -66,8 +66,7 @@
 %
 /enough_mem {
   biosmem 4 20 shl lt
-  biosmem livecd.mem.check 20 shl ge or
-  syslinux not or
+  biosmem mem.check 20 shl ge or
 } def
 
 
@@ -214,6 +213,17 @@
     /window.action actNothing def
     /load_error false def
 
+    syslinux {
+      menu.texts menu.entry 0 max menu.texts length 1 sub min get
+      dup "mem.min[%s]" mem.min sprintf
+      "mem.msg[%s]" mem.msg sprintf
+
+      enough_mem not {
+        nomem_popup
+        boot.buf menu.entry 0 return
+      } if
+    } if
+
     % some tricks to make it possible to review the complete command line
     debug 3 ge xxx.cmdline .undef eq and {
       /window.action actNothing def
@@ -274,6 +284,8 @@
 
 
 /bc.cmd cmdlinelength string def
+/mem.min 128 string def
+/mem.msg 256 string def
 
 % ( option_string ) ==> ( cmdline menu_entry )
 %
@@ -542,23 +554,15 @@
       window.show
 
   syslinux {
-    enough_mem not livecd and {
+    32+64bit_source not {
 
-      notimeout nomem_popup
+      64bit {
+        64bit_source not { notimeout 32bit_popup } if
+      } {
+        64bit_source { notimeout 64bit_popup } if
+      } ifelse
 
-    } {
-
-      32+64bit_source not {
-
-        64bit {
-          64bit_source not { notimeout 32bit_popup } if
-        } {
-          64bit_source { notimeout 64bit_popup } if
-        } ifelse
-
-      } if
-
-    } ifelse
+    } if
   } if
 
 } def
@@ -1466,14 +1470,10 @@
 /nomem_popup {
   window.dialog
 
-  dup .title "Cool computer, but..." put
-  dup .text
-    livecd.mem.show
-    "Sorry, but SUSE Linux 10.1 LiveCD needs at least %dMB main memory."
-    dup length 32 add string dup 4 1 roll sprintf
-  put
+  dup .title "Sorry, but..." put
+  dup .text mem.show put
   dup .buttons [
-    button.reboot button.default actReboot actNoClose or button.setaction
+    button.ok button.default actNothing button.setaction
   ] put
   dup window.init
       window.show

@@ -1,3 +1,9 @@
+22/5/2006:	v3.2.28
+	- add check to handle insufficient real mode handling in Xen on VMX
+	  machines (#175473)
+	- allow per menu entry memory checks via mem.min[<label>] and
+	  mem.msg[<label>] in gfxboot.cfg
+
 15/5/2006:	v3.2.27
 	- fix random memory corruption when trying to open a nonexistent
 	  file (#165846)

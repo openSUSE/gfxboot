@@ -629,6 +629,17 @@ gfx_init_20:
 		test al,1		; in prot mode (maybe vm86)?
 		setz byte [pm_ok]
 
+		; xen currently can't handle real mode 4GB selectors on
+		; Intel VMX, so we do a quick check here whether it really
+		; works
+
+		xor eax,eax
+		lin2seg eax,es,eax
+		mov ax,es
+		call lin_seg_off
+		cmp ax,1		; xen will have returned 0 to match the base address
+		jc gfx_init_90
+
 		; init malloc memory chain
 
 		push dword [mem_free]

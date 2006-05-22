@@ -805,23 +805,21 @@ def
 } def
 
 
-% Mininum Live-CD memory in MB.
+% Mininum required memory in MB.
 %
 % (  -- int )
 %
-/livecd.mem.check {
-  /livecd.mem.check "livecd.mem.check" getgfxconfig dup .undef ne { cvn } { pop 200 } ifelse def
-  livecd.mem.check
+/mem.check {
+  mem.min getgfxconfig dup .undef ne { cvn } { pop 0 } ifelse
 } def
 
 
-% Mininum Live-CD memory in MB we ask the user for.
+% Message to print if we fail minimum memory requirement.
 %
 % (  -- int )
 %
-/livecd.mem.show {
-  /livecd.mem.show "livecd.mem.show" getgfxconfig dup .undef ne { cvn } { pop 256 } ifelse def
-  livecd.mem.show
+/mem.show {
+  mem.msg getgfxconfig dup .undef eq { pop "Not enough memory." } if
 } def
 
 
