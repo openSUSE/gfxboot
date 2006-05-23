@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
-"PO-Revision-Date: 2005-03-11 18:31+0100\n"
+"PO-Revision-Date: 2006-05-17 15:31\n"
 "Last-Translator: Novell Language <language@novell.com>\n"
 "Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
@@ -77,12 +77,8 @@ msgid "Exiting..."
 msgstr "Beenden ..."
 
 #. txt_exit_dialog
-msgid ""
-"You are leaving the graphical boot menu and\n"
-"starting the text mode interface."
-msgstr ""
-"Sie verlassen das grafische Bootmenü und\n"
-"kommen in den Textmodus."
+msgid "You are leaving the graphical boot menu and\nstarting the text mode interface."
+msgstr "Sie verlassen das grafische Bootmenü und\nkommen in den Textmodus."
 
 #. txt_help
 msgid "Help"
@@ -95,25 +91,13 @@ msgstr "Starten..."
 
 # Keep the three newlines!
 #. txt_load_kernel
-msgid ""
-"Loading Linux Kernel\n"
-"\n"
-"\n"
-msgstr ""
-"Laden des Linux-Kernels\n"
-"\n"
-"\n"
+msgid "Loading Linux Kernel\n\n\n"
+msgstr "Laden des Linux-Kernels\n\n\n"
 
 # Keep the three newlines!
 #. txt_load_memtest
-msgid ""
-"Loading memtest86\n"
-"\n"
-"\n"
-msgstr ""
-"Laden von memtest86\n"
-"\n"
-"\n"
+msgid "Loading memtest86\n\n\n"
+msgstr "Laden von memtest86\n\n\n"
 
 # info box title
 #. txt_info_title
@@ -137,22 +121,14 @@ msgstr "Bootdiskette %u einlegen."
 
 #. txt_insert_disk2
 #, c-format
-msgid ""
-"This is boot disk %u.\n"
-"Insert boot disk %u."
-msgstr ""
-"Dies ist Bootdiskette %u.\n"
-"Legen Sie die Bootdiskette %u ein."
+msgid "This is boot disk %u.\nInsert boot disk %u."
+msgstr "Dies ist Bootdiskette %u.\nLegen Sie die Bootdiskette %u ein."
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
 #, c-format
-msgid ""
-"This is not a <product> boot disk.\n"
-"Please insert boot disk %u."
-msgstr ""
-"Dies ist keine Bootdiskette für <product>.\n"
-"Legen Sie Bootdiskette %u ein."
+msgid "This is not a <product> boot disk.\nPlease insert boot disk %u."
+msgstr "Dies ist keine Bootdiskette für <product>.\nLegen Sie Bootdiskette %u ein."
 
 # password dialog title
 #. txt_password_title
@@ -161,14 +137,8 @@ msgstr "Passwort"
 
 # Keep the newlines and spaces after ':'!
 #. txt_password
-msgid ""
-"Enter your password:   \n"
-"\n"
-"\n"
-msgstr ""
-"Geben Sie Ihr Passwort ein:   \n"
-"\n"
-"\n"
+msgid "Enter your password:   \n\n\n"
+msgstr "Geben Sie Ihr Passwort ein:   \n\n\n"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
@@ -180,14 +150,8 @@ msgid "DVD Error"
 msgstr "DVD-Fehler"
 
 #. txt_dvd_warning2
-msgid ""
-"This is a two-sided DVD. You have booted from the second side.\n"
-"\n"
-"Turn the DVD over then continue."
-msgstr ""
-"Dies ist eine doppelseitige DVD. Sie haben von der zweiten Seite gebootet.\n"
-"\n"
-"Drehen Sie die DVD um, und fahren Sie dann fort."
+msgid "This is a two-sided DVD. You have booted from the second side.\n\nTurn the DVD over then continue."
+msgstr "Dies ist eine doppelseitige DVD. Sie haben von der zweiten Seite gebootet.\n\nDrehen Sie die DVD um, und fahren Sie dann fort."
 
 # power off dialog title
 #. txt_power_off_title
@@ -302,5 +266,5 @@ msgstr "Datei"
 # input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr ""
+msgstr "Freigabe\n"
 

@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
-"PO-Revision-Date: 2005-03-07 10:09+0100\n"
+"PO-Revision-Date: 2006-05-16 13:58\n"
 "Last-Translator: Novell Language <language@novell.com>\n"
 "Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
@@ -78,12 +78,8 @@ msgid "Exiting..."
 msgstr "Saliendo..."
 
 #. txt_exit_dialog
-msgid ""
-"You are leaving the graphical boot menu and\n"
-"starting the text mode interface."
-msgstr ""
-"Está saliendo del menú gráfico de arranque e\n"
-"iniciando la interfaz de modo texto."
+msgid "You are leaving the graphical boot menu and\nstarting the text mode interface."
+msgstr "Está saliendo del menú gráfico de arranque e\niniciando la interfaz de modo texto."
 
 #. txt_help
 msgid "Help"
@@ -96,25 +92,13 @@ msgstr "Iniciando..."
 
 # Keep the three newlines!
 #. txt_load_kernel
-msgid ""
-"Loading Linux Kernel\n"
-"\n"
-"\n"
-msgstr ""
-"Cargando el kernel Linux\n"
-"\n"
-"\n"
+msgid "Loading Linux Kernel\n\n\n"
+msgstr "Cargando el kernel Linux\n\n\n"
 
 # Keep the three newlines!
 #. txt_load_memtest
-msgid ""
-"Loading memtest86\n"
-"\n"
-"\n"
-msgstr ""
-"Cargando memtest86\n"
-"\n"
-"\n"
+msgid "Loading memtest86\n\n\n"
+msgstr "Cargando memtest86\n\n\n"
 
 # info box title
 #. txt_info_title
@@ -138,22 +122,14 @@ msgstr "Inserte el disco de arranque %u."
 
 #. txt_insert_disk2
 #, c-format
-msgid ""
-"This is boot disk %u.\n"
-"Insert boot disk %u."
-msgstr ""
-"Este es el disco de arranque %u.\n"
-"Inserte el disco de arranque %u."
+msgid "This is boot disk %u.\nInsert boot disk %u."
+msgstr "Este es el disco de arranque %u.\nInserte el disco de arranque %u."
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
 #, c-format
-msgid ""
-"This is not a <product> boot disk.\n"
-"Please insert boot disk %u."
-msgstr ""
-"Este no es un disco de arranque de <product>.\n"
-"Inserte el disco de arranque %u."
+msgid "This is not a <product> boot disk.\nPlease insert boot disk %u."
+msgstr "Este no es un disco de arranque de <product>.\nInserte el disco de arranque %u."
 
 # password dialog title
 #. txt_password_title
@@ -162,14 +138,8 @@ msgstr "Contraseña"
 
 # Keep the newlines and spaces after ':'!
 #. txt_password
-msgid ""
-"Enter your password:   \n"
-"\n"
-"\n"
-msgstr ""
-"Introduzca la contraseña:   \n"
-"\n"
-"\n"
+msgid "Enter your password:   \n\n\n"
+msgstr "Introduzca la contraseña:   \n\n\n"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
@@ -181,14 +151,8 @@ msgid "DVD Error"
 msgstr "Error de DVD"
 
 #. txt_dvd_warning2
-msgid ""
-"This is a two-sided DVD. You have booted from the second side.\n"
-"\n"
-"Turn the DVD over then continue."
-msgstr ""
-"Este DVD es de doble cara. Ha arrancado desde la segunda cara.\n"
-"\n"
-"Dé la vuelta al DVD y continúe."
+msgid "This is a two-sided DVD. You have booted from the second side.\n\nTurn the DVD over then continue."
+msgstr "Este DVD es de doble cara. Ha arrancado desde la segunda cara.\n\nDé la vuelta al DVD y continúe."
 
 # power off dialog title
 #. txt_power_off_title
@@ -298,10 +262,10 @@ msgstr "No"
 # menu item for selecting a file
 #. txt_file
 msgid "File"
-msgstr ""
+msgstr "Archivo"
 
 # input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr ""
+msgstr "Compartir\n"
 
