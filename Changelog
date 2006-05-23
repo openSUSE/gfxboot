@@ -1,3 +1,7 @@
+23/5/2006:	v3.2.29
+	- translations updated
+	- added Zen texts & theme
+
 22/5/2006:	v3.2.28
 	- add check to handle insufficient real mode handling in Xen on VMX
 	  machines (#175473)

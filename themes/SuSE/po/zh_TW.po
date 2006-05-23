@@ -264,3 +264,31 @@ msgstr "檔案"
 msgid "Share\n"
 msgstr "共享\n"
 
+#. txt_zenAuto
+msgid "Automatic mode"
+msgstr ""
+
+#. txt_zenManual
+msgid "Manual mode"
+msgstr ""
+
+#. txt_zenConfig
+msgid "Configure parameters on ZEN partition"
+msgstr ""
+
+#. txt_zenInstall
+msgid "Install/Update ZEN partition"
+msgstr ""
+
+#. txt_zenLilo
+msgid "Reinstall ZEN partition boot loader"
+msgstr ""
+
+#. txt_zenDisable
+msgid "Disable ZEN partition"
+msgstr ""
+
+#. txt_zenEnable
+msgid "Enable ZEN partition"
+msgstr ""
+
