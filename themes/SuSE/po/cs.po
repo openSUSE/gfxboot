@@ -1,20 +1,18 @@
-# translation of cs.po to Czech
 # translation of cs.po to cs_CZ
-# translation of bootloader.po to cs_CZ
 # LANGUAGE translations for boot loader
 # Copyright (C) 2004 SUSE LINUX AG
-# Klara Cihlarova <koty@seznam.cz>, 2004, 2005, 2006.
 #
+# Klara Cihlarova <koty@seznam.cz>, 2004, 2005, 2006.
 msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
-"PO-Revision-Date: 2006-04-10 11:16+0200\n"
+"PO-Revision-Date: 2006-05-25 13:11+0200\n"
 "Last-Translator: Klara Cihlarova <koty@seznam.cz>\n"
 "Language-Team: cs_CZ <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.10.2\n"
+"X-Generator: KBabel 1.11.2\n"
 "Plural-Forms:  nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 # ok button label
@@ -308,29 +306,29 @@ msgstr "Sdílení\n"
 
 #. txt_zenAuto
 msgid "Automatic mode"
-msgstr ""
+msgstr "Automatický režim"
 
 #. txt_zenManual
 msgid "Manual mode"
-msgstr ""
+msgstr "Ruční režim"
 
 #. txt_zenConfig
 msgid "Configure parameters on ZEN partition"
-msgstr ""
+msgstr "Nastavit parametry pro ZEN oddíly"
 
 #. txt_zenInstall
 msgid "Install/Update ZEN partition"
-msgstr ""
+msgstr "Instalovat/aktualizovat ZEN oddíly"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN partition boot loader"
-msgstr ""
+msgstr "Reinstalovat zavaděč ZEN oddílu"
 
 #. txt_zenDisable
 msgid "Disable ZEN partition"
-msgstr ""
+msgstr "Zakázat ZEN oddíl"
 
 #. txt_zenEnable
 msgid "Enable ZEN partition"
-msgstr ""
+msgstr "Povolit ZEN oddíl"
 

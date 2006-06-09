@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
-"PO-Revision-Date: 2006-05-17 15:31\n"
+"PO-Revision-Date: 2006-06-01 11:55\n"
 "Last-Translator: Novell Language <language@novell.com>\n"
 "Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
@@ -270,29 +270,29 @@ msgstr "Freigabe\n"
 
 #. txt_zenAuto
 msgid "Automatic mode"
-msgstr ""
+msgstr "Automatischer Modus"
 
 #. txt_zenManual
 msgid "Manual mode"
-msgstr ""
+msgstr "Manueller Modus"
 
 #. txt_zenConfig
 msgid "Configure parameters on ZEN partition"
-msgstr ""
+msgstr "Parameter in ZEN-Partition konfigurieren"
 
 #. txt_zenInstall
 msgid "Install/Update ZEN partition"
-msgstr ""
+msgstr "ZEN-Partition installieren/aktualisieren"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN partition boot loader"
-msgstr ""
+msgstr "Bootloader für ZEN-Partition neu installieren"
 
 #. txt_zenDisable
 msgid "Disable ZEN partition"
-msgstr ""
+msgstr "ZEN-Partition deaktivieren"
 
 #. txt_zenEnable
 msgid "Enable ZEN partition"
-msgstr ""
+msgstr "ZEN-Partition aktivieren"
 

@@ -1,26 +1,24 @@
 # translation of hu.po to
 # translation of hu.po to Hungarian
-# translation of bootloader.hu.po to hungarian
-# translation of bootloader.po to hungarian
 # LANGUAGE translations for boot loader
 # Copyright (C) 2004 SUSE LINUX AG
+#
 # Kéménczy Kálmán, 2006.
 # Marcel Hilzinger <marcel.hilzinger@suselinux.hu>, 2004.
 # Szabolcs Varga <shirokuma@shirokuma.hu>, 2004, 2005.
 # Kalman Kemenczy <kkemenczy@novell.com>, 2006.
 # Kéménczy Kálmán <kkemenczy@novell.com>, 2006.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2006-04-10 11:29+0200\n"
-"Last-Translator: Kéménczy Kálmán <kkemenczy@novell.com>\n"
-"Language-Team:  <en@li.org>\n"
+"PO-Revision-Date: 2006-05-24 09:18+0200\n"
+"Last-Translator: Kalman Kemenczy <kkemenczy@novell.com>\n"
+"Language-Team: Hungarian <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.10.2\n"
+"X-Generator: KBabel 1.11.2\n"
 
 # ok button label
 #. txt_ok
@@ -313,29 +311,29 @@ msgstr "Megosztás\n"
 
 #. txt_zenAuto
 msgid "Automatic mode"
-msgstr ""
+msgstr "Automatikus"
 
 #. txt_zenManual
 msgid "Manual mode"
-msgstr ""
+msgstr "Kézi"
 
 #. txt_zenConfig
 msgid "Configure parameters on ZEN partition"
-msgstr ""
+msgstr "ZEN partíció paramétereinek beállítása"
 
 #. txt_zenInstall
 msgid "Install/Update ZEN partition"
-msgstr ""
+msgstr "ZEN partíció telepítése/frissítése"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN partition boot loader"
-msgstr ""
+msgstr "ZEN partíció betöltőjének újratelepítése"
 
 #. txt_zenDisable
 msgid "Disable ZEN partition"
-msgstr ""
+msgstr "ZEN partíció tiltása"
 
 #. txt_zenEnable
 msgid "Enable ZEN partition"
-msgstr ""
+msgstr "ZEN partíció engedélyezése"
 
