@@ -1,3 +1,5 @@
+	- use disk image, not floppy for grub testing
+
 9/6/2006:	v3.2.30
 	- translations updated
 	- minor Zen theme change

@@ -148,21 +148,25 @@ function tst_grub {
   rm -rf $dst $vm_tmp
   rm -f $img
 
-  mkdir -p $dst
+  mkdir -p $dst/boot
   cp -a $src $dst/grub
   cp $bin/usr/lib/grub/{fat_stage1_5,stage1,stage2} $dst/grub
   cp -a $logo $dst/grub/bootlogo
-  sh -c "echo '(fd0) $img' >$dst/grub/device.map"
+  for i in /boot/vmlinuz /boot/initrd ; do
+    [ -f $i ] && cp --parents $i $dst
+  done
 
-  test/dosimg $img
+  sh -c "echo '(hd0) $img' >$dst/grub/device.map"
 
-  sw 0 mount -oloop "$img" /mnt
+  test/hdimg $img
+
+  sw 0 mount -oloop,offset=32256 "$img" /mnt
   sw 0 cp -r $dst/* /mnt
-  echo "setup --prefix=/grub (fd0) (fd0)" | \
-  sw 0 $bin/usr/sbin/grub --batch --config-file=/mnt/grub/menu.lst --device-map=/mnt/grub/device.map
-  echo
-
   sw 0 umount /mnt
+
+  echo "setup --prefix=/grub (hd0,0) (hd0,0)" | \
+  $bin/usr/sbin/grub --batch --config-file=$dst/grub/menu.lst --device-map=$dst/grub/device.map
+  echo
 
   if [ "$program" = vmware ] ; then
     # vmware
@@ -172,7 +176,7 @@ function tst_grub {
     vmware -qx $vm_tmp/gfxboot.vmx
   elif [ "$program" = qemu ] ; then
     # qemu
-    qemu -boot a -fda $img
+    qemu -boot c -hda $img
   elif [ "$program" = bd ] ; then
     # bochs debug wrapper
     bd $img
