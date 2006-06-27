@@ -296,3 +296,8 @@ msgstr "ZEN-Partition deaktivieren"
 msgid "Enable ZEN partition"
 msgstr "ZEN-Partition aktivieren"
 
+# video mode menu item
+#. txt_text_mode
+msgid "Text Mode"
+msgstr ""
+

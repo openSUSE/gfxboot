@@ -332,3 +332,8 @@ msgstr "Zakázat ZEN oddíl"
 msgid "Enable ZEN partition"
 msgstr "Povolit ZEN oddíl"
 
+# video mode menu item
+#. txt_text_mode
+msgid "Text Mode"
+msgstr ""
+

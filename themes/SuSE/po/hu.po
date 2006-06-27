@@ -337,3 +337,8 @@ msgstr "ZEN partíció tiltása"
 msgid "Enable ZEN partition"
 msgstr "ZEN partíció engedélyezése"
 
+# video mode menu item
+#. txt_text_mode
+msgid "Text Mode"
+msgstr ""
+

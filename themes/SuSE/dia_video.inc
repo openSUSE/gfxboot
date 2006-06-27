@@ -151,7 +151,7 @@
     video.modes.list {
       dup .vm_width get
       dup 0 eq {
-        pop pop "Text Mode"
+        pop pop /txt_text_mode
       } {
         dup 1 eq {
           pop pop "VESA"

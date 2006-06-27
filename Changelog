@@ -4,6 +4,7 @@
 	- ShiftTab now works
 	- remove duplicate video modes (#145749)
 	- menu bar fits menu text width
+	- made 'Text Mode' translatable (#179582)
 
 9/6/2006:	v3.2.30
 	- translations updated

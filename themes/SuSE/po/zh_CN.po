@@ -292,3 +292,8 @@ msgstr "禁用 ZEN 分区"
 msgid "Enable ZEN partition"
 msgstr "启用 ZEN 分区"
 
+# video mode menu item
+#. txt_text_mode
+msgid "Text Mode"
+msgstr ""
+
