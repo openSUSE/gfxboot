@@ -142,10 +142,6 @@
   dup 0xff00 and 16 shl over 0xff and dup 0xe0 eq { pop 0 } if add /key exch def
   16 shr 0xffff and /keystat exch def
 
-  key keyTab eq keyStatus statusShift and 0 ne and {
-    /key keyShiftTab def
-  } if
-
   key
 
   config.keymap { mapkey } if

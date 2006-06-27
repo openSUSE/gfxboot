@@ -105,7 +105,7 @@
       } for
 
       % no modes added? -> try 8 bit
-      dup 0 get -2 eq vm_color_bits 8 ne and {
+      dup .vm_mode get -2 eq vm_color_bits 8 ne and {
         /vm_color_bits 8 def
       } {
         exit
@@ -127,6 +127,23 @@
       pop
     } for
   } if
+
+  % remove duplicates
+  % (assumes text or vesa entry to be first)
+
+  /video.modes.list
+    [
+      video.modes.list {
+        dup .vm_mode get 0 gt {		% ensure it's not the first entry
+          over .vm_width get over .vm_width get eq
+          2 index .vm_height get 2 index .vm_height get eq and {
+            free
+          } if
+        } if
+      } forall
+    ]
+    video.modes.list free
+  def
 
   % create mode strings
 

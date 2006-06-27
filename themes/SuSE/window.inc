@@ -345,7 +345,7 @@
         pop 0
       } if
 
-      dup keyLeft eq over keyUp eq or {
+      dup keyShiftTab eq over keyLeft eq or over keyUp eq or {
         window.findselected window.buttons length 1 sub add window.buttons length mod
         window.selectbutton
         pop 0
