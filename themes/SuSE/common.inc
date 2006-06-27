@@ -675,6 +675,11 @@
    /y y menu.item.height add def
   } for
 
+  /menu.bar.width
+    menu.bar.min.width
+    menu.texts { menuitemmap strsize pop menu.text.xofs 2 mul add 2 add max } forall
+  def
+
 } def
 
 
@@ -1194,23 +1199,23 @@
 
   /menu.bar.color      white       def
 
+  /menu.bar.min.width  300 def
+
   small_layout {
-    /frame1.pos  { 120 110 } def
-    /frame1.width  400 def
+    /menu.start.x 130 def
+    /menu.start.y 122 def
   } {
-    /frame1.pos  { 200 192 } def
-    /frame1.width  400 def
+    /menu.start.x 210 def
+    /menu.start.y 204 def
   } ifelse
 
   ptheme {
-    /frame1.pos  { 210 170 } def
-    /frame1.width  365 def
+    /menu.start.x 220 def
+    /menu.start.y 182 def
   } if
 
-  /menu.start.x frame1.pos pop 10 add def
-  /menu.start.y frame1.pos exch pop 12 add def
+  /menu.bar.width menu.bar.min.width def
 
-  /menu.bar.width frame1.width 20 sub def
   /menu.max.entries 7 def
 
   /boot.label.len 243 def
