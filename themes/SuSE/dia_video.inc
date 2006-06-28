@@ -171,6 +171,18 @@
   boot_failsafe 4 and { 0 0 } { monitorsize } ifelse
   exch 800 max exch 600 max		% at least 800x600
 
+  % ATI quirk: avoid 1280x1024, older chips (<= 8MB, max res 1280x1024) use
+  % interlaced there
+
+  video.modes.list dup length 1 sub get
+  dup .vm_width get 1280 eq exch .vm_height get 1024 eq and {
+    video.memory 0x2000 le {
+      video.oem "ATI " strstr 1 eq {
+        exch 1024 min exch 768 min	% down to 1024x768
+      } if
+    } if
+  } if 
+
   xmenu .xm_current -1 put
   video.modes.list {
     dup .vm_width get 3 index le

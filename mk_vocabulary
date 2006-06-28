@@ -73,7 +73,7 @@
 
   blend
 
-  memcpy sysconfig _readsector
+  memcpy sysconfig _readsector sysinfo
 
   xxx
 

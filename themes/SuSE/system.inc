@@ -823,3 +823,53 @@ def
 } def
 
 
+% Video memory in kb.
+%
+% (  -- int )
+%
+/video.memory {
+  /video.memory 0 sysinfo def
+  video.memory
+} def
+
+
+% Graphics card OEM info.
+%
+% (  -- string )
+%
+/video.oem {
+  /video.oem 1 sysinfo strdup def
+  video.oem
+} def
+
+
+% Graphics card vendor name.
+%
+% (  -- string )
+%
+/video.vendor {
+  /video.vendor 2 sysinfo strdup def
+  video.vendor
+} def
+
+
+% Graphics card product name.
+%
+% (  -- string )
+%
+/video.product {
+  /video.product 3 sysinfo strdup def
+  video.product
+} def
+
+
+% Graphics card revision.
+%
+% (  -- string )
+%
+/video.revision {
+  /video.revision 4 sysinfo strdup def
+  video.revision
+} def
+
+

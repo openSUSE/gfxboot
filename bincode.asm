@@ -157,6 +157,7 @@ malloc.area		times malloc.areas * 2 dd 0
 
 vbe_buffer		dd 0		; (seg:ofs) buffer for vbe calls
 vbe_mode_list		dd 0		; (seg:ofs) list with (up to 100h) vbe modes
+vbe_info_buffer		dd 0		; (seg:ofs) buffer for vbe gfx card info
 infobox_buffer		dd 0		; (lin) temp buffer for InfoBox messages
 
 local_stack		dd 0		; (seg:ofs) local stack (8k)
@@ -767,6 +768,14 @@ gfx_init_40:
 		push eax
 		call lin2so
 		pop dword [vbe_buffer]
+
+		mov eax,100h
+		call calloc
+		cmp eax,byte 1
+		jc gfx_init_90
+		push eax
+		call lin2so
+		pop dword [vbe_info_buffer]
 
 		mov eax,200h
 		call calloc
@@ -8643,6 +8652,45 @@ prim_vmi_90:
 
 
 
+;; sysinfo - return system info
+;
+; group: gfx.screen
+;
+; ( int1 -- obj1 )
+;
+; int1: info type
+; obj1: info (or .undef)
+;
+; example
+;   0 sysinfo		% video mem size in kb
+;   1 sysinfo		% gfx card oem string
+;   2 sysinfo		% gfx card vendor string
+;   3 sysinfo		% gfx card product string
+;   4 sysinfo		% gfx card revision string
+;
+prim_sysinfo:
+		mov dl,t_int
+		call get_1arg
+		jc prim_si_90
+
+		cmp eax,100h
+		jae prim_si_20
+		call videoinfo
+		jmp prim_si_80
+prim_si_20:
+
+
+
+prim_si_70:
+		mov dl,t_none
+		xor eax,eax
+prim_si_80:
+		xor cx,cx
+		call set_pstack_tos
+prim_si_90:
+		ret
+
+
 ;; colorbits - current pixel size
 ;
 ; group: gfx.screen
@@ -14257,3 +14305,98 @@ xxx_setscreen:
 		ret
 
 %endif
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; Read vbe card info.
+;
+; al		info type
+;
+; return:
+;  eax		info
+;   dl		info type
+;
+videoinfo:
+		les di,[vbe_buffer]
+		push eax
+		mov dword [es:di],32454256h	; 'VBE2'
+		push di
+		add di,4
+		mov cx,200h-4
+		mov al,0
+		rep stosb
+		pop di
+		push di
+		mov ax,4f00h
+		int 10h
+		pop di
+		xor ecx,ecx
+		cmp ax,4fh
+		pop eax
+		jnz videoinfo_80
+
+		cmp word [screen_mem],0
+		jnz videoinfo_20
+		push word [es:di+12h]
+		pop word [screen_mem]
+videoinfo_20:
+		cmp al,0
+		jnz videoinfo_30
+		mov ax,[screen_mem]
+		shl eax,6
+		mov dl,t_int
+		jmp videoinfo_90
+videoinfo_30:
+		cmp al,1
+		jnz videoinfo_31
+		add di,6
+		jmp videoinfo_50
+videoinfo_31:
+		cmp al,2
+		jnz videoinfo_32
+		add di,16h
+		jmp videoinfo_50
+videoinfo_32:
+		cmp al,3
+		jnz videoinfo_33
+		add di,1ah
+		jmp videoinfo_50
+videoinfo_33:
+		cmp al,4
+		jnz videoinfo_34
+		add di,1eh
+		jmp videoinfo_50
+videoinfo_34:
+		; add more here...
+
+		jmp videoinfo_80
+
+videoinfo_50:
+		cmp dword [es:di],0
+		jz videoinfo_90
+		lfs si,[es:di]
+		mov cx,100h-1
+		les di,[vbe_info_buffer]
+videoinfo_55:
+		fs lodsb
+		stosb
+		or al,al
+		jz videoinfo_57
+		dec cx
+		jnz videoinfo_55
+		mov byte [es:di],0
+videoinfo_57:
+		push dword [vbe_info_buffer]
+		call so2lin
+		pop eax
+		mov dl,t_string
+		jmp videoinfo_90
+
+videoinfo_80:
+		mov dl,t_none
+		xor eax,eax
+videoinfo_90:
+		ret
+
+
