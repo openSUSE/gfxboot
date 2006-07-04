@@ -354,7 +354,9 @@
   % getcwd 0 300 moveto show trace
 
   bc.addkernel {
-    alt.kernel { alt.kernel } { bc.kernel } ifelse
+
+    bc.kernel
+
     dup "linux" eq add_suffix .undef ne and {
       add_suffix exch "%s%s "
     } {
@@ -575,15 +577,15 @@
 
   boot.ed edit.hidecursor
   menu.args menu.entry get
-  menu.texts menu.entry get
-  bootpromptmap
+
+  boot.ed .inp_buf get exch strcpy pop
+
+  boot.ed bootpromptmap
 
   boot.show {
-    boot.ed over edit.init
+    boot.ed dup .inp_buf get exch over edit.init
     "" ne { boot.ed ' ' edit.input } if
-  } {
-    "%s" boot.ed 3 get sprintf
-  } ifelse
+  } if
 
 } def
 
@@ -591,45 +593,23 @@
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Split command line into hidden and normal part.
 %
-% ( cmdline_args menu_text ) == > ( new_cmdline_args )
-%
-% alt.kernel is set if a different kernel should be used (this feature should
-% no longer be needed).
+% ( edit_object ) == > ( )
 %
 /bootpromptmap {
-  /alt.kernel .undef def
+  dup length .inp_hidden le { pop return } if
+  dup .inp_hidden get .undef eq { pop return } if
 
-  syslinux {
-    dup "failsafe" eq
-    over "noacpi" eq or
-    over "noapic" eq or
-    over "nolapic" eq or
-    over "apic" eq or
-    over "manual" eq or
-    over "rescue" eq or
-    { /alt.kernel "linux" def } if
-  } if
+  dup .inp_hidden get over .inp_buf get strcpy pop
 
-  pop
-
-  /cmdline exch def
-
-  cmdline "showopts" getoption
-  dup "" eq {
-    cmdline.shown 0 0 put
-    pop cmdline "%s" cmdline.shown sprintf
-    cmdline.hidden 0 0 put
+  dup .inp_hidden get "showopts" bootopt.find dup {
+    dup "showopts" length add skipspaces
+    2 index .inp_buf get exch strcpy dropspaces
+    0 0 put
+    .inp_hidden get dropspaces
   } {
-    "showopts" length add skipspaces
-    "%s" cmdline.shown sprintf
-    cmdline "%s" cmdline.hidden sprintf
-    cmdline.hidden "showopts" getoption 0 0 put
+    pop dup .inp_hidden get 0 0 put
+    .inp_buf get dropspaces
   } ifelse
-
-  cmdline.shown dropspaces
-  cmdline.hidden dropspaces
-
-  cmdline.shown
 } def
 
 
@@ -837,7 +817,7 @@
   window.current .color.bg get setcolor
   fillrect  
 
-  "%3u%%" 8 dup string dup 5 1 roll snprintf
+  "%3u%%" 8 string dup 4 1 roll sprintf
 
   dup strsize pop neg progress.text.x add progress.text.y moveto
   window.current .color.fg get setcolor
@@ -1585,13 +1565,12 @@ dup .undef eq { pop "back-low.jpg" findfile } if
 /font.large font.normal def
 
 /cmdline.hidden cmdlinelength string def
-/cmdline.shown cmdlinelength string def
 
 /kroete.dir 0 def
 
 /debug 0 def
 
-ptheme small_layout or CapsLock or {
+ptheme small_layout or CapsLock or   true or   {
   /bsplash.done { } def
 } {
   bsplash.show

@@ -80,6 +80,20 @@
 
 /CapsLock { 0x417 cvp getbyte 0x40 and 0 ne } def
 
+
+% input object fields
+/.inp_x		0 def		% x pos
+/.inp_y		1 def		% y pos
+/.inp_back	2 def		% background pixmap
+/.inp_buf	3 def		% input buffer
+/.inp_buf_len	4 def		% input buffer length
+/.inp_cur	5 def		% current edit char offset
+/.inp_cursor	6 def		% cursor pos (pixel)
+/.inp_shift	7 def		% input line shifted (pixel)
+% optional fields
+/.inp_hidden	8 def		% hidden buffer
+
+
 % boot loader
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -718,20 +732,20 @@ def
 % ( cmdline option_name ) ==> ( option_start )
 %
 /bootopt.find {
-  /bo.opt exch def
-  /bo.cmdline exch def
+  /_bo.opt exch def
+  /_bo.cmdline exch def
 
   {
-    bo.cmdline bo.opt strstr
+    _bo.cmdline _bo.opt strstr
     dup {
       dup 1 eq {
         true
       } {
-        dup 2 sub bo.cmdline exch get ' ' eq
+        dup 2 sub _bo.cmdline exch get ' ' eq
       } ifelse
 
       {
-        bo.cmdline over bo.opt length add 1 sub get
+        _bo.cmdline over _bo.opt length add 1 sub get
         dup '=' eq
         over ' ' eq or
         exch 0 eq or
@@ -739,12 +753,12 @@ def
         false
       } ifelse
 
-      bo.cmdline rot add exch
+      _bo.cmdline rot add exch
 
       {
         1 sub exit
       } {
-        /bo.cmdline exch def
+        /_bo.cmdline exch def
       } ifelse
     } {
       pop

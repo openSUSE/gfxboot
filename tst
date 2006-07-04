@@ -100,19 +100,22 @@ function tst_lilo {
   rm -rf $dst $vm_tmp
   rm -f $img
 
-  mkdir -p $dst
-  cp -a $src/* $dst
-  cp -a $logo $dst/bootlogo
-  rm -f $dst/lilo.conf
+  mkdir -p $dst/boot
+  cp -a $src/* $dst/boot
+  cp -a $logo $dst/boot/message
 
-  dd if=/dev/zero of="$img" bs=36b count=80
-  mke2fs -F -m 0 "$img"
-  sw 0 mount -oloop=/dev/loop7 "$img" /mnt
-  sw 0 cp -a $dst/* /mnt
-  sw 0 rmdir /mnt/lost+found
-  sw 0 $bin/sbin/lilo -C $src/lilo.conf -m /mnt/map
+  for i in /boot/vmlinuz /boot/initrd ; do
+    [ -f $i ] && cp --parents $i $dst
+  done
+
+  test/hdimg $img
+
+  sw 0 mount -oloop=/dev/loop7,offset=32256 $img /mnt
+  sw 0 cp -r $dst/* /mnt
+  sw 0 losetup /dev/loop6 $img
+  sw 0 $bin/sbin/lilo -w -C /mnt/boot/lilo.conf -m /mnt/boot/map
+  sw 0 losetup -d /dev/loop6
   sw 0 umount /mnt
-  sw 0 losetup -d /dev/loop7 2>/dev/null
 
   if [ "$program" = vmware ] ; then
     # vmware
@@ -122,7 +125,7 @@ function tst_lilo {
     vmware -qx $vm_tmp/gfxboot.vmx
   elif [ "$program" = qemu ] ; then
     # qemu
-    qemu -boot a -fda $img
+    qemu -boot c -hda $img
   elif [ "$program" = bd ] ; then
     # bochs debug wrapper
     bd $img
@@ -149,14 +152,14 @@ function tst_grub {
   rm -f $img
 
   mkdir -p $dst/boot
-  cp -a $src $dst/grub
-  cp $bin/usr/lib/grub/{fat_stage1_5,stage1,stage2} $dst/grub
-  cp -a $logo $dst/grub/bootlogo
+  cp -a $src/* $dst/boot
+  cp $bin/usr/lib/grub/{fat_stage1_5,stage1,stage2} $dst/boot/grub
+  cp -a $logo $dst/boot/message
   for i in /boot/vmlinuz /boot/initrd ; do
     [ -f $i ] && cp --parents $i $dst
   done
 
-  sh -c "echo '(hd0) $img' >$dst/grub/device.map"
+  sh -c "echo '(hd0) $img' >$dst/boot/grub/device.map"
 
   test/hdimg $img
 
@@ -164,8 +167,8 @@ function tst_grub {
   sw 0 cp -r $dst/* /mnt
   sw 0 umount /mnt
 
-  echo "setup --prefix=/grub (hd0,0) (hd0,0)" | \
-  $bin/usr/sbin/grub --batch --config-file=$dst/grub/menu.lst --device-map=$dst/grub/device.map
+  echo "setup --prefix=/boot/grub (hd0,0) (hd0,0)" | \
+  $bin/usr/sbin/grub --batch --config-file=$dst/boot/grub/menu.lst --device-map=$dst/boot/grub/device.map
   echo
 
   if [ "$program" = vmware ] ; then

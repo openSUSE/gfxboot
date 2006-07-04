@@ -19,7 +19,7 @@
     boot.window .color.fg get setcolor
     boot.window .ed.font get setfont  
 
-    boot.ed 3 get
+    boot.ed .inp_buf get
     boot.ed over edit.init
     "" ne { boot.ed ' ' edit.input } if
   } if

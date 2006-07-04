@@ -112,6 +112,7 @@
     0
     0
     0
+    cmdline.hidden
   ] def
 
   boot.setup

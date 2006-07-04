@@ -6,6 +6,8 @@
 	- menu bar fits menu text width
 	- made 'Text Mode' translatable (#179582)
 	- workaround for interlaced mode issue on some ATI cards (#177982)
+	- use disk image, not floppy for lilo testing
+	- some code cleanup
 
 9/6/2006:	v3.2.30
 	- translations updated

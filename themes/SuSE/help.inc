@@ -93,9 +93,9 @@ clip.size pop 800 eq {
 % ( ) ==> ( option )
 %
 /findbootoption {
-  /bo.buf boot.ed 3 get def
-  /bo.len boot.ed 4 get def
-  /bo.pos boot.ed 5 get def
+  /bo.buf boot.ed .inp_buf get def
+  /bo.len boot.ed .inp_buf_len  get def
+  /bo.pos boot.ed .inp_cur get def
 
   {
     bo.pos 0 eq { exit } if
@@ -108,7 +108,7 @@ clip.size pop 800 eq {
   bo.buf 0 get ' ' le { "" return } if
 
   % "o_" + option name is the help text label
-  "o_" 3 bo.opt snprintf
+  "o_" bo.opt sprintf
 
   0 1 bo.opt.max 1 sub {
     dup
