@@ -614,33 +614,6 @@
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Get boot option.
-%
-% ( cmdline option_name ) ==> ( option_start )
-%
-/getoption {
-  /go.name exch def
-  /go.cmdline exch def
-  /go.pos 0 def
-  {
-    go.cmdline go.pos add go.name strstr dup {
-       1 sub /go.pos exch def
-
-       go.cmdline go.pos iswordboundary
-       go.cmdline go.pos go.name length add iswordboundary
-       and {
-         go.cmdline go.pos add exit
-       } {
-         /go.pos go.pos 1 add def
-       } ifelse
-    } {
-      pop "" exit
-    } ifelse
-  } loop
-} def
-
-
-% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 /redrawmenu {
   menu.text.normal setcolor
 
