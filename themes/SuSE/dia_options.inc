@@ -15,13 +15,7 @@
   boot.show not {
     /boot.show true def
     boot.setup
-
-    boot.window .color.fg get setcolor
-    boot.window .ed.font get setfont  
-
-    boot.ed .inp_buf get
-    boot.ed over edit.init
-    "" ne { boot.ed ' ' edit.input } if
+    bootoptions.init
   } if
 
   /window.action actRedraw def

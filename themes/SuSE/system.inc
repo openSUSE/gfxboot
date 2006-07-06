@@ -887,3 +887,19 @@ def
 } def
 
 
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Free memory.
+%
+% Like free, but accepts dict entries, too.
+%
+% ( obj -- )
+%
+/xfree {
+  dup gettype
+  t_dict_idx eq {
+    dup exec exch .undef def
+  } if
+  free
+} def
+
+

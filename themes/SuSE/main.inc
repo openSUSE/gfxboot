@@ -107,12 +107,12 @@
   /boot.ed [
     boot.pos exch 10 add exch 1 sub
     over over moveto boot.ed.width boot.ed.height savescreen
-    boot.buf
-    boot.buf.size
+    cmdlinelength string
+    cmdlinelength
     0
     0
     0
-    cmdline.hidden
+    cmdlinelength string
   ] def
 
   boot.setup
