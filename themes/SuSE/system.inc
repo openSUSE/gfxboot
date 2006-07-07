@@ -92,6 +92,7 @@
 /.inp_shift	7 def		% input line shifted (pixel)
 % optional fields
 /.inp_hidden	8 def		% hidden buffer
+/.inp_label	9 def		% input field label
 
 
 % boot loader

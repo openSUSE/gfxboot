@@ -9,6 +9,7 @@
 	- use disk image, not floppy for lilo testing
 	- major code cleanup
 	- removed ancient compatibility code
+	- allow more than one boot option line (for xen)
 
 9/6/2006:	v3.2.30
 	- translations updated

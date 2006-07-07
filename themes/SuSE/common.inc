@@ -521,30 +521,6 @@
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Setup boot option input field.
-%
-% ( ) == > ( )
-%
-/bootoptions.init {
-  window.current .color.fg get setcolor
-  window.current .ed.font get setfont
-
-  boot.ed edit.hidecursor
-  menu.args menu.entry get
-
-  boot.ed .inp_buf get exch strcpy pop
-
-  boot.ed splitcmdline
-
-  boot.show {
-    boot.ed dup .inp_buf get exch over edit.init
-    "" ne { boot.ed ' ' edit.input } if
-  } if
-
-} def
-
-
-% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Split command line into hidden and normal part.
 %
 % ( edit_object ) == > ( )
@@ -776,7 +752,7 @@
 /ProgressInit {
   /progress.kname exch def
 
-  boot.ed edit.hidecursor
+  boot.ed.list { edit.hidecursor } forall
 
   /dia window.dialog def
 
@@ -832,7 +808,7 @@
 
   load_error {
     /load_error false def
-    boot.ed edit.showcursor
+    boot.ed.list boot.window .ed.focus get get edit.showcursor
   } if
 } def
 
@@ -1125,9 +1101,7 @@
 
   /menu.max.entries 7 def
 
-  /boot.label.len 243 def
-
-  /boot.pos { boot.label.len 10 add ptheme { 480 } { small_layout { 380 } { 490 } ifelse } ifelse } def
+  /boot.pos { 253 ptheme { 480 } { small_layout { 380 } { 490 } ifelse } ifelse } def
 
   % false: no boot options line initially
   /boot.show true def

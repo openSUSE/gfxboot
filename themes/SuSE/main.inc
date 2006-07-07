@@ -41,9 +41,14 @@
   boot.show {
     boot.text.options setcolor
     window.current .font get setfont
-    boot.pos moveto boot.label.len neg 0 rmoveto
-    currentpoint boot.label.len fontheight image
-    boot.pos moveto txt_bootoptions showright
+    boot.ed.list {
+      dup .inp_x get 10 sub over .inp_y get moveto
+      currentpoint
+      currentpoint 0 exch moveto
+      currentpoint rot fontheight image
+      moveto
+      .inp_label get exec showright
+    } forall
   } if
 
   redrawmenu
@@ -52,25 +57,70 @@
   /keepbootoptions .undef def
 
   panel.show
-
-%  dud.redraw
 } def
 
 
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Setup boot option input field.
+%
+% ( ) == > ( )
+%
 /boot.setup {
   boot.show not { return } if
 
-  boot.window .ed boot.ed put
+  boot.window .ed.list boot.ed.list put
+  boot.window .ed.focus 0 put
 
-  boot.pos moveto
-  txt_bootoptions showright
+  boot.ed.list {
+    dup .inp_x get 10 sub over .inp_y get moveto
+    dup .inp_label get exec showright
 
-  currenttransparency
-  white setcolor
-  boot.pos moveto 10 boot.ed.height rmoveto
-  0xe0 settransparency
-  boot.ed.width 1 fillrect
-  settransparency
+    white setcolor
+    dup .inp_x get over .inp_y get boot.ed.height add moveto
+
+    currenttransparency
+
+    0xe0 settransparency
+    boot.ed.width 1 fillrect
+
+    settransparency
+
+    pop
+
+  } forall
+
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Activate boot option input field.
+%
+% ( ) == > ( )
+%
+/bootoptions.init {
+  window.current .color.fg get setcolor
+  window.current .ed.font get setfont
+
+  boot.ed.list boot.window .ed.focus get get edit.hidecursor
+
+  boot.window .ed.focus 0 put
+
+  boot.ed.list { .inp_buf get 0 0 put } forall
+
+  menu.args menu.entry get
+  boot.ed.list 0 get .inp_buf get exch strcpy pop
+
+  boot.ed.list { splitcmdline } forall
+
+  boot.show {
+    boot.ed.list {
+      dup
+      dup dup .inp_buf get exch over edit.init
+      "" ne { ' ' edit.input } { pop } ifelse
+      edit.hidecursor
+    } forall
+    boot.ed.list boot.window .ed.focus get get edit.showcursor
+  } if
 } def
 
 
@@ -104,16 +154,25 @@
 
   /boot.window window.current def
 
-  /boot.ed [
-    boot.pos exch 10 add exch 1 sub
-    over over moveto boot.ed.width boot.ed.height savescreen
-    cmdlinelength string
-    cmdlinelength
-    0
-    0
-    0
-    cmdlinelength string
+  /boot.ed.list [
+    0 1 1 {
+      [
+        boot.pos exch 10 add exch 1 sub 4 -1 roll boot.ed.height 5 add mul add
+        over over moveto boot.ed.width boot.ed.height savescreen
+        cmdlinelength string
+        cmdlinelength
+        0
+        0
+        0
+        cmdlinelength string
+        /txt_boot_harddisk
+      ]
+    } for
   ] def
+
+  boot.ed.list 0 get .inp_label /txt_bootoptions put
+
+  /boot.ed boot.ed.list 0 get def
 
   boot.setup
 

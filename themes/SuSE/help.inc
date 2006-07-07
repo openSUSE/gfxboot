@@ -93,9 +93,10 @@ clip.size pop 800 eq {
 % ( ) ==> ( option )
 %
 /findbootoption {
-  /bo.buf boot.ed .inp_buf get def
-  /bo.len boot.ed .inp_buf_len  get def
-  /bo.pos boot.ed .inp_cur get def
+  boot.window .ed.list get boot.window .ed.focus get get
+  /bo.buf over .inp_buf get def
+  /bo.len over .inp_buf_len  get def
+  /bo.pos exch .inp_cur get def
 
   {
     bo.pos 0 eq { exit } if
