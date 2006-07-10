@@ -82,17 +82,19 @@
 
 
 % input object fields
-/.inp_x		0 def		% x pos
-/.inp_y		1 def		% y pos
-/.inp_back	2 def		% background pixmap
-/.inp_buf	3 def		% input buffer
-/.inp_buf_len	4 def		% input buffer length
-/.inp_cur	5 def		% current edit char offset
-/.inp_cursor	6 def		% cursor pos (pixel)
-/.inp_shift	7 def		% input line shifted (pixel)
+/.inp_x		 0 def		% x pos
+/.inp_y		 1 def		% y pos
+/.inp_back	 2 def		% background pixmap
+/.inp_buf	 3 def		% input buffer
+/.inp_buf_len	 4 def		% input buffer length
+/.inp_cur	 5 def		% current edit char offset
+/.inp_cursor	 6 def		% cursor pos (pixel)
+/.inp_shift	 7 def		% input line shifted (pixel)
 % optional fields
-/.inp_hidden	8 def		% hidden buffer
-/.inp_label	9 def		% input field label
+/.inp_hidden	 8 def		% hidden buffer
+/.inp_label	 9 def		% input field label
+/.inp_visible	10 def		% field is visible
+/.inp_show	11 def		% field should be visible
 
 
 % boot loader
