@@ -86,7 +86,7 @@
     /panel ptheme {
       panel.penguin
     } {
-%% include panel.default
+      panel.full
       CapsLock { pop panel.full } if
     } ifelse def
   } {

@@ -155,7 +155,7 @@
   /boot.window window.current def
 
   /boot.ed.list [
-    0 1 1 {
+    0 1 0 {
       [
         boot.pos exch 10 add exch 1 sub 4 -1 roll boot.ed.height 5 add mul add
         over over moveto boot.ed.width boot.ed.height savescreen

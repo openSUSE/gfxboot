@@ -1,3 +1,4 @@
+10/7/2006:	v3.2.31
 	- use disk image, not floppy for grub testing
 	- updated Zen pictures
 	- made full panel default
@@ -10,6 +11,7 @@
 	- major code cleanup
 	- removed ancient compatibility code
 	- allow more than one boot option line (for xen)
+	- using beta pictures
 
 9/6/2006:	v3.2.30
 	- translations updated
