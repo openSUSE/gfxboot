@@ -1,3 +1,5 @@
+	- more than one boot option line, cont.
+
 10/7/2006:	v3.2.31
 	- use disk image, not floppy for grub testing
 	- updated Zen pictures
