@@ -299,6 +299,8 @@ def
 /cvs { t_string settype } def
 
 
+% base num char
+
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Convert object to number.
 %
@@ -306,12 +308,22 @@ def
 %
 /cvn {
   dup gettype t_string eq {
-    0 exch
+    1 % sign
+    exch dup 0 get '-' eq {
+      exch pop 1 add -1 exch
+    } if
+    10 % initial base
+    0 % value
+    rot
     {
+      dup 'a' ge { 0x20 sub } if
+      dup 'X' eq { pop pop pop 16 0 '0' } if
       '0' sub
-      dup 0 lt over 9 gt or { pop exit } if
-      exch 10 mul add
+      dup 9 gt { 7 sub } if
+      dup 0 lt over 4 index ge or { pop exit } if
+      exch 2 index mul add
     } forall
+    exch pop mul
   } {
     t_int settype
   } ifelse
@@ -592,15 +604,18 @@ def
 %
 /split {
 
+  % split does not work if str1 is in a special memory region (where 
+  % 'cvp length' does not work). So we dup it first.
+
+  exch strdup dup rot
+
   currenteotchar exch seteotchar exch
 
   [ exch
 
     {
-      dup length 0 gt {
-        dup strdup exch
-        dup length add
-      } if
+      dup strdup exch
+      dup length add
 
       dup cvp length 1 le { pop exit } if
 
@@ -611,6 +626,8 @@ def
   ]
 
   exch seteotchar
+
+  exch free
 
 } def
 
@@ -840,6 +857,16 @@ def
 } def
 
 
+% Bitmask for menu entries with no boot option input field.
+%
+% (  -- int )
+%
+/config.nobootoptions {
+  "nobootoptions" getgfxconfig dup .undef ne { cvn } { pop 0 } ifelse
+  /config.nobootoptions over def
+} def
+
+
 % Video memory in kb.
 %
 % (  -- int )
@@ -903,6 +930,18 @@ def
     dup exec exch .undef def
   } if
   free
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Get array element.
+%
+% Like get, but returns .undef if index is outside array bounds.
+%
+% ( array index -- obj )
+%
+/aget {
+  over length over gt { get } { pop pop .undef } ifelse
 } def
 
 

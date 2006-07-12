@@ -204,7 +204,7 @@
     /panel.extra.fkey 1 def
     menu.entry false MenuSelect
     menu.visible.entries menu.entry menu.shift sub sub 1 eq {
-      /menu.shift menu.shift 1 add def redrawmenu
+      /menu.shift menu.shift 1 add def main.drawmenu
     } if
     /menu.entry menu.entry 1 add def
     menu.entry true MenuSelect

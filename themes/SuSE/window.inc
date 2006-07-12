@@ -312,31 +312,41 @@
   } if
 
   window.current .ed.list get {
-    dup keyDown eq over keyTab eq or {
-      window.current .ed.focus get
-      window.current .ed.list get over get edit.hidecursor
 
-      1 add window.current .ed.list get length mod
-      window.current .ed.focus 2 index put
-      window.current .ed.list get exch get edit.showcursor
-      pop 0
+    window.current .ed.list get window.current .ed.focus get get .inp_show aget false ne {
+
+      dup keyDown eq over keyTab eq or {
+        window.current .ed.focus get
+        window.current .ed.list get over get edit.hidecursor
+
+        1 add window.current .ed.list get length mod
+        window.current .ed.list get over get .inp_show aget false ne { } { pop 0 } ifelse
+        window.current .ed.focus 2 index put
+        window.current .ed.list get exch get edit.showcursor
+        pop 0
+      } if
+
+      dup keyUp eq over keyShiftTab eq or {
+        window.current .ed.focus get
+        window.current .ed.list get over get edit.hidecursor
+
+        1 sub window.current .ed.list get length exch over add exch mod
+        {
+          dup 0 eq { exit } if
+          window.current .ed.list get over get .inp_show aget false ne { exit } { 1 sub } ifelse
+        } loop
+        window.current .ed.focus 2 index put
+        window.current .ed.list get exch get edit.showcursor
+        pop 0
+      } if
+
+  %    dup keyTab eq {
+  %      window.findselected 1 add window.buttons length mod
+  %      window.selectbutton
+  %      pop 0
+  %    } if
+
     } if
-
-    dup keyUp eq over keyShiftTab eq or {
-      window.current .ed.focus get
-      window.current .ed.list get over get edit.hidecursor
-
-      1 sub window.current .ed.list get length exch over add exch mod
-      window.current .ed.focus 2 index put
-      window.current .ed.list get exch get edit.showcursor
-      pop 0
-    } if
-
-%    dup keyTab eq {
-%      window.findselected 1 add window.buttons length mod
-%      window.selectbutton
-%      pop 0
-%    } if
 
   } {
     has_buttons {
@@ -379,7 +389,7 @@
         setfont
       window.current .color.fg get setcolor
 
-      window.current .ed.focus get get exch edit.input
+      window.current .ed.focus get get dup .inp_show aget false ne { exch edit.input } { pop pop } ifelse
       0
     } { pop } ifelse
   } if

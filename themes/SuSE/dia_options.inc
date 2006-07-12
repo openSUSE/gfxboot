@@ -12,11 +12,7 @@
 /panel.options {
   /panel panel.full def
 
-  boot.show not {
-    /boot.show true def
-    boot.setup
-    bootoptions.init
-  } if
+  /boot.show true def
 
   /window.action actRedraw def
 } def
