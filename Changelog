@@ -1,5 +1,6 @@
 	- more than one boot option line, finished
 	- added 'about' button
+	- make it openSUSE
 
 10/7/2006:	v3.2.31
 	- use disk image, not floppy for grub testing
