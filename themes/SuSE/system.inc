@@ -633,6 +633,34 @@ def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% join - join array of strings
+%
+% group:
+%
+% ( array1 str1 -- str2 )
+%
+% array1: array of strings
+% str1: separator
+% str2: complete string
+%
+/join {
+  over length 0 eq { pop pop 0 string return } if
+
+  over length 1 sub over length mul
+  2 index { length add } forall
+  string
+
+  rot {
+    over 0 get { exch 2 index strcat exch } if
+    strcat
+  } forall
+
+  exch pop
+
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Skip leading non-spaces.
 %
 % ( string ) ==> ( string )

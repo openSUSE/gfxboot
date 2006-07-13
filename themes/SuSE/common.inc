@@ -130,7 +130,7 @@
 /KeyEvent {
   % timeout
 
-  dup 0 eq { boot.ed buildcmdline 2 return } if
+  dup 0 eq { boot.ed.list buildcmdline 2 return } if
 
   debug 4 ge {
     % print keycode somewhere
@@ -224,7 +224,7 @@
     debug 3 ge xxx.cmdline .undef eq and {
       /window.action actNothing def
 
-      boot.ed buildcmdline /xxx.menu exch def /xxx.cmdline exch def
+      boot.ed.list buildcmdline /xxx.menu exch def /xxx.cmdline exch def
 
       /dia window.dialog def
       dia .title "Kernel command line" put
@@ -249,7 +249,7 @@
         xxx.cmdline xxx.menu
         /xxx.cmdline .undef def
       } {
-        boot.ed buildcmdline
+        boot.ed.list buildcmdline
       } ifelse
       2 return
     } ifelse
@@ -283,7 +283,35 @@
 /mem.min 128 string def
 /mem.msg 256 string def
 
-% ( edit_object ) ==> ( cmdline menu_entry )
+
+% ( edit_object_list ) ==> ( cmdline menu_entry )
+%
+/buildcmdline {
+  menu.entry 0 lt menu.entry menu.texts length ge or { pop "" -1 return } if
+
+  [ over
+    {
+      dup .inp_show get {
+        build1cmdline strdup
+      } {
+        pop
+      } ifelse
+    } forall
+
+    % empty? -> pass at least the first edit object
+    dup [ eq { over 0 get build1cmdline strdup } if
+
+  ]
+
+  dup boot.splitstr join bc.cmd over strcpy pop free
+  dup { free } forall free
+
+  pop bc.cmd menu.entry
+
+} def
+
+
+% ( edit_object ) ==> ( cmdline )
 %
 % grub:
 %   just return
@@ -291,9 +319,7 @@
 % syslinux & lilo:
 %   add kernel name at start of command line
 %
-/buildcmdline {
-  menu.entry 0 lt menu.entry menu.texts length ge or { pop "" -1 return } if
-
+/build1cmdline {
   syslinux {
     % set new working directory
     xmenu.bits .xm_current get 1 eq { 64bit_boot_dir } { 32bit_boot_dir } ifelse
@@ -480,7 +506,7 @@
   % remove final space
   bc.cmd dropspaces
 
-  bc.cmd menu.entry
+  bc.cmd
 } def
 
 

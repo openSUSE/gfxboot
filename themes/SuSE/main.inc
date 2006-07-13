@@ -9,6 +9,8 @@
 
 % boot option input line separator
 /boot.splitchar '$' def
+/boot.splitstr 1 string dup 0 boot.splitchar put def
+/boot.splitstr "\u2590" def
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Create new main window.
@@ -326,8 +328,6 @@
 
   boot.window .ed.list boot.ed.list put
   boot.window .ed.focus 0 put
-
-  /boot.ed boot.ed.list 0 get def
 
   main.drawmenu
 

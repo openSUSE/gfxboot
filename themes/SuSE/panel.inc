@@ -29,12 +29,19 @@
 
   /panel.back 0 panel.y moveto panel.size savescreen def
 
+  /panel.entry.help [ keyF1 0 "F1" /panel.help /panel.help.width /panel.help.update .undef ] def
+  /panel.entry.about [ keyF1 0 "F1" /panel.about /panel.about.width /panel.about.update .undef ] def
+
   % define panel layout
   /panel.full [
 
     % [ key x label show_func width_func update_func init_func ]
 
-    [ keyF1 0 "F1" /panel.help /panel.help.width /panel.help.update .undef ]
+    about.msg {
+      panel.entry.about
+    } {
+      panel.entry.help
+    } ifelse
 
     syslinux {
 
