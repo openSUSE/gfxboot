@@ -317,7 +317,7 @@
         0
         0
         cmdlinelength string
-        "More options"
+        "More Options"
         false
         false
       ]

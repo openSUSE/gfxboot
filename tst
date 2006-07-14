@@ -243,14 +243,14 @@ function tst_syslinux {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 function usage {
-  echo "usage: tst [-b] [-i] [-p program] [-t theme] what"
+  echo "usage: tst [-b] [-d floppy_nr] [-i] [-l language] [-p program] [-s test_src_dir] [-t theme] what"
   exit 1
 }
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-while getopts bd:hil:p:t: opt ; do
+while getopts bd:hil:p:s:t: opt ; do
   case $opt in
     \:|\?|h) usage
       ;;
@@ -268,6 +268,9 @@ while getopts bd:hil:p:t: opt ; do
       ;;
 
     p) program=$OPTARG
+      ;;
+
+    s) src=$OPTARG
       ;;
 
     t) theme=$OPTARG
@@ -325,14 +328,18 @@ fi
 tmp=tmp
 mkdir -p "$tmp" || exit
 
-if [ "$what" = isolinux ] ; then
-  tst_isolinux syslinux
-elif [ "$what" = lilo ] ; then
-  tst_lilo lilo
-elif [ "$what" = syslinux ] ; then
-  tst_syslinux syslinux
-elif [ "$what" = grub ] ; then
-  tst_grub grub
+if [ -z "$src" ] ; then
+  src=$what
+  [ $what = isolinux ] && src=syslinux
+fi
+
+if [ ! -d test/$src ] ; then
+  echo "no such directory: $src"
+  usage
+fi
+
+if [ "`type -t tst_$what`" = function ] ; then
+  tst_$what $src
 else
   echo "What is "\""$what"\""?"
   usage
