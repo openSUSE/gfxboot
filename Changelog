@@ -1,4 +1,5 @@
-	- more than one boot option line, finished
+17/7/2006:	v3.2.32
+	- more than one boot option line, finished (#160066)
 	- added 'about' button
 	- make it openSUSE
 	- added xen test config

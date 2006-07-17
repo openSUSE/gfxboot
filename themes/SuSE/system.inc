@@ -650,9 +650,10 @@ def
   2 index { length add } forall
   string
 
+  % note: last element is not followed by separator because it exceeds
+  % the destination string size
   rot {
-    over 0 get { exch 2 index strcat exch } if
-    strcat
+    strcat over strcat
   } forall
 
   exch pop

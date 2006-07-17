@@ -8,9 +8,8 @@
 /boot.ed.max 3 def
 
 % boot option input line separator
-/boot.splitchar '$' def
+/boot.splitchar 1 def
 /boot.splitstr 1 string dup 0 boot.splitchar put def
-/boot.splitstr "\u2590" def
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Create new main window.
