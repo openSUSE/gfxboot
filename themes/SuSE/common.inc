@@ -984,7 +984,7 @@
     tmp dup setlang pop setkeymap
   } {
     pop
-    "en" dup setlang pop setkeymap
+    "en_US" dup setlang pop setkeymap
   } ifelse
 
   font.large setfont

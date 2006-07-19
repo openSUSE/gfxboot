@@ -678,14 +678,11 @@ clip.size pop 800 eq {
 /help.getmessages {
 
   help.messages .undef eq {
-    % find help texts
+    % load help texts
     /help.messages
-      help.file free /help.file .undef def
-      16 string dup config.lang "%s.hlp" 2 index sprintf
-      findfile exch free
-      dup .undef eq { pop "en.hlp" findfile } if
-      dup .undef eq { pop "" } if
-      /help.file over def
+      config.lang "%s.hlp" locale.findfile
+      dup .undef eq { pop "en_US" "%s.hlp" locale.findfile } if
+      dup .undef eq { pop 0 string } if
       cvs
     def
   } if

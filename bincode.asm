@@ -337,6 +337,7 @@ gfx_cs_b		db 0
 label_buf		times 35 db 0
 
 ; buffer for number conversions
+; must be large enough for ps_status_info()
 num_buf			times 23h db 0
 num_buf_end		db 0
 
@@ -348,6 +349,7 @@ tmp_write_cnt		db 0
 tmp_write_pad		db 0
 
 pf_gfx			db 0
+pf_gfx_raw_char		db 0
 pf_gfx_err		dw 0
 			align 4, db 0
 pf_gfx_buf		dd 0
@@ -441,21 +443,33 @@ dmsg_10			db '  %2u: type %u, val 0x%x', 10, 0
 
 single_step		db 0
 show_debug_info		db 0
+dtrace_count		db 0
 
 fms_cpio_swab		db 0
 
 hello			db 10, 'Initializing gfx code...', 10, 0
-msg_10			db '|ip %4x:  %8x.%x           |', 10, 0
-msg_11			db '|%2x: %8x.%2x', 0
-msg_12			db '|  :            ', 0
-msg_13			db '/----pstk------------rstk-------\', 10, 0
-msg_14			db '|-------------------------------|', 10, 0
-msg_15			db '\-------------------------------/', 10, 0
-msg_16			db '|', 10, 0
-msg_17			db '|err %3x                        |', 10, 0 
-msg_18			db '|err %3x: %8x              |', 10, 0
-msg_19			db '|err %3x: %8x   %8x   |', 10, 0
-msg_20			db '|ip %4x: %8x.%x %8x.%x |', 10, 0
+msg_10			db 0b3h, 'ip %4x:  %8x.%x           ', 0b3h, 10, 0
+msg_11			db 0b3h, '%2x: %8x.%2x', 0
+msg_12			db 0b3h, '  :            ', 0
+msg_13			db 0dah, 0c4h, 0c4h, 0c4h, 0c4h, 'data'
+			times 7 db 0c4h
+			db 0c2h, 0c4h, 0c4h, 0c4h, 0c4h, 'prog'
+			times 7 db 0c4h
+			db 0bfh, 10, 0
+msg_14			db 0c3h
+			times 15 db 0c4h
+			db 0c1h
+			times 15 db 0c4h
+			db 0b4h, 10, 0
+msg_15			db 0c0h
+			times 31 db 0c4h
+			db 0d9h, 10, 0
+msg_16			db 0b3h, 10, 0
+msg_17			db 0b3h, 'err %3x                        ', 0b3h, 10, 0 
+msg_18			db 0b3h, 'err %3x: %8x              ', 0b3h, 10, 0
+msg_19			db 0b3h, 'err %3x: %8x   %8x   ', 0b3h, 10, 0
+msg_20			db 0b3h, 'ip %4x: %8x.%x %8x.%x ', 0b3h, 10, 0
+msg_21			db 0b3h, '%S', 0b3h, 10, 0 
 
 			align 2, db 0
 			; prim_function entries
@@ -3417,9 +3431,14 @@ printf_20:
 		cmp al,'%'
 		jz printf_70
 
+		cmp al,'S'
+		jnz printf_23
+		mov byte [pf_gfx_raw_char],1
+		jmp printf_24
+printf_23:
 		cmp al,'s'
 		jnz printf_30
-
+printf_24:
 		push si
 
 		call pf_next_arg
@@ -3439,6 +3458,7 @@ printf_27:
 		mov al,' '
 		call write_chars
 		pop si
+		mov byte [pf_gfx_raw_char],0
 		jmp printf_10
 
 printf_30:		
@@ -3642,6 +3662,8 @@ write_char:
 		mov [es:di],ax
 		jmp write_char_90
 write_char_50:
+		cmp byte [pf_gfx_raw_char],0
+		jnz write_char_60
 		cmp al,0ah
 		jnz write_char_60
 		push ax
@@ -3668,10 +3690,24 @@ write_cons_char:
 		cmp byte [gfx_mode+1],0
 		jnz write_cons_char_20
 		mov bx,7
+		cmp byte [pf_gfx_raw_char],0
+		jz write_cons_char_10
+		mov ah,0ah
+		mov cx,1
+		int 10h
+		mov ah,3
+		int 10h
+		inc dl
+		mov ah,2
+		int 10h
+		jmp write_cons_char_90
+write_cons_char_10:
 		mov ah,0eh
 		int 10h
 		jmp write_cons_char_90
 write_cons_char_20:
+		cmp byte [pf_gfx_raw_char],0
+		jnz write_cons_char_40
 		cmp al,0ah
 		jnz write_cons_char_30
 		mov cx,[cfont_height]
@@ -3867,6 +3903,56 @@ ps_status_info_60:
 ps_status_info_70:
 		call printf
 
+		xor cx,cx
+		call get_pstack_tos
+		jnc ps_status_info_71
+		mov dl,t_none
+		xor eax,eax
+ps_status_info_71:
+		push eax
+		push ds
+		pop es
+		mov al,' '
+		mov di,num_buf
+		mov cx,1fh		; watch num_buf_end
+		rep stosb
+		mov [di],cl
+		pop eax
+
+		cmp dl,t_string
+		jnz ps_status_info_79
+
+		lin2seg eax,fs,esi
+
+		mov di,num_buf
+		mov al,0afh
+		stosb
+ps_status_info_72:
+		fs a32 lodsb
+		or al,al
+		jz ps_status_info_73
+		stosb
+		cmp byte [es:di+1],0
+		jnz ps_status_info_72
+		cmp byte [fs:esi],0
+		jnz ps_status_info_74
+ps_status_info_73:		
+		mov al,0aeh
+		jmp ps_status_info_75
+ps_status_info_74:
+		mov al,0afh
+ps_status_info_75:
+		stosb
+
+		call lin_seg_off
+
+ps_status_info_79:
+		mov si,num_buf
+		pf_arg_uint 0,esi
+		mov si,msg_21
+		call printf
+
+ps_status_info_80:
 		mov si,msg_15
 		call printf
 
@@ -6144,6 +6230,7 @@ prim_roll_90:
 prim_dtrace:
 		mov byte [single_step],1
 		mov byte [show_debug_info],1
+		inc byte [dtrace_count]
 		ret
 
 
@@ -13288,7 +13375,7 @@ prim_xxx_90:
 ;
 ; Note: use find_mem_size to find out the file size
 find_file_ext:
-		mov dl,t_ptr
+		mov dl,t_string
 		push eax
 		call get_length
 		xchg eax,ecx

@@ -879,7 +879,7 @@ def
 
 % Message to print if we fail minimum memory requirement.
 %
-% (  -- int )
+% (  -- str1 )
 %
 /mem.show {
   mem.msg getgfxconfig dup .undef eq { pop "Not enough memory." } if

@@ -32,17 +32,19 @@
 %% include keymap.sv.inc
 %% include keymap.tr.inc
 
-% must not be empty
+% array must not be empty
 /keymaps [
   [ "ar"    .undef       ]
   [ "bg"    .undef       ]
   [ "bn"    .undef       ]
+  [ "ca_ES" .undef       ]
   [ "cs"    keymap.cs    ]
   [ "cy_GB" .undef       ]
   [ "da"    keymap.da    ]
   [ "de"    keymap.de    ]
   [ "el"    keymap.el    ]
-  [ "en"    .undef       ]
+  [ "en_GB" .undef       ]
+  [ "en_US" .undef       ]
   [ "es"    keymap.es    ]
   [ "fi"    .undef       ]
   [ "fr"    keymap.fr    ]
@@ -65,6 +67,7 @@
   [ "sv"    keymap.sv    ]
   [ "tr"    keymap.tr    ]
   [ "uk"    .undef       ]
+  [ "vi"    .undef       ]
   [ "zh_CN" .undef       ]
   [ "zh_TW" .undef       ]
 ] def

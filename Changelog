@@ -1,3 +1,10 @@
+19/7/2006:	v3.2.33
+	- added Catalan & Vietnamese
+	- better debug window
+	- fixed minor file reading bug
+	- better internal locale handling
+	- separated en locale into en_GB & en_US
+
 17/7/2006:	v3.2.32
 	- more than one boot option line, finished (#160066)
 	- added 'about' button

@@ -15,7 +15,8 @@
 
   /config.lang exch def
 
-  /help.messages .undef def
+  % clear old help texts
+  /help.messages xfree
 
   translation.texts {
     translation.texts dup { free } forall free
@@ -55,20 +56,11 @@
 % ( ) ==> ( )
 %
 /findtexts {
-  texts.file free /texts.file .undef def
-  16 string dup config.lang "%s.tr" 2 index sprintf findfile exch free
-  dup .undef eq {
-    config.lang length 2 gt {
-      pop 16 string
-      dup config.lang 1 get config.lang 0 get "%c%c.tr" 3 index sprintf findfile exch free
-      dup {
-        /config.lang 2 string
-          config.lang 1 get config.lang 0 get "%c%c" 3 index sprintf
-        def
-      } if
-    } if
-  } if
-  dup .undef eq { pop "en.tr" findfile } if
+  /texts.file xfree
+
+  config.lang "%s.tr" locale.findfile
+  dup .undef eq { pop "en_US" "%s.tr" locale.findfile } if
+
   /texts.file over def
   dup .undef eq { pop 0 cvp } if
   cvs
@@ -118,11 +110,7 @@
 
   config.lang .undef eq { return } if
 
-  tr.tmp .undef eq { /tr.tmp 64 string def } if
-
-  config.lang "translations.%s" tr.tmp sprintf
-
-  tr.tmp findfile dup {
+  config.lang "translations.%s" locale.findfile dup {
 
     /la.tmp.datalen over length def
     /la.tmp.str exch cvs def
@@ -151,4 +139,38 @@
   } { pop } ifelse
 
 } def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Read locale-specific file.
+%
+% ( str1 str2 -- ptr1 )
+%
+% str1: locale
+% str2: file name template (like "foo.%s")
+% ptr1:  buffer with file data (or .undef)
+%
+/locale.findfile {
+  over length over length add string
+
+  rot strdup rot
+
+  over over 4 index sprintf 2 index findfile
+
+  dup .undef eq {
+    pop
+    exch
+    dup "_" strstr dup {
+      1 sub
+      over exch 0 put
+      exch
+      over over 4 index sprintf 2 index findfile
+    } {
+      pop exch .undef
+    } ifelse
+  } if
+
+  exch pop exch free exch free
+} def
+
 
