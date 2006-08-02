@@ -62,7 +62,10 @@ GetOptions(
   'q'   => sub { $opt_verbose-- },
   'o=s' => \$opt_out_file,
 );
-    
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+$static_data_seg = 'fs';
+# see trace_it() for more configs
 
 while(<>) {
   chomp;
@@ -108,10 +111,10 @@ while(<>) {
     if($context) {
       $symbol{$context}{size} = $1;
       $seg = $symbol{$context}{seg};
-      if($seg && $seg ne 'ds') {
-        warn "$.: moving $context from \"$seg\" to \"ds\"\n"
+      if($seg && $seg ne $static_data_seg) {
+        warn "$.: moving $context from \"$seg\" to \"$static_data_seg\"\n"
       }
-      $symbol{$context}{seg} = "ds";
+      $symbol{$context}{seg} = $static_data_seg;
     }
     undef $_;
   }
@@ -591,7 +594,7 @@ sub trace_it
   $symbol{stack}{seg} = 'ss';
 
   $symbol{jpg}{seg} = 'es';
-  $symbol{pic}{seg} = 'fs';
+  $symbol{pic}{seg} = 'es';
 
   $state->{"%esp"} = "stack+1000";
   push_on_stack "jpg";

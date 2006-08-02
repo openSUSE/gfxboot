@@ -2,7 +2,7 @@
 
 # gcc -save-temps -fomit-frame-pointer -Os -Wall -c jpg.c
 # convert: .data -> .text
-# add: .code16gcc
+# ## add: .code16gcc
 # convert: .local/.comm foo,bar,??? -> foo: .space bar,0
 # remove: .size, .type, .align
 # remove .section .note...
@@ -29,7 +29,10 @@ for (@f) {
   }
 }
 
-unshift @globl, ( "\t.file\t\"jpeg.S\"\n", "\t.text\n", "\t\.code16gcc\n", "\n" );
+unshift @globl, ( "\t.file\t\"jpeg.S\"\n", "\t.text\n",
+  # "\t\.code16gcc\n",
+  "\n"
+);
 
 fix_getword;
 

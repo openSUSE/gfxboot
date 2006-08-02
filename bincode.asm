@@ -156,8 +156,11 @@ malloc.end		dd 0
 malloc.area		times malloc.areas * 2 dd 0
 
 vbe_buffer		dd 0		; (seg:ofs) buffer for vbe calls
+vbe_buffer.ofs		equ vbe_buffer
+vbe_buffer.seg		equ vbe_buffer+2
+vbe_buffer.lin		dd 0		; (lin) dto
 vbe_mode_list		dd 0		; (seg:ofs) list with (up to 100h) vbe modes
-vbe_info_buffer		dd 0		; (seg:ofs) buffer for vbe gfx card info
+vbe_info_buffer		dd 0		; (lin) buffer for vbe gfx card info
 infobox_buffer		dd 0		; (lin) temp buffer for InfoBox messages
 
 local_stack		dd 0		; ofs local stack (8k)
@@ -203,7 +206,7 @@ image_pal		dd 0		; (seg:ofs)
 image_type		db 0		; 0:no image, 1: pcx, 2:jpeg
 
 pcx_line_starts		dd 0		; (lin) table of line starts
-jpg_static_buf_seg	dw 0		; seg
+jpg_static_buf		dd 0		; (lin) tmp data for jpeg decoder
 
 screen_width		dw 0
 screen_height		dw 0
@@ -434,18 +437,21 @@ rm_seg:
 gdt			dd 0, 0			; null descriptor
 .4gb_d32		dd 0000ffffh, 00cf9300h	; 4GB segment, data, use32
 .4gb_c32		dd 0000ffffh, 00cf9b00h	; 4GB segment, code, use32
-.prog_c32		dd 0000ffffh, 00cf9b00h	; our program as code, use32
-.prog_d16		dd 0000ffffh, 008f9300h	; dto, data, use16
-.prog_c16		dd 0000ffffh, 008f9b00h	; dto, code, use16
+			; see gdt_init
+.prog_c32		dd 00000000h, 00409b00h	; our program as code, use32
+.prog_d16		dd 00000000h, 00009300h	; dto, data, use16
+.prog_c16		dd 00000000h, 00009b00h	; dto, code, use16
+.data_d16		dd 00000000h, 00009300h	; 64k segment, data, use16
 gdt_size		equ $-gdt
 
 ; gdt for pm switch
 pm_seg			equ 8
-pm_seg.4gb_d32		equ 8
-pm_seg.4gb_c32		equ 10h
-pm_seg.prog_c32		equ 18h
-pm_seg.prog_d16		equ 20h
-pm_seg.prog_c16		equ 28h
+pm_seg.4gb_d32		equ 8			; covers all 4GB, default ss, es, fs, gs
+pm_seg.4gb_c32		equ 10h			; dto, but executable (for e.g., idt)
+pm_seg.prog_c32		equ 18h			; default cs, use32
+pm_seg.prog_d16		equ 20h			; default ds
+pm_seg.prog_c16		equ 28h			; default cs, use16
+pm_seg.data_d16		equ 30h			; free to use
 
 pm_large_seg		db 0			; active large segment mask
 pm_seg_mask		db 0			; segment bit mask (1:es, 2:fs, 3:gs)
@@ -886,17 +892,16 @@ gfx_init_40:
 		call calloc
 		cmp eax,byte 1
 		jc gfx_init_90
+		mov [vbe_buffer.lin],eax
 		push eax
 		call lin2so
-		pop dword [vbe_buffer]
+		pop dword [vbe_buffer.ofs]
 
 		mov eax,100h
 		call calloc
 		cmp eax,byte 1
 		jc gfx_init_90
-		push eax
-		call lin2so
-		pop dword [vbe_info_buffer]
+		mov [vbe_info_buffer],eax
 
 		mov eax,200h
 		call calloc
@@ -3356,10 +3361,10 @@ get_vbe_modes_90:
 ;
 ; Activate image from file.
 ;
-;  eax:		lin ptr to image
+;  eax		lin ptr to image
 ;
 ; return:
-;  CF:		error
+;  CF		error
 ;
 image_init:
 		push eax
@@ -3367,7 +3372,9 @@ image_init:
 		call pcx_init
 		jnc image_init_90
 
+		pm_enter 32
 		call jpg_init
+		pm_leave 32
 
 image_init_90:
 		pop eax
@@ -7572,7 +7579,9 @@ prim_unpackimage:
 		sub eax,[line_y0]
 		sub ecx,[line_x0]
 
+		pm_enter 32
 		call alloc_fb
+		pm_leave 32
 		or eax,eax
 		jz prim_unpackimage_70
 
@@ -7783,7 +7792,9 @@ prim_savescreen:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
 		jc prim_savescreen_90
+		pm_enter 32
 		call alloc_fb
+		pm_leave 32
 		or eax,eax
 		jz prim_savescreen_50
 		push eax
@@ -7804,6 +7815,7 @@ prim_savescreen_90:
 		ret
 
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; Allocate drawing buffer.
 ;
 ; eax		height
@@ -7812,35 +7824,35 @@ prim_savescreen_90:
 ; return:
 ;  eax		buffer (0: failed)
 ;
+
+		bits 32
+
 alloc_fb:
-		push ax
-		push cx
+		push eax
+		push ecx
 		mul ecx
 		mul dword [pixel_bytes]
-		pop dx
-		pop cx
+		pop edx
+		pop ecx
 		mov bp,pserr_invalid_image_size
 		add eax,4
 		jc alloc_fb_80
-		push cx
-		push dx
-		pm_enter 32
+		push ecx
+		push edx
 		call xmalloc
-		pm_leave 32
-		pop dx
-		pop cx
+		pop edx
+		pop ecx
 		or eax,eax
 		jz alloc_fb_90
-		lin2seg eax,es,edi
-		mov [es:edi],dx
-		mov [es:edi+2],cx
-		call lin_seg_off
+		mov [es:eax],dx
+		mov [es:eax+2],cx
 		jmp alloc_fb_90
 alloc_fb_80:
 		xor eax,eax
 alloc_fb_90:
 		ret
 
+		bits 16
 
 ;; restorescreen - restore screen area
 ;
@@ -8919,7 +8931,9 @@ prim_sysinfo:
 
 		cmp eax,100h
 		jae prim_si_20
+		pm_enter 32
 		call videoinfo
+		pm_leave 32
 		jmp prim_si_80
 prim_si_20:
 
@@ -13756,7 +13770,9 @@ unpack_image:
 unpack_image_20:
 		cmp byte [image_type],2
 		jnz unpack_image_90
+		pm_enter 32
 		call jpg_unpack
+		pm_leave 32
 unpack_image_90:
 		ret
 
@@ -13779,7 +13795,9 @@ show_image:
 show_image_20:
 		cmp byte [image_type],2
 		jnz show_image_90
+		pm_enter 32
 		call jpg_show
+		pm_leave 32
 show_image_90:
 		ret
 
@@ -14002,34 +14020,45 @@ pcx_show_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Allocate static buffer for jpeg decoder.
 ;
-; allocate static buffer
+; return:
+;  [jpg_static_buf]	buffer
 ;
+		bits 32
+
 jpg_setup:
-		cmp word [jpg_static_buf_seg], 0
+		cmp dword [jpg_static_buf], 0
 		jnz jpg_setup_90
 
-		mov eax,jpg_data_size + 16
+		mov eax,jpg_data_size + 15
+		pm_leave 32
 		call calloc
+		pm_enter 32
 		or eax,eax
 		jz jpg_setup_90
-		add eax,15
-		shr eax,4
 
-		mov [jpg_static_buf_seg],ax
+		; align a bit
+		add eax,15
+		and eax,~15
+
+		mov [jpg_static_buf],eax
 jpg_setup_90:
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Activate jpeg image from file.
 ;
-; Activate jpg image from file.
-;
-;  eax:		lin ptr to image
+;  eax		jpeg image
 ;
 ; return:
-;  CF:		error
+;  eax		jpeg image
+;  CF		error
 ;
+
+		bits 32
+
 jpg_init:
 		push eax
 
@@ -14037,19 +14066,20 @@ jpg_init:
 		call jpg_setup
 		pop eax
 
-		cmp word [jpg_static_buf_seg],0
+		cmp dword [jpg_static_buf],0
 		jz jpg_init_80
 
 		push eax
+		pm_leave 32
 		call find_mem_size
+		pm_enter 32
 		mov ecx,eax
 		pop eax
 
 		or ecx,ecx
 		jz jpg_init_80
 
-		lin2segofs eax,es,bx
-		cmp dword [es:bx],0e0ffd8ffh
+		cmp dword [es:eax],0e0ffd8ffh
 		jnz jpg_init_80
 
 		call jpg_size
@@ -14076,25 +14106,28 @@ jpg_init_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Read jpeg image size.
 ;
-; eax		jpg image
+; eax		jpeg image
 ;
 ; return:
+;  eax		size (low word: width, high word: height)
 ;  CF		error
 ;
+
+		bits 32
+
 jpg_size:
-		lin2seg eax,es,eax
-
-		mov ds,[jpg_static_buf_seg]
-
 		push eax
+
+		mov si,pm_seg.data_d16
+		mov eax,[jpg_static_buf]
+		call set_gdt_base_pm
+		mov fs,si
+
 		call dword jpeg_get_size
+
 		pop ecx
-
-		push cs
-		pop ds
-
-		call lin_seg_off
 
 		or eax,eax
 		jnz jpg_size_90
@@ -14104,9 +14137,10 @@ jpg_size_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Unpack image region from jpeg.
 ;
 ; eax			drawing buffer
-; [image]		jpg image
+; [image]		jpeg image
 ; dword [line_x0]	x0
 ; dword [line_y0]	y0
 ; dword [line_x1]	x1
@@ -14115,6 +14149,9 @@ jpg_size_90:
 ; note:
 ;  [line_*] are unchanged
 ;
+
+		bits 32
+
 jpg_unpack:
 		movzx edx,byte [pixel_bits]
 		cmp dl,16
@@ -14130,21 +14167,17 @@ jpg_unpack_10:
 		push dword [line_x1]
 		push dword [line_x0]
 		add eax,4
-		lin2seg eax,fs,eax
 		push eax
-		lin2seg dword [image],es,eax
-		push eax
+		push dword [image]
 
-		mov ds,[jpg_static_buf_seg]
+		mov si,pm_seg.data_d16
+		mov eax,[jpg_static_buf]
+		call set_gdt_base_pm
+		mov fs,si
 
 		call dword jpeg_decode
 
 		add sp,28
-
-		push cs
-		pop ds
-
-		call lin_seg_off
 
 jpg_unpack_90:
 		ret
@@ -14160,17 +14193,16 @@ jpg_unpack_90:
 ; dword [line_x1]	x1	; lower right
 ; dword [line_y1]	y1
 ;
-jpg_show:
-		pm_enter 32
 
+		bits 32
+
+jpg_show:
 		xor eax,eax
 		call memsize
 		push edi
 		mov eax,1
 		call memsize
 		pop eax
-
-		pm_leave 32
 
 		cmp edi,eax
 		jae jpg_show_20
@@ -14205,6 +14237,7 @@ jpg_show_30:
 
 		; eax, ecx, height, width
 		call alloc_fb
+
 		or eax,eax
 		jz jpg_show_90
 
@@ -14225,15 +14258,14 @@ jpg_show_50:
 
 		push eax
 		mov eax,[line_tmp2]
-		push bp
 
+		push ebp
 		call jpg_unpack
-		pop bp
+		pop ebp
 
-		lin2seg dword [line_tmp2],es,edi
+		mov edi,[line_tmp2]
 		mov dx,[es:edi]
 		mov cx,[es:edi+2]
-		call lin_seg_off
 
 		cmp cx,bp
 		jbe jpg_show_60
@@ -14244,7 +14276,9 @@ jpg_show_60:
 		add edi,4
 		mov bx,dx
 		imul bx,[pixel_bytes]
+		pm_leave 32
 		call restore_bg
+		pm_enter 32
 
 		mov eax,[line_y1]
 		mov ecx,eax
@@ -14259,46 +14293,53 @@ jpg_show_60:
 		jmp jpg_show_40
 
 jpg_show_70:
-
 		mov eax,[line_tmp2]
-		pm_enter 32
 		call free
-		pm_leave 32
-
 jpg_show_90:
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Switch to local stack.
 ;
 ; no regs or flags changed
 ;
+
+		bits 16
+
 use_local_stack:
 		cmp dword [old_stack],0
-		jnz $		; FIXME - for testing
 		pop word [tmp_stack_val]
 		mov [old_stack],esp
 		mov [old_stack+4],ss
 		lss esp,[local_stack]
 		jmp [tmp_stack_val]
 
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Switch back to system wide stack.
 ;
 ; no regs or flags changed
 ;
+
+		bits 16
+
 use_old_stack:
 		cmp dword [old_stack],0
-		jz $		; FIXME - for testing
 		pop word [tmp_stack_val]
 		lss esp,[old_stack]
 		mov dword [old_stack],0
 		jmp [tmp_stack_val]
 
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Install mouse handler.
+;
+; Note: experimental.
+;
+
+		bits 16
+
 mouse_init:
 		push cs
 		pop es
@@ -14329,11 +14370,14 @@ mouse_handler:
 
 		retf
 
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Get monitor capabilities.
 ;
 ;
+
+		bits 16
+
 get_monitor_res:
 		call read_ddc
 		call read_fsc
@@ -14391,6 +14435,9 @@ get_mon_res_60:
 ;
 ; Read EDID record via DDC
 ;
+
+		bits 16
+
 read_ddc:
 		push es
 
@@ -14487,7 +14534,11 @@ ddc_mult	dd 0, 1		; needed for ddc timing calculation
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; look for a fsc notebook lcd panel and set ddc_timings
+; Look for a fsc notebook lcd panel and set ddc_timings.
+;
+
+		bits 16
+
 read_fsc:
 		push es
 		push ds
@@ -14552,29 +14603,41 @@ xxx_setscreen:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Read vbe card info.
 ;
 ; al		info type
+;		  0: video mem size in kb
+;		  1: oem string
+;		  2: vendor string
+;		  3: product string
+;		  4: revision string
 ;
 ; return:
 ;  eax		info
-;   dl		info type
+;   dl		info type (enum_type_t)
 ;
+
+		bits 32
+
 videoinfo:
-		les di,[vbe_buffer]
+		mov edi,[vbe_buffer.lin]
+
 		push eax
-		mov dword [es:di],32454256h	; 'VBE2'
-		push di
-		add di,4
-		mov cx,200h-4
-		mov al,0
-		rep stosb
-		pop di
-		push di
+		push edi
+
+		mov ecx,200h/4
+		xor eax,eax
+		rep stosd
+		mov dword [es:edi-200h],32454256h	; 'VBE2'
+
+		mov di,[vbe_buffer.ofs]
+		push word [vbe_buffer.seg]
+		pop word [rm_seg.es]
+
 		mov ax,4f00h
 		int 10h
-		pop di
+
+		pop edi
 		xor ecx,ecx
 		cmp ax,4fh
 		pop eax
@@ -14582,34 +14645,34 @@ videoinfo:
 
 		cmp word [screen_mem],0
 		jnz videoinfo_20
-		push word [es:di+12h]
+		push word [es:edi+12h]
 		pop word [screen_mem]
 videoinfo_20:
 		cmp al,0
 		jnz videoinfo_30
-		mov ax,[screen_mem]
+		movzx eax,word [screen_mem]
 		shl eax,6
 		mov dl,t_int
 		jmp videoinfo_90
 videoinfo_30:
 		cmp al,1
 		jnz videoinfo_31
-		add di,6
+		add edi,6
 		jmp videoinfo_50
 videoinfo_31:
 		cmp al,2
 		jnz videoinfo_32
-		add di,16h
+		add edi,16h
 		jmp videoinfo_50
 videoinfo_32:
 		cmp al,3
 		jnz videoinfo_33
-		add di,1ah
+		add edi,1ah
 		jmp videoinfo_50
 videoinfo_33:
 		cmp al,4
 		jnz videoinfo_34
-		add di,1eh
+		add edi,1eh
 		jmp videoinfo_50
 videoinfo_34:
 		; add more here...
@@ -14617,23 +14680,24 @@ videoinfo_34:
 		jmp videoinfo_80
 
 videoinfo_50:
-		cmp dword [es:di],0
+		cmp dword [es:edi],0
 		jz videoinfo_90
-		lfs si,[es:di]
-		mov cx,100h-1
-		les di,[vbe_info_buffer]
+		movzx esi,word [es:edi]
+		movzx ecx,word [es:edi+2]
+		shl ecx,4
+		add esi,ecx
+		mov ecx,100h-1
+		mov edi,[vbe_info_buffer]
 videoinfo_55:
-		fs lodsb
+		es lodsb
 		stosb
 		or al,al
 		jz videoinfo_57
-		dec cx
+		dec ecx
 		jnz videoinfo_55
-		mov byte [es:di],0
+		mov byte [es:edi],0
 videoinfo_57:
-		push dword [vbe_info_buffer]
-		call so2lin
-		pop eax
+		mov eax,[vbe_info_buffer]
 		mov dl,t_string
 		jmp videoinfo_90
 
@@ -14645,38 +14709,77 @@ videoinfo_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Set segment descriptor base in gdt.
 ;
-; ds:si		descriptor
+; si		descriptor
 ; eax		base
 ;
-set_descr_base:
-		mov [si+2],ax
+; changes no regs
+;
+
+		bits 16
+
+set_gdt_base:
+		push eax
+		mov [gdt+si+2],ax
 		shr eax,16
-		mov [si+4],al
-		mov [si+7],ah
+		mov [gdt+si+4],al
+		mov [gdt+si+7],ah
+		pop eax
 		ret
 
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Set segment descriptor base in gdt (32 bit code).
 ;
-; ds:si		descriptor
+; si		descriptor
+; eax		base
+;
+; changes no regs
+;
+
+		bits 32
+
+set_gdt_base_pm:
+		push eax
+		mov [gdt+si+2],ax
+		shr eax,16
+		mov [gdt+si+4],al
+		mov [gdt+si+7],ah
+		pop eax
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Set segment descriptor limit in gdt.
+;
+; si		descriptor
 ; eax		limit (largest address)
 ;
-set_descr_limit:
+; changes no regs
+;
+
+		bits 16
+
+set_gdt_limit:
+		push eax
+		push dx
 		mov dl,0
 		cmp eax,0fffffh
-		jbe set_descr_limit_40
+		jbe set_gdt_limit_40
 		shr eax,12
 		mov dl,80h	; big segment
-set_descr_limit_40:
-		mov [si],ax
+set_gdt_limit_40:
+		mov [gdt+si],ax
 		shr eax,16
-		mov ah,[si+6]
+		mov ah,[gdt+si+6]
 		and ah,70h
 		or ah,al
 		or ah,dl
-		mov [si+6],ah
+		mov [gdt+si+6],ah
+		pop dx
+		pop eax
 		ret
-
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -14685,37 +14788,38 @@ set_descr_limit_40:
 ; Setup gdt so we can at least switch modes with interrupts disabled.
 ;
 
+		bits 16
+
 gdt_init:
 		mov eax,cs
 
 		segofs2lin ax,word gdt,dword [pm_gdt.base]
 
 		mov [rm_prog_cs],ax
-
 		shl eax,4
 
-		push eax
-		mov si,gdt.prog_c32
-		call set_descr_base
-		pop eax
-		push eax
-		mov si,gdt.prog_d16
-		call set_descr_base
-		pop eax
-		mov si,gdt.prog_c16
-		call set_descr_base
+		mov si,pm_seg.prog_c32
+		call set_gdt_base
+
+		mov si,pm_seg.prog_d16
+		call set_gdt_base
+
+		mov si,pm_seg.prog_c16
+		call set_gdt_base
 
 		mov eax,0ffffh
-		push eax
-		mov si,gdt.prog_c32
-		call set_descr_limit
-		pop eax
-		push eax
-		mov si,gdt.prog_d16
-		call set_descr_limit
-		pop eax
-		mov si,gdt.prog_c16
-		call set_descr_limit
+
+		mov si,pm_seg.prog_c32
+		call set_gdt_limit
+
+		mov si,pm_seg.prog_d16
+		call set_gdt_limit
+
+		mov si,pm_seg.prog_c16
+		call set_gdt_limit
+
+		mov si,pm_seg.data_d16
+		call set_gdt_limit
 
 		ret
 
@@ -14723,8 +14827,9 @@ gdt_init:
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; Complete protected mode setup.
 ;
-; Initialize idt and set up interrupt handlers.
+; Initialize idt and setup interrupt handlers.
 ;
+
 		bits 16
 
 pm_init:
@@ -14843,12 +14948,12 @@ pm_int_50:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; Switch to 16bit protected mode.
+; Switch from real mode to 16 bit protected mode.
 ;
-; assumes cs = .text
+; Assumes cs = .text.
 ;
-; no normal regs or flags changed
-; segment regs != cs are stored in rm_seg
+; No normal regs or flags changed.
+; Segment regs != cs are stored in rm_seg.
 ; ds = .text; ss, es, fs, gs = 4GB selector
 ;
 
@@ -14861,9 +14966,7 @@ switch_to_pm:
 		mov eax,cr0
 
 		test al,1
-		jnz $		; FIXME - for testing
-
-		jnz switch_to_pm_80
+		jnz $			; FIXME - for testing
 
 		cli
 
@@ -14894,20 +14997,18 @@ switch_to_pm_20:
 		mov fs,ax
 		mov gs,ax
 
-switch_to_pm_80:
-
 		pop eax
 		popf
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; Switch to real mode from 16bit protected mode.
+; Switch from 16 bit protected mode to real mode.
 ;
-; assumes cs = .text
+; Assumes cs = .text
 ;
-; no normal regs or flags changed
-; segment regs != cs are taken from rm_seg
+; No normal regs or flags changed.
+; Segment regs != cs are taken from rm_seg.
 ;
 
 		bits 16
@@ -14920,9 +15021,7 @@ switch_to_rm:
 		mov eax,cr0
 
 		test al,1
-		jz $			; FIXME - for testing
-
-		jz switch_to_rm_80
+		jz $				; FIXME - for testing
 
 		cli
 
@@ -14952,8 +15051,6 @@ switch_to_rm_20:
 		mov fs,[cs:rm_seg.fs]
 		mov gs,[cs:rm_seg.gs]
 
-switch_to_rm_80:
-
 		pop edx
 		pop eax
 		popf
@@ -14961,8 +15058,17 @@ switch_to_rm_80:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; Switch to 32bit protected mode.
+; Switch from real mode to 32 bit protected mode.
 ;
+; Assumes cs = .text.
+;
+; No normal regs or flags changed.
+; Segment regs != cs are stored in rm_seg.
+; ds = .text; ss, es, fs, gs = 4GB selector
+;
+
+		bits 16
+
 switch_to_pm32:
 		call switch_to_pm
 		switch_to_bits 32
@@ -14970,12 +15076,22 @@ switch_to_pm32:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; Switch to real mode from 32bit protected mode.
+; Switch from 32 bit protected mode to real mode.
 ;
+; Assumes cs = .text
+;
+; No normal regs or flags changed.
+; Segment regs != cs are taken from rm_seg.
+;
+
+		bits 32
+
 switch_to_rm32:
 		switch_to_bits 16
 		call switch_to_rm
 		o32 ret
+
+		bits 16
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
