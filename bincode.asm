@@ -3390,122 +3390,6 @@ get_vbe_modes_90:
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
-; Activate image from file.
-;
-;  eax		lin ptr to image
-;
-; return:
-;  CF		error
-;
-image_init:
-		push eax
-
-		call pcx_init
-		jnc image_init_90
-
-		pm32_call jpg_init
-
-image_init_90:
-		pop eax
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Activate pcx image from file.
-;
-;  eax:		lin ptr to image
-;
-; return:
-;  CF:		error
-;
-pcx_init:
-		push eax
-		lin2segofs eax,es,bx
-		cmp dword [es:bx],0801050ah
-		jnz pcx_init_80
-
-		mov cx,[es:bx+8]
-		inc cx
-		jz pcx_init_80
-		mov dx,[es:bx+10]
-		inc dx
-		jz pcx_init_80
-
-		push eax
-		push cx
-		push dx
-		push bx
-		push es
-		call find_mem_size
-		pop es
-		pop bx
-		pop dx
-		pop cx
-		pop edi
-
-		cmp eax,381h
-		jb pcx_init_80
-
-		lea esi,[eax+edi-301h]
-		lin2segofs esi,fs,si
-
-		cmp byte [fs:si],12
-		jnz pcx_init_80
-
-		mov byte [image_type],1		; pcx
-
-		mov [image],edi
-		mov [image_width],cx
-		mov [image_height],dx
-
-		lea ax,[bx+80h]
-		mov [image_data],ax
-		mov [image_data+2],es
-
-		inc si
-		mov [image_pal],si
-		mov [image_pal+2],fs
-
-		call parse_img
-
-		lfs si,[image_pal]
-		les di,[gfx_pal]
-
-		mov cx,300h
-		push cx
-		fs rep movsb
-		pop cx
-
-		xor ax,ax
-		mov dx,cx
-		dec di
-		std
-		repz scasb
-		cld
-		setnz al
-		sub dx,cx
-		sub dx,ax
-		xchg ax,dx
-		xor dx,dx
-		mov cx,3
-		div cx
-		sub ax,100h
-		neg ax
-		mov [pals],ax
-
-		clc
-		jmp pcx_init_90
-		
-pcx_init_80:
-		stc
-pcx_init_90:
-		pop eax
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Convert 32bit linear address to seg:ofs.
 ;
 ;  dword [esp + 2]:	linear address
@@ -12532,64 +12416,6 @@ fade_it:
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
-parse_img:
-		push fs
-		mov eax,[pcx_line_starts]
-		or eax,eax
-		jz parse_img_10
-		pm32_call free
-parse_img_10:
-		movzx eax,word [image_height]
-		shl eax,2
-		call calloc
-		or eax,eax
-		stc
-		mov [pcx_line_starts],eax
-		jz parse_img_90
-		lin2segofs eax,es,di
-		lfs si,[image_data]
-
-		xor dx,dx		; y count
-
-parse_img_20:
-		xor cx,cx		; x count
-		mov [es:di],si
-		mov [es:di+2],fs
-		add di,4
-parse_img_30:
-		fs lodsb
-		cmp al,0c0h
-		jb parse_img_40
-		and ax,3fh
-		inc si
-		add cx,ax
-		dec cx
-parse_img_40:
-		inc cx
-		cmp cx,[image_width]
-		jb parse_img_30
-		stc
-		jnz parse_img_90		; no decoding break at line end?
-
-		; normalize fs:si
-		mov bp,si
-		and si,0fh
-		shr bp,4
-		mov ax,fs
-		add ax,bp
-		mov fs,ax
-
-		inc dx
-		cmp dx,[image_height]
-		jb parse_img_20
-
-parse_img_90:
-		pop fs
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; cx		colors
 ; dx		src
 ; bx		dst
@@ -13851,6 +13677,187 @@ show_image_20:
 		jnz show_image_90
 		call jpg_show
 show_image_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Activate image from file.
+;
+;  eax		lin ptr to image
+;
+; return:
+;  CF		error
+;
+
+		bits 16
+
+image_init:
+		push eax
+
+		call pcx_init
+		jnc image_init_90
+
+		pm32_call jpg_init
+
+image_init_90:
+		pop eax
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Activate pcx image from file.
+;
+;  eax:		lin ptr to image
+;
+; return:
+;  CF:		error
+;
+
+		bits 16
+
+pcx_init:
+		push eax
+		lin2segofs eax,es,bx
+		cmp dword [es:bx],0801050ah
+		jnz pcx_init_80
+
+		mov cx,[es:bx+8]
+		inc cx
+		jz pcx_init_80
+		mov dx,[es:bx+10]
+		inc dx
+		jz pcx_init_80
+
+		push eax
+		push cx
+		push dx
+		push bx
+		push es
+		call find_mem_size
+		pop es
+		pop bx
+		pop dx
+		pop cx
+		pop edi
+
+		cmp eax,381h
+		jb pcx_init_80
+
+		lea esi,[eax+edi-301h]
+		lin2segofs esi,fs,si
+
+		cmp byte [fs:si],12
+		jnz pcx_init_80
+
+		mov byte [image_type],1		; pcx
+
+		mov [image],edi
+		mov [image_width],cx
+		mov [image_height],dx
+
+		lea ax,[bx+80h]
+		mov [image_data],ax
+		mov [image_data+2],es
+
+		inc si
+		mov [image_pal],si
+		mov [image_pal+2],fs
+
+		call parse_img
+
+		lfs si,[image_pal]
+		les di,[gfx_pal]
+
+		mov cx,300h
+		push cx
+		fs rep movsb
+		pop cx
+
+		xor ax,ax
+		mov dx,cx
+		dec di
+		std
+		repz scasb
+		cld
+		setnz al
+		sub dx,cx
+		sub dx,ax
+		xchg ax,dx
+		xor dx,dx
+		mov cx,3
+		div cx
+		sub ax,100h
+		neg ax
+		mov [pals],ax
+
+		clc
+		jmp pcx_init_90
+		
+pcx_init_80:
+		stc
+pcx_init_90:
+		pop eax
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+
+		bits 16
+
+parse_img:
+		push fs
+		mov eax,[pcx_line_starts]
+		or eax,eax
+		jz parse_img_10
+		pm32_call free
+parse_img_10:
+		movzx eax,word [image_height]
+		shl eax,2
+		call calloc
+		or eax,eax
+		stc
+		mov [pcx_line_starts],eax
+		jz parse_img_90
+		lin2segofs eax,es,di
+		lfs si,[image_data]
+
+		xor dx,dx		; y count
+
+parse_img_20:
+		xor cx,cx		; x count
+		mov [es:di],si
+		mov [es:di+2],fs
+		add di,4
+parse_img_30:
+		fs lodsb
+		cmp al,0c0h
+		jb parse_img_40
+		and ax,3fh
+		inc si
+		add cx,ax
+		dec cx
+parse_img_40:
+		inc cx
+		cmp cx,[image_width]
+		jb parse_img_30
+		stc
+		jnz parse_img_90		; no decoding break at line end?
+
+		; normalize fs:si
+		mov bp,si
+		and si,0fh
+		shr bp,4
+		mov ax,fs
+		add ax,bp
+		mov fs,ax
+
+		inc dx
+		cmp dx,[image_height]
+		jb parse_img_20
+
+parse_img_90:
+		pop fs
 		ret
 
 
