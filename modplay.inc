@@ -128,7 +128,7 @@ pl_play:
 	or	ax, ax
 	jz	p3
 	dec	ax
-	jnz	near p1
+	jnz	p1
 
 	; run effects
 	push	si
@@ -146,7 +146,7 @@ p30:	add	si, ch_sizeof
 	inc	word [si + pl_effpos]
 	mov	ax, [si + pl_effpos]
 	cmp	ax, [si + pl_speed]
-	jb	near p1
+	jb	p1
 
 	; advance note
 	xor	ax, ax
@@ -236,7 +236,7 @@ p29:	call	norm
 	add	si, ch_sizeof
 	add	bx, 4
 	dec	cx
-	jnz	near p18
+	jnz	p18
 	pop     si
 
 	; prepare playing of each channel
@@ -292,7 +292,7 @@ p21:	push	ax
 	mov	cx, 4
 p20:	mov	bx, [si + ch_startseg]
 	or	bx, bx
-	jz	near p22
+	jz	p22
 	push	es
 	mov     es, bx
 	mov	bx, [si + ch_start]
@@ -348,12 +348,12 @@ p40:	mov	[es:di], ax
 p25:	mov     [si + ch_pointer], ax
 p22:	add	si, ch_sizeof
 	dec	cx
-	jnz	near p20
+	jnz	p20
 	add	di, 2
 	sub	si, ch_sizeof * 4
 	pop	ax
 	dec	ax
-	jnz	near p21
+	jnz	p21
 	sub	si, pl_channs
 	mov	ax, [si + pl_state]
 	dec	ax
@@ -889,7 +889,7 @@ ss13:	mov     ax, [si +  ch_roff]
 	add     ax, [si +  ch_rend]
 	cmp     dx, [si +  ch_roff]
 	jnb     ss14
-ss16	xor     ax, ax
+ss16:	xor     ax, ax
 	mov     [si +  ch_roff], ax
 ss14:	cmp     dx, ax
 	jnb     ss15

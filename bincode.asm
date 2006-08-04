@@ -697,6 +697,20 @@ sizeof_fb_entry		equ 8
 %endmacro
 
 
+%macro		rm32_call 1
+		pm_leave 32
+		call %1
+		pm_enter 32
+%endmacro
+
+
+%macro		pm32_call 1
+		pm_enter 32
+		call %1
+		pm_leave 32
+%endmacro
+
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ; Interface functions.
@@ -877,7 +891,7 @@ gfx_init_40:
 		add [local_stack],eax
 
 		; jpg decoding buffer
-		call jpg_setup
+		pm32_call jpg_setup
 
 		; alloc memory for palette data
 		call pal_init
@@ -1718,17 +1732,32 @@ gfx_password_done_90:
 		retf
 
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Run boot loader function.
+;
+; al		function number
+;
+; return:
+;  al		error code (0 = ok)
+;
+
+		bits 32
+
 gfx_cb:
 		cmp dword [boot_callback],0
 		jz gfx_cb_80
+		pm_leave 32
 		push ds
 		call far [boot_callback]
 		pop ds
+		pm_enter 32
 		jmp gfx_cb_90
 gfx_cb_80:
 		mov al,0ffh
 gfx_cb_90:
 		ret
+
+		bits 16
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1740,6 +1769,9 @@ gfx_cb_90:
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
+
+		bits 16
+
 timeout:
 		mov cx,cb_Timeout
 		call get_dict_entry
@@ -2369,9 +2401,7 @@ malloc_init_70:
 ;
 calloc:
 		push eax
-		pm_enter 32
-		call malloc
-		pm_leave 32
+		pm32_call malloc
 		pop ecx
 		or eax,eax
 		jz calloc_90
@@ -2763,17 +2793,18 @@ _memsize_50:
 _memsize_90:
 		ret
 
-		bits 16
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Calculate size of memory block.
 ;
-;  eax		lin. address
+; eax		address
 ;
 ; return:
 ;  eax		size
 ;
+
+		bits 16
+
 find_mem_size:
 		call fms_code
 		jnc find_mem_size_90
@@ -3372,9 +3403,7 @@ image_init:
 		call pcx_init
 		jnc image_init_90
 
-		pm_enter 32
-		call jpg_init
-		pm_leave 32
+		pm32_call jpg_init
 
 image_init_90:
 		pop eax
@@ -3765,7 +3794,7 @@ write_str_10:
 		call pf_next_char
 		cmp byte [pf_gfx],0
 		jz write_str_40
-		call is_eot
+		call rm_is_eot
 		jmp write_str_50
 write_str_40:
 		or al,al
@@ -5161,7 +5190,7 @@ prim_length:
 		mov dl,t_none
 		call get_1arg
 		jc prim_length_90
-		call get_length
+		pm32_call get_length
 		jc prim_length_90
 		xor cx,cx
 		mov dl,t_int
@@ -5170,42 +5199,7 @@ prim_length_90:
 		ret
 
 
-;  dl, eax	obj
-; Return:
-;  eax		length
-;   CF		0/1 ok/not ok
-;
-get_length:
-		cmp dl,t_ptr
-		jz get_length_10
-		lin2segofs eax,es,si
-		cmp dl,t_array
-		jz get_length_20
-		cmp dl,t_string
-		jz get_length_30
-		stc
-		jmp get_length_90
-get_length_10:
-		call find_mem_size
-		jmp get_length_80
-get_length_20:
-		movzx eax,word [es:si]
-		jmp get_length_80
-get_length_30:
-		xor cx,cx
-		xor eax,eax
-get_length_40:
-		es lodsb
-		call is_eot
-		loopnz get_length_40	; max 64k length
-		not cx
-		movzx eax,cx
-get_length_80:
-		clc
-get_length_90:
-		ret
-
-
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;; array - create an empty array
 ;
 ; group: mem
@@ -6707,7 +6701,7 @@ prim_forall_30:
 		xchg dl,dh
 		push dx
 		xchg eax,ecx
-		call get_length
+		pm32_call get_length
 		pop dx
 		pop ecx
 		pop ebx
@@ -7489,7 +7483,7 @@ prim_image:
 		jnc prim_image_90
 
 		push dword [gfx_cur]
-		call show_image
+		pm32_call show_image
 		pop dword [gfx_cur]
 
 		clc
@@ -7579,14 +7573,12 @@ prim_unpackimage:
 		sub eax,[line_y0]
 		sub ecx,[line_x0]
 
-		pm_enter 32
-		call alloc_fb
-		pm_leave 32
+		pm32_call alloc_fb
 		or eax,eax
 		jz prim_unpackimage_70
 
 		push eax
-		call unpack_image
+		pm32_call unpack_image
 		pop eax
 
 prim_unpackimage_60:
@@ -7792,9 +7784,7 @@ prim_savescreen:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
 		jc prim_savescreen_90
-		pm_enter 32
-		call alloc_fb
-		pm_leave 32
+		pm32_call alloc_fb
 		or eax,eax
 		jz prim_savescreen_50
 		push eax
@@ -7963,9 +7953,7 @@ prim_free:
 		stc
 		jnz prim_free_90
 prim_free_10:
-		pm_enter 32
-		call free
-		pm_leave 32
+		pm32_call free
 prim_free_50:
 		dec word [pstack_ptr]
 		clc
@@ -8002,11 +7990,7 @@ prim_memsize:
 		jb prim_memsize_90
 		mov [pstack_ptr],cx
 
-		pm_enter 32
-
-		call memsize
-
-		pm_leave 32
+		pm32_call memsize
 
 		mov dl,t_int
 		xchg eax,ebp
@@ -8552,7 +8536,7 @@ prim_filesize_40:
 		jmp prim_filesize_70
 prim_filesize_50:
 		xchg eax,ecx
-		call file_size_ext
+		pm32_call file_size_ext
 		cmp eax,-1
 		jnz prim_filesize_40
 		inc eax
@@ -8577,7 +8561,7 @@ prim_filesize_90:
 ;
 prim_getcwd:
 		mov al,3
-		call gfx_cb			; cwd (lin)
+		pm32_call gfx_cb			; cwd (lin)
 		or al,al
 		jnz prim_getcwd_70
 		mov eax,edx
@@ -8606,7 +8590,7 @@ prim_chdir:
 		call get_1arg
 		jc prim_chdir_90
 		push eax
-		call get_length
+		pm32_call get_length
 		xchg eax,ecx
 		pop eax
 		jc prim_chdir_60
@@ -8620,7 +8604,7 @@ prim_chdir:
 
 		push eax
 		mov al,0
-		call gfx_cb			; get file name buffer address (edx)
+		pm32_call gfx_cb			; get file name buffer address (edx)
 		call lin2so
 		pop si
 		pop fs
@@ -8637,7 +8621,7 @@ prim_chdir:
 		stosb
 
 		mov al,4
-		call gfx_cb
+		pm32_call gfx_cb
 		or al,al
 
 		mov bp,pserr_invalid_function
@@ -8673,7 +8657,7 @@ prim__readsector:
 
 		mov edx,eax
 		mov al,5
-		call gfx_cb			; read sector (nr = edx)
+		pm32_call gfx_cb			; read sector (nr = edx)
 		or al,al
 		jz prim__readsector_50
 		mov dl,t_none
@@ -8931,9 +8915,7 @@ prim_sysinfo:
 
 		cmp eax,100h
 		jae prim_si_20
-		pm_enter 32
-		call videoinfo
-		pm_leave 32
+		pm32_call videoinfo
 		jmp prim_si_80
 prim_si_20:
 
@@ -9087,7 +9069,7 @@ prim_strstr_30:
 		inc ebx
 		jmp prim_strstr_20
 
-prim_strstr_40
+prim_strstr_40:
 		xor ebx,ebx
 		jmp prim_strstr_60
 prim_strstr_50:
@@ -10191,6 +10173,50 @@ pr_setobj_30:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Get object size.
+;
+; eax, dl	obj, obj tyoe
+;
+; return:
+;
+;  eax		length
+;   CF		0/1 ok/not ok
+;
+
+		bits 32
+
+get_length:
+		cmp dl,t_ptr
+		jz get_length_10
+		cmp dl,t_array
+		jz get_length_20
+		cmp dl,t_string
+		jz get_length_30
+		stc
+		jmp get_length_90
+get_length_10:
+		rm32_call find_mem_size
+		jmp get_length_80
+get_length_20:
+		movzx eax,word [es:eax]
+		jmp get_length_80
+get_length_30:
+		xchg eax,esi
+		xor ecx,ecx
+		xor eax,eax
+get_length_40:
+		es lodsb
+		call is_eot
+		loopnz get_length_40
+		not ecx
+		xchg eax,ecx
+get_length_80:
+		clc
+get_length_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ;  al			arg type; bit 0, 1: src, alpha is int (1) or ptr (0)
 ;  fs:esi		src
@@ -10199,6 +10225,9 @@ pr_setobj_30:
 ;  word [gfx_cur_x]	offset into src
 ;  word [gfx_cur_y]	dto
 ;
+
+		bits 16
+
 blend:
 		push dword [transp]
 
@@ -11420,7 +11449,7 @@ text_xy:
 		push si
 		call utf8_dec
 		pop si
-		call is_eot
+		call rm_is_eot
 		jz text_xy_05
 		inc word [cur_row2]
 text_xy_05:
@@ -11429,7 +11458,7 @@ text_xy_10:
 		mov di,si
 		call utf8_dec
 
-		call is_eot
+		call rm_is_eot
 		jz text_xy_90
 
 		cmp word [line_wrap],byte 0
@@ -11456,7 +11485,7 @@ text_xy_30:
 		mov di,si
 		call utf8_dec
 
-		call is_eot
+		call rm_is_eot
 		jz text_xy_90
 		jmp text_xy_30
 text_xy_50:
@@ -11622,7 +11651,7 @@ word_width_10:
 		call utf8_dec
 
 word_width_20:
-		call is_eot
+		call rm_is_eot
 		jz word_width_90
 
 		cmp eax,0ah
@@ -11710,14 +11739,35 @@ is_space_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Test for end of text.
 ;
-;  eax		char
+; eax		char
 ;
 ; return:
 ;  ZF		0 = no, 1 = yes
 ;
+
+		bits 16
+
+rm_is_eot:
+		or eax,eax
+		jz rm_is_eot_90
+		cmp eax,[char_eot]
+rm_is_eot_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Test for end of text.
+;
+; eax		char
+;
+; return:
+;  ZF		0 = no, 1 = yes
+;
+
+		bits 32
+
 is_eot:
 		or eax,eax
 		jz is_eot_90
@@ -11736,6 +11786,9 @@ is_eot_90:
 ;  cx		width
 ;  dx		height
 ;
+
+		bits 16
+
 str_size:
 		xor cx,cx
 		xor dx,dx
@@ -12484,9 +12537,7 @@ parse_img:
 		mov eax,[pcx_line_starts]
 		or eax,eax
 		jz parse_img_10
-		pm_enter 32
-		call free
-		pm_leave 32 
+		pm32_call free
 parse_img_10:
 		movzx eax,word [image_height]
 		shl eax,2
@@ -13278,16 +13329,12 @@ sound_done:
 		push dword [mod_buf]
 		call so2lin
 		pop eax
-		pm_enter 32
-		call free
-		pm_leave 32
+		pm32_call free
 
 		push dword [sound_buf]
 		call so2lin
 		pop eax
-		pm_enter 32
-		call free
-		pm_leave 32
+		pm32_call free
 
 sound_done_90:
 		ret
@@ -13551,10 +13598,13 @@ prim_xxx_90:
 ;  eax		file start (lin)
 ;
 ; Note: use find_mem_size to find out the file size
+
+		bits 16
+
 find_file_ext:
 		mov dl,t_string
 		push eax
-		call get_length
+		pm32_call get_length
 		xchg eax,ecx
 		pop eax
 		or ecx,ecx
@@ -13566,7 +13616,7 @@ find_file_ext:
 
 		push eax
 		mov al,0
-		call gfx_cb			; get file name buffer address (edx)
+		pm32_call gfx_cb			; get file name buffer address (edx)
 		call lin2so
 		pop si
 		pop fs
@@ -13583,7 +13633,7 @@ find_file_ext:
 		stosb
 
 		mov al,1
-		call gfx_cb			; open file (ecx size)
+		pm32_call gfx_cb			; open file (ecx size)
 		or al,al
 		jnz find_file_ext_80
 
@@ -13602,7 +13652,7 @@ find_file_ext:
 find_file_ext_20:
 		push ebx
 		mov al,2
-		call gfx_cb			; read next chunk (edx buffer, ecx len)
+		pm32_call gfx_cb			; read next chunk (edx buffer, ecx len)
 		pop ebx
 		or al,al
 		jnz find_file_ext_50
@@ -13629,9 +13679,7 @@ find_file_ext_50:
 		jz find_file_ext_90
 
 		; ... no -> read error
-		pm_enter 32
-		call free
-		pm_leave 32
+		pm32_call free
 
 find_file_ext_80:
 		xor eax,eax
@@ -13640,7 +13688,6 @@ find_file_ext_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Find file from file system, returns size.
 ;
 ;  eax		file name (lin)
@@ -13648,6 +13695,9 @@ find_file_ext_90:
 ; return:
 ;  eax		file size (-1: not found)
 ;
+
+		bits 32
+
 file_size_ext:
 		mov dl,t_string
 		push eax
@@ -13659,23 +13709,20 @@ file_size_ext:
 		cmp ecx,64
 		jae file_size_ext_80
 
-		push cx
-
+		push ecx
 		push eax
+
 		mov al,0
 		call gfx_cb			; get file name buffer address (edx)
-		call lin2so
-		pop si
-		pop fs
+		mov edi,edx
 
-		pop cx
+		pop esi
+		pop ecx
 
 		or al,al
 		jnz file_size_ext_80
 
-		lin2segofs edx,es,di
-
-		fs rep movsb
+		es rep movsb
 		mov al,0
 		stosb
 
@@ -13708,6 +13755,9 @@ file_size_ext_90:
 ;  If CF = 0		Area adjusted to fit within [line_*].
 ;  If CF = 1		Undefined values in [line_*].
 ;
+
+		bits 16
+
 clip_image:
 		movzx edx,word [image_width]
 		mov eax,[line_x0]
@@ -13762,17 +13812,18 @@ clip_image_90:
 ; dword [line_x1]	x1	; lower right
 ; dword [line_y1]	y1
 ;
+
+		bits 32
+
 unpack_image:
 		cmp byte [image_type],1
 		jnz unpack_image_20
-		call pcx_unpack
+		rm32_call pcx_unpack
 		jmp unpack_image_90
 unpack_image_20:
 		cmp byte [image_type],2
 		jnz unpack_image_90
-		pm_enter 32
 		call jpg_unpack
-		pm_leave 32
 unpack_image_90:
 		ret
 
@@ -13787,17 +13838,18 @@ unpack_image_90:
 ; dword [line_x1]	x1	; lower right
 ; dword [line_y1]	y1
 ;
+
+		bits 32
+
 show_image:
 		cmp byte [image_type],1
 		jnz show_image_20
-		call pcx_show
+		rm32_call pcx_show
 		jmp show_image_90
 show_image_20:
 		cmp byte [image_type],2
 		jnz show_image_90
-		pm_enter 32
 		call jpg_show
-		pm_leave 32
 show_image_90:
 		ret
 
@@ -13811,6 +13863,9 @@ show_image_90:
 ; dword [line_x1]	x1	; lower right
 ; dword [line_y1]	y1
 ;
+
+		bits 16
+
 pcx_unpack:
 		push gs
 		push fs
@@ -13914,6 +13969,9 @@ pcx_unpack_90:
 ; dword [line_x1]	x1	; lower right
 ; dword [line_y1]	y1
 ;
+
+		bits 16
+
 pcx_show:
 		push gs
 		push fs
@@ -14032,9 +14090,7 @@ jpg_setup:
 		jnz jpg_setup_90
 
 		mov eax,jpg_data_size + 15
-		pm_leave 32
-		call calloc
-		pm_enter 32
+		rm32_call calloc
 		or eax,eax
 		jz jpg_setup_90
 
@@ -14070,9 +14126,7 @@ jpg_init:
 		jz jpg_init_80
 
 		push eax
-		pm_leave 32
-		call find_mem_size
-		pm_enter 32
+		rm32_call find_mem_size
 		mov ecx,eax
 		pop eax
 
@@ -14276,9 +14330,7 @@ jpg_show_60:
 		add edi,4
 		mov bx,dx
 		imul bx,[pixel_bytes]
-		pm_leave 32
-		call restore_bg
-		pm_enter 32
+		rm32_call restore_bg
 
 		mov eax,[line_y1]
 		mov ecx,eax

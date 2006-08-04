@@ -1,0 +1,105 @@
+#! /usr/bin/perl
+
+#
+# trace 16/32 bit context switches and warn if we messed things up
+#
+
+use Getopt::Long;
+
+$opt_verbose = 0;
+
+GetOptions(
+  'verbose|v' => \$opt_verbose
+);
+
+$ctx = 16;
+$line = 0;
+
+$err = 0;
+
+while(<>) {
+  chomp;
+
+  $line++;
+
+  $macro = 1 if /^\s*%macro/;
+  $macro = 0 if /^\s*%endmacro/;
+
+  s/\s*;.*$//;
+
+  $_ = "" if $macro || /^\s*%endmacro/;
+
+  push @line, [ $ctx, $_, $line ];
+
+  if(!$macro) {
+    if(/^\s*(\S+):/) {
+      $label{$1}{ctx} = $ctx;
+      $label{$1}{line} = $line;
+    }
+
+    $ctx = $2 if /^\s*(switch_to_)?bits\s+(16|32)\s*$/;
+    $ctx = $1 if /^\s*pm_enter\s*(16|32)\s*$/;
+    $ctx = 16 if /^\s*pm_leave\s*(16|32)\s*$/;
+  }
+}
+
+$macro = 0;
+
+for $l (@line) {
+  $_ = $l->[1];
+
+  if(/^\s*(\S+:)?\s*(call|j[a-z])(\s+far)?\s+(\S+)/) {
+    $op = $2;
+    $dst = $4;
+    next if $dst eq '$';
+    if($label{$dst}) {
+      if($label{$dst}{ctx} != $l->[0]) {
+        printf "%5d: wrong context (%d -> %d): %s\n", $l->[2], $l->[0], $label{$dst}{ctx}, $_;
+        $err = 1;
+      }
+    }
+    else {
+      printf "%5d: no target: %s\n", $l->[2], $_ if $opt_verbose;
+    }
+
+    next;
+  }
+
+  if(/^\s*(\S+:)?\s*([rp]m32_call)\s+(\S+)/) {
+    $op = $2;
+    $dst = $3;
+
+    ($c0, $c1) = $op eq 'pm32_call' ? (16, 32) : (32, 16);
+
+    if($label{$dst}) {
+      if($label{$dst}{ctx} != $c1 || $l->[0] != $c0) {
+        printf "%5d: wrong context (%d -> %d): %s\n", $l->[2], $l->[0], $label{$dst}{ctx}, $_;
+        $err = 1
+      }
+    }
+    else {
+      printf "%5d: no target: %s\n", $l->[2], $_ if $opt_verbose;
+    }
+
+    next;
+  }
+
+
+  if(/^\s*(\S+:)?\s*(pm_enter|pm_leave)\s+(16|32)/) {
+    $op = $2;
+    $arg = $3;
+
+    $c = $op eq 'pm_enter' || $arg == 16 ? 16 : 32;
+
+    if($l->[0] != $c) {
+      printf "%5d: wrong context (%d): %s\n", $l->[2], $l->[0], $_;
+      $err = 1
+    }
+
+    next;
+  }
+
+}
+
+exit $err;
+

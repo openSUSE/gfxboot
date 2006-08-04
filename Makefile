@@ -23,6 +23,7 @@ addblack: addblack.c
 	$(CC) $(CFLAGS) $< -o $@
 
 bincode.o:  bincode.asm vocabulary.inc modplay_defines.inc modplay.inc kroete.inc
+	bin/trace_context bincode.asm
 	nasm -f elf -O10 -o $@ -l bincode.lst $<
 
 bincode: bincode.o jpeg.o
