@@ -1,4 +1,6 @@
+7/8/2006:	v3.2.36
 	- move to 32 bit, cont.
+	- added 10.2 openSUSE logos
 
 1/8/2006:	v3.2.35
 	- started internal rewrite to run all code in 32 bit pm
