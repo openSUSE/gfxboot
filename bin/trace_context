@@ -31,6 +31,8 @@ while(<>) {
 
   push @line, [ $ctx, $_, $line ];
 
+  $ctx_cnt{$ctx}++;
+
   if(!$macro) {
     if(/^\s*(\S+):/) {
       $label{$1}{ctx} = $ctx;
@@ -48,7 +50,7 @@ $macro = 0;
 for $l (@line) {
   $_ = $l->[1];
 
-  if(/^\s*(\S+:)?\s*(call|j[a-z])(\s+far)?\s+(\S+)/) {
+  if(/^\s*(\S+:)?\s*(call|j[a-z]+)(\s+far)?\s+(\S+)/) {
     $op = $2;
     $dst = $4;
     next if $dst eq '$';
@@ -100,6 +102,8 @@ for $l (@line) {
   }
 
 }
+
+printf "  32 bit: %d (of %d)\n", $ctx_cnt{32}, scalar(@line);
 
 exit $err;
 

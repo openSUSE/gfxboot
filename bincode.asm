@@ -220,6 +220,12 @@ setpixel_t		dw setpixel_8		; function that sets one pixel
 setpixel_ta		dw setpixel_a_8		; function that sets one pixel
 getpixel		dw getpixel_8		; function that gets one pixel
 
+pm_setpixel		dd pm_setpixel_8		; function that sets one pixel
+pm_setpixel_a		dd pm_setpixel_a_8		; function that sets one pixel
+pm_setpixel_t		dd pm_setpixel_8		; function that sets one pixel
+pm_setpixel_ta		dd pm_setpixel_a_8		; function that sets one pixel
+pm_getpixel		dd pm_getpixel_8		; function that gets one pixel
+
 
 transp			dd 0		; transparency
 
@@ -254,6 +260,9 @@ utf8_buf		times 8 db 0
 
 ; pointer to currently active palette (3*100h bytes)
 gfx_pal			dd 0		; (seg:ofs)
+gfx_pal.ofs		equ gfx_pal
+gfx_pal.seg		equ gfx_pal+2
+gfx_pal.lin		dd 0		; (lin)
 ; pointer to tmp area (3*100h bytes)
 gfx_pal_tmp		dd 0		; (seg:ofs)
 ; number of fixed pal values
@@ -814,11 +823,21 @@ gfx_init_30:
 		mov [si+4],eax
 gfx_init_40:
 
+		; we can run in protected mode but can't handle ints until
+		; after pm_init
+		cli
+
+		pm_enter 32
+
 		call malloc_init
 
 		; setup full pm interface
 		; can't do it earlier - we need malloc
 		call pm_init
+
+		pm_leave 32
+
+		sti
 
 %if debug
 		mov si,hello
@@ -878,7 +897,7 @@ gfx_init_40:
 		mov eax,8 << 10
 		mov [stack_size],ax
 		add eax,3
-		call calloc
+		pm32_call calloc
 		cmp eax,byte 1
 		jc gfx_init_90
 		; dword align
@@ -897,13 +916,13 @@ gfx_init_40:
 		call pal_init
 
 		mov eax,100h
-		call calloc
+		pm32_call calloc
 		cmp eax,byte 1
 		jc gfx_init_90
 		mov [infobox_buffer],eax
 
 		mov eax,200h
-		call calloc
+		pm32_call calloc
 		cmp eax,byte 1
 		jc gfx_init_90
 		mov [vbe_buffer.lin],eax
@@ -912,13 +931,13 @@ gfx_init_40:
 		pop dword [vbe_buffer.ofs]
 
 		mov eax,100h
-		call calloc
+		pm32_call calloc
 		cmp eax,byte 1
 		jc gfx_init_90
 		mov [vbe_info_buffer],eax
 
 		mov eax,200h
-		call calloc
+		pm32_call calloc
 		cmp eax,byte 1
 		jc gfx_init_90
 		push eax
@@ -1160,10 +1179,10 @@ gfx_menu_init_20:
 		imul ax,ax,5
 		add ax,2
 		push eax
-		call calloc
+		pm32_call calloc
 		mov [tmp_var_2],eax
 		pop eax
-		call calloc
+		pm32_call calloc
 		mov [tmp_var_1],eax
 		pop cx
 		pop si
@@ -1867,7 +1886,7 @@ stack_init:
 		mov [pstack_size],ax
 		and word [pstack_ptr],byte 0
 		mov eax,param_stack_size * 5
-		call calloc
+		pm32_call calloc
 		cmp eax,byte 1
 		jc stack_init_90
 		push eax
@@ -1878,7 +1897,7 @@ stack_init:
 		mov [rstack_size],ax
 		and word [rstack_ptr],byte 0
 		mov eax,ret_stack_size * 5
-		call calloc
+		pm32_call calloc
 		cmp eax,byte 1
 		jc stack_init_90
 		push eax
@@ -2200,7 +2219,7 @@ dict_init:
 		imul eax,eax,5
 		push es
 		push si
-		call calloc
+		pm32_call calloc
 		pop si
 		pop es
 		cmp eax,byte 1
@@ -2293,6 +2312,9 @@ dump_dict_90:
 ;  cx		index
 ;  CF		error
 ;
+
+		bits 16
+
 get_dict_entry:
 		les bx,[dict]
 		xor eax,eax
@@ -2320,6 +2342,9 @@ get_dict_entry_90:
 ;  cx		index
 ;  CF		error
 ;
+
+		bits 16
+
 set_dict_entry:
 		les bx,[dict]
 		cmp [dict_size],cx
@@ -2337,17 +2362,14 @@ set_dict_entry_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Init malloc areas.
 ;
 ; idt is not ready yet - hence the cli.
 ;
+
+		bits 32
+
 malloc_init:
-		pushf
-		cli
-
-		pm_enter 32
-
 		xor ebx,ebx
 malloc_init_10:
 		mov eax,[malloc.area + bx]
@@ -2381,11 +2403,6 @@ malloc_init_70:
 		add bx,8
 		cmp bx,malloc.areas * 8
 		jb malloc_init_10
-
-		pm_leave 32
-
-		popf
-
 		ret
 
 
@@ -2399,14 +2416,17 @@ malloc_init_70:
 ;  eax          linear address  (0 if the request failed)
 ;  memory is initialized with 0
 ;
+
+		bits 32
+
 calloc:
 		push eax
-		pm32_call malloc
+		call malloc
 		pop ecx
 		or eax,eax
 		jz calloc_90
 		push eax
-		lin2segofs eax,es,di
+		mov edi,eax
 		xor al,al
 		rep stosb
 		pop eax
@@ -3176,6 +3196,7 @@ set_mode:
 		mov byte [pixel_bits],8
 		mov byte [pixel_bytes],1
 		call mode_init
+		call pm_mode_init
 set_mode_102:
 		clc
 		jmp set_mode_90
@@ -3244,6 +3265,7 @@ set_mode_45:
 		mov [color_bits],dh
 
 		call mode_init
+		call pm_mode_init
 
 		; we check if win A is readable _and_ writable; if not, we want
 		; at least a writable win A and a readable win B
@@ -3331,6 +3353,34 @@ mode_init_10:
 		mov word [setpixel_ta],setpixel_ta_32
 		mov word [getpixel],getpixel_32
 mode_init_90:
+		ret
+
+
+pm_mode_init:
+		mov dword [pm_setpixel],pm_setpixel_8
+		mov dword [pm_setpixel_a],pm_setpixel_a_8
+		mov dword [pm_setpixel_t],pm_setpixel_8
+		mov dword [pm_setpixel_ta],pm_setpixel_a_8
+		mov dword [pm_getpixel],pm_getpixel_8
+		cmp byte [pixel_bits],8
+		jz pm_mode_init_90
+		cmp  byte [pixel_bits],16
+		jnz pm_mode_init_10
+		mov dword [pm_setpixel],pm_setpixel_16
+		mov dword [pm_setpixel_a],pm_setpixel_a_16
+		mov dword [pm_setpixel_t],pm_setpixel_t_16
+		mov dword [pm_setpixel_ta],pm_setpixel_ta_16
+		mov dword [pm_getpixel],pm_getpixel_16
+		jmp mode_init_90
+pm_mode_init_10:
+		cmp byte [pixel_bits],32
+		jnz pm_mode_init_90
+		mov dword [pm_setpixel],pm_setpixel_32
+		mov dword [pm_setpixel_a],pm_setpixel_a_32
+		mov dword [pm_setpixel_t],pm_setpixel_t_32
+		mov dword [pm_setpixel_ta],pm_setpixel_ta_32
+		mov dword [pm_getpixel],pm_getpixel_32
+pm_mode_init_90:
 		ret
 
 
@@ -3987,17 +4037,22 @@ ps_status_info_71:
 		cmp dl,t_string
 		jnz ps_status_info_79
 
-		lin2seg eax,fs,esi
+		pm_enter 32
 
-		mov di,num_buf
+		push ds
+		pop es
+
+		xchg eax,esi
+
+		mov edi,num_buf
 		mov al,0afh
 		stosb
 ps_status_info_72:
-		fs a32 lodsb
+		fs lodsb
 		or al,al
 		jz ps_status_info_73
 		stosb
-		cmp byte [es:di+1],0
+		cmp byte [es:edi+1],0
 		jnz ps_status_info_72
 		cmp byte [fs:esi],0
 		jnz ps_status_info_74
@@ -4009,7 +4064,7 @@ ps_status_info_74:
 ps_status_info_75:
 		stosb
 
-		call lin_seg_off
+		pm_leave 32
 
 ps_status_info_79:
 		mov si,num_buf
@@ -4841,7 +4896,7 @@ prim_aend_10:
 		inc ax
 		inc ax
 		movzx eax,ax
-		call calloc
+		pm32_call calloc
 		pop cx
 		or eax,eax
 		mov bp,pserr_no_memory
@@ -5113,7 +5168,7 @@ prim_array:
 		mul cx
 		inc ax
 		inc ax
-		call calloc
+		pm32_call calloc
 		pop cx
 		or eax,eax
 		stc
@@ -7148,7 +7203,7 @@ prim_fontheight:
 ;
 prim_setimage:
 		call pr_setptr_or_none
-		call image_init
+		pm32_call image_init
 		ret
 
 
@@ -7354,6 +7409,8 @@ prim_image:
 
 		sub word [pstack_ptr],byte 4
 
+		pm_enter 32
+
 		mov edx,[line_x0]
 		add edx,ecx
 		mov [line_x1],edx
@@ -7364,13 +7421,15 @@ prim_image:
 
 		call clip_image
 		cmc
-		jnc prim_image_90
+		jnc prim_image_89
 
 		push dword [gfx_cur]
-		pm32_call show_image
+		call show_image
 		pop dword [gfx_cur]
 
 		clc
+prim_image_89:
+		pm_leave 32
 prim_image_90:
 		ret
 
@@ -7440,6 +7499,8 @@ prim_unpackimage:
 
 		sub word [pstack_ptr],byte 3
 
+		pm_enter 32
+
 		mov edx,[line_x0]
 		add edx,ecx
 		mov [line_x1],edx
@@ -7457,12 +7518,12 @@ prim_unpackimage:
 		sub eax,[line_y0]
 		sub ecx,[line_x0]
 
-		pm32_call alloc_fb
+		call alloc_fb
 		or eax,eax
 		jz prim_unpackimage_70
 
 		push eax
-		pm32_call unpack_image
+		call unpack_image
 		pop eax
 
 prim_unpackimage_60:
@@ -7473,6 +7534,9 @@ prim_unpackimage_70:
 		mov dl,t_none
 		xor eax,eax
 prim_unpackimage_80:
+
+		pm_leave 32
+
 		xor cx,cx
 		call set_pstack_tos
 prim_unpackimage_90:
@@ -7792,7 +7856,7 @@ prim_malloc:
 		mov dl,t_int
 		call get_1arg
 		jc prim_malloc_90
-		call calloc
+		pm32_call calloc
 		or eax,eax
 		stc
 		mov bp,pserr_no_memory
@@ -8258,17 +8322,9 @@ prim_getbyte:
 		mov dl,t_ptr
 		call get_1arg
 		jc prim_getbyte_90
-		lin2seg eax,es,esi
-		xor eax,eax
-		cmp esi,0xfffc
-		jbe prim_getbyte_30
-		mov ax,es
-		or ax,ax
-		jz prim_getbyte_70
-prim_getbyte_30:
-		movzx eax,byte [es:esi]
-prim_getbyte_70:
-		call lin_seg_off
+		pm_enter 32
+		movzx eax,byte [es:eax]
+		pm_leave 32
 		mov dl,t_int
 		xor cx,cx
 		call set_pstack_tos
@@ -8288,8 +8344,9 @@ prim_putbyte:
 		mov dx,t_int + (t_ptr << 8)
 		call get_2args
 		jc prim_putbyte_90
-		lin2segofs ecx,es,bx
-		mov [es:bx],al
+		pm_enter 32
+		mov [es:ecx],al
+		pm_leave 32
 		sub word [pstack_ptr],byte 2
 prim_putbyte_90:
 		ret
@@ -8307,17 +8364,9 @@ prim_getdword:
 		mov dl,t_ptr
 		call get_1arg
 		jc prim_getdword_90
-		lin2seg eax,es,esi
-		xor eax,eax
-		cmp esi,0xfffc
-		jbe prim_getdword_30
-		mov ax,es
-		or ax,ax
-		jz prim_getdword_70
-prim_getdword_30:
-		mov eax,[es:esi]
-prim_getdword_70:
-		call lin_seg_off
+		pm_enter 32
+		mov eax,[es:eax]
+		pm_leave 32
 		mov dl,t_int
 		xor cx,cx
 		call set_pstack_tos
@@ -8337,8 +8386,9 @@ prim_putdword:
 		mov dx,t_int + (t_ptr << 8)
 		call get_2args
 		jc prim_putdword_90
-		lin2segofs ecx,es,bx
-		mov [es:bx],eax
+		pm_enter 32
+		mov [es:ecx],eax
+		pm_leave 32
 		sub word [pstack_ptr],byte 2
 prim_putdword_90:
 		ret
@@ -8376,7 +8426,7 @@ prim_findfile_10:
 		or eax,eax
 		jnz prim_findfile_20
 		xchg eax,ecx
-		call find_file_ext
+		pm32_call find_file_ext
 		mov dl,t_ptr
 		or eax,eax
 		jnz prim_findfile_20
@@ -10951,10 +11001,18 @@ goto_xy:
 ;
 ;  Changed registers: eax
 ;
+
+		bits 16
+
 setcolor:
 		mov [gfx_color],eax
 		ret
 
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+
+		bits 16
 
 encode_color:
 		cmp byte [pixel_bits],16
@@ -10993,28 +11051,74 @@ decode_color_90:
 		ret
 
 
-;  ax		palette index
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+
+		bits 32
+
+pm_encode_color:
+		cmp byte [pixel_bits],16
+		jnz pm_encode_color_90
+		push edx
+		xor edx,edx
+		shl eax,8
+		shld edx,eax,5
+		shl eax,8
+		shld edx,eax,6
+		shl eax,8
+		shld edx,eax,5
+		mov eax,edx
+		pop edx
+pm_encode_color_90:
+		ret
+
+
+pm_decode_color:
+		cmp byte [pixel_bits],16
+		jnz pm_decode_color_90
+		push edx
+		xor edx,edx
+		shl eax,16
+		shld edx,eax,5
+		shld edx,eax,3
+		shl eax,5
+		shld edx,eax,6
+		shld edx,eax,2
+		shl eax,6
+		shld edx,eax,5
+		shld edx,eax,3
+		mov eax,edx
+		pop edx
+pm_decode_color_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Look up rgb value for palette entry.
+;
+;  eax		palette index
 ;
 ; return:
 ;  eax		color
 ;
+
+		bits 32
+
 pal_to_color:
-		push gs
-		push si
-		lgs si,[gfx_pal]
-		add si,ax
-		add si,ax
-		add si,ax
-		mov eax,[gs:si]
+		lea eax,[eax+2*eax]
+		add eax,[gfx_pal.lin]
+		mov eax,[es:eax]
 		bswap eax
 		shr eax,8
-		pop si
-		pop gs
 		ret
+
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; draw a line
 ;
+
+		bits 16
+
 line:
 		xor eax,eax
 		xor ebx,ebx
@@ -11140,9 +11244,11 @@ line_pp:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Set pixel at es:di.
 ;
+
+		bits 16
+
 setpixel_8:
 		mov al,[gfx_color]
 
@@ -11197,6 +11303,22 @@ setpixel_ta_32:
 		mov [es:edi],eax
 		ret
 
+
+; (1 - t) eax + t * ecx -> eax
+enc_transp:
+		ror ecx,16
+		ror eax,16
+		call add_transp
+		rol ecx,8
+		rol eax,8
+		call add_transp
+		rol ecx,8
+		rol eax,8
+		call add_transp
+		mov eax,ecx
+		ret
+
+
 ; cl, al -> cl
 add_transp:
 		push eax
@@ -11222,25 +11344,12 @@ add_transp_20:
 		ret
 
 
-; (1 - t) eax + t * ecx -> eax
-enc_transp:
-		ror ecx,16
-		ror eax,16
-		call add_transp
-		rol ecx,8
-		rol eax,8
-		call add_transp
-		rol ecx,8
-		rol eax,8
-		call add_transp
-		mov eax,ecx
-		ret
-
-
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Get pixel from fs:si.
 ;
+
+		bits 16
+
 getpixel_8:
 		mov al,[fs:esi]
 		ret
@@ -11255,8 +11364,131 @@ getpixel_32:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; initialize console font (used for debug output)
+; Set pixel at es:edi.
 ;
+
+		bits 32
+
+pm_setpixel_8:
+		mov al,[gfx_color]
+
+pm_setpixel_a_8:
+		mov [es:edi],al
+		ret
+
+pm_setpixel_16:
+		mov ax,[gfx_color]
+
+pm_setpixel_a_16:
+		mov [es:edi],ax
+		ret
+
+pm_setpixel_32:
+		mov eax,[gfx_color]
+
+pm_setpixel_a_32:
+		mov [es:edi],eax
+		ret
+
+
+; with transparency
+pm_setpixel_t_16:
+		mov ax,[gfx_color]
+
+pm_setpixel_ta_16:
+		cmp dword [transp],0
+		jz pm_setpixel_a_16
+		call pm_decode_color
+		push ecx
+		xchg eax,ecx
+		mov ax,[fs:edi]
+		call pm_decode_color
+		xchg eax,ecx
+		call pm_enc_transp
+		pop ecx
+		call pm_encode_color
+		mov [es:edi],ax
+		ret
+
+pm_setpixel_t_32:
+		mov eax,[gfx_color]
+
+pm_setpixel_ta_32:
+		cmp dword [transp],0
+		jz pm_setpixel_a_32
+		push ecx
+		mov ecx,[fs:edi]
+		call pm_enc_transp
+		pop ecx
+		mov [es:edi],eax
+		ret
+
+
+; (1 - t) eax + t * ecx -> eax
+pm_enc_transp:
+		ror ecx,16
+		ror eax,16
+		call pm_add_transp
+		rol ecx,8
+		rol eax,8
+		call pm_add_transp
+		rol ecx,8
+		rol eax,8
+		call pm_add_transp
+		mov eax,ecx
+		ret
+
+
+; cl, al -> cl
+pm_add_transp:
+		push eax
+		push ecx
+		movzx eax,al
+		movzx ecx,cl
+		sub ecx,eax
+		imul ecx,[transp]
+		sar ecx,8
+		add ecx,eax
+		cmp ecx,0
+		jge pm_add_transp_10
+		mov cl,0
+		jmp pm_add_transp_20
+pm_add_transp_10:
+		cmp ecx,100h
+		jb pm_add_transp_20
+		mov cl,0ffh
+pm_add_transp_20:
+		mov [esp],cl
+		pop ecx
+		pop eax
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Get pixel from fs:esi.
+;
+
+		bits 32
+
+pm_getpixel_8:
+		mov al,[fs:esi]
+		ret
+
+pm_getpixel_16:
+		mov ax,[fs:esi]
+		ret
+
+pm_getpixel_32:
+		mov eax,[fs:esi]
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Initialize console font (used for debug output).
+;
+
+		bits 16
+
 cfont_init:
 		; 3: 8x8, 2: 8x14, 6: 8x16
 		mov bh,6
@@ -11274,6 +11506,9 @@ cfont_init:
 ;
 ; eax		linear ptr to font header
 ;
+
+		bits 16
+
 font_init:
 		mov edx,eax
 		shr edx,31
@@ -12190,7 +12425,8 @@ con_char_xy_60:
 ;
 pal_init:
 		mov eax,300h
-		call calloc
+		pm32_call calloc
+		mov [gfx_pal.lin],eax
 		push eax
 		call lin2so
 		pop dword [gfx_pal]
@@ -12198,7 +12434,7 @@ pal_init:
 		stc
 		jz pal_init_90
 		mov eax,300h
-		call calloc
+		pm32_call calloc
 		push eax
 		call lin2so
 		pop dword [gfx_pal_tmp]
@@ -13020,7 +13256,7 @@ sound_init:
 		jc sound_init_90
 
 		mov eax,ar_sizeof
-		call calloc
+		pm32_call calloc
 		cmp eax,byte 1
 		jc sound_init_90
 		push eax
@@ -13030,7 +13266,7 @@ sound_init:
 		call mod_init
 
 		mov eax,sound_buf_size
-		call calloc
+		pm32_call calloc
 		cmp eax,byte 1
 		jc sound_init_90
 		push eax
@@ -13425,12 +13661,12 @@ prim_xxx_90:
 ;
 ; Note: use find_mem_size to find out the file size
 
-		bits 16
+		bits 32
 
 find_file_ext:
 		mov dl,t_string
 		push eax
-		pm32_call get_length
+		call get_length
 		xchg eax,ecx
 		pop eax
 		or ecx,ecx
@@ -13438,28 +13674,25 @@ find_file_ext:
 		cmp ecx,64
 		jae find_file_ext_80
 
-		push cx
+		push ecx
 
 		push eax
 		mov al,0
-		pm32_call gfx_cb			; get file name buffer address (edx)
-		call lin2so
-		pop si
-		pop fs
+		call gfx_cb			; get file name buffer address (edx)
+		pop esi
 
-		pop cx
+		pop ecx
 
 		or al,al
 		jnz find_file_ext_80
 
-		lin2segofs edx,es,di
-
-		fs rep movsb
+		mov edi,edx
+		es rep movsb
 		mov al,0
 		stosb
 
 		mov al,1
-		pm32_call gfx_cb			; open file (ecx size)
+		call gfx_cb			; open file (ecx size)
 		or al,al
 		jnz find_file_ext_80
 
@@ -13473,24 +13706,22 @@ find_file_ext:
 		push ecx
 		push eax
 
-		mov ebx,eax
+		; eax: buffer, ecx: buffer size
+
+		mov edi,eax
 
 find_file_ext_20:
-		push ebx
+		push edi
 		mov al,2
-		pm32_call gfx_cb			; read next chunk (edx buffer, ecx len)
-		pop ebx
+		call gfx_cb			; read next chunk (edx buffer, ecx len)
+		pop edi
 		or al,al
 		jnz find_file_ext_50
 		or ecx,ecx
 		jz find_file_ext_50
 
-		lin2segofs edx,fs,si
-		lin2segofs ebx,es,di
-
-		add ebx,ecx
-
-		fs rep movsb
+		mov esi,edx
+		es rep movsb
 
 		jmp find_file_ext_20
 
@@ -13500,12 +13731,12 @@ find_file_ext_50:
 		pop ecx
 
 		; did we get everything...?
-		sub ebx,ecx
-		cmp eax,ebx
+		sub edi,ecx
+		cmp eax,edi
 		jz find_file_ext_90
 
 		; ... no -> read error
-		pm32_call free
+		call free
 
 find_file_ext_80:
 		xor eax,eax
@@ -13568,7 +13799,6 @@ file_size_ext_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Clip image area.
 ;
 ; [line_x0]		left, incl
@@ -13582,7 +13812,7 @@ file_size_ext_90:
 ;  If CF = 1		Undefined values in [line_*].
 ;
 
-		bits 16
+		bits 32
 
 clip_image:
 		movzx edx,word [image_width]
@@ -13628,8 +13858,7 @@ clip_image_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Unpack image to buffer.
+; Draw image into buffer.
 ;
 ; eax			drawing buffer
 ; [image]		image
@@ -13644,39 +13873,13 @@ clip_image_90:
 unpack_image:
 		cmp byte [image_type],1
 		jnz unpack_image_20
-		rm32_call pcx_unpack
+		call pcx_unpack
 		jmp unpack_image_90
 unpack_image_20:
 		cmp byte [image_type],2
 		jnz unpack_image_90
 		call jpg_unpack
 unpack_image_90:
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Draw image on screen.
-;
-; [image]		image
-; dword [line_x0]	x0	; upper left
-; dword [line_y0]	y0
-; dword [line_x1]	x1	; lower right
-; dword [line_y1]	y1
-;
-
-		bits 32
-
-show_image:
-		cmp byte [image_type],1
-		jnz show_image_20
-		rm32_call pcx_show
-		jmp show_image_90
-show_image_20:
-		cmp byte [image_type],2
-		jnz show_image_90
-		call jpg_show
-show_image_90:
 		ret
 
 
@@ -13689,64 +13892,186 @@ show_image_90:
 ;  CF		error
 ;
 
-		bits 16
+		bits 32
 
 image_init:
-		push eax
-
 		call pcx_init
 		jnc image_init_90
-
-		pm32_call jpg_init
-
+		call jpg_init
 image_init_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Draw image region on screen.
+;
+; [image]		jpg image
+; dword [line_x0]	x0	; uppper left
+; dword [line_y0]	y0
+; dword [line_x1]	x1	; lower right
+; dword [line_y1]	y1
+;
+
+		bits 32
+
+show_image:
+		xor esi,esi
+		xor eax,eax
+show_image_10:
+		push esi
+		push eax
+		call memsize
 		pop eax
+		pop esi
+		cmp edi,esi
+		jb show_image_20
+		mov esi,edi
+show_image_20:
+		inc eax
+		cmp eax,malloc.areas
+		jb show_image_10
+
+		; esi: largest free mem block
+
+		sub esi,4		; fb header size
+		jc show_image_90
+
+		mov ebx,[line_y1]
+		sub ebx,[line_y0]
+
+		mov ecx,[line_x1]
+		sub ecx,[line_x0]
+
+		mov eax,[pixel_bytes]
+		mul ecx
+		xchg eax,esi
+		div esi
+
+		; fb height
+
+		cmp eax,ebx
+		jbe show_image_30
+		mov eax,ebx
+show_image_30:
+		mov [line_tmp],eax
+
+		or eax,eax
+		jz show_image_90
+
+		; eax, ecx, height, width
+		call alloc_fb
+
+		or eax,eax
+		jz show_image_90
+
+		mov [line_tmp2],eax
+
+show_image_40:
+		mov eax,[line_y1]
+		sub eax,[line_y0]
+		jle show_image_70
+		mov ebp,[line_tmp]
+		cmp eax,ebp
+		jle show_image_50
+		mov eax,ebp
+show_image_50:
+		mov bp,ax
+		add eax,[line_y0]
+		xchg eax,[line_y1]
+
+		push eax
+		mov eax,[line_tmp2]
+
+		push ebp
+
+		cmp byte [image_type],1
+		jnz show_image_54
+		call pcx_unpack
+		jmp show_image_56
+show_image_54:
+		cmp byte [image_type],2
+		jnz show_image_56
+		call jpg_unpack
+show_image_56:
+
+		pop ebp
+
+		mov edi,[line_tmp2]
+		mov dx,[es:edi]
+		mov cx,[es:edi+2]
+
+		cmp cx,bp
+		jbe show_image_60
+		mov cx,bp
+show_image_60:
+
+		mov edi,[line_tmp2]
+		add edi,4
+		mov bx,dx
+		imul bx,[pixel_bytes]
+		rm32_call restore_bg
+
+		mov eax,[line_y1]
+		mov ecx,eax
+		sub ecx,[line_y0]
+		mov [line_y0],eax
+
+		add [gfx_cur_y],cx
+
+		pop eax
+
+		mov [line_y1],eax
+		jmp show_image_40
+
+show_image_70:
+		mov eax,[line_tmp2]
+		call free
+show_image_90:
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; Activate pcx image from file.
 ;
-;  eax:		lin ptr to image
+;  eax		pcx image
 ;
 ; return:
-;  CF:		error
+;  eax		pcx image
+;  CF		error
 ;
 
-		bits 16
+		bits 32
 
 pcx_init:
 		push eax
-		lin2segofs eax,es,bx
-		cmp dword [es:bx],0801050ah
+		cmp dword [es:eax],0801050ah
 		jnz pcx_init_80
 
-		mov cx,[es:bx+8]
+		mov cx,[es:eax+8]
 		inc cx
 		jz pcx_init_80
-		mov dx,[es:bx+10]
+		mov dx,[es:eax+10]
 		inc dx
 		jz pcx_init_80
 
 		push eax
-		push cx
-		push dx
-		push bx
-		push es
-		call find_mem_size
-		pop es
-		pop bx
-		pop dx
-		pop cx
+		push ecx
+		push edx
+		push ebx
+		rm32_call find_mem_size
+		pop ebx
+		pop edx
+		pop ecx
 		pop edi
+
+		; edi: image, eax: size, cx: width, dx: height
 
 		cmp eax,381h
 		jb pcx_init_80
 
 		lea esi,[eax+edi-301h]
-		lin2segofs esi,fs,si
 
-		cmp byte [fs:si],12
+		cmp byte [es:esi],12
 		jnz pcx_init_80
 
 		mov byte [image_type],1		; pcx
@@ -13755,39 +14080,38 @@ pcx_init:
 		mov [image_width],cx
 		mov [image_height],dx
 
-		lea ax,[bx+80h]
-		mov [image_data],ax
-		mov [image_data+2],es
+		lea ebx,[edi+80h]
+		mov [image_data],ebx
 
-		inc si
-		mov [image_pal],si
-		mov [image_pal+2],fs
+		inc esi
+		mov [image_pal],esi
 
-		call parse_img
+		push esi
+		call parse_pcx_img
+		pop esi
 
-		lfs si,[image_pal]
-		les di,[gfx_pal]
+		mov edi,[gfx_pal.lin]
 
-		mov cx,300h
-		push cx
-		fs rep movsb
-		pop cx
+		mov ecx,300h
+		push ecx
+		es rep movsb
+		pop ecx
 
-		xor ax,ax
-		mov dx,cx
-		dec di
+		xor eax,eax
+		mov edx,ecx
+		dec edi
 		std
 		repz scasb
 		cld
 		setnz al
-		sub dx,cx
-		sub dx,ax
-		xchg ax,dx
-		xor dx,dx
-		mov cx,3
-		div cx
-		sub ax,100h
-		neg ax
+		sub edx,ecx
+		sub edx,eax
+		xchg eax,edx
+		xor edx,edx
+		mov ecx,3
+		div ecx
+		sub eax,100h
+		neg eax
 		mov [pals],ax
 
 		clc
@@ -13803,65 +14127,56 @@ pcx_init_90:
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 
-		bits 16
+		bits 32
 
-parse_img:
-		push fs
+parse_pcx_img:
 		mov eax,[pcx_line_starts]
 		or eax,eax
-		jz parse_img_10
-		pm32_call free
-parse_img_10:
+		jz parse_pcx_img_10
+		call free
+parse_pcx_img_10:
 		movzx eax,word [image_height]
 		shl eax,2
 		call calloc
 		or eax,eax
 		stc
 		mov [pcx_line_starts],eax
-		jz parse_img_90
-		lin2segofs eax,es,di
-		lfs si,[image_data]
+		jz parse_pcx_img_90
 
-		xor dx,dx		; y count
+		mov edi,eax
+		mov esi,[image_data]
 
-parse_img_20:
-		xor cx,cx		; x count
-		mov [es:di],si
-		mov [es:di+2],fs
-		add di,4
-parse_img_30:
-		fs lodsb
+		xor edx,edx		; y count
+
+parse_pcx_img_20:
+		xor ecx,ecx		; x count
+		mov [es:edi],esi
+		add edi,4
+parse_pcx_img_30:
+		es lodsb
 		cmp al,0c0h
-		jb parse_img_40
-		and ax,3fh
-		inc si
-		add cx,ax
-		dec cx
-parse_img_40:
-		inc cx
+		jb parse_pcx_img_40
+		and eax,3fh
+		inc esi
+		add ecx,eax
+		dec ecx
+parse_pcx_img_40:
+		inc ecx
 		cmp cx,[image_width]
-		jb parse_img_30
+		jb parse_pcx_img_30
 		stc
-		jnz parse_img_90		; no decoding break at line end?
+		jnz parse_pcx_img_90		; no decoding break at line end?
 
-		; normalize fs:si
-		mov bp,si
-		and si,0fh
-		shr bp,4
-		mov ax,fs
-		add ax,bp
-		mov fs,ax
-
-		inc dx
+		inc edx
 		cmp dx,[image_height]
-		jb parse_img_20
+		jb parse_pcx_img_20
 
-parse_img_90:
-		pop fs
+parse_pcx_img_90:
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Draw pcx image region into buffer.
 ;
 ; eax			drawing buffer
 ; [image]		pcx image
@@ -13870,36 +14185,38 @@ parse_img_90:
 ; dword [line_x1]	x1	; lower right
 ; dword [line_y1]	y1
 ;
+; note:
+;  [line_*] are unchanged
+;
 
-		bits 16
+		bits 32
 
 pcx_unpack:
-		push gs
-		push fs
+		push dword [line_x1]
+		push dword [line_y1]
 
-		lin2segofs dword [pcx_line_starts],gs,bp
+		mov ebp,[pcx_line_starts]
 
-		add eax,4
-		lin2seg eax,es,edi
+		lea edi,[eax+4]
 
-		mov ax,[line_x0]
-		sub [line_x1],ax
+		mov eax,[line_x0]
+		sub [line_x1],eax
 
-		mov ax,[line_y0]
-		sub [line_y1],ax
+		mov eax,[line_y0]
+		sub [line_y1],eax
 
-		shl ax,2
-		add bp,ax
+		shl eax,2
+		add ebp,eax
 
 pcx_unpack_20:
-		lfs si,[gs:bp]
+		mov esi,[es:ebp]
 
-		mov cx,[line_x0]
-		neg cx
+		mov ecx,[line_x0]
+		neg ecx
 
 		; draw one line
 pcx_unpack_30:
-		fs lodsb
+		es lodsb
 
 		mov ah,0
 		cmp al,0c0h
@@ -13907,31 +14224,31 @@ pcx_unpack_30:
 
 		; repeat count
 
-		and ax,3fh
-		mov dx,ax
-		fs lodsb
+		and eax,3fh
+		mov edx,eax
+		es lodsb
 
-		add cx,dx
+		add ecx,edx
 		js pcx_unpack_80
 		jnc pcx_unpack_40
-		mov dx,cx
+		mov edx,ecx
 
 pcx_unpack_40:
-		mov bx,cx
-		sub bx,[line_x1]
+		mov ebx,ecx
+		sub ebx,[line_x1]
 		jle pcx_unpack_50
-		sub dx,bx
+		sub edx,ebx
 pcx_unpack_50:
-		or dx,dx
+		or edx,edx
 		jz pcx_unpack_80
-		dec dx
+		dec edx
 		cmp byte [pixel_bytes],1
 		jbe pcx_unpack_54
-		push ax
+		push eax
 		call pal_to_color
-		call encode_color
-		call [setpixel_a]
-		pop ax
+		call pm_encode_color
+		call [pm_setpixel_a]
+		pop eax
 		jmp pcx_unpack_55
 pcx_unpack_54:
 		mov [es:edi],al
@@ -13940,147 +14257,27 @@ pcx_unpack_55:
 		jmp pcx_unpack_50
 
 pcx_unpack_70:
-		inc cx
-		cmp cx,byte 0
+		inc ecx
+		cmp ecx,0
 		jle pcx_unpack_80
 		cmp byte [pixel_bytes],1
 		jbe pcx_unpack_74
 		call pal_to_color
-		call encode_color
+		call pm_encode_color
 pcx_unpack_74:
-		call [setpixel_a]
+		call [pm_setpixel_a]
 		add edi,[pixel_bytes]
 pcx_unpack_80:
-		cmp cx,[line_x1]
+		cmp ecx,[line_x1]
 		jl pcx_unpack_30
 
-		add bp,4
-		dec word [line_y1]
+		add ebp,4
+		dec dword [line_y1]
 		jnz pcx_unpack_20
 
 pcx_unpack_90:
-		call lin_seg_off
-
-		pop fs
-		pop gs
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Draw part of pcx image.
-;
-; [image]		pcx image
-; dword [line_x0]	x0	; uppper left
-; dword [line_y0]	y0
-; dword [line_x1]	x1	; lower right
-; dword [line_y1]	y1
-;
-
-		bits 16
-
-pcx_show:
-		push gs
-		push fs
-
-		mov es,[window_seg_w]
-
-		lin2segofs dword [pcx_line_starts],gs,bp
-
-		mov ax,[line_x0]
-		sub [line_x1],ax
-
-		mov ax,[line_y0]
-		sub [line_y1],ax
-pcx_show_10:
-		shl ax,2
-		add bp,ax
-
-pcx_show_20:
-		call goto_xy
-
-		lfs si,[gs:bp]
-
-		mov cx,[line_x0]
-		neg cx
-
-		; draw one line
-pcx_show_30:
-		fs lodsb
-
-		mov ah,0
-		cmp al,0c0h
-		jb pcx_show_70
-
-		; repeat count
-
-		and ax,3fh
-		mov dx,ax
-		fs lodsb
-
-		add cx,dx
-		js pcx_show_80
-		jnc pcx_show_40
-		mov dx,cx
-
-pcx_show_40:
-		mov bx,cx
-		sub bx,[line_x1]
-		jle pcx_show_50
-		sub dx,bx
-pcx_show_50:
-		or dx,dx
-		jz pcx_show_80
-		dec dx
-		cmp ax,[transparent_color]
-		jz pcx_show_55
-		cmp byte [pixel_bytes],1
-		jbe pcx_show_54
-		push ax
-		call pal_to_color
-		call encode_color
-		call [setpixel_a]
-		pop ax
-		jmp pcx_show_55
-pcx_show_54:
-		mov [es:di],al
-pcx_show_55:
-		add di,[pixel_bytes]
-		jnc pcx_show_50
-		call inc_winseg
-		jmp pcx_show_50
-
-pcx_show_70:
-		inc cx
-		cmp cx,byte 0
-		jle pcx_show_80
-		cmp ax,[transparent_color]
-		jz pcx_show_75
-		cmp byte [pixel_bytes],1
-		jbe pcx_show_74
-		call pal_to_color
-		call encode_color
-		call [setpixel_a]
-		jmp pcx_show_75
-pcx_show_74:
-		mov [es:di],al
-pcx_show_75:
-		add di,[pixel_bytes]
-		jnc pcx_show_80
-		call inc_winseg
-pcx_show_80:
-		cmp cx,[line_x1]
-		jl pcx_show_30
-
-		inc word [gfx_cur_y]
-
-		add bp,4
-		dec word [line_y1]
-		jnz pcx_show_20
-
-pcx_show_90:
-		pop fs
-		pop gs
+		pop dword [line_y1]
+		pop dword [line_x1]
 		ret
 
 
@@ -14097,7 +14294,7 @@ jpg_setup:
 		jnz jpg_setup_90
 
 		mov eax,jpg_data_size + 15
-		rm32_call calloc
+		call calloc
 		or eax,eax
 		jz jpg_setup_90
 
@@ -14241,120 +14438,6 @@ jpg_unpack_10:
 		add sp,28
 
 jpg_unpack_90:
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Draw part of jpg image.
-;
-; [image]		jpg image
-; dword [line_x0]	x0	; uppper left
-; dword [line_y0]	y0
-; dword [line_x1]	x1	; lower right
-; dword [line_y1]	y1
-;
-
-		bits 32
-
-jpg_show:
-		xor eax,eax
-		call memsize
-		push edi
-		mov eax,1
-		call memsize
-		pop eax
-
-		cmp edi,eax
-		jae jpg_show_20
-		mov edi,eax
-jpg_show_20:
-		; edi: largest free mem block
-
-		sub edi,4		; fb header size
-		jc jpg_show_90
-
-		mov ebx,[line_y1]
-		sub ebx,[line_y0]
-
-		mov ecx,[line_x1]
-		sub ecx,[line_x0]
-
-		mov eax,[pixel_bytes]
-		mul ecx
-		xchg eax,edi
-		div edi
-
-		; fb height
-
-		cmp eax,ebx
-		jbe jpg_show_30
-		mov eax,ebx
-jpg_show_30:
-		mov [line_tmp],eax
-
-		or eax,eax
-		jz jpg_show_90
-
-		; eax, ecx, height, width
-		call alloc_fb
-
-		or eax,eax
-		jz jpg_show_90
-
-		mov [line_tmp2],eax
-
-jpg_show_40:
-		mov eax,[line_y1]
-		sub eax,[line_y0]
-		jle jpg_show_70
-		mov ebp,[line_tmp]
-		cmp eax,ebp
-		jle jpg_show_50
-		mov eax,ebp
-jpg_show_50:
-		mov bp,ax
-		add eax,[line_y0]
-		xchg eax,[line_y1]
-
-		push eax
-		mov eax,[line_tmp2]
-
-		push ebp
-		call jpg_unpack
-		pop ebp
-
-		mov edi,[line_tmp2]
-		mov dx,[es:edi]
-		mov cx,[es:edi+2]
-
-		cmp cx,bp
-		jbe jpg_show_60
-		mov cx,bp
-jpg_show_60:
-
-		mov edi,[line_tmp2]
-		add edi,4
-		mov bx,dx
-		imul bx,[pixel_bytes]
-		rm32_call restore_bg
-
-		mov eax,[line_y1]
-		mov ecx,eax
-		sub ecx,[line_y0]
-		mov [line_y0],eax
-
-		add [gfx_cur_y],cx
-
-		pop eax
-
-		mov [line_y1],eax
-		jmp jpg_show_40
-
-jpg_show_70:
-		mov eax,[line_tmp2]
-		call free
-jpg_show_90:
 		ret
 
 
@@ -14889,12 +14972,9 @@ gdt_init:
 ; Initialize idt and setup interrupt handlers.
 ;
 
-		bits 16
+		bits 32
 
 pm_init:
-		pushf
-		cli
-
 		mov eax,(8+8)*100h
 		call calloc
 		cmp eax,byte 1
@@ -14902,8 +14982,6 @@ pm_init:
 		mov [pm_idt.base],eax
 
 		; setup idt
-
-		pm_enter 32
 
 		mov esi,[pm_idt.base]
 		lea ebx,[esi+8*100h]
@@ -14930,10 +15008,7 @@ pm_init_40:
 		add edi,8
 		loop pm_init_40
 
-		pm_leave 32
-
 pm_init_90:
-		popf
 		ret
 
 
