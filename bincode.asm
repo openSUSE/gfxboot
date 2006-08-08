@@ -185,18 +185,21 @@ pscode_type		db 0		; current instr type
 
 			align 4, db 0
 dict			dd 0		; seg:ofs
-dict_size		dw 0		; dict entries
+dict.lin		dd 0		; lin
+dict_size		dd 0		; dict entries
 
 boot_cs			dw 0		; seg
 boot_sysconfig		dw 0		; ofs
 boot_callback		dd 0 		; seg:ofs
 
 pstack			dd 0		; (seg:ofs)
-pstack_size		dw 0		; entries
-pstack_ptr		dw 0
+pstack.lin		dd 0		; (lin)
+pstack_size		dd 0		; entries
+pstack_ptr		dd 0
 rstack			dd 0		; (seg:ofs)
-rstack_size		dw 0		; entries
-rstack_ptr		dw 0
+rstack.lin		dd 0		; (lin)
+rstack_size		dd 0		; entries
+rstack_ptr		dd 0
 
 image			dd 0		; (lin) current image
 image_width		dw 0
@@ -839,14 +842,16 @@ gfx_init_40:
 
 		sti
 
+		; now we really start...
+
+		pm_enter 32
+
 %if debug
 		mov si,hello
-		call printf
+		rm32_call printf
 %endif
 
 		; get initial keyboard state
-		push byte 0
-		pop es
 		push word [es:417h]
 		pop word [kbd_status]
 
@@ -857,7 +862,7 @@ gfx_init_40:
 		pf_arg_uint 1,eax
 
 		mov si,dmsg_01
-		call printf
+		rm32_call printf
 
 		xor ebx,ebx
 
@@ -870,16 +875,18 @@ gfx_init_40:
 
 		push ebx
 		mov si,dmsg_02
-		call printf
+		rm32_call printf
 		pop ebx
 
-		inc bx
-		cmp bx,malloc.areas
+		inc ebx
+		cmp ebx,malloc.areas
 		jb .malloc_deb
 %endif
 
 		call dict_init
-		jc gfx_init_90
+		jc pm_gfx_init_90
+
+		pm_leave 32
 
 		call stack_init
 		jc gfx_init_90
@@ -985,6 +992,13 @@ gfx_init_70:
 		call gfx_done
 		stc
 		jmp gfx_init_90
+
+		bits 32
+
+pm_gfx_init_90:
+		pm_leave 32
+		jmp gfx_init_90
+
 gfx_init_80:
 		clc
 
@@ -1836,6 +1850,9 @@ timeout_90:
 ;
 ; eax		time
 ;
+
+		bits 16
+
 timer:
 		mov cx,cb_Timer
 		push eax
@@ -1875,31 +1892,33 @@ timer_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Initialize parameter & return stack.
 ;
 ; return:
 ;  CF		error
 ;
+
+		bits 16
+
 stack_init:
-		mov ax,param_stack_size
-		mov [pstack_size],ax
-		and word [pstack_ptr],byte 0
+		mov dword [pstack_size],param_stack_size
+		and dword [pstack_ptr],0
 		mov eax,param_stack_size * 5
 		pm32_call calloc
-		cmp eax,byte 1
+		cmp eax,1
 		jc stack_init_90
+		mov [pstack.lin],eax
 		push eax
 		call lin2so
 		pop dword [pstack]
 
-		mov ax,ret_stack_size
-		mov [rstack_size],ax
-		and word [rstack_ptr],byte 0
+		mov dword [rstack_size],ret_stack_size
+		and dword [rstack_ptr],0
 		mov eax,ret_stack_size * 5
 		pm32_call calloc
-		cmp eax,byte 1
+		cmp eax,1
 		jc stack_init_90
+		mov [rstack.lin],eax
 		push eax
 		call lin2so
 		pop dword [rstack]
@@ -1919,6 +1938,9 @@ stack_init_90:
 ;  cx		index
 ;  CF		error
 ;
+
+		bits 16
+
 get_pstack_entry:
 		les bx,[pstack]
 		xor eax,eax
@@ -1946,6 +1968,9 @@ get_pstack_entry_90:
 ;  cx		index
 ;  CF		error
 ;
+
+		bits 16
+
 set_pstack_entry:
 		les bx,[pstack]
 		cmp [pstack_size],cx
@@ -1974,6 +1999,9 @@ set_pstack_entry_90:
 ;  cx		index (absolute)
 ;  CF		error
 ;
+
+		bits 16
+
 get_pstack_tos:
 		mov ax,[pstack_ptr]
 		sub ax,1
@@ -1998,6 +2026,9 @@ get_pstack_tos_90:
 ;  cx		index (absolute)
 ;  CF		error
 ;
+
+		bits 16
+
 set_pstack_tos:
 		mov bx,[pstack_ptr]
 		sub bx,1
@@ -2019,6 +2050,9 @@ set_pstack_tos_90:
 ; return:
 ;  CF		error
 ;
+
+		bits 16
+
 rot_pstack_up:
 		or cx,cx
 		jz rot_pstack_up_90
@@ -2055,6 +2089,9 @@ rot_pstack_up_90:
 ; return:
 ;  CF		error
 ;
+
+		bits 16
+
 rot_pstack_down:
 		or cx,cx
 		jz rot_pstack_down_90
@@ -2097,6 +2134,9 @@ rot_pstack_down_90:
 ;  cx		index
 ;  CF		error
 ;
+
+		bits 16
+
 get_rstack_entry:
 		les bx,[rstack]
 		xor eax,eax
@@ -2124,6 +2164,9 @@ get_rstack_entry_90:
 ;  cx		index
 ;  CF		error
 ;
+
+		bits 16
+
 set_rstack_entry:
 		les bx,[rstack]
 		cmp [rstack_size],cx
@@ -2152,6 +2195,9 @@ set_rstack_entry_90:
 ;  cx		index (absolute)
 ;  CF		error
 ;
+
+		bits 16
+
 get_rstack_tos:
 		mov ax,[rstack_ptr]
 		sub ax,1
@@ -2176,6 +2222,9 @@ get_rstack_tos_90:
 ;  cx		index (absolute)
 ;  CF		error
 ;
+
+		bits 16
+
 set_rstack_tos:
 		mov bx,[rstack_ptr]
 		sub bx,1
@@ -2189,25 +2238,241 @@ set_rstack_tos_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Read pstack entry.
 ;
+;  ecx		index
+;
+; return:
+;  eax		value
+;  dl		type
+;  ecx		index
+;  CF		error
+;
+
+		bits 32
+
+pm_get_pstack_entry:
+		xor eax,eax
+		mov dl,al
+		cmp [pstack_size],ecx
+		jb pm_get_pstack_entry_90
+		lea ebx,[ecx+ecx*4]
+		add ebx,[pstack.lin]
+		mov dl,[es:ebx]
+		mov eax,[es:ebx+1]
+		clc
+pm_get_pstack_entry_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Write pstack entry.
+;
+;  ecx		index
+;  eax		value
+;  dl		type
+;
+; return:
+;  ecx		index
+;  CF		error
+;
+
+		bits 32
+
+pm_set_pstack_entry:
+		cmp [pstack_size],ecx
+		jb pm_set_pstack_entry_90
+		lea ebx,[ecx+ecx*4]
+		add ebx,[pstack.lin]
+		mov [es:ebx],dl
+		mov [es:ebx+1],eax
+		clc
+pm_set_pstack_entry_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Read pstack tos (no pop).
+;
+;  ecx		index (rel. to tos, 0 = tos)
+;
+; return:
+;  eax		value
+;  dl		type
+;  ecx		index (absolute)
+;  CF		error
+;
+
+		bits 32
+
+pm_get_pstack_tos:
+		mov eax,[pstack_ptr]
+		sub eax,1
+		jc pm_get_pstack_tos_90
+		sub eax,ecx
+		jc pm_get_pstack_tos_90
+		xchg eax,ecx
+		call pm_get_pstack_entry
+pm_get_pstack_tos_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Write pstack tos (no push).
+;
+;  ecx		index (rel. to tos, 0 = tos)
+;  eax		value
+;  dl		type
+;
+; return:
+;  ecx		index (absolute)
+;  CF		error
+;
+
+		bits 32
+
+pm_set_pstack_tos:
+		mov ebx,[pstack_ptr]
+		sub ebx,1
+		jc pm_set_pstack_tos_90
+		sub ebx,ecx
+		jc pm_set_pstack_tos_90
+		xchg ebx,ecx
+		call pm_set_pstack_entry
+pm_set_pstack_tos_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Read rstack entry.
+;
+;  ecx		index
+;
+; return:
+;  eax		value
+;  dl		type
+;  ecx		index
+;  CF		error
+;
+
+		bits 32
+
+pm_get_rstack_entry:
+		xor eax,eax
+		mov dl,al
+		cmp [rstack_size],ecx
+		jb pm_get_rstack_entry_90
+		lea ebx,[ecx+ecx*4]
+		add ebx,[rstack.lin]
+		mov dl,[es:ebx]
+		mov eax,[es:ebx+1]
+		clc
+pm_get_rstack_entry_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Write rstack entry.
+;
+;  ecx		index
+;  eax		value
+;  dl		type
+;
+; return:
+;  ecx		index
+;  CF		error
+;
+
+		bits 32
+
+pm_set_rstack_entry:
+		cmp [rstack_size],ecx
+		jb pm_set_rstack_entry_90
+		lea ebx,[ecx+ecx*4]
+		add ebx,[rstack.lin]
+		mov [es:ebx],dl
+		mov [es:ebx+1],eax
+		clc
+pm_set_rstack_entry_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Read rstack tos (no pop).
+;
+;  ecx		index (rel. to tos, 0 = tos)
+;
+; return:
+;  eax		value
+;  dl		type
+;  ecx		index (absolute)
+;  CF		error
+;
+
+		bits 32
+
+pm_get_rstack_tos:
+		mov eax,[rstack_ptr]
+		sub eax,1
+		jc pm_get_rstack_tos_90
+		sub eax,ecx
+		jc pm_get_rstack_tos_90
+		xchg eax,ecx
+		call pm_get_rstack_entry
+pm_get_rstack_tos_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Write rstack tos (no push).
+;
+;  ecx		index (rel. to tos, 0 = tos)
+;  eax		value
+;  dl		type
+;
+; return:
+;  ecx		index (absolute)
+;  CF		error
+;
+
+		bits 32
+
+pm_set_rstack_tos:
+		mov ebx,[rstack_ptr]
+		sub ebx,1
+		jc pm_set_rstack_tos_90
+		sub ebx,ecx
+		jc pm_set_rstack_tos_90
+		xchg ebx,ecx
+		call pm_set_rstack_entry
+pm_set_rstack_tos_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; Setup initial dictionary.
 ;
 ; return:
 ;  CF		error
 ;
+
+		bits 32
+
 dict_init:
-		push fs
 		mov eax,[mem]
-		lin2segofs eax,es,si
-		mov ecx,[es:si+fh_dict]
-		cmp ecx,byte 1
+
+		mov ecx,[es:eax+fh_dict]
+		cmp ecx,1
 		jc dict_init_90
 		add eax,ecx
-		lin2segofs eax,es,si
+
+		mov esi,eax
+
 		xor eax,eax
 		es lodsw
 		mov [dict_size],ax
 		; the dictionary should fit in 64k
+		; -- really?
 		cmp ax,0fff0h/5
 		cmc
 		jc dict_init_90
@@ -2216,64 +2481,67 @@ dict_init:
 		cmp ax,cb_functions + prim_functions - 1
 		jb dict_init_90
 
-		imul eax,eax,5
-		push es
-		push si
-		pm32_call calloc
-		pop si
-		pop es
-		cmp eax,byte 1
+		lea eax,[eax+eax*4]
+
+		push esi
+		call calloc
+		pop esi
+		cmp eax,1
 		jc dict_init_90
 
+		mov [dict.lin],eax
+		mov ebx,eax
 		push eax
-		call lin2so
+		call pm_lin2so
 		pop dword [dict]
 
 		; add default functions
 
-		lfs bx,[dict]
-		add bx,cb_functions * 5
-		xor cx,cx
-		inc cx
+		add ebx,cb_functions * 5
+		xor ecx,ecx
+		inc ecx
 dict_init_20:
-		mov byte [fs:bx],t_prim
-		mov [fs:bx+1],cx
-		add bx,5
-		inc cx
-		cmp cx,prim_functions
+		mov byte [es:ebx],t_prim
+		mov [es:ebx+1],ecx
+		add ebx,5
+		inc ecx
+		cmp ecx,prim_functions
 		jb dict_init_20
 
 		; add user defined things
 
+		xor eax,eax
 		es lodsw
-		or ax,ax
+		or eax,eax
 		jz dict_init_80
-		cmp [dict_size],ax
+		cmp [dict_size],eax
 		jb dict_init_90
-		lfs bx,[dict]
-		xchg ax,cx
+
+		mov ebx,[dict.lin]
+
+		xchg eax,ecx
 dict_init_50:
+		xor eax,eax
 		es lodsw
-		cmp ax,[dict_size]
+		cmp eax,[dict_size]
 		cmc
 		jc dict_init_90
-		mov di,5
-		mul di
-		xchg ax,di
+		lea edi,[eax+eax*4]
 		es lodsb
-		mov [fs:bx+di],al
+		mov [fs:ebx+edi],al
 		es lodsd
-		mov [fs:bx+di+1],eax
-		dec cx
+		mov [fs:ebx+edi+1],eax
+		dec ecx
 		jnz dict_init_50
 
 dict_init_80:
 		clc
 dict_init_90:
-		pop fs
 		ret
 
 %if debug
+
+		bits 16
 
 dump_dict:
 		mov si,dmsg_09
@@ -3476,6 +3744,30 @@ lin2so:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Convert 32bit linear address to seg:ofs.
+;
+;  dword [esp + 2]:	linear address
+;
+; return:
+;  dword [esp + 2]:	seg:ofs
+;
+; Notes:
+;  - changes no regs
+;
+
+		bits 32
+
+pm_lin2so:
+		push eax
+		mov eax,[esp + 8]
+		shr eax,4
+		mov [esp + 10],ax
+		and word [esp + 8],byte 0fh
+		pop eax
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ; Convert seg:ofs to 32bit linear address.
 ;
@@ -3515,6 +3807,9 @@ so2lin:
 ;  - changes no regs
 ;  - clears IF
 ;
+
+		bits 16
+
 _lin2seg:
 		push eax
 		mov eax,[esp + 6]
@@ -3541,6 +3836,9 @@ _lin2gs:
 ;
 ; si		text (ACSIIZ)
 ;
+
+		bits 16
+
 printf:
 		mov byte [tmp_write_cnt],0
 printf_10:
@@ -3682,6 +3980,9 @@ printf_90:
 ;
 ; either from ds:si or es:si
 ;
+
+		bits 16
+
 pf_next_char:
 		xor eax,eax
 		cmp byte [pf_gfx],0
@@ -3699,6 +4000,9 @@ pf_next_char_50:
 ;
 ; changes no regs
 ;
+
+		bits 16
+
 pf_next_arg:
 		cmp byte [pf_gfx],0
 		jz pf_next_arg_50
@@ -3740,6 +4044,9 @@ pf_next_arg_90:
 ; return:
 ;  cx		length
 ;
+
+		bits 16
+
 write_str:
 		xor cx,cx
 write_str_10:
@@ -3764,6 +4071,9 @@ write_str_90:
 ; al		char
 ; cx		count (must be > 0)
 ;
+
+		bits 16
+
 write_chars:
 		cmp cx,0
 		jle write_chars_90
@@ -3778,6 +4088,9 @@ write_chars_90:
 ;
 ; al		char
 ;
+
+		bits 16
+
 write_char:
 		push es
 		pushad
@@ -3815,6 +4128,9 @@ write_char_90:
 ;
 ; al		char
 ;
+
+		bits 16
+
 write_cons_char:
 		push gs
 		push fs
@@ -3877,6 +4193,9 @@ write_cons_char_90:
 ;  si		points past number
 ;  CF		not a number
 ;
+
+		bits 16
+
 get_number:
 
 		xor cx,cx
@@ -3911,6 +4230,9 @@ get_number_90:
 ; return:
 ;  si		string
 ;
+
+		bits 16
+
 number:
 		push es
 
@@ -3954,6 +4276,9 @@ number_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+		bits 16
+
 ps_status_info:
 		xor dx,dx
 		call con_xy
@@ -4104,6 +4429,9 @@ ps_status_info_80:
 ; return:
 ;  eax		key
 ;
+
+		bits 16
+
 get_key:
 		mov ah,10h
 		int 16h
@@ -4124,6 +4452,9 @@ get_key:
 ;
 ; return:
 ;  eax		key (or 0)
+
+		bits 16
+
 get_key_to:
 		call get_time
 		xchg eax,edx
@@ -4190,6 +4521,9 @@ get_key_to_90:
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
+
+		bits 16
+
 clear_kbd_queue:
 		mov ah,11h
 		int 16h
@@ -4203,6 +4537,9 @@ clear_kbd_queue_90:
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
+
+		bits 16
+
 get_time:
 		push cx
 		push dx
@@ -4224,6 +4561,9 @@ get_time:
 ; return
 ;  ax		binary
 ;
+
+		bits 16
+
 bcd2bin:
 		push dx
 		mov dl,al
@@ -4237,6 +4577,9 @@ bcd2bin:
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
+
+		bits 16
+
 get_date:
 		clc
 		mov ah,4
@@ -4270,6 +4613,9 @@ get_date_10:
 ;
 ; return:
 ;
+
+		bits 16
+
 con_xy:
 		mov bh,0
 		mov ah,2
@@ -4283,6 +4629,8 @@ idle_data	dd 0
 idle_data2	dd 0
 
 %include	"kroete.inc"
+
+		bits 16
 
 idle:
 		push es
@@ -4310,6 +4658,9 @@ idle:
 ; return:
 ;  CF		error
 ;
+
+		bits 16
+
 run_pscode:
 		mov [pscode_instr],eax
 		mov [pscode_next_instr],eax
@@ -4749,6 +5100,9 @@ run_pscode_90:
 ;  dl		actual tos types (even if CF is set)
 ;  CF		error
 ;
+
+		bits 16
+
 get_1arg:
 		xor eax,eax
 		cmp word [pstack_ptr],byte 1
@@ -4770,6 +5124,39 @@ get_1arg_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Get one argument from stack.
+;
+;  dl		tos type
+;
+; return:
+;  eax		tos
+;  dl		actual tos types (even if CF is set)
+;  CF		error
+;
+
+		bits 32
+
+pm_get_1arg:
+		xor eax,eax
+		cmp dword [pstack_ptr],1
+		mov bp,pserr_pstack_underflow
+		jc pm_get_1arg_90
+		push edx
+		xor ecx,ecx
+		call pm_get_pstack_tos
+		pop ebx
+		; ignore type check if t_none was requested
+		cmp bl,t_none
+		jz pm_get_1arg_90
+		cmp bl,dl
+		jz pm_get_1arg_90
+		mov bp,pserr_wrong_arg_types
+		stc
+pm_get_1arg_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ;  dl		tos type
 ;  dh		tos + 1 type
@@ -4779,6 +5166,9 @@ get_1arg_90:
 ;  dx		actual tos types (even if CF is set)
 ;  CF		error
 ;
+
+		bits 16
+
 get_2args:
 		xor eax,eax
 		xor ecx,ecx
@@ -4816,10 +5206,65 @@ get_2args_80:
 get_2args_90:
 		ret
 
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Get two arguments from stack.
+;
+;  dl		tos type
+;  dh		tos + 1 type
+; return:
+;  eax		tos
+;  ecx		tos + 1
+;  dx		actual tos types (even if CF is set)
+;  CF		error
+;
+
+		bits 32
+
+pm_get_2args:
+		xor eax,eax
+		xor ecx,ecx
+		mov ebx,edx
+		xor edx,edx
+		cmp dword [pstack_ptr],2
+		mov bp,pserr_pstack_underflow
+		jc pm_get_2args_90
+		push ebx
+		inc ecx
+		call pm_get_pstack_tos
+		push edx
+		push eax
+		xor ecx,ecx
+		call pm_get_pstack_tos
+		pop ecx
+		pop ebx
+		mov dh,bl
+		pop ebx
+
+		; ignore type check if t_none was requested
+		cmp bh,t_none
+		jnz pm_get_2args_50
+		mov bh,dh
+pm_get_2args_50:
+		cmp bl,t_none
+		jnz pm_get_2args_60
+		mov bl,dl
+pm_get_2args_60:
+		cmp bx,dx
+		jz pm_get_2args_90
+		mov bp,pserr_wrong_arg_types
+pm_get_2args_80:
+		stc
+pm_get_2args_90:
+		ret
+
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ; Our primary functions.
 ;
+
+		bits 16
 
 ;; { - start code definition
 ;
@@ -5144,15 +5589,19 @@ prim_put_90:
 ;   foo 3 add length	% 7
 ;
 prim_length:
+		pm_enter 32
+
 		mov dl,t_none
-		call get_1arg
+		call pm_get_1arg
 		jc prim_length_90
-		pm32_call get_length
+		call get_length
 		jc prim_length_90
-		xor cx,cx
+		xor ecx,ecx
 		mov dl,t_int
-		call set_pstack_tos
+		call pm_set_pstack_tos
 prim_length_90:
+
+		pm_leave 32
 		ret
 
 
@@ -7403,31 +7852,31 @@ prim_memcpy_90:
 ;   0 0 image.size image		% draw whole image
 ;
 prim_image:
+		pm_enter 32
+
 		mov bp,pserr_pstack_underflow
-		cmp word [pstack_ptr],byte 4
+		cmp dword [pstack_ptr],4
 		jc prim_image_90
-		mov cx,3
-		call get_pstack_tos
+		mov ecx,3
+		call pm_get_pstack_tos
 		cmp dl,t_int
 		stc
 		mov bp,pserr_wrong_arg_types
 		jnz prim_image_90
 		mov [line_x0],eax
-		mov cx,2
-		push bp
-		call get_pstack_tos
-		pop bp
+		mov ecx,2
+		push ebp
+		call pm_get_pstack_tos
+		pop ebp
 		cmp dl,t_int
 		stc
 		jnz prim_image_90
 		mov [line_y0],eax
 		mov dx,t_int + (t_int << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_image_90
 
-		sub word [pstack_ptr],byte 4
-
-		pm_enter 32
+		sub dword [pstack_ptr],4
 
 		mov edx,[line_x0]
 		add edx,ecx
@@ -7439,16 +7888,16 @@ prim_image:
 
 		call clip_image
 		cmc
-		jnc prim_image_89
+		jnc prim_image_90
 
 		push dword [gfx_cur]
 		call show_image
 		pop dword [gfx_cur]
 
 		clc
-prim_image_89:
-		pm_leave 32
 prim_image_90:
+
+		pm_leave 32
 		ret
 
 
@@ -7493,31 +7942,31 @@ prim_loadpalette:
 ;  img free				% free it
 ;
 prim_unpackimage:
+		pm_enter 32
+
 		mov bp,pserr_pstack_underflow
-		cmp word [pstack_ptr],byte 4
+		cmp dword [pstack_ptr],4
 		jc prim_unpackimage_90
-		mov cx,3
-		call get_pstack_tos
+		mov ecx,3
+		call pm_get_pstack_tos
 		cmp dl,t_int
 		stc
 		mov bp,pserr_wrong_arg_types
 		jnz prim_unpackimage_90
 		mov [line_x0],eax
-		mov cx,2
-		push bp
-		call get_pstack_tos
-		pop bp
+		mov ecx,2
+		push ebp
+		call pm_get_pstack_tos
+		pop ebp
 		cmp dl,t_int
 		stc
 		jnz prim_unpackimage_90
 		mov [line_y0],eax
 		mov dx,t_int + (t_int << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_unpackimage_90
 
-		sub word [pstack_ptr],byte 3
-
-		pm_enter 32
+		sub dword [pstack_ptr],3
 
 		mov edx,[line_x0]
 		add edx,ecx
@@ -7553,11 +8002,11 @@ prim_unpackimage_70:
 		xor eax,eax
 prim_unpackimage_80:
 
-		pm_leave 32
-
-		xor cx,cx
-		call set_pstack_tos
+		xor ecx,ecx
+		call pm_set_pstack_tos
 prim_unpackimage_90:
+
+		pm_leave 32
 		ret
 
 
@@ -8432,12 +8881,14 @@ prim_putdword_90:
 ;   "xxx.jpg" findfile length		% file size of "xxx.jpg"
 ;
 prim_findfile:
+		pm_enter 32
+
 		mov dl,t_string
-		call get_1arg
+		call pm_get_1arg
 		jc prim_findfile_90
 prim_findfile_10:
 		push eax
-		pm32_call find_file
+		call find_file
 		pop ecx
 		cmp bl,1
 		jz prim_findfile_10		; symlink
@@ -8445,15 +8896,17 @@ prim_findfile_10:
 		or eax,eax
 		jnz prim_findfile_20
 		xchg eax,ecx
-		pm32_call find_file_ext
+		call find_file_ext
 		mov dl,t_ptr
 		or eax,eax
 		jnz prim_findfile_20
 		mov dl,t_none
 prim_findfile_20:
-		xor cx,cx
-		call set_pstack_tos
+		xor ecx,ecx
+		call pm_set_pstack_tos
 prim_findfile_90:
+
+		pm_leave 32
 		ret
 
 
@@ -8472,32 +8925,36 @@ prim_findfile_90:
 ;   "xxx.jpg" filesize		% file size of "xxx.jpg"
 ;
 prim_filesize:
+		pm_enter 32
+
 		mov dl,t_string
-		call get_1arg
+		call pm_get_1arg
 		jc prim_filesize_90
 prim_filesize_10:
 		push eax
-		pm32_call find_file
+		call find_file
 		pop ecx
 		cmp bl,1
 		jz prim_filesize_10		; symlink
 		or eax,eax
 		jz prim_filesize_50
-		pm32_call find_mem_size
+		call find_mem_size
 prim_filesize_40:
 		mov dl,t_int
 		jmp prim_filesize_70
 prim_filesize_50:
 		xchg eax,ecx
-		pm32_call file_size_ext
+		call file_size_ext
 		cmp eax,-1
 		jnz prim_filesize_40
 		inc eax
 		mov dl,t_none
 prim_filesize_70:
-		xor cx,cx
-		call set_pstack_tos
+		xor ecx,ecx
+		call pm_set_pstack_tos
 prim_filesize_90:
+
+		pm_leave 32
 		ret
 
 
@@ -8513,8 +8970,10 @@ prim_filesize_90:
 ;   getcwd show		% print working directory
 ;
 prim_getcwd:
+		pm_enter 32
+
 		mov al,3
-		pm32_call gfx_cb			; cwd (lin)
+		call gfx_cb			; cwd (lin)
 		or al,al
 		jnz prim_getcwd_70
 		mov eax,edx
@@ -8524,6 +8983,8 @@ prim_getcwd_70:
 		mov dl,t_none
 		xor eax,eax
 prim_getcwd_90:
+
+		pm_leave 32
 		jmp pr_getobj
 
 
@@ -9955,14 +10416,16 @@ prim_keepmode:
 ; Note: 16/32-bit modes only.
 ;
 prim_blend:
+		pm_enter 32
+
 		mov bp,pserr_pstack_underflow
-		cmp word [pstack_ptr],byte 3
+		cmp dword [pstack_ptr],3
 		jc prim_blend_90
 
 		and dword [tmp_var_0],0
 
-		mov cx,2
-		call get_pstack_tos
+		mov ecx,2
+		call pm_get_pstack_tos
 		cmp dl,t_none
 		jnz prim_blend_21
 		xor eax,eax
@@ -9980,8 +10443,8 @@ prim_blend_22:
 prim_blend_23:
 		mov [tmp_var_1],eax
 
-		mov cx,1
-		call get_pstack_tos
+		mov ecx,1
+		call pm_get_pstack_tos
 		cmp dl,t_none
 		jnz prim_blend_31
 		xor eax,eax
@@ -9995,11 +10458,11 @@ prim_blend_31:
 prim_blend_33:
 		mov [tmp_var_2],eax
 
-		xor cx,cx
-		call get_pstack_tos
+		xor ecx,ecx
+		call pm_get_pstack_tos
 		cmp dl,t_none
 		jnz prim_blend_35
-		sub word [pstack_ptr],3
+		sub dword [pstack_ptr],3
 		; CF = 0
 		jmp prim_blend_90
 prim_blend_35:
@@ -10008,9 +10471,7 @@ prim_blend_35:
 
 		mov [tmp_var_3],eax
 
-		sub word [pstack_ptr],3
-
-		pm_enter 32
+		sub dword [pstack_ptr],3
 
 		; tmp_var_0: bit 0, 1: src type, alpha type (0 = ptr, 1 = int)
 		; tmp_var_1: src
@@ -10028,24 +10489,17 @@ prim_blend_35:
 		mov ecx,[es:esi]
 		cmp ecx,[es:ebx]
 
-		stc
-		mov bp,pserr_wrong_arg_types
-		jnz prim_blend_80
-
+		jnz prim_blend_22
 prim_blend_60:
-
 		mov edi,[tmp_var_3]
 
 		; invalidates tmp_var_*
 		call blend
 
 		clc
-
-prim_blend_80:
+prim_blend_90:
 
 		pm_leave 32
-
-prim_blend_90:
 		ret
 
 
