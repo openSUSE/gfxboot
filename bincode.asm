@@ -2823,7 +2823,7 @@ _memsize_90:
 ;  eax		size
 ;
 
-		bits 16
+		bits 32
 
 find_mem_size:
 		call fms_code
@@ -2840,9 +2840,6 @@ find_mem_size:
 		xor eax,eax
 
 find_mem_size_90:
-
-		call lin_seg_off
-
 		ret
 
 
@@ -2856,14 +2853,15 @@ fms_code:
 		cmc
 		jc fms_code_90
 
-		lin2segofs eax,es,di
-		mov cx,0ffffh
-		sub cx,di
-		movzx edx,cx
+		mov edi,eax
+		xor ecx,ecx
+		dec ecx
+		sub ecx,edi
+		mov edx,ecx
 		xor eax,eax
 		repnz scasb
 		jnz fms_code_80
-		sub dx,cx
+		sub edx,ecx
 		mov eax,edx
 fms_code_80:
 		clc
@@ -2873,7 +2871,7 @@ fms_code_90:
 
 ; check malloc areas
 fms_malloc:
-		xor bx,bx
+		xor ebx,ebx
 fms_malloc_10:
 		mov ecx,[malloc.area + bx]
 		mov edx,[malloc.area + 4 + bx]
@@ -2888,8 +2886,8 @@ fms_malloc_10:
 
 		jmp fms_malloc_30
 fms_malloc_20:
-		add bx,8
-		cmp bx,malloc.areas * 8
+		add ebx,8
+		cmp ebx,malloc.areas * 8
 		jb fms_malloc_10
 
 		stc
@@ -2907,21 +2905,20 @@ fms_malloc_30:
 		mov ebx,[malloc.start]
 
 fms_malloc_40:
-		lin2seg ebx,es,esi
-		mov ecx,[es:esi + mhead.memsize]
+		mov ecx,[es:ebx + mhead.memsize]
 		lea edx,[ebx+ecx]
 
 		cmp eax,edx
 		jae fms_malloc_50
 
-		test byte [es:esi + mhead.used],80h
+		test byte [es:ebx + mhead.used],80h
 		jz fms_malloc_70		; free
 
 		sub eax,ebx
 		cmp eax,mhead.size
 		jb fms_malloc_70		; within header
 
-		mov dl,[es:esi + mhead.rem]
+		mov dl,[es:ebx + mhead.rem]
 		and edx,7fh
 
 		add eax,edx
@@ -2943,11 +2940,11 @@ fms_malloc_90:
 
 ; some file in cpio archive
 fms_file:
-		mov ebp,[mem_archive]
-		or ebp,ebp
+		mov ebx,[mem_archive]
+		or ebx,ebx
 		stc
 		jz fms_file_90
-		cmp eax,ebp
+		cmp eax,ebx
 		jc fms_file_90
 		cmp eax,[mem_free]
 		cmc
@@ -2956,47 +2953,46 @@ fms_file:
 fms_file_10:
 		mov ecx,[mem_free]
 		sub ecx,26
-		cmp ebp,ecx
+		cmp ebx,ecx
 		jae fms_file_80
 
-		lin2segofs ebp,es,bx
 		mov byte [fms_cpio_swab],0
-		cmp word [es:bx],71c7h
+		cmp word [es:ebx],71c7h
 		jz fms_file_20			; normal cpio record
-		cmp word [es:bx],0c771h		; maybe byte-swapped?
+		cmp word [es:ebx],0c771h	; maybe byte-swapped?
 		jnz fms_file_80			; no cpio record
 		mov byte [fms_cpio_swab],1
 
 fms_file_20:
-		push ax
-		mov ax,[es:bx+20]		; file name size
+		push eax
+		mov ax,[es:ebx+20]		; file name size
 		call cpio_swab
 		movzx ecx,ax
-		pop ax
-		inc cx
-		and cx,~1			; align
+		pop eax
+		inc ecx
+		and ecx,~1			; align
 
-		lea ecx,[ecx+ebp+26]		; data start
+		lea ecx,[ecx+ebx+26]		; data start
 
 		cmp eax,ecx
 		jb fms_file_80			; within header area
 
 		push eax
-		mov eax,[es:bx+22]		; data size
+		mov eax,[es:ebx+22]		; data size
 		call cpio_swab
 		rol eax,16			; strange word order
 		call cpio_swab
 		mov edx,eax
 		pop eax
 
-		mov ebp,edx
-		inc ebp
-		and ebp,byte ~1			; align
-		add ebp,ecx			; next record
+		mov ebx,edx
+		inc ebx
+		and ebx,~1			; align
+		add ebx,ecx			; next record
 
 		add ecx,edx
 
-		cmp eax,ebp
+		cmp eax,ebx
 		jae fms_file_10
 
 		sub ecx,eax
@@ -3004,25 +3000,26 @@ fms_file_20:
 
 		jnc fms_file_90			; not within alignment area
 fms_file_80:
-		xor  eax,eax
+		xor eax,eax
 fms_file_90:
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; byte-swap cpio data if appropriate
+; Byte-swap cpio data if appropriate.
 ;
 ;  ax:		word to swap
 ;
 ; return:
 ;  ax:		swapped if [fms_cpio_swab], otherwise same as input
 ;
+
+		bits 32
+
 cpio_swab:
 		cmp byte [fms_cpio_swab],0
 		jz cpio_swab_90
 		xchg ah,al
-
 cpio_swab_90:
 		ret
 
@@ -3039,6 +3036,9 @@ cpio_swab_90:
 ;
 ; Note: MUST NOT be run in protected mode!!!
 ;
+
+		bits 16
+
 lin_seg:
 		cli
 
@@ -3086,6 +3086,9 @@ lin_seg_80:
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ;
+
+		bits 16
+
 lin_seg_off:
 		mov byte [pm_large_seg],0
 		sti
@@ -3093,58 +3096,61 @@ lin_seg_off:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Find (and load) file.
 ;
-; Find file.
-;
-;  eax		file name (lin)
+;  eax		file name
 ;
 ; return:
-;  eax		file start (lin)
+;  eax		file start
 ;   bl		0/1: file/symlink 
 ;
-; Note: use find_mem_size to find out the file size
+; Note: use find_mem_size to find out file size.
 ;
+
+		bits 32
+
 find_file:
-		lin2segofs eax,fs,si
+		mov esi,eax
 		mov al,0
 		mov ebp,[mem_archive]
 		or ebp,ebp
 		jz find_file_80
 find_file_20:
-		lin2segofs ebp,es,bx
+		mov ebx,ebp
+
 		mov byte [fms_cpio_swab],0
-		cmp word [es:bx],71c7h		; little-endian archive
+		cmp word [es:ebx],71c7h		; little-endian archive
 		jz find_file_30
-		cmp word [es:bx],0c771h		; big-endian
+		cmp word [es:ebx],0c771h	; big-endian
 		jnz find_file_80
 		mov byte [fms_cpio_swab],1
 find_file_30:
-		mov al,[es:bx+7]
+		mov al,[es:ebx+7]
 		and al,0f0h
 		cmp al,0a0h
 		setz al
-		push ax
-		mov ax,[es:bx+20]	; file name size (incl. final 0)
+		push eax
+		mov ax,[es:ebx+20]	; file name size (incl. final 0)
 		call cpio_swab
-		mov cx,ax
-		pop ax
-		movzx edx,cx
-		inc dx
-		and dx,~1		; align
-		lea ebp,[ebp+edx+26]	; points to data start
-		lea di,[bx+26]
-		or cx,cx
+		movzx ecx,ax
+		pop eax
+		mov edx,ecx
+		inc edx
+		and edx,~1		; align
+		lea edi,[ebx+26]
+		lea ebp,[ebx+edx+26]	; points to data start
+		or ecx,ecx
 		jz find_file_50
-		push si
-		fs rep cmpsb
-		pop si
+		push esi
+		es rep cmpsb
+		pop esi
 		jnz find_file_50
 		mov bl,al
 		mov eax,ebp
 		jmp find_file_90
 find_file_50:
 		push eax
-		mov eax,[es:bx+22]	; data size
+		mov eax,[es:ebx+22]	; data size
 		call cpio_swab
 		rol eax,16		; strange word order
 		call cpio_swab
@@ -3152,7 +3158,7 @@ find_file_50:
 		pop eax
 
 		inc ecx
-		and ecx,byte ~1		; align
+		and ecx,~1		; align
 		add ebp,ecx
 		mov ecx,ebp
 		add ecx,26
@@ -3175,6 +3181,9 @@ find_file_90:
 ; return:
 ;  CF		error
 ;
+
+		bits 16
+
 set_mode:
 		push es
 		mov ax,[gfx_mode]
@@ -3394,6 +3403,9 @@ pm_mode_init_90:
 ;  [vbe_mode_list]	mode list, last entry is 0xffff
 ;  [screen_mem]		video memory size
 ;
+
+		bits 16
+
 get_vbe_modes:
 		push es
 
@@ -3450,6 +3462,9 @@ get_vbe_modes_90:
 ; Notes:
 ;  - changes no regs
 ;
+
+		bits 16
+
 lin2so:
 		push eax
 		mov eax,[esp + 6]
@@ -3472,6 +3487,9 @@ lin2so:
 ; Notes:
 ;  - changes no regs
 ;
+
+		bits 16
+
 so2lin:
 		push eax
 		movzx eax,word [esp + 8]
@@ -7820,15 +7838,16 @@ prim_restorescreen:
 
 prim_restorescreen_20:
 
-		lin2seg eax,es,edi
-		mov dx,[es:edi]
-		mov cx,[es:edi+2]
-		call lin_seg_off
+		pm_enter 32
 
+		mov dx,[es:eax]
+		mov cx,[es:eax+2]
 		lea edi,[eax+4]
 		mov bx,dx
 		imul bx,[pixel_bytes]
-		call restore_bg
+		rm32_call restore_bg
+
+		pm_leave 32
 
 prim_restorescreen_80:
 		dec word [pstack_ptr]
@@ -8418,7 +8437,7 @@ prim_findfile:
 		jc prim_findfile_90
 prim_findfile_10:
 		push eax
-		call find_file
+		pm32_call find_file
 		pop ecx
 		cmp bl,1
 		jz prim_findfile_10		; symlink
@@ -8458,13 +8477,13 @@ prim_filesize:
 		jc prim_filesize_90
 prim_filesize_10:
 		push eax
-		call find_file
+		pm32_call find_file
 		pop ecx
 		cmp bl,1
 		jz prim_filesize_10		; symlink
 		or eax,eax
 		jz prim_filesize_50
-		call find_mem_size
+		pm32_call find_mem_size
 prim_filesize_40:
 		mov dl,t_int
 		jmp prim_filesize_70
@@ -9981,7 +10000,8 @@ prim_blend_33:
 		cmp dl,t_none
 		jnz prim_blend_35
 		sub word [pstack_ptr],3
-		jmp prim_blend_85
+		; CF = 0
+		jmp prim_blend_90
 prim_blend_35:
 		cmp dl,t_ptr
 		jnz prim_blend_22
@@ -9990,7 +10010,9 @@ prim_blend_35:
 
 		sub word [pstack_ptr],3
 
-		; tmp_var_0: bit 0, 1 = src, alpha type
+		pm_enter 32
+
+		; tmp_var_0: bit 0, 1: src type, alpha type (0 = ptr, 1 = int)
 		; tmp_var_1: src
 		; tmp_var_2: alpha
 		; tmp_var_3: dst
@@ -9999,36 +10021,29 @@ prim_blend_35:
 		mov ebx,[tmp_var_2]
 
 		mov al,[tmp_var_0]
-		test al,1
-		jnz prim_blend_40
-		lin2seg esi,fs,esi
-prim_blend_40:
-		test al,2
-		jnz prim_blend_50
-		lin2seg ebx,gs,ebx
-prim_blend_50:
 		or al,al
 		jnz prim_blend_60
 
 		; check image domensions
-		mov ecx,[fs:esi]
-		cmp ecx,[gs:ebx]
-		jz prim_blend_60
+		mov ecx,[es:esi]
+		cmp ecx,[es:ebx]
 
-		call lin_seg_off
+		stc
+		mov bp,pserr_wrong_arg_types
+		jnz prim_blend_80
 
-		jmp prim_blend_22
 prim_blend_60:
 
-		lin2seg dword [tmp_var_3],es,edi
+		mov edi,[tmp_var_3]
 
 		; invalidates tmp_var_*
 		call blend
 
-		call lin_seg_off
-
-prim_blend_85:
 		clc
+
+prim_blend_80:
+
+		pm_leave 32
 
 prim_blend_90:
 		ret
@@ -10039,6 +10054,9 @@ prim_blend_90:
 ; Helper function that covers common cases.
 
 ; return eax as ptr on stack, returns undef if eax = 0
+
+		bits 16
+
 pr_getptr_or_none:
 		mov dl,t_ptr
 		or eax,eax
@@ -10129,7 +10147,7 @@ get_length:
 		stc
 		jmp get_length_90
 get_length_10:
-		rm32_call find_mem_size
+		call find_mem_size
 		jmp get_length_80
 get_length_20:
 		movzx eax,word [es:eax]
@@ -10152,15 +10170,15 @@ get_length_90:
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
-;  al			arg type; bit 0, 1: src, alpha is int (1) or ptr (0)
-;  fs:esi		src
-;  gs:ebx		alpha
-;  es:edi		dst
+;  al		arg type; bit 0, 1: src, alpha (0 = ptr, 1 = int)
+;  esi		src
+;  ebx		alpha
+;  edi		dst
 ;  word [gfx_cur_x]	offset into src
 ;  word [gfx_cur_y]	dto
 ;
 
-		bits 16
+		bits 32
 
 blend:
 		push dword [transp]
@@ -10174,11 +10192,11 @@ blend_10:
 		mov ebp,[es:edi]
 		test al,2
 		jnz blend_12
-		mov ebp,[gs:ebx]
+		mov ebp,[es:ebx]
 blend_12:
 		test al,1
 		jnz blend_14
-		mov ebp,[fs:esi]
+		mov ebp,[es:esi]
 blend_14:
 
 		mov [tmp_var_0],al
@@ -10256,6 +10274,8 @@ blend_90:
 
 		ret
 
+
+		align 4, db 0
 blend_pixel	dd 0
 
 blend_pixel_16	dd blend_pixel_00_16
@@ -10268,30 +10288,31 @@ blend_pixel_32	dd blend_pixel_00_32
 		dd blend_pixel_10_32
 		dd blend_pixel_11_32
 
+
 ; src: image, alpha: image
 blend_pixel_00_16:
-		mov ax,[gs:ebx]
-		call decode_color
+		mov ax,[es:ebx]
+		call pm_decode_color
 
 		movzx eax,ah
 		mov [transp],eax
 
-		mov ax,[fs:esi]
-		call decode_color
+		mov ax,[es:esi]
+		call pm_decode_color
 		xchg ecx,eax
 
 		mov ax,[es:edi]
-		call decode_color
-		call enc_transp
-		call encode_color
+		call pm_decode_color
+		call pm_enc_transp
+		call pm_encode_color
 
 		mov [es:edi],ax
 		ret
 
 ; src: color, alpha: image
 blend_pixel_01_16:
-		mov ax,[gs:ebx]
-		call decode_color
+		mov ax,[es:ebx]
+		call pm_decode_color
 
 		movzx eax,ah
 		mov [transp],eax
@@ -10299,23 +10320,23 @@ blend_pixel_01_16:
 		mov ecx,[tmp_var_3]
 
 		mov ax,[es:edi]
-		call decode_color
-		call enc_transp
-		call encode_color
+		call pm_decode_color
+		call pm_enc_transp
+		call pm_encode_color
 
 		mov [es:edi],ax
 		ret
 
 ; src: image, alpha: fixed
 blend_pixel_10_16:
-		mov ax,[fs:esi]
-		call decode_color
+		mov ax,[es:esi]
+		call pm_decode_color
 		xchg eax,ecx
 
 		mov ax,[es:edi]
-		call decode_color
-		call enc_transp
-		call encode_color
+		call pm_decode_color
+		call pm_enc_transp
+		call pm_encode_color
 
 		mov [es:edi],ax
 		ret
@@ -10325,47 +10346,47 @@ blend_pixel_11_16:
 		mov ecx,[tmp_var_3]
 
 		mov ax,[es:edi]
-		call decode_color
-		call enc_transp
-		call encode_color
+		call pm_decode_color
+		call pm_enc_transp
+		call pm_encode_color
 
 		mov [es:edi],ax
 		ret
 
 ; src: image, alpha: image
 blend_pixel_00_32:
-		mov eax,[gs:ebx]
+		mov eax,[es:ebx]
 		movzx eax,ah
 		mov [transp],eax
 
-		mov ecx,[fs:esi]
+		mov ecx,[es:esi]
 
 		mov eax,[es:edi]
-		call enc_transp
+		call pm_enc_transp
 
 		mov [es:edi],eax
 		ret
 
 ; src: color, alpha: image
 blend_pixel_01_32:
-		mov eax,[gs:ebx]
+		mov eax,[es:ebx]
 		movzx eax,ah
 		mov [transp],eax
 
 		mov ecx,[tmp_var_3]
 
 		mov eax,[es:edi]
-		call enc_transp
+		call pm_enc_transp
 
 		mov [es:edi],eax
 		ret
 
 ; src: image, alpha: fixed
 blend_pixel_10_32:
-		mov ecx,[fs:esi]
+		mov ecx,[es:esi]
 
 		mov eax,[es:edi]
-		call enc_transp
+		call pm_enc_transp
 
 		mov [es:edi],eax
 		ret
@@ -10375,15 +10396,19 @@ blend_pixel_11_32:
 		mov ecx,[tmp_var_3]
 
 		mov eax,[es:edi]
-		call enc_transp
+		call pm_enc_transp
 
 		mov [es:edi],eax
 		ret
+
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ; ensure the cursor is always within the visible area
 ;
+
+		bits 16
+
 edit_align:
 		mov cx,[edit_width]
 		mov dx,cx
@@ -10408,9 +10433,6 @@ edit_align_90:
 		ret
 
 
-
-
-
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ;  es:bx	string
@@ -10421,6 +10443,9 @@ edit_align_90:
 ;
 ;  Changes no other regs.
 ;
+
+		bits 16
+
 utf8_prev:
 		push ax
 		or si,si
@@ -10447,6 +10472,9 @@ utf8_prev_90:
 ;
 ;  Changes no other regs.
 ;
+
+		bits 16
+
 utf8_next:
 		push ax
 		cmp byte [es:bx+si],0
@@ -10466,6 +10494,9 @@ utf8_next_90:
 ;
 ; eax		key (bits 0-23: key, 24-31: scan code)
 ;
+
+		bits 16
+
 edit_input:
 		mov edx,eax
 		shr edx,24
@@ -10620,9 +10651,13 @@ edit_input_80:
 edit_input_90:
 		ret
 
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 edit_redraw:
+
+		bits 16
+
 		mov ax,[edit_x]
 		sub ax,[edit_shift]
 		mov [gfx_cur_x],ax
@@ -10665,6 +10700,7 @@ edit_redraw_50:
 edit_redraw_90:
 		ret
 
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ; Write char at current cursor position.
@@ -10675,6 +10711,9 @@ edit_redraw_90:
 ; return:
 ;  cursor position gets advanced
 ;
+
+		bits 16
+
 edit_char:
 		push fs
 
@@ -10727,6 +10766,9 @@ edit_char_90:
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
+
+		bits 16
+
 edit_hide_cursor:
 		mov edi,[edit_bg]
 		add edi,4
@@ -10750,6 +10792,9 @@ edit_hide_cursor:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+		bits 16
+
 edit_show_cursor:
 		call screen_segs
 
@@ -10773,6 +10818,9 @@ edit_show_cursor_10:
 ;
 ; es:si		initial text
 ;
+
+		bits 16
+
 edit_init:
 		push fs
 		push es
@@ -10806,6 +10854,7 @@ edit_init_90:
 		pop fs
 		ret
 
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ; es:si		parameter array
@@ -10813,6 +10862,9 @@ edit_init_90:
 ; note: no consistency checks done, es:si _must_ point to
 ; a valid array
 ;
+
+		bits 16
+
 edit_put_params:
 		push word [edit_buf_ptr]
 		pop word [es:si+2+5*5+1]
@@ -10833,6 +10885,9 @@ edit_put_params:
 ; return:
 ;  CF		invalid data
 ;
+
+		bits 16
+
 edit_get_params:
 		es lodsw
 		cmp ax,8
@@ -10908,6 +10963,7 @@ edit_get_params_80:
 edit_get_params_90:
 		ret
 
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ; basic graphics functions
@@ -10918,6 +10974,9 @@ edit_get_params_90:
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; map next window segment
 ;
+
+		bits 16
+
 inc_winseg:
 		push ax
 		mov al,[cs:mapped_window]
@@ -10932,6 +10991,9 @@ inc_winseg:
 ;
 ; 	al	= window segment
 ;
+
+		bits 16
+
 set_win:
 		push edi
 		cmp byte [cs:vbe_active],0
@@ -10972,6 +11034,9 @@ set_win_90:
 ;  - changes no regs other than edi
 ;  - does not require ds == cs
 ;
+
+		bits 16
+
 goto_xy:
 		push ax
 		push dx
@@ -14058,7 +14123,7 @@ pcx_init:
 		push ecx
 		push edx
 		push ebx
-		rm32_call find_mem_size
+		call find_mem_size
 		pop ebx
 		pop edx
 		pop ecx
@@ -14216,9 +14281,9 @@ pcx_unpack_20:
 
 		; draw one line
 pcx_unpack_30:
+		xor eax,eax
 		es lodsb
 
-		mov ah,0
 		cmp al,0c0h
 		jb pcx_unpack_70
 
@@ -14330,7 +14395,7 @@ jpg_init:
 		jz jpg_init_80
 
 		push eax
-		rm32_call find_mem_size
+		call find_mem_size
 		mov ecx,eax
 		pop eax
 
