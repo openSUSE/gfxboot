@@ -20,7 +20,7 @@
   screen.size image.colors vscreen.size monitorsize
   moveto currentpoint lineto setcolor currentcolor putpixel getpixel
   setfont currentfont fontheight strsize show settextmodecolor
-  image loadpalette tint settintcolor setpalette getpalette
+  image loadpalette setpalette getpalette
   settransparentcolor
   savescreen restorescreen
   fillrect
@@ -47,8 +47,6 @@
 
   usleep notimeout
   time date
-  setbrightness currentbrightness
-  fadein fade
   idle
   image.size
 

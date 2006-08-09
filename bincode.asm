@@ -160,14 +160,19 @@ vbe_buffer.ofs		equ vbe_buffer
 vbe_buffer.seg		equ vbe_buffer+2
 vbe_buffer.lin		dd 0		; (lin) dto
 vbe_mode_list		dd 0		; (seg:ofs) list with (up to 100h) vbe modes
+vbe_mode_list.ofs	equ vbe_mode_list
+vbe_mode_list.seg	equ vbe_mode_list+2
+vbe_mode_list.lin	dd 0		; (lin) dto
 vbe_info_buffer		dd 0		; (lin) buffer for vbe gfx card info
 infobox_buffer		dd 0		; (lin) temp buffer for InfoBox messages
 
 local_stack		dd 0		; ofs local stack (8k)
-			dw 0		; dto, seg
+local_stack.ofs		equ local_stack
+local_stack.seg		dw 0		; dto, seg
 old_stack		dd 0		; store old esp value
-			dw 0		; dto, ss
-stack_size		dw 0		; in bytes
+old_stack.ofs		equ old_stack
+old_stack.seg		dw 0		; dto, ss
+stack_size		dd 0		; in bytes
 tmp_stack_val		dw 0		; needed for stack switching
 
 pscode_start		dd 0		; (lin)
@@ -232,9 +237,6 @@ pm_getpixel		dd pm_getpixel_8		; function that gets one pixel
 
 transp			dd 0		; transparency
 
-; 0..100h
-brightness		dw 100h
-
 			align 4, db 0
 ; current font description
 font			dd 0		; (seg:ofs) to font header
@@ -246,6 +248,7 @@ font_res1		db 0		; alignment
 
 ; console font
 cfont			dd 0		; (seg:ofs) to bitmap
+cfont.lin		dd 0		; console font bitmap
 cfont_height		dw 0
 con_x			dw 0		; cursor pos in pixel
 con_y			dw 0		; cursor pos in pixel, *must* follow con_x
@@ -262,12 +265,9 @@ chr_width		dw 0
 utf8_buf		times 8 db 0
 
 ; pointer to currently active palette (3*100h bytes)
-gfx_pal			dd 0		; (seg:ofs)
-gfx_pal.ofs		equ gfx_pal
-gfx_pal.seg		equ gfx_pal+2
-gfx_pal.lin		dd 0		; (lin)
+gfx_pal			dd 0		; (lin)
 ; pointer to tmp area (3*100h bytes)
-gfx_pal_tmp		dd 0		; (seg:ofs)
+gfx_pal_tmp		dd 0		; (lin)
 ; number of fixed pal values
 pals			dw 0
 
@@ -340,15 +340,6 @@ row_start_ofs		times max_text_rows dw 0
 
 			; note: link_list relies on row_start_seg
 link_list		times sizeof_link * link_entries db 0
-
-; currently used tint color (call load_palette to make changes visible)
-gfx_cs_tint_r		db 0
-gfx_cs_tint_g		db 0
-gfx_cs_tint_b		db 0
-gfx_cs_r		db 0
-gfx_cs_g		db 0
-gfx_cs_b		db 0
-
 
 			; max label size: 32
 label_buf		times 35 db 0
@@ -886,70 +877,73 @@ gfx_init_40:
 		call dict_init
 		jc pm_gfx_init_90
 
-		pm_leave 32
-
 		call stack_init
-		jc gfx_init_90
+		jc pm_gfx_init_90
 
 		mov eax,[mem]
-		lin2segofs eax,es,si
-		add eax,[es:si+fh_code]
+		mov esi,eax
+		add eax,[es:esi+fh_code]
 		mov [pscode_start],eax
-		mov eax,[es:si+fh_code_size]
+		mov eax,[es:esi+fh_code_size]
 		mov [pscode_size],eax
 
 		; now the ps interpreter is ready to run
 
 		; allocate 8k local stack
 		mov eax,8 << 10
-		mov [stack_size],ax
+		mov [stack_size],eax
 		add eax,3
-		pm32_call calloc
-		cmp eax,byte 1
-		jc gfx_init_90
+		call calloc
+		cmp eax,1
+		jc pm_gfx_init_90
 		; dword align
 		add eax,3
-		and al,~3
-		lin2segofs eax,word [local_stack+4],ax
-		movzx eax,ax
-		mov dword [local_stack],eax
-		mov ax,[stack_size]
-		add [local_stack],eax
+		and eax,~3
+
+		push eax
+		xor eax,eax
+		call pm_lin2so
+		pop ax
+		add eax,[stack_size]
+		mov [local_stack.ofs],eax
+		pop word [local_stack.seg]
 
 		; jpg decoding buffer
-		pm32_call jpg_setup
+		call jpg_setup
 
 		; alloc memory for palette data
 		call pal_init
 
 		mov eax,100h
-		pm32_call calloc
-		cmp eax,byte 1
-		jc gfx_init_90
+		call calloc
+		cmp eax,1
+		jc pm_gfx_init_90
 		mov [infobox_buffer],eax
 
 		mov eax,200h
-		pm32_call calloc
-		cmp eax,byte 1
-		jc gfx_init_90
+		call calloc
+		cmp eax,1
+		jc pm_gfx_init_90
 		mov [vbe_buffer.lin],eax
 		push eax
-		call lin2so
+		call pm_lin2so
 		pop dword [vbe_buffer.ofs]
 
 		mov eax,100h
-		pm32_call calloc
-		cmp eax,byte 1
-		jc gfx_init_90
+		call calloc
+		cmp eax,1
+		jc pm_gfx_init_90
 		mov [vbe_info_buffer],eax
 
 		mov eax,200h
-		pm32_call calloc
-		cmp eax,byte 1
-		jc gfx_init_90
+		call calloc
+		cmp eax,1
+		jc pm_gfx_init_90
+		mov [vbe_mode_list.lin],eax
 		push eax
-		call lin2so
-		pop dword [vbe_mode_list]
+		call pm_lin2so
+		pop dword [vbe_mode_list.ofs]
+
 		; fill list
 		call get_vbe_modes
 
@@ -959,9 +953,11 @@ gfx_init_40:
 		; ok, we've done it, now continue the setup
 
 %if 0
-		call dump_malloc
-		call get_key
+		rm32_call dump_malloc
+		rm32_call get_key
 %endif
+
+		pm_leave 32
 
 		; run global code
 		xor eax,eax
@@ -1898,29 +1894,29 @@ timer_90:
 ;  CF		error
 ;
 
-		bits 16
+		bits 32
 
 stack_init:
 		mov dword [pstack_size],param_stack_size
 		and dword [pstack_ptr],0
 		mov eax,param_stack_size * 5
-		pm32_call calloc
+		call calloc
 		cmp eax,1
 		jc stack_init_90
 		mov [pstack.lin],eax
 		push eax
-		call lin2so
+		call pm_lin2so
 		pop dword [pstack]
 
 		mov dword [rstack_size],ret_stack_size
 		and dword [rstack_ptr],0
 		mov eax,ret_stack_size * 5
-		pm32_call calloc
+		call calloc
 		cmp eax,1
 		jc stack_init_90
 		mov [rstack.lin],eax
 		push eax
-		call lin2so
+		call pm_lin2so
 		pop dword [rstack]
 stack_init_90:
 		ret
@@ -2471,11 +2467,6 @@ dict_init:
 		xor eax,eax
 		es lodsw
 		mov [dict_size],ax
-		; the dictionary should fit in 64k
-		; -- really?
-		cmp ax,0fff0h/5
-		cmc
-		jc dict_init_90
 
 		; p_none is not part of the default dict
 		cmp ax,cb_functions + prim_functions - 1
@@ -3662,7 +3653,6 @@ pm_mode_init_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Get VBE mode list.
 ;
 ;  [vbe_buffer]	buffer for vbe info
@@ -3672,49 +3662,57 @@ pm_mode_init_90:
 ;  [screen_mem]		video memory size
 ;
 
-		bits 16
+		bits 32
 
 get_vbe_modes:
-		push es
-
-		lfs si,[vbe_mode_list]
-		cmp word [fs:si],0
+		mov ebx,[vbe_mode_list.lin]
+		cmp word [es:ebx],0
 		jnz get_vbe_modes_90
 
-		les di,[vbe_buffer]
+		mov edx,[vbe_buffer.lin]
+		and dword [es:edx],0
+		
+		mov di,[vbe_buffer.ofs]
+		push word [vbe_buffer.seg]
+		pop word [rm_seg.es]
 		mov ax,4f00h
-		and dword [es:di],byte 0
-		push di
+
+		push ebx
+		push edx
 		int 10h
-		pop di
+		pop edx
+		pop ebx
+
+		mov edi,ebx
+
 		cmp ax,4fh
-		jnz get_vbe_modes_30
-		push word [es:di+12h]
+		jnz get_vbe_modes_20
+
+		push word [es:edx+12h]
 		pop word [screen_mem]
-		lfs si,[es:di+0eh]
-		les di,[vbe_mode_list]
-		mov cx,0ffh
+
+		movzx esi,word [es:edx+0eh]
+		movzx eax,word [es:edx+0eh+2]
+		shl eax,4
+		add esi,eax
+
+		mov ecx,0ffh
 get_vbe_modes_10:
-		fs lodsw
+		es lodsw
 		stosw
 		cmp ax,0ffffh
-		jz get_vbe_modes_20
-		dec cx
+		jz get_vbe_modes_30
+		dec ecx
 		jnz get_vbe_modes_10
-		mov word [es:di],0ffffh
 get_vbe_modes_20:
-		lfs si,[vbe_mode_list]
-		cmp word [fs:si],0
+		mov word [es:edi],0ffffh
+get_vbe_modes_30:
+		cmp word [es:ebx],0
 		jnz get_vbe_modes_90
 		; make sure it's not 0; mode 1 is the same as mode 0
-		mov byte [fs:si],1
-		jmp get_vbe_modes_90
-get_vbe_modes_30:
-		lfs si,[vbe_mode_list]
-		mov word [fs:si],0ffffh
+		inc word [es:esi]
 
 get_vbe_modes_90:
-		pop es
 		ret
 
 
@@ -7910,10 +7908,14 @@ prim_image_90:
 ; Activates current palette in 8-bit modes.
 ;
 prim_loadpalette:
-		mov cx,100h
-		xor dx,dx
+		pm_enter 32
+
+		mov ecx,100h
+		xor edx,edx
 		call load_palette
 		clc
+
+		pm_leave 32
 		ret
 
 
@@ -8010,81 +8012,6 @@ prim_unpackimage_90:
 		ret
 
 
-;; tint - tint palette
-;
-; group: tint
-;
-; ( int1 int2 int3 -- )
-;
-; int1: source
-; int2: destination
-; int3: palette entries
-; 
-; Tint int3 palette entries starting at int1 and store them starting at int2.
-;
-prim_tint:
-		mov bp,pserr_pstack_underflow
-		cmp  word [pstack_ptr],byte 3
-		jc prim_tint_90
-		mov bp,pserr_wrong_arg_types
-		mov cx,2
-		call get_pstack_tos
-		cmp dl,t_int
-		stc
-		jnz prim_tint_90
-		push ax
-		mov dx,t_int + (t_int << 8)
-		call get_2args
-		pop dx
-		jc prim_tint_90
-
-		sub word [pstack_ptr],byte 3
-
-		xchg ax,bx
-
-		push cx
-		push bx
-		call tint
-		pop dx
-		pop cx
-
-		call load_palette
-		clc
-prim_tint_90:
-		ret
-
-
-;; settintcolor - set tint color
-;
-; group: tint
-;
-; ( int1 int2 -- )
-;
-; int1: RGB value
-; int2: opaqueness (individually for each R, G, B component)
-;
-prim_settintcolor:
-		mov dx,t_int + (t_int << 8)
-		call get_2args
-		jc prim_settintcolor_90
-
-		sub word [pstack_ptr],byte 2
-
-		mov [gfx_cs_tint_b],al
-		mov [gfx_cs_tint_g],ah
-		shr eax,16
-		mov [gfx_cs_tint_r],al
-		mov [gfx_cs_b],cl
-		mov [gfx_cs_g],ch
-		shr ecx,16
-		mov [gfx_cs_r],cl
-
-		clc
-
-prim_settintcolor_90:
-		ret
-
-
 ;; setpalette - set palette entry
 ;
 ; group: draw
@@ -8099,31 +8026,35 @@ prim_settintcolor_90:
 ;   /yellow 12 0xffff00 def	% color 12 = yellow
 ;
 prim_setpalette:
+		pm_enter 32
+
 		mov dx,t_int + (t_int << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_setpalette_90
 
-		sub word [pstack_ptr],byte 2
+		sub dword [pstack_ptr],2
 
 		cmp ecx,100h
 		jae prim_setpalette_90
 
-		push cx
-		les di,[gfx_pal]
-		add di,cx
-		add di,cx
-		add di,cx
-		mov [es:di+2],al
-		mov [es:di+1],ah
+		mov edx,ecx
+
+		lea edi,[ecx+2*ecx]
+		add edi,[gfx_pal]
+		
+		mov [es:edi+2],al
+		mov [es:edi+1],ah
 		shr eax,16
-		mov [es:di],al
-		pop dx
-		mov cx,1
+		mov [es:edi],al
+
+		mov ecx,1
 		call load_palette
 
 		clc
 
 prim_setpalette_90:
+
+		pm_leave 32
 		ret
 
 
@@ -8140,8 +8071,10 @@ prim_setpalette_90:
 ;   11 dup getpalette not setpalette	% invert color 11
 ;
 prim_getpalette:
+		pm_enter 32
+
 		mov dl,t_int
-		call get_1arg
+		call pm_get_1arg
 		jc prim_getpalette_90
 
 		xchg eax,ecx
@@ -8149,19 +8082,20 @@ prim_getpalette:
 		cmp ecx,100h
 		jae prim_getpalette_50
 
-		les di,[gfx_pal]
-		add di,cx
-		add di,cx
-		add di,cx
-		mov al,[es:di]
+		lea ecx,[ecx+2*ecx]
+		add ecx,[gfx_pal]
+
+		mov al,[es:ecx]
 		shl eax,16
-		mov ah,[es:di+1]
-		mov al,[es:di+2]
+		mov ah,[es:ecx+1]
+		mov al,[es:ecx+2]
 prim_getpalette_50:
 		mov dl,t_int
-		xor cx,cx
-		call set_pstack_tos
+		xor ecx,ecx
+		call pm_set_pstack_tos
 prim_getpalette_90:
+
+		pm_leave 32
 		ret
 
 
@@ -10259,97 +10193,6 @@ prim_date:
 		jmp pr_getint
 
 
-;; setbrightness - set brightness
-;
-; group: image
-;
-; ( int1 -- )
-;
-; int1: 0 .. 256 (0 = black, 256 = normal)
-;
-; Taken into account in @loadpalette. Maybe useful for fading effects.
-;
-prim_setbrightness:
-		call pr_setint
-		mov [brightness],ax
-		ret
-
-
-;; currentbrightness - current brightness
-;
-; group: image
-;
-; ( -- int1 )
-;
-; int1: 0 .. 256 (0 = black, 256 = normal)
-;
-prim_currentbrightness:
-		movzx eax,word [brightness]
-		jmp pr_getint
-
-
-;; fadein - some obscure thing
-;
-; group: obsolete
-;
-; ( str1 int1 -- )
-;
-; str1: palette
-; int1: some palette index
-;
-; Note: obsolete, forget it.
-;
-prim_fadein:
-		mov dx,t_int + (t_string << 8)
-		call get_2args
-		jc prim_get_90
-
-		sub word [pstack_ptr],byte 2
-
-		lin2segofs ecx,es,bx
-		call fade_in
-
-		clc
-prim_fadein_90:
-		ret
-
-
-;; fade -- some obscure thing
-;
-; group: obsolete
-;
-; ( str1 int1 int2 -- )
-;
-; Note: obsolete, forget it.
-;
-prim_fade:
-		mov bp,pserr_pstack_underflow
-		cmp word [pstack_ptr],byte 3
-		jc prim_fade_90
-		mov bp,pserr_wrong_arg_types
-		mov cx,2
-		call get_pstack_tos
-		cmp dl,t_string
-		stc
-		jnz prim_fade_90
-		push eax
-		mov dx,t_int + (t_int << 8)
-		call get_2args
-		pop edx
-		jc prim_fade_90
-
-		sub word [pstack_ptr],byte 3
-
-		mov bp,ax
-		mov ax,cx
-		lin2segofs edx,es,bx
-		call fade_one
-
-		clc
-prim_fade_90:
-		ret
-
-
 ;; idle - run stuff when idle
 ;
 ; group: system
@@ -11625,7 +11468,7 @@ pm_decode_color_90:
 
 pal_to_color:
 		lea eax,[eax+2*eax]
-		add eax,[gfx_pal.lin]
+		add eax,[gfx_pal]
 		mov eax,[es:eax]
 		bswap eax
 		shr eax,8
@@ -12006,16 +11849,23 @@ pm_getpixel_32:
 ; Initialize console font (used for debug output).
 ;
 
-		bits 16
+		bits 32
 
 cfont_init:
 		; 3: 8x8, 2: 8x14, 6: 8x16
 		mov bh,6
 		mov ax,1130h
 		int 10h
+		movzx ebp,bp
+		movzx eax,word [rm_seg.es]
 		mov [cfont],bp
-		mov [cfont+2],es
-		mov byte [cfont_height],16
+		mov [cfont+2],ax
+
+		shl eax,4
+		add eax,ebp
+		mov [cfont.lin],eax
+
+		mov word [cfont_height],16
 		ret
 
 
@@ -12479,6 +12329,9 @@ str_size_90:
 ; notes:
 ;  - stops at linebreak ('\n')
 ;
+
+		bits 16
+
 str_len:
 		xor cx,cx
 str_len_10:
@@ -12516,6 +12369,9 @@ str_len_70:
 ;
 ;  Note: changes only: eax, si
 ;
+
+		bits 16
+
 utf8_dec:
 		xor eax,eax
 		es lodsb
@@ -12590,6 +12446,9 @@ utf8_dec_90:
 ;  cx		length
 ;  utf8_buf	char
 ;
+
+		bits 16
+
 utf8_enc:
 		mov si,utf8_buf
 		xor cx,cx
@@ -12670,6 +12529,9 @@ utf8_enc_90:
 ; return:
 ;  cursor position gets advanced
 ;
+
+		bits 16
+
 char_xy:
 		cmp eax,1fh			; \x1f looks like a space, but isn't
 		jnz char_xy_10
@@ -12762,6 +12624,9 @@ char_xy_90:
 ;  CF		0 = found, 1 = not found
 ;  [chr_*]	updated
 ;
+
+		bits 16
+
 find_char:
 		and eax,1fffffh
 		push eax
@@ -12848,6 +12713,9 @@ find_char_90:
 ;  eax		char
 ;  cx		char width
 ;
+
+		bits 16
+
 char_width:
 		push eax
 		cmp eax,1fh		; \x1f looks like a space, but isn't
@@ -12873,6 +12741,9 @@ char_width_90:
 ; return:
 ;  console cursor position gets advanced
 ;
+
+		bits 16
+
 con_char_xy:
 		push dword [gfx_color]
 
@@ -12942,21 +12813,19 @@ con_char_xy_60:
 ;
 ; Get some memory for palette data
 ;
+
+		bits 32
+
 pal_init:
 		mov eax,300h
-		pm32_call calloc
-		mov [gfx_pal.lin],eax
-		push eax
-		call lin2so
-		pop dword [gfx_pal]
+		call calloc
+		mov [gfx_pal],eax
 		or eax,eax
 		stc
 		jz pal_init_90
 		mov eax,300h
-		pm32_call calloc
-		push eax
-		call lin2so
-		pop dword [gfx_pal_tmp]
+		call calloc
+		mov [gfx_pal_tmp],eax
 		or eax,eax
 		stc
 		jz pal_init_90
@@ -12966,288 +12835,70 @@ pal_init_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Load palette data.
 ;
-; cx		number of palettes
-; dx		start
+; ecx		number of palette entries
+; edx		start entry
 ;
-load_palette:
-		push fs
 
+		bits 32
+
+load_palette:
 		cmp byte [pixel_bytes],1
 		ja load_palette_90
 
-		cmp dx,100h
+		cmp edx,100h
 		jae load_palette_90
 
-		mov ax,dx
-		add ax,cx
-		sub ax,100h
+		mov eax,edx
+		add eax,ecx
+		sub eax,100h
 		jbe load_palette_10
-		sub cx,ax
+		sub ecx,eax
 load_palette_10:
-		or cx,cx
+		or ecx,ecx
 		jz load_palette_90
 
-		mov ax,dx
-		add ax,dx
-		add ax,dx
+		lea ebp,[edx+2*edx]
 
-		push dx
-		push cx
+		mov ebx,edx
+		push ecx
 
 		; vga function wants 6 bit values
 
-		lfs si,[gfx_pal]
-		les di,[gfx_pal_tmp]
-		add si,ax
-		add di,ax
+		mov esi,[gfx_pal]
+		mov edi,[gfx_pal_tmp]
 
-		imul cx,cx,3
-		mov dx,di
-		push dx
+		add esi,ebp
+		add edi,ebp
+
+		lea ecx,[ecx+2*ecx]
+
 load_palette_50:
-		fs lodsb
-		mov ah,0
-		mul word [brightness]
-		shr ax,10
+		es lodsb
+		shr al,2
 		stosb
 		loop load_palette_50
 
-		pop dx
-		pop cx
-		pop bx
+		pop ecx
 
+		mov edx,[gfx_pal_tmp]
+		add edx,ebp
 
-%if 0
-		mov si,dx
-		mov dx,3dah
-		cli
-load_palette_60:
-		in al,dx
-		test al,8
-		jnz load_palette_60
-load_palette_70:
-		in al,dx
-		test al,8
-		jz load_palette_70
-		cli
-		imul cx,cx,3
-		mov dx,3c8h
-		xchg ax,bx
-		out dx,al
-		inc dx
-		es rep outsb
-		sti
-%else
+		mov eax,edx
+		and edx,0fh
+		shr eax,4
+
+		; check seg value
+		cmp eax,10000h
+		jae load_palette_90
+
+		mov [rm_seg.es],ax
+
 		mov ax,1012h
 		int 10h
-%endif
 
 load_palette_90:
-		pop fs
-		ret
-
-
-; es:bx		colors
-; ax		ref color
-;
-fade_in:
-		xor bp,bp
-
-fade_in_20:
-		push bx
-		push ax
-
-		mov dx,3dah
-fade_in_30:
-		in al,dx
-		test al,8
-		jnz fade_in_30
-fade_in_40:
-		in al,dx
-		test al,8
-		jz fade_in_40
-
-		pop ax
-		pop bx
-
-		push bx
-		push ax
-		call fade_one
-		pop ax
-		pop bx
-
-		add bp,4
-
-		cmp bp,100h
-		jbe fade_in_20
-
-		ret
-
-
-; es:bx		colors
-; ax		ref color
-; bp		step (0 - 100h)
-;
-fade_one:
-		push fs
-
-		lfs si,[gfx_pal]
-		mov di,si
-		imul ax,ax,3
-		add di,ax
-
-		mov dx,3c8h
-		xor cx,cx
-fade_one_30:
-		cmp byte [es:bx],0
-		jz fade_one_70
-
-		mov al,cl
-		out dx,al
-
-		inc dx
-
-		mov al,[fs:di]
-		mov ah,[fs:si]
-		call fade_it
-		shr al,2
-		out dx,al
-
-		mov al,[fs:di+1]
-		mov ah,[fs:si+1]
-		call fade_it
-		shr al,2
-		out dx,al
-
-		mov al,[fs:di+2]
-		mov ah,[fs:si+2]
-		call fade_it
-		shr al,2
-		out dx,al
-
-		dec dx
-fade_one_70:
-		inc bx
-		add si,3
-		inc cx
-		cmp cx,100h
-		jb fade_one_30
-
-fade_one_90:
-		pop fs
-		ret
-
-
-; al		old color
-; ah		new color
-; bp		step (0 - 100h)
-;
-; return:
-;  al		color
-fade_it:
-		push cx
-		push dx
-		push bp
-
-		push ax
-		movzx ax,ah
-		mul bp
-		mov cx,ax
-		sub bp,100h
-		neg bp
-		pop ax
-		mov ah,0
-		mul bp
-		add ax,cx
-		mov al,ah
-
-		pop bp
-		pop dx
-		pop cx
-		ret
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; cx		colors
-; dx		src
-; bx		dst
-;
-tint:
-		push fs
-
-		; ensure we don't exceed bounds
-		cmp dx,100h
-		jae tint_90
-		cmp bx,100h
-		jae tint_90
-
-		mov ax,dx
-		cmp dx,bx
-		jae tint_10
-		mov ax,bx
-tint_10:
-		add ax,cx
-		sub ax,100h
-		jb tint_20
-		sub cx,ax
-tint_20:
-		or cx,cx
-		jz tint_90
-
-		lfs si,[gfx_pal]
-		les di,[gfx_pal_tmp]
-
-		imul ax,dx,3
-		add si,dx
-		imul ax,bx,3
-		add di,ax
-		imul cx,cx,3
-		push ax
-		push cx
-
-		xor bx,bx
-
-tint_40:
-		movzx ax,byte [gfx_cs_r + bx]
-		fs movzx bp,byte [si]
-		inc si
-		sub ax,bp
-		push bp
-		movzx dx,byte [gfx_cs_tint_r + bx]
-		imul dx
-		mov bp,0ffh		; 100
-		idiv bp
-		pop bp
-		add ax,bp
-		jns tint_50
-		xor ax,ax
-tint_50:
-		or ah,ah
-		jz tint_60
-		mov ax,0ffh
-tint_60:
-		stosb
-		inc bx
-		cmp bx,3
-		jb tint_70
-		xor bx,bx
-tint_70:
-		loop tint_40
-
-		pop cx
-		pop ax
-
-		lfs si,[gfx_pal_tmp]
-		les di,[gfx_pal]
-
-		add di,ax
-		add si,ax
-		fs rep movsb
-tint_90:
-		pop fs
 		ret
 
 
@@ -13267,6 +12918,9 @@ tint_90:
 ;
 ;  Changed registers: -
 ;
+
+		bits 16
+
 clip_it:
 		pusha
 
@@ -13325,6 +12979,9 @@ clip_it_90:
 ; ATI 7000 boards will make problems (computer hangs).
 ; As an added bonus, it really speeds things up.
 ;
+
+		bits 16
+
 save_bg:
 		push fs
 
@@ -13454,6 +13111,9 @@ save_bg_90:
 ;
 ; Does not change cursor positon.
 ;
+
+		bits 16
+
 restore_bg:
 		push fs
 
@@ -13550,6 +13210,9 @@ restore_bg_90:
 ;
 ; Modified registers: -
 ;
+
+		bits 16
+
 screen_segs:
 		call screen_seg_w
 		jmp screen_seg_r
@@ -13561,6 +13224,9 @@ screen_segs:
 ;
 ; Modified registers: -
 ;
+
+		bits 16
+
 screen_seg_w:
 		mov es,[window_seg_w]
 		ret
@@ -13572,6 +13238,9 @@ screen_seg_w:
 ;
 ; Modified registers: -
 ;
+
+		bits 16
+
 screen_seg_r:
 		cmp word [window_seg_r],0
 		jz screen_seg_r_10
@@ -13591,6 +13260,9 @@ screen_seg_r_10:
 ;		bp	= drawing mode
 ;			  0: move, 1: add, 2,3: dto, except for bh (bh->bl)
 ;
+
+		bits 16
+
 fill_rect:
 		mov [gfx_width],dx
 		mov [gfx_height],cx
@@ -13636,6 +13308,9 @@ fill_rect_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+		bits 16
+
 new_int8:
 		pushad
 		push ds
@@ -13767,6 +13442,9 @@ new_int8_90:
 
 		iret
 
+
+		bits 16
+
 sound_init:
 		cmp byte [sound_ok],0
 		jnz sound_init_90
@@ -13875,6 +13553,8 @@ sound_init_90:
 		ret
 
 
+		bits 16
+
 sound_done:
 		cmp byte [sound_ok],0
 		jz sound_done_90
@@ -13922,6 +13602,9 @@ sound_done_90:
 
 
 ; eax: new sample rate
+
+		bits 16
+
 sound_setsample:
 		cmp eax,20
 		jae sound_setsample_20
@@ -13963,6 +13646,9 @@ sound_setsample_90:
 		ret
 
 %if 0
+
+		bits 16
+
 sound_test:
 		cmp dword [sound_x],0
 		jz sound_test_80
@@ -14609,7 +14295,7 @@ pcx_init:
 		call parse_pcx_img
 		pop esi
 
-		mov edi,[gfx_pal.lin]
+		mov edi,[gfx_pal]
 
 		mov ecx,300h
 		push ecx
@@ -14895,6 +14581,7 @@ jpg_init_90:
 		bits 32
 
 jpg_size:
+		push fs
 		push eax
 
 		mov si,pm_seg.data_d16
@@ -14910,6 +14597,7 @@ jpg_size:
 		jnz jpg_size_90
 		stc
 jpg_size_90:
+		pop fs
 		ret
 
 
@@ -14930,6 +14618,8 @@ jpg_size_90:
 		bits 32
 
 jpg_unpack:
+		push fs
+
 		movzx edx,byte [pixel_bits]
 		cmp dl,16
 		jz jpg_unpack_10
@@ -14957,6 +14647,7 @@ jpg_unpack_10:
 		add sp,28
 
 jpg_unpack_90:
+		pop fs
 		ret
 
 
@@ -14969,10 +14660,11 @@ jpg_unpack_90:
 		bits 16
 
 use_local_stack:
-		cmp dword [old_stack],0
+		; cmp dword [old_stack.ofs],0
+		; jnz $
 		pop word [tmp_stack_val]
-		mov [old_stack],esp
-		mov [old_stack+4],ss
+		mov [old_stack.ofs],esp
+		mov [old_stack.seg],ss
 		lss esp,[local_stack]
 		jmp [tmp_stack_val]
 
@@ -14986,10 +14678,11 @@ use_local_stack:
 		bits 16
 
 use_old_stack:
-		cmp dword [old_stack],0
+		; cmp dword [old_stack.ofs],0
+		; jz $
 		pop word [tmp_stack_val]
 		lss esp,[old_stack]
-		mov dword [old_stack],0
+		mov dword [old_stack.ofs],0
 		jmp [tmp_stack_val]
 
 
