@@ -281,8 +281,7 @@ pixel_bytes		dd 0		; pixel size in bytes
 
 ; segment address of writeable window
 window_seg_w		dw 0
-; segment address of readable window
-; if 0 -> gfx_window_seg_w is rw
+; segment address of readable window (= gfx_window_seg_w if 0)
 window_seg_r		dw 0
 ; ganularity units per window
 window_inc		db 0
@@ -445,6 +444,9 @@ gdt			dd 0, 0			; null descriptor
 .prog_d16		dd 00000000h, 00009300h	; dto, data, use16
 .prog_c16		dd 00000000h, 00009b00h	; dto, code, use16
 .data_d16		dd 00000000h, 00009300h	; 64k segment, data, use16
+
+.screen_r16		dd 00000000h, 00009300h ; 64k screen, data, use16
+.screen_w16		dd 00000000h, 00009300h ; 64k screen, data, use16
 gdt_size		equ $-gdt
 
 ; gdt for pm switch
@@ -455,6 +457,8 @@ pm_seg.prog_c32		equ 18h			; default cs, use32
 pm_seg.prog_d16		equ 20h			; default ds
 pm_seg.prog_c16		equ 28h			; default cs, use16
 pm_seg.data_d16		equ 30h			; free to use
+pm_seg.screen_r16	equ 38h			; graphics window, for reading
+pm_seg.screen_w16	equ 40h			; graphics window, for writing
 
 pm_large_seg		db 0			; active large segment mask
 pm_seg_mask		db 0			; segment bit mask (1:es, 2:fs, 3:gs)
@@ -3532,9 +3536,6 @@ set_mode_45:
 		mov [pixel_bytes],ah
 		mov [color_bits],dh
 
-		call mode_init
-		call pm_mode_init
-
 		; we check if win A is readable _and_ writable; if not, we want
 		; at least a writable win A and a readable win B
 		; other, even more silly variations are not supported
@@ -3587,6 +3588,12 @@ set_mode_50:
 		jnz set_mode_80
 		mov al,0
 		call set_win
+
+		call mode_init
+		call pm_mode_init
+
+		clc
+
 		jmp set_mode_90
 set_mode_80:
 		and word [gfx_mode],byte 0
@@ -3625,6 +3632,23 @@ mode_init_90:
 
 
 pm_mode_init:
+		; graphics window selectors
+
+		movzx eax,word [window_seg_w]
+		shl eax,4
+		mov si,pm_seg.screen_w16
+		call set_gdt_base
+
+		movzx ecx,word [window_seg_r]
+		shl ecx,4
+		jz pm_mode_init_05
+		mov eax,ecx
+pm_mode_init_05:
+		mov si,pm_seg.screen_r16
+		call set_gdt_base
+
+		; pixel get/set functions
+
 		mov dword [pm_setpixel],pm_setpixel_8
 		mov dword [pm_setpixel_a],pm_setpixel_a_8
 		mov dword [pm_setpixel_t],pm_setpixel_8
@@ -3633,14 +3657,14 @@ pm_mode_init:
 		cmp byte [pixel_bits],8
 		jz pm_mode_init_90
 		cmp  byte [pixel_bits],16
-		jnz pm_mode_init_10
+		jnz pm_mode_init_50
 		mov dword [pm_setpixel],pm_setpixel_16
 		mov dword [pm_setpixel_a],pm_setpixel_a_16
 		mov dword [pm_setpixel_t],pm_setpixel_t_16
 		mov dword [pm_setpixel_ta],pm_setpixel_ta_16
 		mov dword [pm_getpixel],pm_getpixel_16
 		jmp mode_init_90
-pm_mode_init_10:
+pm_mode_init_50:
 		cmp byte [pixel_bits],32
 		jnz pm_mode_init_90
 		mov dword [pm_setpixel],pm_setpixel_32
@@ -7558,10 +7582,25 @@ prim_lineto_90:
 ;   0 0 moveto putpixel		% blue dot at upper left corner
 ;
 prim_putpixel:
-		call goto_xy
-		call screen_segs
-		call [setpixel_t]
+		pm_enter 32
+
+		push es
+		push fs
+
+		call pm_goto_xy
+
+		mov ax,pm_seg.screen_r16
+		mov fs,ax
+		mov ax,pm_seg.screen_w16
+		mov es,ax
+
+		call [pm_setpixel_t]
 		clc
+
+		pop fs
+		pop es
+
+		pm_leave 32
 		ret
 
 
@@ -11284,6 +11323,21 @@ inc_winseg:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Map next window segment.
+;
+
+		bits 32
+
+pm_inc_winseg:
+		push eax
+		mov al,[mapped_window]
+		inc al
+		call pm_set_win
+		pop eax
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; map window segment
 ;
 ; 	al	= window segment
@@ -11320,6 +11374,42 @@ set_win_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Map window segment.
+;
+;  al		window segment
+;
+
+		bits 32
+
+pm_set_win:
+		push edi
+		cmp byte [vbe_active],0
+		jz pm_set_win_90
+		cmp [mapped_window],al
+		jz pm_set_win_90
+		pusha
+		mov [mapped_window],al
+		mov ah,[window_inc]
+		mul ah
+		xchg eax,edx
+		mov ax,4f05h
+		xor ebx,ebx
+		cmp word [window_seg_r],0
+		jz pm_set_win_50
+		pusha
+		inc ebx
+		int 10h
+		popa
+pm_set_win_50:
+		int 10h
+		popa
+pm_set_win_90:
+		pop edi
+		ret
+
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ; Go to current cursor position.
 ;
@@ -11349,6 +11439,37 @@ goto_xy:
 		pop di
 		pop dx
 		pop ax
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Go to current cursor position.
+;
+; return:
+;  edi		offset
+;  correct gfx segment is mapped
+;
+; Notes:
+;  - changes no regs other than edi
+;
+
+		bits 32
+
+pm_goto_xy:
+		push eax
+		push edx
+		mov ax,[gfx_cur_y]
+		movzx edi,word [gfx_cur_x]
+		imul edi,[pixel_bytes]
+		mul word [screen_line_len]
+		add ax,di
+		adc dx,0
+		push ax
+		xchg ax,dx
+		call pm_set_win
+		pop di
+		pop edx
+		pop eax
 		ret
 
 
@@ -13101,8 +13222,8 @@ save_bg_90:
 		pop fs
 		ret
 
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Restore a screen region.
 ;
 ;  dx,cx	width, height
@@ -15173,6 +15294,12 @@ gdt_init:
 		call set_gdt_limit
 
 		mov si,pm_seg.data_d16
+		call set_gdt_limit
+
+		mov si,pm_seg.screen_r16
+		call set_gdt_limit
+
+		mov si,pm_seg.screen_w16
 		call set_gdt_limit
 
 		ret
