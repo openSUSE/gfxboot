@@ -7584,21 +7584,16 @@ prim_lineto_90:
 prim_putpixel:
 		pm_enter 32
 
-		push es
 		push fs
+		push gs
 
 		call pm_goto_xy
-
-		mov ax,pm_seg.screen_r16
-		mov fs,ax
-		mov ax,pm_seg.screen_w16
-		mov es,ax
-
+		call pm_screen_segs
 		call [pm_setpixel_t]
 		clc
 
+		pop gs
 		pop fs
-		pop es
 
 		pm_leave 32
 		ret
@@ -7617,12 +7612,22 @@ prim_putpixel:
 ;   getpixel not setcolor putpixel	% invert pixel color
 ;
 prim_getpixel:
-		call goto_xy
-		call screen_seg_r
+		pm_enter 32
+
+		push fs
+		push gs
+
+		call pm_goto_xy
+		call pm_screen_segs
 		mov esi,edi
 		xor eax,eax
-		call [getpixel]
-		call decode_color
+		call [pm_getpixel]
+		call pm_decode_color
+
+		pop gs
+		pop fs
+
+		pm_leave 32
 		jmp pr_getint
 
 
@@ -8169,10 +8174,12 @@ prim_settransparentcolor:
 ;   0 0 moveto screen.size savescreen	% save entire screen
 ;
 prim_savescreen:
+		pm_enter 32
+
 		mov dx,t_int + (t_int << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_savescreen_90
-		pm32_call alloc_fb
+		call alloc_fb
 		or eax,eax
 		jz prim_savescreen_50
 		push eax
@@ -8180,16 +8187,17 @@ prim_savescreen:
 		call save_bg
 		pop eax
 prim_savescreen_50:
-		call lin_seg_off
-		dec word [pstack_ptr]
-		xor cx,cx
+		dec dword [pstack_ptr]
+		xor ecx,ecx
 		mov dl,t_ptr
 		or eax,eax
 		jnz prim_savescreen_70
 		mov dl,t_none
 prim_savescreen_70:
-		call set_pstack_tos
+		call pm_set_pstack_tos
 prim_savescreen_90:
+
+		pm_leave 32
 		ret
 
 
@@ -8249,32 +8257,31 @@ alloc_fb_90:
 ;   free				% free memory
 ;
 prim_restorescreen:
+		pm_enter 32
+
 		mov dl,t_ptr
-		call get_1arg
+		call pm_get_1arg
 		jnc prim_restorescreen_20
 		cmp dl,t_none
 		stc
 		jnz prim_restorescreen_90
-
 		jmp prim_restorescreen_80
 
 prim_restorescreen_20:
-
-		pm_enter 32
 
 		mov dx,[es:eax]
 		mov cx,[es:eax+2]
 		lea edi,[eax+4]
 		mov bx,dx
 		imul bx,[pixel_bytes]
-		rm32_call restore_bg
-
-		pm_leave 32
+		call restore_bg
 
 prim_restorescreen_80:
-		dec word [pstack_ptr]
+		dec dword [pstack_ptr]
 		clc
 prim_restorescreen_90:
+
+		pm_leave 32
 		ret
 
 
@@ -8414,15 +8421,19 @@ prim_dumpmem:
 ;   300 200 fillrect		% 300x200 blue rectangle
 ;
 prim_fillrect:
+		pm_enter 32
+
 		mov dx,t_int + (t_int << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_fillrect_90
-		mov dx,cx
-		mov cx,ax
+		mov edx,ecx
+		mov ecx,eax
 		mov eax,[gfx_color]
 		call fill_rect
-		sub word [pstack_ptr],byte 2
+		sub dword [pstack_ptr],2
 prim_fillrect_90:
+
+		pm_leave 32
 		ret
 
 
@@ -8574,7 +8585,7 @@ prim_editdone:
 
 		mov bx,dx
 		imul bx,[pixel_bytes]
-		call restore_bg
+		pm32_call restore_bg
 
 		sub word [pstack_ptr],byte 1
 prim_editdone_90:
@@ -8600,7 +8611,7 @@ prim_editshowcursor:
 		jc prim_editshowcursor_90
 
 		push dword [gfx_cur]
-		call edit_show_cursor
+		pm32_call edit_show_cursor
 		pop dword [gfx_cur]
 
 		sub word [pstack_ptr],byte 1
@@ -8670,7 +8681,7 @@ prim_editinput:
 		call edit_hide_cursor
 		pop eax
 		call edit_input
-		call edit_show_cursor
+		pm32_call edit_show_cursor
 		pop si
 		pop es
 		pop dword [gfx_cur]
@@ -11032,7 +11043,7 @@ edit_redraw_50:
 		add edi,ebx
 		sub edi,eax
 
-		call restore_bg
+		pm32_call restore_bg
 edit_redraw_90:
 		ret
 
@@ -11085,7 +11096,7 @@ edit_char:
 		mov dx,[chr_width]
 		mov cx,[font_height]
 
-		call restore_bg
+		pm32_call restore_bg
 
 edit_char_80:
 		pop eax
@@ -11123,16 +11134,19 @@ edit_hide_cursor:
 		mov bx,[edit_width]
 		imul bx,[pixel_bytes]
 
-		call restore_bg
+		pm32_call restore_bg
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-		bits 16
+		bits 32
 
 edit_show_cursor:
-		call screen_segs
+		push fs
+		push gs
+
+		call pm_screen_segs
 
 		mov ax,[edit_cursor]
 		sub ax,[edit_shift]
@@ -11140,14 +11154,17 @@ edit_show_cursor:
 		mov [gfx_cur_x],ax
 		push word [edit_y]
 		pop word [gfx_cur_y]
-		mov cx,[edit_height]
+		movzx ecx,word [edit_height]
 edit_show_cursor_10:
-		push cx
-		call goto_xy
-		call [setpixel_t]
-		pop cx
+		push ecx
+		call pm_goto_xy
+		call [pm_setpixel_t]
+		pop ecx
 		inc word [gfx_cur_y]
 		loop edit_show_cursor_10
+
+		pop gs
+		pop fs
 		ret
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -11185,7 +11202,7 @@ edit_init_20:
 		call edit_align
 
 		call edit_redraw
-		call edit_show_cursor
+		pm32_call edit_show_cursor
 edit_init_90:
 		pop fs
 		ret
@@ -11849,6 +11866,8 @@ getpixel_32:
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; Set pixel at es:edi.
 ;
+; pm_setpixel_* read from [fs:edi] and write to [gs:edi]
+;
 
 		bits 32
 
@@ -11856,21 +11875,21 @@ pm_setpixel_8:
 		mov al,[gfx_color]
 
 pm_setpixel_a_8:
-		mov [es:edi],al
+		mov [gs:edi],al
 		ret
 
 pm_setpixel_16:
 		mov ax,[gfx_color]
 
 pm_setpixel_a_16:
-		mov [es:edi],ax
+		mov [gs:edi],ax
 		ret
 
 pm_setpixel_32:
 		mov eax,[gfx_color]
 
 pm_setpixel_a_32:
-		mov [es:edi],eax
+		mov [gs:edi],eax
 		ret
 
 
@@ -11890,7 +11909,7 @@ pm_setpixel_ta_16:
 		call pm_enc_transp
 		pop ecx
 		call pm_encode_color
-		mov [es:edi],ax
+		mov [gs:edi],ax
 		ret
 
 pm_setpixel_t_32:
@@ -11903,7 +11922,7 @@ pm_setpixel_ta_32:
 		mov ecx,[fs:edi]
 		call pm_enc_transp
 		pop ecx
-		mov [es:edi],eax
+		mov [gs:edi],eax
 		ret
 
 
@@ -11949,6 +11968,8 @@ pm_add_transp_20:
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; Get pixel from fs:esi.
+;
+; pm_getpixel_* read from [fs:esi]
 ;
 
 		bits 32
@@ -13091,62 +13112,61 @@ clip_it_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; save a screen region
+; Save screen region.
 ;
-;		dx,cx	= width, height
-;		edi	= buffer (linear address)
+;  dx, cx	width, height
+;  edi		buffer
 ;
 ; Note: ensure we only make aligned dword reads from video memory. Else some
 ; ATI 7000 boards will make problems (computer hangs).
 ; As an added bonus, it really speeds things up.
 ;
 
-		bits 16
+		bits 32
 
 save_bg:
 		push fs
+		push gs
 
 		push edi
 
-		call goto_xy
+		call pm_goto_xy
+		mov esi,edi
 
-		call screen_seg_r
+		pop edi
 
-		mov si,di
-		pop ebx
+		call pm_screen_segs
 
-		or cx,cx
+		movzx ecx,cx
+		movzx edx,dx
+
+		or ecx,ecx
 		jz save_bg_90
-		or dx,dx
+		or edx,edx
 		jz save_bg_90
 
 		imul dx,[pixel_bytes]
 
 save_bg_10:
-		lin2seg ebx,es,edi
+		push ecx
+		push edx
 
-		push cx
-
-		push dx
-
-		mov bp,si
-		mov cx,si
-		and bp,~3
-		and cx,3
+		mov ebp,esi
+		mov ecx,esi
+		and ebp,~3
+		and ecx,3
 
 		jz save_bg_30
 
-		shl cx,3
-		mov eax,[fs:bp]
+		shl ecx,3
+		mov eax,[fs:ebp]
 		shr eax,cl
 
 save_bg_20:
-		mov [es:edi],al
-		inc ebx
-		inc edi
+		stosb
 		inc si
 		shr eax,8
-		dec dx
+		dec edx
 		; ensure ch = 0
 		jz save_bg_70
 		add cl,8
@@ -13155,88 +13175,69 @@ save_bg_20:
 
 		or si,si
 		jnz save_bg_30
-		call lin_seg_off
-		call inc_winseg
-		lin2seg ebx,es,edi
-
+		call pm_inc_winseg
 save_bg_30:
-		mov eax,[fs:si]
+		mov eax,[fs:esi]
 		add si,4
 		jnz save_bg_35
-		call lin_seg_off
-		call inc_winseg
-		lin2seg ebx,es,edi
+		call pm_inc_winseg
 save_bg_35:
-		cmp dx,4
+		cmp edx,4
 		jb save_bg_50
-		mov [es:edi],eax
-		add ebx,4
-		add di,4
-		jnc save_bg_40
-		lin2seg ebx,es,edi
-save_bg_40:
-		sub dx,4
+		stosd
+		sub edx,4
 		; ch = 0
 		jz save_bg_70
 		jmp save_bg_30
 save_bg_50:
-		mov cx,4
-		sub cx,dx
+		mov ecx,4
+		sub ecx,edx
 		sub si,cx
 		; don't switch bank later: we've already done it
 		setc ch
-		cmp di,-4
-		jbe save_bg_60
-		lin2seg ebx,es,edi
 save_bg_60:
-		mov [es:edi],al
-		inc ebx
-		inc edi
+		stosb
 		shr eax,8
-		dec dx
+		dec edx
 		jnz save_bg_60
 
 save_bg_70:
+		pop edx
 
-		pop dx
-		mov ax,[screen_line_len]
-		sub ax,dx
+		mov eax,[screen_line_len]
+		sub eax,edx
 		add si,ax
 		jnc save_bg_80
-		call lin_seg_off
 		or ch,ch
-		jnz save_bg_75
-		call inc_winseg
-save_bg_75:
-		lin2seg ebx,es,edi
+		jnz save_bg_80
+		call pm_inc_winseg
 save_bg_80:
-		pop cx
+		pop ecx
 
-		dec cx
+		dec ecx
 		jnz save_bg_10
 
 save_bg_90:
-
-		call lin_seg_off
-
+		pop gs
 		pop fs
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; Restore a screen region.
+; Restore screen region.
 ;
-;  dx,cx	width, height
+;  dx, cx	width, height
 ;  bx		bytes per line
-;  edi		buffer (linear address)
+;  edi		buffer
 ;
 ; Does not change cursor positon.
 ;
 
-		bits 16
+		bits 32
 
 restore_bg:
 		push fs
+		push gs
 
 		push dword [gfx_cur]
 
@@ -13246,7 +13247,7 @@ restore_bg:
 		mov ax,[gfx_cur_x]
 		mov cx,[gfx_cur_y]
 
-		call clip_it
+		rm32_call clip_it
 		jc restore_bg_90
 
 		sub ax,[gfx_cur_x]
@@ -13261,66 +13262,48 @@ restore_bg:
 		imul ecx,ebx
 		add ecx,ebp
 
-		lea ebp,[edi+ecx]
+		lea esi,[edi+ecx]
 
-		mov dx,[gfx_width]
-		mov cx,[gfx_height]
+		movzx edx,word [gfx_width]
+		movzx ecx,word [gfx_height]
 
-		call goto_xy
+		call pm_goto_xy
+		call pm_screen_segs
 
-		call screen_seg_w
-
-		push es
-		pop fs
-		mov si,di
-		
-		imul dx,[pixel_bytes]
-
-		lin2seg ebp,es,edi
+		imul edx,[pixel_bytes]
 
 restore_bg_20:
-		push dx
+		push edx
+
 restore_bg_30:
-		mov al,[es:edi]
-		inc ebp
+		es lodsb
+		mov [gs:edi],al
 		inc di
-		jnz restore_bg_40
-		lin2seg ebp,es,edi
-restore_bg_40:
-		mov [fs:si],al
-		inc si
 		jnz restore_bg_50
-		call lin_seg_off
-		call inc_winseg
-		lin2seg ebp,es,edi
+		call pm_inc_winseg
 restore_bg_50:
-		dec dx
+		dec edx
 		jnz restore_bg_30
-		pop dx
-		mov ax,[screen_line_len]
-		sub ax,dx
-		add si,ax
-		jnc restore_bg_60
-		call lin_seg_off
-		call inc_winseg
-		lin2seg ebp,es,edi
-restore_bg_60:
-		mov ax,bx
-		sub ax,dx
-		movsx eax,ax
-		add ebp,eax
+
+		pop edx
+
+		mov eax,[screen_line_len]
+		sub eax,edx
 		add di,ax
-		jnc restore_bg_70
-		lin2seg ebp,es,edi
-restore_bg_70:
-		dec cx
+		jnc restore_bg_60
+		call pm_inc_winseg
+restore_bg_60:
+		mov eax,ebx
+		sub eax,edx
+		add esi,eax
+
+		dec ecx
 		jnz restore_bg_20
 
 restore_bg_90:
 		pop dword [gfx_cur]
 
-		call lin_seg_off
-
+		pop gs
 		pop fs
 		ret
 
@@ -13337,6 +13320,28 @@ restore_bg_90:
 screen_segs:
 		call screen_seg_w
 		jmp screen_seg_r
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Load screen segments.
+;
+; return:
+;  fs		read segment
+;  gs		write segment
+;
+; Modified registers: -
+;
+
+		bits 32
+
+pm_screen_segs:
+		push eax
+		mov ax,pm_seg.screen_r16
+		mov fs,ax
+		mov ax,pm_seg.screen_w16
+		mov gs,ax
+		pop eax
+		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -13373,58 +13378,57 @@ screen_seg_r_10:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; draw a filled rectangle
+; Draw filled rectangle.
 ;
-;		dx, cx	= width, height
+;  dx, cx	width, height
 ;  eax		color
-;		bh,bl	= bh -> bl
-;		bp	= drawing mode
-;			  0: move, 1: add, 2,3: dto, except for bh (bh->bl)
 ;
 
-		bits 16
+		bits 32
 
 fill_rect:
+		push fs
+		push gs
+
 		mov [gfx_width],dx
 		mov [gfx_height],cx
 
-		call clip_it
+		rm32_call clip_it
 		jc fill_rect_90
 
-		mov dx,[gfx_width]
-		mov cx,[gfx_height]
+		movzx edx,word [gfx_width]
+		movzx ecx,word [gfx_height]
 
-		call goto_xy
+		call pm_goto_xy
+		call pm_screen_segs
 
-		call screen_segs
-
-		mov bp,[screen_line_len]
-		push dx
-		mov ax,dx
-		xor dx,dx
-		mul word [pixel_bytes]
-		sub bp,ax
-		pop dx
+		mov ebp,[screen_line_len]
+		mov eax,edx
+		imul eax,[pixel_bytes]
+		sub ebp,eax
 
 fill_rect_20:
-		mov bx,dx
+		mov ebx,edx
 fill_rect_30:
-		call [setpixel_t]
+		call [pm_setpixel_t]
 		add di,[pixel_bytes]
 		jnc fill_rect_60
-		call inc_winseg
+		call pm_inc_winseg
 fill_rect_60:
-		dec bx
+		dec ebx
 		jnz fill_rect_30
 
 		add di,bp
 		jnc fill_rect_80
-		call inc_winseg
+		call pm_inc_winseg
 fill_rect_80:
-		dec cx
+		dec ecx
 		jnz fill_rect_20
 
 fill_rect_90:
+
+		pop gs
+		pop fs
 		ret	
 
 
@@ -14335,7 +14339,7 @@ show_image_60:
 		add edi,4
 		mov bx,dx
 		imul bx,[pixel_bytes]
-		rm32_call restore_bg
+		call restore_bg
 
 		mov eax,[line_y1]
 		mov ecx,eax
@@ -14577,7 +14581,7 @@ pcx_unpack_50:
 		pop eax
 		jmp pcx_unpack_55
 pcx_unpack_54:
-		mov [es:edi],al
+		mov [gs:edi],al
 pcx_unpack_55:
 		add edi,[pixel_bytes]
 		jmp pcx_unpack_50
