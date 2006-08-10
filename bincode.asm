@@ -376,8 +376,7 @@ edit_y			dw 0
 edit_width		dw 0
 edit_height		dw 0
 edit_bg			dd 0		; (lin)
-edit_buf		dd 0		; (seg:ofs)
-edit_buf.lin		dd 0		; (lin)
+edit_buf		dd 0		; (lin)
 edit_buf_len		dw 0
 edit_buf_ptr		dw 0
 edit_cursor		dw 0
@@ -7796,31 +7795,35 @@ prim_show_90:
 ;   dup strsize pop neg 0 rmoveto show		% print "Hi there!" right aligned
 ;
 prim_strsize:
+		pm_enter 32
+
 		mov dl,t_string
-		call get_1arg
+		call pm_get_1arg
 		jc prim_strsize_90
-		dec word [pstack_ptr]
-		lin2segofs eax,es,si
+		dec dword [pstack_ptr]
+
+		mov esi,eax
 		call str_size
 
-		mov ax,[pstack_ptr]
-		inc ax
-		inc ax
-		cmp [pstack_size],ax
+		mov eax,[pstack_ptr]
+		inc eax
+		inc eax
+		cmp [pstack_size],eax
 		mov bp,pserr_pstack_overflow
 		jb prim_strsize_90
-		mov [pstack_ptr],ax
-		push dx
-		movzx eax,cx
+		mov [pstack_ptr],eax
+		push edx
+		mov eax,ecx
 		mov dl,t_int
-		mov cx,1
-		call set_pstack_tos
-		pop ax
+		mov ecx,1
+		call pm_set_pstack_tos
+		pop eax
 		mov dl,t_int
-		movzx eax,ax
-		xor cx,cx
-		call set_pstack_tos
+		xor ecx,ecx
+		call pm_set_pstack_tos
 prim_strsize_90:
+
+		pm_leave 32
 		ret
 
 
@@ -8703,7 +8706,7 @@ prim_editinput:
 		call edit_hide_cursor
 		pop eax
 
-		rm32_call edit_input
+		call edit_input
 
 		call edit_show_cursor
 
@@ -10807,59 +10810,58 @@ edit_align_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-;  es:bx	string
-;  si		ptr to char (rel. to es:bx)
+;  ebx		string
+;  esi		ptr to char (rel. to ebx)
 ;
 ; return:
-;  si		points to prev char
+;  esi		points to prev char
 ;
 ;  Changes no other regs.
 ;
 
-		bits 16
+		bits 32
 
 utf8_prev:
-		push ax
-		or si,si
+		push eax
+		or esi,esi
 		jz utf8_prev_90
 utf8_prev_50:
-		dec si
+		dec esi
 		jz utf8_prev_90
-		mov al,[es:bx+si]
+		mov al,[es:ebx+esi]
 		shr al,6
 		cmp al,2
 		jz utf8_prev_50
 utf8_prev_90:
-		pop ax
+		pop eax
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
-;  es:bx	string
-;  si		ptr to char (rel. to es:bx)
+;  ebx		string
+;  esi		ptr to char (rel. to ebx)
 ;
 ; return:
-;  si		points to next char
+;  esi		points to next char
 ;
 ;  Changes no other regs.
 ;
 
-		bits 16
+		bits 32
 
 utf8_next:
-		push ax
-		cmp byte [es:bx+si],0
+		push eax
+		cmp byte [es:ebx+esi],0
 		jz utf8_next_90
 utf8_next_50:
-		inc si
-		mov al,[es:bx+si]
+		inc esi
+		mov al,[es:ebx+esi]
 		shr al,6
 		cmp al,2
 		jz utf8_next_50
 utf8_next_90:
-		pop ax
+		pop eax
 		ret
 
 
@@ -10868,79 +10870,81 @@ utf8_next_90:
 ; eax		key (bits 0-23: key, 24-31: scan code)
 ;
 
-		bits 16
+		bits 32
 
 edit_input:
 		mov edx,eax
 		shr edx,24
 		and eax,1fffffh
-		les si,[edit_buf]
-		mov bx,si
+		mov esi,[edit_buf]
 
-		dec si
+		mov ebx,esi
+		dec esi
+
 edit_input_10:
-		inc si
-		cmp byte [es:si],0
+		inc esi
+		cmp byte [es:esi],0
 		jnz edit_input_10
-		mov cx,si
-		sub cx,bx
-		; cx: string length
+		mov ecx,esi
+		sub ecx,ebx
 
-		mov si,[edit_buf_ptr]
+		; ecx: string length
+
+		movzx esi,word [edit_buf_ptr]
 
 		cmp dl,keyLeft
 		jnz edit_input_20
-		mov di,si
+		mov edi,esi
 		call utf8_prev
-		cmp di,si
+		cmp edi,esi
 		jz edit_input_90
 		mov [edit_buf_ptr],si
 		jmp edit_input_80
 edit_input_20:
 		cmp dl,keyRight
 		jnz edit_input_21
-		mov di,si
+		mov edi,esi
 		call utf8_next
-		cmp di,si
+		cmp edi,esi
 		jz edit_input_90
 		mov [edit_buf_ptr],si
 		jmp edit_input_80
 edit_input_21:
 		cmp dl,keyEnd
 		jnz edit_input_22
-		cmp byte [es:bx+si],0
+		cmp byte [es:ebx+esi],0
 		jz edit_input_90
 		mov [edit_buf_ptr],cx
 		jmp edit_input_80
 edit_input_22:
 		cmp dl,keyHome
 		jnz edit_input_23
-		or si,si
+		or esi,esi
 		jz edit_input_90
-		and word [edit_buf_ptr],byte 0
+		and word [edit_buf_ptr],0
 		jmp edit_input_80
 edit_input_23:
 		cmp dl,keyDel
 		jnz edit_input_30
 edit_input_24:
-		mov di,si
+		mov edi,esi
 		call utf8_next
-		cmp di,si
+		cmp edi,esi
 		jz edit_input_90
 edit_input_25:
-		mov al,[es:bx+si]
-		mov [es:bx+di],al
-		inc si
-		inc di
+		mov al,[es:ebx+esi]
+		mov [es:ebx+edi],al
+		inc esi
+		inc edi
 		or al,al
 		jnz edit_input_25
 		jmp edit_input_80
 edit_input_30:
 		cmp eax,keyBS
 		jnz edit_input_35
-		mov di,si
+		mov edi,esi
 		call utf8_prev
-		cmp di,si
+		cmp edi,esi
 		jz edit_input_90
 		mov [edit_buf_ptr],si
 		jmp edit_input_24
@@ -10951,75 +10955,75 @@ edit_input_35:
 
 		; reject chars we can't display
 		pusha
-		push es
 		call char_width
-		or cx,cx
-		pop es
+		or ecx,ecx
 		popa
 		jz edit_input_90
 
-		push cx
-		push bx
-		push si
+		push ecx
+		push ebx
+		push esi
 		call utf8_enc
-		pop si
-		pop bx
-		pop ax
+		pop esi
+		pop ebx
+		pop eax
 
-		mov dx,[edit_buf_len]
-		sub dx,ax
-		sub dx,cx
+		movzx edx,word [edit_buf_len]
+		sub edx,eax
+		sub edx,ecx
 		jb edit_input_90
-		cmp dx,1
+		cmp edx,1
 		jb edit_input_90
 		sub ax,[edit_buf_ptr]
 		add [edit_buf_ptr],cx
 
-		; ax: bytes to copy (excl. final 0)
-		; cx: utf8 size
+		; eax: bytes to copy (excl. final 0)
+		; ecx: utf8 size
 
-		push si
-		add si,ax
-		mov di,si
-		add di,cx
-		inc ax
+		push esi
+
+		add esi,eax
+		mov edi,esi
+		add edi,ecx
+		inc eax
 edit_input_70:
-		mov dl,[es:bx+si]
-		mov [es:bx+di],dl
-		dec si
-		dec di
-		dec ax
+		mov dl,[es:ebx+esi]
+		mov [es:ebx+edi],dl
+		dec esi
+		dec edi
+		dec eax
 		jnz edit_input_70
-		pop si
 
-		mov di,utf8_buf
+		pop esi
+
+		mov edi,utf8_buf
 edit_input_75:
-		mov al,[di]
-		mov [es:bx+si],al
-		inc di
-		inc si
-		dec cx
+		mov al,[edi]
+		mov [es:ebx+esi],al
+		inc edi
+		inc esi
+		dec ecx
 		jnz edit_input_75
 
 edit_input_80:
-		mov si,[edit_buf_ptr]
+		movzx esi,word [edit_buf_ptr]
 		mov al,0
-		xchg al,[es:bx+si]
-		push ax
-		push si
-		push bx
-		push es
-		mov si,bx
+		xchg al,[es:ebx+esi]
+		push eax
+		push esi
+		push ebx
+
+		mov esi,ebx
 		call str_size
-		pop es
-		pop bx
-		pop si
-		pop ax
-		xchg al,[es:bx+si]
+
+		pop ebx
+		pop esi
+		pop eax
+		xchg al,[es:ebx+esi]
 		mov [edit_cursor],cx
 
-		pm32_call edit_align
-		pm32_call edit_redraw
+		call edit_align
+		call edit_redraw
 edit_input_90:
 		ret
 
@@ -11036,7 +11040,7 @@ edit_redraw:
 		add ax,[edit_y_ofs]
 		mov [gfx_cur_y],ax
 
-		mov esi,[edit_buf.lin]
+		mov esi,[edit_buf]
 edit_redraw_20:
 		call pm_utf8_dec
 		or eax,eax
@@ -11194,7 +11198,7 @@ edit_show_cursor_10:
 edit_init:
 		xor ecx,ecx
 		mov [edit_shift],cx
-		mov edi,[edit_buf.lin]
+		mov edi,[edit_buf]
 edit_init_10:
 		es lodsb
 		or al,al
@@ -11209,10 +11213,8 @@ edit_init_20:
 		mov byte [es:edi],0
 		mov [edit_buf_ptr],cx
 
-		pm_leave 32
-		les si,[edit_buf]
+		mov esi,[edit_buf]
 		call str_size
-		pm_enter 32
 
 		mov [edit_cursor],cx
 
@@ -11280,10 +11282,7 @@ edit_get_params:
 		cmp byte [es:esi+5*3],t_string
 		jnz edit_get_params_80
 		mov eax,[es:esi+5*3+1]
-		mov [edit_buf.lin],eax
-		push eax
-		call pm_lin2so
-		pop dword [edit_buf]
+		mov [edit_buf],eax
 		
 		cmp byte [es:esi+5*4],t_int
 		jnz edit_get_params_80
@@ -12326,7 +12325,7 @@ word_width_34:
 		push dx
 		push si
 		push es
-		call char_width
+		pm32_call char_width
 		pop es
 		pop si
 		pop dx
@@ -12415,39 +12414,38 @@ is_eot_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Get string dimensions (in pixel).
 ;
-;  es:si	ASCIIZ string
+;  esi		string
 ;
 ; return:
-;  cx		width
-;  dx		height
+;  ecx		width
+;  edx		height
 ;
 
-		bits 16
+		bits 32
 
 str_size:
-		xor cx,cx
-		xor dx,dx
+		xor ecx,ecx
+		xor edx,edx
 str_size_20:
-		push cx
-		push dx
+		push ecx
+		push edx
 		call str_len
-		xchg ax,cx
-		pop dx
-		pop cx
-		cmp ax,cx
+		xchg eax,ecx
+		pop edx
+		pop ecx
+		cmp eax,ecx
 		jb str_size_40
-		mov cx,ax
+		mov ecx,eax
 str_size_40:
-		inc dx
+		inc edx
 
 		; suppress final line break
-		call utf8_dec
+		call pm_utf8_dec
 		cmp eax,0ah
 		jnz str_size_60
-		cmp byte [es:si],0
+		cmp byte [es:esi],0
 		jz str_size_80
 str_size_60:
 		or eax,eax
@@ -12456,54 +12454,51 @@ str_size_60:
 		jz str_size_80
 		jmp str_size_20
 str_size_80:
-		dec dx
-		mov ax,[font_line_height]
-		mul dx
-		mov dx,[font_height]
-		add dx,ax
+		dec edx
+		movzx eax,word [font_line_height]
+		mul edx
+		movzx edx,word [font_height]
+		add edx,eax
 str_size_90:
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Get string length (in pixel).
 ; *** Use str_size instead. ***
 ;
-;  es:si	ASCIIZ string
+;  esi		string
 ;
 ; return:
-;  cx		width
-;  es:si	points to string end or line break
+;  ecx		width
+;  esi		points to string end or line break
 ;
 ; notes:
 ;  - stops at linebreak ('\n')
 ;
 
-		bits 16
+		bits 32
 
 str_len:
-		xor cx,cx
+		xor ecx,ecx
 str_len_10:
-		mov di,si
-		call utf8_dec
+		mov edi,esi
+		call pm_utf8_dec
 		or eax,eax
 		jz str_len_70
 		cmp eax,[char_eot]
 		jz str_len_70
 		cmp eax,0ah
 		jz str_len_70
-		push cx
-		push si
-		push es
+		push ecx
+		push esi
 		call char_width
-		pop es
-		pop si
-		pop ax
-		add cx,ax
+		pop esi
+		pop eax
+		add ecx,eax
 		jmp str_len_10
 str_len_70:
-		mov si,di
+		mov esi,edi
 		ret
 
 
@@ -12665,30 +12660,29 @@ pm_utf8_dec_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Encode utf8 char.
 ;
 ;  eax		char
 ;
 ; return:
-;  cx		length
+;  ecx		length
 ;  utf8_buf	char
 ;
 
-		bits 16
+		bits 32
 
 utf8_enc:
-		mov si,utf8_buf
-		xor cx,cx
-		xor dx,dx
+		mov esi,utf8_buf
+		xor ecx,ecx
+		xor edx,edx
 
 		cmp eax,80h
 		jae utf8_enc_10
-		mov [si],al
-		inc si
+		mov [esi],al
+		inc esi
 		jmp utf8_enc_80
 utf8_enc_10:
-		inc cx
+		inc ecx
 		cmp eax,800h
 		jae utf8_enc_20
 		shl eax,21
@@ -12697,7 +12691,7 @@ utf8_enc_10:
 		shl eax,5
 		jmp utf8_enc_60
 utf8_enc_20:
-		inc cx
+		inc ecx
 		cmp eax,10000h
 		jae utf8_enc_30
 		shl eax,16
@@ -12706,7 +12700,7 @@ utf8_enc_20:
 		shl eax,4
 		jmp utf8_enc_60
 utf8_enc_30:
-		inc cx
+		inc ecx
 		cmp eax,200000h
 		jae utf8_enc_40
 		shl eax,11
@@ -12715,7 +12709,7 @@ utf8_enc_30:
 		shl eax,3
 		jmp utf8_enc_60
 utf8_enc_40
-		inc cx
+		inc ecx
 		cmp eax,4000000h
 		jae utf8_enc_50
 		shl eax,6
@@ -12724,26 +12718,26 @@ utf8_enc_40
 		shl eax,2
 		jmp utf8_enc_60
 utf8_enc_50:
-		inc cx
+		inc ecx
 		shl eax,1
 		mov dl,7eh
 		shld edx,eax,1
 		add eax,eax
 utf8_enc_60:
-		mov bx,cx
-		mov [si],dl
-		inc si
+		mov ebx,ecx
+		mov [esi],dl
+		inc esi
 utf8_enc_70:
 		mov dl,2
 		shld edx,eax,6
 		shl eax,6
-		mov [si],dl
-		inc si
-		dec bx
+		mov [esi],dl
+		inc esi
+		dec ebx
 		jnz utf8_enc_70
 utf8_enc_80:
-		mov byte [si],0
-		inc cx
+		mov byte [esi],0
+		inc ecx
 utf8_enc_90:
 		ret
 
@@ -12935,17 +12929,16 @@ find_char_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; 
 ; Get char width.
 ;
 ;  eax		char
 ;
 ; return:
 ;  eax		char
-;  cx		char width
+;  ecx		char width
 ;
 
-		bits 16
+		bits 32
 
 char_width:
 		push eax
@@ -12953,10 +12946,10 @@ char_width:
 		jnz char_width_10
 		mov al,' '
 char_width_10:
-		pm32_call find_char
-		mov cx,0
+		call find_char
+		mov ecx,0
 		jc char_width_90
-		mov cx,[chr_width]
+		movzx ecx,word [chr_width]
 char_width_90:
 		pop eax
 		ret
