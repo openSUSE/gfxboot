@@ -239,7 +239,7 @@ transp			dd 0		; transparency
 
 			align 4, db 0
 ; current font description
-font			dd 0		; (seg:ofs) to font header
+font			dd 0		; (lin)
 font_entries		dw 0		; chars in font
 font_height		dw 0
 font_line_height	dw 0
@@ -255,7 +255,7 @@ con_y			dw 0		; cursor pos in pixel, *must* follow con_x
 
 
 ; current char description
-chr_bitmap		dw 0		; ofs rel. to [font]
+chr_bitmap		dd 0		; ofs rel. to [font]
 chr_x_ofs		dw 0
 chr_y_ofs		dw 0
 chr_real_width		dw 0
@@ -377,6 +377,7 @@ edit_width		dw 0
 edit_height		dw 0
 edit_bg			dd 0		; (lin)
 edit_buf		dd 0		; (seg:ofs)
+edit_buf.lin		dd 0		; (lin)
 edit_buf_len		dw 0
 edit_buf_ptr		dw 0
 edit_cursor		dw 0
@@ -7672,9 +7673,7 @@ prim_setfont:
 ; FIXME: [font_properties] are lost
 ;
 prim_currentfont:
-		push dword [font]
-		call so2lin
-		pop eax
+		mov eax,[font]
 		jmp pr_getptr_or_none
 
 
@@ -8522,32 +8521,38 @@ prim_snprintf_90:
 ;   ed "foo" edit.init
 ;
 prim_editinit:
+		pm_enter 32
+
 		mov dx,t_string + (t_array << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_editinit_90
 
-		lin2segofs ecx,es,si
-		push es
-		push si
+		mov esi,ecx
+
+		push esi
 		push eax
 		call edit_get_params
 		pop eax
-		pop ecx
+		pop esi
+
 		mov bp,pserr_invalid_data
 		jc prim_editinit_90
 
 		push dword [gfx_cur]
-		push ecx
-		lin2segofs eax,es,si
+
+		push esi
+		mov esi,eax
 		call edit_init
-		pop si
-		pop es
+		pop esi
+
 		pop dword [gfx_cur]
 
 		call edit_put_params
 
-		sub word [pstack_ptr],byte 2
+		sub dword [pstack_ptr],2
 prim_editinit_90:
+
+		pm_leave 32
 		ret
 
 
@@ -8565,11 +8570,13 @@ prim_editinit_90:
 ;   ed edit.done		% delete input field
 ;
 prim_editdone:
+		pm_enter 32
+
 		mov dx,t_array
-		call get_1arg
+		call pm_get_1arg
 		jc prim_editdone_90
 
-		lin2segofs eax,es,si
+		mov esi,eax
 		call edit_get_params
 		mov bp,pserr_invalid_data
 		jc prim_editdone_90
@@ -8585,10 +8592,12 @@ prim_editdone:
 
 		mov bx,dx
 		imul bx,[pixel_bytes]
-		pm32_call restore_bg
+		call restore_bg
 
 		sub word [pstack_ptr],byte 1
 prim_editdone_90:
+
+		pm_leave 32
 		ret
 
 
@@ -8601,21 +8610,25 @@ prim_editdone_90:
 ; array1: see @edit.init
 ;
 prim_editshowcursor:
+		pm_enter 32
+
 		mov dx,t_array
-		call get_1arg
+		call pm_get_1arg
 		jc prim_editshowcursor_90
 
-		lin2segofs eax,es,si
+		mov esi,eax
 		call edit_get_params
 		mov bp,pserr_invalid_data
 		jc prim_editshowcursor_90
 
 		push dword [gfx_cur]
-		pm32_call edit_show_cursor
+		call edit_show_cursor
 		pop dword [gfx_cur]
 
-		sub word [pstack_ptr],byte 1
+		sub dword [pstack_ptr],1
 prim_editshowcursor_90:
+
+		pm_leave 32
 		ret
 
 
@@ -8628,11 +8641,13 @@ prim_editshowcursor_90:
 ; array1: see @edit.init
 ;
 prim_edithidecursor:
+		pm_enter 32
+
 		mov dx,t_array
-		call get_1arg
+		call pm_get_1arg
 		jc prim_edithidecursor_90
 
-		lin2segofs eax,es,si
+		mov esi,eax
 		call edit_get_params
 		mov bp,pserr_invalid_data
 		jc prim_edithidecursor_90
@@ -8641,8 +8656,10 @@ prim_edithidecursor:
 		call edit_hide_cursor
 		pop dword [gfx_cur]
 
-		sub word [pstack_ptr],byte 1
+		sub dword [pstack_ptr],1
 prim_edithidecursor_90:
+
+		pm_leave 32
 		ret
 
 
@@ -8661,35 +8678,45 @@ prim_edithidecursor_90:
 ;   ed keyLeft edit.input
 ;
 prim_editinput:
+		pm_enter 32
+
 		mov dx,t_int + (t_array << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_editinput_90
 
-		lin2segofs ecx,es,si
-		push es
-		push si
+		mov esi,ecx
+
+		push esi
 		push eax
 		call edit_get_params
 		pop eax
-		pop ecx
+		pop esi
+
 		mov bp,pserr_invalid_data
 		jc prim_editinput_90
 
+		push esi
+
 		push dword [gfx_cur]
-		push ecx
+
 		push eax
 		call edit_hide_cursor
 		pop eax
-		call edit_input
-		pm32_call edit_show_cursor
-		pop si
-		pop es
+
+		rm32_call edit_input
+
+		call edit_show_cursor
+
 		pop dword [gfx_cur]
+
+		pop esi
 
 		call edit_put_params
 
-		sub word [pstack_ptr],byte 2
+		sub dword [pstack_ptr],2
 prim_editinput_90:
+
+		pm_leave 32
 		ret
 
 
@@ -10750,11 +10777,10 @@ blend_pixel_11_32:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; ensure the cursor is always within the visible area
+; Ensure the cursor is always within the visible area.
 ;
 
-		bits 16
+		bits 32
 
 edit_align:
 		mov cx,[edit_width]
@@ -10769,11 +10795,11 @@ edit_align:
 		jge edit_align_90
 		add [edit_shift],ax
 		jge edit_align_90
-		and word [edit_shift],byte 0
+		and word [edit_shift],0
 		jmp edit_align_90
 edit_align_50:
 		sub cx,ax
-		sub cx,byte 5		; still 5 pixel away?
+		sub cx,5		; still 5 pixel away?
 		jge edit_align_90
 		sub [edit_shift],cx
 edit_align_90:
@@ -10992,19 +11018,17 @@ edit_input_80:
 		xchg al,[es:bx+si]
 		mov [edit_cursor],cx
 
-		call edit_align
-		
-		call edit_redraw
+		pm32_call edit_align
+		pm32_call edit_redraw
 edit_input_90:
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
+		bits 32
+
 edit_redraw:
-
-		bits 16
-
 		mov ax,[edit_x]
 		sub ax,[edit_shift]
 		mov [gfx_cur_x],ax
@@ -11012,16 +11036,14 @@ edit_redraw:
 		add ax,[edit_y_ofs]
 		mov [gfx_cur_y],ax
 
-		les si,[edit_buf]
+		mov esi,[edit_buf.lin]
 edit_redraw_20:
-		call utf8_dec
+		call pm_utf8_dec
 		or eax,eax
 		jz edit_redraw_50
-		push si
-		push es
+		push esi
 		call edit_char
-		pop es
-		pop si
+		pop esi
 		jmp edit_redraw_20
 edit_redraw_50:
 		mov ax,[edit_x]
@@ -11043,13 +11065,12 @@ edit_redraw_50:
 		add edi,ebx
 		sub edi,eax
 
-		pm32_call restore_bg
+		call restore_bg
 edit_redraw_90:
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Write char at current cursor position.
 ;
 ;  eax		char
@@ -11059,11 +11080,9 @@ edit_redraw_90:
 ;  cursor position gets advanced
 ;
 
-		bits 16
+		bits 32
 
 edit_char:
-		push fs
-
 		push word [clip_r]
 		push word [clip_l]
 
@@ -11096,7 +11115,7 @@ edit_char:
 		mov dx,[chr_width]
 		mov cx,[font_height]
 
-		pm32_call restore_bg
+		call restore_bg
 
 edit_char_80:
 		pop eax
@@ -11107,14 +11126,13 @@ edit_char_80:
 		pop word [clip_r]
 
 edit_char_90:
-		pop fs
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 
-		bits 16
+		bits 32
 
 edit_hide_cursor:
 		mov edi,[edit_bg]
@@ -11133,8 +11151,7 @@ edit_hide_cursor:
 		mov dx,1
 		mov bx,[edit_width]
 		imul bx,[pixel_bytes]
-
-		pm32_call restore_bg
+		call restore_bg
 		ret
 
 
@@ -11169,149 +11186,141 @@ edit_show_cursor_10:
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
-; es:si		initial text
+; esi		initial text
 ;
 
-		bits 16
+		bits 32
 
 edit_init:
-		push fs
-		push es
-		pop fs
-		xor cx,cx
+		xor ecx,ecx
 		mov [edit_shift],cx
-		les di,[edit_buf]
+		mov edi,[edit_buf.lin]
 edit_init_10:
-		fs lodsb
+		es lodsb
 		or al,al
 		jz edit_init_20
 		stosb
-		inc cx
+		inc ecx
 		cmp cx,[edit_buf_len]
 		jb edit_init_10
-		dec cx
-		dec di
+		dec ecx
+		dec edi
 edit_init_20:
-		mov byte [es:di],0
+		mov byte [es:edi],0
 		mov [edit_buf_ptr],cx
 
-		mov si,[edit_buf]
+		pm_leave 32
+		les si,[edit_buf]
 		call str_size
+		pm_enter 32
+
 		mov [edit_cursor],cx
 
 		call edit_align
-
 		call edit_redraw
-		pm32_call edit_show_cursor
+		call edit_show_cursor
 edit_init_90:
-		pop fs
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Store internal input field state.
 ;
-; es:si		parameter array
+;  esi		parameter array
 ;
-; note: no consistency checks done, es:si _must_ point to
-; a valid array
+; Note: no consistency checks done, esi _must_ point to a valid array.
 ;
 
-		bits 16
+		bits 32
 
 edit_put_params:
 		push word [edit_buf_ptr]
-		pop word [es:si+2+5*5+1]
+		pop word [es:esi+2+5*5+1]
 		
 		push word [edit_cursor]
-		pop word [es:si+2+5*6+1]
+		pop word [es:esi+2+5*6+1]
 		
 		push word [edit_shift]
-		pop word [es:si+2+5*7+1]
+		pop word [es:esi+2+5*7+1]
 
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Copy input field parameters into internal structures.
 ;
-;  es:si	parameter array
+;  esi		parameter array
 ;
 ; return:
 ;  CF		invalid data
 ;
 
-		bits 16
+		bits 32
 
 edit_get_params:
 		es lodsw
 		cmp ax,8
 		jc edit_get_params_90
 
-		cmp byte [es:si+5*0],t_int
+		cmp byte [es:esi+5*0],t_int
 		jnz edit_get_params_80
-		push word [es:si+5*0+1]
+		push word [es:esi+5*0+1]
 		pop word [edit_x]
 
-		cmp byte [es:si+5*1],t_int
+		cmp byte [es:esi+5*1],t_int
 		jnz edit_get_params_80
-		push word [es:si+5*1+1]
+		push word [es:esi+5*1+1]
 		pop word [edit_y]
 		
-		cmp byte [es:si+5*2],t_ptr
+		cmp byte [es:esi+5*2],t_ptr
 		jnz edit_get_params_80
-		push dword [es:si+5*2+1]
+		push dword [es:esi+5*2+1]
 		pop dword [edit_bg]
 		
-		cmp byte [es:si+5*3],t_string
+		cmp byte [es:esi+5*3],t_string
 		jnz edit_get_params_80
-		push dword [es:si+5*3+1]
-		call lin2so
+		mov eax,[es:esi+5*3+1]
+		mov [edit_buf.lin],eax
+		push eax
+		call pm_lin2so
 		pop dword [edit_buf]
 		
-		cmp byte [es:si+5*4],t_int
+		cmp byte [es:esi+5*4],t_int
 		jnz edit_get_params_80
-		push word [es:si+5*4+1]
+		push word [es:esi+5*4+1]
 		pop word [edit_buf_len]
 		
-		cmp byte [es:si+5*5],t_int
+		cmp byte [es:esi+5*5],t_int
 		jnz edit_get_params_80
-		push word [es:si+5*5+1]
+		push word [es:esi+5*5+1]
 		pop word [edit_buf_ptr]
 		
-		cmp byte [es:si+5*6],t_int
+		cmp byte [es:esi+5*6],t_int
 		jnz edit_get_params_80
-		push word [es:si+5*6+1]
+		push word [es:esi+5*6+1]
 		pop word [edit_cursor]
 		
-		cmp byte [es:si+5*7],t_int
+		cmp byte [es:esi+5*7],t_int
 		jnz edit_get_params_80
-		push word [es:si+5*7+1]
+		push word [es:esi+5*7+1]
 		pop word [edit_shift]
 		
-		lin2seg dword [edit_bg],es,esi
-		es a32 lodsw
+		mov esi,[edit_bg]
+		es lodsw
 		mov [edit_width],ax
-		es a32 lodsw
+		es lodsw
 		mov [edit_height],ax
-		call lin_seg_off
 
 		mov cx,[font_height]
 		sub ax,cx
 		sar ax,1
 		mov [edit_y_ofs],ax
 
-		cmp word [edit_buf_len],byte 2		; at least 1 char
-		jc edit_get_params_90
-
-		movzx eax,word [edit_width]
-		movzx ecx,word [edit_height]
-		mul ecx
-		cmp eax,10000h-20
-		jae edit_get_params_80			; to large: max 64k
-
-		clc
-		jmp edit_get_params_90
+		cmp word [edit_buf_len],2		; at least 1 char
+		jnc edit_get_params_90
 
 edit_get_params_80:
+
 		stc
 edit_get_params_90:
 		ret
@@ -12025,6 +12034,7 @@ font_init:
 		shr edx,31
 		mov [font_properties],dl
 		and eax,~(1 << 31)
+		mov ebp,eax
 		lin2segofs eax,es,bx
 		cmp dword [es:bx+foh_magic],0d2828e07h	; magic
 		jnz font_init_90
@@ -12038,9 +12048,7 @@ font_init:
 		mov [font_entries],ax
 		mov [font_height],dl
 		mov [font_line_height],dh
-		push es
-		push bx
-		pop dword [font]
+		mov [font],ebp
 font_init_90:
 		ret
 
@@ -12158,7 +12166,7 @@ text_xy_70:
 text_xy_80:
 		test byte [txt_state],1
 		jnz text_xy_81
-		call char_xy
+		pm32_call char_xy
 text_xy_81:
 		pop es
 		pop si
@@ -12579,6 +12587,84 @@ utf8_dec_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Decode next utf8 char.
+;
+;  esi		string
+;
+; return:
+;  eax		char (invalid char: 0)
+;  esi		points past char
+;
+; Note: changes only eax, esi
+;
+
+		bits 32
+
+pm_utf8_dec:
+		xor eax,eax
+		es lodsb
+		cmp al,80h
+		jb pm_utf8_dec_90
+
+		push ecx
+		push edx
+
+		xor edx,edx
+		xor ecx,ecx
+		mov dl,al
+
+		cmp al,0c0h		; invalid
+		jb pm_utf8_dec_70
+
+		inc ecx			; 2 bytes
+		and dl,1fh
+		cmp al,0e0h
+		jb pm_utf8_dec_10
+
+		inc ecx			; 3 bytes
+		and dl,0fh
+		cmp al,0f0h
+		jb pm_utf8_dec_10
+
+		inc ecx			; 4 bytes
+		and dl,7
+		cmp al,0f8h
+		jb pm_utf8_dec_10
+
+		inc ecx			; 5 bytes
+		and dl,3
+		cmp al,0fch
+		jb pm_utf8_dec_10
+
+		inc ecx			; 6 bytes
+		and dl,1
+		cmp al,0feh
+		jae pm_utf8_dec_70
+pm_utf8_dec_10:
+		es lodsb
+		cmp al,80h
+		jb pm_utf8_dec_70
+		cmp al,0c0h
+		jae pm_utf8_dec_70
+		and al,3fh
+		shl edx,6
+		or dl,al
+		dec ecx
+		jnz pm_utf8_dec_10
+		xchg eax,edx
+		jmp pm_utf8_dec_80
+		
+pm_utf8_dec_70:
+		xor eax,eax
+pm_utf8_dec_80:
+		pop edx
+		pop ecx
+
+pm_utf8_dec_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ; Encode utf8 char.
 ;
@@ -12663,7 +12749,6 @@ utf8_enc_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Write a char at the current cursor position.
 ;
 ;  eax		char
@@ -12672,9 +12757,12 @@ utf8_enc_90:
 ;  cursor position gets advanced
 ;
 
-		bits 16
+		bits 32
 
 char_xy:
+		push fs
+		push gs
+
 		cmp eax,1fh			; \x1f looks like a space, but isn't
 		jnz char_xy_10
 		mov al,' '
@@ -12694,12 +12782,11 @@ char_xy_10:
 		mov dx,[chr_y_ofs]
 		add [gfx_cur_y],dx
 
-		call goto_xy
+		call pm_goto_xy
+		call pm_screen_segs
 
-		call screen_segs
-
-		lgs si,[font]
-		add si,[chr_bitmap]
+		mov esi,[font]
+		add esi,[chr_bitmap]
 
 		cmp byte [chr_real_width],0
 		jz char_xy_70
@@ -12712,7 +12799,7 @@ char_xy_10:
 char_xy_20:
 		xor cx,cx
 char_xy_30:
-		bt [gs:si],bp
+		bt [es:esi],bp
 		jnc char_xy_40
 		mov ax,[gfx_cur_x]
 		add ax,cx
@@ -12720,12 +12807,12 @@ char_xy_30:
 		jge char_xy_40
 		cmp ax,[clip_l]
 		jl char_xy_40
-		call [setpixel_t]
+		call [pm_setpixel_t]
 char_xy_40:
 		inc bp
 		add di,[pixel_bytes]
 		jnc char_xy_50
-		call inc_winseg
+		call pm_inc_winseg
 char_xy_50:
 		inc cx
 		cmp cx,[chr_real_width]
@@ -12737,7 +12824,7 @@ char_xy_50:
 		sub ax,bx
 		add di,ax
 		jnc char_xy_60
-		call inc_winseg
+		call pm_inc_winseg
 char_xy_60:
 		inc dx
 		cmp dx,[chr_real_height]
@@ -12753,11 +12840,13 @@ char_xy_80:
 		add [gfx_cur_x],cx
 
 char_xy_90:
+
+		pop gs
+		pop fs
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Look for char in font.
 ;
 ;  eax		char
@@ -12767,12 +12856,12 @@ char_xy_90:
 ;  [chr_*]	updated
 ;
 
-		bits 16
+		bits 32
 
 find_char:
 		and eax,1fffffh
 		push eax
-		cmp dword [font],byte 0
+		cmp dword [font],0
 		stc
 		jz find_char_90
 
@@ -12781,16 +12870,16 @@ find_char:
 		mov eax,'*'
 find_char_10:
 
-		les bx,[font]
-		add bx,sizeof_font_header_t
-		mov cx,[font_entries]
+		mov ebx,[font]
+		add ebx,sizeof_font_header_t
+		movzx ecx,word [font_entries]
 
 find_char_20:
-		mov si,cx
-		shr si,1
+		mov esi,ecx
+		shr esi,1
 
-		shl si,3
-		mov edx,[es:bx+si+ch_c]
+		shl esi,3
+		mov edx,[es:ebx+esi+ch_c]
 		and edx,1fffffh		; 21 bits
 		cmp eax,edx
 
@@ -12798,21 +12887,21 @@ find_char_20:
 
 		jl find_char_50
 
-		add bx,si
+		add ebx,esi
 		test cl,1
 		jz find_char_50
-		add bx,sizeof_char_header_t
+		add ebx,sizeof_char_header_t
 find_char_50:
-		shr cx,1
+		shr ecx,1
 		jnz find_char_20
 
 		stc
 		jmp find_char_90
 
 find_char_80:
-		mov dx,[es:bx+si+ch_ofs]
-		mov [chr_bitmap],dx
-		mov edx,[es:bx+si+ch_size]
+		movzx edx,word [es:ebx+esi+ch_ofs]
+		mov [chr_bitmap],edx
+		mov edx,[es:ebx+esi+ch_size]
 
 		shr edx,5
 		mov cl,dl
@@ -12864,7 +12953,7 @@ char_width:
 		jnz char_width_10
 		mov al,' '
 char_width_10:
-		call find_char
+		pm32_call find_char
 		mov cx,0
 		jc char_width_90
 		mov cx,[chr_width]
