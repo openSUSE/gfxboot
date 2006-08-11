@@ -222,17 +222,11 @@ screen_vheight		dw 0
 screen_mem		dw 0		; mem in 64k
 screen_line_len		dd 0
 
-setpixel		dw setpixel_8		; function that sets one pixel
-setpixel_a		dw setpixel_a_8		; function that sets one pixel
-setpixel_t		dw setpixel_8		; function that sets one pixel
-setpixel_ta		dw setpixel_a_8		; function that sets one pixel
-getpixel		dw getpixel_8		; function that gets one pixel
-
-pm_setpixel		dd pm_setpixel_8		; function that sets one pixel
-pm_setpixel_a		dd pm_setpixel_a_8		; function that sets one pixel
-pm_setpixel_t		dd pm_setpixel_8		; function that sets one pixel
-pm_setpixel_ta		dd pm_setpixel_a_8		; function that sets one pixel
-pm_getpixel		dd pm_getpixel_8		; function that gets one pixel
+setpixel		dd setpixel_8		; function that sets one pixel
+setpixel_a		dd setpixel_a_8		; function that sets one pixel
+setpixel_t		dd setpixel_8		; function that sets one pixel
+setpixel_ta		dd setpixel_a_8		; function that sets one pixel
+getpixel		dd getpixel_8		; function that gets one pixel
 
 
 transp			dd 0		; transparency
@@ -247,9 +241,8 @@ font_properties		db 0		; bit 0: pw mode (show '*')
 font_res1		db 0		; alignment
 
 ; console font
-cfont			dd 0		; (seg:ofs) to bitmap
 cfont.lin		dd 0		; console font bitmap
-cfont_height		dw 0
+cfont_height		dd 0
 con_x			dw 0		; cursor pos in pixel
 con_y			dw 0		; cursor pos in pixel, *must* follow con_x
 
@@ -3435,7 +3428,6 @@ find_file_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Set graphics mode.
 ;
 ;  [gfx_mode]	graphics mode (either vbe or normal mode number)
@@ -3445,76 +3437,79 @@ find_file_90:
 ;  CF		error
 ;
 
-		bits 16
+		bits 32
 
 set_mode:
-		push es
 		mov ax,[gfx_mode]
 		test ah,ah
 		jnz set_mode_20
 		int 10h
 		mov word [window_seg_w],0a000h
-		and word [window_seg_r],byte 0
+		and word [window_seg_r],0
 		mov byte [mapped_window],0
 
 		mov al,[gfx_mode]
 		cmp al,13h
-		jnz set_mode_102
+		jnz set_mode_10
 		; 320x200, 8 bit
 		mov word [screen_width],320
 		mov word [screen_height],200
 		mov word [screen_vheight],200
-		mov word [screen_line_len],320
+		mov dword [screen_line_len],320
 		mov byte [pixel_bits],8
 		mov byte [pixel_bytes],1
 		call mode_init
-		call pm_mode_init
-set_mode_102:
+set_mode_10:
 		clc
 		jmp set_mode_90
 set_mode_20:
-		les di,[vbe_buffer]
+		mov ebx,[vbe_buffer.lin]
+		and dword [es:ebx],0
+
+		mov di,[vbe_buffer.ofs]
+		push word [vbe_buffer.seg]
+		pop word [rm_seg.es]
+
 		mov ax,4f00h
-		and dword [es:di],byte 0
-		push di			; you never know...
+		push ebx
 		int 10h
-		pop di
+		pop ebx
 		cmp ax,4fh
 		jnz set_mode_80
 		mov ax,4f01h
 		mov cx,[gfx_mode]
-		push di
+		push ebx
 		int 10h
-		pop di
+		pop edi
 		cmp ax,4fh
 		jnz set_mode_80
 
-		push word [es:di+10h]
-		pop word [screen_line_len]
+		movzx eax,word [es:edi+10h]
+		mov [screen_line_len],eax
 
-		push word [es:di+12h]
+		push word [es:edi+12h]
 		pop word [screen_width]
-		push word [es:di+14h]
+		push word [es:edi+14h]
 		pop word [screen_height]
 
-		movzx eax,byte [es:di+1dh]
-		inc ax
+		movzx eax,byte [es:edi+1dh]
+		inc eax
 		movzx ecx,word [screen_height]
 		mul ecx
 		cmp eax,7fffh
 		jbe set_mode_25
-		mov ax,7fffh
+		mov eax,7fffh
 set_mode_25:
 		mov [screen_vheight],ax
 
-		mov al,[es:di+1bh]		; color mode (aka memory model)
-		mov ah,[es:di+19h]		; color depth
+		mov al,[es:edi+1bh]		; color mode (aka memory model)
+		mov ah,[es:edi+19h]		; color depth
 		mov dh,ah
 		cmp al,6			; direct color
 		jnz set_mode_30
-		mov dh,[es:di+1fh]		; red
-		add dh,[es:di+21h]		; green
-		add dh,[es:di+23h]		; blue
+		mov dh,[es:edi+1fh]		; red
+		add dh,[es:edi+21h]		; green
+		add dh,[es:edi+23h]		; blue
 		jmp set_mode_40
 set_mode_30:
 		cmp al,4			; PL 8
@@ -3540,14 +3535,14 @@ set_mode_45:
 		; at least a writable win A and a readable win B
 		; other, even more silly variations are not supported
 
-		mov ax,[es:di+8]		; win seg A
-		mov bx,[es:di+10]		; win seg B
+		mov ax,[es:edi+8]		; win seg A
+		mov bx,[es:edi+10]		; win seg B
 
 		or ax,ax
 		jz set_mode_80
 		mov [window_seg_w],ax
 		and word [window_seg_r],byte 0
-		mov dx,[es:di+2]		; win A/B attributes
+		mov dx,[es:edi+2]		; win A/B attributes
 		and dx,707h
 		cmp dl,7
 		jz set_mode_50		; win A is rw
@@ -3567,11 +3562,11 @@ set_mode_45:
 		mov [window_seg_r],ax
 		mov [window_seg_w],bx
 set_mode_50:
-		mov ax,[es:di+6]	; win size (in kb)
+		mov ax,[es:edi+6]	; win size (in kb)
 		cmp ax,64
 		jb set_mode_80		; at least 64k
-		xor dx,dx
-		mov bx,[es:di+4]	; granularity (in kb)
+		xor edx,edx
+		mov bx,[es:edi+4]	; granularity (in kb)
 		or bx,bx
 		jz set_mode_80
 		div bx
@@ -3590,89 +3585,58 @@ set_mode_50:
 		call set_win
 
 		call mode_init
-		call pm_mode_init
 
 		clc
 
 		jmp set_mode_90
 set_mode_80:
-		and word [gfx_mode],byte 0
+		and word [gfx_mode],0
 		stc
 set_mode_90
-		pop es
 		ret
-
 
 mode_init:
-		mov word [setpixel],setpixel_8
-		mov word [setpixel_a],setpixel_a_8
-		mov word [setpixel_t],setpixel_8
-		mov word [setpixel_ta],setpixel_a_8
-		mov word [getpixel],getpixel_8
-		cmp byte [pixel_bits],8
-		jz mode_init_90
-		cmp  byte [pixel_bits],16
-		jnz mode_init_10
-		mov word [setpixel],setpixel_16
-		mov word [setpixel_a],setpixel_a_16
-		mov word [setpixel_t],setpixel_t_16
-		mov word [setpixel_ta],setpixel_ta_16
-		mov word [getpixel],getpixel_16
-		jmp mode_init_90
-mode_init_10:
-		cmp byte [pixel_bits],32
-		jnz mode_init_90
-		mov word [setpixel],setpixel_32
-		mov word [setpixel_a],setpixel_a_32
-		mov word [setpixel_t],setpixel_t_32
-		mov word [setpixel_ta],setpixel_ta_32
-		mov word [getpixel],getpixel_32
-mode_init_90:
-		ret
-
-
-pm_mode_init:
 		; graphics window selectors
 
 		movzx eax,word [window_seg_w]
 		shl eax,4
 		mov si,pm_seg.screen_w16
-		call set_gdt_base
+		call set_gdt_base_pm
 
 		movzx ecx,word [window_seg_r]
 		shl ecx,4
-		jz pm_mode_init_05
+		jz mode_init_05
 		mov eax,ecx
-pm_mode_init_05:
+mode_init_05:
 		mov si,pm_seg.screen_r16
-		call set_gdt_base
+		call set_gdt_base_pm
 
 		; pixel get/set functions
 
-		mov dword [pm_setpixel],pm_setpixel_8
-		mov dword [pm_setpixel_a],pm_setpixel_a_8
-		mov dword [pm_setpixel_t],pm_setpixel_8
-		mov dword [pm_setpixel_ta],pm_setpixel_a_8
-		mov dword [pm_getpixel],pm_getpixel_8
+		mov dword [setpixel],setpixel_8
+		mov dword [setpixel_a],setpixel_a_8
+		mov dword [setpixel_t],setpixel_8
+		mov dword [setpixel_ta],setpixel_a_8
+		mov dword [getpixel],getpixel_8
 		cmp byte [pixel_bits],8
-		jz pm_mode_init_90
+		jz mode_init_90
 		cmp  byte [pixel_bits],16
-		jnz pm_mode_init_50
-		mov dword [pm_setpixel],pm_setpixel_16
-		mov dword [pm_setpixel_a],pm_setpixel_a_16
-		mov dword [pm_setpixel_t],pm_setpixel_t_16
-		mov dword [pm_setpixel_ta],pm_setpixel_ta_16
-		mov dword [pm_getpixel],pm_getpixel_16
+		jnz mode_init_50
+		mov dword [setpixel],setpixel_16
+		mov dword [setpixel_a],setpixel_a_16
+		mov dword [setpixel_t],setpixel_t_16
+		mov dword [setpixel_ta],setpixel_ta_16
+		mov dword [getpixel],getpixel_16
 		jmp mode_init_90
-pm_mode_init_50:
+mode_init_50:
 		cmp byte [pixel_bits],32
-		jnz pm_mode_init_90
-		mov dword [pm_setpixel],pm_setpixel_32
-		mov dword [pm_setpixel_a],pm_setpixel_a_32
-		mov dword [pm_setpixel_t],pm_setpixel_t_32
-		mov dword [pm_setpixel_ta],pm_setpixel_ta_32
-		mov dword [pm_getpixel],pm_getpixel_32
-pm_mode_init_90:
+		jnz mode_init_90
+		mov dword [setpixel],setpixel_32
+		mov dword [setpixel_a],setpixel_a_32
+		mov dword [setpixel_t],setpixel_t_32
+		mov dword [setpixel_ta],setpixel_ta_32
+		mov dword [getpixel],getpixel_32
+mode_init_90:
 		ret
 
 
@@ -4196,7 +4160,7 @@ write_cons_char_40:
 		ja write_cons_char_50
 		mov bl,[textmode_color]
 write_cons_char_50:
-		call con_char_xy
+		pm32_call con_char_xy
 write_cons_char_90:
 
 		pop fs
@@ -4486,7 +4450,7 @@ get_key_to_20:
 		jnz get_key_to_60
 		cmp byte [run_idle],0
 		jz get_key_to_25
-		call idle
+		pm32_call idle
 get_key_to_25:
 		push es
 		push byte 0
@@ -4652,22 +4616,58 @@ idle_data2	dd 0
 
 %include	"kroete.inc"
 
-		bits 16
+		bits 32
 
 idle:
-		push es
-		push fs
-		push gs
-		pushad
+		pusha
 
-		les si,[idle_data]
-		mov bx,[idle_data2]
+		push dword [gfx_cur]
+
+		mov ax,[screen_width]
+		sub ax,kroete.width
+		shr ax,1
+		mov [gfx_cur_x],ax
+
+		mov ax,[screen_height]
+		sub ax,kroete.height
+		shr ax,1
+		mov [gfx_cur_y],ax
+
+		mov ecx,kroete.width
+		mov eax,kroete.height
+		call alloc_fb
+		or eax,eax
+		jz idle_90
+
+		push eax
+		lea edi,[eax+4]
+		call save_bg
+
+		pop edi
+		push edi
+
+		mov esi,[idle_data]
 		call kroete
 
-		popad
-		pop gs
-		pop fs
-		pop es
+		pop eax
+		push eax
+
+		mov dx,[es:eax]
+		mov cx,[es:eax+2]
+		lea edi,[eax+4]
+		mov bx,dx
+		imul bx,[pixel_bytes]
+		call restore_bg
+
+		pop eax
+		call free
+
+
+idle_90:
+
+		pop dword [gfx_cur]
+
+		popa
 		ret
 
 
@@ -7419,10 +7419,14 @@ prim_imagecolors_90:
 ;
 prim_setcolor:
 		call pr_setint
+
+		pm_enter 32
 		mov [gfx_color_rgb],eax
 		call encode_color
 		mov [gfx_color0],eax
-		call setcolor
+		call pm_setcolor
+
+		pm_leave 32
 		ret
 
 
@@ -7438,8 +7442,12 @@ prim_setcolor:
 ;   currentcolor not setcolor	% inverse color
 ;
 prim_currentcolor:
+		pm_enter 32
+
 		mov eax,[gfx_color0]
 		call decode_color
+
+		pm_leave 32
 		jmp pr_getint
 
 
@@ -7547,8 +7555,10 @@ prim_currentpoint_90:
 ;   0 0 moveto screen.size lineto	% draw diagonal
 ;
 prim_lineto:
+		pm_enter 32
+
 		mov dx,t_int + (t_int << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_lineto_90
 
 		mov [line_x1],ecx
@@ -7563,8 +7573,10 @@ prim_lineto:
 		pop word [gfx_cur_y]
 		pop word [gfx_cur_x]
 
-		sub word [pstack_ptr],byte 2
+		sub dword [pstack_ptr],2
 prim_lineto_90:
+
+		pm_leave 32
 		ret
 
 
@@ -7587,9 +7599,9 @@ prim_putpixel:
 		push fs
 		push gs
 
-		call pm_goto_xy
-		call pm_screen_segs
-		call [pm_setpixel_t]
+		call goto_xy
+		call screen_segs
+		call [setpixel_t]
 		clc
 
 		pop gs
@@ -7617,12 +7629,10 @@ prim_getpixel:
 		push fs
 		push gs
 
-		call pm_goto_xy
-		call pm_screen_segs
-		mov esi,edi
-		xor eax,eax
-		call [pm_getpixel]
-		call pm_decode_color
+		call goto_xy
+		call screen_segs
+		call [getpixel]
+		call decode_color
 
 		pop gs
 		pop fs
@@ -7650,7 +7660,12 @@ prim_getpixel:
 ;
 prim_setfont:
 		call pr_setptr_or_none
+
+		pm_enter 32
+
 		call font_init
+
+		pm_leave 32
 		ret
 
 
@@ -8211,6 +8226,7 @@ prim_savescreen_90:
 ;
 ; return:
 ;  eax		buffer (0: failed)
+;  dx, cx       width, height
 ;
 
 		bits 32
@@ -9114,20 +9130,22 @@ prim__readsector_90:
 ; screen contents is undefined.
 ;
 prim_setmode:
+		pm_enter 32
+
 		mov dl,t_int
-		call get_1arg
+		call pm_get_1arg
 		jz prim_setmode_30
 		cmp dl,t_none
 		stc
 		jnz prim_setmode_90
 		xor eax,eax
-		mov cx,ax
+		mov ecx,eax
 		jmp prim_setmode_80
 prim_setmode_30:
 		xchg [gfx_mode],ax
-		push ax
+		push eax
 		call set_mode
-		pop ax
+		pop eax
 		jnc prim_setmode_60
 		xchg [gfx_mode],ax
 		call set_mode
@@ -9142,15 +9160,17 @@ prim_setmode_60:
 		mov cx,[screen_vheight]
 		mov [clip_b],cx
 
-		xor cx,cx
+		xor ecx,ecx
 
 		mov [clip_l],cx
 		mov [clip_t],cx
 
 prim_setmode_80:
 		mov dl,t_bool
-		call set_pstack_tos
+		call pm_set_pstack_tos
 prim_setmode_90:
+
+		pm_leave 32
 		ret
 
 
@@ -9991,11 +10011,13 @@ prim_getlinks:
 ; Note: int1 can be changed using @setcolor, too.
 ;
 prim_settextcolors:
+		pm_enter 32
+
 		mov bp,pserr_pstack_underflow
-		cmp word [pstack_ptr],byte 4
+		cmp dword [pstack_ptr],4
 		jc prim_settextcolors_90
-		mov cx,3
-		call get_pstack_tos
+		mov ecx,3
+		call pm_get_pstack_tos
 		cmp dl,t_int
 		stc
 		mov bp,pserr_wrong_arg_types
@@ -10003,20 +10025,20 @@ prim_settextcolors:
 		call encode_color
 		mov [gfx_color0],eax
 		mov [gfx_color],eax
-		mov cx,2
-		push bp
-		call get_pstack_tos
-		pop bp
+		mov ecx,2
+		push ebp
+		call pm_get_pstack_tos
+		pop ebp
 		cmp dl,t_int
 		stc
 		jnz prim_settextcolors_90
 		call encode_color
 		mov [gfx_color1],eax
 		mov dx,t_int + (t_int << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_settextcolors_90
 
-		sub word [pstack_ptr],byte 4
+		sub dword [pstack_ptr],4
 
 		call encode_color
 		mov [gfx_color3],eax
@@ -10026,6 +10048,8 @@ prim_settextcolors:
 
 		clc
 prim_settextcolors_90:
+
+		pm_leave 32
 		ret
 
 
@@ -10041,33 +10065,37 @@ prim_settextcolors_90:
 ; int4: selected link color
 ; 
 prim_currenttextcolors:
-		mov ax,[pstack_ptr]
-		add ax,4
-		cmp [pstack_size],ax
+		pm_enter 32
+
+		mov eax,[pstack_ptr]
+		add eax,4
+		cmp [pstack_size],eax
 		mov bp,pserr_pstack_overflow
 		jb prim_currenttextcolors_90
-		mov [pstack_ptr],ax
+		mov [pstack_ptr],eax
 		mov dl,t_int
 		mov eax,[gfx_color3]
 		call decode_color
-		xor cx,cx
-		call set_pstack_tos
+		xor ecx,ecx
+		call pm_set_pstack_tos
 		mov dl,t_int
 		mov eax,[gfx_color2]
 		call decode_color
-		mov cx,1
-		call set_pstack_tos
+		mov ecx,1
+		call pm_set_pstack_tos
 		mov dl,t_int
 		mov eax,[gfx_color1]
 		call decode_color
-		mov cx,2
-		call set_pstack_tos
+		mov ecx,2
+		call pm_set_pstack_tos
 		mov dl,t_int
 		mov eax,[gfx_color0]
 		call decode_color
-		mov cx,3
-		call set_pstack_tos
+		mov ecx,3
+		call pm_set_pstack_tos
 prim_currenttextcolors_90:
+
+		pm_leave 32
 		ret
 
 
@@ -10296,9 +10324,7 @@ prim_idle_10:
 		mov byte [run_idle],0
 		cmp dh,t_none			; undef
 		jz prim_idle_90
-		push ecx
-		call lin2so
-		pop dword [idle_data]
+		mov [idle_data],ecx
 		mov [idle_data2],eax
 		mov byte [run_idle],1
 		clc
@@ -10546,6 +10572,7 @@ get_length_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Blend src & dst using alpha channel.
 ;
 ;  al		arg type; bit 0, 1: src, alpha (0 = ptr, 1 = int)
 ;  esi		src
@@ -10669,19 +10696,19 @@ blend_pixel_32	dd blend_pixel_00_32
 ; src: image, alpha: image
 blend_pixel_00_16:
 		mov ax,[es:ebx]
-		call pm_decode_color
+		call decode_color
 
 		movzx eax,ah
 		mov [transp],eax
 
 		mov ax,[es:esi]
-		call pm_decode_color
+		call decode_color
 		xchg ecx,eax
 
 		mov ax,[es:edi]
-		call pm_decode_color
-		call pm_enc_transp
-		call pm_encode_color
+		call decode_color
+		call enc_transp
+		call encode_color
 
 		mov [es:edi],ax
 		ret
@@ -10689,7 +10716,7 @@ blend_pixel_00_16:
 ; src: color, alpha: image
 blend_pixel_01_16:
 		mov ax,[es:ebx]
-		call pm_decode_color
+		call decode_color
 
 		movzx eax,ah
 		mov [transp],eax
@@ -10697,9 +10724,9 @@ blend_pixel_01_16:
 		mov ecx,[tmp_var_3]
 
 		mov ax,[es:edi]
-		call pm_decode_color
-		call pm_enc_transp
-		call pm_encode_color
+		call decode_color
+		call enc_transp
+		call encode_color
 
 		mov [es:edi],ax
 		ret
@@ -10707,13 +10734,13 @@ blend_pixel_01_16:
 ; src: image, alpha: fixed
 blend_pixel_10_16:
 		mov ax,[es:esi]
-		call pm_decode_color
+		call decode_color
 		xchg eax,ecx
 
 		mov ax,[es:edi]
-		call pm_decode_color
-		call pm_enc_transp
-		call pm_encode_color
+		call decode_color
+		call enc_transp
+		call encode_color
 
 		mov [es:edi],ax
 		ret
@@ -10723,9 +10750,9 @@ blend_pixel_11_16:
 		mov ecx,[tmp_var_3]
 
 		mov ax,[es:edi]
-		call pm_decode_color
-		call pm_enc_transp
-		call pm_encode_color
+		call decode_color
+		call enc_transp
+		call encode_color
 
 		mov [es:edi],ax
 		ret
@@ -10739,7 +10766,7 @@ blend_pixel_00_32:
 		mov ecx,[es:esi]
 
 		mov eax,[es:edi]
-		call pm_enc_transp
+		call enc_transp
 
 		mov [es:edi],eax
 		ret
@@ -10753,7 +10780,7 @@ blend_pixel_01_32:
 		mov ecx,[tmp_var_3]
 
 		mov eax,[es:edi]
-		call pm_enc_transp
+		call enc_transp
 
 		mov [es:edi],eax
 		ret
@@ -10763,7 +10790,7 @@ blend_pixel_10_32:
 		mov ecx,[es:esi]
 
 		mov eax,[es:edi]
-		call pm_enc_transp
+		call enc_transp
 
 		mov [es:edi],eax
 		ret
@@ -10773,7 +10800,7 @@ blend_pixel_11_32:
 		mov ecx,[tmp_var_3]
 
 		mov eax,[es:edi]
-		call pm_enc_transp
+		call enc_transp
 
 		mov [es:edi],eax
 		ret
@@ -11167,7 +11194,7 @@ edit_show_cursor:
 		push fs
 		push gs
 
-		call pm_screen_segs
+		call screen_segs
 
 		mov ax,[edit_cursor]
 		sub ax,[edit_shift]
@@ -11178,8 +11205,8 @@ edit_show_cursor:
 		movzx ecx,word [edit_height]
 edit_show_cursor_10:
 		push ecx
-		call pm_goto_xy
-		call [pm_setpixel_t]
+		call goto_xy
+		call [setpixel_t]
 		pop ecx
 		inc word [gfx_cur_y]
 		loop edit_show_cursor_10
@@ -11333,69 +11360,18 @@ edit_get_params_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; map next window segment
-;
-
-		bits 16
-
-inc_winseg:
-		push ax
-		mov al,[cs:mapped_window]
-		inc al
-		call set_win
-		pop ax
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; Map next window segment.
 ;
 
 		bits 32
 
-pm_inc_winseg:
+inc_winseg:
 		push eax
 		mov al,[mapped_window]
 		inc al
-		call pm_set_win
+		call set_win
 		pop eax
 		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; map window segment
-;
-; 	al	= window segment
-;
-
-		bits 16
-
-set_win:
-		push edi
-		cmp byte [cs:vbe_active],0
-		jz set_win_90
-		cmp [cs:mapped_window],al
-		jz set_win_90
-		pusha
-		mov [cs:mapped_window],al
-		mov ah,[cs:window_inc]
-		mul ah
-		xchg ax,dx
-		mov ax,4f05h
-		xor bx,bx
-		cmp word [cs:window_seg_r],0
-		jz set_win_50
-		pusha
-		inc bx
-		int 10h
-		popa
-set_win_50:
-		int 10h
-		popa
-set_win_90:
-		pop edi
-		ret
-
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -11406,12 +11382,12 @@ set_win_90:
 
 		bits 32
 
-pm_set_win:
+set_win:
 		push edi
 		cmp byte [vbe_active],0
-		jz pm_set_win_90
+		jz set_win_90
 		cmp [mapped_window],al
-		jz pm_set_win_90
+		jz set_win_90
 		pusha
 		mov [mapped_window],al
 		mov ah,[window_inc]
@@ -11420,50 +11396,16 @@ pm_set_win:
 		mov ax,4f05h
 		xor ebx,ebx
 		cmp word [window_seg_r],0
-		jz pm_set_win_50
+		jz set_win_50
 		pusha
 		inc ebx
 		int 10h
 		popa
-pm_set_win_50:
+set_win_50:
 		int 10h
 		popa
-pm_set_win_90:
+set_win_90:
 		pop edi
-		ret
-
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Go to current cursor position.
-;
-; return:
-;  edi		offset
-;  correct gfx segment is mapped
-;
-; Notes:
-;  - changes no regs other than edi
-;  - does not require ds == cs
-;
-
-		bits 16
-
-goto_xy:
-		push ax
-		push dx
-		mov ax,[cs:gfx_cur_y]
-		movzx edi,word [cs:gfx_cur_x]
-		imul di,[pixel_bytes]
-		mul word [cs:screen_line_len]
-		add ax,di
-		adc dx,0
-		push ax
-		xchg ax,dx
-		call set_win
-		pop di
-		pop dx
-		pop ax
 		ret
 
 
@@ -11480,7 +11422,7 @@ goto_xy:
 
 		bits 32
 
-pm_goto_xy:
+goto_xy:
 		push eax
 		push edx
 		mov ax,[gfx_cur_y]
@@ -11491,7 +11433,7 @@ pm_goto_xy:
 		adc dx,0
 		push ax
 		xchg ax,dx
-		call pm_set_win
+		call set_win
 		pop di
 		pop edx
 		pop eax
@@ -11518,9 +11460,31 @@ setcolor:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Set active color.
+;
+; eax		color
+;
+; return:
+;  [gfx_color]	color
 ;
 
-		bits 16
+		bits 32
+
+pm_setcolor:
+		mov [gfx_color],eax
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Encode rgb value to color.
+;
+;  eax		rgb value
+;
+; return:
+;  eax		color
+;
+
+		bits 32
 
 encode_color:
 		cmp byte [pixel_bits],16
@@ -11539,6 +11503,17 @@ encode_color_90:
 		ret
 
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Decode color to rgb.
+;
+;  eax		color
+;
+; return:
+;  eax		rgb value
+;
+
+		bits 32
+
 decode_color:
 		cmp byte [pixel_bits],16
 		jnz decode_color_90
@@ -11556,48 +11531,6 @@ decode_color:
 		mov eax,edx
 		pop edx
 decode_color_90:
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-
-		bits 32
-
-pm_encode_color:
-		cmp byte [pixel_bits],16
-		jnz pm_encode_color_90
-		push edx
-		xor edx,edx
-		shl eax,8
-		shld edx,eax,5
-		shl eax,8
-		shld edx,eax,6
-		shl eax,8
-		shld edx,eax,5
-		mov eax,edx
-		pop edx
-pm_encode_color_90:
-		ret
-
-
-pm_decode_color:
-		cmp byte [pixel_bits],16
-		jnz pm_decode_color_90
-		push edx
-		xor edx,edx
-		shl eax,16
-		shld edx,eax,5
-		shld edx,eax,3
-		shl eax,5
-		shld edx,eax,6
-		shld edx,eax,2
-		shl eax,6
-		shld edx,eax,5
-		shld edx,eax,3
-		mov eax,edx
-		pop edx
-pm_decode_color_90:
 		ret
 
 
@@ -11622,12 +11555,18 @@ pal_to_color:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; draw a line
+; Draw a line.
+;
+; [line_x0], [line_y0]	start
+; [line_x1], [line_y1]	end
 ;
 
-		bits 16
+		bits 32
 
 line:
+		push fs
+		push gs
+
 		xor eax,eax
 		xor ebx,ebx
 		inc ax
@@ -11676,7 +11615,6 @@ line_23:
 		shl ecx,1
 line_25:
 
-		; es  -> window
 		; edi -> address
 		; ecx -> d_x
 		; edx -> d_y
@@ -11738,6 +11676,8 @@ line_60:
 
 		call line_pp
 
+		pop gs
+		pop fs
 		ret
 
 line_pp:
@@ -11752,34 +11692,36 @@ line_pp:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; Set pixel at es:di.
+; Set pixel at gs:edi.
+;
+; setpixel_* read from [fs:edi] and write to [gs:edi]
 ;
 
-		bits 16
+		bits 32
 
 setpixel_8:
 		mov al,[gfx_color]
 
 setpixel_a_8:
-		mov [es:edi],al
+		mov [gs:edi],al
 		ret
 
 setpixel_16:
 		mov ax,[gfx_color]
 
 setpixel_a_16:
-		mov [es:edi],ax
+		mov [gs:edi],ax
 		ret
 
 setpixel_32:
 		mov eax,[gfx_color]
 
 setpixel_a_32:
-		mov [es:edi],eax
+		mov [gs:edi],eax
 		ret
 
 
-; with transparency
+; set pixel with transparency
 setpixel_t_16:
 		mov ax,[gfx_color]
 
@@ -11795,7 +11737,7 @@ setpixel_ta_16:
 		call enc_transp
 		pop ecx
 		call encode_color
-		mov [es:edi],ax
+		mov [gs:edi],ax
 		ret
 
 setpixel_t_32:
@@ -11808,9 +11750,8 @@ setpixel_ta_32:
 		mov ecx,[fs:edi]
 		call enc_transp
 		pop ecx
-		mov [es:edi],eax
+		mov [gs:edi],eax
 		ret
-
 
 ; (1 - t) eax + t * ecx -> eax
 enc_transp:
@@ -11825,7 +11766,6 @@ enc_transp:
 		call add_transp
 		mov eax,ecx
 		ret
-
 
 ; cl, al -> cl
 add_transp:
@@ -11853,145 +11793,23 @@ add_transp_20:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; Get pixel from fs:si.
+; Get pixel from fs:edi.
+;
+; getpixel_* read from [fs:edi]
 ;
 
-		bits 16
+		bits 32
 
 getpixel_8:
-		mov al,[fs:esi]
+		mov al,[fs:edi]
 		ret
 
 getpixel_16:
-		mov ax,[fs:esi]
+		mov ax,[fs:edi]
 		ret
 
 getpixel_32:
-		mov eax,[fs:esi]
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; Set pixel at es:edi.
-;
-; pm_setpixel_* read from [fs:edi] and write to [gs:edi]
-;
-
-		bits 32
-
-pm_setpixel_8:
-		mov al,[gfx_color]
-
-pm_setpixel_a_8:
-		mov [gs:edi],al
-		ret
-
-pm_setpixel_16:
-		mov ax,[gfx_color]
-
-pm_setpixel_a_16:
-		mov [gs:edi],ax
-		ret
-
-pm_setpixel_32:
-		mov eax,[gfx_color]
-
-pm_setpixel_a_32:
-		mov [gs:edi],eax
-		ret
-
-
-; with transparency
-pm_setpixel_t_16:
-		mov ax,[gfx_color]
-
-pm_setpixel_ta_16:
-		cmp dword [transp],0
-		jz pm_setpixel_a_16
-		call pm_decode_color
-		push ecx
-		xchg eax,ecx
-		mov ax,[fs:edi]
-		call pm_decode_color
-		xchg eax,ecx
-		call pm_enc_transp
-		pop ecx
-		call pm_encode_color
-		mov [gs:edi],ax
-		ret
-
-pm_setpixel_t_32:
-		mov eax,[gfx_color]
-
-pm_setpixel_ta_32:
-		cmp dword [transp],0
-		jz pm_setpixel_a_32
-		push ecx
-		mov ecx,[fs:edi]
-		call pm_enc_transp
-		pop ecx
-		mov [gs:edi],eax
-		ret
-
-
-; (1 - t) eax + t * ecx -> eax
-pm_enc_transp:
-		ror ecx,16
-		ror eax,16
-		call pm_add_transp
-		rol ecx,8
-		rol eax,8
-		call pm_add_transp
-		rol ecx,8
-		rol eax,8
-		call pm_add_transp
-		mov eax,ecx
-		ret
-
-
-; cl, al -> cl
-pm_add_transp:
-		push eax
-		push ecx
-		movzx eax,al
-		movzx ecx,cl
-		sub ecx,eax
-		imul ecx,[transp]
-		sar ecx,8
-		add ecx,eax
-		cmp ecx,0
-		jge pm_add_transp_10
-		mov cl,0
-		jmp pm_add_transp_20
-pm_add_transp_10:
-		cmp ecx,100h
-		jb pm_add_transp_20
-		mov cl,0ffh
-pm_add_transp_20:
-		mov [esp],cl
-		pop ecx
-		pop eax
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; Get pixel from fs:esi.
-;
-; pm_getpixel_* read from [fs:esi]
-;
-
-		bits 32
-
-pm_getpixel_8:
-		mov al,[fs:esi]
-		ret
-
-pm_getpixel_16:
-		mov ax,[fs:esi]
-		ret
-
-pm_getpixel_32:
-		mov eax,[fs:esi]
+		mov eax,[fs:edi]
 		ret
 
 
@@ -12008,38 +11826,32 @@ cfont_init:
 		int 10h
 		movzx ebp,bp
 		movzx eax,word [rm_seg.es]
-		mov [cfont],bp
-		mov [cfont+2],ax
-
 		shl eax,4
 		add eax,ebp
 		mov [cfont.lin],eax
 
-		mov word [cfont_height],16
+		mov dword [cfont_height],16
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Initialize font.
 ;
-; eax		linear ptr to font header
+; eax		ptr to font header
 ;
 
-		bits 16
+		bits 32
 
 font_init:
-		mov edx,eax
-		shr edx,31
-		mov [font_properties],dl
-		and eax,~(1 << 31)
-		mov ebp,eax
-		lin2segofs eax,es,bx
-		cmp dword [es:bx+foh_magic],0d2828e07h	; magic
+		mov ebx,eax
+		shr eax,31
+		mov [font_properties],al
+		and ebx,~(1 << 31)
+		cmp dword [es:ebx+foh_magic],0d2828e07h		; magic
 		jnz font_init_90
-		mov ax,[es:bx+foh_entries]
-		mov dl,[es:bx+foh_height]
-		mov dh,[es:bx+foh_line_height]
+		mov ax,[es:ebx+foh_entries]
+		mov dl,[es:ebx+foh_height]
+		mov dh,[es:ebx+foh_line_height]
 		or ax,ax
 		jz font_init_90
 		or dx,dx
@@ -12047,7 +11859,7 @@ font_init:
 		mov [font_entries],ax
 		mov [font_height],dl
 		mov [font_line_height],dh
-		mov [font],ebp
+		mov [font],ebx
 font_init_90:
 		ret
 
@@ -12069,6 +11881,9 @@ font_init_90:
 ;   \x13	set link text color (gfx_color2); typically label end
 ;   \x14	start page description
 ;
+
+		bits 16
+
 text_xy:
 		xor eax,eax
 		mov [last_label],ax
@@ -12184,6 +11999,9 @@ text_xy_90:
 ;  eax		char
 ;  es:si	ptr to next char
 ;
+
+		bits 16
+
 text_special:
 		cmp eax,10h
 		jnz text_special_20
@@ -12275,6 +12093,9 @@ text_special_90:
 ; return:
 ;  cx		width
 ;
+
+		bits 16
+
 word_width:
 		push es
 		push si
@@ -12367,6 +12188,9 @@ word_width_90:
 ; return:
 ;  ZF		0 = no, 1 = yes
 ;
+
+		bits 16
+
 is_space:
 		cmp eax,20h
 		jz is_space_90
@@ -12776,8 +12600,8 @@ char_xy_10:
 		mov dx,[chr_y_ofs]
 		add [gfx_cur_y],dx
 
-		call pm_goto_xy
-		call pm_screen_segs
+		call goto_xy
+		call screen_segs
 
 		mov esi,[font]
 		add esi,[chr_bitmap]
@@ -12801,12 +12625,12 @@ char_xy_30:
 		jge char_xy_40
 		cmp ax,[clip_l]
 		jl char_xy_40
-		call [pm_setpixel_t]
+		call [setpixel_t]
 char_xy_40:
 		inc bp
 		add di,[pixel_bytes]
 		jnc char_xy_50
-		call pm_inc_winseg
+		call inc_winseg
 char_xy_50:
 		inc cx
 		cmp cx,[chr_real_width]
@@ -12818,7 +12642,7 @@ char_xy_50:
 		sub ax,bx
 		add di,ax
 		jnc char_xy_60
-		call pm_inc_winseg
+		call inc_winseg
 char_xy_60:
 		inc dx
 		cmp dx,[chr_real_height]
@@ -12956,8 +12780,7 @@ char_width_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Write a char at the current console cursor position.
+; Write char at the current console cursor position.
 ;
 ;  al		char
 ;  ebx		color
@@ -12966,9 +12789,12 @@ char_width_90:
 ;  console cursor position gets advanced
 ;
 
-		bits 16
+		bits 32
 
 con_char_xy:
+		push fs
+		push gs
+
 		push dword [gfx_color]
 
 		push word [gfx_cur_x]
@@ -12983,44 +12809,45 @@ con_char_xy:
 		pop word [gfx_cur_y]
 
 		call goto_xy
-
 		call screen_segs
 
-		lgs si,[cfont]
+		mov esi,[cfont.lin]
+
+		movzx eax,al
 
 		mul byte [cfont_height]
-		add si,ax
+		add esi,eax
 
-		xor dx,dx
+		xor edx,edx
 
 con_char_xy_20:
-		mov cx,7
+		mov ecx,7
 con_char_xy_30:
-		bt [gs:si],cx
+		bt [es:esi],ecx
 		mov eax,[gfx_color]
 		jc con_char_xy_40
-		xor  eax,eax
+		xor eax,eax
 con_char_xy_40:
 		call [setpixel_a]
 		add di,[pixel_bytes]
 		jnc con_char_xy_50
 		call inc_winseg
 con_char_xy_50:
-		dec cx
+		dec ecx
 		jns con_char_xy_30
 
-		inc si
+		inc esi
 
-		mov ax,[screen_line_len]
-		mov bx,8
-		imul bx,[pixel_bytes]
-		sub ax,bx
+		mov eax,[screen_line_len]
+		mov ebx,[pixel_bytes]
+		shl ebx,3
+		sub eax,ebx
 		add di,ax
 		jnc con_char_xy_60
 		call inc_winseg
 con_char_xy_60:
-		inc dx
-		cmp dx,[cfont_height]
+		inc edx
+		cmp edx,[cfont_height]
 		jnz con_char_xy_20
 
 		add word [con_x],8
@@ -13030,11 +12857,12 @@ con_char_xy_60:
 
 		pop dword [gfx_color]
 
+		pop gs
+		pop fs
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Get some memory for palette data
 ;
 
@@ -13212,12 +13040,12 @@ save_bg:
 
 		push edi
 
-		call pm_goto_xy
+		call goto_xy
 		mov esi,edi
 
 		pop edi
 
-		call pm_screen_segs
+		call screen_segs
 
 		movzx ecx,cx
 		movzx edx,dx
@@ -13257,12 +13085,12 @@ save_bg_20:
 
 		or si,si
 		jnz save_bg_30
-		call pm_inc_winseg
+		call inc_winseg
 save_bg_30:
 		mov eax,[fs:esi]
 		add si,4
 		jnz save_bg_35
-		call pm_inc_winseg
+		call inc_winseg
 save_bg_35:
 		cmp edx,4
 		jb save_bg_50
@@ -13292,7 +13120,7 @@ save_bg_70:
 		jnc save_bg_80
 		or ch,ch
 		jnz save_bg_80
-		call pm_inc_winseg
+		call inc_winseg
 save_bg_80:
 		pop ecx
 
@@ -13349,8 +13177,8 @@ restore_bg:
 		movzx edx,word [gfx_width]
 		movzx ecx,word [gfx_height]
 
-		call pm_goto_xy
-		call pm_screen_segs
+		call goto_xy
+		call screen_segs
 
 		imul edx,[pixel_bytes]
 
@@ -13362,7 +13190,7 @@ restore_bg_30:
 		mov [gs:edi],al
 		inc di
 		jnz restore_bg_50
-		call pm_inc_winseg
+		call inc_winseg
 restore_bg_50:
 		dec edx
 		jnz restore_bg_30
@@ -13373,7 +13201,7 @@ restore_bg_50:
 		sub eax,edx
 		add di,ax
 		jnc restore_bg_60
-		call pm_inc_winseg
+		call inc_winseg
 restore_bg_60:
 		mov eax,ebx
 		sub eax,edx
@@ -13391,20 +13219,6 @@ restore_bg_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Load screen segments. Write segment to es, read segment to fs.
-;
-; Modified registers: -
-;
-
-		bits 16
-
-screen_segs:
-		call screen_seg_w
-		jmp screen_seg_r
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; Load screen segments.
 ;
 ; return:
@@ -13416,46 +13230,13 @@ screen_segs:
 
 		bits 32
 
-pm_screen_segs:
+screen_segs:
 		push eax
 		mov ax,pm_seg.screen_r16
 		mov fs,ax
 		mov ax,pm_seg.screen_w16
 		mov gs,ax
 		pop eax
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Load write segment to es.
-;
-; Modified registers: -
-;
-
-		bits 16
-
-screen_seg_w:
-		mov es,[window_seg_w]
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Load read segment to fs.
-;
-; Modified registers: -
-;
-
-		bits 16
-
-screen_seg_r:
-		cmp word [window_seg_r],0
-		jz screen_seg_r_10
-		mov fs,[window_seg_r]
-		ret
-screen_seg_r_10:
-		mov fs,[window_seg_w]
 		ret
 
 
@@ -13481,8 +13262,8 @@ fill_rect:
 		movzx edx,word [gfx_width]
 		movzx ecx,word [gfx_height]
 
-		call pm_goto_xy
-		call pm_screen_segs
+		call goto_xy
+		call screen_segs
 
 		mov ebp,[screen_line_len]
 		mov eax,edx
@@ -13492,17 +13273,17 @@ fill_rect:
 fill_rect_20:
 		mov ebx,edx
 fill_rect_30:
-		call [pm_setpixel_t]
+		call [setpixel_t]
 		add di,[pixel_bytes]
 		jnc fill_rect_60
-		call pm_inc_winseg
+		call inc_winseg
 fill_rect_60:
 		dec ebx
 		jnz fill_rect_30
 
 		add di,bp
 		jnc fill_rect_80
-		call pm_inc_winseg
+		call inc_winseg
 fill_rect_80:
 		dec ecx
 		jnz fill_rect_20
@@ -14658,8 +14439,8 @@ pcx_unpack_50:
 		jbe pcx_unpack_54
 		push eax
 		call pal_to_color
-		call pm_encode_color
-		call [pm_setpixel_a]
+		call encode_color
+		call [setpixel_a]
 		pop eax
 		jmp pcx_unpack_55
 pcx_unpack_54:
@@ -14675,9 +14456,9 @@ pcx_unpack_70:
 		cmp byte [pixel_bytes],1
 		jbe pcx_unpack_74
 		call pal_to_color
-		call pm_encode_color
+		call encode_color
 pcx_unpack_74:
-		call [pm_setpixel_a]
+		call [setpixel_a]
 		add edi,[pixel_bytes]
 pcx_unpack_80:
 		cmp ecx,[line_x1]
@@ -15143,24 +14924,6 @@ read_fsc_90:
 
 fsc_bits	dw 0, 0x0004, 0x4000, 0x0200, 0x0100, 0x0200, 0, 0x4000
 		dw 0x0200, 0, 0, 0, 0, 0, 0, 0
-
-
-%if 0
-xxx_setscreen:
-		push es
-		pushad
-		call encode_color
-		push word 0a000h
-		pop es
-		xor di,di
-		mov cx,4000h
-		rep stosd
-		call get_key
-		popad
-		pop es
-		ret
-
-%endif
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
