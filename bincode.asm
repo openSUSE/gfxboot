@@ -449,7 +449,6 @@ gdt			dd 0, 0			; null descriptor
 gdt_size		equ $-gdt
 
 ; gdt for pm switch
-pm_seg			equ 8
 pm_seg.4gb_d32		equ 8			; covers all 4GB, default ss, es, fs, gs
 pm_seg.4gb_c32		equ 10h			; dto, but executable (for e.g., idt)
 pm_seg.prog_c32		equ 18h			; default cs, use32
@@ -458,9 +457,6 @@ pm_seg.prog_c16		equ 28h			; default cs, use16
 pm_seg.data_d16		equ 30h			; free to use
 pm_seg.screen_r16	equ 38h			; graphics window, for reading
 pm_seg.screen_w16	equ 40h			; graphics window, for writing
-
-pm_large_seg		db 0			; active large segment mask
-pm_seg_mask		db 0			; segment bit mask (1:es, 2:fs, 3:gs)
 
 %if debug
 ; debug texts
@@ -577,21 +573,6 @@ sizeof_fb_entry		equ 8
 		call so2lin
 		pop %3
 %endmacro
-
-%macro		lin2seg 3
-		push %1
-		%ifidn %2,es
-		  call _lin2es
-		%elifidn %2,fs
-		  call _lin2fs
-		%elifidn %2,gs
-		  call _lin2gs
-		%else
-		  %error "invalid segment argument"
-		%endif
-		pop %3
-%endmacro
-
 
 %macro		debug_print 2
 		push %1
@@ -769,17 +750,6 @@ gfx_init_20:
 		; setup gdt, to get pm-switching going
 		call gdt_init
 
-		; xen currently can't handle real mode 4GB selectors on
-		; Intel VMX, so we do a quick check here whether it really
-		; works
-
-		xor eax,eax
-		lin2seg eax,es,eax
-		mov ax,es
-		call lin_seg_off
-		cmp ax,1		; xen will have returned 0 to match the base address
-		jc gfx_init_90
-
 		; init malloc memory chain
 
 		push dword [mem_free]
@@ -956,7 +926,7 @@ gfx_init_40:
 		; ok, we've done it, now continue the setup
 
 %if 0
-		rm32_call dump_malloc
+		call dump_malloc
 		rm32_call get_key
 %endif
 
@@ -2909,18 +2879,16 @@ _free_90:
 ; Dump memory chain.
 ;
 
-		bits 16
+		bits 32
 
-%if debug
-; dump memory chain
 dump_malloc:
 		pushad
 
-		xor dx,dx
+		xor edx,edx
 		call con_xy
 
-		xor bx,bx
-		xor bp,bp
+		xor ebx,ebx
+		xor ebp,ebp
 
 dump_malloc_10:
 		mov ecx,[malloc.area + bx]
@@ -2932,17 +2900,15 @@ dump_malloc_10:
 		cmp ecx,edx
 		jz dump_malloc_70
 
-		push bx
+		push ebx
 		call _dump_malloc
-		pop bx
+		pop ebx
 
 dump_malloc_70:
-		add bx,8
-		cmp bx,malloc.areas * 8
+		add ebx,8
+		cmp ebx,malloc.areas * 8
 		jb dump_malloc_10
 dump_malloc_90:
-
-		call lin_seg_off
 
 		popad
 		ret
@@ -2951,7 +2917,7 @@ _dump_malloc:
 		mov ebx,[malloc.start]
 
 _dump_malloc_30:
-		lin2seg ebx,es,esi
+		mov esi,ebx
 		mov ecx,[es:esi + mhead.memsize]
 
 		pushad
@@ -2973,17 +2939,15 @@ _dump_malloc_40:
 		pf_arg_uint 4,eax
 		mov si,dmsg_03
 
-		call lin_seg_off
-
-		call printf
+		rm32_call printf
 		popad
 
-		inc bp
-		test bp,01fh
+		inc ebp
+		test ebp,01fh
 		jnz _dump_malloc_60
 		pushad
-		call get_key
-		xor dx,dx
+		rm32_call get_key
+		xor edx,edx
 		call con_xy
 		popad
 _dump_malloc_60:		
@@ -3005,14 +2969,11 @@ _dump_malloc_70:
 		pf_arg_uint 1,ecx
 _dump_malloc_80:
 
-		call lin_seg_off
-
-		push bp
-		call printf
-		pop bp
+		push ebp
+		rm32_call printf
+		pop ebp
 _dump_malloc_90:
 		ret
-%endif
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -3283,77 +3244,6 @@ cpio_swab:
 		jz cpio_swab_90
 		xchg ah,al
 cpio_swab_90:
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Load segment with 4GB selector.
-;
-;  byte [pm_seg_mask]	segment bit mask (bit 1-3: es, fs, gs)
-;
-; return:
-;  seg			4GB segment selector
-;  IF			0 (interrupts off)
-;
-; Note: MUST NOT be run in protected mode!!!
-;
-
-		bits 16
-
-lin_seg:
-		cli
-
-		push eax
-
-		mov al,[pm_seg_mask]
-		test [pm_large_seg],al
-		jnz lin_seg_80
-
-		mov eax,cr0
-		or al,1
-		o32 lgdt [pm_gdt]
-		mov cr0,eax
-
-		test byte [pm_seg_mask],(1 << 1)
-		jz lin_seg_30
-		push word pm_seg
-		pop es
-		jmp lin_seg_50
-lin_seg_30:
-		test byte [pm_seg_mask],(1 << 2)
-		jz lin_seg_40
-		push word pm_seg
-		pop fs
-		jmp lin_seg_50
-lin_seg_40:
-		test byte [pm_seg_mask],(1 << 3)
-		jz lin_seg_50
-		push word pm_seg
-		pop gs
-lin_seg_50:
-
-		and al,~1
-		mov cr0,eax
-
-		mov al,[pm_seg_mask]
-		or byte [pm_large_seg],al
-
-lin_seg_80:
-		pop eax
-
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-;
-
-		bits 16
-
-lin_seg_off:
-		mov byte [pm_large_seg],0
-		sti
 		ret
 
 
@@ -3783,44 +3673,6 @@ so2lin:
 		pop eax
 		ret
 
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Convert 32bit linear address to seg:32_bit_ofs.
-;
-;  dword [esp + 2]:	linear address
-;  byte [pm_seg_mask]:	segment bit mask (bit 1-3: es, fs, gs)
-;
-; return:
-;  seg:			segment (as determined by [pm_seg_mask])
-;  dword [esp + 2]:	ofs
-;
-; Notes:
-;  - changes no regs
-;  - clears IF
-;
-
-		bits 16
-
-_lin2seg:
-		push eax
-		mov eax,[esp + 6]
-		call lin_seg
-		pop eax
-		ret
-
-
-_lin2es:
-		mov byte [pm_seg_mask],(1 << 1)
-		jmp _lin2seg
-
-_lin2fs:
-		mov byte [pm_seg_mask],(1 << 2)
-		jmp _lin2seg
-
-_lin2gs:
-		mov byte [pm_seg_mask],(1 << 3)
-		jmp _lin2seg
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
@@ -4273,7 +4125,7 @@ number_90:
 
 ps_status_info:
 		xor dx,dx
-		call con_xy
+		pm32_call con_xy
 
 		mov si,msg_13
 		call printf
@@ -4598,8 +4450,8 @@ get_date_10:
 		mov eax,ebx
 		ret
 
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Set console cursor position.
 ;
 ;  dh		row
@@ -4608,7 +4460,7 @@ get_date_10:
 ; return:
 ;
 
-		bits 16
+		bits 32
 
 con_xy:
 		mov bh,0
@@ -8420,9 +8272,11 @@ prim_memsize_90:
 		ret
 
 prim_dumpmem:
-%if debug
+		pm_enter 32
+
 		call dump_malloc
-%endif
+
+		pm_leave 32
 		ret
 
 
