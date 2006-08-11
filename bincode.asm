@@ -321,10 +321,16 @@ cur_link		dw 0		; link count
 sel_link		dw 0		; selected link
 txt_state		db 0		; bit 0: 1 = skip text
 					; bit 1: 1 = text formatting only
-run_idle		db 0
-
 textmode_color		db 7		; fg color for text (debug) output
 keep_mode		db 0		; keep video mode in gfx_done
+
+			align 4, db 0
+
+idle.draw_buffer	dd 0		; some drawing buffer
+idle.data1		dd 0		; some data
+idle.data2		dd 0		; some more data
+idle.run		db 0		; run idle loop
+idle.invalid		db 0		; idle loop has been left
 
 			align 2, db 0
 row_start_seg		dw 0
@@ -4448,7 +4454,7 @@ get_key_to_20:
 		mov ah,11h
 		int 16h
 		jnz get_key_to_60
-		cmp byte [run_idle],0
+		cmp byte [idle.run],0
 		jz get_key_to_25
 		pm32_call idle
 get_key_to_25:
@@ -4503,6 +4509,8 @@ get_key_to_70:
 get_key_to_80:
 		call get_key
 get_key_to_90:
+		mov byte [idle.invalid],1
+
 		ret
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -4611,15 +4619,16 @@ con_xy:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-idle_data	dd 0
-idle_data2	dd 0
-
 %include	"kroete.inc"
 
 		bits 32
 
 idle:
 		pusha
+
+		mov edi,[idle.draw_buffer]
+		or edi,edi
+		jz idle_90
 
 		push dword [gfx_cur]
 
@@ -4633,38 +4642,30 @@ idle:
 		shr ax,1
 		mov [gfx_cur_y],ax
 
-		mov ecx,kroete.width
-		mov eax,kroete.height
-		call alloc_fb
-		or eax,eax
-		jz idle_90
-
-		push eax
-		lea edi,[eax+4]
-		call save_bg
-
-		pop edi
+		cmp byte [idle.invalid],0
+		jz idle_10
 		push edi
+		mov dx,[es:edi]
+		mov cx,[es:edi+2]
+		add edi,4
+		call save_bg
+		pop edi
+		mov byte [idle.invalid],0
+idle_10:
 
-		mov esi,[idle_data]
+		mov esi,[idle.data1]
+		push edi
 		call kroete
+		pop edi
 
-		pop eax
-		push eax
-
-		mov dx,[es:eax]
-		mov cx,[es:eax+2]
-		lea edi,[eax+4]
+		mov dx,[es:edi]
+		mov cx,[es:edi+2]
+		add edi,4
 		mov bx,dx
 		imul bx,[pixel_bytes]
 		call restore_bg
 
-		pop eax
-		call free
-
-
 idle_90:
-
 		pop dword [gfx_cur]
 
 		popa
@@ -10313,22 +10314,48 @@ prim_date:
 ; Run 'kroete' animation while we're waiting for keyboard input.
 ;
 prim_idle:
+		pm_enter 32
+
 		mov dx,t_int + (t_ptr << 8)
-		call get_2args
+		call pm_get_2args
 		jnc prim_idle_10
 		cmp dx,t_int + (t_none << 8)
 		stc
 		jnz prim_idle_90
 prim_idle_10:
-		sub word [pstack_ptr],byte 2
-		mov byte [run_idle],0
+		sub dword [pstack_ptr],2
 		cmp dh,t_none			; undef
-		jz prim_idle_90
-		mov [idle_data],ecx
-		mov [idle_data2],eax
-		mov byte [run_idle],1
+		jnz prim_idle_50
+		mov byte [idle.run],0
+		mov eax,[idle.draw_buffer]
+		or eax,eax
+		jz prim_idle_80
+		call free
+		and dword [idle.draw_buffer],0
+		jmp prim_idle_80
+prim_idle_50:
+		mov [idle.data1],ecx
+		mov [idle.data2],eax
+
+		mov byte [idle.invalid],1
+
+		cmp dword [idle.draw_buffer],0
+		jnz prim_idle_70
+
+		mov ecx,kroete.width
+		mov eax,kroete.height
+		call alloc_fb
+		mov [idle.draw_buffer],eax
+		or eax,eax
+		jz prim_idle_80
+
+prim_idle_70:
+		mov byte [idle.run],1
+prim_idle_80:
 		clc
 prim_idle_90:
+
+		pm_leave 32
 		ret
 
 

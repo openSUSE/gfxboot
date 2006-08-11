@@ -6,7 +6,7 @@ kroete.height   equ 236
 
 ;  esi			kroete data
 ;  edi			drawing buffer
-;  [idle_data2]		direction (0 forward, != 0 backward)
+;  [idle.data2]		direction (0 forward, != 0 backward)
 
 kroete:
 		movzx eax,word [es:edi]		; width
@@ -27,7 +27,7 @@ kroete:
 
 		call [getpixel]
 
-		cmp byte [idle_data2],0
+		cmp byte [idle.data2],0
 		jnz sul3
 		lea ebp,[esi+16384]
 sul:
