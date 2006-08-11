@@ -1,100 +1,97 @@
-;	es:si	pointer to data
-;	bx	== 0 forward  != 0 backward
+		bits 32
+
+; must be large enough, else we will get evil memory corruptions
+kroete.width    equ 520
+kroete.height   equ 236
+
+;  esi			kroete data
+;  edi			drawing buffer
+;  [idle_data2]		direction (0 forward, != 0 backward)
+
 kroete:
-	mov	fs,[window_seg_w]
-	mov	ax,[window_seg_r]
-	or	ax,ax
-	jnz	sul1
-	mov	ax,[window_seg_w]
-sul1:	mov	gs,ax
-	mov	di,[cs:screen_width]
-	shr	di,1
-	imul	di,[cs:pixel_bytes]
-	mov	ax,[cs:screen_height]
-	shr	ax,1
-	mul	word [cs:screen_line_len]
-	add	di,ax
-	adc	dx,byte 0
-	mov	ax,dx
-	call	set_win
-	call	kr_getpixel
-	or	bx,bx
-	jnz	sul3
-	lea	bp,[si+16384]
-sul:	mov	bl,[es:si]
-	rol	bl,2
-	call	doit
-	rol	bl,2
-	call	doit
-	rol	bl,2
-	call	doit
-	rol	bl,2
-	call	doit
-	inc	si
-	cmp	si,bp
-	jnz	sul
-	call	kr_putpixel
-      	ret
-sul3:	lea	bp,[si-1]
-	add	si,16383
-sul4:	mov	bl,[es:si]
-	xor	bl,0xaa
-	call	doit
-	ror	bl,2
-	call	doit
-	ror	bl,2
-	call	doit
-	ror	bl,2
-	call	doit
-	dec	si
-	cmp	si,bp
-	jnz	sul4
-	call	kr_putpixel
-	ret
+		movzx eax,word [es:edi]		; width
+
+		mov edx,[pixel_bytes]
+		imul edx,eax
+		mov [tmp_var_0],edx
+
+		movzx edx,word [es:edi+2]	; height
+		inc edx
+		mul edx
+		shr eax,1
+		mul dword [pixel_bytes]
+		add edi,4
+		add edi,eax
+
+		; edi: start offset into buffer
+
+		call [getpixel]
+
+		cmp byte [idle_data2],0
+		jnz sul3
+		lea ebp,[esi+16384]
+sul:
+		mov bl,[es:esi]
+		rol bl,2
+		call doit
+		rol bl,2
+		call doit
+		rol bl,2
+		call doit
+		rol bl,2
+		call doit
+		inc esi
+		cmp esi,ebp
+		jnz sul
+		jmp sul5
+
+sul3:
+		lea ebp,[esi-1]
+		add esi,16383
+sul4:
+		mov bl,[es:esi]
+		xor bl,0xaa
+		call doit
+		ror bl,2
+		call doit
+		ror bl,2
+		call doit
+		ror bl,2
+		call doit
+		dec esi
+		cmp esi,ebp
+		jnz sul4
+sul5:
+		call [setpixel_a]
+		ret
+
 doit:
-	push	ecx
-	call	kr_getpixel
-	mov	edx,ecx
-	pop	ecx
-	call	kr_putpixel
-	mov	ecx,edx
-	mov	dl,bl
-	and	dl,3
-	jnz	doit1
-	sub	di,[cs:pixel_bytes]
-	jnc	doit4
-doit5:	sbb	al,0
-	jmp	set_win
-doit1:	dec	dl
-	jnz	doit2
-	sub	di,[cs:screen_line_len]
-	jc	doit5
-doit4:	ret
-doit2:	dec	dl
-	jnz	doit3
-	add	di,[cs:pixel_bytes]
-	jnc	doit4
-doit6:	adc	al,0
-	jmp	set_win
-doit3:  add	di,[cs:screen_line_len]
-	jc	doit6
-	ret
+		xchg eax,edx
+		call [getpixel]
+		xchg eax,edx
+		call [setpixel_a]
+		xchg eax,edx
 
-kr_getpixel:
-	cmp byte [cs:pixel_bytes],1
-	ja kr_getpixel_10
-	mov cl,[fs:di]
-	ret
-kr_getpixel_10:
-	mov cx,[fs:di]
-	ret
+		mov edx,ebx
+		and edx,3
+		jmp [doit_tab+4*edx]
 
-kr_putpixel:
-	cmp byte [cs:pixel_bytes],1
-	ja kr_putpixel_10
-	mov [gs:di],cl
-	ret
-kr_putpixel_10:
-	mov [gs:di],cx
-	ret
+doit0:
+		sub edi,[pixel_bytes]
+		ret
+
+doit1:
+		sub edi,[tmp_var_0]
+		ret
+
+doit2:
+		add edi,[pixel_bytes]
+		ret
+
+doit3:
+		add edi,[tmp_var_0]
+		ret
+
+		align 4, db 0
+doit_tab	dd doit0, doit1, doit2, doit3
 
