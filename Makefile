@@ -24,7 +24,7 @@ addblack: addblack.c
 
 bincode.o:  bincode.asm vocabulary.inc modplay_defines.inc modplay.inc kroete.inc
 	bin/trace_context bincode.asm
-	nasm -f elf -O10 -o $@ -l bincode.lst $<
+	nasm -f elf -O99 -o $@ -l bincode.lst $<
 
 bincode: bincode.o jpeg.o
 	ld -m elf_i386 --section-start .text=0 --oformat binary -Map bincode.map -o $@ $^
