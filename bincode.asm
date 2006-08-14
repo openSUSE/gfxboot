@@ -54,11 +54,11 @@ sizeof_playlist		equ 16
 playlist_entries	equ 4
 
 ; struct link
-li_label		equ 0
-li_text			equ 2
-li_x			equ 4
-li_row			equ 6
-sizeof_link		equ 8		; search for 'sizeof_link'!
+li.label		equ 0
+li.text			equ 4
+li.x			equ 8
+li.row			equ 10
+li.size			equ 12		; search for 'li.size'!
 link_entries		equ 64
 
 ; enum_type_t
@@ -287,7 +287,7 @@ gfx_cur_x		dw 0
 gfx_cur_y		dw 0		; must follow gfx_cur_x
 gfx_width		dw 0
 gfx_height		dw 0
-line_wrap		dw 0
+line_wrap		dd 0
 
 ; clip region (incl)
 clip_l			dw 0		; left, incl
@@ -311,14 +311,14 @@ gfx_color3		dd 0		; color #3 (selected link color)
 gfx_color_rgb		dd 0		; current color (rgb)
 transparent_color	dd -1
 char_eot		dd 0		; 'end of text' char
-last_label		dw 0		; ofs, seg = [row_start_seg]
-page_title		dw 0		; ofs, seg = [row_start_seg]
-max_rows		dw 0		; max. number of text rows
-cur_row			dw 0		; current text row (0 based)
-cur_row2		dw 0		; dto, only durig formatting
-start_row		dw 0		; start row for text output
-cur_link		dw 0		; link count
-sel_link		dw 0		; selected link
+last_label		dd 0		; lin
+page_title		dd 0		; lin
+max_rows		dd 0		; max. number of text rows
+cur_row			dd 0		; current text row (0 based)
+cur_row2		dd 0		; dto, only during formatting
+start_row		dd 0		; start row for text output
+cur_link		dd 0		; link count
+sel_link		dd 0		; selected link
 txt_state		db 0		; bit 0: 1 = skip text
 					; bit 1: 1 = text formatting only
 textmode_color		db 7		; fg color for text (debug) output
@@ -332,12 +332,11 @@ idle.data2		dd 0		; some more data
 idle.run		db 0		; run idle loop
 idle.invalid		db 0		; idle loop has been left
 
-			align 2, db 0
-row_start_seg		dw 0
-row_start_ofs		times max_text_rows dw 0
+			align 4, db 0
+row_text		times max_text_rows dd 0
 
-			; note: link_list relies on row_start_seg
-link_list		times sizeof_link * link_entries db 0
+			; note: link_list relies on row_start
+link_list		times li.size * link_entries db 0
 
 			; max label size: 32
 label_buf		times 35 db 0
@@ -435,6 +434,9 @@ rm_seg:
 .gs			dw 0
 
 			align 4
+
+prog.base		dd 0			; our base address
+
 gdt			dd 0, 0			; null descriptor
 .4gb_d32		dd 0000ffffh, 00cf9300h	; 4GB segment, data, use32
 .4gb_c32		dd 0000ffffh, 00cf9b00h	; 4GB segment, code, use32
@@ -7277,7 +7279,7 @@ prim_setcolor:
 		mov [gfx_color_rgb],eax
 		call encode_color
 		mov [gfx_color0],eax
-		call pm_setcolor
+		call setcolor
 
 		pm_leave 32
 		ret
@@ -7629,23 +7631,25 @@ prim_currenttransparency:
 ; example
 ;   "Hello world!" show		% print "Hello world!"
 prim_show:
+		pm_enter 32
+
 		mov dl,t_string
-		call get_1arg
+		call pm_get_1arg
 		jc prim_show_90
-		dec word [pstack_ptr]
-		lin2segofs eax,es,si
-		mov bx,[start_row]
-		or bx,bx
+		dec dword [pstack_ptr]
+		mov esi,eax
+		mov ebx,[start_row]
+		or ebx,ebx
 		jz prim_show_50
-		cmp bx,[cur_row2]
+		cmp ebx,[cur_row2]
 		jae prim_show_90
-		add bx,bx
-		mov si,[bx + row_start_ofs]
-		mov es,[row_start_seg]
+		mov esi,[row_text+4*ebx]
 prim_show_50:
 		call text_xy
 		clc
 prim_show_90:
+
+		pm_leave 32
 		ret
 
 
@@ -9667,24 +9671,6 @@ prim_modps_90:
 		ret
 
 
-%if 0
-prim_numtest:
-		mov dl,t_int
-		call get_1arg
-		jc prim_numtest_90
-
-		mov eax,[tmp_var_0 + 4*eax]
-
-		mov dl,t_int
-		xor cx,cx
-		call set_pstack_tos
-
-		clc
-prim_numtest_90:
-		ret
-%endif
-
-
 ;; settextwrap - set text wrap column
 ;
 ; group: text
@@ -9695,7 +9681,11 @@ prim_numtest_90:
 ;
 prim_settextwrap:
 		call pr_setint
-		mov [line_wrap],ax
+
+		pm_enter 32
+		mov [line_wrap],eax
+
+		pm_leave 32
 		ret
 
 
@@ -9708,7 +9698,11 @@ prim_settextwrap:
 ; int1: text wrap column
 ;
 prim_currenttextwrap:
-		movzx eax,word [line_wrap]
+		pm_enter 32
+
+		mov eax,[line_wrap]
+
+		pm_leave 32
 		jmp pr_getint
 
 
@@ -9725,7 +9719,12 @@ prim_currenttextwrap:
 ;
 prim_seteotchar:
 		call pr_setint
+
+		pm_enter 32
+
 		mov [char_eot],eax
+
+		pm_leave 32
 		ret
 
 
@@ -9738,7 +9737,11 @@ prim_seteotchar:
 ; int1: eot char
 ;
 prim_currenteotchar:
+		pm_enter 32
+
 		mov eax,[char_eot]
+
+		pm_leave 32
 		jmp pr_getint
 
 
@@ -9752,7 +9755,12 @@ prim_currenteotchar:
 ;
 prim_setmaxrows:
 		call pr_setint
-		mov [max_rows],ax
+
+		pm_enter 32
+
+		mov [max_rows],eax
+
+		pm_leave 32
 		ret
 
 
@@ -9765,7 +9773,11 @@ prim_setmaxrows:
 ; int1: maxium number of text rows to display in a single @show command.
 ;
 prim_currentmaxrows:
-		movzx eax,word [max_rows]
+		pm_enter 32
+
+		mov eax,[max_rows]
+
+		pm_leave 32
 		jmp pr_getint
 
 
@@ -9780,27 +9792,36 @@ prim_currentmaxrows:
 ; Preprocess text to find (and remember) line breaks, links and stuff.
 ;
 prim_formattext:
+		pm_enter 32
+
 		mov dl,t_string
-		call get_1arg
+		call pm_get_1arg
 		jc prim_formattext_90
-		dec word [pstack_ptr]
+		dec dword [pstack_ptr]
 		push eax
-		xor ax,ax
-		mov cx,max_text_rows
-		mov di,row_start_ofs
+
+		push es
 		push ds
 		pop es
-		rep stosw
-		mov cx,link_entries * sizeof_link
-		mov di,link_list
+
+		xor eax,eax
+		mov ecx,max_text_rows
+		mov edi,row_text
+		rep stosd
+		mov ecx,link_entries * li.size
+		mov edi,link_list
 		rep stosb
-		pop eax
-		lin2segofs eax,es,si
+
+		pop es
+
+		pop esi
 		or byte [txt_state],2
 		call text_xy
 		and byte [txt_state],~2
 		clc
 prim_formattext_90:
+
+		pm_leave 32
 		ret
 
 
@@ -9815,7 +9836,11 @@ prim_formattext_90:
 ; Note: available after running @formattext.
 ;
 prim_gettextrows:
-		movzx eax,word [cur_row2]
+		pm_enter 32
+
+		mov eax,[cur_row2]
+
+		pm_leave 32
 		jmp pr_getint
 
 
@@ -9832,7 +9857,12 @@ prim_gettextrows:
 ;
 prim_setstartrow:
 		call pr_setint
-		mov [start_row],ax
+
+		pm_enter 32
+
+		mov [start_row],eax
+
+		pm_leave 32
 		ret
 
 
@@ -9848,7 +9878,12 @@ prim_setstartrow:
 ; Note: available after running @formattext.
 ;
 prim_getlinks:
-		movzx eax,word [cur_link]
+		pm_enter 32
+
+		mov eax,[cur_link]
+
+
+		pm_leave 32
 		jmp pr_getint
 
 
@@ -9964,11 +9999,15 @@ prim_currenttextcolors_90:
 ;
 prim_setlink:
 		call pr_setint
-		mov dx,[cur_link]
-		cmp ax,dx
+
+		pm_enter 32
+
+		cmp eax,[cur_link]
 		jae prim_setlink_90
-		mov [sel_link],ax
+		mov [sel_link],eax
 prim_setlink_90:
+
+		pm_leave 32
 		ret
 
 
@@ -9981,7 +10020,12 @@ prim_setlink_90:
 ; int1: selected link
 ;
 prim_currentlink:
-		movzx eax,word [sel_link]
+		pm_enter 32
+
+		mov eax,[sel_link]
+
+		pm_leave 32
+
 		jmp pr_getint
 
 
@@ -9998,56 +10042,63 @@ prim_currentlink:
 ; int2: link text row
 ;
 prim_getlink:
+		pm_enter 32
+
 		mov dl,t_int
-		call get_1arg
+		call pm_get_1arg
 		jc prim_getlink_90
 		mov bp,pserr_invalid_range
-		cmp ax,[cur_link]
+		cmp eax,[cur_link]
 		cmc
 		jc prim_getlink_90
-		xchg ax,di
-		shl di,3		; sizeof_link = 8
-		add di,link_list
-		mov ax,[pstack_ptr]
-		add ax,3
-		cmp [pstack_size],ax
+		shl eax,2
+		lea edi,[link_list+2*eax+eax]		; li.size = 12 (3*4)
+		mov eax,[pstack_ptr]
+		add eax,3
+		cmp [pstack_size],eax
 		mov bp,pserr_pstack_overflow
 		jb prim_getlink_90
-		mov [pstack_ptr],ax
-		mov dl,t_string
-		segofs2lin ds, word label_buf,eax
-		mov cx,3
-		call set_pstack_tos
-		mov dl,t_string
-		segofs2lin word [row_start_seg],word [di+li_text],eax
-		mov cx,2
-		call set_pstack_tos
-		mov dl,t_int
-		movzx eax,word [di+li_x]
-		mov cx,1
-		call set_pstack_tos
-		mov dl,t_int
-		movzx eax,word [di+li_row]
-		xor cx,cx
-		call set_pstack_tos
+		mov [pstack_ptr],eax
 
-		mov es,[row_start_seg]
-		mov si,[di+li_label]
-		mov di,label_buf
-		mov cx,32		; sizeof buf
+		mov dl,t_string
+		mov eax,label_buf
+		add eax,[prog.base]
+		mov ecx,3
+		call pm_set_pstack_tos
+
+		mov dl,t_string
+		mov eax,[edi+li.text]
+		mov ecx,2
+		call pm_set_pstack_tos
+
+		mov dl,t_int
+		movzx eax,word [edi+li.x]
+		mov ecx,1
+		call pm_set_pstack_tos
+
+		mov dl,t_int
+		movzx eax,word [edi+li.row]
+		xor ecx,ecx
+		call pm_set_pstack_tos
+
+		mov esi,[edi+li.label]
+		mov edi,label_buf
+		mov ecx,32			; sizeof label_buf
 prim_getlink_50:
 		es lodsb
 		cmp al,13h
 		jz prim_getlink_60
 		or al,al
 		jz prim_getlink_60
-		mov [di],al
-		inc di
+		mov [edi],al
+		inc edi
 		loop prim_getlink_50
 prim_getlink_60:
-		mov byte [di],0
+		mov byte [edi],0
 		clc
 prim_getlink_90:
+
+		pm_leave 32
 		ret
 
 
@@ -10060,7 +10111,11 @@ prim_getlink_90:
 ; int1: line height
 ;
 prim_lineheight:
+		pm_enter 32
+
 		movzx eax,word [font_line_height]
+
+		pm_leave 32
 		jmp pr_getint
 
 
@@ -10075,8 +10130,13 @@ prim_lineheight:
 ; Note: available after running @formattext.
 ;
 prim_currenttitle:
-		segofs2lin word [row_start_seg],word [page_title],eax
+		pm_enter 32
+
+		mov eax,[page_title]
 		mov dl,t_string
+
+		pm_leave 32
+
 		jmp pr_getobj
 
 
@@ -10950,7 +11010,7 @@ edit_redraw:
 
 		mov esi,[edit_buf]
 edit_redraw_20:
-		call pm_utf8_dec
+		call utf8_dec
 		or eax,eax
 		jz edit_redraw_50
 		push esi
@@ -11322,25 +11382,6 @@ goto_xy:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Set active color.
-;
-; eax		color
-;
-; return:
-;  [gfx_color]	color
-;
-;  Changed registers: eax
-;
-
-		bits 16
-
-setcolor:
-		mov [gfx_color],eax
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; Set active color.
 ;
 ; eax		color
@@ -11351,7 +11392,7 @@ setcolor:
 
 		bits 32
 
-pm_setcolor:
+setcolor:
 		mov [gfx_color],eax
 		ret
 
@@ -11746,10 +11787,9 @@ font_init_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Write a string. '\n' is a line break.
 ;
-;  es:si	ASCIIZ string
+;  esi		string
 ;
 ; return:
 ;  cursor position gets advanced
@@ -11763,38 +11803,38 @@ font_init_90:
 ;   \x14	start page description
 ;
 
-		bits 16
+		bits 32
 
 text_xy:
 		xor eax,eax
-		mov [last_label],ax
-		mov [cur_row],ax
-		and [txt_state],byte ~1
+		mov [last_label],eax
+		mov [cur_row],eax
+		and byte [txt_state],~1
 
 		test byte [txt_state],2
 		jz text_xy_05
-		mov [row_start_seg],es
-		mov [row_start_ofs],si
-		mov [cur_row2],ax
-		mov [cur_link],ax
-		mov [sel_link],ax
-		mov [page_title],ax
-		push si
+
+		mov [row_text],esi
+		mov [cur_row2],eax
+		mov [cur_link],eax
+		mov [sel_link],eax
+		mov [page_title],eax
+		push esi
 		call utf8_dec
-		pop si
-		call rm_is_eot
+		pop esi
+		call is_eot
 		jz text_xy_05
-		inc word [cur_row2]
+		inc dword [cur_row2]
 text_xy_05:
 		push word [gfx_cur_x]
 text_xy_10:
-		mov di,si
+		mov edi,esi
 		call utf8_dec
 
-		call rm_is_eot
+		call is_eot
 		jz text_xy_90
 
-		cmp word [line_wrap],byte 0
+		cmp dword [line_wrap],0
 		jz text_xy_60
 
 		cmp eax,3000h
@@ -11804,25 +11844,26 @@ text_xy_10:
 		jnz text_xy_60
 text_xy_20:
 
-		push si
-		mov si,di
+		push esi
+		mov esi,edi
 		call word_width
-		pop si
-		add cx,[gfx_cur_x]
-		cmp cx,[line_wrap]
+		pop esi
+		movzx edx,word [gfx_cur_x]
+		add ecx,edx
+		cmp ecx,[line_wrap]
 		jbe text_xy_60
 text_xy_30:
 		call is_space
 		jnz text_xy_50
 
-		mov di,si
+		mov edi,esi
 		call utf8_dec
 
-		call rm_is_eot
+		call is_eot
 		jz text_xy_90
 		jmp text_xy_30
 text_xy_50:
-		mov si,di
+		mov esi,edi
 		jmp text_xy_65
 text_xy_60:
 		cmp eax,0ah
@@ -11833,27 +11874,24 @@ text_xy_65:
 		pop ax
 		push ax
 		mov [gfx_cur_x],ax
-		inc word [cur_row]
-		mov dx,[max_rows]
-		mov ax,[cur_row]
-		or dx,dx
+		inc dword [cur_row]
+		mov edx,[max_rows]
+		mov eax,[cur_row]
+		or edx,edx
 		jz text_xy_67
-		cmp ax,dx
+		cmp eax,edx
 		jae text_xy_90
 text_xy_67:
 		test byte [txt_state],2
 		jz text_xy_10
-		cmp ax,max_text_rows
+		cmp eax,max_text_rows
 		jae text_xy_10
-		mov [cur_row2],ax
-		inc word [cur_row2]
-		add ax,ax
-		xchg ax,bx
-		mov [row_start_ofs + bx],si
+		mov [cur_row2],eax
+		inc dword [cur_row2]
+		mov [row_text+4*eax],esi
 		jmp text_xy_10
 text_xy_70:
-		push si
-		push es
+		push esi
 		cmp eax,1fh
 		jae text_xy_80
 		call text_special
@@ -11861,10 +11899,9 @@ text_xy_70:
 text_xy_80:
 		test byte [txt_state],1
 		jnz text_xy_81
-		pm32_call char_xy
+		call char_xy
 text_xy_81:
-		pop es
-		pop si
+		pop esi
 		jmp text_xy_10
 text_xy_90:
 		pop ax
@@ -11874,14 +11911,13 @@ text_xy_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Handle special chars.
 ;
 ;  eax		char
-;  es:si	ptr to next char
+;  esi		ptr to next char
 ;
 
-		bits 16
+		bits 32
 
 text_special:
 		cmp eax,10h
@@ -11908,7 +11944,7 @@ text_special_30:
 		jnz text_special_40
 
 		or byte [txt_state],1
-		mov [last_label],si
+		mov [last_label],esi
 
 		jmp text_special_90
 text_special_40:
@@ -11918,10 +11954,10 @@ text_special_40:
 		and byte [txt_state],~1
 
 		; check for selected link
-		mov bx,[sel_link]
-		shl bx,3		; sizeof_link = 8
-		mov dx,[bx+link_list+li_text]
-		cmp si,dx
+		mov ebx,[sel_link]
+		shl ebx,2
+		mov edx,[link_list+li.text+2*ebx+ebx]		; li.size = 12 (4*3)
+		cmp esi,edx
 
 		push eax
 		mov eax,[gfx_color3]
@@ -11934,28 +11970,28 @@ text_special_45:
 		test byte [txt_state],2
 		jz text_special_90
 
-		mov bx,[cur_link]
-		cmp bx,link_entries
+		mov ebx,[cur_link]
+		cmp ebx,link_entries
 		jae text_special_90
-		inc word [cur_link]
-		shl bx,3		; sizeof_link = 8
-		add bx,link_list
-		push word [last_label]
-		pop word [bx+li_label]
-		mov [bx+li_text],si
+		inc dword [cur_link]
+		shl ebx,2
+		lea ebx,[link_list+2*ebx+ebx]			; li.size = 12 (4*3)
+		push dword [last_label]
+		pop dword [ebx+li.label]
+		mov [ebx+li.text],esi
 		push word [gfx_cur_x]
-		pop word [bx+li_x]
-		mov dx,[cur_row2]
-		sub dx,1		; 0-- -> 0
-		adc dx,0
-		mov [bx+li_row],dx
+		pop word [ebx+li.x]
+		mov edx,[cur_row2]
+		sub edx,1		; 0-- -> 0
+		adc edx,0
+		mov [ebx+li.row],dx
 
 		jmp text_special_90
 text_special_50:
 		cmp eax,14h
 		jnz text_special_60
 
-		mov [page_title],si
+		mov [page_title],esi
 
 		jmp text_special_90
 text_special_60:
@@ -11966,31 +12002,28 @@ text_special_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; String width until end of next word.
 ;
-; string width until end of next word
-;
-;  es:si	ASCIIZ string
+;  esi		string
 ;
 ; return:
-;  cx		width
+;  ecx		width
 ;
 
-		bits 16
+		bits 32
 
 word_width:
-		push es
-		push si
-		push ax
+		push esi
+		push eax
 
-		xor dx,dx
-		mov bl,0
-		mov bh,0
+		xor edx,edx
+		xor ebx,ebx
 
 word_width_10:
 		call utf8_dec
 
 word_width_20:
-		call rm_is_eot
+		call is_eot
 		jz word_width_90
 
 		cmp eax,0ah
@@ -11998,8 +12031,7 @@ word_width_20:
 
 		cmp eax,10h
 		jnz word_width_30
-		mov bh,0
-		mov bl,0
+		xor ebx,ebx
 word_width_30:
 		cmp eax,11h
 		jnz word_width_31
@@ -12023,18 +12055,16 @@ word_width_34:
 		jnz word_width_70
 
 		push eax
-		push bx
-		push dx
-		push si
-		push es
-		pm32_call char_width
-		pop es
-		pop si
-		pop dx
-		pop bx
+		push ebx
+		push edx
+		push esi
+		call char_width
+		pop esi
+		pop edx
+		pop ebx
 		pop eax
 
-		add dx,cx
+		add edx,ecx
 
 word_width_70:
 		call is_space
@@ -12042,7 +12072,7 @@ word_width_70:
 
 		call utf8_dec
 
-		or bx,bx
+		or ebx,ebx
 		jnz word_width_80
 		cmp eax,3000h
 		jae word_width_90
@@ -12052,16 +12082,14 @@ word_width_80:
 		jnz word_width_20
 
 word_width_90:
-		mov cx,dx
+		mov ecx,edx
 
-		pop ax
-		pop si
-		pop es
+		pop eax
+		pop esi
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Test for white space (space or tab).
 ;
 ;  eax		char
@@ -12070,7 +12098,7 @@ word_width_90:
 ;  ZF		0 = no, 1 = yes
 ;
 
-		bits 16
+		bits 32
 
 is_space:
 		cmp eax,20h
@@ -12147,7 +12175,7 @@ str_size_40:
 		inc edx
 
 		; suppress final line break
-		call pm_utf8_dec
+		call utf8_dec
 		cmp eax,0ah
 		jnz str_size_60
 		cmp byte [es:esi],0
@@ -12188,7 +12216,7 @@ str_len:
 		xor ecx,ecx
 str_len_10:
 		mov edi,esi
-		call pm_utf8_dec
+		call utf8_dec
 		or eax,eax
 		jz str_len_70
 		cmp eax,[char_eot]
@@ -12207,85 +12235,6 @@ str_len_70:
 		ret
 
 
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Decode next utf8 char.
-;
-;  es:si	string
-;
-; return:
-;  eax		char	(invalid char: 0)
-;
-;  Note: changes only: eax, si
-;
-
-		bits 16
-
-utf8_dec:
-		xor eax,eax
-		es lodsb
-		cmp al,80h
-		jb utf8_dec_90
-
-		push cx
-		push edx
-
-		xor edx,edx
-		xor cx,cx
-		mov dl,al
-
-		cmp al,0c0h		; invalid
-		jb utf8_dec_70
-
-		inc cx			; 2 bytes
-		and dl,1fh
-		cmp al,0e0h
-		jb utf8_dec_10
-
-		inc cx			; 3 bytes
-		and dl,0fh
-		cmp al,0f0h
-		jb utf8_dec_10
-
-		inc cx			; 4 bytes
-		and dl,7
-		cmp al,0f8h
-		jb utf8_dec_10
-
-		inc cx			; 5 bytes
-		and dl,3
-		cmp al,0fch
-		jb utf8_dec_10
-
-		inc cx			; 6 bytes
-		and dl,1
-		cmp al,0feh
-		jae utf8_dec_70
-utf8_dec_10:
-		es lodsb
-		cmp al,80h
-		jb utf8_dec_70
-		cmp al,0c0h
-		jae utf8_dec_70
-		and al,3fh
-		shl edx,6
-		or dl,al
-		dec cx
-		jnz utf8_dec_10
-		xchg eax,edx
-		jmp utf8_dec_80
-		
-utf8_dec_70:
-		xor eax,eax
-utf8_dec_80:
-		pop edx
-		pop cx
-
-utf8_dec_90:
-		ret
-
-
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; Decode next utf8 char.
 ;
@@ -12300,11 +12249,11 @@ utf8_dec_90:
 
 		bits 32
 
-pm_utf8_dec:
+utf8_dec:
 		xor eax,eax
 		es lodsb
 		cmp al,80h
-		jb pm_utf8_dec_90
+		jb utf8_dec_90
 
 		push ecx
 		push edx
@@ -12314,53 +12263,53 @@ pm_utf8_dec:
 		mov dl,al
 
 		cmp al,0c0h		; invalid
-		jb pm_utf8_dec_70
+		jb utf8_dec_70
 
 		inc ecx			; 2 bytes
 		and dl,1fh
 		cmp al,0e0h
-		jb pm_utf8_dec_10
+		jb utf8_dec_10
 
 		inc ecx			; 3 bytes
 		and dl,0fh
 		cmp al,0f0h
-		jb pm_utf8_dec_10
+		jb utf8_dec_10
 
 		inc ecx			; 4 bytes
 		and dl,7
 		cmp al,0f8h
-		jb pm_utf8_dec_10
+		jb utf8_dec_10
 
 		inc ecx			; 5 bytes
 		and dl,3
 		cmp al,0fch
-		jb pm_utf8_dec_10
+		jb utf8_dec_10
 
 		inc ecx			; 6 bytes
 		and dl,1
 		cmp al,0feh
-		jae pm_utf8_dec_70
-pm_utf8_dec_10:
+		jae utf8_dec_70
+utf8_dec_10:
 		es lodsb
 		cmp al,80h
-		jb pm_utf8_dec_70
+		jb utf8_dec_70
 		cmp al,0c0h
-		jae pm_utf8_dec_70
+		jae utf8_dec_70
 		and al,3fh
 		shl edx,6
 		or dl,al
 		dec ecx
-		jnz pm_utf8_dec_10
+		jnz utf8_dec_10
 		xchg eax,edx
-		jmp pm_utf8_dec_80
+		jmp utf8_dec_80
 		
-pm_utf8_dec_70:
+utf8_dec_70:
 		xor eax,eax
-pm_utf8_dec_80:
+utf8_dec_80:
 		pop edx
 		pop ecx
 
-pm_utf8_dec_90:
+utf8_dec_90:
 		ret
 
 
@@ -15002,6 +14951,8 @@ gdt_init:
 
 		mov [rm_prog_cs],ax
 		shl eax,4
+
+		mov [prog.base],eax
 
 		mov si,pm_seg.prog_c32
 		call set_gdt_base
