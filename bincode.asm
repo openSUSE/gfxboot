@@ -921,7 +921,7 @@ gfx_init_40:
 		jmp gfx_init_70
 
 gfx_init_60:
-		call ps_status_info
+		pm32_call ps_status_info
 		call get_key
 gfx_init_70:
 		push cs
@@ -1038,7 +1038,7 @@ gfx_input_20:
 		call run_pscode
 		jnc gfx_input_50
 
-		call ps_status_info
+		pm32_call ps_status_info
 		call get_key
 		stc
 		jmp gfx_input_90
@@ -1214,7 +1214,7 @@ gfx_menu_init_50:
 		call run_pscode
 		jnc gfx_menu_init_90
 
-		call ps_status_info
+		pm32_call ps_status_info
 		call get_key
 		stc
 
@@ -1313,7 +1313,7 @@ gfx_infobox_init_40:
 		call run_pscode
 		jnc gfx_infobox_init_90
 
-		call ps_status_info
+		pm32_call ps_status_info
 		call get_key
 		stc
 
@@ -1361,7 +1361,7 @@ gfx_infobox_done:
 		call run_pscode
 		jnc gfx_infobox_done_90
 
-		call ps_status_info
+		pm32_call ps_status_info
 		call get_key
 		stc
 
@@ -1423,7 +1423,7 @@ gfx_progress_init:
 		call run_pscode
 		jnc gfx_progress_init_90
 
-		call ps_status_info
+		pm32_call ps_status_info
 		call get_key
 		stc
 
@@ -1471,7 +1471,7 @@ gfx_progress_done:
 		call run_pscode
 		jnc gfx_progress_done_90
 
-		call ps_status_info
+		pm32_call ps_status_info
 		call get_key
 		stc
 
@@ -1532,7 +1532,7 @@ gfx_progress_update:
 		call run_pscode
 		jnc gfx_progress_update_90
 
-		call ps_status_info
+		pm32_call ps_status_info
 		call get_key
 		stc
 
@@ -1617,7 +1617,7 @@ gfx_password_init:
 		jnc gfx_password_init_90
 
 gfx_password_init_80:
-		call ps_status_info
+		pm32_call ps_status_info
 		call get_key
 		stc
 
@@ -1687,7 +1687,7 @@ gfx_password_done:
 		jmp gfx_password_done_90
 
 gfx_password_done_80:
-		call ps_status_info
+		pm32_call ps_status_info
 		call get_key
 		stc
 
@@ -1774,7 +1774,7 @@ timeout:
 		call run_pscode
 		jnc timeout_90
 
-		call ps_status_info
+		pm32_call ps_status_info
 		call get_key
 		stc
 
@@ -1819,7 +1819,7 @@ timer:
 		call run_pscode
 		jnc timer_90
 
-		call ps_status_info
+		pm32_call ps_status_info
 		call get_key
 		stc
 
@@ -4083,23 +4083,25 @@ number_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Print status/debug info window on console.
+;
 
-		bits 16
+		bits 32
 
 ps_status_info:
-		xor dx,dx
-		pm32_call con_xy
+		xor edx,edx
+		call con_xy
 
 		mov esi,msg_13
-		pm32_call printf
+		call printf
 
-		mov cx,7
+		mov ecx,7
 ps_status_info_10:
-		push cx
+		push ecx
 
-		call get_pstack_tos
+		call pm_get_pstack_tos
 		jc ps_status_info_20
-		pf_arg_ushort 0,cx
+		pf_arg_uint 0,ecx
 		pf_arg_uchar 2,dl
 		pf_arg_uint 1,eax
 		mov esi,msg_11
@@ -4107,14 +4109,14 @@ ps_status_info_10:
 ps_status_info_20:
 		mov esi,msg_12
 ps_status_info_30:
-		pm32_call printf
+		call printf
 
-		pop cx
-		push cx
+		pop ecx
+		push ecx
 
-		call get_rstack_tos
+		call pm_get_rstack_tos
 		jc ps_status_info_40
-		pf_arg_ushort 0,cx
+		pf_arg_uint 0,ecx
 		pf_arg_uchar 2,dl
 		pf_arg_uint 1,eax
 		mov esi,msg_11
@@ -4122,17 +4124,17 @@ ps_status_info_30:
 ps_status_info_40:
 		mov esi,msg_12
 ps_status_info_50:
-		pm32_call printf
+		call printf
 
 		mov esi,msg_16
-		pm32_call printf
+		call printf
 
-		pop cx
-		dec cx
+		pop ecx
+		dec ecx
 		jge ps_status_info_10
 
 		mov esi,msg_14
-		pm32_call printf
+		call printf
 
 		mov eax,[pscode_error_arg_0]
 		pf_arg_uint 1,eax
@@ -4140,7 +4142,7 @@ ps_status_info_50:
 		pf_arg_uint 2,eax
 		mov ax,[pscode_error]
 		pf_arg_ushort 0,ax
-		mov si,msg_17
+		mov esi,msg_17
 		cmp ax,100h
 		jb ps_status_info_60
 		mov esi,msg_18
@@ -4148,7 +4150,7 @@ ps_status_info_50:
 		jb ps_status_info_60
 		mov esi,msg_19
 ps_status_info_60:
-		pm32_call printf
+		call printf
 
 		mov eax,[pscode_instr]
 		pf_arg_uint 0,eax
@@ -4166,45 +4168,39 @@ ps_status_info_60:
 		jnz ps_status_info_70
 		mov esi,msg_20
 ps_status_info_70:
-		pm32_call printf
+		call printf
 
-		xor cx,cx
-		call get_pstack_tos
+		xor ecx,ecx
+		call pm_get_pstack_tos
 		jnc ps_status_info_71
 		mov dl,t_none
 		xor eax,eax
 ps_status_info_71:
+		mov ebp,[prog.base]
 		push eax
-		push ds
-		pop es
 		mov al,' '
-		mov di,num_buf
-		mov cx,1fh		; watch num_buf_end
+		lea edi,[num_buf+ebp]
+		mov ecx,1fh		; watch num_buf_end
 		rep stosb
-		mov [di],cl
+		mov [es:edi],cl
 		pop eax
 
 		cmp dl,t_string
 		jnz ps_status_info_79
 
-		pm_enter 32
+		mov esi,eax
 
-		push ds
-		pop es
-
-		xchg eax,esi
-
-		mov edi,num_buf
+		lea edi,[num_buf+ebp]
 		mov al,0afh
 		stosb
 ps_status_info_72:
-		fs lodsb
+		es lodsb
 		or al,al
 		jz ps_status_info_73
 		stosb
 		cmp byte [es:edi+1],0
 		jnz ps_status_info_72
-		cmp byte [fs:esi],0
+		cmp byte [es:esi],0
 		jnz ps_status_info_74
 ps_status_info_73:		
 		mov al,0aeh
@@ -4214,17 +4210,15 @@ ps_status_info_74:
 ps_status_info_75:
 		stosb
 
-		pm_leave 32
-
 ps_status_info_79:
 		mov esi,num_buf
 		pf_arg_uint 0,esi
 		mov esi,msg_21
-		pm32_call printf
+		call printf
 
 ps_status_info_80:
 		mov esi,msg_15
-		pm32_call printf
+		call printf
 
 		ret
 
@@ -4617,7 +4611,7 @@ run_pscode_46:
 		pushad
 		cmp byte [show_debug_info],0
 		jz run_pscode_47
-		call ps_status_info
+		pm32_call ps_status_info
 run_pscode_47:
 		mov eax,[pscode_next_break]
 		cmp eax,[pscode_instr]
