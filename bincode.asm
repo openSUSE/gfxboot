@@ -717,6 +717,12 @@ gfx_init_20:
 		; setup gdt, to get pm-switching going
 		call gdt_init
 
+		; we can run in protected mode but can't handle ints until
+		; after pm_init
+		cli
+
+		pm_enter 32
+
 		; init malloc memory chain
 
 		push dword [mem_free]
@@ -724,27 +730,29 @@ gfx_init_20:
 		push dword [mem_max]
 		pop dword [malloc.area + 4]
 
-		mov es,[boot_cs]
-		mov bx,[boot_sysconfig]
-		mov si,malloc.area + 8
-		cmp byte [es:bx],1		; syslinux
+		movzx eax,word [boot_cs]
+		movzx ebx,word [boot_sysconfig]
+		shl eax,4
+		add ebx,eax
+		mov esi,malloc.area + 8
+		cmp byte [es:ebx],1		; syslinux
 		jnz gfx_init_30
-		mov cx,2			; 2 extended mem areas
+		mov ecx,2			; 2 extended mem areas
 gfx_init_24:
-		mov ax,[es:bx+24]		; extended mem area pointer
-		or ax,ax
+		movzx eax,word [es:ebx+24]	; extended mem area pointer
+		or eax,eax
 		jz gfx_init_26
-		movzx edx,ax
+		mov edx,eax
 		and dl,~0fh
 		shl edx,16
-		mov [si],edx
+		mov [esi],edx
 		and eax,0fh
 		shl eax,20
 		add eax,edx
-		mov [si+4],eax
-		add si,8
-		add bx,2
-		dec cx
+		mov [esi+4],eax
+		add esi,8
+		add ebx,2
+		dec ecx
 		jnz gfx_init_24
 gfx_init_26:
 		jmp gfx_init_40
@@ -752,16 +760,10 @@ gfx_init_26:
 gfx_init_30:
 		; 2MB - 3MB (to avoid A20 tricks)
 		mov eax,200000h
-		mov [si],eax
+		mov [esi],eax
 		add eax,100000h		; 1MB
-		mov [si+4],eax
+		mov [esi+4],eax
 gfx_init_40:
-
-		; we can run in protected mode but can't handle ints until
-		; after pm_init
-		cli
-
-		pm_enter 32
 
 		call malloc_init
 
@@ -769,12 +771,9 @@ gfx_init_40:
 		; can't do it earlier - we need malloc
 		call pm_init
 
-		pm_leave 32
-
-		sti
-
 		; now we really start...
-
+		pm_leave 32
+		sti
 		pm_enter 32
 
 %if debug
@@ -901,8 +900,8 @@ gfx_init_40:
 
 		; run global code
 		xor eax,eax
-		mov [pstack_ptr],ax
-		mov [rstack_ptr],ax
+		mov [pstack_ptr],eax
+		mov [rstack_ptr],eax
 		call use_local_stack
 		call run_pscode
 		call use_old_stack
@@ -911,7 +910,7 @@ gfx_init_40:
 		; check for true/false on stack
 		; (empty stack == true)
 
-		xor cx,cx
+		xor ecx,ecx
 		call get_pstack_tos
 		jc gfx_init_80
 		cmp dl,t_bool
