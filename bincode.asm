@@ -4479,8 +4479,6 @@ idle_90:
 		bits 32
 
 run_pscode:
-		pm_leave 32
-
 		mov [pscode_instr],eax
 		mov [pscode_next_instr],eax
 		mov dword [pscode_next_break],-1
@@ -4508,7 +4506,7 @@ run_pscode_10:
 run_pscode_15:
 		mov ebx,eax
 		add eax,[pscode_start]
-		lin2segofs eax,es,si
+		mov esi,eax
 		es lodsb
 		xor ecx,ecx
 		mov cl,al
@@ -4522,20 +4520,20 @@ run_pscode_15:
 		cmp cl,0
 		jz run_pscode_20
 
-		mov dl,[es:si]
+		mov dl,[es:esi]
 		cmp cl,1
 		jz run_pscode_20
 
-		mov dx,[es:si]
+		mov dx,[es:esi]
 		cmp cl,2
 		jz run_pscode_20
 
-		mov edx,[es:si]
+		mov edx,[es:esi]
 		and edx,0ffffffh
 		cmp cl,3
 		jz run_pscode_20
 
-		mov edx,[es:si]
+		mov edx,[es:esi]
 run_pscode_20:		
 		stc
 		adc ebx,ecx		; ebx+ecx+1
@@ -4586,7 +4584,7 @@ run_pscode_455:
 
 		; look it up in the dictionary, then continue
 		mov ecx,eax
-		pm32_call get_dict_entry
+		call get_dict_entry
 		mov bp,pserr_invalid_dict
 		jc run_pscode_90
 
@@ -4595,10 +4593,10 @@ run_pscode_455:
 		mov [pscode_error_arg_1],edx
 
 run_pscode_46:
-		pushad
+		pusha
 		cmp byte [show_debug_info],0
 		jz run_pscode_47
-		pm32_call ps_status_info
+		call ps_status_info
 run_pscode_47:
 		mov eax,[pscode_next_break]
 		cmp eax,[pscode_instr]
@@ -4607,7 +4605,7 @@ run_pscode_47:
 		jz run_pscode_48
 run_pscode_475:
 		mov byte [single_step],1
-		pm32_call get_key
+		call get_key
 		cmp ah,1		; ESC
 		jnz run_pscode_477
 		mov byte [single_step],0
@@ -4620,7 +4618,7 @@ run_pscode_477:
 		mov eax,[pscode_next_instr]
 		mov [pscode_next_break],eax
 run_pscode_48:
-		popad
+		popa
 
 		; actually do something
 		cmp dl,t_none
@@ -4646,14 +4644,14 @@ run_pscode_50:
 		jnz run_pscode_51
 		mov dl,t_int		; always use t_int
 run_pscode_51:
-		mov cx,[pstack_ptr]
-		cmp cx,[pstack_size]
+		mov ecx,[pstack_ptr]
+		cmp ecx,[pstack_size]
 		mov bp,pserr_pstack_overflow
 		jae run_pscode_80
-		inc word [pstack_ptr]
+		inc dword [pstack_ptr]
 
-		xor cx,cx
-		call set_pstack_tos
+		xor ecx,ecx
+		call pm_set_pstack_tos
 		jc run_pscode_90
 		jmp run_pscode_10
 
@@ -4664,13 +4662,11 @@ run_pscode_52:
 		cmp eax,prim_functions
 		mov bp,pserr_invalid_prim
 		jae run_pscode_80
-		xchg ax,si
-		add si,si
-		mov ax,[si+jt_p_none]
-		or ax,ax		; implemented?
+		movzx eax,word [jt_p_none+2*eax]
+		or eax,eax		; implemented?
 		jz run_pscode_80
 
-		call ax
+		rm32_call ax
 		jc run_pscode_90
 		jmp run_pscode_10
 
@@ -4687,14 +4683,14 @@ run_pscode_53:
 		cmp byte [pscode_type],t_sec
 		jnz run_pscode_50
 
-		mov cx,[rstack_ptr]
-		cmp cx,[rstack_size]
+		mov ecx,[rstack_ptr]
+		cmp ecx,[rstack_size]
 		mov bp,pserr_rstack_overflow
 		jae run_pscode_80
-		inc word [rstack_ptr]
+		inc dword [rstack_ptr]
 
-		xor cx,cx
-		call set_rstack_tos
+		xor ecx,ecx
+		call pm_set_rstack_tos
 		jc run_pscode_90
 		jmp run_pscode_10
 
@@ -4702,8 +4698,8 @@ run_pscode_54:
 		cmp dl,t_ret
 		jnz run_pscode_70
 
-		xor cx,cx
-		call get_rstack_tos
+		xor ecx,ecx
+		call pm_get_rstack_tos
 		jnc run_pscode_55
 		mov bp,pserr_rstack_underflow
 		jc run_pscode_90
@@ -4727,26 +4723,26 @@ run_pscode_55:
 		jnz run_pscode_80
 
 		; forall
-		cmp word [rstack_ptr],byte 5
+		cmp dword [rstack_ptr],5
 		mov bp,pserr_rstack_underflow
 		jc run_pscode_90
 
-		mov cx,1
-		call get_rstack_tos		; count
+		mov ecx,1
+		call pm_get_rstack_tos		; count
 		cmp dl,t_int
 		jnz run_pscode_66
 
-		mov cx,2
+		mov ecx,2
 		push eax
-		call get_rstack_tos		; length
+		call pm_get_rstack_tos		; length
 		pop esi
 		cmp dl,t_int
 		jnz run_pscode_66
 
-		mov cx,3
+		mov ecx,3
 		push eax
 		push esi
-		call get_rstack_tos		; string/array
+		call pm_get_rstack_tos		; string/array
 		pop esi
 		pop ecx
 		cmp dl,t_array
@@ -4765,55 +4761,55 @@ run_pscode_57:
 		cmp esi,ecx
 		jae run_pscode_64
 
-		push dx
-		mov cx,1
+		push edx
+		mov ecx,1
 		mov dl,t_int
 		push eax
 		push esi
 		mov eax,esi
-		call set_rstack_tos
+		call pm_set_rstack_tos
 		pop eax
 		pop ecx
-		pop dx
+		pop edx
 
 		xchg dl,dh
 		call p_get
 		mov bp,pserr_invalid_range
 		jc run_pscode_80
 
-		mov cx,[pstack_ptr]
-		cmp cx,[pstack_size]
+		mov ecx,[pstack_ptr]
+		cmp ecx,[pstack_size]
 		jae run_pscode_80
-		inc word [pstack_ptr]
-		xor cx,cx
-		call set_pstack_tos
+		inc dword [pstack_ptr]
+		xor ecx,ecx
+		call pm_set_pstack_tos
 		jc run_pscode_90
 
-		xor cx,cx
-		call get_rstack_tos
+		xor ecx,ecx
+		call pm_get_rstack_tos
 		jmp run_pscode_69
 
 
 run_pscode_62:
 		; for
-		cmp word [rstack_ptr],byte 5
+		cmp dword [rstack_ptr],5
 		mov bp,pserr_rstack_underflow
 		jc run_pscode_90
 
-		mov cx,2
-		call get_rstack_tos		; step
+		mov ecx,2
+		call pm_get_rstack_tos		; step
 		cmp dl,t_int
 		jnz run_pscode_66
-		mov cx,1
+		mov ecx,1
 		push eax
-		call get_rstack_tos		; limit
+		call pm_get_rstack_tos		; limit
 		pop esi
 		cmp dl,t_int
 		jnz run_pscode_66
 		push eax
-		mov cx,3
+		mov ecx,3
 		push esi
-		call get_rstack_tos		; counter
+		call pm_get_rstack_tos		; counter
 		pop esi
 		cmp dl,t_int
 		pop ecx
@@ -4828,36 +4824,36 @@ run_pscode_63:
 		pop eax
 		jl run_pscode_64
 
-		mov cx,3
+		mov ecx,3
 		push eax
-		call set_rstack_tos
+		call pm_set_rstack_tos
 		pop eax
-		mov cx,[pstack_ptr]
-		cmp cx,[pstack_size]
+		mov ecx,[pstack_ptr]
+		cmp ecx,[pstack_size]
 		jae run_pscode_80
-		inc word [pstack_ptr]
-		xor cx,cx
+		inc dword [pstack_ptr]
+		xor ecx,ecx
 		mov dl,t_int
-		call set_pstack_tos
+		call pm_set_pstack_tos
 		jc run_pscode_90
-		xor cx,cx
-		call get_rstack_tos
+		xor ecx,ecx
+		call pm_get_rstack_tos
 		jmp run_pscode_69
 run_pscode_64:
-		mov cx,4
-		call get_rstack_tos
-		sub word [rstack_ptr],byte 5
+		mov ecx,4
+		call pm_get_rstack_tos
+		sub dword [rstack_ptr],5
 		jmp run_pscode_69
 
 
 run_pscode_65:
 		; repeat
-		cmp word [rstack_ptr],byte 3
+		cmp dword [rstack_ptr],3
 		mov bp,pserr_rstack_underflow
 		jc run_pscode_90
 		push eax
-		mov cx,1
-		call get_rstack_tos
+		mov ecx,1
+		call pm_get_rstack_tos
 		pop ebx
 		cmp dl,t_int
 run_pscode_66:
@@ -4865,18 +4861,18 @@ run_pscode_66:
 		jnz run_pscode_80
 		dec eax
 		jz run_pscode_67
-		mov cx,1
+		mov ecx,1
 		push ebx
-		call set_rstack_tos
+		call pm_set_rstack_tos
 		pop eax
 		jmp run_pscode_69
 run_pscode_67:
-		mov cx,2
-		call get_rstack_tos
-		sub word [rstack_ptr],byte 2
+		mov ecx,2
+		call pm_get_rstack_tos
+		sub dword [rstack_ptr],2
 
 run_pscode_68:
-		dec word [rstack_ptr]
+		dec dword [rstack_ptr]
 run_pscode_69:
 		mov [pscode_next_instr],eax
 
@@ -4907,10 +4903,7 @@ run_pscode_80:
 		stc
 run_pscode_90:
 		mov [pscode_error],bp
-
-		pm_enter 32
 		ret
-
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -5081,6 +5074,48 @@ pm_get_2args_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Get array/string/ptr element.
+;
+;  dh, ecx	obj
+;  eax		index
+;
+; return:
+;  dl, eax	element
+;  CF		0/1 ok/not ok
+;
+
+		bits 32
+
+p_get:
+		cmp dh,t_array
+		jz p_get_50
+		cmp dh,t_string
+		jz p_get_10
+		cmp dh,t_ptr
+		stc
+		jnz p_get_90
+p_get_10:
+		mov dl,t_int
+		movzx eax,byte [es:eax+ecx]
+		jmp p_get_80
+p_get_50:
+		mov bp,pserr_invalid_range
+		movzx ebx,word [es:ecx]
+		cmp eax,ebx
+		cmc
+		jc p_get_90
+
+		lea eax,[eax+4*eax]
+
+		mov dl,[es:ecx+eax+2]
+		mov eax,[es:ecx+eax+3]
+p_get_80:
+		clc
+p_get_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ; Our primary functions.
 ;
@@ -5245,8 +5280,10 @@ prim_aend_90:
 ;   [ 10 20 30 ] 2 get		% 30
 ;
 prim_get:
+		pm_enter 32
+
 		mov dx,t_int + (t_array << 8)
-		call get_2args
+		call pm_get_2args
 		jnc prim_get_10
 		cmp dx,t_int + (t_string << 8)
 		jz prim_get_10
@@ -5257,50 +5294,12 @@ prim_get_10:
 		call p_get
 		jc prim_get_90
 
-		dec word [pstack_ptr]
-		xor cx,cx
-		call set_pstack_tos
+		dec dword [pstack_ptr]
+		xor ecx,ecx
+		call pm_set_pstack_tos
 prim_get_90:
-		ret
 
-
-;  dh, ecx	obj
-;  eax		index
-; Return:
-;  dl, eax	element
-;  CF		0/1 ok/not ok
-;
-p_get:
-		cmp dh,t_array
-		jz p_get_50
-		cmp dh,t_string
-		jz p_get_10
-		cmp dh,t_ptr
-		stc
-		jnz p_get_90
-p_get_10:
-		add ecx,eax
-		lin2segofs ecx,es,di
-		mov dl,t_int
-		movzx eax,byte [es:di]
-		jmp p_get_80
-p_get_50:
-		lin2segofs ecx,es,di
-		mov bp,pserr_invalid_range
-		cmp ax,[es:di]
-		cmc
-		jc p_get_90
-
-		add di,ax
-		add ax,ax
-		add ax,ax
-		add di,ax
-
-		mov dl,[es:di+2]
-		mov eax,[es:di+3]
-p_get_80:
-		clc
-p_get_90:
+		pm_leave 32
 		ret
 
 
@@ -6906,8 +6905,10 @@ prim_for_90:
 ;  [ 1 2 3 ] { } forall		% leave 1 2 3 on the stack
 ;
 prim_forall:
+		pm_enter 32
+
 		mov dx,t_code + (t_array << 8)
-		call get_2args
+		call pm_get_2args
 		jnc prim_forall_30
 		cmp dl,t_code
 		stc
@@ -6922,7 +6923,7 @@ prim_forall:
 
 		; nothing to do
 prim_forall_20:
-		sub word [pstack_ptr],2
+		sub dword [pstack_ptr],2
 		clc
 		jmp prim_forall_90
 
@@ -6932,7 +6933,7 @@ prim_forall_30:
 		xchg dl,dh
 		push dx
 		xchg eax,ecx
-		pm32_call get_length
+		call get_length
 		pop dx
 		pop ecx
 		pop ebx
@@ -6943,50 +6944,50 @@ prim_forall_30:
 		or eax,eax			; length == 0
 		jz prim_forall_20
 
-		sub word [pstack_ptr],2
+		sub dword [pstack_ptr],2
 
 		; branch
 		xchg ebx,[pscode_next_instr]
 
-		mov si,[rstack_size]
-		sub si,[rstack_ptr]
-		cmp si,6
+		mov esi,[rstack_size]
+		sub esi,[rstack_ptr]
+		cmp esi,6
 		mov bp,pserr_rstack_overflow
 		jb prim_forall_90
-		add word [rstack_ptr],5
+		add dword [rstack_ptr],5
 
 		push ecx
-		push dx
+		push edx
 		push eax
 
 		mov dl,t_exit
 		xchg eax,ebx
-		mov cx,4
-		call set_rstack_tos		; code
+		mov ecx,4
+		call pm_set_rstack_tos		; code
 
 		pop eax
 		mov dl,t_int
-		mov cx,2
-		call set_rstack_tos		; length
+		mov ecx,2
+		call pm_set_rstack_tos		; length
 
-		pop dx
+		pop edx
 		pop eax
 		push eax
-		push dx
-		mov cx,3
-		call set_rstack_tos		; string/array
+		push edx
+		mov ecx,3
+		call pm_set_rstack_tos		; string/array
 
 		xor eax,eax
 		mov dl,t_int
-		mov cx,1
-		call set_rstack_tos		; count
+		mov ecx,1
+		call pm_set_rstack_tos		; count
 
-		xor cx,cx
+		xor ecx,ecx
 		mov dl,t_forall			; mark as 'forall' block
 		mov eax,[pscode_next_instr]
-		call set_rstack_tos
+		call pm_set_rstack_tos
 
-		pop dx
+		pop edx
 		pop ecx
 		xchg dl,dh
 		xor eax,eax
@@ -6994,9 +6995,15 @@ prim_forall_30:
 		mov bp,pserr_invalid_range
 		jc prim_forall_90
 
+		pm_leave 32
+
 		jmp pr_getobj
 
+		bits 32
+
 prim_forall_90:
+
+		pm_leave 32
 		ret
 
 
