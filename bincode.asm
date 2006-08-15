@@ -189,9 +189,8 @@ pscode_error		dw 0		; error code (if any)
 pscode_type		db 0		; current instr type
 
 			align 4, db 0
-dict			dd 0		; seg:ofs
-dict.lin		dd 0		; lin
-dict_size		dd 0		; dict entries
+dict			dd 0		; lin
+dict.size		dd 0		; dict entries
 
 boot_cs			dw 0		; seg
 boot_sysconfig		dw 0		; ofs
@@ -893,7 +892,7 @@ gfx_init_40:
 
 %if 0
 		call dump_malloc
-		rm32_call get_key
+		call get_key
 %endif
 
 		pm_leave 32
@@ -903,7 +902,7 @@ gfx_init_40:
 		mov [pstack_ptr],eax
 		mov [rstack_ptr],eax
 		call use_local_stack
-		call run_pscode
+		pm32_call run_pscode
 		call use_old_stack
 		jc gfx_init_60
 
@@ -921,7 +920,7 @@ gfx_init_40:
 
 gfx_init_60:
 		pm32_call ps_status_info
-		call get_key
+		pm32_call get_key
 gfx_init_70:
 		push cs
 		call gfx_done
@@ -1004,15 +1003,15 @@ gfx_input:
 		mov [input_timeout_start],eax
 gfx_input_10:
 
-		call clear_kbd_queue
+		pm32_call clear_kbd_queue
 
 gfx_input_20:
-		call get_key_to
+		pm32_call get_key_to
 		and dword [input_timeout],byte 0	; disable timeout
 
 		push eax
-		mov cx,cb_KeyEvent
-		call get_dict_entry
+		mov ecx,cb_KeyEvent
+		pm32_call get_dict_entry
 		pop ecx
 		jc gfx_input_90
 
@@ -1034,11 +1033,11 @@ gfx_input_20:
 		call set_rstack_tos
 		pop eax
 
-		call run_pscode
+		pm32_call run_pscode
 		jnc gfx_input_50
 
 		pm32_call ps_status_info
-		call get_key
+		pm32_call get_key
 		stc
 		jmp gfx_input_90
 
@@ -1174,8 +1173,8 @@ gfx_menu_init_50:
 		call so2lin
 		pop dword [tmp_var_3]
 
-		mov cx,cb_MenuInit
-		call get_dict_entry
+		mov ecx,cb_MenuInit
+		pm32_call get_dict_entry
 		jc gfx_menu_init_90
 
 		cmp dl,t_code
@@ -1210,11 +1209,11 @@ gfx_menu_init_50:
 
 		pop eax
 
-		call run_pscode
+		pm32_call run_pscode
 		jnc gfx_menu_init_90
 
 		pm32_call ps_status_info
-		call get_key
+		pm32_call get_key
 		stc
 
 gfx_menu_init_90:
@@ -1276,8 +1275,8 @@ gfx_infobox_init_25:
 gfx_infobox_init_40:
 		mov byte [es:bp-1],0
 
-		mov cx,cb_InfoBoxInit
-		call get_dict_entry
+		mov ecx,cb_InfoBoxInit
+		pm32_call get_dict_entry
 
 		pop bx
 
@@ -1309,11 +1308,11 @@ gfx_infobox_init_40:
 		call set_rstack_tos
 
 		pop eax
-		call run_pscode
+		pm32_call run_pscode
 		jnc gfx_infobox_init_90
 
 		pm32_call ps_status_info
-		call get_key
+		pm32_call get_key
 		stc
 
 gfx_infobox_init_90:
@@ -1339,8 +1338,8 @@ gfx_infobox_done:
 
 		call use_local_stack
 
-		mov cx,cb_InfoBoxDone
-		call get_dict_entry
+		mov ecx,cb_InfoBoxDone
+		pm32_call get_dict_entry
 		jc gfx_infobox_done_90
 
 		cmp dl,t_code
@@ -1357,11 +1356,11 @@ gfx_infobox_done:
 		call set_rstack_tos
 
 		pop eax
-		call run_pscode
+		pm32_call run_pscode
 		jnc gfx_infobox_done_90
 
 		pm32_call ps_status_info
-		call get_key
+		pm32_call get_key
 		stc
 
 gfx_infobox_done_90:
@@ -1393,9 +1392,9 @@ gfx_progress_init:
 		mov [progress_max],eax
 		and dword [progress_current],byte 0
 
-		mov cx,cb_ProgressInit
+		mov ecx,cb_ProgressInit
 		push si
-		call get_dict_entry
+		pm32_call get_dict_entry
 		pop si
 		jc gfx_progress_init_90
 
@@ -1419,11 +1418,11 @@ gfx_progress_init:
 		call set_rstack_tos
 
 		pop eax
-		call run_pscode
+		pm32_call run_pscode
 		jnc gfx_progress_init_90
 
 		pm32_call ps_status_info
-		call get_key
+		pm32_call get_key
 		stc
 
 gfx_progress_init_90:
@@ -1449,8 +1448,8 @@ gfx_progress_done:
 
 		call use_local_stack
 
-		mov cx,cb_ProgressDone
-		call get_dict_entry
+		mov ecx,cb_ProgressDone
+		pm32_call get_dict_entry
 		jc gfx_progress_done_90
 
 		cmp dl,t_code
@@ -1467,11 +1466,11 @@ gfx_progress_done:
 		call set_rstack_tos
 
 		pop eax
-		call run_pscode
+		pm32_call run_pscode
 		jnc gfx_progress_done_90
 
 		pm32_call ps_status_info
-		call get_key
+		pm32_call get_key
 		stc
 
 gfx_progress_done_90:
@@ -1499,8 +1498,8 @@ gfx_progress_update:
 
 		add [progress_current],eax
 
-		mov cx,cb_ProgressUpdate
-		call get_dict_entry
+		mov ecx,cb_ProgressUpdate
+		pm32_call get_dict_entry
 		jc gfx_progress_update_90
 
 		cmp dl,t_code
@@ -1528,11 +1527,11 @@ gfx_progress_update:
 		call set_rstack_tos
 
 		pop eax
-		call run_pscode
+		pm32_call run_pscode
 		jnc gfx_progress_update_90
 
 		pm32_call ps_status_info
-		call get_key
+		pm32_call get_key
 		stc
 
 gfx_progress_update_90:
@@ -1576,10 +1575,10 @@ gfx_password_init:
 
 		call use_local_stack
 
-		mov cx,cb_PasswordInit
+		mov ecx,cb_PasswordInit
 		push si
 		push di
-		call get_dict_entry
+		pm32_call get_dict_entry
 		pop di
 		pop si
 		jc gfx_password_init_90
@@ -1612,12 +1611,12 @@ gfx_password_init:
 		call set_rstack_tos
 
 		pop eax
-		call run_pscode
+		pm32_call run_pscode
 		jnc gfx_password_init_90
 
 gfx_password_init_80:
 		pm32_call ps_status_info
-		call get_key
+		pm32_call get_key
 		stc
 
 gfx_password_init_90:
@@ -1645,9 +1644,9 @@ gfx_password_done:
 
 		call use_local_stack
 
-		mov cx,cb_PasswordDone
+		mov ecx,cb_PasswordDone
 		push si
-		call get_dict_entry
+		pm32_call get_dict_entry
 		pop si
 		jc gfx_password_done_90
 
@@ -1672,7 +1671,7 @@ gfx_password_done:
 		call set_rstack_tos
 
 		pop eax
-		call run_pscode
+		pm32_call run_pscode
 		jc gfx_password_done_80
 
 		xor cx,cx
@@ -1687,7 +1686,7 @@ gfx_password_done:
 
 gfx_password_done_80:
 		pm32_call ps_status_info
-		call get_key
+		pm32_call get_key
 		stc
 
 gfx_password_done_90:
@@ -1738,10 +1737,10 @@ gfx_cb_90:
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 
-		bits 16
+		bits 32
 
 timeout:
-		mov cx,cb_Timeout
+		mov ecx,cb_Timeout
 		call get_dict_entry
 		jc timeout_90
 
@@ -1750,30 +1749,30 @@ timeout:
 		jnz timeout_90
 
 		push eax
-		mov word [pstack_ptr],2
+		mov dword [pstack_ptr],2
 
-		mov cx,1
+		mov ecx,1
 		mov dl,t_int
 		mov eax,[input_timeout_start]
-		call set_pstack_tos
+		call pm_set_pstack_tos
 
-		xor cx,cx
+		xor ecx,ecx
 		mov dl,t_int
 		mov eax,[input_timeout]
-		call set_pstack_tos
+		call pm_set_pstack_tos
 
-		mov word [rstack_ptr],1
-		xor cx,cx
+		mov dword [rstack_ptr],1
+		xor ecx,ecx
 		mov dl,t_code
 		stc
 		sbb eax,eax
-		call set_rstack_tos
+		call pm_set_rstack_tos
 
 		pop eax
 		call run_pscode
 		jnc timeout_90
 
-		pm32_call ps_status_info
+		call ps_status_info
 		call get_key
 		stc
 
@@ -1782,14 +1781,15 @@ timeout_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Run 'Timer' callback function.
 ;
 ; eax		time
 ;
 
-		bits 16
+		bits 32
 
 timer:
-		mov cx,cb_Timer
+		mov ecx,cb_Timer
 		push eax
 		call get_dict_entry
 		pop ebx
@@ -1800,25 +1800,25 @@ timer:
 		jnz timer_90
 
 		push eax
-		mov word [pstack_ptr],1
+		mov dword [pstack_ptr],1
 
-		xor cx,cx
+		xor ecx,ecx
 		mov dl,t_int
-		xchg eax,ebx
-		call set_pstack_tos
+		mov eax,ebx
+		call pm_set_pstack_tos
 
-		mov word [rstack_ptr],1
-		xor cx,cx
+		mov dword [rstack_ptr],1
+		xor ecx,ecx
 		mov dl,t_code
 		stc
 		sbb eax,eax
-		call set_rstack_tos
+		call pm_set_rstack_tos
 
 		pop eax
 		call run_pscode
 		jnc timer_90
 
-		pm32_call ps_status_info
+		call ps_status_info
 		call get_key
 		stc
 
@@ -2405,7 +2405,7 @@ dict_init:
 
 		xor eax,eax
 		es lodsw
-		mov [dict_size],ax
+		mov [dict.size],ax
 
 		; p_none is not part of the default dict
 		cmp ax,cb_functions + prim_functions - 1
@@ -2418,22 +2418,17 @@ dict_init:
 		pop esi
 		cmp eax,1
 		jc dict_init_90
-
-		mov [dict.lin],eax
-		mov ebx,eax
-		push eax
-		call pm_lin2so
-		pop dword [dict]
+		mov [dict],eax
 
 		; add default functions
 
-		add ebx,cb_functions * 5
+		add eax,cb_functions * 5
 		xor ecx,ecx
 		inc ecx
 dict_init_20:
-		mov byte [es:ebx],t_prim
-		mov [es:ebx+1],ecx
-		add ebx,5
+		mov byte [es:eax],t_prim
+		mov [es:eax+1],ecx
+		add eax,5
 		inc ecx
 		cmp ecx,prim_functions
 		jb dict_init_20
@@ -2444,16 +2439,16 @@ dict_init_20:
 		es lodsw
 		or eax,eax
 		jz dict_init_80
-		cmp [dict_size],eax
+		cmp [dict.size],eax
 		jb dict_init_90
 
-		mov ebx,[dict.lin]
+		mov ebx,[dict]
 
 		xchg eax,ecx
 dict_init_50:
 		xor eax,eax
 		es lodsw
-		cmp eax,[dict_size]
+		cmp eax,[dict.size]
 		cmc
 		jc dict_init_90
 		lea edi,[eax+eax*4]
@@ -2485,7 +2480,7 @@ dump_dict:
 
 		xor ecx,ecx
 dump_dict_20:
-		rm32_call get_dict_entry
+		call get_dict_entry
 		jc dump_dict_90
 		pf_arg_uint 0,ecx
 		pf_arg_uchar 1,dl
@@ -2496,7 +2491,7 @@ dump_dict_20:
 		popa
 
 		inc ecx
-		cmp ecx,[dict_size]
+		cmp ecx,[dict.size]
 		jb dump_dict_20
 dump_dict_90:
 		ret
@@ -2505,62 +2500,53 @@ dump_dict_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Read a dictionary entry.
 ;
-;  cx		index
+;  ecx		index
 ;
 ; return:
 ;  eax		value
 ;  dl		type
-;  cx		index
+;  ecx		index
 ;  CF		error
 ;
 
-		bits 16
+		bits 32
 
 get_dict_entry:
-		les bx,[dict]
 		xor eax,eax
 		mov dl,al
-		cmp [dict_size],cx
+		cmp [dict.size],ecx
 		jb get_dict_entry_90
-		mov ax,5
-		mul cx
-		add bx,ax
-		mov dl,[es:bx]
-		mov eax,[es:bx+1]
+		lea eax,[ecx+4*ecx]		; dict entry size = 5
+		add eax,[dict]
+		mov dl,[es:eax]
+		mov eax,[es:eax+1]
 get_dict_entry_90:
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Write a dictionary entry.
 ;
-;  cx		index
+;  ecx		index
 ;  eax		value
 ;  dl		type
 ;
 ; return:
-;  cx		index
+;  ecx		index
 ;  CF		error
 ;
 
-		bits 16
+		bits 32
 
 set_dict_entry:
-		les bx,[dict]
-		cmp [dict_size],cx
+		cmp [dict.size],ecx
 		jb set_dict_entry_90
-		push eax
-		push dx
-		mov ax,5
-		mul cx
-		add bx,ax
-		pop dx
-		mov [es:bx],dl
-		pop dword [es:bx+1]
+		lea ebx,[ecx+4*ecx]
+		add ebx,[dict]
+		mov [es:ebx],dl
+		mov [es:ebx+1],eax
 set_dict_entry_90:
 		ret
 
@@ -2918,7 +2904,7 @@ _dump_malloc_40:
 		test ebp,01fh
 		jnz _dump_malloc_60
 		pushad
-		rm32_call get_key
+		call get_key
 		xor edx,edx
 		call con_xy
 		popad
@@ -4223,37 +4209,32 @@ ps_status_info_80:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Read a key (blocking).
 ;
 ; return:
 ;  eax		key
 ;
 
-		bits 16
+		bits 32
 
 get_key:
 		mov ah,10h
 		int 16h
 		and eax,0ffffh
-		push es
-		push word 0
-		pop es
 		mov ecx,[es:417h-2]
 		xor cx,cx
 		add eax,ecx
-		pop es
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Read a key, return 0 if timed out
 ;
 ; return:
 ;  eax		key (or 0)
+;
 
-		bits 16
+		bits 32
 
 get_key_to:
 		call get_time
@@ -4264,13 +4245,9 @@ get_key_to_20:
 		jnz get_key_to_60
 		cmp byte [idle.run],0
 		jz get_key_to_25
-		pm32_call idle
+		call idle
 get_key_to_25:
-		push es
-		push byte 0
-		pop es
 		mov ax,[es:417h]
-		pop es
 		cmp ax,[kbd_status]
 		mov [kbd_status],ax
 		jz get_key_to_30
@@ -4303,9 +4280,9 @@ get_key_to_30:
 
 get_key_to_60:
 		pushf
-		cmp dword [input_timeout],byte 0
+		cmp dword [input_timeout],0
 		jz get_key_to_70
-		and dword [input_timeout],byte 0
+		and dword [input_timeout],0
 		call timeout
 get_key_to_70:
 		popf
@@ -4318,13 +4295,14 @@ get_key_to_80:
 		call get_key
 get_key_to_90:
 		mov byte [idle.invalid],1
-
 		ret
 
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Clear keyboard input buffer.
 ;
 
-		bits 16
+		bits 32
 
 clear_kbd_queue:
 		mov ah,11h
@@ -4338,24 +4316,28 @@ clear_kbd_queue_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Get system time.
+;
+; return:
+;  eax		clock ticks since midnight (18.2/s)
 ;
 
-		bits 16
+		bits 32
 
 get_time:
-		push cx
-		push dx
-		xor ax,ax
+		push ecx
+		push edx
+		xor eax,eax
 		int 1ah
 		push cx
 		push dx
 		pop eax
-		pop dx
-		pop cx
+		pop edx
+		pop ecx
 		ret
 
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Convert 8 bit bcd to binary.
 ;
 ;  al		bcd
@@ -4364,31 +4346,36 @@ get_time:
 ;  ax		binary
 ;
 
-		bits 16
+		bits 32
 
 bcd2bin:
-		push dx
+		push edx
 		mov dl,al
 		shr al,4
 		and dl,0fh
 		mov ah,10
 		mul ah
 		add al,dl
-		pop dx
+		pop edx
 		ret
 
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Get date.
+;
+; return:
+;  eax		date (year:16, month:8, day:8)
 ;
 
-		bits 16
+		bits 32
 
 get_date:
 		clc
 		mov ah,4
 		int 1ah
 		jnc get_date_10
-		xor dx,dx
-		xor cx,cx
+		xor edx,edx
+		xor ecx,ecx
 get_date_10:
 		mov al,ch
 		call bcd2bin
@@ -4481,18 +4468,19 @@ idle_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Execute bytecode.
 ;
-; Execute ps code.
-;
-;  eax		start address, relative to 
+;  eax		start address, relative to [pscode_start]
 ;
 ; return:
 ;  CF		error
 ;
 
-		bits 16
+		bits 32
 
 run_pscode:
+		pm_leave 32
+
 		mov [pscode_instr],eax
 		mov [pscode_next_instr],eax
 		mov dword [pscode_next_break],-1
@@ -4597,8 +4585,8 @@ run_pscode_455:
 		jnz run_pscode_46
 
 		; look it up in the dictionary, then continue
-		xchg ax,cx
-		call get_dict_entry
+		mov ecx,eax
+		pm32_call get_dict_entry
 		mov bp,pserr_invalid_dict
 		jc run_pscode_90
 
@@ -4619,7 +4607,7 @@ run_pscode_47:
 		jz run_pscode_48
 run_pscode_475:
 		mov byte [single_step],1
-		call get_key
+		pm32_call get_key
 		cmp ah,1		; ESC
 		jnz run_pscode_477
 		mov byte [single_step],0
@@ -4919,6 +4907,8 @@ run_pscode_80:
 		stc
 run_pscode_90:
 		mov [pscode_error],bp
+
+		pm_enter 32
 		ret
 
 
@@ -6103,19 +6093,23 @@ prim_shr_90:
 ;   /neg { -1 mul } def	% define 'neg' function
 ;
 prim_def:
+		pm_enter 32
+
 		mov dx,t_none + (t_dict_idx << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_def_90
 		cmp dl,t_sec
 		mov bp,pserr_wrong_arg_types
 		stc
 		jz prim_def_90
-		; note: cx is index
+		; note: ecx is index
 		call set_dict_entry
 		mov bp,pserr_invalid_dict
 		jc prim_def_90
-		sub word [pstack_ptr],byte 2
+		sub dword [pstack_ptr],2
 prim_def_90:
+
+		pm_leave 32
 		ret
 
 
@@ -10108,6 +10102,8 @@ prim_currenttitle:
 prim_usleep:
 		call pr_setint
 
+		pm_enter 32
+
 		mov ecx,54944/2
 		add eax,ecx
 		add ecx,ecx
@@ -10127,6 +10123,8 @@ prim_usleep_20:
 		cmp eax,ecx
 		jbe prim_usleep_20
 prim_usleep_90:
+
+		pm_leave 32
 		ret
 
 
@@ -10139,8 +10137,12 @@ prim_usleep_90:
 ; Turns off any automatic booting.
 ;
 prim_notimeout:
+		pm_enter 32
+
 		mov byte [input_notimeout],1
 		clc
+
+		pm_leave 32
 		ret
 
 
@@ -10153,7 +10155,11 @@ prim_notimeout:
 ; int1: time in seconds since midnight.
 ;
 prim_time:
+		pm_enter 32
+
 		call get_time
+
+		pm_leave 32
 		jmp pr_getint
 
 
@@ -10166,7 +10172,11 @@ prim_time:
 ; int1: date (bit 0-7: day, bit 8-15: month, bit 16-31: year)
 ;
 prim_date:
+		pm_enter 32
+
 		call get_date
+
+		pm_leave 32
 		jmp pr_getint
 
 
