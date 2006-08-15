@@ -348,7 +348,7 @@ num_buf_end		db 0
 
 ; temp data for printf
 tmp_write_data		times 10h dd 0
-tmp_write_num		dw 0
+tmp_write_num		dd 0
 tmp_write_sig		db 0
 tmp_write_cnt		db 0
 tmp_write_pad		db 0
@@ -576,41 +576,6 @@ sizeof_fb_entry		equ 8
 		pop %3
 %endmacro
 
-%macro		debug_print 2
-		push %1
-		pop dword [tmp_write_data]
-		push es
-		push fs
-		pushad
-		mov si,%%msg
-		call printf
-		popad
-		pop fs
-		pop es
-		jmp %%cont
-%%msg		db %2, ': %x', 10, 0
-%%cont:
-%endmacro
-
-
-%macro		debug_printw 2
-		push %1
-		pop dword [tmp_write_data]
-		push es
-		push fs
-		pushad
-		mov si,%%msg
-		call printf
-		call get_key
-		popad
-		pop fs
-		pop es
-		jmp %%cont
-%%msg		db %2, ': %x', 10, 0
-%%cont:
-%endmacro
-
-
 %macro		switch_to_bits 1
 		%ifidn %1,16
 %%j_16_1:
@@ -813,8 +778,8 @@ gfx_init_40:
 		pm_enter 32
 
 %if debug
-		mov si,hello
-		rm32_call printf
+		mov esi,hello
+		call printf
 %endif
 
 		; get initial keyboard state
@@ -827,8 +792,8 @@ gfx_init_40:
 		mov eax,[mem_max]
 		pf_arg_uint 1,eax
 
-		mov si,dmsg_01
-		rm32_call printf
+		mov esi,dmsg_01
+		call printf
 
 		xor ebx,ebx
 
@@ -840,8 +805,8 @@ gfx_init_40:
 		pf_arg_uint 2,eax
 
 		push ebx
-		mov si,dmsg_02
-		rm32_call printf
+		mov esi,dmsg_02
+		call printf
 		pop ebx
 
 		inc ebx
@@ -2505,28 +2470,34 @@ dict_init_80:
 dict_init_90:
 		ret
 
-%if debug
 
-		bits 16
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Dump dictionary to console.
+;
+; Currently unused.
+;
+%if 0
+
+		bits 32
 
 dump_dict:
-		mov si,dmsg_09
+		mov esi,dmsg_09
 		call printf
 
-		xor cx,cx
+		xor ecx,ecx
 dump_dict_20:
-		call get_dict_entry
+		rm32_call get_dict_entry
 		jc dump_dict_90
-		pf_arg_ushort 0,cx
+		pf_arg_uint 0,ecx
 		pf_arg_uchar 1,dl
 		pf_arg_uint 2,eax
-		mov si,dmsg_10
+		mov esi,dmsg_10
 		pusha
 		call printf
 		popa
 
-		inc cx
-		cmp cx,[dict_size]
+		inc ecx
+		cmp ecx,[dict_size]
 		jb dump_dict_20
 dump_dict_90:
 		ret
@@ -2939,9 +2910,9 @@ _dump_malloc_40:
 		pf_arg_uchar 3,al
 		mov eax,[es:esi + mhead.ip]
 		pf_arg_uint 4,eax
-		mov si,dmsg_03
+		mov esi,dmsg_03
 
-		rm32_call printf
+		call printf
 		popad
 
 		inc ebp
@@ -2954,7 +2925,7 @@ _dump_malloc_40:
 		popad
 _dump_malloc_60:		
 
-		mov si,dmsg_04
+		mov esi,dmsg_04
 		cmp ecx,mhead.size
 		jbe _dump_malloc_70
 
@@ -2964,7 +2935,7 @@ _dump_malloc_60:
 		jb _dump_malloc_30
 
 		mov ecx,[malloc.end]
-		mov si,dmsg_04a
+		mov esi,dmsg_04a
 
 _dump_malloc_70:
 		pf_arg_uint 0,ebx
@@ -2972,7 +2943,7 @@ _dump_malloc_70:
 _dump_malloc_80:
 
 		push ebp
-		rm32_call printf
+		call printf
 		pop ebp
 _dump_malloc_90:
 		ret
@@ -3677,33 +3648,33 @@ so2lin:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Write text to console.
 ;
-; si		text (ACSIIZ)
+;  esi		format string
+;  [pf_gfx]	use ds:esi (0) or es:esi (1) 
 ;
 
-		bits 16
+		bits 32
 
 printf:
 		mov byte [tmp_write_cnt],0
 printf_10:
 		call pf_next_char
-		or al,al
+		or eax,eax
 		jz printf_90
 		cmp al,'%'
 		jnz printf_70
 		mov byte [tmp_write_pad],' '
 		call pf_next_char
-		dec si
+		dec esi
 		cmp al,'0'
 		jnz printf_20
 		mov [tmp_write_pad],al
 printf_20:
 		call get_number
-		mov [tmp_write_num],cx
+		mov [tmp_write_num],ecx
 		call pf_next_char
-		or al,al
+		or eax,eax
 		jz printf_90
 		cmp al,'%'
 		jz printf_70
@@ -3716,25 +3687,19 @@ printf_23:
 		cmp al,'s'
 		jnz printf_30
 printf_24:
-		push si
+		push esi
 
 		call pf_next_arg
-		cmp byte [pf_gfx],0
-		jz printf_25
-		push es
-		lin2segofs eax,es,si
+		mov esi,eax
 		call write_str
-		pop es
-		jmp printf_27
-printf_25:
-		xchg ax,si
-		call write_str
-printf_27:
-		sub cx,[tmp_write_num]
-		neg cx
+
+		sub ecx,[tmp_write_num]
+		neg ecx
 		mov al,' '
 		call write_chars
-		pop si
+
+		pop esi
+
 		mov byte [pf_gfx_raw_char],0
 		jmp printf_10
 
@@ -3744,7 +3709,8 @@ printf_30:
 
 		mov dx,10
 printf_31:
-		push si
+		push esi
+
 		call pf_next_arg
 		or dh,dh
 		jz printf_34
@@ -3761,16 +3727,12 @@ printf_34:
 		call number
 		cmp byte [pf_gfx],0
 		jz printf_345
-		push es
-		push ds
-		pop es
-		call write_str
-		pop es
-		jmp printf_347
+		add esi,[prog.base]
 printf_345:
 		call write_str
 printf_347:
-		pop si
+		pop esi
+
 		jmp printf_10
 
 printf_35:
@@ -3804,10 +3766,10 @@ printf_40:
 		cmp al,'c'
 		jnz printf_45
 
-		push si
+		push esi
 		call pf_next_arg
 		call write_char
-		pop si
+		pop esi
 		jmp printf_10
 printf_45:
 
@@ -3822,12 +3784,17 @@ printf_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; get next char for printf
+; Get next char for printf.
 ;
-; either from ds:si or es:si
+; esi		string
+;  [pf_gfx]	use ds:esi (0) or es:esi (1) 
+;
+; return:
+;  eax		char
+;  esi		points to next char
 ;
 
-		bits 16
+		bits 32
 
 pf_next_char:
 		xor eax,eax
@@ -3838,8 +3805,11 @@ pf_next_char_50:
 		lodsb
 		ret
 
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; return next printf arg
+; Get next printf arg.
+;
+;  [pf_gfx]	get arg from [tmp_write_data] (0) or pstack (1)
 ;
 ; return:
 ;  eax		arg
@@ -3847,99 +3817,99 @@ pf_next_char_50:
 ; changes no regs
 ;
 
-		bits 16
+		bits 32
 
 pf_next_arg:
 		cmp byte [pf_gfx],0
 		jz pf_next_arg_50
-		push es
-		pushad
-		xor cx,cx
-		call get_pstack_tos
+		pusha
+		xor ecx,ecx
+		call pm_get_pstack_tos
 		mov [tmp_write_data],eax
 		jnc pf_next_arg_20
-		and dword [tmp_write_data],byte 0
-		cmp word [pf_gfx_err],byte 0
+		and dword [tmp_write_data],0
+		cmp word [pf_gfx_err],0
 		jnz pf_next_arg_20
 		mov word [pf_gfx_err],pserr_pstack_underflow
 		jmp pf_next_arg_30
 pf_next_arg_20:
-		dec word [pstack_ptr]
+		dec dword [pstack_ptr]
 pf_next_arg_30:
-		popad
-		pop es
+		popa
 		mov eax,[tmp_write_data]
 		jmp pf_next_arg_90
 pf_next_arg_50:
-		push si
-		mov al,[tmp_write_cnt]
-		cbw
+		movzx eax,byte [tmp_write_cnt]
 		inc byte [tmp_write_cnt]
-		shl ax,2
-		mov si,ax
-		mov eax,[si+tmp_write_data]
-		pop si
+		mov eax,[tmp_write_data+4*eax]
 pf_next_arg_90:
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Write string.
 ;
-;  si		text
+;  esi		text
+;  [pf_gfx]	use ds:esi (0) or es:esi (1) 
 ;
 ; return:
-;  cx		length
+;  ecx		length
 ;
 
-		bits 16
+		bits 32
 
 write_str:
-		xor cx,cx
+		xor ecx,ecx
 write_str_10:
 		call pf_next_char
 		cmp byte [pf_gfx],0
 		jz write_str_40
-		call rm_is_eot
+		call is_eot
 		jmp write_str_50
 write_str_40:
-		or al,al
+		or eax,eax
 write_str_50:
 		jz write_str_90
 		call write_char
-		inc cx
+		inc ecx
 		jmp write_str_10
 write_str_90:
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Write char multiple times.
 ;
-; al		char
-; cx		count (must be > 0)
+;  al		char
+;  ecx		count (does nothing if count <= 0)
+;  [pf_gfx]	write to console (0) or [pf_gfx_buf] (1)
 ;
 
-		bits 16
+		bits 32
 
 write_chars:
-		cmp cx,0
+		cmp ecx,0
 		jle write_chars_90
 		call write_char
-		dec cx
+		dec ecx
 		jmp write_chars
 write_chars_90:
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Write single char.
 ;
-; al		char
+;  al		char
+;  [pf_gfx]	write to console (0) or [pf_gfx_buf] (1)
+;
+; Changes no regs.
 ;
 
-		bits 16
+		bits 32
 
 write_char:
-		push es
-		pushad
+		pusha
 		cmp byte [pf_gfx],0
 		jz write_char_50
 		mov ebx,[pf_gfx_cnt]
@@ -3949,38 +3919,34 @@ write_char:
 		mov [pf_gfx_cnt],ebx
 		add ebx,[pf_gfx_buf]
 		dec ebx
-		lin2segofs ebx,es,di
 		mov ah,0
-		mov [es:di],ax
+		mov [es:ebx],ax
 		jmp write_char_90
 write_char_50:
 		cmp byte [pf_gfx_raw_char],0
 		jnz write_char_60
 		cmp al,0ah
 		jnz write_char_60
-		push ax
+		push eax
 		mov al,0dh
 		call write_cons_char
-		pop ax
+		pop eax
 write_char_60:
 		call write_cons_char
 write_char_90:
-		popad
-		pop es
+		popa
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Write char on text console.
 ;
-; al		char
+;  al		char
 ;
 
-		bits 16
+		bits 32
 
 write_cons_char:
-		push gs
-		push fs
-
 		; vesa mode?
 		cmp byte [gfx_mode+1],0
 		jnz write_cons_char_20
@@ -4020,31 +3986,28 @@ write_cons_char_40:
 		ja write_cons_char_50
 		mov bl,[textmode_color]
 write_cons_char_50:
-		pm32_call con_char_xy
+		call con_char_xy
 write_cons_char_90:
-
-		pop fs
-		pop gs
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Convert string to number.
 ;
-;  si		string
+;  esi		string
+;  [pf_gfx]	use ds:esi (0) or es:esi (1) 
 ;
 ; return:
-;  cx		number
-;  si		points past number
+;  ecx		number
+;  esi		points past number
 ;  CF		not a number
 ;
 
-		bits 16
+		bits 32
 
 get_number:
 
-		xor cx,cx
+		xor ecx,ecx
 		mov ah,1
 get_number_10:
 		call pf_next_char
@@ -4054,18 +4017,17 @@ get_number_10:
 		jb get_number_90
 		cmp al,9
 		ja get_number_90
-		cbw
-		imul cx,cx,10
-		add cx,ax
+		movzx eax,al
+		imul ecx,ecx,10
+		add ecx,eax
 		jmp get_number_10
 get_number_90:
-		dec si
+		dec esi
 		shr ah,1
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Convert a number to string.
 ;
 ;  eax		number
@@ -4074,26 +4036,26 @@ get_number_90:
 ;  dl		base
 ;
 ; return:
-;  si		string
+;  ds:esi	string
+;
+; Note: esi is relative to [prog.base], not 0!
 ;
 
-		bits 16
+		bits 32
 
 number:
-		push es
-
-		push ds
-		pop es
-		mov di,num_buf
-		push ax
-		push cx
+		mov edi,num_buf
+		add edi,[prog.base]
+		push eax
+		push ecx
 		mov al,ch
-		mov cx,num_buf_end - num_buf
+		mov ecx,num_buf_end - num_buf
 		rep stosb
-		pop cx
-		pop ax
-		mov ch,0
+		pop ecx
+		pop eax
+		movzx ecx,cl
 		movzx ebx,dl
+		sub edi,[prog.base]
 number_10:
 		xor edx,edx
 		div ebx
@@ -4102,22 +4064,21 @@ number_10:
 		add dl,27h
 number_20:
 		add dl,'0'
-		dec di
-		mov [di],dl
+		dec edi
+		mov [edi],dl
 		or eax,eax
 		jz number_30
-		cmp di,num_buf
+		cmp edi,num_buf
 		ja number_10
 number_30:
-		mov si,di
-		or cx,cx
+		mov esi,edi
+		or ecx,ecx
 		jz number_90
-		cmp cl,num_buf_end - num_buf
+		cmp ecx,num_buf_end - num_buf
 		jae number_90
-		mov si,num_buf_end
-		sub si,cx
+		mov esi,num_buf_end
+		sub esi,ecx
 number_90:
-		pop es
 		ret
 
 
@@ -4129,8 +4090,8 @@ ps_status_info:
 		xor dx,dx
 		pm32_call con_xy
 
-		mov si,msg_13
-		call printf
+		mov esi,msg_13
+		pm32_call printf
 
 		mov cx,7
 ps_status_info_10:
@@ -4141,12 +4102,12 @@ ps_status_info_10:
 		pf_arg_ushort 0,cx
 		pf_arg_uchar 2,dl
 		pf_arg_uint 1,eax
-		mov si,msg_11
+		mov esi,msg_11
 		jmp ps_status_info_30
 ps_status_info_20:
-		mov si,msg_12
+		mov esi,msg_12
 ps_status_info_30:
-		call printf
+		pm32_call printf
 
 		pop cx
 		push cx
@@ -4156,22 +4117,22 @@ ps_status_info_30:
 		pf_arg_ushort 0,cx
 		pf_arg_uchar 2,dl
 		pf_arg_uint 1,eax
-		mov si,msg_11
+		mov esi,msg_11
 		jmp ps_status_info_50
 ps_status_info_40:
-		mov si,msg_12
+		mov esi,msg_12
 ps_status_info_50:
-		call printf
+		pm32_call printf
 
-		mov si,msg_16
-		call printf
+		mov esi,msg_16
+		pm32_call printf
 
 		pop cx
 		dec cx
 		jge ps_status_info_10
 
-		mov si,msg_14
-		call printf
+		mov esi,msg_14
+		pm32_call printf
 
 		mov eax,[pscode_error_arg_0]
 		pf_arg_uint 1,eax
@@ -4182,12 +4143,12 @@ ps_status_info_50:
 		mov si,msg_17
 		cmp ax,100h
 		jb ps_status_info_60
-		mov si,msg_18
+		mov esi,msg_18
 		cmp ax,200h
 		jb ps_status_info_60
-		mov si,msg_19
+		mov esi,msg_19
 ps_status_info_60:
-		call printf
+		pm32_call printf
 
 		mov eax,[pscode_instr]
 		pf_arg_uint 0,eax
@@ -4200,12 +4161,12 @@ ps_status_info_60:
 		mov al,[pscode_type]
 		pf_arg_uchar 2,al
 
-		mov si,msg_10
+		mov esi,msg_10
 		cmp al,t_sec
 		jnz ps_status_info_70
-		mov si,msg_20
+		mov esi,msg_20
 ps_status_info_70:
-		call printf
+		pm32_call printf
 
 		xor cx,cx
 		call get_pstack_tos
@@ -4256,14 +4217,14 @@ ps_status_info_75:
 		pm_leave 32
 
 ps_status_info_79:
-		mov si,num_buf
+		mov esi,num_buf
 		pf_arg_uint 0,esi
-		mov si,msg_21
-		call printf
+		mov esi,msg_21
+		pm32_call printf
 
 ps_status_info_80:
-		mov si,msg_15
-		call printf
+		mov esi,msg_15
+		pm32_call printf
 
 		ret
 
@@ -8339,44 +8300,44 @@ prim_fillrect_90:
 ; buf show				% print "3 foo bar"
 ; 
 prim_snprintf:
+		pm_enter 32
+
 		mov bp,pserr_pstack_underflow
-		cmp  word [pstack_ptr],byte 3
+		cmp dword [pstack_ptr],3
 		jc prim_snprintf_90
 		mov bp,pserr_wrong_arg_types
-		mov cx,2
-		call get_pstack_tos
+		mov ecx,2
+		call pm_get_pstack_tos
 		cmp dl,t_string
 		stc
 		jnz prim_snprintf_90
 		push eax
 		mov dx,t_string + (t_int << 8)
-		call get_2args
-		pop ebx
+		call pm_get_2args
+		pop esi
 		jc prim_snprintf_90
 
-		sub word [pstack_ptr],byte 3
+		sub dword [pstack_ptr],3
 
 		mov [pf_gfx_buf],eax
 		mov [pf_gfx_max],ecx
-		and dword [pf_gfx_cnt],byte 0
-		and word [pf_gfx_err],byte 0
+		and dword [pf_gfx_cnt],0
+		and word [pf_gfx_err],0
 
 		or ecx,ecx
 		jz prim_snprintf_40
 		; clear buffer in case we have to print _nothing_
-		lin2segofs eax,es,di
-		mov byte [es:di],0
+		mov byte [es:eax],0
 prim_snprintf_40:
-
-		lin2segofs ebx,es,si
-
 		mov byte [pf_gfx],1
 		call printf
 		mov byte [pf_gfx],0
 
 		mov bp,[pf_gfx_err]
-		cmp bp,byte 0
+		cmp bp,0
 prim_snprintf_90:
+
+		pm_leave 32
 		ret
 
 
@@ -12105,25 +12066,6 @@ is_space:
 		jz is_space_90
 		cmp eax,9
 is_space_90:
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; Test for end of text.
-;
-; eax		char
-;
-; return:
-;  ZF		0 = no, 1 = yes
-;
-
-		bits 16
-
-rm_is_eot:
-		or eax,eax
-		jz rm_is_eot_90
-		cmp eax,[char_eot]
-rm_is_eot_90:
 		ret
 
 
