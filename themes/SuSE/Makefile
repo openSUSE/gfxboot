@@ -20,7 +20,7 @@ PIC_COMMON   = timer_a.jpg
 PIC_INSTALL  = back.jpg welcome.jpg text*.pcx
 PIC_BOOT     = back-low.jpg
 
-FILES_INST   = init languages $(TRANSLATIONS) 16x16.fnt kroete.dat \
+FILES_INST   = init languages $(TRANSLATIONS) 16x16.fnt kroete.dat hapysuse.mod \
 	       $(PIC_COMMON) $(PIC_INSTALL) $(HELPINST_ALL)
 
 FILES_BOOT   = init languages $(TRANSLATIONS) 16x16.fnt \
@@ -28,7 +28,7 @@ FILES_BOOT   = init languages $(TRANSLATIONS) 16x16.fnt \
 
 FILES_BOOT_EN = init languages en.tr 16x16.fnt $(PIC_COMMON) back.jpg en.hlp
 
-INST_EXT     = 16x16.fnt $(PIC_COMMON) $(PIC_INSTALL) kroete.dat *.hlp *.tr
+INST_EXT     = 16x16.fnt $(PIC_COMMON) $(PIC_INSTALL) kroete.dat hapysuse.mod *.hlp *.tr
 
 ifdef DEFAULT_LANG
 FILES_INST += lang
