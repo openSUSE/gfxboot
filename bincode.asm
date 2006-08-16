@@ -4662,11 +4662,17 @@ run_pscode_52:
 		cmp eax,prim_functions
 		mov bp,pserr_invalid_prim
 		jae run_pscode_80
-		movzx eax,word [jt_p_none+2*eax]
+		mov cx,[jt_p_none+4*eax+2]
+		movzx eax,word [jt_p_none+4*eax]
 		or eax,eax		; implemented?
 		jz run_pscode_80
-
+		or cx,cx
+		jz run_pscode_525
+		call eax
+		jmp run_pscode_527
+run_pscode_525:
 		rm32_call ax
+run_pscode_527:
 		jc run_pscode_90
 		jmp run_pscode_10
 
@@ -5162,17 +5168,20 @@ p_get_90:
 ; example 
 ;   [ 1 2 3 ]	% array with 3 elements
 ;
+
+		bits 32
+
 prim_astart:
-		mov ax,[pstack_ptr]
-		inc ax
-		cmp [pstack_size],ax
+		mov eax,[pstack_ptr]
+		inc eax
+		cmp [pstack_size],eax
 		mov bp,pserr_pstack_overflow
 		jb prim_astart_90
-		mov [pstack_ptr],ax
+		mov [pstack_ptr],eax
 		mov dl,t_prim
 		mov eax,(jt_p_astart - jt_p_none) / 2	; we need just some mark
-		xor cx,cx
-		call set_pstack_tos
+		xor ecx,ecx
+		call pm_set_pstack_tos
 prim_astart_90:
 		ret
 
@@ -5194,6 +5203,9 @@ prim_astart_90:
 ;   /foo [ "some" "text" ] def	% array with 2 elements
 ;   foo free			% free memory
 ;
+
+		bits 16
+
 prim_aend:
 		xor cx,cx
 prim_aend_10:
@@ -5279,9 +5291,10 @@ prim_aend_90:
 ;
 ;   [ 10 20 30 ] 2 get		% 30
 ;
-prim_get:
-		pm_enter 32
 
+		bits 32
+
+prim_get:
 		mov dx,t_int + (t_array << 8)
 		call pm_get_2args
 		jnc prim_get_10
@@ -5298,8 +5311,6 @@ prim_get_10:
 		xor ecx,ecx
 		call pm_set_pstack_tos
 prim_get_90:
-
-		pm_leave 32
 		ret
 
 
@@ -5331,6 +5342,9 @@ prim_get_90:
 ;   But don't do this:
 ;   "abc" 1 'X' put		% modifies string constant "abc" to "aXc"!
 ;
+
+		bits 16
+
 prim_put:
 		mov bp,pserr_pstack_underflow
 		cmp word [pstack_ptr],byte 3
@@ -5408,9 +5422,10 @@ prim_put_90:
 ;   foo length		% 10
 ;   foo 3 add length	% 7
 ;
-prim_length:
-		pm_enter 32
 
+		bits 32
+
+prim_length:
 		mov dl,t_none
 		call pm_get_1arg
 		jc prim_length_90
@@ -5420,8 +5435,6 @@ prim_length:
 		mov dl,t_int
 		call pm_set_pstack_tos
 prim_length_90:
-
-		pm_leave 32
 		ret
 
 
@@ -5442,6 +5455,9 @@ prim_length_90:
 ;   foo 4 123 put	% foo[4] = 123
 ;   foo free		% free foo
 ;
+
+		bits 16
+
 prim_array:
 		mov dl,t_int
 		call get_1arg
@@ -6091,9 +6107,10 @@ prim_shr_90:
 ;
 ;   /neg { -1 mul } def	% define 'neg' function
 ;
-prim_def:
-		pm_enter 32
 
+		bits 32
+
+prim_def:
 		mov dx,t_none + (t_dict_idx << 8)
 		call pm_get_2args
 		jc prim_def_90
@@ -6107,8 +6124,6 @@ prim_def:
 		jc prim_def_90
 		sub dword [pstack_ptr],2
 prim_def_90:
-
-		pm_leave 32
 		ret
 
 
@@ -6132,6 +6147,9 @@ prim_def_90:
 ;
 ;   "" { "is always true" show } if	% strings are always 'true'
 ;
+
+		bits 16
+
 prim_if:
 		mov dx,t_code + (t_bool << 8)
 		call get_2args
@@ -6904,9 +6922,10 @@ prim_for_90:
 ; example
 ;  [ 1 2 3 ] { } forall		% leave 1 2 3 on the stack
 ;
-prim_forall:
-		pm_enter 32
 
+		bits 32
+
+prim_forall:
 		mov dx,t_code + (t_array << 8)
 		call pm_get_2args
 		jnc prim_forall_30
@@ -6995,15 +7014,8 @@ prim_forall_30:
 		mov bp,pserr_invalid_range
 		jc prim_forall_90
 
-		pm_leave 32
-
-		jmp pr_getobj
-
-		bits 32
-
+		jmp pm_pr_getobj
 prim_forall_90:
-
-		pm_leave 32
 		ret
 
 
@@ -7018,14 +7030,17 @@ prim_forall_90:
 ; example
 ;   "abc" gettype	% 4 (= string)
 ;
+
+		bits 32
+
 prim_gettype:
 		mov dl,t_none
-		call get_1arg
+		call pm_get_1arg
 		jc prim_gettype_90
 		movzx eax,dl
 		mov dl,t_int
-		xor cx,cx
-		call set_pstack_tos
+		xor ecx,ecx
+		call pm_set_pstack_tos
 prim_gettype_90:
 		ret
 
@@ -7043,16 +7058,19 @@ prim_gettype_90:
 ;   /string { 1 add malloc 4 settype } def	% 4 = string type
 ;   10 string					% new empty string of length 10
 ;
+
+		bits 32
+
 prim_settype:
 		mov dx,t_int + (t_none << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_settype_90
 		mov dl,al
 		and al,15
 		xchg eax,ecx
-		dec word [pstack_ptr]
-		xor cx,cx
-		call set_pstack_tos
+		dec dword [pstack_ptr]
+		xor ecx,ecx
+		call pm_set_pstack_tos
 prim_settype_90:
 		ret
 
@@ -7070,22 +7088,25 @@ prim_settype_90:
 ; blue setcolor
 ; 0 0 moveto screen.size fillrect	% draw blue screen
 ;
+
+		bits 32
+
 prim_screensize:
-		mov ax,[pstack_ptr]
-		inc ax
-		inc ax
-		cmp [pstack_size],ax
+		mov eax,[pstack_ptr]
+		inc eax
+		inc eax
+		cmp [pstack_size],eax
 		mov bp,pserr_pstack_overflow
 		jb prim_screensize_90
-		mov [pstack_ptr],ax
+		mov [pstack_ptr],eax
 		mov dl,t_int
 		movzx eax,word [screen_width]
-		mov cx,1
-		call set_pstack_tos
+		mov ecx,1
+		call pm_set_pstack_tos
 		mov dl,t_int
 		movzx eax,word [screen_height]
-		xor cx,cx
-		call set_pstack_tos
+		xor ecx,ecx
+		call pm_set_pstack_tos
 prim_screensize_90:
 		ret
 
@@ -7102,22 +7123,25 @@ prim_screensize_90:
 ; @screen.size. That area is available e.g. for hidden drawing. Some kind of
 ; scrolling is not implemented, however.
 ;
+
+		bits 32
+
 prim_vscreensize:
-		mov ax,[pstack_ptr]
-		inc ax
-		inc ax
-		cmp [pstack_size],ax
+		mov eax,[pstack_ptr]
+		inc eax
+		inc eax
+		cmp [pstack_size],eax
 		mov bp,pserr_pstack_overflow
-		jb prim_screensize_90
-		mov [pstack_ptr],ax
+		jb prim_vscreensize_90
+		mov [pstack_ptr],eax
 		mov dl,t_int
 		movzx eax,word [screen_width]
-		mov cx,1
-		call set_pstack_tos
+		mov ecx,1
+		call pm_set_pstack_tos
 		mov dl,t_int
 		movzx eax,word [screen_vheight]
-		xor cx,cx
-		call set_pstack_tos
+		xor ecx,ecx
+		call pm_set_pstack_tos
 prim_vscreensize_90:
 		ret
 
@@ -7130,30 +7154,33 @@ prim_vscreensize_90:
 ;
 ; int1, int2: width and height
 ;
+
+		bits 32
+
 prim_monitorsize:
-		mov ax,[pstack_ptr]
-		inc ax
-		inc ax
-		cmp [pstack_size],ax
+		mov eax,[pstack_ptr]
+		inc eax
+		inc eax
+		cmp [pstack_size],eax
 		mov bp,pserr_pstack_overflow
 		jb prim_monitorsize_90
-		mov [pstack_ptr],ax
+		mov [pstack_ptr],eax
 
 		cmp word [ddc_xtimings],0
 		jnz prim_monitorsize_50
 
-		call get_monitor_res
+		rm32_call get_monitor_res
 
 prim_monitorsize_50:
 
 		mov dl,t_int
 		movzx eax,word [ddc_xtimings]
-		mov cx,1
-		call set_pstack_tos
+		mov ecx,1
+		call pm_set_pstack_tos
 		mov dl,t_int
 		movzx eax,word [ddc_xtimings + 2]
-		xor cx,cx
-		call set_pstack_tos
+		xor ecx,ecx
+		call pm_set_pstack_tos
 prim_monitorsize_90:
 		ret
 
@@ -7172,22 +7199,25 @@ prim_monitorsize_90:
 ;  exch 4 -1 roll sub 2 div 3 1 roll exch sub 2 div	% center image
 ;  moveto 0 0 image.size image				% draw it
 ;
+
+		bits 32
+
 prim_imagesize:
-		mov ax,[pstack_ptr]
-		inc ax
-		inc ax
-		cmp [pstack_size],ax
+		mov eax,[pstack_ptr]
+		inc eax
+		inc eax
+		cmp [pstack_size],eax
 		mov bp,pserr_pstack_overflow
 		jb prim_imagesize_90
-		mov [pstack_ptr],ax
+		mov [pstack_ptr],eax
 		mov dl,t_int
 		movzx eax,word [image_width]
-		mov cx,1
-		call set_pstack_tos
+		mov ecx,1
+		call pm_set_pstack_tos
 		mov dl,t_int
 		movzx eax,word [image_height]
-		xor cx,cx
-		call set_pstack_tos
+		xor ecx,ecx
+		call pm_set_pstack_tos
 prim_imagesize_90:
 		ret
 
@@ -7205,13 +7235,16 @@ prim_imagesize_90:
 ; entries. If you want to define your own colors, use @image.colors to get
 ; the first free palette entry. For 16/32-bit modes, 0 is returned.
 ;
+
+		bits 32
+
 prim_imagecolors:
 		xor eax,eax
 		cmp byte [image_type],1
 		jnz prim_imagecolors_90
 		mov ax,[pals]
 prim_imagecolors_90:
-		jmp pr_getint
+		jmp pm_pr_getint
 
 
 ;; setcolor - set active drawing color
@@ -7227,16 +7260,15 @@ prim_imagecolors_90:
 ;  0xff00 setcolor	% or green...
 ;  0xff setcolor	% or blue
 ;
-prim_setcolor:
-		call pr_setint
 
-		pm_enter 32
+		bits 32
+
+prim_setcolor:
+		call pm_pr_setint
 		mov [gfx_color_rgb],eax
 		call encode_color
 		mov [gfx_color0],eax
 		call setcolor
-
-		pm_leave 32
 		ret
 
 
@@ -7251,15 +7283,13 @@ prim_setcolor:
 ; example
 ;   currentcolor not setcolor	% inverse color
 ;
-prim_currentcolor:
-		pm_enter 32
 
+		bits 32
+
+prim_currentcolor:
 		mov eax,[gfx_color0]
 		call decode_color
-
-		pm_leave 32
-		jmp pr_getint
-
+		jmp pm_pr_getint
 
 
 ;; settextmodecolor - set color to be used in text mode
@@ -7272,8 +7302,11 @@ prim_currentcolor:
 ;
 ; Note: You only need this in case you're running in text mode (practically never).
 ;
+
+		bits 32
+
 prim_settextmodecolor:
-		call pr_setint
+		call pm_pr_setint
 		mov [textmode_color],al
 		ret
 
@@ -7289,11 +7322,14 @@ prim_settextmodecolor:
 ; example
 ;   200 100 moveto "Hello" show		% print "Hello" at (200, 100)
 ;
+
+		bits 32
+
 prim_moveto:
 		mov dx,t_int + (t_int << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_moveto_90
-		sub word [pstack_ptr],byte 2
+		sub dword [pstack_ptr],2
 		mov [gfx_cur_x],cx
 		mov [gfx_cur_y],ax
 prim_moveto_90:
@@ -7313,11 +7349,14 @@ prim_moveto_90:
 ;   "Hello" show
 ;   30 0 rmoveto "world!"	% "Hello    world!" (approx.)
 ;
+
+		bits 32
+
 prim_rmoveto:
 		mov dx,t_int + (t_int << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_rmoveto_90
-		sub word [pstack_ptr],byte 2
+		sub dword [pstack_ptr],2
 		add [gfx_cur_x],cx
 		add [gfx_cur_y],ax
 		clc
@@ -7333,22 +7372,25 @@ prim_rmoveto_90:
 ;
 ; int1, int2: x, y (upper left: 0, 0)
 ;
+
+		bits 32
+
 prim_currentpoint:
-		mov ax,[pstack_ptr]
-		inc ax
-		inc ax
-		cmp [pstack_size],ax
+		mov eax,[pstack_ptr]
+		inc eax
+		inc eax
+		cmp [pstack_size],eax
 		mov bp,pserr_pstack_overflow
 		jb prim_currentpoint_90
-		mov [pstack_ptr],ax
+		mov [pstack_ptr],eax
 		mov dl,t_int
 		movzx eax,word [gfx_cur_x]
-		mov cx,1
-		call set_pstack_tos
+		mov ecx,1
+		call pm_set_pstack_tos
 		mov dl,t_int
 		movzx eax,word [gfx_cur_y]
-		xor cx,cx
-		call set_pstack_tos
+		xor ecx,ecx
+		call pm_set_pstack_tos
 prim_currentpoint_90:
 		ret
 
@@ -7364,9 +7406,10 @@ prim_currentpoint_90:
 ; example
 ;   0 0 moveto screen.size lineto	% draw diagonal
 ;
-prim_lineto:
-		pm_enter 32
 
+		bits 32
+
+prim_lineto:
 		mov dx,t_int + (t_int << 8)
 		call pm_get_2args
 		jc prim_lineto_90
@@ -7385,8 +7428,6 @@ prim_lineto:
 
 		sub dword [pstack_ptr],2
 prim_lineto_90:
-
-		pm_leave 32
 		ret
 
 
@@ -7403,21 +7444,21 @@ prim_lineto_90:
 ;   blue setcolor
 ;   0 0 moveto putpixel		% blue dot at upper left corner
 ;
-prim_putpixel:
-		pm_enter 32
 
+		bits 32
+
+prim_putpixel:
 		push fs
 		push gs
 
 		call goto_xy
 		call screen_segs
 		call [setpixel_t]
-		clc
 
 		pop gs
 		pop fs
 
-		pm_leave 32
+		clc
 		ret
 
 
@@ -7433,9 +7474,10 @@ prim_putpixel:
 ; example
 ;   getpixel not setcolor putpixel	% invert pixel color
 ;
-prim_getpixel:
-		pm_enter 32
 
+		bits 32
+
+prim_getpixel:
 		push fs
 		push gs
 
@@ -7447,8 +7489,7 @@ prim_getpixel:
 		pop gs
 		pop fs
 
-		pm_leave 32
-		jmp pr_getint
+		jmp pm_pr_getint
 
 
 ;; setfont - set font
@@ -7468,14 +7509,12 @@ prim_getpixel:
 ;  currentfont pwmode setfont		% now in password mode
 ;  "abc" show				% print "***"
 ;
+
+		bits 32
+
 prim_setfont:
-		call pr_setptr_or_none
-
-		pm_enter 32
-
+		call pm_pr_setptr_or_none
 		call font_init
-
-		pm_leave 32
 		ret
 
 
@@ -7496,9 +7535,12 @@ prim_setfont:
 
 ; FIXME: [font_properties] are lost
 ;
+
+		bits 32
+
 prim_currentfont:
 		mov eax,[font]
-		jmp pr_getptr_or_none
+		jmp pm_pr_getptr_or_none
 
 
 ;; fontheight - font height
@@ -7515,9 +7557,12 @@ prim_currentfont:
 ;   moveto 0 fontheight rmoveto
 ;   "world!"				% print "world!" below "Hello"
 ;
+
+		bits 32
+
 prim_fontheight:
 		movzx eax,word [font_height]
-		jmp pr_getint
+		jmp pm_pr_getint
 
 
 ;; setimage - set active image
@@ -7533,9 +7578,12 @@ prim_fontheight:
 ; example
 ;   "foo.jpg" findfile setimage		% load and use "foo.jpg"
 ;
+
+		bits 32
+
 prim_setimage:
-		call pr_setptr_or_none
-		pm32_call image_init
+		call pm_pr_setptr_or_none
+		call image_init
 		ret
 
 
@@ -7545,9 +7593,12 @@ prim_setimage:
 ;
 ; ( -- ptr1 )
 ;
+
+		bits 32
+
 prim_currentimage:
 		mov eax,[image]
-		jmp pr_getptr_or_none
+		jmp pm_pr_getptr_or_none
 
 
 ;; settransparency - set transparency
@@ -7558,6 +7609,9 @@ prim_currentimage:
 ;
 ; int1: transparency for @fillrect operations; valid values are 0 - 256.
 ;
+
+		bits 16
+
 prim_settransparency:
 		call pr_setint
 		mov [transp],eax
@@ -8002,9 +8056,10 @@ prim_settransparentcolor:
 ; example
 ;   0 0 moveto screen.size savescreen	% save entire screen
 ;
-prim_savescreen:
-		pm_enter 32
 
+		bits 32
+
+prim_savescreen:
 		mov dx,t_int + (t_int << 8)
 		call pm_get_2args
 		jc prim_savescreen_90
@@ -8025,8 +8080,6 @@ prim_savescreen_50:
 prim_savescreen_70:
 		call pm_set_pstack_tos
 prim_savescreen_90:
-
-		pm_leave 32
 		ret
 
 
@@ -8086,9 +8139,10 @@ alloc_fb_90:
 ;   300 200 moveto dup restorescreen	% and copy it to 300x200
 ;   free				% free memory
 ;
-prim_restorescreen:
-		pm_enter 32
 
+		bits 32
+
+prim_restorescreen:
 		mov dl,t_ptr
 		call pm_get_1arg
 		jnc prim_restorescreen_20
@@ -8110,8 +8164,6 @@ prim_restorescreen_80:
 		dec dword [pstack_ptr]
 		clc
 prim_restorescreen_90:
-
-		pm_leave 32
 		ret
 
 
@@ -8130,18 +8182,21 @@ prim_restorescreen_90:
 ;   /foo 256 malloc def	% allocate 256 bytes...
 ;   foo free		% and free it
 ;
+
+		bits 32
+
 prim_malloc:
 		mov dl,t_int
-		call get_1arg
+		call pm_get_1arg
 		jc prim_malloc_90
-		pm32_call calloc
+		call calloc
 		or eax,eax
 		stc
 		mov bp,pserr_no_memory
 		jz prim_malloc_90
-		xor cx,cx
+		xor ecx,ecx
 		mov dl,t_ptr
-		call set_pstack_tos
+		call pm_set_pstack_tos
 prim_malloc_90:
 		ret
 
@@ -8167,9 +8222,12 @@ prim_malloc_90:
 ;
 ; "Some Text" free	% free nothing
 ;
+
+		bits 32
+
 prim_free:
 		mov dl,t_string
-		call get_1arg
+		call pm_get_1arg
 		jnc prim_free_10
 		cmp dl,t_ptr
 		jz prim_free_10
@@ -8179,9 +8237,9 @@ prim_free:
 		stc
 		jnz prim_free_90
 prim_free_10:
-		pm32_call free
+		call free
 prim_free_50:
-		dec word [pstack_ptr]
+		dec dword [pstack_ptr]
 		clc
 prim_free_90:
 		ret
@@ -8205,6 +8263,9 @@ prim_free_90:
 ; example
 ;   0 memsize pop 1024 lt { "less than 1kB left" show } if
 ;
+
+		bits 16
+
 prim_memsize:
 		mov dl,t_int
 		call get_1arg
@@ -10429,6 +10490,74 @@ pr_setobj_20:
 		push word pr_setobj_30
 		jmp cx
 pr_setobj_30:
+		clc
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Helper function that covers common cases.
+
+; return eax as ptr on stack, returns undef if eax = 0
+
+		bits 32
+
+pm_pr_getptr_or_none:
+		mov dl,t_ptr
+		or eax,eax
+		jnz pm_pr_getobj
+		mov dl,t_none
+		jmp pm_pr_getobj
+
+; return eax as integer on stack
+pm_pr_getint:
+		mov dl,t_int
+
+; return eax as dl on stack
+pm_pr_getobj:
+		mov ecx,[pstack_ptr]
+		inc ecx
+		cmp [pstack_size],ecx
+		mov bp,pserr_pstack_overflow
+		jc pm_pr_getobj_90
+		mov [pstack_ptr],ecx
+		xor ecx,ecx
+		call pm_set_pstack_tos
+pm_pr_getobj_90:
+		ret
+
+
+; get ptr from stack as eax; if it is undef, don't return to function
+pm_pr_setptr_or_none:
+		mov dl,t_ptr
+
+; get obj from stack as eax; if it is undef, don't return to function
+pm_pr_setobj_or_none:
+		call pm_get_1arg
+		jnc pm_pr_setobj_20
+		cmp dl,t_none
+		stc
+		jnz pm_pr_setobj_10
+		dec dword [pstack_ptr]
+		clc
+		jmp pm_pr_setobj_10
+
+; get integer from stack as eax
+pm_pr_setint:
+		mov dl,t_int
+
+; get object with type dl from stack as eax
+pm_pr_setobj:
+		call pm_get_1arg
+		jnc pm_pr_setobj_20
+pm_pr_setobj_10:
+		pop eax			; don't return to function that called us
+		ret
+pm_pr_setobj_20:
+		dec dword [pstack_ptr]
+		pop ecx			; put link to clc on stack
+		push dword pm_pr_setobj_30
+		jmp ecx
+pm_pr_setobj_30:
 		clc
 		ret
 
