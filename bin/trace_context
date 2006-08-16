@@ -103,28 +103,14 @@ for $l (@line) {
 
 }
 
-printf "  32 bit: %d (of %d)\n", $ctx_cnt{32}, scalar(@line);
-
-exit $err if $err;
-
-open V, "vocabulary.inc";
-while(<V>) { push @voc, $_ }
-close V;
-
-exit 0 if ! @voc;
-
-for (@voc) {
-  if(/^jt_p_\S+\s*dw\s+(0|prim_[a-zA-Z0-9_]+)/) {
-    $ctx = $label{$1}{ctx} == 32 ? 1 : 0;
-    s/(\bdw\s+(0|prim_[a-zA-Z0-9_]+))(,\s+\d+)?/$1, $ctx/;
+for (sort keys %label) {
+  if(/^prim_/ && $label{$_}{ctx} != 32) {
+    printf "%s: wrong context (16)\n", $_;
+    $err = 1;
   }
 }
 
-open V, ">vocabulary.inc";
-for (@voc) { print V }
-close V;
+printf "  32 bit: %d (of %d)\n", $ctx_cnt{32}, scalar(@line);
 
-print "vocabulary.inc updated\n";
-
-exit 0;
+exit $err;
 

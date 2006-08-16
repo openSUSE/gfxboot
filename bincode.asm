@@ -4660,17 +4660,10 @@ run_pscode_52:
 		cmp eax,prim_functions
 		mov bp,pserr_invalid_prim
 		jae run_pscode_80
-		mov cx,[jt_p_none+4*eax+2]
-		movzx eax,word [jt_p_none+4*eax]
+		movzx eax,word [jt_p_none+2*eax]
 		or eax,eax		; implemented?
 		jz run_pscode_80
-		or cx,cx
-		jz run_pscode_525
 		call eax
-		jmp run_pscode_527
-run_pscode_525:
-		rm32_call ax
-run_pscode_527:
 		jc run_pscode_90
 		jmp run_pscode_10
 
@@ -4911,37 +4904,6 @@ run_pscode_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-;  dl		tos type
-; return:
-;  eax		tos
-;  dl		actual tos types (even if CF is set)
-;  CF		error
-;
-
-		bits 16
-
-get_1arg:
-		xor eax,eax
-		cmp word [pstack_ptr],byte 1
-		mov bp,pserr_pstack_underflow
-		jc get_1arg_90
-		push dx
-		xor cx,cx
-		call get_pstack_tos
-		pop bx
-		; ignore type check if t_none was requested
-		cmp bl,t_none
-		jz get_1arg_90
-		cmp bl,dl
-		jz get_1arg_90
-		mov bp,pserr_wrong_arg_types
-		stc
-get_1arg_90:
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; Get one argument from stack.
 ;
 ;  dl		tos type
@@ -4954,74 +4916,23 @@ get_1arg_90:
 
 		bits 32
 
-pm_get_1arg:
+get_1arg:
 		xor eax,eax
 		cmp dword [pstack_ptr],1
 		mov bp,pserr_pstack_underflow
-		jc pm_get_1arg_90
+		jc get_1arg_90
 		push edx
 		xor ecx,ecx
 		call pm_get_pstack_tos
 		pop ebx
 		; ignore type check if t_none was requested
 		cmp bl,t_none
-		jz pm_get_1arg_90
+		jz get_1arg_90
 		cmp bl,dl
-		jz pm_get_1arg_90
+		jz get_1arg_90
 		mov bp,pserr_wrong_arg_types
 		stc
-pm_get_1arg_90:
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-;  dl		tos type
-;  dh		tos + 1 type
-; return:
-;  eax		tos
-;  ecx		tos + 1
-;  dx		actual tos types (even if CF is set)
-;  CF		error
-;
-
-		bits 16
-
-get_2args:
-		xor eax,eax
-		xor ecx,ecx
-		mov bx,dx
-		xor dx,dx
-		cmp word [pstack_ptr],byte 2
-		mov bp,pserr_pstack_underflow
-		jc get_2args_90
-		push bx
-		inc cx
-		call get_pstack_tos
-		push dx
-		push eax
-		xor cx,cx
-		call get_pstack_tos
-		pop ecx
-		pop bx
-		mov dh,bl
-		pop bx
-
-		; ignore type check if t_none was requested
-		cmp bh,t_none
-		jnz get_2args_50
-		mov bh,dh
-get_2args_50:
-		cmp bl,t_none
-		jnz get_2args_60
-		mov bl,dl
-get_2args_60:
-		cmp bx,dx
-		jz get_2args_90
-		mov bp,pserr_wrong_arg_types
-get_2args_80:
-		stc
-get_2args_90:
+get_1arg_90:
 		ret
 
 
@@ -5039,14 +4950,14 @@ get_2args_90:
 
 		bits 32
 
-pm_get_2args:
+get_2args:
 		xor eax,eax
 		xor ecx,ecx
 		mov ebx,edx
 		xor edx,edx
 		cmp dword [pstack_ptr],2
 		mov bp,pserr_pstack_underflow
-		jc pm_get_2args_90
+		jc get_2args_90
 		push ebx
 		inc ecx
 		call pm_get_pstack_tos
@@ -5061,19 +4972,19 @@ pm_get_2args:
 
 		; ignore type check if t_none was requested
 		cmp bh,t_none
-		jnz pm_get_2args_50
+		jnz get_2args_50
 		mov bh,dh
-pm_get_2args_50:
+get_2args_50:
 		cmp bl,t_none
-		jnz pm_get_2args_60
+		jnz get_2args_60
 		mov bl,dl
-pm_get_2args_60:
+get_2args_60:
 		cmp bx,dx
-		jz pm_get_2args_90
+		jz get_2args_90
 		mov bp,pserr_wrong_arg_types
-pm_get_2args_80:
+get_2args_80:
 		stc
-pm_get_2args_90:
+get_2args_90:
 		ret
 
 
@@ -5177,7 +5088,7 @@ prim_astart:
 		jb prim_astart_90
 		mov [pstack_ptr],eax
 		mov dl,t_prim
-		mov eax,(jt_p_astart - jt_p_none) / 4	; we need just some mark
+		mov eax,(jt_p_astart - jt_p_none) / 2	; we need just some mark
 		xor ecx,ecx
 		call pm_set_pstack_tos
 prim_astart_90:
@@ -5215,7 +5126,7 @@ prim_aend_10:
 		inc ecx
 		cmp dl,t_prim
 		jnz prim_aend_10
-		cmp eax,(jt_p_astart - jt_p_none) / 4
+		cmp eax,(jt_p_astart - jt_p_none) / 2
 		jnz prim_aend_10
 
 		dec ecx
@@ -5290,7 +5201,7 @@ prim_aend_90:
 
 prim_get:
 		mov dx,t_int + (t_array << 8)
-		call pm_get_2args
+		call get_2args
 		jnc prim_get_10
 		cmp dx,t_int + (t_string << 8)
 		jz prim_get_10
@@ -5351,7 +5262,7 @@ prim_put:
 		push edx
 		push eax
 		mov dx,t_none + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		pop ebx
 		pop ebp
 		shl edx,16
@@ -5416,7 +5327,7 @@ prim_put_90:
 
 prim_length:
 		mov dl,t_none
-		call pm_get_1arg
+		call get_1arg
 		jc prim_length_90
 		call get_length
 		jc prim_length_90
@@ -5449,7 +5360,7 @@ prim_length_90:
 
 prim_array:
 		mov dl,t_int
-		call pm_get_1arg
+		call get_1arg
 		jc prim_array_90
 		cmp eax,10000h
 		cmc
@@ -5569,7 +5480,7 @@ prim_over_90:
 
 prim_index:
 		mov dl,t_int
-		call pm_get_1arg
+		call get_1arg
 		jc prim_index_90
 
 		mov edx,[pstack_ptr]
@@ -5646,7 +5557,7 @@ prim_exec_50:
 
 prim_add:
 		mov dx,t_int + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jnc prim_add_50
 		cmp dx,t_int + (t_string << 8)
 		jz prim_add_50
@@ -5692,7 +5603,7 @@ prim_add_90:
 
 prim_sub:
 		mov dx,t_int + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jnc prim_sub_50
 		cmp dx,t_int + (t_string << 8)
 		jz prim_sub_50
@@ -5732,7 +5643,7 @@ prim_sub_90:
 
 prim_mul:
 		mov dx,t_int + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_mul_90
 		imul ecx
 		dec dword [pstack_ptr]
@@ -5759,7 +5670,7 @@ prim_mul_90:
 
 prim_div:
 		mov dx,t_int + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_div_90
 		or eax,eax
 		stc
@@ -5792,7 +5703,7 @@ prim_div_90:
 
 prim_mod:
 		mov dx,t_int + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_mod_90
 		or eax,eax
 		stc
@@ -5826,7 +5737,7 @@ prim_mod_90:
 
 prim_neg:
 		mov dl,t_int
-		call pm_get_1arg
+		call get_1arg
 		jc prim_neg_90
 		neg eax
 		xor ecx,ecx
@@ -5851,7 +5762,7 @@ prim_neg_90:
 
 prim_abs:
 		mov dl,t_int
-		call pm_get_1arg
+		call get_1arg
 		jc prim_abs_90
 		or eax,eax
 		jns prim_abs_50
@@ -5879,7 +5790,7 @@ prim_abs_90:
 
 prim_min:
 		mov dx,t_int + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_min_90
 		cmp eax,ecx
 		jle prim_min_50
@@ -5908,7 +5819,7 @@ prim_min_90:
 
 prim_max:
 		mov dx,t_int + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_max_90
 		cmp eax,ecx
 		jge prim_max_50
@@ -5925,7 +5836,7 @@ prim_max_90:
 
 plog_args:
 		mov dx,t_int + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jnc plog_args_90
 		cmp dx,t_int + (t_bool << 8)
 		jz plog_args_20
@@ -6093,7 +6004,7 @@ prim_not_90:
 
 prim_shl:
 		mov dx,t_int + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_shl_90
 		xchg eax,ecx
 		shl eax,cl
@@ -6124,7 +6035,7 @@ prim_shl_90:
 
 prim_shr:
 		mov dx,t_int + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_shr_90
 		xchg eax,ecx
 		cmp ecx,byte 20h
@@ -6157,7 +6068,7 @@ prim_shr_90:
 
 prim_def:
 		mov dx,t_none + (t_dict_idx << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_def_90
 		cmp dl,t_sec
 		mov bp,pserr_wrong_arg_types
@@ -6197,7 +6108,7 @@ prim_def_90:
 
 prim_if:
 		mov dx,t_code + (t_bool << 8)
-		call pm_get_2args
+		call get_2args
 		jnc prim_if_20
 		cmp dh,t_int
 		jz prim_if_20
@@ -6278,7 +6189,7 @@ prim_ifelse:
 prim_ifelse_10:
 		push eax
 		mov dx,t_code + (t_code << 8)
-		call pm_get_2args
+		call get_2args
 		pop ebx
 		jc prim_ifelse_90
 
@@ -6356,7 +6267,7 @@ pcmp_args:
 		; integer
 		mov dx,t_int + (t_int << 8)
 		push ebx
-		call pm_get_2args
+		call get_2args
 		pop ebx
 		jnc pcmp_args_90
 
@@ -6658,7 +6569,7 @@ prim_rot:
 
 prim_roll:
 		mov dx,t_int + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_roll_90
 		or ecx,ecx
 		jz prim_roll_90
@@ -6882,7 +6793,7 @@ prim_loop_90:
 
 prim_repeat:
 		mov dx,t_code + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_repeat_90
 
 		sub dword [pstack_ptr],2
@@ -6962,7 +6873,7 @@ prim_for:
 		mov dx,t_code + (t_int << 8)
 		push eax
 		push edi
-		call pm_get_2args
+		call get_2args
 		pop edi
 		pop esi
 		jc prim_for_90
@@ -7032,7 +6943,7 @@ prim_for_90:
 
 prim_forall:
 		mov dx,t_code + (t_array << 8)
-		call pm_get_2args
+		call get_2args
 		jnc prim_forall_30
 		cmp dl,t_code
 		stc
@@ -7140,7 +7051,7 @@ prim_forall_90:
 
 prim_gettype:
 		mov dl,t_none
-		call pm_get_1arg
+		call get_1arg
 		jc prim_gettype_90
 		movzx eax,dl
 		mov dl,t_int
@@ -7168,7 +7079,7 @@ prim_gettype_90:
 
 prim_settype:
 		mov dx,t_int + (t_none << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_settype_90
 		mov dl,al
 		and al,15
@@ -7432,7 +7343,7 @@ prim_settextmodecolor:
 
 prim_moveto:
 		mov dx,t_int + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_moveto_90
 		sub dword [pstack_ptr],2
 		mov [gfx_cur_x],cx
@@ -7459,7 +7370,7 @@ prim_moveto_90:
 
 prim_rmoveto:
 		mov dx,t_int + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_rmoveto_90
 		sub dword [pstack_ptr],2
 		add [gfx_cur_x],cx
@@ -7516,7 +7427,7 @@ prim_currentpoint_90:
 
 prim_lineto:
 		mov dx,t_int + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_lineto_90
 
 		mov [line_x1],ecx
@@ -7752,7 +7663,7 @@ prim_currenttransparency:
 
 prim_show:
 		mov dl,t_string
-		call pm_get_1arg
+		call get_1arg
 		jc prim_show_90
 		dec dword [pstack_ptr]
 		mov esi,eax
@@ -7787,7 +7698,7 @@ prim_show_90:
 
 prim_strsize:
 		mov dl,t_string
-		call pm_get_1arg
+		call get_1arg
 		jc prim_strsize_90
 		dec dword [pstack_ptr]
 
@@ -7846,7 +7757,7 @@ prim_memcpy:
 		jnz prim_memcpy_90
 		push eax
 		mov dx,t_int + (t_ptr << 8)
-		call pm_get_2args
+		call get_2args
 		pop ebx			; dst
 		jc prim_memcpy_90
 		xchg eax,ecx
@@ -7904,7 +7815,7 @@ prim_image:
 		jnz prim_image_90
 		mov [line_y0],eax
 		mov dx,t_int + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_image_90
 
 		sub dword [pstack_ptr],4
@@ -7996,7 +7907,7 @@ prim_unpackimage:
 		jnz prim_unpackimage_90
 		mov [line_y0],eax
 		mov dx,t_int + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_unpackimage_90
 
 		sub dword [pstack_ptr],3
@@ -8059,7 +7970,7 @@ prim_unpackimage_90:
 
 prim_setpalette:
 		mov dx,t_int + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_setpalette_90
 
 		sub dword [pstack_ptr],2
@@ -8103,7 +8014,7 @@ prim_setpalette_90:
 
 prim_getpalette:
 		mov dl,t_int
-		call pm_get_1arg
+		call get_1arg
 		jc prim_getpalette_90
 
 		xchg eax,ecx
@@ -8164,7 +8075,7 @@ prim_settransparentcolor:
 
 prim_savescreen:
 		mov dx,t_int + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_savescreen_90
 		call alloc_fb
 		or eax,eax
@@ -8247,7 +8158,7 @@ alloc_fb_90:
 
 prim_restorescreen:
 		mov dl,t_ptr
-		call pm_get_1arg
+		call get_1arg
 		jnc prim_restorescreen_20
 		cmp dl,t_none
 		stc
@@ -8290,7 +8201,7 @@ prim_restorescreen_90:
 
 prim_malloc:
 		mov dl,t_int
-		call pm_get_1arg
+		call get_1arg
 		jc prim_malloc_90
 		call calloc
 		or eax,eax
@@ -8330,7 +8241,7 @@ prim_malloc_90:
 
 prim_free:
 		mov dl,t_string
-		call pm_get_1arg
+		call get_1arg
 		jnc prim_free_10
 		cmp dl,t_ptr
 		jz prim_free_10
@@ -8371,7 +8282,7 @@ prim_free_90:
 
 prim_memsize:
 		mov dl,t_int
-		call pm_get_1arg
+		call get_1arg
 		jc prim_memsize_90
 		mov ecx,[pstack_ptr]
 		inc ecx
@@ -8429,7 +8340,7 @@ prim_dumpmem:
 
 prim_fillrect:
 		mov dx,t_int + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_fillrect_90
 		mov edx,ecx
 		mov ecx,eax
@@ -8479,7 +8390,7 @@ prim_snprintf:
 		jnz prim_snprintf_90
 		push eax
 		mov dx,t_string + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		pop esi
 		jc prim_snprintf_90
 
@@ -8528,7 +8439,7 @@ prim_snprintf_90:
 
 prim_editinit:
 		mov dx,t_string + (t_array << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_editinit_90
 
 		mov esi,ecx
@@ -8575,8 +8486,8 @@ prim_editinit_90:
 		bits 32
 
 prim_editdone:
-		mov dx,t_array
-		call pm_get_1arg
+		mov dl,t_array
+		call get_1arg
 		jc prim_editdone_90
 
 		mov esi,eax
@@ -8614,8 +8525,8 @@ prim_editdone_90:
 		bits 32
 
 prim_editshowcursor:
-		mov dx,t_array
-		call pm_get_1arg
+		mov dl,t_array
+		call get_1arg
 		jc prim_editshowcursor_90
 
 		mov esi,eax
@@ -8644,8 +8555,8 @@ prim_editshowcursor_90:
 		bits 32
 
 prim_edithidecursor:
-		mov dx,t_array
-		call pm_get_1arg
+		mov dl,t_array
+		call get_1arg
 		jc prim_edithidecursor_90
 
 		mov esi,eax
@@ -8681,7 +8592,7 @@ prim_edithidecursor_90:
 
 prim_editinput:
 		mov dx,t_int + (t_array << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_editinput_90
 
 		mov esi,ecx
@@ -8768,7 +8679,7 @@ prim_64bit:
 
 prim_inbyte:
 		mov dl,t_int
-		call pm_get_1arg
+		call get_1arg
 		jc prim_inbyte_90
 		mov edx,eax
 		xor eax,eax
@@ -8793,7 +8704,7 @@ prim_inbyte_90:
 
 prim_outbyte:
 		mov dx,t_int + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_outbyte_90
 		mov edx,ecx
 		out dx,al
@@ -8815,7 +8726,7 @@ prim_outbyte_90:
 
 prim_getbyte:
 		mov dl,t_ptr
-		call pm_get_1arg
+		call get_1arg
 		jc prim_getbyte_90
 		movzx eax,byte [es:eax]
 		mov dl,t_int
@@ -8838,7 +8749,7 @@ prim_getbyte_90:
 
 prim_putbyte:
 		mov dx,t_int + (t_ptr << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_putbyte_90
 		mov [es:ecx],al
 		sub dword [pstack_ptr],2
@@ -8859,7 +8770,7 @@ prim_putbyte_90:
 
 prim_getdword:
 		mov dl,t_ptr
-		call pm_get_1arg
+		call get_1arg
 		jc prim_getdword_90
 		mov eax,[es:eax]
 		mov dl,t_int
@@ -8882,7 +8793,7 @@ prim_getdword_90:
 
 prim_putdword:
 		mov dx,t_int + (t_ptr << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_putdword_90
 		mov [es:ecx],eax
 		sub dword [pstack_ptr],2
@@ -8913,7 +8824,7 @@ prim_putdword_90:
 
 prim_findfile:
 		mov dl,t_string
-		call pm_get_1arg
+		call get_1arg
 		jc prim_findfile_90
 prim_findfile_10:
 		push eax
@@ -8956,7 +8867,7 @@ prim_findfile_90:
 
 prim_filesize:
 		mov dl,t_string
-		call pm_get_1arg
+		call get_1arg
 		jc prim_filesize_90
 prim_filesize_10:
 		push eax
@@ -9029,7 +8940,7 @@ prim_getcwd_90:
 
 prim_chdir:
 		mov dl,t_string
-		call pm_get_1arg
+		call get_1arg
 		jc prim_chdir_90
 		push eax
 		call get_length
@@ -9095,7 +9006,7 @@ prim_chdir_90:
 
 prim__readsector:
 		mov dl,t_int
-		call pm_get_1arg
+		call get_1arg
 		jc prim__readsector_90
 
 		mov edx,eax
@@ -9133,7 +9044,7 @@ prim__readsector_90:
 
 prim_setmode:
 		mov dl,t_int
-		call pm_get_1arg
+		call get_1arg
 		jz prim_setmode_30
 		cmp dl,t_none
 		stc
@@ -9236,7 +9147,7 @@ prim_videomodes_40:
 
 prim_videomodeinfo:
 		mov dl,t_int
-		call pm_get_1arg
+		call get_1arg
 		jc prim_vmi_90
 
 		mov ecx,[pstack_ptr]
@@ -9368,7 +9279,7 @@ prim_vmi_90:
 
 prim_sysinfo:
 		mov dl,t_int
-		call pm_get_1arg
+		call get_1arg
 		jc prim_si_90
 
 		cmp eax,100h
@@ -9421,7 +9332,7 @@ prim_colorbits:
 
 prim_eject:
 		mov dl,t_int
-		call pm_get_1arg
+		call get_1arg
 		jc prim_eject_90
 		mov dl,al
 		mov ax,4600h
@@ -9508,7 +9419,7 @@ prim_reboot:
 
 prim_strstr:
 		mov dx,t_string + (t_string << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_strstr_90
 
 		xor ebx,ebx
@@ -9600,7 +9511,7 @@ prim_sgv_90:
 
 prim_soundsetvolume:
 		mov dl,t_int
-		call pm_get_1arg
+		call get_1arg
 		jc prim_ssv_90
 		dec dword [pstack_ptr]
 		or eax,eax
@@ -9661,7 +9572,7 @@ prim_sgsr_90:
 
 prim_soundsetsamplerate:
 		mov dl,t_int
-		call pm_get_1arg
+		call get_1arg
 		jc prim_sssr_90
 		dec dword [pstack_ptr]
 		push eax
@@ -9714,7 +9625,7 @@ prim_sounddone:
 
 prim_soundtest:
 		mov dl,t_int
-		call pm_get_1arg
+		call get_1arg
 		jc prim_stest_90
 		dec dword [pstack_ptr]
 
@@ -9740,7 +9651,7 @@ prim_stest_90:
 
 prim_modload:
 		mov dx,t_ptr + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_modload_90
 		sub dword [pstack_ptr],2
 		xchg eax,ecx
@@ -9788,7 +9699,7 @@ prim_modload_90:
 
 prim_modplay:
 		mov dx,t_int + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_modplay_90
 		sub dword [pstack_ptr],2
 		xchg eax,ecx
@@ -9844,7 +9755,7 @@ prim_modplaysample:
 		mov dx,t_int + (t_int << 8)
 		push ebx
 		push eax
-		call pm_get_2args
+		call get_2args
 		pop ebx
 		pop edx
 		jc prim_modps_90
@@ -9985,7 +9896,7 @@ prim_currentmaxrows:
 
 prim_formattext:
 		mov dl,t_string
-		call pm_get_1arg
+		call get_1arg
 		jc prim_formattext_90
 		dec dword [pstack_ptr]
 		push eax
@@ -10108,7 +10019,7 @@ prim_settextcolors:
 		call encode_color
 		mov [gfx_color1],eax
 		mov dx,t_int + (t_int << 8)
-		call pm_get_2args
+		call get_2args
 		jc prim_settextcolors_90
 
 		sub dword [pstack_ptr],4
@@ -10222,7 +10133,7 @@ prim_currentlink:
 
 prim_getlink:
 		mov dl,t_int
-		call pm_get_1arg
+		call get_1arg
 		jc prim_getlink_90
 		mov bp,pserr_invalid_range
 		cmp eax,[cur_link]
@@ -10415,7 +10326,7 @@ prim_date:
 
 prim_idle:
 		mov dx,t_int + (t_ptr << 8)
-		call pm_get_2args
+		call get_2args
 		jnc prim_idle_10
 		cmp dx,t_int + (t_none << 8)
 		stc
@@ -10578,75 +10489,6 @@ prim_blend_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Helper function that covers common cases.
-
-; return eax as ptr on stack, returns undef if eax = 0
-
-		bits 16
-
-pr_getptr_or_none:
-		mov dl,t_ptr
-		or eax,eax
-		jnz pr_getobj
-		mov dl,t_none
-		jmp pr_getobj
-
-; return eax as integer on stack
-pr_getint:
-		mov dl,t_int
-
-; return eax as dl on stack
-pr_getobj:
-		mov cx,[pstack_ptr]
-		inc cx
-		cmp [pstack_size],cx
-		mov bp,pserr_pstack_overflow
-		jc pr_getobj_90
-		mov [pstack_ptr],cx
-		xor cx,cx
-		call set_pstack_tos
-pr_getobj_90:
-		ret
-
-
-; get ptr from stack as eax; if it is undef, don't return to function
-pr_setptr_or_none:
-		mov dl,t_ptr
-
-; get obj from stack as eax; if it is undef, don't return to function
-pr_setobj_or_none:
-		call get_1arg
-		jnc pr_setobj_20
-		cmp dl,t_none
-		stc
-		jnz pr_setobj_10
-		dec word [pstack_ptr]
-		clc
-		jmp pr_setobj_10
-
-; get integer from stack as eax
-pr_setint:
-		mov dl,t_int
-
-; get object with type dl from stack as eax
-pr_setobj:
-		call get_1arg
-		jnc pr_setobj_20
-pr_setobj_10:
-		pop ax			; don't return to function that called us
-		ret
-pr_setobj_20:
-		dec word [pstack_ptr]
-		pop cx			; put link to clc on stack
-		push word pr_setobj_30
-		jmp cx
-pr_setobj_30:
-		clc
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; Helper function that covers common cases.
 
 ; return eax as ptr on stack, returns undef if eax = 0
@@ -10684,7 +10526,7 @@ pm_pr_setptr_or_none:
 
 ; get obj from stack as eax; if it is undef, don't return to function
 pm_pr_setobj_or_none:
-		call pm_get_1arg
+		call get_1arg
 		jnc pm_pr_setobj_20
 		cmp dl,t_none
 		stc
@@ -10699,7 +10541,7 @@ pm_pr_setint:
 
 ; get object with type dl from stack as eax
 pm_pr_setobj:
-		call pm_get_1arg
+		call get_1arg
 		jnc pm_pr_setobj_20
 pm_pr_setobj_10:
 		pop eax			; don't return to function that called us
