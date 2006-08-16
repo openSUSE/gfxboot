@@ -155,14 +155,8 @@ malloc.end		dd 0
 			; start, end pairs
 malloc.area		times malloc.areas * 2 dd 0
 
-vbe_buffer		dd 0		; (seg:ofs) buffer for vbe calls
-vbe_buffer.ofs		equ vbe_buffer
-vbe_buffer.seg		equ vbe_buffer+2
-vbe_buffer.lin		dd 0		; (lin) dto
-vbe_mode_list		dd 0		; (seg:ofs) list with (up to 100h) vbe modes
-vbe_mode_list.ofs	equ vbe_mode_list
-vbe_mode_list.seg	equ vbe_mode_list+2
-vbe_mode_list.lin	dd 0		; (lin) dto
+vbe_buffer		dd 0		; (lin) buffer for vbe calls
+vbe_mode_list		dd 0		; (lin) list with (up to 100h) vbe modes
 vbe_info_buffer		dd 0		; (lin) buffer for vbe gfx card info
 infobox_buffer		dd 0		; (lin) temp buffer for InfoBox messages
 
@@ -862,10 +856,7 @@ gfx_init_40:
 		call calloc
 		cmp eax,1
 		jc pm_gfx_init_90
-		mov [vbe_buffer.lin],eax
-		push eax
-		call pm_lin2so
-		pop dword [vbe_buffer.ofs]
+		mov [vbe_buffer],eax
 
 		mov eax,100h
 		call calloc
@@ -877,10 +868,7 @@ gfx_init_40:
 		call calloc
 		cmp eax,1
 		jc pm_gfx_init_90
-		mov [vbe_mode_list.lin],eax
-		push eax
-		call pm_lin2so
-		pop dword [vbe_mode_list.ofs]
+		mov [vbe_mode_list],eax
 
 		; fill list
 		call get_vbe_modes
@@ -3315,12 +3303,14 @@ set_mode_10:
 		clc
 		jmp set_mode_90
 set_mode_20:
-		mov ebx,[vbe_buffer.lin]
+		mov ebx,[vbe_buffer]
 		and dword [es:ebx],0
 
-		mov di,[vbe_buffer.ofs]
-		push word [vbe_buffer.seg]
-		pop word [rm_seg.es]
+		mov eax,ebx
+		shr eax,4
+		mov [rm_seg.es],ax
+		mov edi,ebx
+		and edi,0fh
 
 		mov ax,4f00h
 		push ebx
@@ -3505,18 +3495,20 @@ mode_init_90:
 		bits 32
 
 get_vbe_modes:
-		mov ebx,[vbe_mode_list.lin]
+		mov ebx,[vbe_mode_list]
 		cmp word [es:ebx],0
 		jnz get_vbe_modes_90
 
-		mov edx,[vbe_buffer.lin]
+		mov edx,[vbe_buffer]
 		and dword [es:edx],0
-		
-		mov di,[vbe_buffer.ofs]
-		push word [vbe_buffer.seg]
-		pop word [rm_seg.es]
-		mov ax,4f00h
 
+		mov eax,edx
+		shr eax,4
+		mov [rm_seg.es],ax
+		mov edi,edx
+		and edi,0fh
+
+		mov ax,4f00h
 		push ebx
 		push edx
 		int 10h
@@ -5035,7 +5027,6 @@ p_get_90:
 ; Our primary functions.
 ;
 
-		bits 16
 
 ;; { - start code definition
 ;
@@ -7185,7 +7176,7 @@ prim_monitorsize:
 		cmp word [ddc_xtimings],0
 		jnz prim_monitorsize_50
 
-		rm32_call get_monitor_res
+		call get_monitor_res
 
 prim_monitorsize_50:
 
@@ -8135,7 +8126,6 @@ alloc_fb_80:
 alloc_fb_90:
 		ret
 
-		bits 16
 
 ;; restorescreen - restore screen area
 ;
@@ -9111,7 +9101,7 @@ prim_currentmode:
 		bits 32
 
 prim_videomodes:
-		mov esi,[vbe_mode_list.lin]
+		mov esi,[vbe_mode_list]
 		xor eax,eax
 
 prim_videomodes_20:
@@ -9162,16 +9152,18 @@ prim_videomodeinfo:
 		mov ax,0ffh
 prim_vmi_10:
 		add eax,eax
-		add eax,[vbe_mode_list.lin]
+		add eax,[vbe_mode_list]
 		movzx ecx,word [es:eax]
 		or ecx,ecx
 		jz prim_vmi_60
 		cmp ecx,-1
 		jz prim_vmi_60
 
-		mov di,[vbe_buffer.ofs]
-		push word [vbe_buffer.seg]
-		pop word [rm_seg.es]
+		mov eax,[vbe_buffer]
+		mov edi,eax
+		shr eax,4
+		mov [rm_seg.es],ax
+		and edi,0fh
 
 		mov ax,4f01h
 		push ecx
@@ -9181,7 +9173,7 @@ prim_vmi_10:
 		cmp ax,4fh
 		jnz prim_vmi_60
 
-		mov edi,[vbe_buffer.lin]
+		mov edi,[vbe_buffer]
 
 		test byte [es:edi],1		; mode supported?
 		jz prim_vmi_60
@@ -12860,7 +12852,6 @@ load_palette_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Clip drawing area.
 ;
 ;  [gfx_cur_x]		left border
@@ -12876,7 +12867,7 @@ load_palette_90:
 ;  Changed registers: -
 ;
 
-		bits 16
+		bits 32
 
 clip_it:
 		pusha
@@ -13062,7 +13053,7 @@ restore_bg:
 		mov ax,[gfx_cur_x]
 		mov cx,[gfx_cur_y]
 
-		rm32_call clip_it
+		call clip_it
 		jc restore_bg_90
 
 		sub ax,[gfx_cur_x]
@@ -13161,7 +13152,7 @@ fill_rect:
 		mov [gfx_width],dx
 		mov [gfx_height],cx
 
-		rm32_call clip_it
+		call clip_it
 		jc fill_rect_90
 
 		movzx edx,word [gfx_width]
@@ -14638,11 +14629,11 @@ mouse_handler:
 ;
 ;
 
-		bits 16
+		bits 32
 
 get_monitor_res:
 		call read_ddc
-		call read_fsc
+		rm32_call read_fsc
 
 		; convert timing bitmask to resolution
 		; if the card has enough memory assume larger resolutions
@@ -14670,12 +14661,12 @@ get_mon_res_24:
 
 		; find max. resolution
 
-		mov cx,5
-		mov si,ddc_xtimings
+		mov ecx,5
+		mov esi,ddc_xtimings
 
 get_mon_res_30:
-		mov ax,[si]
-		mov dx,[si+2]
+		mov ax,[esi]
+		mov dx,[esi+2]
 
 		cmp ax,[ddc_xtimings]
 		jb get_mon_res_60
@@ -14687,103 +14678,96 @@ get_mon_res_30:
 		mov [ddc_xtimings+2],dx
 
 get_mon_res_60:
-		add si,4
+		add esi,4
 		loop get_mon_res_30
 
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Read EDID record via DDC
 ;
 
-		bits 16
+		bits 32
 
 read_ddc:
-		push es
-
 		; vbe support check
 		cmp word [screen_mem],0
 		jz read_ddc_90
 
-%if 0
-		xor cx,cx
-		xor dx,dx
-		mov ax,4f15h
-		mov bl,0
-		int 10h
-		cmp ax,4fh
-		jnz read_ddc_90
-%endif
-
-		xor bp,bp
+		xor ebp,ebp
 
 read_ddc_20:
-		push bp
-		les di,[vbe_buffer]
-		push di
-		mov cx,40h
-		xor ax,ax
-		rep stosw
-		pop di
-		mov ax,4f15h
+		mov edi,[vbe_buffer]
+
+		mov ecx,80h
+		xor eax,eax
+		push edi
+		rep stosb
+		pop edi
+
+		mov eax,edi
+		shr eax,4
+		mov [rm_seg.es],ax
+		and edi,0fh
+
+                mov ax,4f15h
 		mov bl,1
 		mov cx,bp
 		xor dx,dx
-		push di
+		push ebp
 		int 10h
-		pop di
-		pop bp
+		pop ebp
 		cmp ax,4fh
 		jz read_ddc_30
 
-		inc bp
-		cmp bp,2		; some BIOSes don't like more (seen on a Packard Bell EasyNote)
+		inc ebp
+		cmp ebp,2		; some BIOSes don't like more (seen on a Packard Bell EasyNote)
 		jb read_ddc_20
 
 		jmp read_ddc_90
 
 read_ddc_30:
 
-		mov ax,[es:di+23h]
+		mov edi,[vbe_buffer]
+
+		mov ax,[es:edi+23h]
 		mov [ddc_timings],ax
 
-		mov cx,4
-		lea si,[di+26h]
-		mov di,ddc_xtimings1
+		mov ecx,4
+		lea esi,[edi+26h]
+		mov edi,ddc_xtimings1
 read_ddc_40:
 		es lodsb
 		cmp al,1
 		jbe read_ddc_70
 		
 		movzx ebp,al
-		add bp,byte 31
-		shl bp,3
+		add ebp,31
+		shl ebp,3
 
-		mov al,[es:si]
+		mov al,[es:esi]
 		shr al,6
 		jz read_ddc_70
-		movzx bx,al
-		shl bx,3
+		movzx ebx,al
+		shl ebx,3
 
 		mov eax,ebp
-		mul dword [bx+ddc_mult]
-		div dword [bx+ddc_mult+4]
+		mul dword [ebx+ddc_mult]
+		div dword [ebx+ddc_mult+4]
 		
 		jz read_ddc_70
 
 		shl eax,16
 		add eax,ebp
-		mov [di],eax
+		mov [edi],eax
 
 read_ddc_70:
-		inc si
-		add di,4
+		inc esi
+		add edi,4
 		loop read_ddc_40
 
 read_ddc_90:
-		pop es
 		ret
 
 ddc_timings	dw 0		; standard ddc timing info
@@ -14864,19 +14848,22 @@ fsc_bits	dw 0, 0x0004, 0x4000, 0x0200, 0x0100, 0x0200, 0, 0x4000
 		bits 32
 
 videoinfo:
-		mov edi,[vbe_buffer.lin]
+		mov edi,[vbe_buffer]
 
 		push eax
 		push edi
 
 		mov ecx,200h/4
 		xor eax,eax
+		push edi
 		rep stosd
-		mov dword [es:edi-200h],32454256h	; 'VBE2'
+		pop edi
+		mov dword [es:edi],32454256h	; 'VBE2'
 
-		mov di,[vbe_buffer.ofs]
-		push word [vbe_buffer.seg]
-		pop word [rm_seg.es]
+		mov eax,edi
+		shr eax,4
+		mov [rm_seg.es],ax
+		and edi,0fh
 
 		mov ax,4f00h
 		int 10h
