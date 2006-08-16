@@ -1977,81 +1977,79 @@ set_pstack_tos_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Rotate pstack up (ecx-1'th element becomes tos).
 ;
-; Rotate pstack up (cx-1'th element becomes tos).
-;
-;  cx		values to rotate (counted from tos)
+;  ecx		values to rotate (counted from tos)
 ;
 ; return:
 ;  CF		error
 ;
 
-		bits 16
+		bits 32
 
 rot_pstack_up:
-		or cx,cx
+		or ecx,ecx
 		jz rot_pstack_up_90
-		les di,[pstack]
-		mov ax,[pstack_ptr]
-		sub ax,cx
+		mov edi,[pstack.lin]
+		mov eax,[pstack_ptr]
+		sub eax,ecx
 		jb rot_pstack_up_90
-		cmp cx,byte 1
+		cmp ecx,1
 		jz rot_pstack_up_90
-		add di,ax
-		shl ax,2
-		add di,ax
-		dec cx
-		mov ax,cx
-		shl ax,2
-		add cx,ax
-		mov ebx,[es:di]
-		mov dl,[es:di+4]
-		lea si,[di+5]
+		add edi,eax
+		shl eax,2
+		add edi,eax
+		dec ecx
+		mov eax,ecx
+		shl eax,2
+		add ecx,eax
+		mov ebx,[es:edi]
+		mov dl,[es:edi+4]
+		lea esi,[edi+5]
 		es rep movsb
-		mov [es:di],ebx
-		mov [es:di+4],dl
+		mov [es:edi],ebx
+		mov [es:edi+4],dl
 		clc
 rot_pstack_up_90:
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Rotate pstack down (1st element becomes tos).
 ;
-;  cx		values to rotate (counted from tos)
+;  ecx		values to rotate (counted from tos)
 ;
 ; return:
 ;  CF		error
 ;
 
-		bits 16
+		bits 32
 
 rot_pstack_down:
-		or cx,cx
+		or ecx,ecx
 		jz rot_pstack_down_90
-		les di,[pstack]
-		mov ax,[pstack_ptr]
-		cmp ax,cx
+		mov edi,[pstack.lin]
+		mov eax,[pstack_ptr]
+		cmp eax,ecx
 		jb rot_pstack_down_90
-		cmp cx,byte 1
+		cmp ecx,1
 		jz rot_pstack_down_90
-		add di,ax
-		shl ax,2
-		add di,ax
-		dec di
-		lea si,[di-5]
-		dec cx
-		mov ax,cx
-		shl ax,2
-		add cx,ax
-		mov ebx,[es:si+1]
-		mov dl,[es:si+5]
+		add edi,eax
+		shl eax,2
+		add edi,eax
+		dec edi
+		lea esi,[edi-5]
+		dec ecx
+		mov eax,ecx
+		shl eax,2
+		add ecx,eax
+		mov ebx,[es:esi+1]
+		mov dl,[es:esi+5]
 		std
 		es rep movsb
 		cld
-		mov [es:si+1],ebx
-		mov [es:si+5],dl
+		mov [es:esi+1],ebx
+		mov [es:esi+5],dl
 		clc
 rot_pstack_down_90:
 		ret
@@ -5611,14 +5609,14 @@ prim_index_90:
 ;   exec				% still "abc"
 ;
 
-		bits 16
+		bits 32
 
 prim_exec:
 		mov dl,t_none
-		call pr_setobj_or_none
+		call pm_pr_setobj_or_none
 		cmp dl,t_dict_idx
 		jz prim_exec_50
-		jmp pr_getobj
+		jmp pm_pr_getobj
 prim_exec_50:
 		mov [pscode_eval],eax
 		ret
@@ -5643,9 +5641,12 @@ prim_exec_50:
 ;
 ;   "abc" 1 add		% "bc"
 ;
+
+		bits 32
+
 prim_add:
 		mov dx,t_int + (t_int << 8)
-		call get_2args
+		call pm_get_2args
 		jnc prim_add_50
 		cmp dx,t_int + (t_string << 8)
 		jz prim_add_50
@@ -5654,10 +5655,10 @@ prim_add:
 		jnz prim_add_90
 prim_add_50:
 		add eax,ecx
-		dec word [pstack_ptr]
-		xor cx,cx
+		dec dword [pstack_ptr]
+		xor ecx,ecx
 		mov dl,dh
-		call set_pstack_tos
+		call pm_set_pstack_tos
 prim_add_90:
 		ret
 
@@ -5686,9 +5687,12 @@ prim_add_90:
 ;   "abcd" 3 add	% "d"
 ;   2 sub		% "bcd"
 ;
+
+		bits 32
+
 prim_sub:
 		mov dx,t_int + (t_int << 8)
-		call get_2args
+		call pm_get_2args
 		jnc prim_sub_50
 		cmp dx,t_int + (t_string << 8)
 		jz prim_sub_50
@@ -5704,10 +5708,10 @@ prim_sub_40:
 prim_sub_50:
 		xchg eax,ecx
 		sub eax,ecx
-		dec word [pstack_ptr]
-		xor cx,cx
+		dec dword [pstack_ptr]
+		xor ecx,ecx
 		mov dl,dh
-		call set_pstack_tos
+		call pm_set_pstack_tos
 prim_sub_90:
 		ret
 
@@ -5723,15 +5727,18 @@ prim_sub_90:
 ; example
 ;   2 3 mul	% 6
 ;
+
+		bits 32
+
 prim_mul:
 		mov dx,t_int + (t_int << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_mul_90
 		imul ecx
-		dec word [pstack_ptr]
-		xor cx,cx
+		dec dword [pstack_ptr]
+		xor ecx,ecx
 		mov dl,t_int
-		call set_pstack_tos
+		call pm_set_pstack_tos
 prim_mul_90:
 		ret
 
@@ -5747,9 +5754,12 @@ prim_mul_90:
 ; example
 ;   17 3 div	% 5
 ;
+
+		bits 32
+
 prim_div:
 		mov dx,t_int + (t_int << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_div_90
 		or eax,eax
 		stc
@@ -5758,10 +5768,10 @@ prim_div:
 		xchg eax,ecx
 		cdq
 		idiv ecx
-		dec word [pstack_ptr]
-		xor cx,cx
+		dec dword [pstack_ptr]
+		xor ecx,ecx
 		mov dl,t_int
-		call set_pstack_tos
+		call pm_set_pstack_tos
 prim_div_90:
 		ret
 
@@ -5777,9 +5787,12 @@ prim_div_90:
 ; example
 ;   17 3 mod	% 2
 ;
+
+		bits 32
+
 prim_mod:
 		mov dx,t_int + (t_int << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_mod_90
 		or eax,eax
 		stc
@@ -5789,10 +5802,10 @@ prim_mod:
 		cdq
 		idiv ecx
 		xchg eax,edx
-		dec word [pstack_ptr]
-		xor cx,cx
+		dec dword [pstack_ptr]
+		xor ecx,ecx
 		mov dl,t_int
-		call set_pstack_tos
+		call pm_set_pstack_tos
 prim_mod_90:
 		ret
 
@@ -5808,13 +5821,16 @@ prim_mod_90:
 ; example
 ;   5 neg	% -5
 ;
+
+		bits 32
+
 prim_neg:
 		mov dl,t_int
-		call get_1arg
+		call pm_get_1arg
 		jc prim_neg_90
 		neg eax
-		xor cx,cx
-		call set_pstack_tos
+		xor ecx,ecx
+		call pm_set_pstack_tos
 prim_neg_90:
 		ret
 
@@ -5830,16 +5846,19 @@ prim_neg_90:
 ; example
 ;   -6 abs	% 6
 ;
+
+		bits 32
+
 prim_abs:
 		mov dl,t_int
-		call get_1arg
+		call pm_get_1arg
 		jc prim_abs_90
 		or eax,eax
 		jns prim_abs_50
 		neg eax
 prim_abs_50:
-		xor cx,cx
-		call set_pstack_tos
+		xor ecx,ecx
+		call pm_set_pstack_tos
 prim_abs_90:
 		ret
 
@@ -5855,17 +5874,20 @@ prim_abs_90:
 ; example
 ;   4 11 min	% 4
 ;
+
+		bits 32
+
 prim_min:
 		mov dx,t_int + (t_int << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_min_90
 		cmp eax,ecx
 		jle prim_min_50
 		xchg eax,ecx
 prim_min_50:
-		dec word [pstack_ptr]
-		xor cx,cx
-		call set_pstack_tos
+		dec dword [pstack_ptr]
+		xor ecx,ecx
+		call pm_set_pstack_tos
 prim_min_90:
 		ret
 
@@ -5881,23 +5903,29 @@ prim_min_90:
 ; example
 ;   4 11 max	% 11
 ;
+
+		bits 32
+
 prim_max:
 		mov dx,t_int + (t_int << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_max_90
 		cmp eax,ecx
 		jge prim_max_50
 		xchg eax,ecx
 prim_max_50:
-		dec word [pstack_ptr]
-		xor cx,cx
-		call set_pstack_tos
+		dec dword [pstack_ptr]
+		xor ecx,ecx
+		call pm_set_pstack_tos
 prim_max_90:
 		ret
 
+
+		bits 32
+
 plog_args:
 		mov dx,t_int + (t_int << 8)
-		call get_2args
+		call pm_get_2args
 		jnc plog_args_90
 		cmp dx,t_int + (t_bool << 8)
 		jz plog_args_20
@@ -5906,7 +5934,7 @@ plog_args:
 		cmp dx,t_bool + (t_bool << 8)
 		jz plog_args_20
 		stc
-		pop ax
+		pop eax			; don't return
 		jmp plog_args_90
 plog_args_20:
 		mov dl,t_bool
@@ -5940,13 +5968,16 @@ plog_args_90:
 ;
 ;   10 true and		% gives true, but please avoid this
 ;
+
+		bits 32
+
 prim_and:
 		call plog_args
 		and eax,ecx
 prim_and_50:
-		dec word [pstack_ptr]
-		xor cx,cx
-		call set_pstack_tos
+		dec dword [pstack_ptr]
+		xor ecx,ecx
+		call pm_set_pstack_tos
 		ret
 
 
@@ -5970,6 +6001,9 @@ prim_and_50:
 ;
 ;   10 true or		% gives true, but please avoid this
 ;
+
+		bits 32
+
 prim_or:
 		call plog_args
 		or eax,ecx
@@ -5996,6 +6030,9 @@ prim_or:
 ;
 ;   10 true xor		% gives false, but please avoid this
 ;
+
+		bits 32
+
 prim_xor:
 		call plog_args
 		xor eax,ecx
@@ -6017,9 +6054,12 @@ prim_xor:
 ;
 ;   0 not		% -1
 ;
+
+		bits 32
+
 prim_not:
-		xor cx,cx
-		call get_pstack_tos
+		xor ecx,ecx
+		call pm_get_pstack_tos
 		jc prim_not_90
 		cmp dl,t_int
 		jz prim_not_50
@@ -6031,8 +6071,8 @@ prim_not:
 		not eax
 prim_not_50:
 		not eax
-		xor cx,cx
-		call set_pstack_tos
+		xor ecx,ecx
+		call pm_set_pstack_tos
 prim_not_90:
 		ret
 
@@ -6048,9 +6088,12 @@ prim_not_90:
 ; example
 ;   5 2 shl	% 20
 ;
+
+		bits 32
+
 prim_shl:
 		mov dx,t_int + (t_int << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_shl_90
 		xchg eax,ecx
 		shl eax,cl
@@ -6058,9 +6101,9 @@ prim_shl:
 		jb prim_shl_50
 		xor eax,eax
 prim_shl_50:
-		dec word [pstack_ptr]
-		xor cx,cx
-		call set_pstack_tos
+		dec dword [pstack_ptr]
+		xor ecx,ecx
+		call pm_set_pstack_tos
 prim_shl_90:
 		ret
 
@@ -6076,9 +6119,12 @@ prim_shl_90:
 ; example
 ;   15 2 shr	% 3
 ;
+
+		bits 32
+
 prim_shr:
 		mov dx,t_int + (t_int << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_shr_90
 		xchg eax,ecx
 		cmp ecx,byte 20h
@@ -6086,9 +6132,9 @@ prim_shr:
 		mov cl,1fh
 prim_shr_50:
 		sar eax,cl
-		dec word [pstack_ptr]
-		xor cx,cx
-		call set_pstack_tos
+		dec dword [pstack_ptr]
+		xor ecx,ecx
+		call pm_set_pstack_tos
 prim_shr_90:
 		ret
 
@@ -6147,11 +6193,11 @@ prim_def_90:
 ;   "" { "is always true" show } if	% strings are always 'true'
 ;
 
-		bits 16
+		bits 32
 
 prim_if:
 		mov dx,t_code + (t_bool << 8)
-		call get_2args
+		call pm_get_2args
 		jnc prim_if_20
 		cmp dh,t_int
 		jz prim_if_20
@@ -6165,22 +6211,22 @@ prim_if:
 		cmp dh,t_array
 		jnz prim_if_80
 prim_if_20:
-		sub word [pstack_ptr],byte 2
+		sub dword [pstack_ptr],2
 		or ecx,ecx
 		jz prim_if_90
 		
 		; branch
 		xchg eax,[pscode_next_instr]
 
-		mov cx,[rstack_ptr]
-		cmp cx,[rstack_size]
+		mov ecx,[rstack_ptr]
+		cmp ecx,[rstack_size]
 		mov bp,pserr_rstack_overflow
 		jae prim_if_80
-		inc word [rstack_ptr]
+		inc dword [rstack_ptr]
 
-		xor cx,cx
+		xor ecx,ecx
 		mov dl,t_if			; mark as 'if' block
-		call set_rstack_tos
+		call pm_set_rstack_tos
 		jnc prim_if_90
 
 prim_if_80:
@@ -6209,11 +6255,11 @@ prim_if_90:
 ;   x1 x2 gt { "x1 > x2" } { "x1 &lt;= x2" } ifelse show
 ;
 
-		bits 16
+		bits 32
 
 prim_ifelse:
-		mov cx,2
-		call get_pstack_tos
+		mov ecx,2
+		call pm_get_pstack_tos
 		jc prim_ifelse_90
 		mov bp,pserr_wrong_arg_types
 		cmp dl,t_bool
@@ -6232,11 +6278,11 @@ prim_ifelse:
 prim_ifelse_10:
 		push eax
 		mov dx,t_code + (t_code << 8)
-		call get_2args
+		call pm_get_2args
 		pop ebx
 		jc prim_ifelse_90
 
-		sub word [pstack_ptr],byte 3
+		sub dword [pstack_ptr],3
 		or ebx,ebx
 		jz prim_ifelse_20
 		xchg dl,dh
@@ -6245,15 +6291,15 @@ prim_ifelse_20:
 		; branch
 		xchg eax,[pscode_next_instr]
 
-		mov cx,[rstack_ptr]
-		cmp cx,[rstack_size]
+		mov ecx,[rstack_ptr]
+		cmp ecx,[rstack_size]
 		mov bp,pserr_rstack_overflow
 		jae prim_ifelse_80
-		inc word [rstack_ptr]
+		inc dword [rstack_ptr]
 
-		xor cx,cx
+		xor ecx,ecx
 		mov dl,t_if			; mark as 'if' block
-		call set_rstack_tos
+		call pm_set_rstack_tos
 		jnc prim_ifelse_90
 
 prim_ifelse_80:
@@ -6562,10 +6608,10 @@ prim_le:
 ;   /a exch def		% a = 8
 ;
 
-		bits 16
+		bits 32
 
 prim_exch:
-		mov cx,2
+		mov ecx,2
 		call rot_pstack_up
 		mov bp,pserr_pstack_underflow
 		ret
@@ -6582,8 +6628,11 @@ prim_exch:
 ;   8
 ;   a 1 rot put		% a[1] = 8
 ;
+
+		bits 32
+
 prim_rot:
-		mov cx,3
+		mov ecx,3
 		call rot_pstack_up
 		mov bp,pserr_pstack_underflow
 		ret
@@ -6604,42 +6653,44 @@ prim_rot:
 ;   /rot { 3 -1 roll } def
 ;  1 2 3 4 5 5 2 roll		% leaves: 4 5 1 2 3
 ;
+
+		bits 32
+
 prim_roll:
 		mov dx,t_int + (t_int << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_roll_90
 		or ecx,ecx
 		jz prim_roll_90
-		movzx edx,word [pstack_ptr]
+		mov edx,[pstack_ptr]
 		sub edx,2
 		cmp edx,ecx
 		mov bp,pserr_pstack_underflow
 		jc prim_roll_90
 		cdq
 		idiv ecx
-		sub word [pstack_ptr],byte 2
-		; ecx is max. 14 bit
-		or dx,dx
+		sub dword [pstack_ptr],2
+		or edx,edx
 		jz prim_roll_90
 		js prim_roll_50
 prim_roll_40:
-		push dx
-		push cx
+		push edx
+		push ecx
 		call rot_pstack_down
-		pop cx
-		pop dx
-		dec dx
+		pop ecx
+		pop edx
+		dec edx
 		jnz prim_roll_40
 		jmp prim_roll_90
 prim_roll_50:
-		neg dx
+		neg edx
 prim_roll_60:
-		push dx
-		push cx
+		push edx
+		push ecx
 		call rot_pstack_up
-		pop cx
-		pop dx
-		dec dx
+		pop ecx
+		pop edx
+		dec edx
 		jnz prim_roll_60
 		clc
 prim_roll_90:
@@ -6654,6 +6705,9 @@ prim_roll_90:
 ;
 ; Turn on @trace mode and show debug info in upper left screen corner.
 ;
+
+		bits 32
+
 prim_dtrace:
 		mov byte [single_step],1
 		mov byte [show_debug_info],1
@@ -6671,6 +6725,9 @@ prim_dtrace:
 ; Tab sets a temporary breakpoint after the current instruction and
 ; continues until it reaches it. Leave this mode by pressing Esc.
 ;
+
+		bits 32
+
 prim_trace:
 		mov byte [single_step],1
 		mov byte [show_debug_info],0
@@ -6691,19 +6748,22 @@ prim_trace:
 ;     pop
 ;   } def
 ; 
+
+		bits 32
+
 prim_return:
-		xor cx,cx
+		xor ecx,ecx
 prim_return_10:
-		push cx
-		call get_rstack_tos
-		pop cx
+		push ecx
+		call pm_get_rstack_tos
+		pop ecx
 		mov bp,pserr_rstack_underflow
 		jc prim_return_90
-		inc cx
+		inc ecx
 		cmp dl,t_code
 		jnz prim_return_10		; skip if, loop, repeat, for, forall
 
-		sub [rstack_ptr],cx
+		sub [rstack_ptr],ecx
 		mov [pscode_next_instr],eax
 prim_return_90:
 		ret
@@ -6719,15 +6779,18 @@ prim_return_90:
 ;
 ;  0 1 100 { 56 eq { exit } if } for	% leave if counter == 56
 ;
+
+		bits 32
+
 prim_exit:
-		xor cx,cx
+		xor ecx,ecx
 prim_exit_10:
-		push cx
-		call get_rstack_tos
-		pop cx
+		push ecx
+		call pm_get_rstack_tos
+		pop ecx
 		mov bp,pserr_rstack_underflow
 		jc prim_exit_90
-		inc cx
+		inc ecx
 		cmp dl,t_loop			; loop
 		jz prim_exit_60
 		cmp dl,t_repeat			; repeat
@@ -6737,14 +6800,14 @@ prim_exit_10:
 		cmp dl,t_forall			; forall
 		jnz prim_exit_10
 prim_exit_30:
-		inc cx
-		inc cx
+		inc ecx
+		inc ecx
 prim_exit_40:
-		inc cx
+		inc ecx
 prim_exit_60:
-		push cx
-		call get_rstack_tos
-		pop cx
+		push ecx
+		call pm_get_rstack_tos
+		pop ecx
 		cmp dl,t_code
 		jz prim_exit_80
 		cmp dl,t_exit
@@ -6753,8 +6816,8 @@ prim_exit_60:
 		jnz prim_exit_90
 
 prim_exit_80:
-		inc cx
-		sub [rstack_ptr],cx
+		inc ecx
+		sub [rstack_ptr],ecx
 		mov [pscode_next_instr],eax
 prim_exit_90:
 		ret
@@ -6769,33 +6832,36 @@ prim_exit_90:
 ;
 ;     /x 0 def { /x x 1 add def x 56 eq { exit } if } loop	% loop until x == 56
 ;
+
+		bits 32
+
 prim_loop:
-		xor cx,cx
-		call get_pstack_tos
+		xor ecx,ecx
+		call pm_get_pstack_tos
 		cmp dl,t_code
 		mov bp,pserr_wrong_arg_types
 		stc
 		jnz prim_loop_90
 
-		dec word [pstack_ptr]
+		dec dword [pstack_ptr]
 
 		; branch
 		xchg eax,[pscode_next_instr]
 
-		mov cx,[rstack_size]
-		sub cx,[rstack_ptr]
-		cmp cx,3
+		mov ecx,[rstack_size]
+		sub ecx,[rstack_ptr]
+		cmp ecx,3
 		mov bp,pserr_rstack_overflow
 		jb prim_loop_90
-		add word [rstack_ptr],byte 2
+		add dword [rstack_ptr],2
 
 		mov dl,t_exit
-		mov cx,1
-		call set_rstack_tos
-		xor cx,cx
+		mov ecx,1
+		call pm_set_rstack_tos
+		xor ecx,ecx
 		mov dl,t_loop			; mark as 'loop' block
 		mov eax,[pscode_next_instr]
-		call set_rstack_tos
+		call pm_set_rstack_tos
 prim_loop_90:
 		ret
 
@@ -6811,12 +6877,15 @@ prim_loop_90:
 ; example
 ;   3 { "X" show } repeat	% print "XXX"
 ;
+
+		bits 32
+
 prim_repeat:
 		mov dx,t_code + (t_int << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_repeat_90
 
-		sub word [pstack_ptr],byte 2
+		sub dword [pstack_ptr],2
 
 		or ecx,ecx
 		jz prim_repeat_90
@@ -6828,26 +6897,26 @@ prim_repeat:
 		; branch
 		xchg eax,[pscode_next_instr]
 
-		mov dx,[rstack_size]
-		sub dx,[rstack_ptr]
-		cmp dx,4
+		mov edx,[rstack_size]
+		sub edx,[rstack_ptr]
+		cmp edx,4
 		mov bp,pserr_rstack_overflow
 		jb prim_repeat_90
-		add word [rstack_ptr],byte 3
+		add dword [rstack_ptr],3
 
 		push eax
 		xchg eax,ecx
 		mov dl,t_int
-		mov  cx,1
-		call set_rstack_tos
+		mov ecx,1
+		call pm_set_rstack_tos
 		pop eax
-		mov cx,2
+		mov ecx,2
 		mov dl,t_exit
-		call set_rstack_tos
-		xor cx,cx
+		call pm_set_rstack_tos
+		xor ecx,ecx
 		mov dl,t_repeat			; mark as 'repeat' block
 		mov eax,[pscode_next_instr]
-		call set_rstack_tos
+		call pm_set_rstack_tos
 prim_repeat_90:
 		ret
 
@@ -6867,22 +6936,25 @@ prim_repeat_90:
 ; example
 ;  0 1 4 { } for 	% leave 0 1 2 3 4 on the stack
 ;
+
+		bits 32
+
 prim_for:
 		mov bp,pserr_pstack_underflow
-		cmp  word [pstack_ptr],byte 4
+		cmp dword [pstack_ptr],4
 		jc prim_for_90
-		mov cx,3
-		call get_pstack_tos
+		mov ecx,3
+		call pm_get_pstack_tos
 		cmp dl,t_int
 		stc
 		mov bp,pserr_wrong_arg_types
 		jnz prim_for_90
-		mov cx,2
-		push bp
+		mov ecx,2
+		push ebp
 		push eax
-		call get_pstack_tos
+		call pm_get_pstack_tos
 		pop edi
-		pop bp
+		pop ebp
 		cmp dl,t_int
 		stc
 		jnz prim_for_90
@@ -6890,51 +6962,51 @@ prim_for:
 		mov dx,t_code + (t_int << 8)
 		push eax
 		push edi
-		call get_2args
+		call pm_get_2args
 		pop edi
 		pop esi
 		jc prim_for_90
 
 		; don't remove start value!
-		sub word [pstack_ptr],byte 3
+		sub dword [pstack_ptr],3
 
 		; branch
 		xchg eax,[pscode_next_instr]
 
-		mov dx,[rstack_size]
-		sub dx,[rstack_ptr]
-		cmp dx,6
+		mov edx,[rstack_size]
+		sub edx,[rstack_ptr]
+		cmp edx,6
 		mov bp,pserr_rstack_overflow
 		jb prim_for_90
-		add word [rstack_ptr],byte 5
+		add dword [rstack_ptr],5
 
 		push ecx
 		push esi
 		push edi
 
 		mov dl,t_exit
-		mov cx,4
-		call set_rstack_tos
+		mov ecx,4
+		call pm_set_rstack_tos
 
 		pop eax
 		mov dl,t_int
-		mov cx,3
-		call set_rstack_tos
+		mov ecx,3
+		call pm_set_rstack_tos
 
 		pop eax
 		mov dl,t_int
-		mov cx,2
-		call set_rstack_tos
+		mov ecx,2
+		call pm_set_rstack_tos
 
 		pop eax
 		mov dl,t_int
-		mov cx,1
-		call set_rstack_tos
+		mov ecx,1
+		call pm_set_rstack_tos
 
-		xor cx,cx
+		xor ecx,ecx
 		mov dl,t_for			; mark as 'for' block
 		mov eax,[pscode_next_instr]
-		call set_rstack_tos
+		call pm_set_rstack_tos
 prim_for_90:
 		ret
 
@@ -9498,19 +9570,19 @@ prim_strstr_90:
 ; int1: volume (0 .. 100)
 ;
 
-		bits 16
+		bits 32
 
 prim_soundgetvolume:
-		mov ax,[pstack_ptr]
-		inc ax
-		cmp [pstack_size],ax
+		mov eax,[pstack_ptr]
+		inc eax
+		cmp [pstack_size],eax
 		mov bp,pserr_pstack_overflow
 		jb prim_sgv_90
-		mov [pstack_ptr],ax
+		mov [pstack_ptr],eax
 		mov dl,t_int
 		movzx eax,byte [sound_vol]
-		xor cx,cx
-		call set_pstack_tos
+		xor ecx,ecx
+		call pm_set_pstack_tos
 prim_sgv_90:
 		ret
 
@@ -9524,27 +9596,27 @@ prim_sgv_90:
 ; int1: volume (0 .. 100)
 ;
 
-		bits 16
+		bits 32
 
 prim_soundsetvolume:
 		mov dl,t_int
-		call get_1arg
+		call pm_get_1arg
 		jc prim_ssv_90
-		dec word [pstack_ptr]
+		dec dword [pstack_ptr]
 		or eax,eax
 		jns prim_ssv_30
 		xor eax,eax
 prim_ssv_30:
 		cmp eax,100
 		jl prim_ssv_50
-		mov ax,100
+		mov eax,100
 prim_ssv_50:
 		or eax,eax
 		jns prim_ssv_60
-		xor ax,ax
+		xor eax,eax
 prim_ssv_60:
 		mov [sound_vol],al
-		call mod_setvolume
+		rm32_call mod_setvolume
 		clc
 prim_ssv_90:
 		ret
@@ -9559,19 +9631,19 @@ prim_ssv_90:
 ; int1: sample rate
 ;
 
-		bits 16
+		bits 32
 
 prim_soundgetsamplerate:
-		mov ax,[pstack_ptr]
-		inc ax
-		cmp [pstack_size],ax
+		mov eax,[pstack_ptr]
+		inc eax
+		cmp [pstack_size],eax
 		mov bp,pserr_pstack_overflow
 		jb prim_sgsr_90
-		mov [pstack_ptr],ax
+		mov [pstack_ptr],eax
 		mov dl,t_int
 		movzx eax,byte [sound_sample]
-		xor cx,cx
-		call set_pstack_tos
+		xor ecx,ecx
+		call pm_set_pstack_tos
 prim_sgsr_90:
 		ret
 
@@ -9585,17 +9657,17 @@ prim_sgsr_90:
 ; int1: sample rate
 ;
 
-		bits 16
+		bits 32
 
 prim_soundsetsamplerate:
 		mov dl,t_int
-		call get_1arg
+		call pm_get_1arg
 		jc prim_sssr_90
-		dec word [pstack_ptr]
+		dec dword [pstack_ptr]
 		push eax
-		call sound_init
+		rm32_call sound_init
 		pop eax
-		call sound_setsample
+		rm32_call sound_setsample
 		clc
 prim_sssr_90:
 		ret
@@ -9610,12 +9682,10 @@ prim_sssr_90:
 ; Note: obsolete. Sounds are played using the PC speaker.
 ;
 
-		bits 16
+		bits 32
 
 prim_soundplay:
-
-
-		call sound_init
+		rm32_call sound_init
 		jc prim_splay_80
 prim_splay_80:
 		clc
@@ -9630,23 +9700,23 @@ prim_splay_90:
 ; ( -- )
 ;
 
-		bits 16
+		bits 32
 
 prim_sounddone:
-		call sound_done
+		rm32_call sound_done
 		clc
 		ret
 
 
 %if 0
 
-		bits 16
+		bits 32
 
 prim_soundtest:
 		mov dl,t_int
-		call get_1arg
+		call pm_get_1arg
 		jc prim_stest_90
-		dec word [pstack_ptr]
+		dec dword [pstack_ptr]
 
 		mov [sound_x],eax
 		call sound_test
@@ -9666,13 +9736,13 @@ prim_stest_90:
 ; ptr1: mod file
 ;
 
-		bits 16
+		bits 32
 
 prim_modload:
 		mov dx,t_ptr + (t_int << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_modload_90
-		sub word [pstack_ptr],byte 2
+		sub dword [pstack_ptr],2
 		xchg eax,ecx
 
 		; ecx mod file
@@ -9680,10 +9750,12 @@ prim_modload:
 
 		push eax
 		push ecx
-		call sound_init
+		rm32_call sound_init
 		pop ecx
 		pop eax
 		jc prim_modload_80
+
+		pm_leave 32
 
 		push ecx
 		call lin2so
@@ -9691,6 +9763,8 @@ prim_modload:
 		pop es
 
 		call mod_load
+
+		pm_enter 32
 
 prim_modload_80:
 		clc
@@ -9710,13 +9784,13 @@ prim_modload_90:
 ; Note: sounds are played using the PC speaker.
 ;
 
-		bits 16
+		bits 32
 
 prim_modplay:
 		mov dx,t_int + (t_int << 8)
-		call get_2args
+		call pm_get_2args
 		jc prim_modplay_90
-		sub word [pstack_ptr],byte 2
+		sub dword [pstack_ptr],2
 		xchg eax,ecx
 
 		; ecx start
@@ -9725,8 +9799,8 @@ prim_modplay:
 		cmp byte [sound_ok],0
 		jz prim_modplay_90
 
-		mov bx,cx
-		call mod_play
+		mov ebx,ecx
+		rm32_call mod_play
 
 		clc
 prim_modplay_90:
@@ -9745,49 +9819,49 @@ prim_modplay_90:
 ; int4: pitch
 ;
 
-		bits 16
+		bits 32
 
 prim_modplaysample:
 		mov bp,pserr_pstack_underflow
-		cmp  word [pstack_ptr],byte 4
+		cmp dword [pstack_ptr],4
 		jc prim_modps_90
 		mov bp,pserr_wrong_arg_types
 
-		mov cx,3
-		call get_pstack_tos
+		mov ecx,3
+		call pm_get_pstack_tos
 		cmp dl,t_int
 		stc
 		jnz prim_modps_90
 
-		mov cx,2
-		push ax
-		call get_pstack_tos
-		pop bx
+		mov ecx,2
+		push eax
+		call pm_get_pstack_tos
+		pop ebx
 		cmp dl,t_int
 		stc
 		jnz prim_modps_90
 
 		mov dx,t_int + (t_int << 8)
-		push bx
-		push ax
-		call get_2args
-		pop bx
-		pop dx
+		push ebx
+		push eax
+		call pm_get_2args
+		pop ebx
+		pop edx
 		jc prim_modps_90
 
-		sub word [pstack_ptr],byte 4
+		sub dword [pstack_ptr],4
 
-		xchg ax,dx
+		xchg eax,edx
 
-		; 1: ax
-		; 2: bx
-		; 3: cx
-		; 4: dx
+		; 1: eax
+		; 2: ebx
+		; 3: ecx
+		; 4: edx
 
 		cmp byte [sound_ok],0
 		jz prim_modps_90
 
-		call mod_playsample
+		rm32_call mod_playsample
 
 		clc
 prim_modps_90:
@@ -13624,30 +13698,30 @@ sound_setsample_90:
 
 %if 0
 
-		bits 16
+		bits 32
 
 sound_test:
 		cmp dword [sound_x],0
 		jz sound_test_80
 
-		call sound_init
+		rm32_call sound_init
 		jc sound_test_90
 
 		mov eax,16000
-		call sound_setsample
+		rm32_call sound_setsample
 
 		mov byte [sound_playing],1
 
 		jmp sound_test_90
 
-
-
 sound_test_80:
-		call sound_done
+		rm32_call sound_done
 sound_test_90:
 		ret
 %endif
 
+
+		bits 16
 
 ; mod player
 %include	"modplay.inc"
