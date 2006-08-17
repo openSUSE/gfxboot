@@ -14961,7 +14961,7 @@ set_gdt_limit_40:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; Prelimiray protected mode interface init.
+; Preliminary protected mode interface init.
 ;
 ; Setup gdt so we can at least switch modes with interrupts disabled.
 ;
