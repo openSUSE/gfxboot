@@ -409,6 +409,17 @@ tmp_var_1		dd 0
 tmp_var_2		dd 0
 tmp_var_3		dd 0
 
+ddc_timings		dw 0		; standard ddc timing info
+ddc_xtimings		dd 0		; converted standard timing/final timing value
+ddc_xtimings1		dd 0, 0, 0, 0
+ddc_mult		dd 0, 1		; needed for ddc timing calculation
+			dd 3, 4
+			dd 4, 5
+			dd 9, 16
+
+fsc_bits		dw 0, 0x0004, 0x4000, 0x0200, 0x0100, 0x0200, 0, 0x4000
+			dw 0x0200, 0, 0, 0, 0, 0, 0, 0
+
 			align 2
 pm_idt			dw 7ffh			; idt for pm
 .base			dd 0
@@ -1711,8 +1722,6 @@ gfx_cb_80:
 		mov al,0ffh
 gfx_cb_90:
 		ret
-
-		bits 16
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -4404,7 +4413,10 @@ con_xy:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-%include	"kroete.inc"
+; Idle task.
+;
+; Run when we are waiting for keyboard input.
+;
 
 		bits 32
 
@@ -14633,7 +14645,7 @@ mouse_handler:
 
 get_monitor_res:
 		call read_ddc
-		rm32_call read_fsc
+		call read_fsc
 
 		; convert timing bitmask to resolution
 		; if the card has enough memory assume larger resolutions
@@ -14770,64 +14782,48 @@ read_ddc_70:
 read_ddc_90:
 		ret
 
-ddc_timings	dw 0		; standard ddc timing info
-ddc_xtimings	dd 0		; converted standard timing/final timing value
-ddc_xtimings1	dd 0, 0, 0, 0
-ddc_mult	dd 0, 1		; needed for ddc timing calculation
-		dd 3, 4
-		dd 4, 5
-		dd 9, 16
-
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; Look for a fsc notebook lcd panel and set ddc_timings.
 ;
 
-		bits 16
+		bits 32
 
 read_fsc:
-		push es
-		push ds
-		cmp word [ddc_timings],byte 0
+		cmp word [ddc_timings],0
 		jnz read_fsc_90
 
-		push word 0xf000
-		pop ds
-		xor di,di
+		mov edi,0f0000h
 read_fsc_10:
-		cmp dword [di],0x696a7546
+		cmp dword [es:edi],0x696a7546
 		jnz read_fsc_30
-		cmp dword [di+4],0x20757374
+		cmp dword [es:edi+4],0x20757374
 		jnz read_fsc_30
-		mov cx,0x20
-		xor bx,bx
-		mov si,di
+		mov ecx,0x20
+		xor ebx,ebx
+		mov esi,edi
 read_fsc_20:
-		lodsb
+		es lodsb
 		add bl,al
-		dec cx
+		dec ecx
 		jnz read_fsc_20
 		or bl,bl
 		jnz read_fsc_30
-		mov al,[di+23]
+		mov al,[es:edi+23]
 		and al,0xf0
 		jnz read_fsc_90
-		mov bl,[di+21]
-		and bx,0xf0
-		shr bx,3
-		mov ax,[cs:bx+fsc_bits]
-		mov [cs:ddc_timings],ax
+		mov bl,[es:edi+21]
+		and bl,0xf0
+		shr bl,3
+		mov ax,[fsc_bits+ebx]
+		mov [ddc_timings],ax
 		jmp read_fsc_90
 read_fsc_30:
-		add di,0x10
-		jnz read_fsc_10
+		add edi,0x10
+		cmp edi,100000h
+		jbe read_fsc_10
 read_fsc_90:
-		pop ds
-		pop es
 		ret
-
-fsc_bits	dw 0, 0x0004, 0x4000, 0x0200, 0x0100, 0x0200, 0, 0x4000
-		dw 0x0200, 0, 0, 0, 0, 0, 0, 0
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -14940,27 +14936,6 @@ videoinfo_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; Set segment descriptor base in gdt.
-;
-; si		descriptor
-; eax		base
-;
-; changes no regs
-;
-
-		bits 16
-
-set_gdt_base:
-		push eax
-		mov [gdt+si+2],ax
-		shr eax,16
-		mov [gdt+si+4],al
-		mov [gdt+si+7],ah
-		pop eax
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; Set segment descriptor base in gdt (32 bit code).
 ;
 ; si		descriptor
@@ -14972,6 +14947,27 @@ set_gdt_base:
 		bits 32
 
 set_gdt_base_pm:
+		push eax
+		mov [gdt+si+2],ax
+		shr eax,16
+		mov [gdt+si+4],al
+		mov [gdt+si+7],ah
+		pop eax
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Set segment descriptor base in gdt.
+;
+; si		descriptor
+; eax		base
+;
+; changes no regs
+;
+
+		bits 16
+
+set_gdt_base:
 		push eax
 		mov [gdt+si+2],ax
 		shr eax,16
@@ -15023,13 +15019,13 @@ set_gdt_limit_40:
 
 gdt_init:
 		mov eax,cs
-
-		segofs2lin ax,word gdt,dword [pm_gdt.base]
-
 		mov [rm_prog_cs],ax
-		shl eax,4
 
+		shl eax,4
 		mov [prog.base],eax
+
+		lea edx,[eax+gdt]
+		mov [pm_gdt.base],edx
 
 		mov si,pm_seg.prog_c32
 		call set_gdt_base
@@ -15322,7 +15318,11 @@ switch_to_rm32:
 		call switch_to_rm
 		o32 ret
 
-		bits 16
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+		bits 32
+
+%include	"kroete.inc"
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
