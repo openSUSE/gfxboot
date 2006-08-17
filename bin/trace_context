@@ -42,6 +42,8 @@ while(<>) {
     $ctx = $2 if /^\s*(switch_to_)?bits\s+(16|32)\s*$/;
     $ctx = 32 if /^\s*pm_enter\s*$/;
     $ctx = 16 if /^\s*pm_leave\s*$/;
+    $ctx = 32 if /^\s*gfx_enter\s*$/;
+    $ctx = 16 if /^\s*gfx_leave\s*$/;
   }
 }
 

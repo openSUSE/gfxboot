@@ -189,6 +189,7 @@ dict.size		dd 0		; dict entries
 boot_cs			dw 0		; seg
 boot_sysconfig		dw 0		; ofs
 boot_callback		dd 0 		; seg:ofs
+boot_cs.base		dd 0		; boot_cs * 16
 
 pstack			dd 0		; (seg:ofs)
 pstack.lin		dd 0		; (lin)
@@ -580,6 +581,18 @@ sizeof_fb_entry		equ 8
 		pop %3
 %endmacro
 
+%macro		pm_enter 0
+%%j_pm_1:
+		call switch_to_pm
+%%j_pm_2:
+		%if %%j_pm_2 - %%j_pm_1 != 3
+		  %error "pm_enter: not in 16 bit mode"
+		%endif
+
+		bits 32
+%endmacro
+
+
 %macro		pm_leave 0
 %%j_pm_1:
 		call switch_to_rm
@@ -592,15 +605,15 @@ sizeof_fb_entry		equ 8
 %endmacro
 
 
-%macro		pm_enter 0
-%%j_pm_1:
-		call switch_to_pm
-%%j_pm_2:
-		%if %%j_pm_2 - %%j_pm_1 != 3
-		  %error "pm_enter: not in 16 bit mode"
-		%endif
-
+%macro		gfx_enter 0
+		call gfx_enter
 		bits 32
+%endmacro
+
+
+%macro		gfx_leave 0
+		call gfx_leave
+		bits 16
 %endmacro
 
 
@@ -638,6 +651,9 @@ sizeof_fb_entry		equ 8
 ; return:
 ;  CF		error
 ;
+
+		bits 16
+
 gfx_init:
 		push fs
 		push es
@@ -654,6 +670,10 @@ gfx_init:
 		mov [mem_archive],edi
 		mov [boot_cs],dx
 		mov [boot_sysconfig],si
+
+		movzx eax,dx
+		shl eax,4
+		mov [boot_cs.base],eax
 
 		mov es,dx
 		mov ax,[es:si+9]
@@ -896,55 +916,43 @@ gfx_init_90:
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ; Do something.
+
+		bits 16
+
 gfx_done:
-		push fs
-		push es
-		push ds
+		gfx_enter
 
-		push cs
-		pop ds
-		cld
-
-		call use_local_stack
-
-		call sound_done
+		rm32_call sound_done
 
 		cmp byte [keep_mode],0
 		jnz gfx_done_50
 		mov ax,3
 		int 10h
 gfx_done_50:
-
-		call use_old_stack
-
-		pop ds
-		pop es
-		pop fs
-		retf
+		gfx_leave		; does not return
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
-; [boot_cs]:di	buffer	( 0 --> no buffer )
+; [boot_cs]:di	buffer (0 --> no buffer)
 ; cx		buffer size
 ; ax		timeout value (0 --> no timeout)
+;
 ; return:
 ;  eax		action (1, 2: textmode, boot)
 ;  ebx		selected menu entry (-1: none)
 ;
+
+		bits 16
+
 gfx_input:
-		push fs
-		push es
-		push ds
+		gfx_enter
 
-		push cs
-		pop ds
-		cld
+		movzx edi,di
+		movzx ecx,cx
 
-		call use_local_stack
-
-		push di
-		push cx
+		push edi
+		push ecx
 
 		cmp byte [input_notimeout],0
 		jnz gfx_input_10
@@ -953,15 +961,15 @@ gfx_input:
 		mov [input_timeout_start],eax
 gfx_input_10:
 
-		pm32_call clear_kbd_queue
+		call clear_kbd_queue
 
 gfx_input_20:
-		pm32_call get_key_to
-		and dword [input_timeout],byte 0	; disable timeout
+		call get_key_to
+		and dword [input_timeout],0		; disable timeout
 
 		push eax
 		mov ecx,cb_KeyEvent
-		pm32_call get_dict_entry
+		call get_dict_entry
 		pop ecx
 		jc gfx_input_90
 
@@ -970,65 +978,65 @@ gfx_input_20:
 		jnz gfx_input_90
 
 		push eax
-		xchg eax,ecx
-		mov word [pstack_ptr],1
+		mov eax,ecx
+		mov dword [pstack_ptr],1
 		mov dl,t_int
-		xor cx,cx
-		call set_pstack_tos
-		mov word [rstack_ptr],1
-		xor cx,cx
+		xor ecx,ecx
+		call pm_set_pstack_tos
+		mov dword [rstack_ptr],1
+		xor ecx,ecx
 		mov dl,t_code
 		stc
 		sbb eax,eax
-		call set_rstack_tos
+		call pm_set_rstack_tos
 		pop eax
 
-		pm32_call run_pscode
+		call run_pscode
 		jnc gfx_input_50
 
-		pm32_call ps_status_info
-		pm32_call get_key
+		call ps_status_info
+		call get_key
 		stc
 		jmp gfx_input_90
 
 gfx_input_50:
-		mov cx,2
-		call get_pstack_tos
+		mov ecx,2
+		call pm_get_pstack_tos
 		jc gfx_input_90
 		cmp dl,t_string
 		stc
 		jnz gfx_input_90
 
-		pop cx
-		pop di
-		push di
-		push cx
+		pop ecx
+		pop edi
+		push edi
+		push ecx
 
-		or di,di
+		or edi,edi
 		jz gfx_input_70
-		or cx,cx
+		or ecx,ecx
 		jz gfx_input_70
 
-		lin2segofs eax,fs,si
-		mov es,[boot_cs]
+		mov esi,eax
+		add edi,[boot_cs.base]
 gfx_input_60:
-		fs lodsb
+		es lodsb
 		stosb
 		or al,al
 		loopnz gfx_input_60
-		mov byte [es:di-1],0
+		mov byte [es:edi-1],0
 
 gfx_input_70:
-		mov cx,1
-		call get_pstack_tos
+		mov ecx,1
+		call pm_get_pstack_tos
 		jc gfx_input_90
 		cmp dl,t_int
 		stc
 		jnz gfx_input_90
 
-		xor cx,cx
+		xor ecx,ecx
 		push eax
-		call get_pstack_tos
+		call pm_get_pstack_tos
 		pop ebx
 		jc gfx_input_90
 		cmp dl,t_int
@@ -1040,21 +1048,19 @@ gfx_input_70:
 
 gfx_input_90:
 
-		pop cx
-		pop di
+		pop ecx
+		pop edi
 
-		call use_old_stack
-
-		pop ds
-		pop es
-		pop fs
-		retf
+		gfx_leave		; does not return
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ; es:si	menu description
 ;
+
+		bits 16
+
 gfx_menu_init:
 		push fs
 		push es
@@ -1182,53 +1188,52 @@ gfx_menu_init_90:
 ; [boot_cs]:di	info text 2	(may be 0 --> no text 2)
 ; al		0/1	info/error
 ;
+
+		bits 16
+
 gfx_infobox_init:
-		push fs
-		push es
-		push ds
+		gfx_enter
 
-		push cs
-		pop ds
-		cld
+		push eax
 
-		call use_local_stack
+		mov ecx,100h-1
+		mov ebx,[infobox_buffer]
 
-		push ax
-
-		mov cx,100h-1
-		mov fs,[boot_cs]
-
-		lin2segofs dword [infobox_buffer],es,bp
-		or si,si
+		movzx esi,si
+		or esi,esi
 		jnz gfx_infobox_init_20
-		inc bp
+		inc ebx
 		jmp gfx_infobox_init_40
 gfx_infobox_init_20:
-		fs lodsb
-		mov [es:bp],al
-		inc bp
+		add esi,[boot_cs.base]
+gfx_infobox_init_21:
+		es lodsb
+		mov [es:ebx],al
+		inc ebx
 		or al,al
-		loopnz gfx_infobox_init_20
-		or cx,cx
+		loopnz gfx_infobox_init_21
+		or ecx,ecx
 		jz gfx_infobox_init_40
-		mov si,di
-		or si,si
+
+		movzx esi,di
+		or esi,esi
 		jz gfx_infobox_init_40
-		inc cx
-		dec bp
+		inc ecx
+		dec ebx
+		add esi,[boot_cs.base]
 gfx_infobox_init_25:
-		fs lodsb
-		mov [es:bp],al
-		inc bp
+		es lodsb
+		mov [es:ebx],al
+		inc ebx
 		or al,al
 		loopnz gfx_infobox_init_25
 gfx_infobox_init_40:
-		mov byte [es:bp-1],0
+		mov byte [es:ebx-1],0
 
 		mov ecx,cb_InfoBoxInit
-		pm32_call get_dict_entry
+		call get_dict_entry
 
-		pop bx
+		pop ebx
 
 		jc gfx_infobox_init_90
 
@@ -1238,58 +1243,48 @@ gfx_infobox_init_40:
 
 		push eax
 
-		mov word [pstack_ptr],2
+		mov dword [pstack_ptr],2
 
 		movzx eax,bl
 		mov dl,t_int
-		xor cx,cx
-		call set_pstack_tos
+		xor ecx,ecx
+		call pm_set_pstack_tos
 
 		mov eax,[infobox_buffer]
 		mov dl,t_string
-		mov cx,1
-		call set_pstack_tos
+		mov ecx,1
+		call pm_set_pstack_tos
 
-		mov word [rstack_ptr],1
-		xor cx,cx
+		mov dword [rstack_ptr],1
+		xor ecx,ecx
 		mov dl,t_code
 		stc
 		sbb eax,eax
-		call set_rstack_tos
+		call pm_set_rstack_tos
 
 		pop eax
-		pm32_call run_pscode
+		call run_pscode
 		jnc gfx_infobox_init_90
 
-		pm32_call ps_status_info
-		pm32_call get_key
+		call ps_status_info
+		call get_key
 		stc
 
 gfx_infobox_init_90:
 
-		call use_old_stack
-
-		pop ds
-		pop es
-		pop fs
-		retf
+		gfx_leave		; does not return
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
+
+		bits 16
+
 gfx_infobox_done:
-		push fs
-		push es
-		push ds
-
-		push cs
-		pop ds
-		cld
-
-		call use_local_stack
+		gfx_enter
 
 		mov ecx,cb_InfoBoxDone
-		pm32_call get_dict_entry
+		call get_dict_entry
 		jc gfx_infobox_done_90
 
 		cmp dl,t_code
@@ -1297,30 +1292,25 @@ gfx_infobox_done:
 		jnz gfx_infobox_done_90
 
 		push eax
-		mov word [pstack_ptr],0
-		mov word [rstack_ptr],1
-		xor cx,cx
+		mov dword [pstack_ptr],0
+		mov dword [rstack_ptr],1
+		xor ecx,ecx
 		mov dl,t_code
 		stc
 		sbb eax,eax
-		call set_rstack_tos
+		call pm_set_rstack_tos
 
 		pop eax
-		pm32_call run_pscode
+		call run_pscode
 		jnc gfx_infobox_done_90
 
-		pm32_call ps_status_info
-		pm32_call get_key
+		call ps_status_info
+		call get_key
 		stc
 
 gfx_infobox_done_90:
 
-		call use_old_stack
-
-		pop ds
-		pop es
-		pop fs
-		retf
+		gfx_leave		; does not return
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1328,24 +1318,19 @@ gfx_infobox_done_90:
 ; eax		max
 ; [boot_cs]:si	kernel name
 ;
+
+		bits 16
+
 gfx_progress_init:
-		push fs
-		push es
-		push ds
-
-		push cs
-		pop ds
-		cld
-
-		call use_local_stack
+		gfx_enter
 
 		mov [progress_max],eax
-		and dword [progress_current],byte 0
+		and dword [progress_current],0
 
 		mov ecx,cb_ProgressInit
-		push si
-		pm32_call get_dict_entry
-		pop si
+		push esi
+		call get_dict_entry
+		pop esi
 		jc gfx_progress_init_90
 
 		cmp dl,t_code
@@ -1353,53 +1338,45 @@ gfx_progress_init:
 		jnz gfx_progress_init_90
 
 		push eax
-		mov word [pstack_ptr],1
+		mov dword [pstack_ptr],1
 
-		segofs2lin word [boot_cs],si,eax
+		movzx eax,si
+		add eax,[boot_cs.base]
+
 		mov dl,t_string
-		xor cx,cx
-		call set_pstack_tos
+		xor ecx,ecx
+		call pm_set_pstack_tos
 
-		mov word [rstack_ptr],1
-		xor cx,cx
+		mov dword [rstack_ptr],1
+		xor ecx,ecx
 		mov dl,t_code
 		stc
 		sbb eax,eax
-		call set_rstack_tos
+		call pm_set_rstack_tos
 
 		pop eax
-		pm32_call run_pscode
+		call run_pscode
 		jnc gfx_progress_init_90
 
-		pm32_call ps_status_info
-		pm32_call get_key
+		call ps_status_info
+		call get_key
 		stc
 
 gfx_progress_init_90:
 
-		call use_old_stack
-
-		pop ds
-		pop es
-		pop fs
-		retf
+		gfx_leave		; does not return
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
+
+		bits 16
+
 gfx_progress_done:
-		push fs
-		push es
-		push ds
-
-		push cs
-		pop ds
-		cld
-
-		call use_local_stack
+		gfx_enter
 
 		mov ecx,cb_ProgressDone
-		pm32_call get_dict_entry
+		call get_dict_entry
 		jc gfx_progress_done_90
 
 		cmp dl,t_code
@@ -1407,49 +1384,39 @@ gfx_progress_done:
 		jnz gfx_progress_done_90
 
 		push eax
-		mov word [pstack_ptr],0
-		mov word [rstack_ptr],1
-		xor cx,cx
+		mov dword [pstack_ptr],0
+		mov dword [rstack_ptr],1
+		xor ecx,ecx
 		mov dl,t_code
 		stc
 		sbb eax,eax
-		call set_rstack_tos
+		call pm_set_rstack_tos
 
 		pop eax
-		pm32_call run_pscode
+		call run_pscode
 		jnc gfx_progress_done_90
 
-		pm32_call ps_status_info
-		pm32_call get_key
+		call ps_status_info
+		call get_key
 		stc
 
 gfx_progress_done_90:
 
-		call use_old_stack
-
-		pop ds
-		pop es
-		pop fs
-		retf
+		gfx_leave		; does not return
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
+
+		bits 16
+
 gfx_progress_update:
-		push fs
-		push es
-		push ds
-
-		push cs
-		pop ds
-		cld
-
-		call use_local_stack
+		gfx_enter
 
 		add [progress_current],eax
 
 		mov ecx,cb_ProgressUpdate
-		pm32_call get_dict_entry
+		call get_dict_entry
 		jc gfx_progress_update_90
 
 		cmp dl,t_code
@@ -1457,56 +1424,50 @@ gfx_progress_update:
 		jnz gfx_progress_update_90
 
 		push eax
-		mov word [pstack_ptr],2
+		mov dword [pstack_ptr],2
 
 		mov eax,[progress_current]
 		mov dl,t_int
-		xor cx,cx
-		call set_pstack_tos
+		xor ecx,ecx
+		call pm_set_pstack_tos
 
 		mov eax,[progress_max]
 		mov dl,t_int
-		mov cx,1
-		call set_pstack_tos
+		mov ecx,1
+		call pm_set_pstack_tos
 
-		mov word [rstack_ptr],1
-		xor cx,cx
+		mov dword [rstack_ptr],1
+		xor ecx,ecx
 		mov dl,t_code
 		stc
 		sbb eax,eax
-		call set_rstack_tos
+		call pm_set_rstack_tos
 
 		pop eax
-		pm32_call run_pscode
+		call run_pscode
 		jnc gfx_progress_update_90
 
-		pm32_call ps_status_info
-		pm32_call get_key
+		call ps_status_info
+		call get_key
 		stc
 
 gfx_progress_update_90:
 
-		call use_old_stack
-
-		pop ds
-		pop es
-		pop fs
-		retf
+		gfx_leave		; does not return
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
-gfx_progress_limit:
-		push ds
 
-		push cs
-		pop ds
+		bits 16
+
+gfx_progress_limit:
+		gfx_enter
 
 		mov [progress_max],eax
 		mov [progress_current],edx
 
-		pop ds
-		retf
+		gfx_leave		; does not return
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1514,23 +1475,18 @@ gfx_progress_limit:
 ;  [boot_cs]:si	password
 ;  [boot_cs]:di	image name
 ;
+
+		bits 16
+
 gfx_password_init:
-		push fs
-		push es
-		push ds
-
-		push cs
-		pop ds
-		cld
-
-		call use_local_stack
+		gfx_enter
 
 		mov ecx,cb_PasswordInit
-		push si
-		push di
-		pm32_call get_dict_entry
-		pop di
-		pop si
+		push esi
+		push edi
+		call get_dict_entry
+		pop edi
+		pop esi
 		jc gfx_password_init_90
 
 		cmp dl,t_code
@@ -1539,51 +1495,116 @@ gfx_password_init:
 
 		push eax
 
-		mov word [pstack_ptr],2
+		mov dword [pstack_ptr],2
 
-		segofs2lin word [boot_cs],si,eax
+		movzx eax,si
+		add eax,[boot_cs.base]
+
 		mov dl,t_string
-		xor cx,cx
-		push di
-		call set_pstack_tos
-		pop di
+		xor ecx,ecx
+		push edi
+		call pm_set_pstack_tos
+		pop edi
 
-		segofs2lin word [boot_cs],di,eax
+		movzx eax,di
+		add eax,[boot_cs.base]
+
 		mov dl,t_string
-		mov cx,1
-		call set_pstack_tos
+		mov ecx,1
+		call pm_set_pstack_tos
 
-		mov word [rstack_ptr],1
-		xor cx,cx
+		mov dword [rstack_ptr],1
+		xor ecx,ecx
 		mov dl,t_code
 		stc
 		sbb eax,eax
-		call set_rstack_tos
+		call pm_set_rstack_tos
 
 		pop eax
-		pm32_call run_pscode
+		call run_pscode
 		jnc gfx_password_init_90
 
 gfx_password_init_80:
-		pm32_call ps_status_info
-		pm32_call get_key
+		call ps_status_info
+		call get_key
 		stc
 
 gfx_password_init_90:
 
-		call use_old_stack
-
-		pop ds
-		pop es
-		pop fs
-		retf
+		gfx_leave		; does not return
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ;  [boot_cs]:si	password
 ;
+
+		bits 16
+
 gfx_password_done:
+		gfx_enter
+
+		mov ecx,cb_PasswordDone
+		push esi
+		call get_dict_entry
+		pop esi
+		jc gfx_password_done_90
+
+		cmp dl,t_code
+		stc
+		jnz gfx_password_done_90
+
+		push eax
+
+		mov dword [pstack_ptr],1
+
+		movzx eax,si
+		add eax,[boot_cs.base]
+
+		mov dl,t_string
+		xor ecx,ecx
+		call pm_set_pstack_tos
+
+		mov dword [rstack_ptr],1
+		xor ecx,ecx
+		mov dl,t_code
+		stc
+		sbb eax,eax
+		call pm_set_rstack_tos
+
+		pop eax
+		call run_pscode
+		jc gfx_password_done_80
+
+		xor ecx,ecx
+		call pm_get_pstack_tos
+		jc gfx_password_done_90
+		cmp dl,t_bool
+		stc
+		jnz gfx_password_done_90
+
+		cmp eax,1
+		jmp gfx_password_done_90
+
+gfx_password_done_80:
+		call ps_status_info
+		call get_key
+		stc
+
+gfx_password_done_90:
+
+		gfx_leave		; does not return
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Save segment regs, use our own stack, and switch to pm.
+;
+
+		bits 16
+
+gfx_enter:
+		pop word [cs:tmp_var_0]
+
 		push fs
 		push es
 		push ds
@@ -1594,52 +1615,21 @@ gfx_password_done:
 
 		call use_local_stack
 
-		mov ecx,cb_PasswordDone
-		push si
-		pm32_call get_dict_entry
-		pop si
-		jc gfx_password_done_90
+		pm_enter
 
-		cmp dl,t_code
-		stc
-		jnz gfx_password_done_90
+		jmp word [tmp_var_0]
 
-		push eax
 
-		mov word [pstack_ptr],1
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Switch to rm, switch back to boot loader stack, restore segment regs and leave.
+;
+; Note: function does not return.
+;
 
-		segofs2lin word [boot_cs],si,eax
-		mov dl,t_string
-		xor cx,cx
-		call set_pstack_tos
+		bits 32
 
-		mov word [rstack_ptr],1
-		xor cx,cx
-		mov dl,t_code
-		stc
-		sbb eax,eax
-		call set_rstack_tos
-
-		pop eax
-		pm32_call run_pscode
-		jc gfx_password_done_80
-
-		xor cx,cx
-		call get_pstack_tos
-		jc gfx_password_done_90
-		cmp dl,t_bool
-		stc
-		jnz gfx_password_done_90
-
-		cmp eax,byte 1
-		jmp gfx_password_done_90
-
-gfx_password_done_80:
-		pm32_call ps_status_info
-		pm32_call get_key
-		stc
-
-gfx_password_done_90:
+gfx_leave:
+		pm_leave
 
 		call use_old_stack
 
