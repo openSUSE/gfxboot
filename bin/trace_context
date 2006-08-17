@@ -40,8 +40,8 @@ while(<>) {
     }
 
     $ctx = $2 if /^\s*(switch_to_)?bits\s+(16|32)\s*$/;
-    $ctx = $1 if /^\s*pm_enter\s*(16|32)\s*$/;
-    $ctx = 16 if /^\s*pm_leave\s*(16|32)\s*$/;
+    $ctx = 32 if /^\s*pm_enter\s*$/;
+    $ctx = 16 if /^\s*pm_leave\s*$/;
   }
 }
 
@@ -87,11 +87,10 @@ for $l (@line) {
   }
 
 
-  if(/^\s*(\S+:)?\s*(pm_enter|pm_leave)\s+(16|32)/) {
+  if(/^\s*(\S+:)?\s*(pm_enter|pm_leave)\s*$/) {
     $op = $2;
-    $arg = $3;
 
-    $c = $op eq 'pm_enter' || $arg == 16 ? 16 : 32;
+    $c = $op eq 'pm_enter' ? 16 : 32;
 
     if($l->[0] != $c) {
       printf "%5d: wrong context (%d): %s\n", $l->[2], $l->[0], $_;

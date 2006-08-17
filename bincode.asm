@@ -580,92 +580,41 @@ sizeof_fb_entry		equ 8
 		pop %3
 %endmacro
 
-%macro		switch_to_bits 1
-		%ifidn %1,16
-%%j_16_1:
-		  jmp pm_seg.prog_c16:%%j_16_2
-%%j_16_2:
-		  %if %%j_16_2 - %%j_16_1 != 7
-		    %error "switch_to_bits 16: not in 32 bit mode"
-		  %endif
-
-		  bits 16
-		%elifidn %1,32
-%%j_32_1:
-		  jmp pm_seg.prog_c32:%%j_32_2
-%%j_32_2:
-		  %if %%j_32_2 - %%j_32_1 != 5
-		    %error "switch_to_bits 32: not in 16 bit mode"
-		  %endif
-
-		  bits 32
-		%else
-		  %error "invalid bits"
+%macro		pm_leave 0
+%%j_pm_1:
+		call switch_to_rm
+%%j_pm_2:
+		%if %%j_pm_2 - %%j_pm_1 != 5
+		  %error "pm_leave: not in 32 bit mode"
 		%endif
+
+		bits 16
 %endmacro
 
 
-%macro		pm_leave 1
-		%ifidn %1,16
-%%j_16_1:
-		  call switch_to_rm
-%%j_16_2:
-		  %if %%j_16_2 - %%j_16_1 != 3
-		    %error "pm_leave %1: not in 16 bit mode"
-		  %endif
-
-		  bits 16
-		%elifidn %1,32
-%%j_32_1:
-		  call switch_to_rm32
-%%j_32_2:
-		  %if %%j_32_2 - %%j_32_1 != 5
-		    %error "pm_leave %1: not in 32 bit mode"
-		  %endif
-
-		  bits 16
-		%else
-		  %error "invalid argument"
+%macro		pm_enter 0
+%%j_pm_1:
+		call switch_to_pm
+%%j_pm_2:
+		%if %%j_pm_2 - %%j_pm_1 != 3
+		  %error "pm_enter: not in 16 bit mode"
 		%endif
-%endmacro
 
-
-%macro		pm_enter 1
-		%ifidn %1,16
-%%j_16_1:
-		  call switch_to_pm
-%%j_16_2:
-		  %if %%j_16_2 - %%j_16_1 != 3
-		    %error "pm_enter %1: not in 16 bit mode"
-		  %endif
-
-		  bits 16
-		%elifidn %1,32
-%%j_32_1:
-		  call switch_to_pm32
-%%j_32_2:
-		  %if %%j_32_2 - %%j_32_1 != 3
-		    %error "pm_enter %1: not in 16 bit mode"
-		  %endif
-
-		  bits 32
-		%else
-		  %error "invalid argument"
-		%endif
+		bits 32
 %endmacro
 
 
 %macro		rm32_call 1
-		pm_leave 32
+		pm_leave
 		call %1
-		pm_enter 32
+		pm_enter
 %endmacro
 
 
 %macro		pm32_call 1
-		pm_enter 32
+		pm_enter
 		call %1
-		pm_leave 32
+		pm_leave
 %endmacro
 
 
@@ -725,7 +674,7 @@ gfx_init_20:
 		; after pm_init
 		cli
 
-		pm_enter 32
+		pm_enter
 
 		; init malloc memory chain
 
@@ -776,9 +725,11 @@ gfx_init_40:
 		call pm_init
 
 		; now we really start...
-		pm_leave 32
+		pm_leave
+
 		sti
-		pm_enter 32
+
+		pm_enter
 
 %if debug
 		mov esi,hello
@@ -894,7 +845,7 @@ gfx_init_40:
 		call get_key
 %endif
 
-		pm_leave 32
+		pm_leave
 
 		; run global code
 		xor eax,eax
@@ -929,7 +880,7 @@ gfx_init_70:
 		bits 32
 
 pm_gfx_init_90:
-		pm_leave 32
+		pm_leave
 		jmp gfx_init_90
 
 gfx_init_80:
@@ -1712,11 +1663,11 @@ gfx_password_done_90:
 gfx_cb:
 		cmp dword [boot_callback],0
 		jz gfx_cb_80
-		pm_leave 32
+		pm_leave
 		push ds
 		call far [boot_callback]
 		pop ds
-		pm_enter 32
+		pm_enter
 		jmp gfx_cb_90
 gfx_cb_80:
 		mov al,0ffh
@@ -9397,9 +9348,9 @@ prim_poweroff_90:
 
 prim_reboot:
 		mov word [es:472h],1234h
-		pm_leave 32
+		pm_leave
 		jmp 0ffffh:0
-		pm_enter 32
+		pm_enter
 		clc
 		ret
 
@@ -9670,7 +9621,7 @@ prim_modload:
 		pop eax
 		jc prim_modload_80
 
-		pm_leave 32
+		pm_leave
 
 		push ecx
 		call lin2so
@@ -9679,7 +9630,7 @@ prim_modload:
 
 		call mod_load
 
-		pm_enter 32
+		pm_enter
 
 prim_modload_80:
 		clc
@@ -15145,17 +15096,13 @@ pm_int:
 		; get original eax
 		mov eax,[esp+4+3*2+4*4+4]	; seg from far call
 
-		switch_to_bits 16
-
-		call switch_to_rm
+		pm_leave
 
 		; jmp to int handler & continue at pm_int_50
 		retf
 pm_int_50:
 
-		call switch_to_pm
-
-		switch_to_bits 32
+		pm_enter
 
 		pop gs
 		pop fs
@@ -15173,9 +15120,8 @@ pm_int_50:
 		iret
 
 
-
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; Switch from real mode to 16 bit protected mode.
+; Switch from real mode to 32 bit protected mode.
 ;
 ; Assumes cs = .text.
 ;
@@ -15208,8 +15154,11 @@ switch_to_pm:
 		o32 lgdt [cs:pm_gdt]
 		o32 lidt [cs:pm_idt]
 		mov cr0,eax
-		jmp pm_seg.prog_c16:switch_to_pm_20
+		jmp pm_seg.prog_c32:switch_to_pm_20
 switch_to_pm_20:
+
+		bits 32
+
 		mov ax,pm_seg.prog_d16
 		mov ds,ax
 
@@ -15225,12 +15174,12 @@ switch_to_pm_20:
 		mov gs,ax
 
 		pop eax
-		popf
-		ret
+		popfw
+		o16 ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; Switch from 16 bit protected mode to real mode.
+; Switch from 32 bit protected mode to real mode.
 ;
 ; Assumes cs = .text
 ;
@@ -15238,10 +15187,10 @@ switch_to_pm_20:
 ; Segment regs != cs are taken from rm_seg.
 ;
 
-		bits 16
+		bits 32
 
 switch_to_rm:
-		pushf
+		pushfw
 		push eax
 		push edx
 
@@ -15261,9 +15210,16 @@ switch_to_rm:
 		mov fs,dx
 		mov gs,dx
 
+		; first down to 16 bit...
+		jmp pm_seg.prog_c16:switch_to_rm_10
+switch_to_rm_10:
+
+		bits 16
+
 		and al,~1
 		mov cr0,eax
 
+		; ... then reload cs
 		jmp 0:switch_to_rm_20
 rm_prog_cs	equ $-2				; our real mode cs value (patched here)
 switch_to_rm_20:
@@ -15281,41 +15237,6 @@ switch_to_rm_20:
 		pop edx
 		pop eax
 		popf
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; Switch from real mode to 32 bit protected mode.
-;
-; Assumes cs = .text.
-;
-; No normal regs or flags changed.
-; Segment regs != cs are stored in rm_seg.
-; ds = .text; ss, es, fs, gs = 4GB selector
-;
-
-		bits 16
-
-switch_to_pm32:
-		call switch_to_pm
-		switch_to_bits 32
-		o16 ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; Switch from 32 bit protected mode to real mode.
-;
-; Assumes cs = .text
-;
-; No normal regs or flags changed.
-; Segment regs != cs are taken from rm_seg.
-;
-
-		bits 32
-
-switch_to_rm32:
-		switch_to_bits 16
-		call switch_to_rm
 		o32 ret
 
 
