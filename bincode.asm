@@ -1062,75 +1062,74 @@ gfx_input_90:
 		bits 16
 
 gfx_menu_init:
-		push fs
-		push es
-		push ds
+		gfx_enter
 
-		push cs
-		pop ds
-
-		call use_local_stack
-
-		push es
-		pop fs
-
-		cld
+		movzx esi,si
+		movzx eax,word [rm_seg.es]
+		shl eax,4
+		add esi,eax
 
 gfx_menu_init_20:
-		push si
-		movzx eax,word [fs:si+menu_entries]
-		push ax
-		imul ax,ax,5
-		add ax,2
+		push esi
+		movzx eax,word [es:esi+menu_entries]
 		push eax
-		pm32_call calloc
+		lea eax,[eax+4*eax+2]
+		push eax
+		call calloc
 		mov [tmp_var_2],eax
 		pop eax
-		pm32_call calloc
+		call calloc
 		mov [tmp_var_1],eax
-		pop cx
-		pop si
-		or eax,[tmp_var_2]
+		pop ecx
+		pop esi
+		or eax,eax
+		jz gfx_menu_init_90
+		cmp dword [tmp_var_1],0
 		jz gfx_menu_init_90
 
-		push cx
+		push ecx
 
-		lin2segofs dword [tmp_var_1],es,bx
-		mov [es:bx],cx
-		add bx,2
-		push dword [fs:si+menu_ent_list]
-		call so2lin
-		pop edi
+		mov ebx,[tmp_var_1]
+		mov [es:ebx],cx
+		add ebx,2
+		movzx eax,word [es:esi+menu_ent_list]
+		movzx edi,word [es:esi+menu_ent_list+2]
+		shl edi,4
+		add edi,eax
 gfx_menu_init_40:
-		mov byte [es:bx],t_string
-		mov [es:bx+1],edi
-		add bx,5
-		movzx eax,word [fs:si+menu_ent_size]
+		mov byte [es:ebx],t_string
+		mov [es:ebx+1],edi
+		add ebx,5
+		movzx eax,word [es:esi+menu_ent_size]
 		add edi,eax
 		loop gfx_menu_init_40
 
-		pop cx
+		pop ecx
 
-		lin2segofs dword [tmp_var_2],es,bx
-		mov [es:bx],cx
-		add bx,2
-		push dword [fs:si+menu_arg_list]
-		call so2lin
-		pop edi
+		mov ebx,[tmp_var_2]
+		mov [es:ebx],cx
+		add ebx,2
+
+		movzx eax,word [es:esi+menu_arg_list]
+		movzx edi,word [es:esi+menu_arg_list+2]
+		shl edi,4
+		add edi,eax
 gfx_menu_init_50:
-		mov byte [es:bx],t_string
-		mov [es:bx+1],edi
-		add bx,5
-		movzx eax,word [fs:si+menu_arg_size]
+		mov byte [es:ebx],t_string
+		mov [es:ebx+1],edi
+		add ebx,5
+		movzx eax,word [es:esi+menu_arg_size]
 		add edi,eax
 		loop gfx_menu_init_50
 
-		push dword [fs:si+menu_default]
-		call so2lin
-		pop dword [tmp_var_3]
+		movzx eax,word [es:esi+menu_default]
+		movzx edi,word [es:esi+menu_default+2]
+		shl edi,4
+		add eax,edi
+		mov [tmp_var_3],eax
 
 		mov ecx,cb_MenuInit
-		pm32_call get_dict_entry
+		call get_dict_entry
 		jc gfx_menu_init_90
 
 		cmp dl,t_code
@@ -1139,47 +1138,42 @@ gfx_menu_init_50:
 
 		push eax
 
-		mov word [pstack_ptr],3
+		mov dword [pstack_ptr],3
 
 		mov eax,[tmp_var_1]
 		mov dl,t_array
-		mov cx,2
-		call set_pstack_tos
+		mov ecx,2
+		call pm_set_pstack_tos
 
 		mov eax,[tmp_var_2]
 		mov dl,t_array
-		mov cx,1
-		call set_pstack_tos
+		mov ecx,1
+		call pm_set_pstack_tos
 
 		mov eax,[tmp_var_3]
 		mov dl,t_string
-		xor cx,cx
-		call set_pstack_tos
+		xor ecx,ecx
+		call pm_set_pstack_tos
 
-		mov word [rstack_ptr],1
-		xor cx,cx
+		mov dword [rstack_ptr],1
+		xor ecx,ecx
 		mov dl,t_code
 		stc
 		sbb eax,eax
-		call set_rstack_tos
+		call pm_set_rstack_tos
 
 		pop eax
 
-		pm32_call run_pscode
+		call run_pscode
 		jnc gfx_menu_init_90
 
-		pm32_call ps_status_info
-		pm32_call get_key
+		call ps_status_info
+		call get_key
 		stc
 
 gfx_menu_init_90:
 
-		call use_old_stack
-
-		pop ds
-		pop es
-		pop fs
-		retf
+		gfx_leave		; does not return
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
