@@ -768,95 +768,114 @@ vo_getvol:
 	
 
 ; pl_playmod - play a modfile
-;   ds:si  start of player
-;   ax     start of song
+;   es:esi	start of player
+;   ax		start of song
 
-		bits 16
+		bits 32
 
 pl_playmod:
-	cmp	[si + pl_loaded], byte 1
-	jz	pm0
-	ret
-pm0:	xor	bx, bx
-	mov	[si + pl_state], bx
-	mov	[si + pl_speed], byte 6
-	mov	[si + pl_effpos], byte 6
-	mov	[si + pl_nextsongnum], ax
-	mov	[si + pl_nextnotenum], bx
-	call	clearchans
-	inc	bx
-	mov	[si + pl_state], bx
-	ret
+		cmp byte [es:esi+pl_loaded],1
+		jz pm0
+		ret
+pm0:
+		xor ebx,ebx
+		mov [es:esi+pl_state],bx
+		mov byte [es:esi+pl_speed],6
+		mov byte [es:esi+pl_effpos],6
+		mov [es:esi+pl_nextsongnum],ax
+		mov [es:esi+pl_nextnotenum],bx
+		call clearchans
+		inc ebx
+		mov [es:esi+pl_state],bx
+		ret
+
 
 ; pl_playsamp - play a sample
-;   ds:si  start of player
-;   ax     channel number
-;   bx     sample number
-;   cx     pitch
+;   es:esi	start of player
+;   ax		channel number
+;   bx		sample number
+;   cx		pitch
+
+		bits 32
+
 pl_playsamp:
-	cmp	[si + pl_loaded], byte 1
-	jz	ps0
-	ret
-ps0:	push	ax
-	mov	ax, [si + pl_state]
-	dec	ax
-	dec	ax
-	jz	ps1
-	call	clearchans
-ps1:	pop	ax
-	pusha
-	push	es
-	mov	es, [si + pl_seg]
-	mov     di, [si + pl_sampinfo]
-	add	si, pl_channs
-	imul	ax, ch_sizeof
-	add	si, ax
-	xor	ax, ax
-	mov	[si + ch_startseg], ax
-	mov	[si + ch_effect], ax
-	mov	[si + ch_pointer], ax
-	mov	[si + ch_pointer8], ax
-	mov	[si + ch_pitch], cx
-	mov	ax, bx
-	or	ax, ax
-	jz	ps2
-	call	setsamp
-ps2:	pop	es
-	mov     ax, [si +  ch_send]
-	mov     [si +  ch_end], ax
-	popa
-	mov	[si + pl_state], byte 2
-	ret
+		cmp byte [es:esi+pl_loaded],1
+		jz ps0
+		ret
+ps0:	
+		push eax
+		mov ax,[es:esi+pl_state]
+		dec ax
+		dec ax
+		jz ps1
+		call clearchans
+ps1:
+		pop eax
+		push esi
+		mov edi,[es:esi+pl_sampinfo]
+		add esi,pl_channs
+		imul eax,ch_sizeof
+		add esi,eax
+		xor eax,eax
+		mov [es:esi+ch_startseg],ax
+		mov [es:esi+ch_effect],ax
+		mov [es:esi+ch_pointer],ax
+		mov [es:esi+ch_pointer8],ax
+		mov [es:esi+ch_pitch],cx
+		mov eax,ebx
+		or ax,ax
+		jz ps2
+		call setsamp
+ps2:
+		mov ax,[es:esi+ ch_send]
+		mov [es:esi+ch_end],ax
+		pop esi
+		mov byte [es:esi + pl_state],2
+		ret
+
 
 ; pl_getstate - get state of player
-;   ds:si  start of player
+;   es:esi	start of player
+
+		bits 32
+
 pl_getstate:
-	mov	ax, [si + pl_state]
-	ret
+		mov ax,[es:esi+pl_state]
+		ret
 
-; pl_getstate - get state of player
+
+; pl_stop - stop something?
 ;   ds:si  start of player
+
+		bits 32
+
 pl_stop:
-	mov	[si + pl_state], byte 0
-	ret
+		mov byte [es:esi+pl_state],0
+		ret
+
 
 ; clearchans - stop all channels
-;   si  start of player
+;   es:esi	start of player
+
+		bits 32
+
 clearchans:
-	push	si
-	push	cx
-	push	ax
-	xor	ax, ax
-	add	si, pl_channs
-	mov	cx, 4
-cc1:	mov	[si + ch_startseg], ax
-	mov	[si + ch_effect], ax
-	add	si, ch_sizeof
-	loop	cc1
-	pop	ax
-	pop	cx
-	pop	si
-	ret
+		push esi
+		push ecx
+		push eax
+		xor eax,eax
+		add esi,pl_channs
+		mov ecx,4
+cc1:
+		mov [es:esi+ch_startseg],ax
+		mov [es:esi+ch_effect],ax
+		add si,ch_sizeof
+		loop cc1
+		pop eax
+		pop ecx
+		pop esi
+		ret
+
 
 ; setsamp - start a sample
 ;   si  start of channel
@@ -864,6 +883,9 @@ cc1:	mov	[si + ch_startseg], ax
 ;   ax     sample number
 ;
 ;   trashes ax, dx
+
+		bits 16
+
 setsamp:
 	xor     ah, ah
 	mov     [si +  ch_samp], ax
@@ -953,7 +975,7 @@ setpl:
 
 
 ; setpl - get player offset
-;   ax		player no.
+;   eax		player no.
 ;
 ; return:
 ;   esi		player offset
@@ -981,53 +1003,64 @@ loadmod:
 	pop	si
 	ret
 
+
 ; playmod - play a modfile
-;   ds:si  start of area
-;   ax     player no.
-;   bx     start of song
+;   es:esi	start of area
+;   eax		player no.
+;   bx		start of song
+
+		bits 32
+
 playmod:
-	push	si
-	call	setpl
-	mov	ax, bx
-	call	pl_playmod
-	pop	si
-	ret
+		call pm_setpl
+		mov eax,ebx
+		call pl_playmod
+		ret
+
 
 ; playsamp - play a sample
-;   ds:si  start of area
-;   ax     player no.
-;   bx     channel number
-;   cx     sample number
-;   dx     pitch
+;   es:esi	start of area
+;   eax		player no.
+;   bx		channel number
+;   cx		sample number
+;   dx		pitch
+
+		bits 32
+
 playsamp:
-	push	si
-	call	setpl
-	mov	ax, bx
-	mov	bx, cx
-	mov	cx, dx
-	call	pl_playsamp
-	pop	si
-	ret
+		call pm_setpl
+		mov eax,ebx
+		mov ebx,ecx
+		mov ecx,edx
+		call pl_playsamp
+		ret
+
 
 ; getstate - get state of player
-;   ds:si  start of area
-;   ax     player no.
+;   es:esi	start of area
+;   eax		player no.
+
+		bits 32
+
 getstate:
-	push	si
-	call	setpl
-	call	pl_getstate
-	pop	si
-	ret
+		call pm_setpl
+		call pl_getstate
+		ret
+
 
 ; stop - stop a player
-;   ds:si  start of area
-;   ax     player no.
+;   es:esi	start of area
+;   eax		player no.
+
+		bits 32
+
 stop:
-	push	si
-	call	setpl
-	call	pl_stop
-	pop	si
-	ret
+		call pm_setpl
+		call pl_stop
+		ret
+
+
+		bits 16
 
 pctab:
 	db	64,  64,  64,  64,  64,  64,  64,  64
@@ -1135,9 +1168,10 @@ ap5:	pop	es
 	popad
 	ret
 
+
 ; setvol - set volume
 ;   es:esi	start of area
-;   ax		player no.
+;   eax		player no.
 ;   bx		goal
 ;   cx		rate 0=immediate 50=one sec
 
@@ -1153,7 +1187,10 @@ setvol:
 
 ; getvol - get volume
 ;   es:esi	start of area
-;   ax		player no.
+;   eax		player no.
+;
+; return:
+;   ax		volume
 
 		bits 32
 
@@ -1164,7 +1201,7 @@ getvol:
 
 
 ; setplvl - get volume offset
-;   ax		player no.
+;   eax		player no.
 
 		bits 32
 

@@ -60,11 +60,11 @@ pl_loop_notenum	equ pl_notenum + 2
 pl_loop_counter	equ pl_loop_notenum + 2
 pl_seg		equ pl_loop_counter + 2
 pl_song		equ pl_seg + 2
-pl_patterns     equ pl_song + 2
-pl_sampinfo     equ pl_patterns + 2
-pl_sampd        equ pl_sampinfo + 2
+pl_patterns     equ pl_song + 4
+pl_sampinfo     equ pl_patterns + 4
+pl_sampd        equ pl_sampinfo + 4
 pl_sampdseg     equ pl_sampd + 2 * 32
-pl_channs       equ pl_sampdseg + 2 * 32
+pl_channs       equ pl_sampdseg + 4 * 32
 pl_loaded	equ pl_channs + 4 * ch_sizeof
 pl_sizeof	equ pl_loaded + 2
 

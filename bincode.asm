@@ -9412,7 +9412,7 @@ prim_modplay:
 		jz prim_modplay_90
 
 		mov ebx,ecx
-		rm32_call mod_play
+		call mod_play
 
 		clc
 prim_modplay_90:
@@ -9473,7 +9473,7 @@ prim_modplaysample:
 		cmp byte [sound_ok],0
 		jz prim_modps_90
 
-		rm32_call mod_playsample
+		call mod_playsample
 
 		clc
 prim_modps_90:
@@ -13293,6 +13293,7 @@ mod_init:
 		call init
 		ret
 
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 		bits 16
@@ -13309,31 +13310,25 @@ mod_load:
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-		bits 16
+		bits 32
 
 mod_play:
-		push ds
-		push dword [mod_buf]
-		pop si
-		pop ds
+		mov esi,[mod_buf.lin]
 		call playmod
-		pop ds
 		mov byte [sound_playing],1
 		ret
+
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-		bits 16
+		bits 32
 
 mod_playsample:
-		push ds
-		push dword [mod_buf]
-		pop si
-		pop ds
+		mov esi,[mod_buf.lin]
 		call playsamp
-		pop ds
 		mov byte [sound_playing],1
 		ret
+
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
