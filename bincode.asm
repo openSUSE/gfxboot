@@ -540,14 +540,17 @@ sizeof_fb_entry		equ 8
 		mov [tmp_write_data + %1 * 4],%2
 %endmacro
 
+
 %macro		pf_arg_ushort 2
 		and word [tmp_write_data + %1 * 4 + 2],byte 0
 		mov [tmp_write_data + %1 * 4],%2
 %endmacro
 
+
 %macro		pf_arg_uint 2
 		mov [tmp_write_data + %1 * 4],%2
 %endmacro
+
 
 %macro		pf_arg_char 2
 		push eax
@@ -556,6 +559,7 @@ sizeof_fb_entry		equ 8
 		pop eax
 %endmacro
 
+
 %macro		pf_arg_short 2
 		push eax
 		movsx eax,%2
@@ -563,23 +567,11 @@ sizeof_fb_entry		equ 8
 		pop eax
 %endmacro
 
+
 %macro		pf_arg_int 2
 		mov [tmp_write_data + %1 * 4],%2
 %endmacro
 
-%macro		lin2segofs 3
-		push %1
-		call lin2so
-		pop %3
-		pop %2
-%endmacro
-
-%macro		segofs2lin 3
-		push %1
-		push %2
-		call so2lin
-		pop %3
-%endmacro
 
 %macro		pm_enter 0
 %%j_pm_1:
