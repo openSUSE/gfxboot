@@ -655,6 +655,7 @@ sizeof_fb_entry		equ 8
 		bits 16
 
 gfx_init:
+		; don't change stack layout - see gfx_enter
 		push fs
 		push es
 		push ds
@@ -682,10 +683,6 @@ gfx_init:
 		mov [boot_callback+2],dx
 		mov [boot_callback],ax
 gfx_init_20:
-
-		mov eax,cr0
-		shr al,1		; in prot mode (maybe vm86)?
-		jc gfx_init_90
 
 		; setup gdt, to get pm-switching going
 		call gdt_init
@@ -744,10 +741,37 @@ gfx_init_40:
 		; can't do it earlier - we need malloc
 		call pm_init
 
+		; allocate 8k local stack
+		mov eax,8 << 10
+		mov [stack_size],eax
+		add eax,3
+		call calloc
+		; dword align
+		add eax,3
+		and eax,~3
+		jnz gfx_init_50
+		; malloc failed - keep stack
+		push word [rm_seg.ss]
+		pop word [local_stack.seg]
+		mov eax,esp
+		mov [local_stack.ofs],eax
+		jmp gfx_init_55
+gfx_init_50:
+		push eax
+		xor eax,eax
+		call pm_lin2so
+		pop ax
+		add eax,[stack_size]
+		mov [local_stack.ofs],eax
+		pop word [local_stack.seg]
+
+gfx_init_55:
+
 		; now we really start...
 		pm_leave
 
 		sti
+		call use_local_stack
 
 		pm_enter
 
@@ -789,10 +813,10 @@ gfx_init_40:
 %endif
 
 		call dict_init
-		jc pm_gfx_init_90
+		jc gfx_init_90
 
 		call stack_init
-		jc pm_gfx_init_90
+		jc gfx_init_90
 
 		mov eax,[mem]
 		mov esi,eax
@@ -803,25 +827,6 @@ gfx_init_40:
 
 		; now the ps interpreter is ready to run
 
-		; allocate 8k local stack
-		mov eax,8 << 10
-		mov [stack_size],eax
-		add eax,3
-		call calloc
-		cmp eax,1
-		jc pm_gfx_init_90
-		; dword align
-		add eax,3
-		and eax,~3
-
-		push eax
-		xor eax,eax
-		call pm_lin2so
-		pop ax
-		add eax,[stack_size]
-		mov [local_stack.ofs],eax
-		pop word [local_stack.seg]
-
 		; jpg decoding buffer
 		call jpg_setup
 
@@ -831,25 +836,25 @@ gfx_init_40:
 		mov eax,100h
 		call calloc
 		cmp eax,1
-		jc pm_gfx_init_90
+		jc gfx_init_90
 		mov [infobox_buffer],eax
 
 		mov eax,200h
 		call calloc
 		cmp eax,1
-		jc pm_gfx_init_90
+		jc gfx_init_90
 		mov [vbe_buffer],eax
 
 		mov eax,100h
 		call calloc
 		cmp eax,1
-		jc pm_gfx_init_90
+		jc gfx_init_90
 		mov [vbe_info_buffer],eax
 
 		mov eax,200h
 		call calloc
 		cmp eax,1
-		jc pm_gfx_init_90
+		jc gfx_init_90
 		mov [vbe_mode_list],eax
 
 		; fill list
@@ -865,15 +870,11 @@ gfx_init_40:
 		call get_key
 %endif
 
-		pm_leave
-
 		; run global code
 		xor eax,eax
 		mov [pstack_ptr],eax
 		mov [rstack_ptr],eax
-		call use_local_stack
-		pm32_call run_pscode
-		call use_old_stack
+		call run_pscode
 		jc gfx_init_60
 
 		; check for true/false on stack
@@ -881,36 +882,23 @@ gfx_init_40:
 
 		xor ecx,ecx
 		call get_pstack_tos
-		jc gfx_init_80
+		cmc
+		jnc gfx_init_90
 		cmp dl,t_bool
 		jnz gfx_init_70
-		cmp eax,byte 1
+		cmp eax,1
 		jz gfx_init_90
 		jmp gfx_init_70
 
 gfx_init_60:
-		pm32_call ps_status_info
-		pm32_call get_key
+		call ps_status_info
+		call get_key
 gfx_init_70:
-		push cs
-		call gfx_done
+		call gfx_done_pm
 		stc
-		jmp gfx_init_90
-
-		bits 32
-
-pm_gfx_init_90:
-		pm_leave
-		jmp gfx_init_90
-
-gfx_init_80:
-		clc
 
 gfx_init_90:
-		pop ds
-		pop es
-		pop fs
-		retf
+		gfx_leave		; does not return
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -922,14 +910,24 @@ gfx_init_90:
 gfx_done:
 		gfx_enter
 
+		call gfx_done_pm
+
+		gfx_leave		; does not return
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+		bits 32
+
+gfx_done_pm:
 		rm32_call sound_done
 
 		cmp byte [keep_mode],0
-		jnz gfx_done_50
+		jnz gfx_done_pm_90
 		mov ax,3
 		int 10h
-gfx_done_50:
-		gfx_leave		; does not return
+gfx_done_pm_90:
+		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -982,13 +980,13 @@ gfx_input_20:
 		mov dword [pstack_ptr],1
 		mov dl,t_int
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		mov dword [rstack_ptr],1
 		xor ecx,ecx
 		mov dl,t_code
 		stc
 		sbb eax,eax
-		call pm_set_rstack_tos
+		call set_rstack_tos
 		pop eax
 
 		call run_pscode
@@ -1001,7 +999,7 @@ gfx_input_20:
 
 gfx_input_50:
 		mov ecx,2
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		jc gfx_input_90
 		cmp dl,t_string
 		stc
@@ -1028,7 +1026,7 @@ gfx_input_60:
 
 gfx_input_70:
 		mov ecx,1
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		jc gfx_input_90
 		cmp dl,t_int
 		stc
@@ -1036,7 +1034,7 @@ gfx_input_70:
 
 		xor ecx,ecx
 		push eax
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		pop ebx
 		jc gfx_input_90
 		cmp dl,t_int
@@ -1143,24 +1141,24 @@ gfx_menu_init_50:
 		mov eax,[tmp_var_1]
 		mov dl,t_array
 		mov ecx,2
-		call pm_set_pstack_tos
+		call set_pstack_tos
 
 		mov eax,[tmp_var_2]
 		mov dl,t_array
 		mov ecx,1
-		call pm_set_pstack_tos
+		call set_pstack_tos
 
 		mov eax,[tmp_var_3]
 		mov dl,t_string
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 
 		mov dword [rstack_ptr],1
 		xor ecx,ecx
 		mov dl,t_code
 		stc
 		sbb eax,eax
-		call pm_set_rstack_tos
+		call set_rstack_tos
 
 		pop eax
 
@@ -1242,19 +1240,19 @@ gfx_infobox_init_40:
 		movzx eax,bl
 		mov dl,t_int
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 
 		mov eax,[infobox_buffer]
 		mov dl,t_string
 		mov ecx,1
-		call pm_set_pstack_tos
+		call set_pstack_tos
 
 		mov dword [rstack_ptr],1
 		xor ecx,ecx
 		mov dl,t_code
 		stc
 		sbb eax,eax
-		call pm_set_rstack_tos
+		call set_rstack_tos
 
 		pop eax
 		call run_pscode
@@ -1292,7 +1290,7 @@ gfx_infobox_done:
 		mov dl,t_code
 		stc
 		sbb eax,eax
-		call pm_set_rstack_tos
+		call set_rstack_tos
 
 		pop eax
 		call run_pscode
@@ -1339,14 +1337,14 @@ gfx_progress_init:
 
 		mov dl,t_string
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 
 		mov dword [rstack_ptr],1
 		xor ecx,ecx
 		mov dl,t_code
 		stc
 		sbb eax,eax
-		call pm_set_rstack_tos
+		call set_rstack_tos
 
 		pop eax
 		call run_pscode
@@ -1384,7 +1382,7 @@ gfx_progress_done:
 		mov dl,t_code
 		stc
 		sbb eax,eax
-		call pm_set_rstack_tos
+		call set_rstack_tos
 
 		pop eax
 		call run_pscode
@@ -1423,19 +1421,19 @@ gfx_progress_update:
 		mov eax,[progress_current]
 		mov dl,t_int
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 
 		mov eax,[progress_max]
 		mov dl,t_int
 		mov ecx,1
-		call pm_set_pstack_tos
+		call set_pstack_tos
 
 		mov dword [rstack_ptr],1
 		xor ecx,ecx
 		mov dl,t_code
 		stc
 		sbb eax,eax
-		call pm_set_rstack_tos
+		call set_rstack_tos
 
 		pop eax
 		call run_pscode
@@ -1497,7 +1495,7 @@ gfx_password_init:
 		mov dl,t_string
 		xor ecx,ecx
 		push edi
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		pop edi
 
 		movzx eax,di
@@ -1505,14 +1503,14 @@ gfx_password_init:
 
 		mov dl,t_string
 		mov ecx,1
-		call pm_set_pstack_tos
+		call set_pstack_tos
 
 		mov dword [rstack_ptr],1
 		xor ecx,ecx
 		mov dl,t_code
 		stc
 		sbb eax,eax
-		call pm_set_rstack_tos
+		call set_rstack_tos
 
 		pop eax
 		call run_pscode
@@ -1557,21 +1555,21 @@ gfx_password_done:
 
 		mov dl,t_string
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 
 		mov dword [rstack_ptr],1
 		xor ecx,ecx
 		mov dl,t_code
 		stc
 		sbb eax,eax
-		call pm_set_rstack_tos
+		call set_rstack_tos
 
 		pop eax
 		call run_pscode
 		jc gfx_password_done_80
 
 		xor ecx,ecx
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		jc gfx_password_done_90
 		cmp dl,t_bool
 		stc
@@ -1686,19 +1684,19 @@ timeout:
 		mov ecx,1
 		mov dl,t_int
 		mov eax,[input_timeout_start]
-		call pm_set_pstack_tos
+		call set_pstack_tos
 
 		xor ecx,ecx
 		mov dl,t_int
 		mov eax,[input_timeout]
-		call pm_set_pstack_tos
+		call set_pstack_tos
 
 		mov dword [rstack_ptr],1
 		xor ecx,ecx
 		mov dl,t_code
 		stc
 		sbb eax,eax
-		call pm_set_rstack_tos
+		call set_rstack_tos
 
 		pop eax
 		call run_pscode
@@ -1737,14 +1735,14 @@ timer:
 		xor ecx,ecx
 		mov dl,t_int
 		mov eax,ebx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 
 		mov dword [rstack_ptr],1
 		xor ecx,ecx
 		mov dl,t_code
 		stc
 		sbb eax,eax
-		call pm_set_rstack_tos
+		call set_rstack_tos
 
 		pop eax
 		call run_pscode
@@ -1790,121 +1788,6 @@ stack_init:
 		call pm_lin2so
 		pop dword [rstack]
 stack_init_90:
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Read a pstack entry.
-;
-;  cx		index
-;
-; return:
-;  eax		value
-;  dl		type
-;  cx		index
-;  CF		error
-;
-
-		bits 16
-
-get_pstack_entry:
-		les bx,[pstack]
-		xor eax,eax
-		mov dl,al
-		cmp [pstack_size],cx
-		jb get_pstack_entry_90
-		mov ax,5
-		mul cx
-		add bx,ax
-		mov dl,[es:bx]
-		mov eax,[es:bx+1]
-get_pstack_entry_90:
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Write a pstack entry.
-;
-;  cx		index
-;  eax		value
-;  dl		type
-;
-; return:
-;  cx		index
-;  CF		error
-;
-
-		bits 16
-
-set_pstack_entry:
-		les bx,[pstack]
-		cmp [pstack_size],cx
-		jb set_pstack_entry_90
-		push eax
-		push dx
-		mov ax,5
-		mul cx
-		add bx,ax
-		pop dx
-		mov [es:bx],dl
-		pop dword [es:bx+1]
-set_pstack_entry_90:
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Read pstack tos (no pop).
-;
-;  cx           index (rel. to tos, 0 = tos)
-;
-; return:
-;  eax		value
-;  dl		type
-;  cx		index (absolute)
-;  CF		error
-;
-
-		bits 16
-
-get_pstack_tos:
-		mov ax,[pstack_ptr]
-		sub ax,1
-		jc get_pstack_tos_90
-		sub ax,cx
-		jc get_pstack_tos_90
-		xchg ax,cx
-		call get_pstack_entry
-get_pstack_tos_90:
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Write pstack tos (no push).
-;
-;  cx           index (rel. to tos, 0 = tos)
-;  eax		value
-;  dl		type
-;
-; return:
-;  cx		index (absolute)
-;  CF		error
-;
-
-		bits 16
-
-set_pstack_tos:
-		mov bx,[pstack_ptr]
-		sub bx,1
-		jc set_pstack_tos_90
-		sub bx,cx
-		jc set_pstack_tos_90
-		xchg bx,cx
-		call set_pstack_entry
-set_pstack_tos_90:
 		ret
 
 
@@ -1988,121 +1871,6 @@ rot_pstack_down_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Read a rstack entry.
-;
-;  cx		index
-;
-; return:
-;  eax		value
-;  dl		type
-;  cx		index
-;  CF		error
-;
-
-		bits 16
-
-get_rstack_entry:
-		les bx,[rstack]
-		xor eax,eax
-		mov dl,al
-		cmp [rstack_size],cx
-		jb get_rstack_entry_90
-		mov ax,5
-		mul cx
-		add bx,ax
-		mov dl,[es:bx]
-		mov eax,[es:bx+1]
-get_rstack_entry_90:
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Write a rstack entry.
-;
-;  cx		index
-;  eax		value
-;  dl		type
-;
-; return:
-;  cx		index
-;  CF		error
-;
-
-		bits 16
-
-set_rstack_entry:
-		les bx,[rstack]
-		cmp [rstack_size],cx
-		jb set_rstack_entry_90
-		push eax
-		push dx
-		mov ax,5
-		mul cx
-		add bx,ax
-		pop dx
-		mov [es:bx],dl
-		pop dword [es:bx+1]
-set_rstack_entry_90:
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Read rstack tos (no pop).
-;
-;  cx           index (rel. to tos, 0 = tos)
-;
-; return:
-;  eax		value
-;  dl		type
-;  cx		index (absolute)
-;  CF		error
-;
-
-		bits 16
-
-get_rstack_tos:
-		mov ax,[rstack_ptr]
-		sub ax,1
-		jc get_rstack_tos_90
-		sub ax,cx
-		jc get_rstack_tos_90
-		xchg ax,cx
-		call get_rstack_entry
-get_rstack_tos_90:
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Write rstack tos (no push).
-;
-;  cx           index (rel. to tos, 0 = tos)
-;  eax		value
-;  dl		type
-;
-; return:
-;  cx		index (absolute)
-;  CF		error
-;
-
-		bits 16
-
-set_rstack_tos:
-		mov bx,[rstack_ptr]
-		sub bx,1
-		jc set_rstack_tos_90
-		sub bx,cx
-		jc set_rstack_tos_90
-		xchg bx,cx
-		call set_rstack_entry
-set_rstack_tos_90:
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; Read pstack entry.
 ;
 ;  ecx		index
@@ -2116,17 +1884,17 @@ set_rstack_tos_90:
 
 		bits 32
 
-pm_get_pstack_entry:
+get_pstack_entry:
 		xor eax,eax
 		mov dl,al
 		cmp [pstack_size],ecx
-		jb pm_get_pstack_entry_90
+		jb get_pstack_entry_90
 		lea ebx,[ecx+ecx*4]
 		add ebx,[pstack.lin]
 		mov dl,[es:ebx]
 		mov eax,[es:ebx+1]
 		clc
-pm_get_pstack_entry_90:
+get_pstack_entry_90:
 		ret
 
 
@@ -2144,15 +1912,15 @@ pm_get_pstack_entry_90:
 
 		bits 32
 
-pm_set_pstack_entry:
+set_pstack_entry:
 		cmp [pstack_size],ecx
-		jb pm_set_pstack_entry_90
+		jb set_pstack_entry_90
 		lea ebx,[ecx+ecx*4]
 		add ebx,[pstack.lin]
 		mov [es:ebx],dl
 		mov [es:ebx+1],eax
 		clc
-pm_set_pstack_entry_90:
+set_pstack_entry_90:
 		ret
 
 
@@ -2170,15 +1938,15 @@ pm_set_pstack_entry_90:
 
 		bits 32
 
-pm_get_pstack_tos:
+get_pstack_tos:
 		mov eax,[pstack_ptr]
 		sub eax,1
-		jc pm_get_pstack_tos_90
+		jc get_pstack_tos_90
 		sub eax,ecx
-		jc pm_get_pstack_tos_90
+		jc get_pstack_tos_90
 		xchg eax,ecx
-		call pm_get_pstack_entry
-pm_get_pstack_tos_90:
+		call get_pstack_entry
+get_pstack_tos_90:
 		ret
 
 
@@ -2196,15 +1964,15 @@ pm_get_pstack_tos_90:
 
 		bits 32
 
-pm_set_pstack_tos:
+set_pstack_tos:
 		mov ebx,[pstack_ptr]
 		sub ebx,1
-		jc pm_set_pstack_tos_90
+		jc set_pstack_tos_90
 		sub ebx,ecx
-		jc pm_set_pstack_tos_90
+		jc set_pstack_tos_90
 		xchg ebx,ecx
-		call pm_set_pstack_entry
-pm_set_pstack_tos_90:
+		call set_pstack_entry
+set_pstack_tos_90:
 		ret
 
 
@@ -2222,17 +1990,17 @@ pm_set_pstack_tos_90:
 
 		bits 32
 
-pm_get_rstack_entry:
+get_rstack_entry:
 		xor eax,eax
 		mov dl,al
 		cmp [rstack_size],ecx
-		jb pm_get_rstack_entry_90
+		jb get_rstack_entry_90
 		lea ebx,[ecx+ecx*4]
 		add ebx,[rstack.lin]
 		mov dl,[es:ebx]
 		mov eax,[es:ebx+1]
 		clc
-pm_get_rstack_entry_90:
+get_rstack_entry_90:
 		ret
 
 
@@ -2250,15 +2018,15 @@ pm_get_rstack_entry_90:
 
 		bits 32
 
-pm_set_rstack_entry:
+set_rstack_entry:
 		cmp [rstack_size],ecx
-		jb pm_set_rstack_entry_90
+		jb set_rstack_entry_90
 		lea ebx,[ecx+ecx*4]
 		add ebx,[rstack.lin]
 		mov [es:ebx],dl
 		mov [es:ebx+1],eax
 		clc
-pm_set_rstack_entry_90:
+set_rstack_entry_90:
 		ret
 
 
@@ -2276,15 +2044,15 @@ pm_set_rstack_entry_90:
 
 		bits 32
 
-pm_get_rstack_tos:
+get_rstack_tos:
 		mov eax,[rstack_ptr]
 		sub eax,1
-		jc pm_get_rstack_tos_90
+		jc get_rstack_tos_90
 		sub eax,ecx
-		jc pm_get_rstack_tos_90
+		jc get_rstack_tos_90
 		xchg eax,ecx
-		call pm_get_rstack_entry
-pm_get_rstack_tos_90:
+		call get_rstack_entry
+get_rstack_tos_90:
 		ret
 
 
@@ -2302,15 +2070,15 @@ pm_get_rstack_tos_90:
 
 		bits 32
 
-pm_set_rstack_tos:
+set_rstack_tos:
 		mov ebx,[rstack_ptr]
 		sub ebx,1
-		jc pm_set_rstack_tos_90
+		jc set_rstack_tos_90
 		sub ebx,ecx
-		jc pm_set_rstack_tos_90
+		jc set_rstack_tos_90
 		xchg ebx,ecx
-		call pm_set_rstack_entry
-pm_set_rstack_tos_90:
+		call set_rstack_entry
+set_rstack_tos_90:
 		ret
 
 
@@ -3743,7 +3511,7 @@ pf_next_arg:
 		jz pf_next_arg_50
 		pusha
 		xor ecx,ecx
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		mov [tmp_write_data],eax
 		jnc pf_next_arg_20
 		and dword [tmp_write_data],0
@@ -4018,7 +3786,7 @@ ps_status_info:
 ps_status_info_10:
 		push ecx
 
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		jc ps_status_info_20
 		pf_arg_uint 0,ecx
 		pf_arg_uchar 2,dl
@@ -4033,7 +3801,7 @@ ps_status_info_30:
 		pop ecx
 		push ecx
 
-		call pm_get_rstack_tos
+		call get_rstack_tos
 		jc ps_status_info_40
 		pf_arg_uint 0,ecx
 		pf_arg_uchar 2,dl
@@ -4090,7 +3858,7 @@ ps_status_info_70:
 		call printf
 
 		xor ecx,ecx
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		jnc ps_status_info_71
 		mov dl,t_none
 		xor eax,eax
@@ -4588,7 +4356,7 @@ run_pscode_51:
 		inc dword [pstack_ptr]
 
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		jc run_pscode_90
 		jmp run_pscode_10
 
@@ -4626,7 +4394,7 @@ run_pscode_53:
 		inc dword [rstack_ptr]
 
 		xor ecx,ecx
-		call pm_set_rstack_tos
+		call set_rstack_tos
 		jc run_pscode_90
 		jmp run_pscode_10
 
@@ -4635,7 +4403,7 @@ run_pscode_54:
 		jnz run_pscode_70
 
 		xor ecx,ecx
-		call pm_get_rstack_tos
+		call get_rstack_tos
 		jnc run_pscode_55
 		mov bp,pserr_rstack_underflow
 		jc run_pscode_90
@@ -4664,13 +4432,13 @@ run_pscode_55:
 		jc run_pscode_90
 
 		mov ecx,1
-		call pm_get_rstack_tos		; count
+		call get_rstack_tos		; count
 		cmp dl,t_int
 		jnz run_pscode_66
 
 		mov ecx,2
 		push eax
-		call pm_get_rstack_tos		; length
+		call get_rstack_tos		; length
 		pop esi
 		cmp dl,t_int
 		jnz run_pscode_66
@@ -4678,7 +4446,7 @@ run_pscode_55:
 		mov ecx,3
 		push eax
 		push esi
-		call pm_get_rstack_tos		; string/array
+		call get_rstack_tos		; string/array
 		pop esi
 		pop ecx
 		cmp dl,t_array
@@ -4703,7 +4471,7 @@ run_pscode_57:
 		push eax
 		push esi
 		mov eax,esi
-		call pm_set_rstack_tos
+		call set_rstack_tos
 		pop eax
 		pop ecx
 		pop edx
@@ -4718,11 +4486,11 @@ run_pscode_57:
 		jae run_pscode_80
 		inc dword [pstack_ptr]
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		jc run_pscode_90
 
 		xor ecx,ecx
-		call pm_get_rstack_tos
+		call get_rstack_tos
 		jmp run_pscode_69
 
 
@@ -4733,19 +4501,19 @@ run_pscode_62:
 		jc run_pscode_90
 
 		mov ecx,2
-		call pm_get_rstack_tos		; step
+		call get_rstack_tos		; step
 		cmp dl,t_int
 		jnz run_pscode_66
 		mov ecx,1
 		push eax
-		call pm_get_rstack_tos		; limit
+		call get_rstack_tos		; limit
 		pop esi
 		cmp dl,t_int
 		jnz run_pscode_66
 		push eax
 		mov ecx,3
 		push esi
-		call pm_get_rstack_tos		; counter
+		call get_rstack_tos		; counter
 		pop esi
 		cmp dl,t_int
 		pop ecx
@@ -4762,7 +4530,7 @@ run_pscode_63:
 
 		mov ecx,3
 		push eax
-		call pm_set_rstack_tos
+		call set_rstack_tos
 		pop eax
 		mov ecx,[pstack_ptr]
 		cmp ecx,[pstack_size]
@@ -4770,14 +4538,14 @@ run_pscode_63:
 		inc dword [pstack_ptr]
 		xor ecx,ecx
 		mov dl,t_int
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		jc run_pscode_90
 		xor ecx,ecx
-		call pm_get_rstack_tos
+		call get_rstack_tos
 		jmp run_pscode_69
 run_pscode_64:
 		mov ecx,4
-		call pm_get_rstack_tos
+		call get_rstack_tos
 		sub dword [rstack_ptr],5
 		jmp run_pscode_69
 
@@ -4789,7 +4557,7 @@ run_pscode_65:
 		jc run_pscode_90
 		push eax
 		mov ecx,1
-		call pm_get_rstack_tos
+		call get_rstack_tos
 		pop ebx
 		cmp dl,t_int
 run_pscode_66:
@@ -4799,12 +4567,12 @@ run_pscode_66:
 		jz run_pscode_67
 		mov ecx,1
 		push ebx
-		call pm_set_rstack_tos
+		call set_rstack_tos
 		pop eax
 		jmp run_pscode_69
 run_pscode_67:
 		mov ecx,2
-		call pm_get_rstack_tos
+		call get_rstack_tos
 		sub dword [rstack_ptr],2
 
 run_pscode_68:
@@ -4862,7 +4630,7 @@ get_1arg:
 		jc get_1arg_90
 		push edx
 		xor ecx,ecx
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		pop ebx
 		; ignore type check if t_none was requested
 		cmp bl,t_none
@@ -4899,11 +4667,11 @@ get_2args:
 		jc get_2args_90
 		push ebx
 		inc ecx
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		push edx
 		push eax
 		xor ecx,ecx
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		pop ecx
 		pop ebx
 		mov dh,bl
@@ -5028,7 +4796,7 @@ prim_astart:
 		mov dl,t_prim
 		mov eax,(jt_p_astart - jt_p_none) / 2	; we need just some mark
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_astart_90:
 		ret
 
@@ -5057,7 +4825,7 @@ prim_aend:
 		xor ecx,ecx
 prim_aend_10:
 		push ecx
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		pop ecx
 		mov bp,pserr_pstack_underflow
 		jc prim_aend_90
@@ -5093,7 +4861,7 @@ prim_aend_40:
 
 		push edi
 		push ecx
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		pop ecx
 		pop edi
 
@@ -5109,7 +4877,7 @@ prim_aend_60:
 		sub [pstack_ptr],ecx
 		mov dl,t_array
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_aend_90:
 		ret
 
@@ -5152,7 +4920,7 @@ prim_get_10:
 
 		dec dword [pstack_ptr]
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_get_90:
 		ret
 
@@ -5195,7 +4963,7 @@ prim_put:
 
 		mov bp,pserr_wrong_arg_types
 		mov ecx,2
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		mov dh,0
 		push edx
 		push eax
@@ -5271,7 +5039,7 @@ prim_length:
 		jc prim_length_90
 		xor ecx,ecx
 		mov dl,t_int
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_length_90:
 		ret
 
@@ -5315,7 +5083,7 @@ prim_array:
 		mov [es:eax],cx
 		xor ecx,ecx
 		mov dl,t_array
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_array_90:
 		ret
 
@@ -5365,12 +5133,12 @@ prim_dup:
 		mov bp,pserr_pstack_overflow
 		jb prim_dup_90
 		xor ecx,ecx
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		mov bp,pserr_pstack_underflow
 		jc prim_dup_90
 		xor ecx,ecx
 		inc dword [pstack_ptr]
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_dup_90:
 		ret
 
@@ -5391,12 +5159,12 @@ prim_over:
 		mov bp,pserr_pstack_overflow
 		jb prim_over_90
 		mov ecx,1
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		mov bp,pserr_pstack_underflow
 		jc prim_over_90
 		xor ecx,ecx
 		inc dword [pstack_ptr]
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_over_90:
 		ret
 
@@ -5429,9 +5197,9 @@ prim_index:
 		jc prim_index_90
 
 		lea ecx,[eax+1]
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_index_90:
 		ret
 
@@ -5462,10 +5230,10 @@ prim_index_90:
 
 prim_exec:
 		mov dl,t_none
-		call pm_pr_setobj_or_none
+		call pr_setobj_or_none
 		cmp dl,t_dict_idx
 		jz prim_exec_50
-		jmp pm_pr_getobj
+		jmp pr_getobj
 prim_exec_50:
 		mov [pscode_eval],eax
 		ret
@@ -5507,7 +5275,7 @@ prim_add_50:
 		dec dword [pstack_ptr]
 		xor ecx,ecx
 		mov dl,dh
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_add_90:
 		ret
 
@@ -5560,7 +5328,7 @@ prim_sub_50:
 		dec dword [pstack_ptr]
 		xor ecx,ecx
 		mov dl,dh
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_sub_90:
 		ret
 
@@ -5587,7 +5355,7 @@ prim_mul:
 		dec dword [pstack_ptr]
 		xor ecx,ecx
 		mov dl,t_int
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_mul_90:
 		ret
 
@@ -5620,7 +5388,7 @@ prim_div:
 		dec dword [pstack_ptr]
 		xor ecx,ecx
 		mov dl,t_int
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_div_90:
 		ret
 
@@ -5654,7 +5422,7 @@ prim_mod:
 		dec dword [pstack_ptr]
 		xor ecx,ecx
 		mov dl,t_int
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_mod_90:
 		ret
 
@@ -5679,7 +5447,7 @@ prim_neg:
 		jc prim_neg_90
 		neg eax
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_neg_90:
 		ret
 
@@ -5707,7 +5475,7 @@ prim_abs:
 		neg eax
 prim_abs_50:
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_abs_90:
 		ret
 
@@ -5736,7 +5504,7 @@ prim_min:
 prim_min_50:
 		dec dword [pstack_ptr]
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_min_90:
 		ret
 
@@ -5765,7 +5533,7 @@ prim_max:
 prim_max_50:
 		dec dword [pstack_ptr]
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_max_90:
 		ret
 
@@ -5826,7 +5594,7 @@ prim_and:
 prim_and_50:
 		dec dword [pstack_ptr]
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		ret
 
 
@@ -5908,7 +5676,7 @@ prim_xor:
 
 prim_not:
 		xor ecx,ecx
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		jc prim_not_90
 		cmp dl,t_int
 		jz prim_not_50
@@ -5921,7 +5689,7 @@ prim_not:
 prim_not_50:
 		not eax
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_not_90:
 		ret
 
@@ -5952,7 +5720,7 @@ prim_shl:
 prim_shl_50:
 		dec dword [pstack_ptr]
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_shl_90:
 		ret
 
@@ -5983,7 +5751,7 @@ prim_shr_50:
 		sar eax,cl
 		dec dword [pstack_ptr]
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_shr_90:
 		ret
 
@@ -6075,7 +5843,7 @@ prim_if_20:
 
 		xor ecx,ecx
 		mov dl,t_if			; mark as 'if' block
-		call pm_set_rstack_tos
+		call set_rstack_tos
 		jnc prim_if_90
 
 prim_if_80:
@@ -6108,7 +5876,7 @@ prim_if_90:
 
 prim_ifelse:
 		mov ecx,2
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		jc prim_ifelse_90
 		mov bp,pserr_wrong_arg_types
 		cmp dl,t_bool
@@ -6148,7 +5916,7 @@ prim_ifelse_20:
 
 		xor ecx,ecx
 		mov dl,t_if			; mark as 'if' block
-		call pm_set_rstack_tos
+		call set_rstack_tos
 		jnc prim_ifelse_90
 
 prim_ifelse_80:
@@ -6258,7 +6026,7 @@ pcmp_false_10:
 		mov dl,t_bool
 		dec dword [pstack_ptr]
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		ret
 
 
@@ -6604,7 +6372,7 @@ prim_return:
 		xor ecx,ecx
 prim_return_10:
 		push ecx
-		call pm_get_rstack_tos
+		call get_rstack_tos
 		pop ecx
 		mov bp,pserr_rstack_underflow
 		jc prim_return_90
@@ -6635,7 +6403,7 @@ prim_exit:
 		xor ecx,ecx
 prim_exit_10:
 		push ecx
-		call pm_get_rstack_tos
+		call get_rstack_tos
 		pop ecx
 		mov bp,pserr_rstack_underflow
 		jc prim_exit_90
@@ -6655,7 +6423,7 @@ prim_exit_40:
 		inc ecx
 prim_exit_60:
 		push ecx
-		call pm_get_rstack_tos
+		call get_rstack_tos
 		pop ecx
 		cmp dl,t_code
 		jz prim_exit_80
@@ -6686,7 +6454,7 @@ prim_exit_90:
 
 prim_loop:
 		xor ecx,ecx
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		cmp dl,t_code
 		mov bp,pserr_wrong_arg_types
 		stc
@@ -6706,11 +6474,11 @@ prim_loop:
 
 		mov dl,t_exit
 		mov ecx,1
-		call pm_set_rstack_tos
+		call set_rstack_tos
 		xor ecx,ecx
 		mov dl,t_loop			; mark as 'loop' block
 		mov eax,[pscode_next_instr]
-		call pm_set_rstack_tos
+		call set_rstack_tos
 prim_loop_90:
 		ret
 
@@ -6757,15 +6525,15 @@ prim_repeat:
 		xchg eax,ecx
 		mov dl,t_int
 		mov ecx,1
-		call pm_set_rstack_tos
+		call set_rstack_tos
 		pop eax
 		mov ecx,2
 		mov dl,t_exit
-		call pm_set_rstack_tos
+		call set_rstack_tos
 		xor ecx,ecx
 		mov dl,t_repeat			; mark as 'repeat' block
 		mov eax,[pscode_next_instr]
-		call pm_set_rstack_tos
+		call set_rstack_tos
 prim_repeat_90:
 		ret
 
@@ -6793,7 +6561,7 @@ prim_for:
 		cmp dword [pstack_ptr],4
 		jc prim_for_90
 		mov ecx,3
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		cmp dl,t_int
 		stc
 		mov bp,pserr_wrong_arg_types
@@ -6801,7 +6569,7 @@ prim_for:
 		mov ecx,2
 		push ebp
 		push eax
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		pop edi
 		pop ebp
 		cmp dl,t_int
@@ -6835,27 +6603,27 @@ prim_for:
 
 		mov dl,t_exit
 		mov ecx,4
-		call pm_set_rstack_tos
+		call set_rstack_tos
 
 		pop eax
 		mov dl,t_int
 		mov ecx,3
-		call pm_set_rstack_tos
+		call set_rstack_tos
 
 		pop eax
 		mov dl,t_int
 		mov ecx,2
-		call pm_set_rstack_tos
+		call set_rstack_tos
 
 		pop eax
 		mov dl,t_int
 		mov ecx,1
-		call pm_set_rstack_tos
+		call set_rstack_tos
 
 		xor ecx,ecx
 		mov dl,t_for			; mark as 'for' block
 		mov eax,[pscode_next_instr]
-		call pm_set_rstack_tos
+		call set_rstack_tos
 prim_for_90:
 		ret
 
@@ -6936,29 +6704,29 @@ prim_forall_30:
 		mov dl,t_exit
 		xchg eax,ebx
 		mov ecx,4
-		call pm_set_rstack_tos		; code
+		call set_rstack_tos		; code
 
 		pop eax
 		mov dl,t_int
 		mov ecx,2
-		call pm_set_rstack_tos		; length
+		call set_rstack_tos		; length
 
 		pop edx
 		pop eax
 		push eax
 		push edx
 		mov ecx,3
-		call pm_set_rstack_tos		; string/array
+		call set_rstack_tos		; string/array
 
 		xor eax,eax
 		mov dl,t_int
 		mov ecx,1
-		call pm_set_rstack_tos		; count
+		call set_rstack_tos		; count
 
 		xor ecx,ecx
 		mov dl,t_forall			; mark as 'forall' block
 		mov eax,[pscode_next_instr]
-		call pm_set_rstack_tos
+		call set_rstack_tos
 
 		pop edx
 		pop ecx
@@ -6968,7 +6736,7 @@ prim_forall_30:
 		mov bp,pserr_invalid_range
 		jc prim_forall_90
 
-		jmp pm_pr_getobj
+		jmp pr_getobj
 prim_forall_90:
 		ret
 
@@ -6994,7 +6762,7 @@ prim_gettype:
 		movzx eax,dl
 		mov dl,t_int
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_gettype_90:
 		ret
 
@@ -7024,7 +6792,7 @@ prim_settype:
 		xchg eax,ecx
 		dec dword [pstack_ptr]
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_settype_90:
 		ret
 
@@ -7056,11 +6824,11 @@ prim_screensize:
 		mov dl,t_int
 		movzx eax,word [screen_width]
 		mov ecx,1
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		mov dl,t_int
 		movzx eax,word [screen_height]
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_screensize_90:
 		ret
 
@@ -7091,11 +6859,11 @@ prim_vscreensize:
 		mov dl,t_int
 		movzx eax,word [screen_width]
 		mov ecx,1
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		mov dl,t_int
 		movzx eax,word [screen_vheight]
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_vscreensize_90:
 		ret
 
@@ -7130,11 +6898,11 @@ prim_monitorsize_50:
 		mov dl,t_int
 		movzx eax,word [ddc_xtimings]
 		mov ecx,1
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		mov dl,t_int
 		movzx eax,word [ddc_xtimings + 2]
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_monitorsize_90:
 		ret
 
@@ -7167,11 +6935,11 @@ prim_imagesize:
 		mov dl,t_int
 		movzx eax,word [image_width]
 		mov ecx,1
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		mov dl,t_int
 		movzx eax,word [image_height]
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_imagesize_90:
 		ret
 
@@ -7198,7 +6966,7 @@ prim_imagecolors:
 		jnz prim_imagecolors_90
 		mov ax,[pals]
 prim_imagecolors_90:
-		jmp pm_pr_getint
+		jmp pr_getint
 
 
 ;; setcolor - set active drawing color
@@ -7218,7 +6986,7 @@ prim_imagecolors_90:
 		bits 32
 
 prim_setcolor:
-		call pm_pr_setint
+		call pr_setint
 		mov [gfx_color_rgb],eax
 		call encode_color
 		mov [gfx_color0],eax
@@ -7243,7 +7011,7 @@ prim_setcolor:
 prim_currentcolor:
 		mov eax,[gfx_color0]
 		call decode_color
-		jmp pm_pr_getint
+		jmp pr_getint
 
 
 ;; settextmodecolor - set color to be used in text mode
@@ -7260,7 +7028,7 @@ prim_currentcolor:
 		bits 32
 
 prim_settextmodecolor:
-		call pm_pr_setint
+		call pr_setint
 		mov [textmode_color],al
 		ret
 
@@ -7340,11 +7108,11 @@ prim_currentpoint:
 		mov dl,t_int
 		movzx eax,word [gfx_cur_x]
 		mov ecx,1
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		mov dl,t_int
 		movzx eax,word [gfx_cur_y]
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_currentpoint_90:
 		ret
 
@@ -7443,7 +7211,7 @@ prim_getpixel:
 		pop gs
 		pop fs
 
-		jmp pm_pr_getint
+		jmp pr_getint
 
 
 ;; setfont - set font
@@ -7467,7 +7235,7 @@ prim_getpixel:
 		bits 32
 
 prim_setfont:
-		call pm_pr_setptr_or_none
+		call pr_setptr_or_none
 		call font_init
 		ret
 
@@ -7494,7 +7262,7 @@ prim_setfont:
 
 prim_currentfont:
 		mov eax,[font]
-		jmp pm_pr_getptr_or_none
+		jmp pr_getptr_or_none
 
 
 ;; fontheight - font height
@@ -7516,7 +7284,7 @@ prim_currentfont:
 
 prim_fontheight:
 		movzx eax,word [font_height]
-		jmp pm_pr_getint
+		jmp pr_getint
 
 
 ;; setimage - set active image
@@ -7536,7 +7304,7 @@ prim_fontheight:
 		bits 32
 
 prim_setimage:
-		call pm_pr_setptr_or_none
+		call pr_setptr_or_none
 		call image_init
 		ret
 
@@ -7552,7 +7320,7 @@ prim_setimage:
 
 prim_currentimage:
 		mov eax,[image]
-		jmp pm_pr_getptr_or_none
+		jmp pr_getptr_or_none
 
 
 ;; settransparency - set transparency
@@ -7567,7 +7335,7 @@ prim_currentimage:
 		bits 32
 
 prim_settransparency:
-		call pm_pr_setint
+		call pr_setint
 		mov [transp],eax
 		ret
 
@@ -7583,7 +7351,7 @@ prim_settransparency:
 
 prim_currenttransparency:
 		mov eax,[transp]
-		jmp pm_pr_getint
+		jmp pr_getint
 
 
 ;; show - print text
@@ -7654,11 +7422,11 @@ prim_strsize:
 		mov eax,ecx
 		mov dl,t_int
 		mov ecx,1
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		pop eax
 		mov dl,t_int
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_strsize_90:
 		ret
 
@@ -7689,7 +7457,7 @@ prim_memcpy:
 
 		mov bp,pserr_wrong_arg_types
 		mov ecx,2
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		cmp dl,t_ptr
 		stc
 		jnz prim_memcpy_90
@@ -7738,7 +7506,7 @@ prim_image:
 		cmp dword [pstack_ptr],4
 		jc prim_image_90
 		mov ecx,3
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		cmp dl,t_int
 		stc
 		mov bp,pserr_wrong_arg_types
@@ -7746,7 +7514,7 @@ prim_image:
 		mov [line_x0],eax
 		mov ecx,2
 		push ebp
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		pop ebp
 		cmp dl,t_int
 		stc
@@ -7830,7 +7598,7 @@ prim_unpackimage:
 		cmp dword [pstack_ptr],4
 		jc prim_unpackimage_90
 		mov ecx,3
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		cmp dl,t_int
 		stc
 		mov bp,pserr_wrong_arg_types
@@ -7838,7 +7606,7 @@ prim_unpackimage:
 		mov [line_x0],eax
 		mov ecx,2
 		push ebp
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		pop ebp
 		cmp dl,t_int
 		stc
@@ -7885,7 +7653,7 @@ prim_unpackimage_70:
 prim_unpackimage_80:
 
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_unpackimage_90:
 		ret
 
@@ -7970,7 +7738,7 @@ prim_getpalette:
 prim_getpalette_50:
 		mov dl,t_int
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_getpalette_90:
 		ret
 
@@ -7989,7 +7757,7 @@ prim_getpalette_90:
 		bits 32
 
 prim_settransparentcolor:
-		call pm_pr_setint
+		call pr_setint
 		mov [transparent_color],eax
 		ret
 
@@ -8030,7 +7798,7 @@ prim_savescreen_50:
 		jnz prim_savescreen_70
 		mov dl,t_none
 prim_savescreen_70:
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_savescreen_90:
 		ret
 
@@ -8147,7 +7915,7 @@ prim_malloc:
 		jz prim_malloc_90
 		xor ecx,ecx
 		mov dl,t_ptr
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_malloc_90:
 		ret
 
@@ -8234,11 +8002,11 @@ prim_memsize:
 		xchg eax,ebp
 		push edi
 		mov ecx,1
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		pop eax
 		mov dl,t_int
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_memsize_90:
 		ret
 
@@ -8321,7 +8089,7 @@ prim_snprintf:
 		jc prim_snprintf_90
 		mov bp,pserr_wrong_arg_types
 		mov ecx,2
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		cmp dl,t_string
 		stc
 		jnz prim_snprintf_90
@@ -8582,7 +8350,7 @@ prim_sysconfig:
 		movzx edx,word [boot_sysconfig]
 		shl eax,4
 		add eax,edx
-		jmp pm_pr_getptr_or_none
+		jmp pr_getptr_or_none
 
 
 ;; 64bit - test if we run on a 64-bit machine
@@ -8600,7 +8368,7 @@ prim_64bit:
 		call chk_64bit
 		sbb eax,eax
 		inc eax
-		jmp pm_pr_getint
+		jmp pr_getint
 
 
 ;; inbyte - get byte from i/o port
@@ -8623,7 +8391,7 @@ prim_inbyte:
 		in al,dx
 		mov dl,t_int
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_inbyte_90:
 		ret
 
@@ -8668,7 +8436,7 @@ prim_getbyte:
 		movzx eax,byte [es:eax]
 		mov dl,t_int
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_getbyte_90:
 		ret
 
@@ -8712,7 +8480,7 @@ prim_getdword:
 		mov eax,[es:eax]
 		mov dl,t_int
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_getdword_90:
 		ret
 
@@ -8780,7 +8548,7 @@ prim_findfile_10:
 		mov dl,t_none
 prim_findfile_20:
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_findfile_90:
 		ret
 
@@ -8827,7 +8595,7 @@ prim_filesize_50:
 		mov dl,t_none
 prim_filesize_70:
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_filesize_90:
 		ret
 
@@ -8858,7 +8626,7 @@ prim_getcwd_70:
 		mov dl,t_none
 		xor eax,eax
 prim_getcwd_90:
-		jmp pm_pr_getobj
+		jmp pr_getobj
 
 
 ;; chdir - set current working directory
@@ -8959,7 +8727,7 @@ prim__readsector_50:
 		mov dl,t_ptr
 prim__readsector_80:
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim__readsector_90:
 		ret
 
@@ -9015,7 +8783,7 @@ prim_setmode_60:
 
 prim_setmode_80:
 		mov dl,t_bool
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_setmode_90:
 		ret
 
@@ -9033,7 +8801,7 @@ prim_setmode_90:
 
 prim_currentmode:
 		movzx eax,word [gfx_mode]
-		jmp pm_pr_getint
+		jmp pr_getint
 
 
 ;; videomodes - video mode list length
@@ -9062,7 +8830,7 @@ prim_videomodes_20:
 prim_videomodes_30:
 		xor eax,eax
 prim_videomodes_40:
-		jmp pm_pr_getint
+		jmp pr_getint
 
 
 ;; videomodeinfo - return video mode info
@@ -9134,21 +8902,21 @@ prim_vmi_20:
 		mov dl,t_int
 		xor ecx,ecx
 		push edi
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		pop edi
 
 		movzx eax,word [es:edi+12h]	; width
 		mov dl,t_int
 		mov ecx,3
 		push edi
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		pop edi
 
 		movzx eax,word [es:edi+14h]	; height
 		mov dl,t_int
 		mov ecx,2
 		push edi
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		pop edi
 
 		mov dl,[es:edi+1bh]		; color mode (aka memory model)
@@ -9171,7 +8939,7 @@ prim_vmi_40:
 
 		mov dl,t_int
 		mov ecx,1
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		jmp prim_vmi_90
 
 prim_vmi_60:
@@ -9179,19 +8947,19 @@ prim_vmi_60:
 		xor eax,eax
 		mov dl,t_int
 		mov ecx,3
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		xor eax,eax
 		mov dl,t_int
 		mov ecx,2
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		xor eax,eax
 		mov dl,t_int
 		mov ecx,1
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		xor eax,eax
 		mov dl,t_none
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 
 prim_vmi_90:
 		ret
@@ -9234,7 +9002,7 @@ prim_si_70:
 		xor eax,eax
 prim_si_80:
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_si_90:
 		ret
 
@@ -9252,7 +9020,7 @@ prim_si_90:
 
 prim_colorbits:
 		movzx eax,byte [color_bits]
-		jmp pm_pr_getint
+		jmp pr_getint
 
 
 ;; eject  - eject CD-ROM
@@ -9279,7 +9047,7 @@ prim_eject:
 		xor ecx,ecx
 		mov dl,t_int
 		movzx eax,ah
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_eject_90:
 		ret
 
@@ -9402,7 +9170,7 @@ prim_strstr_60:
 		dec dword [pstack_ptr]
 		xor ecx,ecx
 		mov dl,t_int
-		call pm_set_pstack_tos
+		call set_pstack_tos
 
 prim_strstr_90:
 		ret
@@ -9432,7 +9200,7 @@ prim_soundgetvolume:
 		mov dl,t_int
 		movzx eax,byte [sound_vol]
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_sgv_90:
 		ret
 
@@ -9493,7 +9261,7 @@ prim_soundgetsamplerate:
 		mov dl,t_int
 		movzx eax,byte [sound_sample]
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_sgsr_90:
 		ret
 
@@ -9678,14 +9446,14 @@ prim_modplaysample:
 		mov bp,pserr_wrong_arg_types
 
 		mov ecx,3
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		cmp dl,t_int
 		stc
 		jnz prim_modps_90
 
 		mov ecx,2
 		push eax
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		pop ebx
 		cmp dl,t_int
 		stc
@@ -9730,7 +9498,7 @@ prim_modps_90:
 		bits 32
 
 prim_settextwrap:
-		call pm_pr_setint
+		call pr_setint
 		mov [line_wrap],eax
 		ret
 
@@ -9748,7 +9516,7 @@ prim_settextwrap:
 
 prim_currenttextwrap:
 		mov eax,[line_wrap]
-		jmp pm_pr_getint
+		jmp pr_getint
 
 
 ;; seteotchar - set alternative end-of-text char
@@ -9766,7 +9534,7 @@ prim_currenttextwrap:
 		bits 32
 
 prim_seteotchar:
-		call pm_pr_setint
+		call pr_setint
 		mov [char_eot],eax
 		ret
 
@@ -9784,7 +9552,7 @@ prim_seteotchar:
 
 prim_currenteotchar:
 		mov eax,[char_eot]
-		jmp pm_pr_getint
+		jmp pr_getint
 
 
 ;; setmaxrows - maximum number of text rows to display
@@ -9799,7 +9567,7 @@ prim_currenteotchar:
 		bits 32
 
 prim_setmaxrows:
-		call pm_pr_setint
+		call pr_setint
 		mov [max_rows],eax
 		ret
 
@@ -9817,7 +9585,7 @@ prim_setmaxrows:
 
 prim_currentmaxrows:
 		mov eax,[max_rows]
-		jmp pm_pr_getint
+		jmp pr_getint
 
 
 ;; formattext -- format text
@@ -9878,7 +9646,7 @@ prim_formattext_90:
 
 prim_gettextrows:
 		mov eax,[cur_row2]
-		jmp pm_pr_getint
+		jmp pr_getint
 
 
 ;; setstartrow - set start row
@@ -9896,7 +9664,7 @@ prim_gettextrows:
 		bits 32
 
 prim_setstartrow:
-		call pm_pr_setint
+		call pr_setint
 		mov [start_row],eax
 		ret
 
@@ -9916,7 +9684,7 @@ prim_setstartrow:
 
 prim_getlinks:
 		mov eax,[cur_link]
-		jmp pm_pr_getint
+		jmp pr_getint
 
 
 ;; settextcolors -- set text markup colors
@@ -9940,7 +9708,7 @@ prim_settextcolors:
 		cmp dword [pstack_ptr],4
 		jc prim_settextcolors_90
 		mov ecx,3
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		cmp dl,t_int
 		stc
 		mov bp,pserr_wrong_arg_types
@@ -9950,7 +9718,7 @@ prim_settextcolors:
 		mov [gfx_color],eax
 		mov ecx,2
 		push ebp
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		pop ebp
 		cmp dl,t_int
 		stc
@@ -9999,22 +9767,22 @@ prim_currenttextcolors:
 		mov eax,[gfx_color3]
 		call decode_color
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		mov dl,t_int
 		mov eax,[gfx_color2]
 		call decode_color
 		mov ecx,1
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		mov dl,t_int
 		mov eax,[gfx_color1]
 		call decode_color
 		mov ecx,2
-		call pm_set_pstack_tos
+		call set_pstack_tos
 		mov dl,t_int
 		mov eax,[gfx_color0]
 		call decode_color
 		mov ecx,3
-		call pm_set_pstack_tos
+		call set_pstack_tos
 prim_currenttextcolors_90:
 		ret
 
@@ -10031,7 +9799,7 @@ prim_currenttextcolors_90:
 		bits 32
 
 prim_setlink:
-		call pm_pr_setint
+		call pr_setint
 		cmp eax,[cur_link]
 		jae prim_setlink_90
 		mov [sel_link],eax
@@ -10052,7 +9820,7 @@ prim_setlink_90:
 
 prim_currentlink:
 		mov eax,[sel_link]
-		jmp pm_pr_getint
+		jmp pr_getint
 
 
 ;; getlink -- get link information
@@ -10091,22 +9859,22 @@ prim_getlink:
 		mov eax,label_buf
 		add eax,[prog.base]
 		mov ecx,3
-		call pm_set_pstack_tos
+		call set_pstack_tos
 
 		mov dl,t_string
 		mov eax,[edi+li.text]
 		mov ecx,2
-		call pm_set_pstack_tos
+		call set_pstack_tos
 
 		mov dl,t_int
 		movzx eax,word [edi+li.x]
 		mov ecx,1
-		call pm_set_pstack_tos
+		call set_pstack_tos
 
 		mov dl,t_int
 		movzx eax,word [edi+li.row]
 		xor ecx,ecx
-		call pm_set_pstack_tos
+		call set_pstack_tos
 
 		mov esi,[edi+li.label]
 		mov edi,label_buf
@@ -10140,7 +9908,7 @@ prim_getlink_90:
 
 prim_lineheight:
 		movzx eax,word [font_line_height]
-		jmp pm_pr_getint
+		jmp pr_getint
 
 
 ;; currenttitle - current page title
@@ -10159,7 +9927,7 @@ prim_lineheight:
 prim_currenttitle:
 		mov eax,[page_title]
 		mov dl,t_string
-		jmp pm_pr_getobj
+		jmp pr_getobj
 
 
 ;; usleep - sleep micro seconds
@@ -10177,7 +9945,7 @@ prim_currenttitle:
 		bits 32
 
 prim_usleep:
-		call pm_pr_setint
+		call pr_setint
 		mov ecx,54944/2
 		add eax,ecx
 		add ecx,ecx
@@ -10230,7 +9998,7 @@ prim_notimeout:
 
 prim_time:
 		call get_time
-		jmp pm_pr_getint
+		jmp pr_getint
 
 
 ;; date - get current date
@@ -10246,7 +10014,7 @@ prim_time:
 
 prim_date:
 		call get_date
-		jmp pm_pr_getint
+		jmp pr_getint
 
 
 ;; idle - run stuff when idle
@@ -10317,7 +10085,7 @@ prim_idle_90:
 		bits 32
 
 prim_keepmode:
-		call pm_pr_setint
+		call pr_setint
 		mov [keep_mode],al
 		ret
 
@@ -10351,7 +10119,7 @@ prim_blend:
 		and dword [tmp_var_0],0
 
 		mov ecx,2
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		cmp dl,t_none
 		jnz prim_blend_21
 		xor eax,eax
@@ -10370,7 +10138,7 @@ prim_blend_23:
 		mov [tmp_var_1],eax
 
 		mov ecx,1
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		cmp dl,t_none
 		jnz prim_blend_31
 		xor eax,eax
@@ -10385,7 +10153,7 @@ prim_blend_33:
 		mov [tmp_var_2],eax
 
 		xor ecx,ecx
-		call pm_get_pstack_tos
+		call get_pstack_tos
 		cmp dl,t_none
 		jnz prim_blend_35
 		sub dword [pstack_ptr],3
@@ -10434,63 +10202,63 @@ prim_blend_90:
 
 		bits 32
 
-pm_pr_getptr_or_none:
+pr_getptr_or_none:
 		mov dl,t_ptr
 		or eax,eax
-		jnz pm_pr_getobj
+		jnz pr_getobj
 		mov dl,t_none
-		jmp pm_pr_getobj
+		jmp pr_getobj
 
 ; return eax as integer on stack
-pm_pr_getint:
+pr_getint:
 		mov dl,t_int
 
 ; return eax as dl on stack
-pm_pr_getobj:
+pr_getobj:
 		mov ecx,[pstack_ptr]
 		inc ecx
 		cmp [pstack_size],ecx
 		mov bp,pserr_pstack_overflow
-		jc pm_pr_getobj_90
+		jc pr_getobj_90
 		mov [pstack_ptr],ecx
 		xor ecx,ecx
-		call pm_set_pstack_tos
-pm_pr_getobj_90:
+		call set_pstack_tos
+pr_getobj_90:
 		ret
 
 
 ; get ptr from stack as eax; if it is undef, don't return to function
-pm_pr_setptr_or_none:
+pr_setptr_or_none:
 		mov dl,t_ptr
 
 ; get obj from stack as eax; if it is undef, don't return to function
-pm_pr_setobj_or_none:
+pr_setobj_or_none:
 		call get_1arg
-		jnc pm_pr_setobj_20
+		jnc pr_setobj_20
 		cmp dl,t_none
 		stc
-		jnz pm_pr_setobj_10
+		jnz pr_setobj_10
 		dec dword [pstack_ptr]
 		clc
-		jmp pm_pr_setobj_10
+		jmp pr_setobj_10
 
 ; get integer from stack as eax
-pm_pr_setint:
+pr_setint:
 		mov dl,t_int
 
 ; get object with type dl from stack as eax
 pm_pr_setobj:
 		call get_1arg
-		jnc pm_pr_setobj_20
-pm_pr_setobj_10:
+		jnc pr_setobj_20
+pr_setobj_10:
 		pop eax			; don't return to function that called us
 		ret
-pm_pr_setobj_20:
+pr_setobj_20:
 		dec dword [pstack_ptr]
 		pop ecx			; put link to clc on stack
-		push dword pm_pr_setobj_30
+		push dword pr_setobj_30
 		jmp ecx
-pm_pr_setobj_30:
+pr_setobj_30:
 		clc
 		ret
 
@@ -13689,7 +13457,7 @@ chk_64bit_90:
 		bits 32
 
 prim_xxx:
-;		call pm_pr_setptr_or_none
+;		call pr_setptr_or_none
 		; eax
 		rm32_call mouse_init
 		or ah,ah
@@ -13698,7 +13466,7 @@ prim_xxx:
 		mov eax,mouse_x
 		add eax,[prog.base]
 prim_xxx_90:
-		jmp pm_pr_getptr_or_none
+		jmp pr_getptr_or_none
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -14498,41 +14266,6 @@ jpg_unpack_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; Switch to local stack.
-;
-; no regs or flags changed
-;
-
-		bits 16
-
-use_local_stack:
-		; cmp dword [old_stack.ofs],0
-		; jnz $
-		pop word [tmp_stack_val]
-		mov [old_stack.ofs],esp
-		mov [old_stack.seg],ss
-		lss esp,[local_stack]
-		jmp [tmp_stack_val]
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; Switch back to system wide stack.
-;
-; no regs or flags changed
-;
-
-		bits 16
-
-use_old_stack:
-		; cmp dword [old_stack.ofs],0
-		; jz $
-		pop word [tmp_stack_val]
-		lss esp,[old_stack]
-		mov dword [old_stack.ofs],0
-		jmp [tmp_stack_val]
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; Install mouse handler.
 ;
 ; Note: experimental.
@@ -14868,6 +14601,41 @@ videoinfo_80:
 		xor eax,eax
 videoinfo_90:
 		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Switch to local stack.
+;
+; no regs or flags changed
+;
+
+		bits 16
+
+use_local_stack:
+		; cmp dword [old_stack.ofs],0
+		; jnz $
+		pop word [tmp_stack_val]
+		mov [old_stack.ofs],esp
+		mov [old_stack.seg],ss
+		lss esp,[local_stack]
+		jmp [tmp_stack_val]
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Switch back to system wide stack.
+;
+; no regs or flags changed
+;
+
+		bits 16
+
+use_old_stack:
+		; cmp dword [old_stack.ofs],0
+		; jz $
+		pop word [tmp_stack_val]
+		lss esp,[old_stack]
+		mov dword [old_stack.ofs],0
+		jmp [tmp_stack_val]
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
