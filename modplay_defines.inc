@@ -20,8 +20,8 @@ ch_pitch	equ ch_startseg + 2
 ch_finetune	equ ch_pitch + 2
 ch_volume	equ ch_finetune + 2
 
-ch_start	equ ch_volume + 2
-ch_pointer	equ ch_start + 2
+ch_start	equ ch_volume + 2		; pointer, rel to ch_startseg
+ch_pointer	equ ch_start + 4
 ch_pointer8	equ ch_pointer + 2
 ch_end		equ ch_pointer8 + 2
 ch_send		equ ch_end + 2
@@ -43,8 +43,8 @@ ch_current	equ ch_arp + 3 * 2
 ch_retrig	equ ch_current + 2
 ch_latesamp	equ ch_retrig + 2
 ch_effect	equ ch_latesamp + 2
-ch_player	equ ch_effect + 2
-ch_sizeof       equ ch_player + 2
+ch_player	equ ch_effect + 2		; pointer to player data, rel to ds
+ch_sizeof       equ ch_player + 4
 
 ; struct player
 pl_volume	equ 0
@@ -59,12 +59,12 @@ pl_notenum	equ pl_songnum + 2
 pl_loop_notenum	equ pl_notenum + 2
 pl_loop_counter	equ pl_loop_notenum + 2
 pl_seg		equ pl_loop_counter + 2
-pl_song		equ pl_seg + 2
-pl_patterns     equ pl_song + 4
-pl_sampinfo     equ pl_patterns + 4
-pl_sampd        equ pl_sampinfo + 4
-pl_sampdseg     equ pl_sampd + 2 * 32
-pl_channs       equ pl_sampdseg + 4 * 32
+pl_song		equ pl_seg + 2			; pointer, rel to pl_seg
+pl_patterns     equ pl_song + 4			; pointer, rel to pl_seg
+pl_sampinfo     equ pl_patterns + 4		; pointer, rel to pl_seg
+pl_sampd        equ pl_sampinfo + 4		; pointer array, rel to pl_sampdseg
+pl_sampdseg     equ pl_sampd + 4 * 32
+pl_channs       equ pl_sampdseg + 2 * 32
 pl_loaded	equ pl_channs + 4 * ch_sizeof
 pl_sizeof	equ pl_loaded + 2
 

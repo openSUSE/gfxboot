@@ -1,4 +1,4 @@
-			bits 16
+			bits 32
 
 			extern jpeg_get_size
 			extern jpeg_decode
@@ -395,11 +395,10 @@ sound_playing		db 0
 sound_sample		dd 0
 sound_buf		dd 0		; (seg:ofs)
 sound_buf.lin		dd 0		; buffer for sound player
-sound_start		dw 0		; rel. to sound_buf
-sound_end		dw 0		; rel. to sound_buf
+sound_start		dd 0		; rel. to sound_buf
+sound_end		dd 0		; rel. to sound_buf
 playlist		times playlist_entries * sizeof_playlist db 0
-mod_buf			dd 0		; (seg:ofs)
-mod_buf.lin		dd 0 		; buffer for mod player
+mod_buf			dd 0 		; buffer for mod player
 int8_count		dd 0
 cycles_per_tt		dd 0
 cycles_per_int		dd 0
@@ -3299,31 +3298,6 @@ pm_lin2so:
 		shr eax,4
 		mov [esp + 10],ax
 		and word [esp + 8],byte 0fh
-		pop eax
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Convert seg:ofs to 32bit linear address.
-;
-;  dword [esp + 2]:	seg:ofs
-;
-; return:
-;  dword [esp + 2]:	linear address
-;
-; Notes:
-;  - changes no regs
-;
-
-		bits 16
-
-so2lin:
-		push eax
-		movzx eax,word [esp + 8]
-		and word [esp + 8],byte 0
-		shl eax,4
-		add [esp + 6],eax
 		pop eax
 		ret
 
@@ -9363,21 +9337,11 @@ prim_modload:
 		push eax
 		push ecx
 		rm32_call sound_init
-		pop ecx
+		pop edi
 		pop eax
 		jc prim_modload_80
 
-		pm_leave
-
-		push ecx
-		call lin2so
-		pop di
-		pop es
-
 		call mod_load
-
-		pm_enter
-
 prim_modload_80:
 		clc
 prim_modload_90:
@@ -13015,7 +12979,7 @@ new_int8_40:
 
 		mov byte [sound_int_active],1
 
-		sti
+		; sti
 
 		mov ax,[sound_end]
 		sub ax,[sound_start]
@@ -13024,7 +12988,7 @@ new_int8_40:
 new_int8_60:
 		cmp ax,160
 		jae new_int8_80
-		call mod_get_samples
+		pm32_call mod_get_samples
 
 new_int8_80:
 
@@ -13059,10 +13023,7 @@ sound_init:
 		pm32_call calloc
 		cmp eax,byte 1
 		jc sound_init_90
-		mov [mod_buf.lin],eax
-		push eax
-		call lin2so
-		pop dword [mod_buf]
+		mov [mod_buf],eax
 
 		pm32_call mod_init
 
@@ -13077,8 +13038,8 @@ sound_init:
 
 		xor eax,eax
 		mov [int8_count],eax
-		mov [sound_start],ax
-		mov [sound_end],ax
+		mov [sound_start],eax
+		mov [sound_end],eax
 		mov [sound_playing],al
 		mov [sound_int_active],al
 
@@ -13195,7 +13156,7 @@ sound_done:
 
 		popf
 
-		mov eax,[mod_buf.lin]
+		mov eax,[mod_buf]
 		call free
 
 		mov eax,[sound_buf.lin]
@@ -13289,22 +13250,18 @@ sound_test_90:
 		bits 32
 
 mod_init:
-		mov esi,[mod_buf.lin]
+		mov esi,[mod_buf]
 		call init
 		ret
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-		bits 16
+		bits 32
 
 mod_load:
-		push ds
-		push dword [mod_buf]
-		pop si
-		pop ds
+		mov esi,[mod_buf]
 		call loadmod
-		pop ds
 		ret
 
 
@@ -13313,7 +13270,7 @@ mod_load:
 		bits 32
 
 mod_play:
-		mov esi,[mod_buf.lin]
+		mov esi,[mod_buf]
 		call playmod
 		mov byte [sound_playing],1
 		ret
@@ -13324,7 +13281,7 @@ mod_play:
 		bits 32
 
 mod_playsample:
-		mov esi,[mod_buf.lin]
+		mov esi,[mod_buf]
 		call playsamp
 		mov byte [sound_playing],1
 		ret
@@ -13332,43 +13289,40 @@ mod_playsample:
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-		bits 16
+		bits 32
 
 mod_get_samples:
-		push ds
-		push dword [mod_buf]
-		pop si
-		pop ds
+		mov esi,[mod_buf]
+		push esi
 		call play
-		mov dl,[si]
-		add si,ar_samps
-		push ds
-		pop fs
-		pop ds
+		pop esi
+
+		mov dl,[es:esi]
+		add esi,ar_samps
 
 		; dl: 0/1 --> play nothing/play
 		sub dl,1
 
-		mov cx,num_samples
-		les bx,[sound_buf]
-		mov di,[sound_end]
+		mov ecx,num_samples
+		mov ebx,[sound_buf.lin]
+		mov edi,[sound_end]
 		cld
 
 mod_get_samples_20:
 
-		fs lodsb
+		es lodsb
 		or al,dl		; 0ffh if we play nothing
-		mov [es:bx+di],al
-		inc di
-		cmp di,sound_buf_size
+		mov [es:ebx+edi],al
+		inc edi
+		cmp edi,sound_buf_size
 		jb mod_get_samples_50
-		xor di,di
+		xor edi,edi
 
 mod_get_samples_50:
 
-		dec cx
+		dec ecx
 		jnz mod_get_samples_20
-		mov [sound_end],di
+		mov [sound_end],edi
 
 mod_get_samples_90:
 		ret
@@ -13386,7 +13340,7 @@ mod_setvolume:
 		cmp byte [sound_ok],0
 		jz mod_setvolume_90
 
-		mov esi,[mod_buf.lin]
+		mov esi,[mod_buf]
 
 		movzx edx,al
 		xor eax,eax
@@ -15017,12 +14971,10 @@ switch_to_rm_20:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 		bits 32
 
 %include	"kroete.inc"
-
-		bits 16
-
 %include	"modplay.inc"
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

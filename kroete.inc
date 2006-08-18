@@ -1,5 +1,3 @@
-		bits 32
-
 ; must be large enough, else we will get evil memory corruptions
 kroete.width    equ 520
 kroete.height   equ 236
