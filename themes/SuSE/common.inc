@@ -1392,7 +1392,7 @@ dup .undef eq { pop "back-low.jpg" findfile } if
 /debug 0 def
 
 ptheme small_layout or CapsLock or
-  true or
+%  true or
 {
   /bsplash.done { } def
 } {
@@ -1400,40 +1400,4 @@ ptheme small_layout or CapsLock or
 } ifelse
 
 check_arch_boot_dir
-
-%%% tests
-
-black setcolor
-0 0 moveto screen.size fillrect
-
-yellow setcolor
-
-0 300 moveto
-
-800 { putpixel 1 0 rmoveto } repeat
-
-0 300 moveto
-
-800 { getpixel 0 4 rmoveto not setcolor putpixel 1 -4 rmoveto } repeat
-
-somegreen setcolor
-
-currenttransparency
-  50 settransparency
-  200 200 moveto 400 300 fillrect
-settransparency
-
-0xc00040 setcolor
-
-100 100 moveto 700 500 lineto 700 100 lineto 100 500 lineto 100 100 lineto
-
-0x008080 setcolor
-
-10 10 790 {
-  150 250 moveto
-  dup 2 div 600 exch sub lineto
-} for
-
-
-dtrace
 
