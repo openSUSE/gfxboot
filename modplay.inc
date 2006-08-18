@@ -5,24 +5,15 @@
 
 
 %if 0
-	call	init
-	sti
-	call	loadmod
-	sti
-	call	play
-	sti
-	call	playmod
-	sti
-	call	playsamp
-	sti
-	call	setvol
-	sti
-	call	getvol
-	sti
-	call	getstate
-	sti
-	call	stop
-	sti
+	init
+	loadmod
+	play
+	playmod
+	playsamp
+	setvol
+	getvol
+	getstate
+	stop
 %endif
 
 ; pl_loadmod - configure a mod player
@@ -738,36 +729,50 @@ vo1:	sub	ax, [si + vo_volumerate]
 	jb	vohit
 	jmp	vo2
 
+
 ; vo_setvol - set volume
-;   ds:si  start of volblock
-;   ax     goal
-;   bx     rate 0=immediate 50=one sec
+;
+;   es:esi	start of volblock
+;   ax		goal
+;   bx		rate 0=immediate 50=one sec
+
+		bits 32
+
 vo_setvol:
-	mov	[si + vo_volumegoal], ax
-	or	bx, bx
-	jnz	sv1
-	mov	[si + vo_volume], ax
-	mov	[si + vo_volumerate], bx
-	ret
-sv1:	push	ax
-	xor	ax, ax
-	not	ax
-	push	dx
-	div	bx
-	pop	dx
-	mov	[si + vo_volumerate], ax
-	pop	ax
-	ret
+		mov [es:esi+vo_volumegoal],ax
+		or bx,bx
+		jnz sv1
+		mov [es:esi+vo_volume],ax
+		mov [es:esi+vo_volumerate],bx
+		ret
+sv1:
+		push eax
+		stc
+		sbb eax,eax
+		push edx
+		div bx
+		pop edx
+		mov [es:esi+vo_volumerate],ax
+		pop eax
+		ret
+
 
 ; getvol - get volume
-;   ds:si  start of volblock
+;   es:esi	start of volblock
+
+		bits 32
+
 vo_getvol:
-	mov	ax, [si + vo_volume]
-	ret
+		mov ax,[es:esi+vo_volume]
+		ret
 	
+
 ; pl_playmod - play a modfile
 ;   ds:si  start of player
 ;   ax     start of song
+
+		bits 16
+
 pl_playmod:
 	cmp	[si + pl_loaded], byte 1
 	jz	pm0
@@ -905,46 +910,70 @@ ss15:	mov	[si +  ch_rend], ax
 	pop     bx
 	ret
 
-; the big picture: four mod players
 
-; init - initiaize everything
-;   ds:si  start of area
+; the big picture: four mod players
+;
+; init - initialize everything
+;
+;   es:esi	start of area
+
+		bits 32
+
 init:
-	pushad
-	push	si
-	xor	ax, ax
-	mov	cx, ar_sizeof
-ii1:	mov	[si], al
-	inc	si
-	loop	ii1
-	pop	si
-	not	ax
-	xor	bx, bx
-	push	si
-	add	si, ar_players
-	mov	cx, 4
-ii2:	call	vo_setvol
-	add	si, pl_sizeof
-	loop	ii2
-	pop	si
-	add	si, ar_volume
-	mov	ax, 32767
-	call	vo_setvol
-	popad
-	ret
+		mov edi,esi
+		xor eax,eax
+		mov ecx,ar_sizeof
+		rep stosb
+		not eax
+		xor ebx,ebx
+		push esi
+		add esi,ar_players
+		mov ecx,4
+ii2:
+		call vo_setvol
+		add esi,pl_sizeof
+		loop ii2
+		pop esi
+		add esi,ar_volume
+		mov ax,32767
+		call vo_setvol
+		ret
+
 
 ; setpl - get player offset
 ;   ax     player no.
+
+		bits 16
+
 setpl:
 	add	si, ar_players
 	imul	ax, pl_sizeof
 	add	si, ax
 	ret
 
+
+; setpl - get player offset
+;   ax		player no.
+;
+; return:
+;   esi		player offset
+
+		bits 32
+
+pm_setpl:
+		add esi,ar_players
+		imul eax,pl_sizeof
+		add esi,eax
+		ret
+
+
 ; loadmod - load a mod into one of the players
 ;   ds:si  start of area
 ;   es:di  start of mod
 ;   ax     player no.
+
+		bits 16
+
 loadmod:
 	push	si
 	call	setpl
@@ -1107,35 +1136,41 @@ ap5:	pop	es
 	ret
 
 ; setvol - set volume
-;   ds:si  start of area
-;   ax     player no.
-;   bx     goal
-;   cx     rate 0=immediate 50=one sec
+;   es:esi	start of area
+;   ax		player no.
+;   bx		goal
+;   cx		rate 0=immediate 50=one sec
+
+		bits 32
+
 setvol:
-	push	si
-	call	setplvl
-	mov	ax, bx
-	mov	bx, cx
-	call	vo_setvol	
-	pop	si
-	ret
+		call setplvl
+		mov eax,ebx
+		mov ebx,ecx
+		call vo_setvol	
+		ret
+
 
 ; getvol - get volume
-;   ds:si  start of area
-;   ax     player no.
+;   es:esi	start of area
+;   ax		player no.
+
+		bits 32
+
 getvol:
-	push	si
-	call	setplvl
-	call	vo_getvol	
-	pop	si
-	ret
+		call setplvl
+		call vo_getvol	
+		ret
+
 
 ; setplvl - get volume offset
-;   ax     player no.
+;   ax		player no.
+
+		bits 32
+
 setplvl:
-	or	ax, ax
-	js	av1
-	jmp	setpl
-av1:	add	si, ar_volume
-	ret
+		or eax,eax
+		jns pm_setpl
+		add esi,ar_volume
+		ret
 

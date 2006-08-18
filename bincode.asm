@@ -394,10 +394,12 @@ sound_int_active	db 0
 sound_playing		db 0
 sound_sample		dd 0
 sound_buf		dd 0		; (seg:ofs)
+sound_buf.lin		dd 0		; buffer for sound player
 sound_start		dw 0		; rel. to sound_buf
 sound_end		dw 0		; rel. to sound_buf
 playlist		times playlist_entries * sizeof_playlist db 0
 mod_buf			dd 0		; (seg:ofs)
+mod_buf.lin		dd 0 		; buffer for mod player
 int8_count		dd 0
 cycles_per_tt		dd 0
 cycles_per_int		dd 0
@@ -912,7 +914,7 @@ gfx_done:
 		bits 32
 
 gfx_done_pm:
-		rm32_call sound_done
+		call sound_done
 
 		cmp byte [keep_mode],0
 		jnz gfx_done_pm_90
@@ -9226,7 +9228,7 @@ prim_ssv_50:
 		xor eax,eax
 prim_ssv_60:
 		mov [sound_vol],al
-		rm32_call mod_setvolume
+		call mod_setvolume
 		clc
 prim_ssv_90:
 		ret
@@ -9277,7 +9279,7 @@ prim_soundsetsamplerate:
 		push eax
 		rm32_call sound_init
 		pop eax
-		rm32_call sound_setsample
+		call sound_setsample
 		clc
 prim_sssr_90:
 		ret
@@ -9313,7 +9315,7 @@ prim_splay_90:
 		bits 32
 
 prim_sounddone:
-		rm32_call sound_done
+		call sound_done
 		clc
 		ret
 
@@ -12899,6 +12901,10 @@ fill_rect_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Our timer interrut handler.
+;
+; Needed to play sound via pc-speaker.
+;
 
 		bits 16
 
@@ -13034,6 +13040,12 @@ new_int8_90:
 		iret
 
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Prepare sound subsystem.
+;
+; Installs a new timer interrupt handler and increases timer frequency.
+;
+
 		bits 16
 
 sound_init:
@@ -13047,16 +13059,18 @@ sound_init:
 		pm32_call calloc
 		cmp eax,byte 1
 		jc sound_init_90
+		mov [mod_buf.lin],eax
 		push eax
 		call lin2so
 		pop dword [mod_buf]
 
-		call mod_init
+		pm32_call mod_init
 
 		mov eax,sound_buf_size
 		pm32_call calloc
 		cmp eax,byte 1
 		jc sound_init_90
+		mov [sound_buf.lin],eax
 		push eax
 		call lin2so
 		pop dword [sound_buf]
@@ -13133,7 +13147,7 @@ sound_init_50:
 		mov [tmp_var_1],edx
 
 		mov eax,16000
-		call sound_setsample
+		pm32_call sound_setsample
 
 		xor eax,eax
 		mov [next_int],eax
@@ -13144,7 +13158,13 @@ sound_init_90:
 		ret
 
 
-		bits 16
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Shut down sound subsystem.
+;
+; Activates old timer interrupt handler and sets timer frequency back to
+; normal.
+;
+		bits 32
 
 sound_done:
 		cmp byte [sound_ok],0
@@ -13168,9 +13188,6 @@ sound_done:
 		mov [sound_cnt0],ax
 		mov [sound_playing],al
 
-		push word 0
-		pop es
-
 		push dword [sound_old_int8]
 		pop dword [es:8*4]
 
@@ -13178,23 +13195,23 @@ sound_done:
 
 		popf
 
-		push dword [mod_buf]
-		call so2lin
-		pop eax
-		pm32_call free
+		mov eax,[mod_buf.lin]
+		call free
 
-		push dword [sound_buf]
-		call so2lin
-		pop eax
-		pm32_call free
+		mov eax,[sound_buf.lin]
+		call free
 
 sound_done_90:
 		ret
 
 
-; eax: new sample rate
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Set sample rate for sound playback.
+;
+; eax		sample rate
+;
 
-		bits 16
+		bits 32
 
 sound_setsample:
 		cmp eax,20
@@ -13236,6 +13253,11 @@ sound_setsample_50:
 sound_setsample_90:
 		ret
 
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Test sound subsystem.
+;
+
 %if 0
 
 		bits 32
@@ -13248,34 +13270,32 @@ sound_test:
 		jc sound_test_90
 
 		mov eax,16000
-		rm32_call sound_setsample
+		call sound_setsample
 
 		mov byte [sound_playing],1
 
 		jmp sound_test_90
 
 sound_test_80:
-		rm32_call sound_done
+		call sound_done
 sound_test_90:
 		ret
 %endif
 
 
-		bits 16
-
-; mod player
-%include	"modplay.inc"
-
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Init mod player.
+;
+		bits 32
 
 mod_init:
-		push ds
-		push dword [mod_buf]
-		pop si
-		pop ds
+		mov esi,[mod_buf.lin]
 		call init
-		clc
-		pop ds
 		ret
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+		bits 16
 
 mod_load:
 		push ds
@@ -13285,6 +13305,11 @@ mod_load:
 		call loadmod
 		pop ds
 		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+		bits 16
 
 mod_play:
 		push ds
@@ -13296,6 +13321,10 @@ mod_play:
 		mov byte [sound_playing],1
 		ret
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+		bits 16
+
 mod_playsample:
 		push ds
 		push dword [mod_buf]
@@ -13305,6 +13334,10 @@ mod_playsample:
 		pop ds
 		mov byte [sound_playing],1
 		ret
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+		bits 16
 
 mod_get_samples:
 		push ds
@@ -13345,30 +13378,34 @@ mod_get_samples_50:
 mod_get_samples_90:
 		ret
 
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Set mod player volume.
+;
+; al		volume (0 .. 100)
+;
+
+		bits 32
+
 mod_setvolume:
 		cmp byte [sound_ok],0
 		jz mod_setvolume_90
-		push ds
-		push dword [mod_buf]
-		pop si
-		pop ds
 
-		mov dx,ax
-		xor ax,ax
-		or dx,dx
+		mov esi,[mod_buf.lin]
+
+		movzx edx,al
+		xor eax,eax
+		or edx,edx
 		jz mod_setvolume_50
 		sub ax,1
 		sbb dx,0
 		mov bx,100
 		div bx
 mod_setvolume_50:
-		mov bx,ax
-		xor ax,ax
-		mov cx,ax
-		dec ax
+		mov ebx,eax
+		xor ecx,ecx
+		lea eax,[ecx-1]
 		call setvol
-
-		pop ds
 mod_setvolume_90:
 		ret
 
@@ -14989,6 +15026,9 @@ switch_to_rm_20:
 
 %include	"kroete.inc"
 
+		bits 16
+
+%include	"modplay.inc"
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
