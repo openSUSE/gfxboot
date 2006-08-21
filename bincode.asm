@@ -166,7 +166,7 @@ local_stack.seg		dw 0		; dto, seg
 old_stack		dd 0		; store old esp value
 old_stack.ofs		equ old_stack
 old_stack.seg		dw 0		; dto, ss
-stack_size		dd 0		; in bytes
+stack.size		dd 0		; in bytes
 tmp_stack_val		dw 0		; needed for stack switching
 
 pscode_start		dd 0		; (lin)
@@ -191,14 +191,12 @@ boot_sysconfig		dw 0		; ofs
 boot_callback		dd 0 		; seg:ofs
 boot_cs.base		dd 0		; boot_cs * 16
 
-pstack			dd 0		; (seg:ofs)
-pstack.lin		dd 0		; (lin)
-pstack_size		dd 0		; entries
-pstack_ptr		dd 0
-rstack			dd 0		; (seg:ofs)
-rstack.lin		dd 0		; (lin)
-rstack_size		dd 0		; entries
-rstack_ptr		dd 0
+pstack			dd 0		; data stack
+pstack.size		dd 0		; entries
+pstack.ptr		dd 0		; index of current tos
+rstack			dd 0		; code stack
+rstack.size		dd 0		; entries
+rstack.ptr		dd 0		; index of current tos
 
 image			dd 0		; (lin) current image
 image_width		dw 0
@@ -736,7 +734,7 @@ gfx_init_40:
 
 		; allocate 8k local stack
 		mov eax,8 << 10
-		mov [stack_size],eax
+		mov [stack.size],eax
 		add eax,3
 		call calloc
 		; dword align
@@ -750,13 +748,12 @@ gfx_init_40:
 		mov [local_stack.ofs],eax
 		jmp gfx_init_55
 gfx_init_50:
-		push eax
-		xor eax,eax
-		call pm_lin2so
-		pop ax
-		add eax,[stack_size]
+		mov edx,eax
+		and eax,0fh
+		add eax,[stack.size]
 		mov [local_stack.ofs],eax
-		pop word [local_stack.seg]
+		shr dx,4
+		mov [local_stack.seg],dx
 
 gfx_init_55:
 
@@ -865,8 +862,8 @@ gfx_init_55:
 
 		; run global code
 		xor eax,eax
-		mov [pstack_ptr],eax
-		mov [rstack_ptr],eax
+		mov [pstack.ptr],eax
+		mov [rstack.ptr],eax
 		call run_pscode
 		jc gfx_init_60
 
@@ -970,11 +967,11 @@ gfx_input_20:
 
 		push eax
 		mov eax,ecx
-		mov dword [pstack_ptr],1
+		mov dword [pstack.ptr],1
 		mov dl,t_int
 		xor ecx,ecx
 		call set_pstack_tos
-		mov dword [rstack_ptr],1
+		mov dword [rstack.ptr],1
 		xor ecx,ecx
 		mov dl,t_code
 		stc
@@ -1129,7 +1126,7 @@ gfx_menu_init_50:
 
 		push eax
 
-		mov dword [pstack_ptr],3
+		mov dword [pstack.ptr],3
 
 		mov eax,[tmp_var_1]
 		mov dl,t_array
@@ -1146,7 +1143,7 @@ gfx_menu_init_50:
 		xor ecx,ecx
 		call set_pstack_tos
 
-		mov dword [rstack_ptr],1
+		mov dword [rstack.ptr],1
 		xor ecx,ecx
 		mov dl,t_code
 		stc
@@ -1228,7 +1225,7 @@ gfx_infobox_init_40:
 
 		push eax
 
-		mov dword [pstack_ptr],2
+		mov dword [pstack.ptr],2
 
 		movzx eax,bl
 		mov dl,t_int
@@ -1240,7 +1237,7 @@ gfx_infobox_init_40:
 		mov ecx,1
 		call set_pstack_tos
 
-		mov dword [rstack_ptr],1
+		mov dword [rstack.ptr],1
 		xor ecx,ecx
 		mov dl,t_code
 		stc
@@ -1277,8 +1274,8 @@ gfx_infobox_done:
 		jnz gfx_infobox_done_90
 
 		push eax
-		mov dword [pstack_ptr],0
-		mov dword [rstack_ptr],1
+		mov dword [pstack.ptr],0
+		mov dword [rstack.ptr],1
 		xor ecx,ecx
 		mov dl,t_code
 		stc
@@ -1323,7 +1320,7 @@ gfx_progress_init:
 		jnz gfx_progress_init_90
 
 		push eax
-		mov dword [pstack_ptr],1
+		mov dword [pstack.ptr],1
 
 		movzx eax,si
 		add eax,[boot_cs.base]
@@ -1332,7 +1329,7 @@ gfx_progress_init:
 		xor ecx,ecx
 		call set_pstack_tos
 
-		mov dword [rstack_ptr],1
+		mov dword [rstack.ptr],1
 		xor ecx,ecx
 		mov dl,t_code
 		stc
@@ -1369,8 +1366,8 @@ gfx_progress_done:
 		jnz gfx_progress_done_90
 
 		push eax
-		mov dword [pstack_ptr],0
-		mov dword [rstack_ptr],1
+		mov dword [pstack.ptr],0
+		mov dword [rstack.ptr],1
 		xor ecx,ecx
 		mov dl,t_code
 		stc
@@ -1409,7 +1406,7 @@ gfx_progress_update:
 		jnz gfx_progress_update_90
 
 		push eax
-		mov dword [pstack_ptr],2
+		mov dword [pstack.ptr],2
 
 		mov eax,[progress_current]
 		mov dl,t_int
@@ -1421,7 +1418,7 @@ gfx_progress_update:
 		mov ecx,1
 		call set_pstack_tos
 
-		mov dword [rstack_ptr],1
+		mov dword [rstack.ptr],1
 		xor ecx,ecx
 		mov dl,t_code
 		stc
@@ -1480,7 +1477,7 @@ gfx_password_init:
 
 		push eax
 
-		mov dword [pstack_ptr],2
+		mov dword [pstack.ptr],2
 
 		movzx eax,si
 		add eax,[boot_cs.base]
@@ -1498,7 +1495,7 @@ gfx_password_init:
 		mov ecx,1
 		call set_pstack_tos
 
-		mov dword [rstack_ptr],1
+		mov dword [rstack.ptr],1
 		xor ecx,ecx
 		mov dl,t_code
 		stc
@@ -1541,7 +1538,7 @@ gfx_password_done:
 
 		push eax
 
-		mov dword [pstack_ptr],1
+		mov dword [pstack.ptr],1
 
 		movzx eax,si
 		add eax,[boot_cs.base]
@@ -1550,7 +1547,7 @@ gfx_password_done:
 		xor ecx,ecx
 		call set_pstack_tos
 
-		mov dword [rstack_ptr],1
+		mov dword [rstack.ptr],1
 		xor ecx,ecx
 		mov dl,t_code
 		stc
@@ -1672,7 +1669,7 @@ timeout:
 		jnz timeout_90
 
 		push eax
-		mov dword [pstack_ptr],2
+		mov dword [pstack.ptr],2
 
 		mov ecx,1
 		mov dl,t_int
@@ -1684,7 +1681,7 @@ timeout:
 		mov eax,[input_timeout]
 		call set_pstack_tos
 
-		mov dword [rstack_ptr],1
+		mov dword [rstack.ptr],1
 		xor ecx,ecx
 		mov dl,t_code
 		stc
@@ -1723,14 +1720,14 @@ timer:
 		jnz timer_90
 
 		push eax
-		mov dword [pstack_ptr],1
+		mov dword [pstack.ptr],1
 
 		xor ecx,ecx
 		mov dl,t_int
 		mov eax,ebx
 		call set_pstack_tos
 
-		mov dword [rstack_ptr],1
+		mov dword [rstack.ptr],1
 		xor ecx,ecx
 		mov dl,t_code
 		stc
@@ -1759,27 +1756,22 @@ timer_90:
 		bits 32
 
 stack_init:
-		mov dword [pstack_size],param_stack_size
-		and dword [pstack_ptr],0
+		mov dword [pstack.size],param_stack_size
+		and dword [pstack.ptr],0
 		mov eax,param_stack_size * 5
 		call calloc
 		cmp eax,1
 		jc stack_init_90
-		mov [pstack.lin],eax
-		push eax
-		call pm_lin2so
-		pop dword [pstack]
+		mov [pstack],eax
 
-		mov dword [rstack_size],ret_stack_size
-		and dword [rstack_ptr],0
+		mov dword [rstack.size],ret_stack_size
+		and dword [rstack.ptr],0
 		mov eax,ret_stack_size * 5
 		call calloc
 		cmp eax,1
 		jc stack_init_90
-		mov [rstack.lin],eax
-		push eax
-		call pm_lin2so
-		pop dword [rstack]
+		mov [rstack],eax
+
 stack_init_90:
 		ret
 
@@ -1798,8 +1790,8 @@ stack_init_90:
 rot_pstack_up:
 		or ecx,ecx
 		jz rot_pstack_up_90
-		mov edi,[pstack.lin]
-		mov eax,[pstack_ptr]
+		mov edi,[pstack]
+		mov eax,[pstack.ptr]
 		sub eax,ecx
 		jb rot_pstack_up_90
 		cmp ecx,1
@@ -1836,8 +1828,8 @@ rot_pstack_up_90:
 rot_pstack_down:
 		or ecx,ecx
 		jz rot_pstack_down_90
-		mov edi,[pstack.lin]
-		mov eax,[pstack_ptr]
+		mov edi,[pstack]
+		mov eax,[pstack.ptr]
 		cmp eax,ecx
 		jb rot_pstack_down_90
 		cmp ecx,1
@@ -1880,10 +1872,10 @@ rot_pstack_down_90:
 get_pstack_entry:
 		xor eax,eax
 		mov dl,al
-		cmp [pstack_size],ecx
+		cmp [pstack.size],ecx
 		jb get_pstack_entry_90
 		lea ebx,[ecx+ecx*4]
-		add ebx,[pstack.lin]
+		add ebx,[pstack]
 		mov dl,[es:ebx]
 		mov eax,[es:ebx+1]
 		clc
@@ -1906,10 +1898,10 @@ get_pstack_entry_90:
 		bits 32
 
 set_pstack_entry:
-		cmp [pstack_size],ecx
+		cmp [pstack.size],ecx
 		jb set_pstack_entry_90
 		lea ebx,[ecx+ecx*4]
-		add ebx,[pstack.lin]
+		add ebx,[pstack]
 		mov [es:ebx],dl
 		mov [es:ebx+1],eax
 		clc
@@ -1932,7 +1924,7 @@ set_pstack_entry_90:
 		bits 32
 
 get_pstack_tos:
-		mov eax,[pstack_ptr]
+		mov eax,[pstack.ptr]
 		sub eax,1
 		jc get_pstack_tos_90
 		sub eax,ecx
@@ -1958,7 +1950,7 @@ get_pstack_tos_90:
 		bits 32
 
 set_pstack_tos:
-		mov ebx,[pstack_ptr]
+		mov ebx,[pstack.ptr]
 		sub ebx,1
 		jc set_pstack_tos_90
 		sub ebx,ecx
@@ -1986,10 +1978,10 @@ set_pstack_tos_90:
 get_rstack_entry:
 		xor eax,eax
 		mov dl,al
-		cmp [rstack_size],ecx
+		cmp [rstack.size],ecx
 		jb get_rstack_entry_90
 		lea ebx,[ecx+ecx*4]
-		add ebx,[rstack.lin]
+		add ebx,[rstack]
 		mov dl,[es:ebx]
 		mov eax,[es:ebx+1]
 		clc
@@ -2012,10 +2004,10 @@ get_rstack_entry_90:
 		bits 32
 
 set_rstack_entry:
-		cmp [rstack_size],ecx
+		cmp [rstack.size],ecx
 		jb set_rstack_entry_90
 		lea ebx,[ecx+ecx*4]
-		add ebx,[rstack.lin]
+		add ebx,[rstack]
 		mov [es:ebx],dl
 		mov [es:ebx+1],eax
 		clc
@@ -2038,7 +2030,7 @@ set_rstack_entry_90:
 		bits 32
 
 get_rstack_tos:
-		mov eax,[rstack_ptr]
+		mov eax,[rstack.ptr]
 		sub eax,1
 		jc get_rstack_tos_90
 		sub eax,ecx
@@ -2064,7 +2056,7 @@ get_rstack_tos_90:
 		bits 32
 
 set_rstack_tos:
-		mov ebx,[rstack_ptr]
+		mov ebx,[rstack.ptr]
 		sub ebx,1
 		jc set_rstack_tos_90
 		sub ebx,ecx
@@ -3254,55 +3246,6 @@ get_vbe_modes_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
-; Convert 32bit linear address to seg:ofs.
-;
-;  dword [esp + 2]:	linear address
-;
-; return:
-;  dword [esp + 2]:	seg:ofs
-;
-; Notes:
-;  - changes no regs
-;
-
-		bits 16
-
-lin2so:
-		push eax
-		mov eax,[esp + 6]
-		shr eax,4
-		mov [esp + 8],ax
-		and word [esp + 6],byte 0fh
-		pop eax
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; Convert 32bit linear address to seg:ofs.
-;
-;  dword [esp + 2]:	linear address
-;
-; return:
-;  dword [esp + 2]:	seg:ofs
-;
-; Notes:
-;  - changes no regs
-;
-
-		bits 32
-
-pm_lin2so:
-		push eax
-		mov eax,[esp + 8]
-		shr eax,4
-		mov [esp + 10],ax
-		and word [esp + 8],byte 0fh
-		pop eax
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; Write text to console.
 ;
 ;  esi		format string
@@ -3488,7 +3431,7 @@ pf_next_arg:
 		mov word [pf_gfx_err],pserr_pstack_underflow
 		jmp pf_next_arg_30
 pf_next_arg_20:
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 pf_next_arg_30:
 		popa
 		mov eax,[tmp_write_data]
@@ -4317,11 +4260,11 @@ run_pscode_50:
 		jnz run_pscode_51
 		mov dl,t_int		; always use t_int
 run_pscode_51:
-		mov ecx,[pstack_ptr]
-		cmp ecx,[pstack_size]
+		mov ecx,[pstack.ptr]
+		cmp ecx,[pstack.size]
 		mov bp,pserr_pstack_overflow
 		jae run_pscode_80
-		inc dword [pstack_ptr]
+		inc dword [pstack.ptr]
 
 		xor ecx,ecx
 		call set_pstack_tos
@@ -4355,11 +4298,11 @@ run_pscode_53:
 		cmp byte [pscode_type],t_sec
 		jnz run_pscode_50
 
-		mov ecx,[rstack_ptr]
-		cmp ecx,[rstack_size]
+		mov ecx,[rstack.ptr]
+		cmp ecx,[rstack.size]
 		mov bp,pserr_rstack_overflow
 		jae run_pscode_80
-		inc dword [rstack_ptr]
+		inc dword [rstack.ptr]
 
 		xor ecx,ecx
 		call set_rstack_tos
@@ -4395,7 +4338,7 @@ run_pscode_55:
 		jnz run_pscode_80
 
 		; forall
-		cmp dword [rstack_ptr],5
+		cmp dword [rstack.ptr],5
 		mov bp,pserr_rstack_underflow
 		jc run_pscode_90
 
@@ -4449,10 +4392,10 @@ run_pscode_57:
 		mov bp,pserr_invalid_range
 		jc run_pscode_80
 
-		mov ecx,[pstack_ptr]
-		cmp ecx,[pstack_size]
+		mov ecx,[pstack.ptr]
+		cmp ecx,[pstack.size]
 		jae run_pscode_80
-		inc dword [pstack_ptr]
+		inc dword [pstack.ptr]
 		xor ecx,ecx
 		call set_pstack_tos
 		jc run_pscode_90
@@ -4464,7 +4407,7 @@ run_pscode_57:
 
 run_pscode_62:
 		; for
-		cmp dword [rstack_ptr],5
+		cmp dword [rstack.ptr],5
 		mov bp,pserr_rstack_underflow
 		jc run_pscode_90
 
@@ -4500,10 +4443,10 @@ run_pscode_63:
 		push eax
 		call set_rstack_tos
 		pop eax
-		mov ecx,[pstack_ptr]
-		cmp ecx,[pstack_size]
+		mov ecx,[pstack.ptr]
+		cmp ecx,[pstack.size]
 		jae run_pscode_80
-		inc dword [pstack_ptr]
+		inc dword [pstack.ptr]
 		xor ecx,ecx
 		mov dl,t_int
 		call set_pstack_tos
@@ -4514,13 +4457,13 @@ run_pscode_63:
 run_pscode_64:
 		mov ecx,4
 		call get_rstack_tos
-		sub dword [rstack_ptr],5
+		sub dword [rstack.ptr],5
 		jmp run_pscode_69
 
 
 run_pscode_65:
 		; repeat
-		cmp dword [rstack_ptr],3
+		cmp dword [rstack.ptr],3
 		mov bp,pserr_rstack_underflow
 		jc run_pscode_90
 		push eax
@@ -4541,10 +4484,10 @@ run_pscode_66:
 run_pscode_67:
 		mov ecx,2
 		call get_rstack_tos
-		sub dword [rstack_ptr],2
+		sub dword [rstack.ptr],2
 
 run_pscode_68:
-		dec dword [rstack_ptr]
+		dec dword [rstack.ptr]
 run_pscode_69:
 		mov [pscode_next_instr],eax
 
@@ -4593,7 +4536,7 @@ run_pscode_90:
 
 get_1arg:
 		xor eax,eax
-		cmp dword [pstack_ptr],1
+		cmp dword [pstack.ptr],1
 		mov bp,pserr_pstack_underflow
 		jc get_1arg_90
 		push edx
@@ -4630,7 +4573,7 @@ get_2args:
 		xor ecx,ecx
 		mov ebx,edx
 		xor edx,edx
-		cmp dword [pstack_ptr],2
+		cmp dword [pstack.ptr],2
 		mov bp,pserr_pstack_underflow
 		jc get_2args_90
 		push ebx
@@ -4755,12 +4698,12 @@ p_get_90:
 		bits 32
 
 prim_astart:
-		mov eax,[pstack_ptr]
+		mov eax,[pstack.ptr]
 		inc eax
-		cmp [pstack_size],eax
+		cmp [pstack.size],eax
 		mov bp,pserr_pstack_overflow
 		jb prim_astart_90
-		mov [pstack_ptr],eax
+		mov [pstack.ptr],eax
 		mov dl,t_prim
 		mov eax,(jt_p_astart - jt_p_none) / 2	; we need just some mark
 		xor ecx,ecx
@@ -4842,7 +4785,7 @@ prim_aend_60:
 
 		pop eax
 		pop ecx
-		sub [pstack_ptr],ecx
+		sub [pstack.ptr],ecx
 		mov dl,t_array
 		xor ecx,ecx
 		call set_pstack_tos
@@ -4886,7 +4829,7 @@ prim_get_10:
 		call p_get
 		jc prim_get_90
 
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		xor ecx,ecx
 		call set_pstack_tos
 prim_get_90:
@@ -4926,7 +4869,7 @@ prim_get_90:
 
 prim_put:
 		mov bp,pserr_pstack_underflow
-		cmp dword [pstack_ptr],3
+		cmp dword [pstack.ptr],3
 		jc prim_put_90
 
 		mov bp,pserr_wrong_arg_types
@@ -4968,7 +4911,7 @@ prim_put_50:
 		mov [es:ebx+ecx+3],eax
 
 prim_put_80:
-		sub dword [pstack_ptr],3
+		sub dword [pstack.ptr],3
 prim_put_90:
 		ret
 
@@ -5070,10 +5013,10 @@ prim_array_90:
 		bits 32
 
 prim_pop:
-		cmp dword [pstack_ptr],1
+		cmp dword [pstack.ptr],1
 		mov bp,pserr_pstack_underflow
 		jc prim_pop_90
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 prim_pop_90:
 		ret
 
@@ -5095,8 +5038,8 @@ prim_pop_90:
 		bits 32
 
 prim_dup:
-		mov ecx,[pstack_ptr]
-		cmp ecx,[pstack_size]
+		mov ecx,[pstack.ptr]
+		cmp ecx,[pstack.size]
 		cmc
 		mov bp,pserr_pstack_overflow
 		jb prim_dup_90
@@ -5105,7 +5048,7 @@ prim_dup:
 		mov bp,pserr_pstack_underflow
 		jc prim_dup_90
 		xor ecx,ecx
-		inc dword [pstack_ptr]
+		inc dword [pstack.ptr]
 		call set_pstack_tos
 prim_dup_90:
 		ret
@@ -5121,8 +5064,8 @@ prim_dup_90:
 		bits 32
 
 prim_over:
-		mov ecx,[pstack_ptr]
-		cmp ecx,[pstack_size]
+		mov ecx,[pstack.ptr]
+		cmp ecx,[pstack.size]
 		cmc
 		mov bp,pserr_pstack_overflow
 		jb prim_over_90
@@ -5131,7 +5074,7 @@ prim_over:
 		mov bp,pserr_pstack_underflow
 		jc prim_over_90
 		xor ecx,ecx
-		inc dword [pstack_ptr]
+		inc dword [pstack.ptr]
 		call set_pstack_tos
 prim_over_90:
 		ret
@@ -5157,7 +5100,7 @@ prim_index:
 		call get_1arg
 		jc prim_index_90
 
-		mov edx,[pstack_ptr]
+		mov edx,[pstack.ptr]
 		sub edx,2
 		jc prim_index_90
 		cmp edx,eax
@@ -5240,7 +5183,7 @@ prim_add:
 		jnz prim_add_90
 prim_add_50:
 		add eax,ecx
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		xor ecx,ecx
 		mov dl,dh
 		call set_pstack_tos
@@ -5293,7 +5236,7 @@ prim_sub_40:
 prim_sub_50:
 		xchg eax,ecx
 		sub eax,ecx
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		xor ecx,ecx
 		mov dl,dh
 		call set_pstack_tos
@@ -5320,7 +5263,7 @@ prim_mul:
 		call get_2args
 		jc prim_mul_90
 		imul ecx
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		xor ecx,ecx
 		mov dl,t_int
 		call set_pstack_tos
@@ -5353,7 +5296,7 @@ prim_div:
 		xchg eax,ecx
 		cdq
 		idiv ecx
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		xor ecx,ecx
 		mov dl,t_int
 		call set_pstack_tos
@@ -5387,7 +5330,7 @@ prim_mod:
 		cdq
 		idiv ecx
 		xchg eax,edx
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		xor ecx,ecx
 		mov dl,t_int
 		call set_pstack_tos
@@ -5470,7 +5413,7 @@ prim_min:
 		jle prim_min_50
 		xchg eax,ecx
 prim_min_50:
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		xor ecx,ecx
 		call set_pstack_tos
 prim_min_90:
@@ -5499,7 +5442,7 @@ prim_max:
 		jge prim_max_50
 		xchg eax,ecx
 prim_max_50:
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		xor ecx,ecx
 		call set_pstack_tos
 prim_max_90:
@@ -5560,7 +5503,7 @@ prim_and:
 		call plog_args
 		and eax,ecx
 prim_and_50:
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		xor ecx,ecx
 		call set_pstack_tos
 		ret
@@ -5686,7 +5629,7 @@ prim_shl:
 		jb prim_shl_50
 		xor eax,eax
 prim_shl_50:
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		xor ecx,ecx
 		call set_pstack_tos
 prim_shl_90:
@@ -5717,7 +5660,7 @@ prim_shr:
 		mov cl,1fh
 prim_shr_50:
 		sar eax,cl
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		xor ecx,ecx
 		call set_pstack_tos
 prim_shr_90:
@@ -5752,7 +5695,7 @@ prim_def:
 		call set_dict_entry
 		mov bp,pserr_invalid_dict
 		jc prim_def_90
-		sub dword [pstack_ptr],2
+		sub dword [pstack.ptr],2
 prim_def_90:
 		ret
 
@@ -5796,18 +5739,18 @@ prim_if:
 		cmp dh,t_array
 		jnz prim_if_80
 prim_if_20:
-		sub dword [pstack_ptr],2
+		sub dword [pstack.ptr],2
 		or ecx,ecx
 		jz prim_if_90
 		
 		; branch
 		xchg eax,[pscode_next_instr]
 
-		mov ecx,[rstack_ptr]
-		cmp ecx,[rstack_size]
+		mov ecx,[rstack.ptr]
+		cmp ecx,[rstack.size]
 		mov bp,pserr_rstack_overflow
 		jae prim_if_80
-		inc dword [rstack_ptr]
+		inc dword [rstack.ptr]
 
 		xor ecx,ecx
 		mov dl,t_if			; mark as 'if' block
@@ -5867,7 +5810,7 @@ prim_ifelse_10:
 		pop ebx
 		jc prim_ifelse_90
 
-		sub dword [pstack_ptr],3
+		sub dword [pstack.ptr],3
 		or ebx,ebx
 		jz prim_ifelse_20
 		xchg dl,dh
@@ -5876,11 +5819,11 @@ prim_ifelse_20:
 		; branch
 		xchg eax,[pscode_next_instr]
 
-		mov ecx,[rstack_ptr]
-		cmp ecx,[rstack_size]
+		mov ecx,[rstack.ptr]
+		cmp ecx,[rstack.size]
 		mov bp,pserr_rstack_overflow
 		jae prim_ifelse_80
-		inc dword [rstack_ptr]
+		inc dword [rstack.ptr]
 
 		xor ecx,ecx
 		mov dl,t_if			; mark as 'if' block
@@ -5992,7 +5935,7 @@ pcmp_false:
 		xor eax,eax
 pcmp_false_10:
 		mov dl,t_bool
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		xor ecx,ecx
 		call set_pstack_tos
 		ret
@@ -6247,14 +6190,14 @@ prim_roll:
 		jc prim_roll_90
 		or ecx,ecx
 		jz prim_roll_90
-		mov edx,[pstack_ptr]
+		mov edx,[pstack.ptr]
 		sub edx,2
 		cmp edx,ecx
 		mov bp,pserr_pstack_underflow
 		jc prim_roll_90
 		cdq
 		idiv ecx
-		sub dword [pstack_ptr],2
+		sub dword [pstack.ptr],2
 		or edx,edx
 		jz prim_roll_90
 		js prim_roll_50
@@ -6348,7 +6291,7 @@ prim_return_10:
 		cmp dl,t_code
 		jnz prim_return_10		; skip if, loop, repeat, for, forall
 
-		sub [rstack_ptr],ecx
+		sub [rstack.ptr],ecx
 		mov [pscode_next_instr],eax
 prim_return_90:
 		ret
@@ -6402,7 +6345,7 @@ prim_exit_60:
 
 prim_exit_80:
 		inc ecx
-		sub [rstack_ptr],ecx
+		sub [rstack.ptr],ecx
 		mov [pscode_next_instr],eax
 prim_exit_90:
 		ret
@@ -6428,17 +6371,17 @@ prim_loop:
 		stc
 		jnz prim_loop_90
 
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 
 		; branch
 		xchg eax,[pscode_next_instr]
 
-		mov ecx,[rstack_size]
-		sub ecx,[rstack_ptr]
+		mov ecx,[rstack.size]
+		sub ecx,[rstack.ptr]
 		cmp ecx,3
 		mov bp,pserr_rstack_overflow
 		jb prim_loop_90
-		add dword [rstack_ptr],2
+		add dword [rstack.ptr],2
 
 		mov dl,t_exit
 		mov ecx,1
@@ -6470,7 +6413,7 @@ prim_repeat:
 		call get_2args
 		jc prim_repeat_90
 
-		sub dword [pstack_ptr],2
+		sub dword [pstack.ptr],2
 
 		or ecx,ecx
 		jz prim_repeat_90
@@ -6482,12 +6425,12 @@ prim_repeat:
 		; branch
 		xchg eax,[pscode_next_instr]
 
-		mov edx,[rstack_size]
-		sub edx,[rstack_ptr]
+		mov edx,[rstack.size]
+		sub edx,[rstack.ptr]
 		cmp edx,4
 		mov bp,pserr_rstack_overflow
 		jb prim_repeat_90
-		add dword [rstack_ptr],3
+		add dword [rstack.ptr],3
 
 		push eax
 		xchg eax,ecx
@@ -6526,7 +6469,7 @@ prim_repeat_90:
 
 prim_for:
 		mov bp,pserr_pstack_underflow
-		cmp dword [pstack_ptr],4
+		cmp dword [pstack.ptr],4
 		jc prim_for_90
 		mov ecx,3
 		call get_pstack_tos
@@ -6553,17 +6496,17 @@ prim_for:
 		jc prim_for_90
 
 		; don't remove start value!
-		sub dword [pstack_ptr],3
+		sub dword [pstack.ptr],3
 
 		; branch
 		xchg eax,[pscode_next_instr]
 
-		mov edx,[rstack_size]
-		sub edx,[rstack_ptr]
+		mov edx,[rstack.size]
+		sub edx,[rstack.ptr]
 		cmp edx,6
 		mov bp,pserr_rstack_overflow
 		jb prim_for_90
-		add dword [rstack_ptr],5
+		add dword [rstack.ptr],5
 
 		push ecx
 		push esi
@@ -6632,7 +6575,7 @@ prim_forall:
 
 		; nothing to do
 prim_forall_20:
-		sub dword [pstack_ptr],2
+		sub dword [pstack.ptr],2
 		clc
 		jmp prim_forall_90
 
@@ -6653,17 +6596,17 @@ prim_forall_30:
 		or eax,eax			; length == 0
 		jz prim_forall_20
 
-		sub dword [pstack_ptr],2
+		sub dword [pstack.ptr],2
 
 		; branch
 		xchg ebx,[pscode_next_instr]
 
-		mov esi,[rstack_size]
-		sub esi,[rstack_ptr]
+		mov esi,[rstack.size]
+		sub esi,[rstack.ptr]
 		cmp esi,6
 		mov bp,pserr_rstack_overflow
 		jb prim_forall_90
-		add dword [rstack_ptr],5
+		add dword [rstack.ptr],5
 
 		push ecx
 		push edx
@@ -6758,7 +6701,7 @@ prim_settype:
 		mov dl,al
 		and al,15
 		xchg eax,ecx
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		xor ecx,ecx
 		call set_pstack_tos
 prim_settype_90:
@@ -6782,13 +6725,13 @@ prim_settype_90:
 		bits 32
 
 prim_screensize:
-		mov eax,[pstack_ptr]
+		mov eax,[pstack.ptr]
 		inc eax
 		inc eax
-		cmp [pstack_size],eax
+		cmp [pstack.size],eax
 		mov bp,pserr_pstack_overflow
 		jb prim_screensize_90
-		mov [pstack_ptr],eax
+		mov [pstack.ptr],eax
 		mov dl,t_int
 		movzx eax,word [screen_width]
 		mov ecx,1
@@ -6817,13 +6760,13 @@ prim_screensize_90:
 		bits 32
 
 prim_vscreensize:
-		mov eax,[pstack_ptr]
+		mov eax,[pstack.ptr]
 		inc eax
 		inc eax
-		cmp [pstack_size],eax
+		cmp [pstack.size],eax
 		mov bp,pserr_pstack_overflow
 		jb prim_vscreensize_90
-		mov [pstack_ptr],eax
+		mov [pstack.ptr],eax
 		mov dl,t_int
 		movzx eax,word [screen_width]
 		mov ecx,1
@@ -6848,13 +6791,13 @@ prim_vscreensize_90:
 		bits 32
 
 prim_monitorsize:
-		mov eax,[pstack_ptr]
+		mov eax,[pstack.ptr]
 		inc eax
 		inc eax
-		cmp [pstack_size],eax
+		cmp [pstack.size],eax
 		mov bp,pserr_pstack_overflow
 		jb prim_monitorsize_90
-		mov [pstack_ptr],eax
+		mov [pstack.ptr],eax
 
 		cmp word [ddc_xtimings],0
 		jnz prim_monitorsize_50
@@ -6893,13 +6836,13 @@ prim_monitorsize_90:
 		bits 32
 
 prim_imagesize:
-		mov eax,[pstack_ptr]
+		mov eax,[pstack.ptr]
 		inc eax
 		inc eax
-		cmp [pstack_size],eax
+		cmp [pstack.size],eax
 		mov bp,pserr_pstack_overflow
 		jb prim_imagesize_90
-		mov [pstack_ptr],eax
+		mov [pstack.ptr],eax
 		mov dl,t_int
 		movzx eax,word [image_width]
 		mov ecx,1
@@ -7019,7 +6962,7 @@ prim_moveto:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
 		jc prim_moveto_90
-		sub dword [pstack_ptr],2
+		sub dword [pstack.ptr],2
 		mov [gfx_cur_x],cx
 		mov [gfx_cur_y],ax
 prim_moveto_90:
@@ -7046,7 +6989,7 @@ prim_rmoveto:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
 		jc prim_rmoveto_90
-		sub dword [pstack_ptr],2
+		sub dword [pstack.ptr],2
 		add [gfx_cur_x],cx
 		add [gfx_cur_y],ax
 		clc
@@ -7066,13 +7009,13 @@ prim_rmoveto_90:
 		bits 32
 
 prim_currentpoint:
-		mov eax,[pstack_ptr]
+		mov eax,[pstack.ptr]
 		inc eax
 		inc eax
-		cmp [pstack_size],eax
+		cmp [pstack.size],eax
 		mov bp,pserr_pstack_overflow
 		jb prim_currentpoint_90
-		mov [pstack_ptr],eax
+		mov [pstack.ptr],eax
 		mov dl,t_int
 		movzx eax,word [gfx_cur_x]
 		mov ecx,1
@@ -7116,7 +7059,7 @@ prim_lineto:
 		pop word [gfx_cur_y]
 		pop word [gfx_cur_x]
 
-		sub dword [pstack_ptr],2
+		sub dword [pstack.ptr],2
 prim_lineto_90:
 		ret
 
@@ -7339,7 +7282,7 @@ prim_show:
 		mov dl,t_string
 		call get_1arg
 		jc prim_show_90
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		mov esi,eax
 		mov ebx,[start_row]
 		or ebx,ebx
@@ -7374,18 +7317,18 @@ prim_strsize:
 		mov dl,t_string
 		call get_1arg
 		jc prim_strsize_90
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 
 		mov esi,eax
 		call str_size
 
-		mov eax,[pstack_ptr]
+		mov eax,[pstack.ptr]
 		inc eax
 		inc eax
-		cmp [pstack_size],eax
+		cmp [pstack.size],eax
 		mov bp,pserr_pstack_overflow
 		jb prim_strsize_90
-		mov [pstack_ptr],eax
+		mov [pstack.ptr],eax
 		push edx
 		mov eax,ecx
 		mov dl,t_int
@@ -7420,7 +7363,7 @@ prim_strsize_90:
 
 prim_memcpy:
 		mov bp,pserr_pstack_underflow
-		cmp dword [pstack_ptr],3
+		cmp dword [pstack.ptr],3
 		jc prim_memcpy_90
 
 		mov bp,pserr_wrong_arg_types
@@ -7447,7 +7390,7 @@ prim_memcpy:
 		es rep movsb
 
 prim_memcpy_80:
-		sub dword [pstack_ptr],3
+		sub dword [pstack.ptr],3
 prim_memcpy_90:
 		ret
 
@@ -7471,7 +7414,7 @@ prim_memcpy_90:
 
 prim_image:
 		mov bp,pserr_pstack_underflow
-		cmp dword [pstack_ptr],4
+		cmp dword [pstack.ptr],4
 		jc prim_image_90
 		mov ecx,3
 		call get_pstack_tos
@@ -7492,7 +7435,7 @@ prim_image:
 		call get_2args
 		jc prim_image_90
 
-		sub dword [pstack_ptr],4
+		sub dword [pstack.ptr],4
 
 		mov edx,[line_x0]
 		add edx,ecx
@@ -7563,7 +7506,7 @@ prim_loadpalette:
 
 prim_unpackimage:
 		mov bp,pserr_pstack_underflow
-		cmp dword [pstack_ptr],4
+		cmp dword [pstack.ptr],4
 		jc prim_unpackimage_90
 		mov ecx,3
 		call get_pstack_tos
@@ -7584,7 +7527,7 @@ prim_unpackimage:
 		call get_2args
 		jc prim_unpackimage_90
 
-		sub dword [pstack_ptr],3
+		sub dword [pstack.ptr],3
 
 		mov edx,[line_x0]
 		add edx,ecx
@@ -7647,7 +7590,7 @@ prim_setpalette:
 		call get_2args
 		jc prim_setpalette_90
 
-		sub dword [pstack_ptr],2
+		sub dword [pstack.ptr],2
 
 		cmp ecx,100h
 		jae prim_setpalette_90
@@ -7759,7 +7702,7 @@ prim_savescreen:
 		call save_bg
 		pop eax
 prim_savescreen_50:
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		xor ecx,ecx
 		mov dl,t_ptr
 		or eax,eax
@@ -7848,7 +7791,7 @@ prim_restorescreen_20:
 		call restore_bg
 
 prim_restorescreen_80:
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		clc
 prim_restorescreen_90:
 		ret
@@ -7926,7 +7869,7 @@ prim_free:
 prim_free_10:
 		call free
 prim_free_50:
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		clc
 prim_free_90:
 		ret
@@ -7957,12 +7900,12 @@ prim_memsize:
 		mov dl,t_int
 		call get_1arg
 		jc prim_memsize_90
-		mov ecx,[pstack_ptr]
+		mov ecx,[pstack.ptr]
 		inc ecx
-		cmp [pstack_size],ecx
+		cmp [pstack.size],ecx
 		mov bp,pserr_pstack_overflow
 		jb prim_memsize_90
-		mov [pstack_ptr],ecx
+		mov [pstack.ptr],ecx
 
 		call memsize
 
@@ -8019,7 +7962,7 @@ prim_fillrect:
 		mov ecx,eax
 		mov eax,[gfx_color]
 		call fill_rect
-		sub dword [pstack_ptr],2
+		sub dword [pstack.ptr],2
 prim_fillrect_90:
 		ret
 
@@ -8053,7 +7996,7 @@ prim_fillrect_90:
 
 prim_snprintf:
 		mov bp,pserr_pstack_underflow
-		cmp dword [pstack_ptr],3
+		cmp dword [pstack.ptr],3
 		jc prim_snprintf_90
 		mov bp,pserr_wrong_arg_types
 		mov ecx,2
@@ -8067,7 +8010,7 @@ prim_snprintf:
 		pop esi
 		jc prim_snprintf_90
 
-		sub dword [pstack_ptr],3
+		sub dword [pstack.ptr],3
 
 		mov [pf_gfx_buf],eax
 		mov [pf_gfx_max],ecx
@@ -8137,7 +8080,7 @@ prim_editinit:
 
 		call edit_put_params
 
-		sub dword [pstack_ptr],2
+		sub dword [pstack.ptr],2
 prim_editinit_90:
 		ret
 
@@ -8181,7 +8124,7 @@ prim_editdone:
 		imul bx,[pixel_bytes]
 		call restore_bg
 
-		sub word [pstack_ptr],byte 1
+		sub word [pstack.ptr],byte 1
 prim_editdone_90:
 		ret
 
@@ -8211,7 +8154,7 @@ prim_editshowcursor:
 		call edit_show_cursor
 		pop dword [gfx_cur]
 
-		sub dword [pstack_ptr],1
+		sub dword [pstack.ptr],1
 prim_editshowcursor_90:
 		ret
 
@@ -8241,7 +8184,7 @@ prim_edithidecursor:
 		call edit_hide_cursor
 		pop dword [gfx_cur]
 
-		sub dword [pstack_ptr],1
+		sub dword [pstack.ptr],1
 prim_edithidecursor_90:
 		ret
 
@@ -8297,7 +8240,7 @@ prim_editinput:
 
 		call edit_put_params
 
-		sub dword [pstack_ptr],2
+		sub dword [pstack.ptr],2
 prim_editinput_90:
 		ret
 
@@ -8381,7 +8324,7 @@ prim_outbyte:
 		jc prim_outbyte_90
 		mov edx,ecx
 		out dx,al
-		sub dword [pstack_ptr],2
+		sub dword [pstack.ptr],2
 prim_outbyte_90:
 		ret
 
@@ -8425,7 +8368,7 @@ prim_putbyte:
 		call get_2args
 		jc prim_putbyte_90
 		mov [es:ecx],al
-		sub dword [pstack_ptr],2
+		sub dword [pstack.ptr],2
 prim_putbyte_90:
 		ret
 
@@ -8469,7 +8412,7 @@ prim_putdword:
 		call get_2args
 		jc prim_putdword_90
 		mov [es:ecx],eax
-		sub dword [pstack_ptr],2
+		sub dword [pstack.ptr],2
 prim_putdword_90:
 		ret
 
@@ -8651,7 +8594,7 @@ prim_chdir:
 		mov bp,pserr_invalid_function
 		jnz prim_chdir_70
 
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		jmp prim_chdir_90
 
 prim_chdir_60:
@@ -8823,12 +8766,12 @@ prim_videomodeinfo:
 		call get_1arg
 		jc prim_vmi_90
 
-		mov ecx,[pstack_ptr]
+		mov ecx,[pstack.ptr]
 		add ecx,3
-		cmp [pstack_size],ecx
+		cmp [pstack.size],ecx
 		mov bp,pserr_pstack_overflow
 		jb prim_vmi_90
-		mov [pstack_ptr],ecx
+		mov [pstack.ptr],ecx
 
 		cmp eax,100h
 		jb prim_vmi_10
@@ -9135,7 +9078,7 @@ prim_strstr_50:
 prim_strstr_60:
 		add esp,2*4
 		mov eax,ebx
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		xor ecx,ecx
 		mov dl,t_int
 		call set_pstack_tos
@@ -9159,12 +9102,12 @@ prim_strstr_90:
 		bits 32
 
 prim_soundgetvolume:
-		mov eax,[pstack_ptr]
+		mov eax,[pstack.ptr]
 		inc eax
-		cmp [pstack_size],eax
+		cmp [pstack.size],eax
 		mov bp,pserr_pstack_overflow
 		jb prim_sgv_90
-		mov [pstack_ptr],eax
+		mov [pstack.ptr],eax
 		mov dl,t_int
 		movzx eax,byte [sound_vol]
 		xor ecx,ecx
@@ -9188,7 +9131,7 @@ prim_soundsetvolume:
 		mov dl,t_int
 		call get_1arg
 		jc prim_ssv_90
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		or eax,eax
 		jns prim_ssv_30
 		xor eax,eax
@@ -9220,12 +9163,12 @@ prim_ssv_90:
 		bits 32
 
 prim_soundgetsamplerate:
-		mov eax,[pstack_ptr]
+		mov eax,[pstack.ptr]
 		inc eax
-		cmp [pstack_size],eax
+		cmp [pstack.size],eax
 		mov bp,pserr_pstack_overflow
 		jb prim_sgsr_90
-		mov [pstack_ptr],eax
+		mov [pstack.ptr],eax
 		mov dl,t_int
 		movzx eax,byte [sound_sample]
 		xor ecx,ecx
@@ -9249,9 +9192,9 @@ prim_soundsetsamplerate:
 		mov dl,t_int
 		call get_1arg
 		jc prim_sssr_90
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		push eax
-		rm32_call sound_init
+		call sound_init
 		pop eax
 		call sound_setsample
 		clc
@@ -9271,7 +9214,7 @@ prim_sssr_90:
 		bits 32
 
 prim_soundplay:
-		rm32_call sound_init
+		call sound_init
 		jc prim_splay_80
 prim_splay_80:
 		clc
@@ -9302,7 +9245,7 @@ prim_soundtest:
 		mov dl,t_int
 		call get_1arg
 		jc prim_stest_90
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 
 		mov [sound_x],eax
 		call sound_test
@@ -9328,7 +9271,7 @@ prim_modload:
 		mov dx,t_ptr + (t_int << 8)
 		call get_2args
 		jc prim_modload_90
-		sub dword [pstack_ptr],2
+		sub dword [pstack.ptr],2
 		xchg eax,ecx
 
 		; ecx mod file
@@ -9336,7 +9279,7 @@ prim_modload:
 
 		push eax
 		push ecx
-		rm32_call sound_init
+		call sound_init
 		pop edi
 		pop eax
 		jc prim_modload_80
@@ -9366,7 +9309,7 @@ prim_modplay:
 		mov dx,t_int + (t_int << 8)
 		call get_2args
 		jc prim_modplay_90
-		sub dword [pstack_ptr],2
+		sub dword [pstack.ptr],2
 		xchg eax,ecx
 
 		; ecx start
@@ -9399,7 +9342,7 @@ prim_modplay_90:
 
 prim_modplaysample:
 		mov bp,pserr_pstack_underflow
-		cmp dword [pstack_ptr],4
+		cmp dword [pstack.ptr],4
 		jc prim_modps_90
 		mov bp,pserr_wrong_arg_types
 
@@ -9425,7 +9368,7 @@ prim_modplaysample:
 		pop edx
 		jc prim_modps_90
 
-		sub dword [pstack_ptr],4
+		sub dword [pstack.ptr],4
 
 		xchg eax,edx
 
@@ -9563,7 +9506,7 @@ prim_formattext:
 		mov dl,t_string
 		call get_1arg
 		jc prim_formattext_90
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		push eax
 
 		push es
@@ -9663,7 +9606,7 @@ prim_getlinks:
 
 prim_settextcolors:
 		mov bp,pserr_pstack_underflow
-		cmp dword [pstack_ptr],4
+		cmp dword [pstack.ptr],4
 		jc prim_settextcolors_90
 		mov ecx,3
 		call get_pstack_tos
@@ -9687,7 +9630,7 @@ prim_settextcolors:
 		call get_2args
 		jc prim_settextcolors_90
 
-		sub dword [pstack_ptr],4
+		sub dword [pstack.ptr],4
 
 		call encode_color
 		mov [gfx_color3],eax
@@ -9715,12 +9658,12 @@ prim_settextcolors_90:
 		bits 32
 
 prim_currenttextcolors:
-		mov eax,[pstack_ptr]
+		mov eax,[pstack.ptr]
 		add eax,4
-		cmp [pstack_size],eax
+		cmp [pstack.size],eax
 		mov bp,pserr_pstack_overflow
 		jb prim_currenttextcolors_90
-		mov [pstack_ptr],eax
+		mov [pstack.ptr],eax
 		mov dl,t_int
 		mov eax,[gfx_color3]
 		call decode_color
@@ -9806,12 +9749,12 @@ prim_getlink:
 		jc prim_getlink_90
 		shl eax,2
 		lea edi,[link_list+2*eax+eax]		; li.size = 12 (3*4)
-		mov eax,[pstack_ptr]
+		mov eax,[pstack.ptr]
 		add eax,3
-		cmp [pstack_size],eax
+		cmp [pstack.size],eax
 		mov bp,pserr_pstack_overflow
 		jb prim_getlink_90
-		mov [pstack_ptr],eax
+		mov [pstack.ptr],eax
 
 		mov dl,t_string
 		mov eax,label_buf
@@ -9997,7 +9940,7 @@ prim_idle:
 		stc
 		jnz prim_idle_90
 prim_idle_10:
-		sub dword [pstack_ptr],2
+		sub dword [pstack.ptr],2
 		cmp dh,t_none			; undef
 		jnz prim_idle_50
 		mov byte [idle.run],0
@@ -10071,7 +10014,7 @@ prim_keepmode:
 
 prim_blend:
 		mov bp,pserr_pstack_underflow
-		cmp dword [pstack_ptr],3
+		cmp dword [pstack.ptr],3
 		jc prim_blend_90
 
 		and dword [tmp_var_0],0
@@ -10114,7 +10057,7 @@ prim_blend_33:
 		call get_pstack_tos
 		cmp dl,t_none
 		jnz prim_blend_35
-		sub dword [pstack_ptr],3
+		sub dword [pstack.ptr],3
 		; CF = 0
 		jmp prim_blend_90
 prim_blend_35:
@@ -10123,7 +10066,7 @@ prim_blend_35:
 
 		mov [tmp_var_3],eax
 
-		sub dword [pstack_ptr],3
+		sub dword [pstack.ptr],3
 
 		; tmp_var_0: bit 0, 1: src type, alpha type (0 = ptr, 1 = int)
 		; tmp_var_1: src
@@ -10173,12 +10116,12 @@ pr_getint:
 
 ; return eax as dl on stack
 pr_getobj:
-		mov ecx,[pstack_ptr]
+		mov ecx,[pstack.ptr]
 		inc ecx
-		cmp [pstack_size],ecx
+		cmp [pstack.size],ecx
 		mov bp,pserr_pstack_overflow
 		jc pr_getobj_90
-		mov [pstack_ptr],ecx
+		mov [pstack.ptr],ecx
 		xor ecx,ecx
 		call set_pstack_tos
 pr_getobj_90:
@@ -10196,7 +10139,7 @@ pr_setobj_or_none:
 		cmp dl,t_none
 		stc
 		jnz pr_setobj_10
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		clc
 		jmp pr_setobj_10
 
@@ -10212,7 +10155,7 @@ pr_setobj_10:
 		pop eax			; don't return to function that called us
 		ret
 pr_setobj_20:
-		dec dword [pstack_ptr]
+		dec dword [pstack.ptr]
 		pop ecx			; put link to clc on stack
 		push dword pr_setobj_30
 		jmp ecx
@@ -13010,31 +12953,34 @@ new_int8_90:
 ; Installs a new timer interrupt handler and increases timer frequency.
 ;
 
-		bits 16
+		bits 32
 
 sound_init:
 		cmp byte [sound_ok],0
 		jnz sound_init_90
 
-		pm32_call chk_tsc
+		call chk_tsc
 		jc sound_init_90
 
 		mov eax,ar_sizeof
-		pm32_call calloc
-		cmp eax,byte 1
+		call calloc
+		cmp eax,1
 		jc sound_init_90
 		mov [mod_buf],eax
 
-		pm32_call mod_init
+		call mod_init
 
 		mov eax,sound_buf_size
-		pm32_call calloc
-		cmp eax,byte 1
+		call calloc
+		cmp eax,1
 		jc sound_init_90
 		mov [sound_buf.lin],eax
-		push eax
-		call lin2so
-		pop dword [sound_buf]
+		mov edx,eax
+		and eax,~0fh
+		shl eax,12
+		and edx,0fh
+		mov ax,dx
+		mov [sound_buf],eax
 
 		xor eax,eax
 		mov [int8_count],eax
@@ -13043,10 +12989,9 @@ sound_init:
 		mov [sound_playing],al
 		mov [sound_int_active],al
 
-		push ds
-		pop es
-		mov di,playlist
-		mov cx,playlist_entries * sizeof_playlist
+		mov edi,playlist
+		add edi,[prog.base]
+		mov ecx,playlist_entries * sizeof_playlist
 		rep stosb
 
 		pushf
@@ -13067,13 +13012,10 @@ sound_init:
 		out 40h,al
 		out 40h,al
 
-		push word 0
-		pop es
-
 		push dword [es:8*4]
 		pop dword [sound_old_int8]
 
-		push cs
+		push word [rm_prog_cs]
 		push word new_int8
 		pop dword [es:8*4]
 
@@ -13108,11 +13050,11 @@ sound_init_50:
 		mov [tmp_var_1],edx
 
 		mov eax,16000
-		pm32_call sound_setsample
+		call sound_setsample
 
 		xor eax,eax
 		mov [next_int],eax
-		mov [next_int + 4],eax
+		mov [next_int+4],eax
 
 		mov byte [sound_ok],1
 sound_init_90:
@@ -13227,7 +13169,7 @@ sound_test:
 		cmp dword [sound_x],0
 		jz sound_test_80
 
-		rm32_call sound_init
+		call sound_init
 		jc sound_test_90
 
 		mov eax,16000
