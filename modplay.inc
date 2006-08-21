@@ -22,15 +22,12 @@
 ;   es:edi	start of mod
 
 pl_loadmod:
-		push esi
-		add esi,pl_state
+		push edi
+		lea edi,[esi+pl_state]
 		xor eax,eax
 		mov ecx,pl_sizeof-pl_state
-sm1:
-		mov [es:esi],al
-		inc esi
-		loop sm1
-		pop esi
+		rep stosb
+		pop edi
 
 		mov edx,esi
 		mov ecx,4
@@ -80,18 +77,14 @@ sm4:
 		add edi,4
 sm6:
 		mov [es:esi+pl_patterns],edi
-		mov ecx,ebx
-sm7:
-		add edi,64*16
-		loop sm7
+		shl ebx,6+4		; *64*16
+		add ebx,edi
 
 		mov byte [es:esi+pl_speed],6
 		mov byte [es:esi+pl_effpos],6
 		mov byte [es:esi+pl_loaded],1
-		mov ecx,edx
-		dec ecx
-		mov ebx,edi
 		mov edi,[es:esi+pl_sampinfo]
+		lea ecx,[edx-1]
 sm9:
 		mov [es:esi+pl_sampd+4],ebx	; +4 -> skip first?
 		movzx eax,word [es:edi]
