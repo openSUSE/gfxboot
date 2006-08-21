@@ -12922,7 +12922,7 @@ new_int8_40:
 
 		mov byte [sound_int_active],1
 
-		; sti
+		sti
 
 		mov ax,[sound_end]
 		sub ax,[sound_start]
