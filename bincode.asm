@@ -186,10 +186,9 @@ pscode_type		db 0		; current instr type
 dict			dd 0		; lin
 dict.size		dd 0		; dict entries
 
-boot_cs			dw 0		; seg
-boot_sysconfig		dw 0		; ofs
+boot_cs.base		dd 0		; bootloader segment
+boot_sysconfig		dd 0		; bootloader parameter block
 boot_callback		dd 0 		; seg:ofs
-boot_cs.base		dd 0		; boot_cs * 16
 
 pstack			dd 0		; data stack
 pstack.size		dd 0		; entries
@@ -201,8 +200,6 @@ rstack.ptr		dd 0		; index of current tos
 image			dd 0		; (lin) current image
 image_width		dw 0
 image_height		dw 0
-image_data		dd 0		; (seg:ofs)
-image_pal		dd 0		; (seg:ofs)
 image_type		db 0		; 0:no image, 1: pcx, 2:jpeg
 
 pcx_line_starts		dd 0		; (lin) table of line starts
@@ -660,12 +657,13 @@ gfx_init:
 		mov [mem_free],ebx
 		mov [mem_max],ecx
 		mov [mem_archive],edi
-		mov [boot_cs],dx
-		mov [boot_sysconfig],si
 
 		movzx eax,dx
 		shl eax,4
 		mov [boot_cs.base],eax
+		movzx esi,si
+		add eax,esi
+		mov [boot_sysconfig],eax
 
 		mov es,dx
 		mov ax,[es:si+9]
@@ -691,10 +689,7 @@ gfx_init_20:
 		push dword [mem_max]
 		pop dword [malloc.area + 4]
 
-		movzx eax,word [boot_cs]
-		movzx ebx,word [boot_sysconfig]
-		shl eax,4
-		add ebx,eax
+		mov ebx,[boot_sysconfig]
 		mov esi,malloc.area + 8
 		cmp byte [es:ebx],1		; syslinux
 		jnz gfx_init_30
@@ -8257,10 +8252,7 @@ prim_editinput_90:
 		bits 32
 
 prim_sysconfig:
-		movzx eax,word [boot_cs]
-		movzx edx,word [boot_sysconfig]
-		shl eax,4
-		add eax,edx
+		mov eax,[boot_sysconfig]
 		jmp pr_getptr_or_none
 
 
@@ -13813,17 +13805,13 @@ pcx_init:
 		cmp byte [es:esi],12
 		jnz pcx_init_80
 
+		inc esi
+
 		mov byte [image_type],1		; pcx
 
 		mov [image],edi
 		mov [image_width],cx
 		mov [image_height],dx
-
-		lea ebx,[edi+80h]
-		mov [image_data],ebx
-
-		inc esi
-		mov [image_pal],esi
 
 		push esi
 		call parse_pcx_img
@@ -13883,7 +13871,8 @@ parse_pcx_img_10:
 		jz parse_pcx_img_90
 
 		mov edi,eax
-		mov esi,[image_data]
+		mov esi,[image]
+		add esi,80h		; skip pcx header
 
 		xor edx,edx		; y count
 
