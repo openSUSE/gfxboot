@@ -11,6 +11,7 @@
 %include		"modplay_defines.inc"
 %include		"jpeg.inc"
 
+
 ; some type definitions from mkbootmsg.c
 ; struct file_header_t
 fh_magic_id		equ 0
@@ -35,12 +36,14 @@ foh_height		equ 6
 foh_line_height		equ 7
 sizeof_font_header_t	equ 8
 
+
 ; char data header definition
 ; struct char_header_t
 ch_ofs			equ 0
 ch_c			equ 2
 ch_size			equ 4
 sizeof_char_header_t	equ 8		; must be 8, otherwise change find_char
+
 
 ; struct playlist
 pl_file			equ 0		; actually file index + 1
@@ -53,6 +56,7 @@ pl_end			equ 12
 sizeof_playlist		equ 16
 playlist_entries	equ 4
 
+
 ; struct link
 li.label		equ 0
 li.text			equ 4
@@ -60,6 +64,31 @@ li.x			equ 8
 li.row			equ 10
 li.size			equ 12		; search for 'li.size'!
 link_entries		equ 64
+
+
+; sysconfig data
+sc.bootloader		equ 0
+sc.sector_shift		equ 1
+sc.media_type		equ 2
+sc.failsafe		equ 3
+sc.sysconfig_size	equ 4
+sc.boot_drive		equ 5
+sc.callback		equ 6
+sc.bootloader_seg	equ 8
+sc.reserved_1		equ 10
+sc.user_info_0		equ 12
+sc.user_info_1		equ 16
+sc.bios_mem_size	equ 20
+sc.xmem_0		equ 24
+sc.xmem_1		equ 26
+sc.xmem_2		equ 28
+sc.xmem_3		equ 30
+sc.file			equ 32
+sc.archive_start	equ 36
+sc.archive_end		equ 40
+sc.mem0_start		equ 44
+sc.mem0_end		equ 48
+
 
 ; enum_type_t
 t_none			equ 0
@@ -86,6 +115,7 @@ t_exit			equ t_code + 60h
 
 param_stack_size	equ 1000
 ret_stack_size		equ 1000
+
 
 ; various error codes
 pserr_ok			equ 0
@@ -143,13 +173,15 @@ jt_password_init	dw gfx_password_init
 jt_password_done	dw gfx_password_done
 
 			align 4, db 0
-; the memory area we are working with
-mem			dd 0		; (lin) data start address
-mem_free		dd 0		; (lin) start of free area for malloc
-mem_max			dd 0		; (lin) end address
-mem_archive		dd 0		; (lin) archive start address (0 -> none), ends at mem_free
+file.start		dd 0		; the file we are in
 
-malloc.areas		equ 4
+archive.start		dd 0		; archive start address (0 -> none)
+archive.end		dd 0		; archive end
+
+mem0.start		dd 0		; free low memory area start
+mem0.end		dd 0		; dto, end
+
+malloc.areas		equ 5
 malloc.start		dd 0
 malloc.end		dd 0
 			; start, end pairs
@@ -186,9 +218,9 @@ pscode_type		db 0		; current instr type
 dict			dd 0		; lin
 dict.size		dd 0		; dict entries
 
-boot_cs.base		dd 0		; bootloader segment
-boot_sysconfig		dd 0		; bootloader parameter block
-boot_callback		dd 0 		; seg:ofs
+boot.base		dd 0		; bootloader segment
+boot.sysconfig		dd 0		; bootloader parameter block
+boot.callback		dd 0 		; seg:ofs
 
 pstack			dd 0		; data stack
 pstack.size		dd 0		; entries
@@ -463,8 +495,8 @@ pm_seg.screen_w16	equ 40h			; graphics window, for writing
 
 %if debug
 ; debug texts
-dmsg_01			db 'static memory: %p - %p', 10, 0
-dmsg_02			db '     malloc %d: %p - %p', 10, 0
+dmsg_01			db 10, 'Press a key to continue...', 0
+dmsg_02			db '     mem area %d: 0x%08x - 0x%08x', 10, 0
 dmsg_03			db '%3u: addr 0x%06x, size 0x%06x+%u, ip 0x%04x, %s', 10, 0
 dmsg_04			db 'oops: block at 0x%06x: size 0x%06x is too small', 10, 0
 dmsg_04a		db 'oops: 0x%06x > 0x%06x', 10, 0
@@ -629,12 +661,7 @@ sizeof_fb_entry		equ 8
 ;
 ; Initialize something.
 ;
-; eax		memory start
-; ebx		free memory start
-; ecx		memory end
-; dx		boot loader code segment
-; si		gfx_sysconfig offset
-; edi		file archive start, if any (ends at ebx)
+; es:si		sysconfig data
 ;
 ; return:
 ;  CF		error
@@ -653,24 +680,28 @@ gfx_init:
 
 		cld
 
-		mov [mem],eax
-		mov [mem_free],ebx
-		mov [mem_max],ecx
-		mov [mem_archive],edi
-
-		movzx eax,dx
+		movzx eax,word [es:si+sc.bootloader_seg]
 		shl eax,4
-		mov [boot_cs.base],eax
+		mov [boot.base],eax
 		movzx esi,si
 		add eax,esi
-		mov [boot_sysconfig],eax
+		mov [boot.sysconfig],eax
 
-		mov es,dx
-		mov ax,[es:si+9]
-		or ax,ax
+		push dword [es:si+sc.file]
+		pop dword [file.start]
+		push dword [es:si+sc.archive_start]
+		pop dword [archive.start]
+		push dword [es:si+sc.archive_end]
+		pop dword [archive.end]
+		push dword [es:si+sc.mem0_start]
+		pop dword [mem0.start]
+		push dword [es:si+sc.mem0_end]
+		pop dword [mem0.end]
+
+		mov eax,[es:si+sc.callback]
+		or ax,ax				; check only offset
 		jz gfx_init_20
-		mov [boot_callback+2],dx
-		mov [boot_callback],ax
+		mov [boot.callback],eax
 gfx_init_20:
 
 		; setup gdt, to get pm-switching going
@@ -684,23 +715,26 @@ gfx_init_20:
 
 		; init malloc memory chain
 
-		push dword [mem_free]
+		push dword [mem0.start]
 		pop dword [malloc.area]
-		push dword [mem_max]
-		pop dword [malloc.area + 4]
+		push dword [mem0.end]
+		pop dword [malloc.area+4]
 
-		mov ebx,[boot_sysconfig]
-		mov esi,malloc.area + 8
-		cmp byte [es:ebx],1		; syslinux
-		jnz gfx_init_30
-		mov ecx,2			; 2 extended mem areas
-gfx_init_24:
-		movzx eax,word [es:ebx+24]	; extended mem area pointer
+		mov ebx,[boot.sysconfig]
+		mov esi,malloc.area+8
+		mov ecx,malloc.areas-1			; extended mem areas
+gfx_init_30:
+		movzx eax,word [es:ebx+sc.xmem_0]	; extended mem area pointer
 		or eax,eax
-		jz gfx_init_26
+		jz gfx_init_40
 		mov edx,eax
 		and dl,~0fh
 		shl edx,16
+		; magic: if archive was loaded in high memory, exclude it
+		cmp edx,[archive.start]
+		jnz gfx_init_35
+		mov edx,[archive.end]
+gfx_init_35:
 		mov [esi],edx
 		and eax,0fh
 		shl eax,20
@@ -709,18 +743,9 @@ gfx_init_24:
 		add esi,8
 		add ebx,2
 		dec ecx
-		jnz gfx_init_24
-gfx_init_26:
-		jmp gfx_init_40
+		jnz gfx_init_30
 
-gfx_init_30:
-		; 2MB - 3MB (to avoid A20 tricks)
-		mov eax,200000h
-		mov [esi],eax
-		add eax,100000h		; 1MB
-		mov [esi+4],eax
 gfx_init_40:
-
 		call malloc_init
 
 		; setup full pm interface
@@ -728,6 +753,7 @@ gfx_init_40:
 		call pm_init
 
 		; allocate 8k local stack
+
 		mov eax,8 << 10
 		mov [stack.size],eax
 		add eax,3
@@ -736,21 +762,23 @@ gfx_init_40:
 		add eax,3
 		and eax,~3
 		jnz gfx_init_50
+		cmp eax,100000h		; must be low memory
+		jb gfx_init_50
 		; malloc failed - keep stack
 		push word [rm_seg.ss]
 		pop word [local_stack.seg]
 		mov eax,esp
 		mov [local_stack.ofs],eax
-		jmp gfx_init_55
+		jmp gfx_init_51
 gfx_init_50:
 		mov edx,eax
 		and eax,0fh
 		add eax,[stack.size]
 		mov [local_stack.ofs],eax
-		shr dx,4
+		shr edx,4
 		mov [local_stack.seg],dx
 
-gfx_init_55:
+gfx_init_51:
 
 		; now we really start...
 		pm_leave
@@ -760,32 +788,29 @@ gfx_init_55:
 
 		pm_enter
 
-%if debug
 		mov esi,hello
 		call printf
-%endif
 
 		; get initial keyboard state
 		push word [es:417h]
 		pop word [kbd_status]
 
-%if debug
-		mov eax,[mem]
-		pf_arg_uint 0,eax
-		mov eax,[mem_max]
-		pf_arg_uint 1,eax
-
-		mov esi,dmsg_01
-		call printf
+		mov eax,[boot.sysconfig]
+		mov al,[es:eax+sc.failsafe]
+		test al,1
+		jz gfx_init_58
 
 		xor ebx,ebx
 
-.malloc_deb:
+gfx_init_55:
 		pf_arg_uchar 0,bl
-		mov eax,[malloc.area + 8*ebx]
+		mov eax,[malloc.area+8*ebx]
 		pf_arg_uint 1,eax
-		mov eax,[malloc.area + 8*ebx + 4]
+		mov eax,[malloc.area+8*ebx+4]
 		pf_arg_uint 2,eax
+
+		or eax,eax
+		jz gfx_init_57
 
 		push ebx
 		mov esi,dmsg_02
@@ -794,35 +819,19 @@ gfx_init_55:
 
 		inc ebx
 		cmp ebx,malloc.areas
-		jb .malloc_deb
-%endif
+		jb gfx_init_55
 
-		call dict_init
-		jc gfx_init_90
+gfx_init_57:
 
-		call stack_init
-		jc gfx_init_90
+		mov esi,dmsg_01
+		call printf
+		call get_key
 
-		mov eax,[mem]
-		mov esi,eax
-		add eax,[es:esi+fh_code]
-		mov [pscode_start],eax
-		mov eax,[es:esi+fh_code_size]
-		mov [pscode_size],eax
-
-		; now the ps interpreter is ready to run
-
-		; jpg decoding buffer
-		call jpg_setup
+gfx_init_58:
 
 		; alloc memory for palette data
 		call pal_init
-
-		mov eax,100h
-		call calloc
-		cmp eax,1
 		jc gfx_init_90
-		mov [infobox_buffer],eax
 
 		mov eax,200h
 		call calloc
@@ -835,6 +844,39 @@ gfx_init_55:
 		cmp eax,1
 		jc gfx_init_90
 		mov [vbe_info_buffer],eax
+
+		; those must be low memory addresses:
+		mov eax,[gfx_pal_tmp]
+		or eax,[vbe_buffer]
+		or eax,[vbe_info_buffer]
+		cmp eax,100000h
+		cmc
+		jc gfx_init_90
+
+		call dict_init
+		jc gfx_init_90
+
+		call stack_init
+		jc gfx_init_90
+
+		mov eax,[file.start]
+		mov esi,eax
+		add eax,[es:esi+fh_code]
+		mov [pscode_start],eax
+		mov eax,[es:esi+fh_code_size]
+		mov [pscode_size],eax
+
+		; now the ps interpreter is ready to run
+
+		; jpg decoding buffer
+		call jpg_setup
+		jc gfx_init_90
+
+		mov eax,100h
+		call calloc
+		cmp eax,1
+		jc gfx_init_90
+		mov [infobox_buffer],eax
 
 		mov eax,200h
 		call calloc
@@ -850,10 +892,17 @@ gfx_init_55:
 
 		; ok, we've done it, now continue the setup
 
-%if 0
+		mov eax,[boot.sysconfig]
+		mov al,[es:eax+sc.failsafe]
+		test al,1
+		jz gfx_init_59
+
 		call dump_malloc
+		mov esi,dmsg_01
+		call printf
 		call get_key
-%endif
+
+gfx_init_59:
 
 		; run global code
 		xor eax,eax
@@ -1001,7 +1050,7 @@ gfx_input_50:
 		jz gfx_input_70
 
 		mov esi,eax
-		add edi,[boot_cs.base]
+		add edi,[boot.base]
 gfx_input_60:
 		es lodsb
 		stosb
@@ -1182,7 +1231,7 @@ gfx_infobox_init:
 		inc ebx
 		jmp gfx_infobox_init_40
 gfx_infobox_init_20:
-		add esi,[boot_cs.base]
+		add esi,[boot.base]
 gfx_infobox_init_21:
 		es lodsb
 		mov [es:ebx],al
@@ -1197,7 +1246,7 @@ gfx_infobox_init_21:
 		jz gfx_infobox_init_40
 		inc ecx
 		dec ebx
-		add esi,[boot_cs.base]
+		add esi,[boot.base]
 gfx_infobox_init_25:
 		es lodsb
 		mov [es:ebx],al
@@ -1318,7 +1367,7 @@ gfx_progress_init:
 		mov dword [pstack.ptr],1
 
 		movzx eax,si
-		add eax,[boot_cs.base]
+		add eax,[boot.base]
 
 		mov dl,t_string
 		xor ecx,ecx
@@ -1475,7 +1524,7 @@ gfx_password_init:
 		mov dword [pstack.ptr],2
 
 		movzx eax,si
-		add eax,[boot_cs.base]
+		add eax,[boot.base]
 
 		mov dl,t_string
 		xor ecx,ecx
@@ -1484,7 +1533,7 @@ gfx_password_init:
 		pop edi
 
 		movzx eax,di
-		add eax,[boot_cs.base]
+		add eax,[boot.base]
 
 		mov dl,t_string
 		mov ecx,1
@@ -1536,7 +1585,7 @@ gfx_password_done:
 		mov dword [pstack.ptr],1
 
 		movzx eax,si
-		add eax,[boot_cs.base]
+		add eax,[boot.base]
 
 		mov dl,t_string
 		xor ecx,ecx
@@ -1628,11 +1677,11 @@ gfx_leave:
 		bits 32
 
 gfx_cb:
-		cmp dword [boot_callback],0
+		cmp dword [boot.callback],0
 		jz gfx_cb_80
 		pm_leave
 		push ds
-		call far [boot_callback]
+		call far [boot.callback]
 		pop ds
 		pm_enter
 		jmp gfx_cb_90
@@ -2072,7 +2121,7 @@ set_rstack_tos_90:
 		bits 32
 
 dict_init:
-		mov eax,[mem]
+		mov eax,[file.start]
 
 		mov ecx,[es:eax+fh_dict]
 		cmp ecx,1
@@ -2275,7 +2324,6 @@ malloc_init_70:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Get some memory.
 ;
 ;  eax          memory size
@@ -2291,6 +2339,7 @@ calloc:
 		push eax
 		call malloc
 		pop ecx
+calloc_10:
 		or eax,eax
 		jz calloc_90
 		push eax
@@ -2303,35 +2352,32 @@ calloc_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Get some memory (taken from extended memory, if possible).
 ;
 ;  eax          memory size
 ;
 ; return:
 ;  eax          linear address  (0 if the request failed)
+;  memory is initialized with 0
 ;
 
 		bits 32
 
-xmalloc:
+xcalloc:
 		mov bx,8		; start with mem area 1
 
 		push eax
 		call malloc_10
-		pop edx
+		pop ecx
 
 		or eax,eax
-		jnz xmalloc_90
+		jnz calloc_10
 
-		mov eax,edx
-		jmp malloc
-xmalloc_90:
-		ret
+		mov eax,ecx
+		jmp calloc
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Get some memory.
 ;
 ;  eax          memory size
@@ -2424,7 +2470,6 @@ _malloc_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Free memory.
 ;
 ;  eax          linear address
@@ -2613,7 +2658,6 @@ _dump_malloc_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-;
 ; Get memory size.
 ;
 ;  eax		memory area (0 ... malloc.areas - 1)
@@ -2799,18 +2843,18 @@ fms_malloc_90:
 
 ; some file in cpio archive
 fms_file:
-		mov ebx,[mem_archive]
+		mov ebx,[archive.start]
 		or ebx,ebx
 		stc
 		jz fms_file_90
 		cmp eax,ebx
 		jc fms_file_90
-		cmp eax,[mem_free]
+		cmp eax,[archive.end]
 		cmc
 		jc fms_file_90
 
 fms_file_10:
-		mov ecx,[mem_free]
+		mov ecx,[archive.end]
 		sub ecx,26
 		cmp ebx,ecx
 		jae fms_file_80
@@ -2900,7 +2944,7 @@ cpio_swab_90:
 find_file:
 		mov esi,eax
 		mov al,0
-		mov ebp,[mem_archive]
+		mov ebp,[archive.start]
 		or ebp,ebp
 		jz find_file_80
 find_file_20:
@@ -2950,7 +2994,7 @@ find_file_50:
 		add ebp,ecx
 		mov ecx,ebp
 		add ecx,26
-		cmp ecx,[mem_free]
+		cmp ecx,[archive.end]
 		jb find_file_20
 find_file_80:
 		xor eax,eax
@@ -7734,7 +7778,7 @@ alloc_fb:
 		jc alloc_fb_80
 		push ecx
 		push edx
-		call xmalloc
+		call calloc
 		pop edx
 		pop ecx
 		or eax,eax
@@ -8252,7 +8296,7 @@ prim_editinput_90:
 		bits 32
 
 prim_sysconfig:
-		mov eax,[boot_sysconfig]
+		mov eax,[boot.sysconfig]
 		jmp pr_getptr_or_none
 
 
@@ -14024,6 +14068,7 @@ jpg_setup:
 		mov eax,jpg_data_size + 15
 		call calloc
 		or eax,eax
+		stc
 		jz jpg_setup_90
 
 		; align a bit
@@ -14681,8 +14726,8 @@ gdt_init:
 
 pm_init:
 		mov eax,(8+8)*100h
-		call calloc
-		cmp eax,byte 1
+		call xcalloc
+		cmp eax,1
 		jc pm_init_90
 		mov [pm_idt.base],eax
 
