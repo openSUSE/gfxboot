@@ -658,10 +658,9 @@ sizeof_fb_entry		equ 8
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Setup internal data structures.
 ;
-; Initialize something.
-;
-; es:si		sysconfig data
+; esi		sysconfig data
 ;
 ; return:
 ;  CF		error
@@ -680,29 +679,7 @@ gfx_init:
 
 		cld
 
-		movzx eax,word [es:si+sc.bootloader_seg]
-		shl eax,4
-		mov [boot.base],eax
-		movzx esi,si
-		add eax,esi
-		mov [boot.sysconfig],eax
-
-		push dword [es:si+sc.file]
-		pop dword [file.start]
-		push dword [es:si+sc.archive_start]
-		pop dword [archive.start]
-		push dword [es:si+sc.archive_end]
-		pop dword [archive.end]
-		push dword [es:si+sc.mem0_start]
-		pop dword [mem0.start]
-		push dword [es:si+sc.mem0_end]
-		pop dword [mem0.end]
-
-		mov eax,[es:si+sc.callback]
-		or ax,ax				; check only offset
-		jz gfx_init_20
-		mov [boot.callback],eax
-gfx_init_20:
+		mov [boot.sysconfig],esi
 
 		; setup gdt, to get pm-switching going
 		call gdt_init
@@ -712,6 +689,28 @@ gfx_init_20:
 		cli
 
 		pm_enter
+
+		mov esi,[boot.sysconfig]
+		movzx eax,word [es:esi+sc.bootloader_seg]
+		shl eax,4
+		mov [boot.base],eax
+
+		push dword [es:esi+sc.file]
+		pop dword [file.start]
+		push dword [es:esi+sc.archive_start]
+		pop dword [archive.start]
+		push dword [es:esi+sc.archive_end]
+		pop dword [archive.end]
+		push dword [es:esi+sc.mem0_start]
+		pop dword [mem0.start]
+		push dword [es:esi+sc.mem0_end]
+		pop dword [mem0.end]
+
+		mov eax,[es:esi+sc.callback]
+		or ax,ax				; check only offset
+		jz gfx_init_20
+		mov [boot.callback],eax
+gfx_init_20:
 
 		; init malloc memory chain
 
@@ -730,16 +729,19 @@ gfx_init_30:
 		mov edx,eax
 		and dl,~0fh
 		shl edx,16
+
+		and eax,0fh
+		shl eax,20
+		add eax,edx
+		mov [esi+4],eax
+
 		; magic: if archive was loaded in high memory, exclude it
 		cmp edx,[archive.start]
 		jnz gfx_init_35
 		mov edx,[archive.end]
 gfx_init_35:
 		mov [esi],edx
-		and eax,0fh
-		shl eax,20
-		add eax,edx
-		mov [esi+4],eax
+
 		add esi,8
 		add ebx,2
 		dec ecx
@@ -936,8 +938,8 @@ gfx_init_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Finish gfx code.
 ;
-; Do something.
 
 		bits 16
 
@@ -965,10 +967,11 @@ gfx_done_pm_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Input a text line.
 ;
-; [boot_cs]:di	buffer (0 --> no buffer)
-; cx		buffer size
-; ax		timeout value (0 --> no timeout)
+; edi		buffer (0: no buffer)
+; ecx		buffer size
+; eax		timeout value (0: no timeout)
 ;
 ; return:
 ;  eax		action (1, 2: textmode, boot)
@@ -980,15 +983,11 @@ gfx_done_pm_90:
 gfx_input:
 		gfx_enter
 
-		movzx edi,di
-		movzx ecx,cx
-
 		push edi
 		push ecx
 
 		cmp byte [input_notimeout],0
 		jnz gfx_input_10
-		movzx eax,ax
 		mov [input_timeout],eax
 		mov [input_timeout_start],eax
 gfx_input_10:
@@ -1050,7 +1049,6 @@ gfx_input_50:
 		jz gfx_input_70
 
 		mov esi,eax
-		add edi,[boot.base]
 gfx_input_60:
 		es lodsb
 		stosb
@@ -1087,8 +1085,9 @@ gfx_input_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Setup boot menu entries.
 ;
-; es:si	menu description
+; esi		menu description
 ;
 
 		bits 16
@@ -1096,12 +1095,6 @@ gfx_input_90:
 gfx_menu_init:
 		gfx_enter
 
-		movzx esi,si
-		movzx eax,word [rm_seg.es]
-		shl eax,4
-		add esi,eax
-
-gfx_menu_init_20:
 		push esi
 		movzx eax,word [es:esi+menu_entries]
 		push eax
@@ -1209,9 +1202,10 @@ gfx_menu_init_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Show info box.
 ;
-; [boot_cs]:si	info text 1
-; [boot_cs]:di	info text 2	(may be 0 --> no text 2)
+; esi		info text 1
+; edi		info text 2	(0: no text 2)
 ; al		0/1	info/error
 ;
 
@@ -1225,28 +1219,24 @@ gfx_infobox_init:
 		mov ecx,100h-1
 		mov ebx,[infobox_buffer]
 
-		movzx esi,si
 		or esi,esi
 		jnz gfx_infobox_init_20
 		inc ebx
 		jmp gfx_infobox_init_40
 gfx_infobox_init_20:
-		add esi,[boot.base]
-gfx_infobox_init_21:
 		es lodsb
 		mov [es:ebx],al
 		inc ebx
 		or al,al
-		loopnz gfx_infobox_init_21
+		loopnz gfx_infobox_init_20
 		or ecx,ecx
 		jz gfx_infobox_init_40
 
-		movzx esi,di
+		mov esi,edi
 		or esi,esi
 		jz gfx_infobox_init_40
 		inc ecx
 		dec ebx
-		add esi,[boot.base]
 gfx_infobox_init_25:
 		es lodsb
 		mov [es:ebx],al
@@ -1302,6 +1292,7 @@ gfx_infobox_init_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Close info box.
 ;
 
 		bits 16
@@ -1340,9 +1331,10 @@ gfx_infobox_done_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Setup progress bar window.
 ;
 ; eax		max
-; [boot_cs]:si	kernel name
+; esi		kernel name
 ;
 
 		bits 16
@@ -1366,9 +1358,7 @@ gfx_progress_init:
 		push eax
 		mov dword [pstack.ptr],1
 
-		movzx eax,si
-		add eax,[boot.base]
-
+		mov eax,esi
 		mov dl,t_string
 		xor ecx,ecx
 		call set_pstack_tos
@@ -1394,6 +1384,7 @@ gfx_progress_init_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Close progress bar window.
 ;
 
 		bits 16
@@ -1432,6 +1423,7 @@ gfx_progress_done_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Advance progress bar.
 ;
 
 		bits 16
@@ -1483,6 +1475,7 @@ gfx_progress_update_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Set progress bar values.
 ;
 
 		bits 16
@@ -1497,9 +1490,10 @@ gfx_progress_limit:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Setup password window.
 ;
-;  [boot_cs]:si	password
-;  [boot_cs]:di	image name
+; esi		password
+; edi		image name
 ;
 
 		bits 16
@@ -1523,18 +1517,14 @@ gfx_password_init:
 
 		mov dword [pstack.ptr],2
 
-		movzx eax,si
-		add eax,[boot.base]
-
+		mov eax,esi
 		mov dl,t_string
 		xor ecx,ecx
 		push edi
 		call set_pstack_tos
 		pop edi
 
-		movzx eax,di
-		add eax,[boot.base]
-
+		mov eax,edi
 		mov dl,t_string
 		mov ecx,1
 		call set_pstack_tos
@@ -1561,8 +1551,9 @@ gfx_password_init_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Close password window.
 ;
-;  [boot_cs]:si	password
+; esi		password
 ;
 
 		bits 16
@@ -1584,9 +1575,7 @@ gfx_password_done:
 
 		mov dword [pstack.ptr],1
 
-		movzx eax,si
-		add eax,[boot.base]
-
+		mov eax,esi
 		mov dl,t_string
 		xor ecx,ecx
 		call set_pstack_tos

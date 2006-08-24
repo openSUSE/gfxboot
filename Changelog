@@ -1,6 +1,6 @@
 23/8/2006:	v3.3.0
-	- changed interface to bootloader + increased internal
-	  version number
+	- 32 bit rewrite finished
+	- changed interface to bootloader
 
 21/8/2006:	v3.2.37
 	- move to 32 bit, cont.

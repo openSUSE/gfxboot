@@ -18,7 +18,7 @@ DEFAULT_LANG =
 
 PIC_COMMON   = timer_a.jpg
 PIC_INSTALL  = back.jpg welcome.jpg text*.pcx
-PIC_BOOT     = back-low.jpg
+PIC_BOOT     = back.jpg
 
 FILES_INST   = init languages $(TRANSLATIONS) 16x16.fnt kroete.dat hapysuse.mod \
 	       $(PIC_COMMON) $(PIC_INSTALL) $(HELPINST_ALL)
@@ -66,7 +66,6 @@ ifdef DEFAULT_LANG
 	@echo $(DEFAULT_LANG) >boot/lang
 	@echo $(DEFAULT_LANG) >>boot/languages
 endif
-	@mv boot/back-low.jpg boot/back.jpg
 	@sh -c 'cd boot; echo $(FILES_BOOT_EN) | sed -e "s/ /\n/g" | cpio --quiet -o >message'
 
 installdir: install.config po install $(INCLUDES) $(HELPINST)
