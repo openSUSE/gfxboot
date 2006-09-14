@@ -21,7 +21,7 @@
 small_layout {
   /xmenu.maxlines	22 def
 } {
-  /xmenu.maxlines	28 def
+  /xmenu.maxlines	24 def	% 28
 } ifelse
 
 % xmenu layout

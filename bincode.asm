@@ -29,20 +29,12 @@ sizeof_file_header_t	equ 32
 
 
 ; font file header definition
-; struct font_header_t
-foh_magic		equ 0
-foh_entries		equ 4
-foh_height		equ 6
-foh_line_height		equ 7
-sizeof_font_header_t	equ 8
-
-
-; char data header definition
-; struct char_header_t
-ch_ofs			equ 0
-ch_c			equ 2
-ch_size			equ 4
-sizeof_char_header_t	equ 8		; must be 8, otherwise change find_char
+foh.magic		equ 0
+foh.entries		equ 4
+foh.height		equ 8
+foh.baseline		equ 9
+foh.line_height		equ 10
+foh.size		equ 11
 
 
 ; struct playlist
@@ -255,11 +247,12 @@ transp			dd 0		; transparency
 			align 4, db 0
 ; current font description
 font			dd 0		; (lin)
-font_entries		dw 0		; chars in font
-font_height		dw 0
-font_line_height	dw 0
-font_properties		db 0		; bit 0: pw mode (show '*')
-font_res1		db 0		; alignment
+font.entries		dd 0		; chars in font
+font.height		dw 0
+font.baseline		dw 0
+font.line_height	dw 0
+font.properties		db 0		; bit 0: pw mode (show '*')
+font.res1		db 0		; alignment
 
 ; console font
 cfont.lin		dd 0		; console font bitmap
@@ -269,12 +262,19 @@ con_y			dw 0		; cursor pos in pixel, *must* follow con_x
 
 
 ; current char description
-chr_bitmap		dd 0		; ofs rel. to [font]
-chr_x_ofs		dw 0
-chr_y_ofs		dw 0
-chr_real_width		dw 0
-chr_real_height		dw 0
-chr_width		dw 0
+chr.buf			dd 0		; buffer for antialiased fonts
+chr.buf_len		dd 0
+chr.pixel_buf		dd 0
+chr.data		dd 0		; encoded char data
+chr.bitmap		dd 0		; start of encoded bitmap; bit offset rel to chr.data
+chr.bitmap_width	dw 0
+chr.bitmap_height	dw 0
+chr.x_ofs		dw 0
+chr.y_ofs		dw 0		; rel. to baseline
+chr.x_advance		dw 0
+chr.type		db 0		; 0 = bitmap, 1: gray scale
+
+chr.gray_values		db 0, 255/5, (2 * 255)/5, (3 * 255)/5, (4 * 255)/5, (5 * 255)/5
 
 utf8_buf		times 8 db 0
 
@@ -7194,7 +7194,7 @@ prim_setfont:
 ;   setfont				% back to normal font
 ;
 
-; FIXME: [font_properties] are lost
+; FIXME: [font.properties] are lost
 ;
 
 		bits 32
@@ -7222,7 +7222,7 @@ prim_currentfont:
 		bits 32
 
 prim_fontheight:
-		movzx eax,word [font_height]
+		movzx eax,word [font.height]
 		jmp pr_getint
 
 
@@ -9833,7 +9833,7 @@ prim_getlink_90:
 		bits 32
 
 prim_lineheight:
-		movzx eax,word [font_line_height]
+		movzx eax,word [font.line_height]
 		jmp pr_getint
 
 
@@ -10794,8 +10794,8 @@ edit_char:
 
 		call find_char
 
-		cmp byte [chr_width],0
-		jz edit_char_80
+		cmp word [chr.x_advance],0
+		jle edit_char_80
 
 		mov edi,[edit_bg]
 		add edi,4
@@ -10811,8 +10811,8 @@ edit_char:
 		movsx ecx,cx
 		add edi,ecx
 
-		mov dx,[chr_width]
-		mov cx,[font_height]
+		mov dx,[chr.x_advance]
+		mov cx,[font.height]
 
 		call restore_bg
 
@@ -11005,7 +11005,7 @@ edit_get_params:
 		es lodsw
 		mov [edit_height],ax
 
-		mov cx,[font_height]
+		mov cx,[font.height]
 		sub ax,cx
 		sar ax,1
 		mov [edit_y_ofs],ax
@@ -11494,20 +11494,22 @@ cfont_init:
 font_init:
 		mov ebx,eax
 		shr eax,31
-		mov [font_properties],al
+		mov [font.properties],al
 		and ebx,~(1 << 31)
-		cmp dword [es:ebx+foh_magic],0d2828e07h		; magic
+		cmp dword [es:ebx+foh.magic],0d2828e06h		; magic
 		jnz font_init_90
-		mov ax,[es:ebx+foh_entries]
-		mov dl,[es:ebx+foh_height]
-		mov dh,[es:ebx+foh_line_height]
-		or ax,ax
+		mov eax,[es:ebx+foh.entries]
+		mov dl,[es:ebx+foh.height]
+		mov dh,[es:ebx+foh.line_height]
+		movsx cx,byte [es:ebx+foh.baseline]
+		or eax,eax
 		jz font_init_90
 		or dx,dx
 		jz font_init_90
-		mov [font_entries],ax
-		mov [font_height],dl
-		mov [font_line_height],dh
+		mov [font.entries],eax
+		mov [font.height],dl
+		mov [font.line_height],dh
+		mov [font.baseline],cx
 		mov [font],ebx
 font_init_90:
 		ret
@@ -11573,7 +11575,9 @@ text_xy_20:
 
 		push esi
 		mov esi,edi
+		push edi
 		call word_width
+		pop edi
 		pop esi
 		movzx edx,word [gfx_cur_x]
 		add ecx,edx
@@ -11596,7 +11600,7 @@ text_xy_60:
 		cmp eax,0ah
 		jnz text_xy_70
 text_xy_65:
-		mov ax,[font_line_height]
+		mov ax,[font.line_height]
 		add [gfx_cur_y],ax
 		pop ax
 		push ax
@@ -11896,9 +11900,9 @@ str_size_60:
 		jmp str_size_20
 str_size_80:
 		dec edx
-		movzx eax,word [font_line_height]
+		movzx eax,word [font.line_height]
 		mul edx
-		movzx edx,word [font_height]
+		movzx edx,word [font.height]
 		add edx,eax
 str_size_90:
 		ret
@@ -12129,76 +12133,349 @@ char_xy_10:
 		test byte [txt_state],2		; don't actually write
 		jnz char_xy_80
 
+		cmp word [chr.bitmap_width],0
+		jz char_xy_80
+		cmp word [chr.bitmap_height],0
+		jz char_xy_80
+
+		mov dl,[chr.type]
+		or dl,dl
+		jnz char_xy_30
+		call char0_xy
+		jmp char_xy_80
+char_xy_30:
+		cmp dl,1
+		jnz char_xy_80
+		call char1_xy
+
+char_xy_80:
+		mov cx,[chr.x_advance]
+		add [gfx_cur_x],cx
+char_xy_90:
+		pop gs
+		pop fs
+		ret
+
+
+char0_xy:
 		push word [gfx_cur_x]
 		push word [gfx_cur_y]
 
-		mov cx,[chr_x_ofs]
-		add [gfx_cur_x],cx
+		mov ax,[chr.x_ofs]
+		add [gfx_cur_x],ax
 
-		mov dx,[chr_y_ofs]
-		add [gfx_cur_y],dx
+		mov ax,[font.height]
+		sub ax,[font.baseline]
+		sub ax,[chr.y_ofs]
+		sub ax,[chr.bitmap_height]
+		add [gfx_cur_y],ax
 
 		call goto_xy
 		call screen_segs
 
-		mov esi,[font]
-		add esi,[chr_bitmap]
+		mov ebx,[chr.data]
+		mov esi,[chr.bitmap]
 
-		cmp byte [chr_real_width],0
-		jz char_xy_70
-		cmp byte [chr_real_height],0
-		jz char_xy_70
-
-		xor dx,dx
-		xor bp,bp
-
-char_xy_20:
-		xor cx,cx
-char_xy_30:
-		bt [es:esi],bp
-		jnc char_xy_40
+		xor edx,edx
+char0_xy_20:
+		xor ecx,ecx
+char0_xy_30:
+		bt [es:ebx],esi
+		jnc char0_xy_40
 		mov ax,[gfx_cur_x]
 		add ax,cx
 		cmp ax,[clip_r]
-		jge char_xy_40
+		jge char0_xy_40
 		cmp ax,[clip_l]
-		jl char_xy_40
+		jl char0_xy_40
 		call [setpixel_t]
-char_xy_40:
-		inc bp
+char0_xy_40:
+		inc esi
 		add di,[pixel_bytes]
-		jnc char_xy_50
+		jnc char0_xy_50
 		call inc_winseg
-char_xy_50:
-		inc cx
-		cmp cx,[chr_real_width]
-		jnz char_xy_30
+char0_xy_50:
+		inc ecx
+		cmp cx,[chr.bitmap_width]
+		jnz char0_xy_30
 
 		mov ax,[screen_line_len]
-		mov bx,[chr_real_width]
-		imul bx,[pixel_bytes]
-		sub ax,bx
+		mov bp,[chr.bitmap_width]
+		imul bp,[pixel_bytes]
+		sub ax,bp
 		add di,ax
-		jnc char_xy_60
+		jnc char0_xy_60
 		call inc_winseg
-char_xy_60:
-		inc dx
-		cmp dx,[chr_real_height]
-		jnz char_xy_20
-
-char_xy_70:
+char0_xy_60:
+		inc edx
+		cmp dx,[chr.bitmap_height]
+		jnz char0_xy_20
 
 		pop word [gfx_cur_y]
 		pop word [gfx_cur_x]
 
-char_xy_80:
-		mov cx,[chr_width]
-		add [gfx_cur_x],cx
+		ret
 
-char_xy_90:
 
-		pop gs
-		pop fs
+char1_xy:
+		push word [gfx_cur_x]
+		push word [gfx_cur_y]
+
+		call char1_unpack
+		jc char1_xy_90
+
+		mov ax,[chr.x_ofs]
+		add [gfx_cur_x],ax
+
+		mov ax,[font.height]
+		sub ax,[font.baseline]
+		sub ax,[chr.y_ofs]
+		sub ax,[chr.bitmap_height]
+		add [gfx_cur_y],ax
+
+		; save_bg does not clip, do it here (sort of)
+		mov ax,[gfx_cur_x]
+		cmp ax,[clip_r]
+		jge char1_xy_20
+		add ax,[chr.bitmap_width]
+		cmp ax,[clip_l]
+		jl char1_xy_20
+
+		mov edi,[chr.pixel_buf]
+		mov dx,[es:edi]
+		mov cx,[es:edi+2]
+		add edi,4
+		call save_bg
+
+char1_xy_20:
+
+		push dword [transp]
+
+		mov edi,[chr.pixel_buf]
+		mov esi,[chr.buf]
+		mov ax,[es:edi]
+		mul word [es:edi+2]
+		movzx ecx,ax
+		add edi,4
+		add esi,4
+
+		mov eax,[gfx_color]
+		call decode_color
+		mov [tmp_var_0],eax
+
+char1_xy_30:
+		push ecx
+
+		movzx eax,byte [es:esi]
+		inc esi
+		mov [transp],eax
+		mov ecx,[tmp_var_0]
+
+		cmp dword [pixel_bytes],2
+		jnz char1_xy_40
+
+		mov ax,[es:edi]
+		call decode_color
+		call enc_transp
+		call encode_color
+		mov [es:edi],ax
+
+		jmp char1_xy_60
+char1_xy_40:
+
+		mov eax,[es:edi]
+		call enc_transp
+		mov [es:edi],eax
+
+char1_xy_60:
+		pop ecx
+		add edi,[pixel_bytes]
+		dec ecx
+		jnz char1_xy_30
+
+		pop dword [transp]
+
+		mov edi,[chr.pixel_buf]
+		mov dx,[es:edi]
+		mov cx,[es:edi+2]
+		add edi,4
+		mov bx,dx
+		imul bx,[pixel_bytes]
+		call restore_bg
+
+char1_xy_90:
+		pop word [gfx_cur_y]
+		pop word [gfx_cur_x]
+
+		ret
+
+
+char1_unpack:
+		mov ax,[chr.bitmap_width]
+		mul word [chr.bitmap_height]
+		movzx eax,ax
+		mov ebp,eax
+		mov ebx,eax
+		imul ebx,[pixel_bytes]
+		add eax,4
+		add ebx,4
+		cmp eax,[chr.buf_len]
+		jb char1_unpack_10
+		push ebp
+		push ebx
+		push eax
+		mov eax,[chr.buf]
+		call free
+		mov eax,[chr.pixel_buf]
+		call free
+		xor eax,eax
+		mov [chr.buf],eax
+		mov [chr.pixel_buf],eax
+		mov [chr.buf_len],eax
+		pop eax
+		push eax
+		call calloc
+		pop ecx
+		pop ebx
+		pop ebp
+		or eax,eax
+		stc
+		jz char1_unpack_90
+		mov [chr.buf_len],ecx
+		mov [chr.buf],eax
+		mov eax,ebx
+		push ebp
+		call calloc
+		pop ebp
+		or eax,eax
+		stc
+		jz char1_unpack_90
+		mov [chr.pixel_buf],eax
+char1_unpack_10:
+		mov edi,[chr.buf]
+		mov esi,[chr.pixel_buf]
+
+		mov cx,[chr.bitmap_width]
+		mov [es:edi],cx
+		mov [es:esi],cx
+		mov cx,[chr.bitmap_height]
+		mov [es:edi+2],cx
+		mov [es:esi+2],cx
+
+		add edi,4
+
+		; ebp: pixel
+
+		mov ebx,[chr.data]
+		mov esi,[chr.bitmap]
+		mov cl,3
+
+char1_unpack_20:
+		push ebp
+		push edi
+		call get_u_bits
+		pop edi
+		pop ebp
+
+		cmp al,6
+		jae char1_unpack_30
+		mov al,[chr.gray_values + eax]
+		stosb
+		dec ebp
+		jnz char1_unpack_20
+		jmp char1_unpack_80
+char1_unpack_30:
+		mov dl,[chr.gray_values + 0]
+		cmp al,7
+		jnz char1_unpack_40
+		mov dl,[chr.gray_values + 5]
+char1_unpack_40:
+		push edx
+		push ebp
+		push edi
+		call get_u_bits
+		pop edi
+		pop ebp
+		pop edx
+		add al,3
+		xchg dl,al
+char1_unpack_50:
+		stosb
+		dec ebp
+		jz char1_unpack_80
+		dec dl
+		jnz char1_unpack_50
+		jmp char1_unpack_20
+char1_unpack_80:
+		clc
+
+char1_unpack_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Read bits and convert to unsigned int.
+;
+; ebx		buffer
+; esi		bit offset
+; cl		bits
+;
+; return:
+;  eax		(unsigned) number
+;  ebx		buffer
+;  esi		updated bit offset
+;  ecx		bits
+;
+get_u_bits:
+		movzx ecx,cl
+		mov edi,esi
+		mov ebp,esi
+		add esi,ecx
+		shr edi,3
+		and ebp,7
+		mov eax,[es:ebx+edi]
+		xchg ecx,ebp
+		mov edx,[es:ebx+edi+4]
+		shrd eax,edx,cl
+		xchg ecx,ebp
+		cmp ecx,32
+		jae get_u_bits_90
+		mov ebp,1
+		shl ebp,cl
+		dec ebp
+		and eax,ebp
+get_u_bits_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Read bits and convert to signed int.
+;
+; ebx		buffer
+; esi		bit offset
+; cl		bits
+;
+; return:
+;  eax		(signed) number
+;  ebx		buffer
+;  esi		updated bit offset
+;  ecx		bits
+;
+get_s_bits:
+		call get_u_bits
+		or ecx,ecx
+		jz get_s_bits_90
+		dec ecx
+		mov ebp,1
+		shl ebp,cl
+		inc ecx
+		test eax,ebp
+		jz get_s_bits_90
+		xor ebp,ebp
+		dec ebp
+		shl ebp,cl
+		add eax,ebp
+get_s_bits_90:
 		ret
 
 
@@ -12209,7 +12486,7 @@ char_xy_90:
 ;
 ; return:
 ;  CF		0 = found, 1 = not found
-;  [chr_*]	updated
+;  [chr.*]	updated
 ;
 
 		bits 32
@@ -12221,22 +12498,24 @@ find_char:
 		stc
 		jz find_char_90
 
-		test byte [font_properties],1
+		test byte [font.properties],1
 		jz find_char_10
 		mov eax,'*'
 find_char_10:
 
 		mov ebx,[font]
-		add ebx,sizeof_font_header_t
-		movzx ecx,word [font_entries]
+		add ebx,foh.size
+		mov ecx,[font.entries]
+
+		; do a binary search for char
 
 find_char_20:
 		mov esi,ecx
 		shr esi,1
 
-		shl esi,3
-		mov edx,[es:ebx+esi+ch_c]
-		and edx,1fffffh		; 21 bits
+		lea esi,[esi+4*esi]			; offset table has 5-byte entries
+		mov edx,[es:ebx+esi]
+		and edx,1fffffh				; 21 bits
 		cmp eax,edx
 
 		jz find_char_80
@@ -12246,7 +12525,7 @@ find_char_20:
 		add ebx,esi
 		test cl,1
 		jz find_char_50
-		add ebx,sizeof_char_header_t
+		add ebx,5				; offset table has 5-byte entries
 find_char_50:
 		shr ecx,1
 		jnz find_char_20
@@ -12255,34 +12534,33 @@ find_char_50:
 		jmp find_char_90
 
 find_char_80:
-		movzx edx,word [es:ebx+esi+ch_ofs]
-		mov [chr_bitmap],edx
-		mov edx,[es:ebx+esi+ch_size]
+		mov edx,[es:ebx+esi+1]
+		shr edx,13				; 19 bit offset
+		add edx,[font]
+		mov [chr.data],edx
 
-		shr edx,5
-		mov cl,dl
-		and cl,01fh
-		mov [chr_x_ofs],cl
+		mov ebx,edx
+		xor esi,esi
+		mov cl,2
+		call get_u_bits
+		mov [chr.type],al
+		mov cl,3
+		call get_u_bits
+		mov cl,al
+		inc cl
 
-		shr edx,5
-		mov cl,dl
-		and cl,01fh
-		mov [chr_y_ofs],cl
+		call get_u_bits
+		mov [chr.bitmap_width],ax
+		call get_u_bits
+		mov [chr.bitmap_height],ax
+		call get_s_bits
+		mov [chr.x_ofs],ax
+		call get_s_bits
+		mov [chr.y_ofs],ax
+		call get_s_bits
+		mov [chr.x_advance],ax
 
-		shr edx,5
-		mov cl,dl
-		and cl,01fh
-		mov [chr_real_width],cl
-
-		shr edx,5
-		mov cl,dl
-		and cl,01fh
-		mov [chr_real_height],cl
-
-		shr edx,5
-		mov cl,dl
-		and cl,01fh
-		mov [chr_width],cl
+		mov [chr.bitmap],esi
 
 		clc
 find_char_90:
@@ -12311,7 +12589,7 @@ char_width_10:
 		call find_char
 		mov ecx,0
 		jc char_width_90
-		movzx ecx,word [chr_width]
+		movsx ecx,word [chr.x_advance]
 char_width_90:
 		pop eax
 		ret

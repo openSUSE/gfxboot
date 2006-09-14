@@ -2,19 +2,14 @@ ARCH    := $(shell uname -m)
 
 CC	 = gcc
 CFLAGS	 = -g -Wall -Wno-pointer-sign -O2 -fomit-frame-pointer
-ifeq "$(ARCH)" "x86_64"
-X11LIBS	 = /usr/X11/lib64
-else
-X11LIBS	 = /usr/X11/lib
-endif
 THEMES	 = $(wildcard themes/*)
 
 .PHONY: all themes clean install doc
 
-all:	bin2c mkbootmsg bincode getx11font addblack
+all:	bin2c mkbootmsg bincode mkblfont addblack
 
-getx11font: getx11font.c
-	$(CC) $(CFLAGS) -L$(X11LIBS) $< -lX11 -o $@
+mkblfont: mkblfont.c
+	$(CC) $(CFLAGS) -I /usr/include/freetype2 -lfreetype $< -o $@
 
 mkbootmsg: mkbootmsg.c vocabulary.h bincode.h
 	$(CC) $(CFLAGS) $< -o $@
@@ -46,12 +41,12 @@ jpeg.o: jpeg.S
 
 install: all
 	install -d -m 755 $(DESTDIR)/usr/sbin $(DESTDIR)/usr/share/gfxboot
-	install -m 755 mkbootmsg getx11font help2txt $(DESTDIR)/usr/sbin
+	install -m 755 mkbootmsg mkblfont help2txt $(DESTDIR)/usr/sbin
 	cp -a themes $(DESTDIR)/usr/share/gfxboot
 	cp -a bin $(DESTDIR)/usr/share/gfxboot
 
 clean: themes doc
-	@rm -f mkbootmsg bincode getx11font addblack bincode.h bin2c *.lst *.map vocabulary.inc vocabulary.h *.o *~
+	@rm -f mkbootmsg bincode mkblfont addblack bincode.h bin2c *.lst *.map vocabulary.inc vocabulary.h *.o *~
 	@rm -rf tmp
 
 themes:
