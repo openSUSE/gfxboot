@@ -30,6 +30,7 @@
   [ "fr"    "Français" ]
   [ "de"    "Deutsch" ]
   [ "es"    "Español" ]
+  [ "ee_EE" "Eesti" ]
   [ "el"    "Ελληνικά" ]
   [ "fi"    "Suomi" ]
   [ "he"    "תירבע" ]
