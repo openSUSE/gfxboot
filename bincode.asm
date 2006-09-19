@@ -37,6 +37,16 @@ foh.line_height		equ 10
 foh.size		equ 11
 
 
+; char bitmap definitions
+; must match values in mkblfont.c
+cbm_gray_bits		equ 4
+cbm_gray_bit_count	equ 3
+
+cbm_max_gray		equ (1 << cbm_gray_bits) - 3
+cbm_rep_black		equ cbm_max_gray + 1
+cbm_rep_white		equ cbm_max_gray + 2
+
+
 ; struct playlist
 pl_file			equ 0		; actually file index + 1
 pl_loop			equ 1
@@ -274,7 +284,12 @@ chr.y_ofs		dw 0		; rel. to baseline
 chr.x_advance		dw 0
 chr.type		db 0		; 0 = bitmap, 1: gray scale
 
-chr.gray_values		db 0, 255/5, (2 * 255)/5, (3 * 255)/5, (4 * 255)/5, (5 * 255)/5
+chr.gray_values
+%assign i 0
+%rep cbm_max_gray + 1
+			db (i * 255)/cbm_max_gray
+%assign i i + 1
+%endrep
 
 utf8_buf		times 8 db 0
 
@@ -12368,17 +12383,17 @@ char1_unpack_10:
 
 		mov ebx,[chr.data]
 		mov esi,[chr.bitmap]
-		mov cl,3
 
 char1_unpack_20:
 		push ebp
 		push edi
+		mov cl,cbm_gray_bits
 		call get_u_bits
 		pop edi
 		pop ebp
 
-		cmp al,6
-		jae char1_unpack_30
+		cmp al,cbm_max_gray
+		ja char1_unpack_30
 		mov al,[chr.gray_values + eax]
 		stosb
 		dec ebp
@@ -12386,13 +12401,14 @@ char1_unpack_20:
 		jmp char1_unpack_80
 char1_unpack_30:
 		mov dl,[chr.gray_values + 0]
-		cmp al,7
+		cmp al,cbm_rep_white
 		jnz char1_unpack_40
-		mov dl,[chr.gray_values + 5]
+		mov dl,[chr.gray_values + cbm_max_gray]
 char1_unpack_40:
 		push edx
 		push ebp
 		push edi
+		mov cl,cbm_gray_bit_count
 		call get_u_bits
 		pop edi
 		pop ebp

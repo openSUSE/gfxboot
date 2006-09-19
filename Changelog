@@ -1,3 +1,6 @@
+19/9/2006:	v3.3.3
+	- use 4 bit for antialiasing (not 3)
+
 19/9/2006:	v3.3.2
 	- fix Estonian support
 

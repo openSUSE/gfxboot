@@ -16,8 +16,15 @@
 
 
 #define MAGIC 0xd2828e06
-// must be < 6
-#define MAX_GRAY 5
+
+// 4 bits seem to be enough
+#define GRAY_BITS 4
+// 3 gave smallest file for about 16x16 pixel fonts, but it doesn't really matter much
+#define GRAY_BIT_COUNT 3
+
+#define MAX_GRAY ((1 << GRAY_BITS) - 3)
+#define REP_BLACK (MAX_GRAY + 1)
+#define REP_WHITE (MAX_GRAY + 2)
 
 struct option options[] = {
   { "add",         1, NULL, 'a' },
@@ -637,9 +644,17 @@ void dump_char(char_data_t *cd)
             printf(".");
           }
           else {
-            c = p[(j - y1) * cd->bitmap_width + i - x1] + '0';
-            if(c == '0') c = ' ';
-            else if(c >= '0' + MAX_GRAY) c = '#';
+            c = p[(j - y1) * cd->bitmap_width + i - x1];
+            if(c == 0) {
+              c = ' ';
+            }
+            else if(c >= MAX_GRAY) {
+              c = '#';
+            }
+            else {
+              c += '0';
+              if(c > '9') c += 'a' - '9' - 1;
+            }
             printf("%c", c);
           }
         }
@@ -1143,15 +1158,20 @@ int unsigned_bits(unsigned num)
 
 void encode_cnt(unsigned char *buf, int *buf_ptr, int lc, int lc_cnt)
 {
+  if((lc_cnt - 2) >= (1 << GRAY_BIT_COUNT)) {
+    fprintf(stderr, "cnt %d too large\n", lc_cnt);
+    exit(1);
+  }
+
   if(lc_cnt >= 2) {
-    *buf_ptr -= 3;
-    add_bits(buf, buf_ptr, 3, lc == 0 ? 6 : 7);
-    // printf("(%d)", lc == 0 ? 6 : 7);
-    add_bits(buf, buf_ptr, 3, lc_cnt - 2);
+    *buf_ptr -= GRAY_BITS;
+    add_bits(buf, buf_ptr, GRAY_BITS, lc == 0 ? REP_BLACK : REP_WHITE);
+    // printf("(%d)", lc == 0 ? REP_BLACK : REP_WHITE);
+    add_bits(buf, buf_ptr, GRAY_BIT_COUNT, lc_cnt - 2);
     // printf("(%d)", lc_cnt - 2);
   }
   else if(lc_cnt) {
-    add_bits(buf, buf_ptr, 3, lc);
+    add_bits(buf, buf_ptr, GRAY_BITS, lc);
     // printf("[%d]", lc);
   }
 }
@@ -1228,7 +1248,7 @@ void encode_char(char_data_t *cd)
     case 1:
       lc = -1;
       for(i = lc_cnt = 0; i < cd->bitmap_width * cd->bitmap_height; i++) {
-        if(cd->bitmap[i] == lc && (lc == 0 || lc == MAX_GRAY) && lc_cnt < 8) {
+        if(cd->bitmap[i] == lc && (lc == 0 || lc == MAX_GRAY) && lc_cnt < ((1 << GRAY_BIT_COUNT) + 1)) {
           lc_cnt++;
         }
         else {
@@ -1237,7 +1257,7 @@ void encode_char(char_data_t *cd)
             lc_cnt = 0;
             lc = -1;
           }
-          add_bits(buf, &buf_ptr, 3, cd->bitmap[i]);
+          add_bits(buf, &buf_ptr, GRAY_BITS, cd->bitmap[i]);
           // printf("[%d]", cd->bitmap[i]);
         }
         lc = cd->bitmap[i];
@@ -1334,14 +1354,14 @@ int show_font(char *name)
 
       case 1:
         for(i = 0; i < bitmap_len;) {
-          lc = read_unsigned_bits(cd->data, &j, 3);
+          lc = read_unsigned_bits(cd->data, &j, GRAY_BITS);
           // printf("(%d)", lc);
-          if(lc < 6) {
+          if(lc <= MAX_GRAY) {
             cd->bitmap[i++] = lc;
             continue;
           }
-          lc = lc == 6 ? 0 : MAX_GRAY;
-          lc_cnt = read_unsigned_bits(cd->data, &j, 3) + 3;
+          lc = lc == REP_BLACK ? 0 : MAX_GRAY;
+          lc_cnt = read_unsigned_bits(cd->data, &j, GRAY_BIT_COUNT) + 3;
           // printf("(%d)", lc_cnt);
           while(i < bitmap_len && lc_cnt--) cd->bitmap[i++] = lc;
         }
