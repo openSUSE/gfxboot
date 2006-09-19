@@ -16,7 +16,7 @@
 %% include keymap.cs.inc
 %% include keymap.da.inc
 %% include keymap.de.inc
-%% include keymap.ee_EE.inc
+%% include keymap.et_EE.inc
 %% include keymap.el.inc
 %% include keymap.es.inc
 %% include keymap.fr.inc
@@ -43,7 +43,7 @@
   [ "cy_GB" .undef       ]
   [ "da"    keymap.da    ]
   [ "de"    keymap.de    ]
-  [ "ee_EE" keymap.ee_EE ]
+  [ "et_EE" keymap.et_EE ]
   [ "el"    keymap.el    ]
   [ "en_GB" .undef       ]
   [ "en_US" .undef       ]
