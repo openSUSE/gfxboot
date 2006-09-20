@@ -36,8 +36,7 @@
   [ "he"    "תירבע" ]
   [ "it"    "Italiano" ]
   [ "ja"    "日本語" ]
-%  [ "hi"    "\u0939\u093f\u0928\u094d\u0926\u0940" ]	% Hindi
-  [ "hi"    "Hindi" ]
+  [ "hi"    "\u0939\u093f\u0928\u094d\u0926\u0940" ]	% Hindi
   [ "hr"    "Hrvatski" ]
   [ "hu"    "Magyar" ]
 %  [ "km_KH" "\u1781\u17d2\u1798\u17c2\u179a" ]		% Khmer

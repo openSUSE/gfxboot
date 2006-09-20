@@ -11641,12 +11641,33 @@ text_xy_70:
 		cmp eax,1fh
 		jae text_xy_80
 		call text_special
-		jmp text_xy_81
+		jmp text_xy_89
 text_xy_80:
 		test byte [txt_state],1
-		jnz text_xy_81
+		jnz text_xy_89
+
+;;
+		pop esi
+		push esi
+		mov edx,eax
+		call utf8_dec
+		xchg eax,edx
+		cmp edx,0a3fh		; Sihari (Gurmukhi 'i')
+		jz text_xy_85
+		cmp edx,093fh		; (Devanagari 'i')
+		jnz text_xy_88
+text_xy_85:
+		pop edi
+		push esi
+		push eax
+		mov eax,edx
 		call char_xy
-text_xy_81:
+		pop eax
+text_xy_88:
+;;
+
+		call char_xy
+text_xy_89:
 		pop esi
 		jmp text_xy_10
 text_xy_90:
