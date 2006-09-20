@@ -1,4 +1,5 @@
 	- fixed font rendering bug
+	- added some indic fonts
 
 19/9/2006:	v3.3.3
 	- use 4 bit for antialiasing (not 3)

@@ -18,7 +18,7 @@
 /lang.defaultnames [
 %  [ "ar"    "\u064a\u0628\u0631\u0639" ]
   [ "ar"    "\ufef2\ufe91\ufeae\ufecb" ]
-  [ "bn"    "Bengali" ]
+  [ "bn"    "\u09ac\u09be\u0982\u09b2\u09be" ]		% Bengali
   [ "bs"    "Bosanski" ]
   [ "bg"    "Български" ]
   [ "ca_ES" "Català" ]
@@ -36,9 +36,11 @@
   [ "he"    "תירבע" ]
   [ "it"    "Italiano" ]
   [ "ja"    "日本語" ]
+%  [ "hi"    "\u0939\u093f\u0928\u094d\u0926\u0940" ]	% Hindi
   [ "hi"    "Hindi" ]
   [ "hr"    "Hrvatski" ]
   [ "hu"    "Magyar" ]
+%  [ "km_KH" "\u1781\u17d2\u1798\u17c2\u179a" ]		% Khmer
   [ "km_KH" "Khmer" ]
   [ "ko"    "한글" ]
   [ "lt"    "Lietuvių" ]
@@ -47,7 +49,7 @@
   [ "pl"    "Polski" ]
   [ "pt_PT" "Português" ]
   [ "pt_BR" "Português (Brasil)" ]
-  [ "pa"    "Punjabi" ]
+  [ "pa"    "\u0a2a\u0a70\u0a1c\u0a3e\u0a2c\u0a40" ]	% Punjabi
   [ "ro"    "Română" ]
   [ "ru"    "Русский" ]
   [ "sk"    "Slovenčina" ]

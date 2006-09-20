@@ -89,6 +89,10 @@ aafont:
 	-t install/log -t boot/log \
 	-t languages \
 	-f 'NachlieliCLM-Bold[size=14 c=0x591-0x5f4]' \
+	-f 'MuktiNarrow[size=18 c=0x0981-0x09fa bold=1]' \
+	-f 'lohit_hi[size=18 c=0x0901-0x0970 bold=1]' \
+	-f 'lohit_pa[size=18 c=0x0a01-0x0a74 bold=1]' \
+	-f 'KhmerOSsys[size=16 c=0x1780-0x17f9 dy=-2]' \
 	-f 'DejaVuSans-Bold[size=14]' \
 	-f 'FZHeiTi[size=17 nobitmap=1]' \
 	-f 'gulim[size=17 bold=1 nobitmap=1]' \
