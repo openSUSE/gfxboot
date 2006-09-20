@@ -54,7 +54,7 @@
   [ "ru"    "Русский" ]
   [ "sk"    "Slovenčina" ]
   [ "sl"    "Slovenščina" ]
-  [ "sr"    "Cрпски" ]
+  [ "sr"    "Srpski" ]
   [ "sv"    "Svenska" ]
   [ "vi"    "Tiếng Việt" ]
   [ "tr"    "Türkçe" ]
