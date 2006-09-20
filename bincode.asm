@@ -39,7 +39,7 @@ foh.size		equ 11
 
 ; char bitmap definitions
 ; must match values in mkblfont.c
-cbm_gray_bits		equ 4
+cbm_gray_bits		equ 3
 cbm_gray_bit_count	equ 3
 
 cbm_max_gray		equ (1 << cbm_gray_bits) - 3

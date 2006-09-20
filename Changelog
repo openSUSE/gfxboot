@@ -1,3 +1,5 @@
+	- fixed font rendering bug, back to 3 bits
+
 19/9/2006:	v3.3.3
 	- use 4 bit for antialiasing (not 3)
 
