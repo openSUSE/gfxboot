@@ -18,7 +18,7 @@
 #define MAGIC 0xd2828e06
 
 // 4 bits seem to be enough
-#define GRAY_BITS 3
+#define GRAY_BITS 4
 // 3 gave smallest file for about 16x16 pixel fonts, but it doesn't really matter much
 #define GRAY_BIT_COUNT 3
 
