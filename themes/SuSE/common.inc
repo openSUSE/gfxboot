@@ -822,6 +822,7 @@
 /menuitemmap {
   translate
   dup "memtest" eq over "memtest86" eq or { pop txt_memtest return } if
+  dup "firmware" eq { pop txt_firmware return } if
   syslinux {
     livecd {
       dup "linux"     eq { pop "openSUSE 10.2 LiveCD (english)" return } if
@@ -1022,7 +1023,7 @@
 
   /menu.bar.width menu.bar.min.width def
 
-  /menu.max.entries 7 def
+  /menu.max.entries 8 def
 
   /boot.pos { 253 ptheme { 480 } { small_layout { 380 } { 490 } ifelse } ifelse } def
 

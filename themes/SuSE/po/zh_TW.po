@@ -297,3 +297,8 @@ msgstr "啟用 ZEN 分割區"
 msgid "Text Mode"
 msgstr ""
 
+# menu item, like 'memory test'
+#. txt_firmware
+msgid "Firmware Test"
+msgstr ""
+

@@ -302,3 +302,8 @@ msgstr "Habilitar partición ZEN"
 msgid "Text Mode"
 msgstr ""
 
+# menu item, like 'memory test'
+#. txt_firmware
+msgid "Firmware Test"
+msgstr ""
+
