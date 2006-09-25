@@ -1393,7 +1393,7 @@ dup .undef eq { pop "back-low.jpg" findfile } if
 /debug 0 def
 
 ptheme small_layout or CapsLock or
-%  true or
+  true or
 {
   /bsplash.done { } def
 } {

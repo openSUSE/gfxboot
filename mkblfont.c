@@ -204,19 +204,13 @@ int main(int argc, char **argv)
       case 'f':
         font = add_list(&font_list, new_mem(sizeof *font));
         font_spec = new_str(optarg);
-        if((s = strchr(font_spec, '['))) {
+
+        if((s = strchr(font_spec, ':'))) {
           font->name = new_mem(s - font_spec + 1);
           memcpy(font->name, font_spec, s - font_spec);
           t = s + 1;
-          if((s = strchr(t, ']'))) {
-            *s = 0;
-          }
-          else {
-            fprintf(stderr, "%s: invalid font spec\n", optarg);
-            return 2;
-          }
           err =  0;
-          while(!err && (str = strsep(&t, " "))) {
+          while(!err && (str = strsep(&t, ":"))) {
             if((s = strchr(str, '='))) {
               *s++ = 0;
               if(!strcmp(str, "size")) {
@@ -453,6 +447,11 @@ int main(int argc, char **argv)
   }
 
   FT_Done_FreeType(ft_lib);
+
+  // fix vertical glyph positions
+  for(cd = char_list.start; cd; cd = cd->next) {
+    if(cd->ok) cd->y_ofs += cd->font->dy;
+  }
 
   // get font dimensions
   font_height = font_y_ofs = 0;
