@@ -119,12 +119,14 @@ msgstr ""
 
 # info box title
 #. txt_info_title
-msgid "Boot loader"
+#, fuzzy
+msgid "Boot Loader"
 msgstr "Oppstartslaster"
 
 # error box title
 #. txt_error_title
-msgid "I/O error"
+#, fuzzy
+msgid "I/O Error"
 msgstr "Inn/ut-feil"
 
 # boot disk change dialog title
@@ -149,9 +151,10 @@ msgstr ""
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
 #, c-format
+#, fuzzy
 msgid ""
 "This is not a <product> boot disk.\n"
-"Please insert boot disk %u."
+"Insert boot disk %u."
 msgstr ""
 "Dette er ikke en oppstartsdisk for <product>.\n"
 "Sett inn oppstartsdisk %u."
@@ -163,10 +166,8 @@ msgstr "Passord"
 
 # Keep the newlines and spaces after ':'!
 #. txt_password
-msgid ""
-"Enter your password:   \n"
-"\n"
-"\n"
+#, fuzzy
+msgid "Password:   \n\n\n"
 msgstr ""
 "Angi passordet:   \n"
 "\n"
@@ -211,7 +212,8 @@ msgid "Hard Disk Installation"
 msgstr "Harddiskinstallasjon"
 
 #. txt_hd_diskdevice
-msgid "Disk Device (scan all disks if empty)\n"
+#, fuzzy
+msgid "Disk Device (Scans All Disks If Empty)\n"
 msgstr "Diskenhet (søk på alle disker hvis tomt)\n"
 
 #. txt_directory
@@ -233,7 +235,8 @@ msgstr "Passord\n"
 
 # label for ftp user input
 #. txt_user1
-msgid "User (anonymous login if empty)\n"
+#, fuzzy
+msgid "User (Anonymous Login If Empty)\n"
 msgstr "Bruker (anonym innlogging hvis tomt)\n"
 
 # dialog title for nfs installation
@@ -243,7 +246,8 @@ msgstr "NFS-installasjon"
 
 # label for smb user input
 #. txt_user2
-msgid "User (using \"guest\" if empty)\n"
+#, fuzzy
+msgid "User (Uses \"guest\" If Empty)\n"
 msgstr "Bruker (bruker \"gjest\" hvis tomt)\n"
 
 # dialog title for smb installation
@@ -307,31 +311,31 @@ msgid "Share\n"
 msgstr ""
 
 #. txt_zenAuto
-msgid "Automatic mode"
+msgid "Automatic Mode"
 msgstr ""
 
 #. txt_zenManual
-msgid "Manual mode"
+msgid "Manual Mode"
 msgstr ""
 
 #. txt_zenConfig
-msgid "Configure parameters on ZEN partition"
+msgid "Configure Parameters on ZEN Partition"
 msgstr ""
 
 #. txt_zenInstall
-msgid "Install/Update ZEN partition"
+msgid "Install or Update ZEN Partition"
 msgstr ""
 
 #. txt_zenLilo
-msgid "Reinstall ZEN partition boot loader"
+msgid "Reinstall ZEN Partition Boot Loader"
 msgstr ""
 
 #. txt_zenDisable
-msgid "Disable ZEN partition"
+msgid "Disable ZEN Partition"
 msgstr ""
 
 #. txt_zenEnable
-msgid "Enable ZEN partition"
+msgid "Enable ZEN Partition"
 msgstr ""
 
 # video mode menu item
@@ -344,3 +348,9 @@ msgstr ""
 msgid "Firmware Test"
 msgstr ""
 
+#. txt_dud_file_msg
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
+"enter the driver update file names (separated\n"
+"by commas ',') here:\n"
+msgstr ""

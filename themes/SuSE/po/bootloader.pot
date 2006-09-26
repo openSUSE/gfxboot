@@ -99,12 +99,12 @@ msgstr ""
 
 # info box title
 #. txt_info_title
-msgid "Boot loader"
+msgid "Boot Loader"
 msgstr ""
 
 # error box title
 #. txt_error_title
-msgid "I/O error"
+msgid "I/O Error"
 msgstr ""
 
 # boot disk change dialog title
@@ -129,7 +129,7 @@ msgstr ""
 #, c-format
 msgid ""
 "This is not a <product> boot disk.\n"
-"Please insert boot disk %u."
+"Insert boot disk %u."
 msgstr ""
 
 # password dialog title
@@ -139,7 +139,7 @@ msgstr ""
 
 # Keep the newlines and spaces after ':'!
 #. txt_password
-msgid "Enter your password:   \n\n\n"
+msgid "Password:   \n\n\n"
 msgstr ""
 
 #. txt_dud_ready
@@ -178,7 +178,7 @@ msgid "Hard Disk Installation"
 msgstr ""
 
 #. txt_hd_diskdevice
-msgid "Disk Device (scan all disks if empty)\n"
+msgid "Disk Device (Scans All Disks If Empty)\n"
 msgstr ""
 
 #. txt_directory
@@ -200,7 +200,7 @@ msgstr ""
 
 # label for ftp user input
 #. txt_user1
-msgid "User (anonymous login if empty)\n"
+msgid "User (Anonymous Login If Empty)\n"
 msgstr ""
 
 # dialog title for nfs installation
@@ -210,7 +210,7 @@ msgstr ""
 
 # label for smb user input
 #. txt_user2
-msgid "User (using \"guest\" if empty)\n"
+msgid "User (Uses \"guest\" If Empty)\n"
 msgstr ""
 
 # dialog title for smb installation
@@ -274,31 +274,31 @@ msgid "Share\n"
 msgstr ""
 
 #. txt_zenAuto
-msgid "Automatic mode"
+msgid "Automatic Mode"
 msgstr ""
 
 #. txt_zenManual
-msgid "Manual mode"
+msgid "Manual Mode"
 msgstr ""
 
 #. txt_zenConfig
-msgid "Configure parameters on ZEN partition"
+msgid "Configure Parameters on ZEN Partition"
 msgstr ""
 
 #. txt_zenInstall
-msgid "Install/Update ZEN partition"
+msgid "Install or Update ZEN Partition"
 msgstr ""
 
 #. txt_zenLilo
-msgid "Reinstall ZEN partition boot loader"
+msgid "Reinstall ZEN Partition Boot Loader"
 msgstr ""
 
 #. txt_zenDisable
-msgid "Disable ZEN partition"
+msgid "Disable ZEN Partition"
 msgstr ""
 
 #. txt_zenEnable
-msgid "Enable ZEN partition"
+msgid "Enable ZEN Partition"
 msgstr ""
 
 # video mode menu item
@@ -311,3 +311,9 @@ msgstr ""
 msgid "Firmware Test"
 msgstr ""
 
+#. txt_dud_file_msg
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
+"enter the driver update file names (separated\n"
+"by commas ',') here:\n"
+msgstr ""

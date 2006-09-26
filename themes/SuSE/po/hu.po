@@ -122,12 +122,14 @@ msgstr ""
 
 # info box title
 #. txt_info_title
-msgid "Boot loader"
+#, fuzzy
+msgid "Boot Loader"
 msgstr "Rendszertöltő"
 
 # error box title
 #. txt_error_title
-msgid "I/O error"
+#, fuzzy
+msgid "I/O Error"
 msgstr "I/O hiba"
 
 # boot disk change dialog title
@@ -152,9 +154,10 @@ msgstr ""
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
 #, c-format
+#, fuzzy
 msgid ""
 "This is not a <product> boot disk.\n"
-"Please insert boot disk %u."
+"Insert boot disk %u."
 msgstr ""
 "Ez nem egy <product> indítólemez.\n"
 "Kérem, helyezze be a(z) %u indítólemezt."
@@ -166,10 +169,8 @@ msgstr "Jelszó"
 
 # Keep the newlines and spaces after ':'!
 #. txt_password
-msgid ""
-"Enter your password:   \n"
-"\n"
-"\n"
+#, fuzzy
+msgid "Password:   \n\n\n"
 msgstr ""
 "Kérem, adja meg a jelszót:   \n"
 "\n"
@@ -214,7 +215,8 @@ msgid "Hard Disk Installation"
 msgstr "Telepítés merevlemezről"
 
 #. txt_hd_diskdevice
-msgid "Disk Device (scan all disks if empty)\n"
+#, fuzzy
+msgid "Disk Device (Scans All Disks If Empty)\n"
 msgstr "Merevlemez-eszköz (az összes üres merevlemez ellenőrizése)\n"
 
 #. txt_directory
@@ -236,7 +238,8 @@ msgstr "Jelszó\n"
 
 # label for ftp user input
 #. txt_user1
-msgid "User (anonymous login if empty)\n"
+#, fuzzy
+msgid "User (Anonymous Login If Empty)\n"
 msgstr "Felhasználó (ha üres, akkor anonymous)\n"
 
 # dialog title for nfs installation
@@ -246,7 +249,8 @@ msgstr "NFS telepítés"
 
 # label for smb user input
 #. txt_user2
-msgid "User (using \"guest\" if empty)\n"
+#, fuzzy
+msgid "User (Uses \"guest\" If Empty)\n"
 msgstr "Felhasználó (ha üres, akkor \"guest\")\n"
 
 # dialog title for smb installation
@@ -310,31 +314,38 @@ msgid "Share\n"
 msgstr "Megosztás\n"
 
 #. txt_zenAuto
-msgid "Automatic mode"
+#, fuzzy
+msgid "Automatic Mode"
 msgstr "Automatikus"
 
 #. txt_zenManual
-msgid "Manual mode"
+#, fuzzy
+msgid "Manual Mode"
 msgstr "Kézi"
 
 #. txt_zenConfig
-msgid "Configure parameters on ZEN partition"
+#, fuzzy
+msgid "Configure Parameters on ZEN Partition"
 msgstr "ZEN partíció paramétereinek beállítása"
 
 #. txt_zenInstall
-msgid "Install/Update ZEN partition"
+#, fuzzy
+msgid "Install or Update ZEN Partition"
 msgstr "ZEN partíció telepítése/frissítése"
 
 #. txt_zenLilo
-msgid "Reinstall ZEN partition boot loader"
+#, fuzzy
+msgid "Reinstall ZEN Partition Boot Loader"
 msgstr "ZEN partíció betöltőjének újratelepítése"
 
 #. txt_zenDisable
-msgid "Disable ZEN partition"
+#, fuzzy
+msgid "Disable ZEN Partition"
 msgstr "ZEN partíció tiltása"
 
 #. txt_zenEnable
-msgid "Enable ZEN partition"
+#, fuzzy
+msgid "Enable ZEN Partition"
 msgstr "ZEN partíció engedélyezése"
 
 # video mode menu item
@@ -347,3 +358,9 @@ msgstr ""
 msgid "Firmware Test"
 msgstr ""
 
+#. txt_dud_file_msg
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
+"enter the driver update file names (separated\n"
+"by commas ',') here:\n"
+msgstr ""

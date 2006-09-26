@@ -97,12 +97,14 @@ msgstr "正在装载 memtest86\n\n\n"
 
 # info box title
 #. txt_info_title
-msgid "Boot loader"
+#, fuzzy
+msgid "Boot Loader"
 msgstr "引导装载程序"
 
 # error box title
 #. txt_error_title
-msgid "I/O error"
+#, fuzzy
+msgid "I/O Error"
 msgstr "I/O 错误"
 
 # boot disk change dialog title
@@ -123,7 +125,10 @@ msgstr "这是引导盘 %u。\n插入引导盘 %u。"
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
 #, c-format
-msgid "This is not a <product> boot disk.\nPlease insert boot disk %u."
+#, fuzzy
+msgid ""
+"This is not a <product> boot disk.\n"
+"Insert boot disk %u."
 msgstr "这不是 <product> 引导盘。\n请插入引导盘 %u。"
 
 # password dialog title
@@ -133,7 +138,8 @@ msgstr "口令"
 
 # Keep the newlines and spaces after ':'!
 #. txt_password
-msgid "Enter your password:   \n\n\n"
+#, fuzzy
+msgid "Password:   \n\n\n"
 msgstr "输入口令：   \n\n\n"
 
 #. txt_dud_ready
@@ -169,7 +175,8 @@ msgid "Hard Disk Installation"
 msgstr "硬盘安装"
 
 #. txt_hd_diskdevice
-msgid "Disk Device (scan all disks if empty)\n"
+#, fuzzy
+msgid "Disk Device (Scans All Disks If Empty)\n"
 msgstr "磁盘设备（如果未填写，则扫描所有磁盘）\n"
 
 #. txt_directory
@@ -191,7 +198,8 @@ msgstr "口令\n"
 
 # label for ftp user input
 #. txt_user1
-msgid "User (anonymous login if empty)\n"
+#, fuzzy
+msgid "User (Anonymous Login If Empty)\n"
 msgstr "用户（如果未填写，则以匿名身份登录）\n"
 
 # dialog title for nfs installation
@@ -201,7 +209,8 @@ msgstr "NFS 安装"
 
 # label for smb user input
 #. txt_user2
-msgid "User (using \"guest\" if empty)\n"
+#, fuzzy
+msgid "User (Uses \"guest\" If Empty)\n"
 msgstr "用户（如果没有填写，则使用\"guest\"身份登录）\n"
 
 # dialog title for smb installation
@@ -265,31 +274,38 @@ msgid "Share\n"
 msgstr "共享\n"
 
 #. txt_zenAuto
-msgid "Automatic mode"
+#, fuzzy
+msgid "Automatic Mode"
 msgstr "自动方式"
 
 #. txt_zenManual
-msgid "Manual mode"
+#, fuzzy
+msgid "Manual Mode"
 msgstr "手动方式"
 
 #. txt_zenConfig
-msgid "Configure parameters on ZEN partition"
+#, fuzzy
+msgid "Configure Parameters on ZEN Partition"
 msgstr "在 ZEN 分区上配置参数"
 
 #. txt_zenInstall
-msgid "Install/Update ZEN partition"
+#, fuzzy
+msgid "Install or Update ZEN Partition"
 msgstr "安装/更新 ZEN 分区"
 
 #. txt_zenLilo
-msgid "Reinstall ZEN partition boot loader"
+#, fuzzy
+msgid "Reinstall ZEN Partition Boot Loader"
 msgstr "重新安装 ZEN 分区引导装载程序"
 
 #. txt_zenDisable
-msgid "Disable ZEN partition"
+#, fuzzy
+msgid "Disable ZEN Partition"
 msgstr "禁用 ZEN 分区"
 
 #. txt_zenEnable
-msgid "Enable ZEN partition"
+#, fuzzy
+msgid "Enable ZEN Partition"
 msgstr "启用 ZEN 分区"
 
 # video mode menu item
@@ -302,3 +318,9 @@ msgstr ""
 msgid "Firmware Test"
 msgstr ""
 
+#. txt_dud_file_msg
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
+"enter the driver update file names (separated\n"
+"by commas ',') here:\n"
+msgstr ""
