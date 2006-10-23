@@ -432,8 +432,10 @@
   } if
 
   xmenu.install {
-    install.option "" ne {
-      install.option "%s " bc.cmd dup length add sprintf
+    config.noinstallopt menu.texts menu.entry get iselement not {
+      install.option "" ne {
+        install.option "%s " bc.cmd dup length add sprintf
+      } if
     } if
   } if
 

@@ -886,13 +886,31 @@ def
 } def
 
 
-% Bitmask for menu entries with no boot option input field.
+% List of menu entries with no boot option input field.
 %
-% (  -- int )
+% (  -- array )
 %
 /config.nobootoptions {
-  "nobootoptions" getgfxconfig dup .undef ne { cvn } { pop 0 } ifelse
+  "nobootoptions" getgfxconfig dup .undef ne {
+    ',' split
+  } {
+    pop [ ]
+  } ifelse
   /config.nobootoptions over def
+} def
+
+
+% List of menu entries which should not get an 'install' option appended.
+%
+% (  -- array )
+%
+/config.noinstallopt {
+  "noinstallopt" getgfxconfig dup .undef ne {
+    ',' split
+  } {
+    pop [ ]
+  } ifelse
+  /config.noinstallopt over def
 } def
 
 
@@ -971,6 +989,19 @@ def
 %
 /aget {
   over length over gt { get } { pop pop .undef } ifelse
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Search for array element.
+%
+% ( array key -- bool )
+%
+/iselement {
+  false rot {
+    2 index eq { pop true exit } if
+  } forall
+  exch pop
 } def
 
 

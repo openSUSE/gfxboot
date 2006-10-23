@@ -126,7 +126,7 @@
 
   free
 
-  config.nobootoptions 1 menu.entry shl and {
+  config.nobootoptions menu.texts menu.entry get iselement {
     boot.ed.list 0 get .inp_show false put
   } if
 
