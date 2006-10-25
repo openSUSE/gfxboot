@@ -7,8 +7,7 @@
 # Aleksey Osipov <aliks-os@yandex.ru>, 2006.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: bootloader\n"
+msgstr "Project-Id-Version: bootloader\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: 2006-01-20 21:42+0300\n"
 "Last-Translator: Aleksey Osipov <aliks-os@yandex.ru>\n"
@@ -80,11 +79,9 @@ msgid "Exiting..."
 msgstr "Выход..."
 
 #. txt_exit_dialog
-msgid ""
-"You are leaving the graphical boot menu and\n"
+msgid "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
-msgstr ""
-"Вы покинули графическое меню загрузки и\n"
+msgstr "Вы покинули графическое меню загрузки и\n"
 "запустили текстовый режим интерфейса."
 
 #. txt_help
@@ -98,23 +95,19 @@ msgstr "Запуск..."
 
 # Keep the three newlines!
 #. txt_load_kernel
-msgid ""
-"Loading Linux Kernel\n"
+msgid "Loading Linux Kernel\n"
 "\n"
 "\n"
-msgstr ""
-"Загрузка ядра Linux\n"
+msgstr "Загрузка ядра Linux\n"
 "\n"
 "\n"
 
 # Keep the three newlines!
 #. txt_load_memtest
-msgid ""
-"Loading memtest86\n"
+msgid "Loading memtest86\n"
 "\n"
 "\n"
-msgstr ""
-"Загрузка memtest86\n"
+msgstr "Загрузка memtest86\n"
 "\n"
 "\n"
 
@@ -142,22 +135,18 @@ msgstr "Вставьте загрузочный диск %u."
 
 #. txt_insert_disk2
 #, c-format
-msgid ""
-"This is boot disk %u.\n"
+msgid "This is boot disk %u.\n"
 "Insert boot disk %u."
-msgstr ""
-"Это загрузочный диск %u.\n"
+msgstr "Это загрузочный диск %u.\n"
 "Вставьте загрузочный диск %u."
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
 #, c-format
 #, fuzzy
-msgid ""
-"This is not a <product> boot disk.\n"
+msgid "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
-msgstr ""
-"Это не <product> загрузочный диск.\n"
+msgstr "Это не <product> загрузочный диск.\n"
 "Пожалуйста вставьте загрузочный диск %u."
 
 # password dialog title
@@ -168,9 +157,10 @@ msgstr "Пароль"
 # Keep the newlines and spaces after ':'!
 #. txt_password
 #, fuzzy
-msgid "Password:   \n\n\n"
-msgstr ""
-"Введите пароль:   \n"
+msgid "Password:   \n"
+"\n"
+"\n"
+msgstr "Введите пароль:   \n"
 "\n"
 "\n"
 
@@ -184,12 +174,10 @@ msgid "DVD Error"
 msgstr "Ошибка DVD"
 
 #. txt_dvd_warning2
-msgid ""
-"This is a two-sided DVD. You have booted from the second side.\n"
+msgid "This is a two-sided DVD. You have booted from the second side.\n"
 "\n"
 "Turn the DVD over then continue."
-msgstr ""
-"Это двусторонний DVD диск. Вы загрузились со второй стороны.\n"
+msgstr "Это двусторонний DVD диск. Вы загрузились со второй стороны.\n"
 "\n"
 "Переверните DVD и продолжите."
 
@@ -350,8 +338,7 @@ msgid "Firmware Test"
 msgstr ""
 
 #. txt_dud_file_msg
-msgid ""
-"To load driver updates directly from CD-ROM,\n"
+msgid "To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""

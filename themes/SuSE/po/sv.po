@@ -1,8 +1,7 @@
 # Copyright (C) 2004 SUSE LINUX AG
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: bootloader\n"
+msgstr "Project-Id-Version: bootloader\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: 2005-08-05 13:19+0100\n"
 "Last-Translator: Anders Norrbring <anders@norrbring.se>\n"
@@ -77,11 +76,9 @@ msgid "Exiting..."
 msgstr "Avslutar..."
 
 #. txt_exit_dialog
-msgid ""
-"You are leaving the graphical boot menu and\n"
+msgid "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
-msgstr ""
-"Du är på väg att lämna den grafiska startmenyn och\n"
+msgstr "Du är på väg att lämna den grafiska startmenyn och\n"
 "starta textlägesgränssnittet."
 
 #. txt_help
@@ -95,23 +92,19 @@ msgstr "Startar..."
 
 # Keep the three newlines!
 #. txt_load_kernel
-msgid ""
-"Loading Linux Kernel\n"
+msgid "Loading Linux Kernel\n"
 "\n"
 "\n"
-msgstr ""
-"Laddar Linuxkärnan\n"
+msgstr "Laddar Linuxkärnan\n"
 "\n"
 "\n"
 
 # Keep the three newlines!
 #. txt_load_memtest
-msgid ""
-"Loading memtest86\n"
+msgid "Loading memtest86\n"
 "\n"
 "\n"
-msgstr ""
-"Laddar memtest86\n"
+msgstr "Laddar memtest86\n"
 "\n"
 "\n"
 
@@ -139,22 +132,18 @@ msgstr "Sätt i startdisk %u."
 
 #. txt_insert_disk2
 #, c-format
-msgid ""
-"This is boot disk %u.\n"
+msgid "This is boot disk %u.\n"
 "Insert boot disk %u."
-msgstr ""
-"Det här är startdisk %u.\n"
+msgstr "Det här är startdisk %u.\n"
 "Sätt i startdisk %u."
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
 #, c-format
 #, fuzzy
-msgid ""
-"This is not a <product> boot disk.\n"
+msgid "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
-msgstr ""
-"Det här är inte en <product>-startdisk.\n"
+msgstr "Det här är inte en <product>-startdisk.\n"
 "Sätt i startdisk %u."
 
 # password dialog title
@@ -165,9 +154,10 @@ msgstr "Lösenord"
 # Keep the newlines and spaces after ':'!
 #. txt_password
 #, fuzzy
-msgid "Password:   \n\n\n"
-msgstr ""
-"Ange ditt lösenord:   \n"
+msgid "Password:   \n"
+"\n"
+"\n"
+msgstr "Ange ditt lösenord:   \n"
 "\n"
 "\n"
 
@@ -181,12 +171,10 @@ msgid "DVD Error"
 msgstr "DVD fel"
 
 #. txt_dvd_warning2
-msgid ""
-"This is a two-sided DVD. You have booted from the second side.\n"
+msgid "This is a two-sided DVD. You have booted from the second side.\n"
 "\n"
 "Turn the DVD over then continue."
-msgstr ""
-"Det här är en dubbelsidig DVD. Du har startat från den andra sidan.\n"
+msgstr "Det här är en dubbelsidig DVD. Du har startat från den andra sidan.\n"
 "\n"
 "Vänd på DVD-skivan och fortsätt sedan."
 
@@ -347,8 +335,7 @@ msgid "Firmware Test"
 msgstr ""
 
 #. txt_dud_file_msg
-msgid ""
-"To load driver updates directly from CD-ROM,\n"
+msgid "To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""

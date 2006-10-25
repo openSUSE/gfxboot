@@ -2,8 +2,7 @@
 # Copyright (C) 2004 SUSE LINUX AG
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: bootloader\n"
+msgstr "Project-Id-Version: bootloader\n"
 "PO-Revision-Date: 2006-06-01 11:29\n"
 "Last-Translator: Novell Language <language@novell.com>\n"
 "Language-Team: Novell Language <language@novell.com>\n"
@@ -73,8 +72,10 @@ msgid "Exiting..."
 msgstr "正在離開..."
 
 #. txt_exit_dialog
-msgid "You are leaving the graphical boot menu and\nstarting the text mode interface."
-msgstr "您將離開圖形開機功能表並\n啟動文字模式介面。"
+msgid "You are leaving the graphical boot menu and\n"
+"starting the text mode interface."
+msgstr "您將離開圖形開機功能表並\n"
+"啟動文字模式介面。"
 
 #. txt_help
 msgid "Help"
@@ -87,13 +88,21 @@ msgstr "正在啟動..."
 
 # Keep the three newlines!
 #. txt_load_kernel
-msgid "Loading Linux Kernel\n\n\n"
-msgstr "載入 Linux 核心\n\n\n"
+msgid "Loading Linux Kernel\n"
+"\n"
+"\n"
+msgstr "載入 Linux 核心\n"
+"\n"
+"\n"
 
 # Keep the three newlines!
 #. txt_load_memtest
-msgid "Loading memtest86\n\n\n"
-msgstr "載入 memtest86\n\n\n"
+msgid "Loading memtest86\n"
+"\n"
+"\n"
+msgstr "載入 memtest86\n"
+"\n"
+"\n"
 
 # info box title
 #. txt_info_title
@@ -119,17 +128,19 @@ msgstr "插入開機磁片 %u。"
 
 #. txt_insert_disk2
 #, c-format
-msgid "This is boot disk %u.\nInsert boot disk %u."
-msgstr "這是開機磁片 %u。\n插入開機磁片 %u。"
+msgid "This is boot disk %u.\n"
+"Insert boot disk %u."
+msgstr "這是開機磁片 %u。\n"
+"插入開機磁片 %u。"
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
 #, c-format
 #, fuzzy
-msgid ""
-"This is not a <product> boot disk.\n"
+msgid "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
-msgstr "這不是 <product> 開機磁片。\n請插入開機磁片 %u。"
+msgstr "這不是 <product> 開機磁片。\n"
+"請插入開機磁片 %u。"
 
 # password dialog title
 #. txt_password_title
@@ -139,8 +150,12 @@ msgstr "密碼"
 # Keep the newlines and spaces after ':'!
 #. txt_password
 #, fuzzy
-msgid "Password:   \n\n\n"
-msgstr "輸入您的密碼：\n\n\n"
+msgid "Password:   \n"
+"\n"
+"\n"
+msgstr "輸入您的密碼：\n"
+"\n"
+"\n"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
@@ -152,8 +167,12 @@ msgid "DVD Error"
 msgstr "DVD 錯誤"
 
 #. txt_dvd_warning2
-msgid "This is a two-sided DVD. You have booted from the second side.\n\nTurn the DVD over then continue."
-msgstr "這是雙面 DVD。您是從第二面開機。\n\n請將 DVD 翻面，然後繼續。"
+msgid "This is a two-sided DVD. You have booted from the second side.\n"
+"\n"
+"Turn the DVD over then continue."
+msgstr "這是雙面 DVD。您是從第二面開機。\n"
+"\n"
+"請將 DVD 翻面，然後繼續。"
 
 # power off dialog title
 #. txt_power_off_title
@@ -319,8 +338,7 @@ msgid "Firmware Test"
 msgstr ""
 
 #. txt_dud_file_msg
-msgid ""
-"To load driver updates directly from CD-ROM,\n"
+msgid "To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""

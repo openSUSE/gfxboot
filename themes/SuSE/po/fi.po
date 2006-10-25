@@ -7,8 +7,7 @@
 # Jyri Palokangas <jmp@netti.fi>, 2005, 2006.
 # Jami Saarikoski <jami.saarikoski@gmail.com>, 2006.
 msgid ""
-msgstr ""
-"Project-Id-Version: fi\n"
+msgstr "Project-Id-Version: fi\n"
 "PO-Revision-Date: 2006-04-18 10:06+0300\n"
 "Last-Translator: Jyri Palokangas <jmp@netti.fi>\n"
 "Language-Team: suomi <yast-trans-fi@kotoistaminen.novell.fi>\n"
@@ -79,11 +78,9 @@ msgid "Exiting..."
 msgstr "Poistutaan..."
 
 #. txt_exit_dialog
-msgid ""
-"You are leaving the graphical boot menu and\n"
+msgid "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
-msgstr ""
-"Olet poistumassa graafisesta käynnistysvalikosta ja\n"
+msgstr "Olet poistumassa graafisesta käynnistysvalikosta ja\n"
 "käynnistämässä tekstipohjaisen liittymän."
 
 #. txt_help
@@ -97,23 +94,19 @@ msgstr "Käynnistetään..."
 
 # Keep the three newlines!
 #. txt_load_kernel
-msgid ""
-"Loading Linux Kernel\n"
+msgid "Loading Linux Kernel\n"
 "\n"
 "\n"
-msgstr ""
-"Linux ytimen lataaminen\n"
+msgstr "Linux ytimen lataaminen\n"
 "\n"
 "\n"
 
 # Keep the three newlines!
 #. txt_load_memtest
-msgid ""
-"Loading memtest86\n"
+msgid "Loading memtest86\n"
 "\n"
 "\n"
-msgstr ""
-"Ladataan memtest86\n"
+msgstr "Ladataan memtest86\n"
 "\n"
 "\n"
 
@@ -141,22 +134,18 @@ msgstr "Anna käynnistyslevyke %u."
 
 #. txt_insert_disk2
 #, c-format
-msgid ""
-"This is boot disk %u.\n"
+msgid "This is boot disk %u.\n"
 "Insert boot disk %u."
-msgstr ""
-"Tämä on käynnistyslevyke %u.\n"
+msgstr "Tämä on käynnistyslevyke %u.\n"
 "Anna käynnistyslevyke %u."
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
 #, c-format
 #, fuzzy
-msgid ""
-"This is not a <product> boot disk.\n"
+msgid "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
-msgstr ""
-"Tämä ei ole <product> käynnistyslevyke.\n"
+msgstr "Tämä ei ole <product> käynnistyslevyke.\n"
 "Anna käynnistyslevyke %u."
 
 # password dialog title
@@ -167,9 +156,10 @@ msgstr "Salasana"
 # Keep the newlines and spaces after ':'!
 #. txt_password
 #, fuzzy
-msgid "Password:   \n\n\n"
-msgstr ""
-"Anna salasanasi:   \n"
+msgid "Password:   \n"
+"\n"
+"\n"
+msgstr "Anna salasanasi:   \n"
 "\n"
 "\n"
 
@@ -183,12 +173,10 @@ msgid "DVD Error"
 msgstr "DVD virhe"
 
 #. txt_dvd_warning2
-msgid ""
-"This is a two-sided DVD. You have booted from the second side.\n"
+msgid "This is a two-sided DVD. You have booted from the second side.\n"
 "\n"
 "Turn the DVD over then continue."
-msgstr ""
-"Tämä on kaksipuoleinen DVD. Olet käynnistänyt kakkospuolelta.\n"
+msgstr "Tämä on kaksipuoleinen DVD. Olet käynnistänyt kakkospuolelta.\n"
 "\n"
 "Käännä DVD toisinpäin ja jatka sitten."
 
@@ -349,8 +337,7 @@ msgid "Firmware Test"
 msgstr ""
 
 #. txt_dud_file_msg
-msgid ""
-"To load driver updates directly from CD-ROM,\n"
+msgid "To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""

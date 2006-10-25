@@ -2,8 +2,7 @@
 # Copyright (C) 2005 SUSE Linux GmbH
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: bootloader\n"
+msgstr "Project-Id-Version: bootloader\n"
 "PO-Revision-Date: 2005-07-27 11:49+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <i18n@suse.de>\n"
@@ -73,8 +72,7 @@ msgid "Exiting..."
 msgstr ""
 
 #. txt_exit_dialog
-msgid ""
-"You are leaving the graphical boot menu and\n"
+msgid "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
 
@@ -89,12 +87,16 @@ msgstr ""
 
 # Keep the three newlines!
 #. txt_load_kernel
-msgid "Loading Linux Kernel\n\n\n"
+msgid "Loading Linux Kernel\n"
+"\n"
+"\n"
 msgstr ""
 
 # Keep the three newlines!
 #. txt_load_memtest
-msgid "Loading memtest86\n\n\n"
+msgid "Loading memtest86\n"
+"\n"
+"\n"
 msgstr ""
 
 # info box title
@@ -119,16 +121,14 @@ msgstr ""
 
 #. txt_insert_disk2
 #, c-format
-msgid ""
-"This is boot disk %u.\n"
+msgid "This is boot disk %u.\n"
 "Insert boot disk %u."
 msgstr ""
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
 #, c-format
-msgid ""
-"This is not a <product> boot disk.\n"
+msgid "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
 
@@ -139,7 +139,9 @@ msgstr ""
 
 # Keep the newlines and spaces after ':'!
 #. txt_password
-msgid "Password:   \n\n\n"
+msgid "Password:   \n"
+"\n"
+"\n"
 msgstr ""
 
 #. txt_dud_ready
@@ -152,8 +154,7 @@ msgid "DVD Error"
 msgstr ""
 
 #. txt_dvd_warning2
-msgid ""
-"This is a two-sided DVD. You have booted from the second side.\n"
+msgid "This is a two-sided DVD. You have booted from the second side.\n"
 "\n"
 "Turn the DVD over then continue."
 msgstr ""
@@ -312,8 +313,7 @@ msgid "Firmware Test"
 msgstr ""
 
 #. txt_dud_file_msg
-msgid ""
-"To load driver updates directly from CD-ROM,\n"
+msgid "To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""

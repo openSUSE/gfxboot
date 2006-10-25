@@ -5,8 +5,7 @@
 # Martin Møller <martin@martinm-76.dk>, 2005.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: da\n"
+msgstr "Project-Id-Version: da\n"
 "PO-Revision-Date: 2005-08-12 16:33+0200\n"
 "Last-Translator: Martin Møller <martin@martinm-76.dk>\n"
 "Language-Team: Dansk <da@li.org>\n"
@@ -77,11 +76,9 @@ msgid "Exiting..."
 msgstr "Afslutter..."
 
 #. txt_exit_dialog
-msgid ""
-"You are leaving the graphical boot menu and\n"
+msgid "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
-msgstr ""
-"Du forlader nu den grafiske opstartsmenu og\n"
+msgstr "Du forlader nu den grafiske opstartsmenu og\n"
 "starter tekstbrugerfladen i stedet."
 
 #. txt_help
@@ -95,23 +92,19 @@ msgstr "Starter..."
 
 # Keep the three newlines!
 #. txt_load_kernel
-msgid ""
-"Loading Linux Kernel\n"
+msgid "Loading Linux Kernel\n"
 "\n"
 "\n"
-msgstr ""
-"Indlæser Linuxkernen\n"
+msgstr "Indlæser Linuxkernen\n"
 "\n"
 "\n"
 
 # Keep the three newlines!
 #. txt_load_memtest
-msgid ""
-"Loading memtest86\n"
+msgid "Loading memtest86\n"
 "\n"
 "\n"
-msgstr ""
-"Indlæser memtest86\n"
+msgstr "Indlæser memtest86\n"
 "\n"
 "\n"
 
@@ -139,22 +132,18 @@ msgstr "Indsæt opstartsdisk %u."
 
 #. txt_insert_disk2
 #, c-format
-msgid ""
-"This is boot disk %u.\n"
+msgid "This is boot disk %u.\n"
 "Insert boot disk %u."
-msgstr ""
-"Dette er opstartsdisk %u.\n"
+msgstr "Dette er opstartsdisk %u.\n"
 "Indsæt opstartsdisk %u."
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
 #, c-format
 #, fuzzy
-msgid ""
-"This is not a <product> boot disk.\n"
+msgid "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
-msgstr ""
-"Dette er ikke en SUSE LINUX 10.0 opstartsdisk.\n"
+msgstr "Dette er ikke en SUSE LINUX 10.0 opstartsdisk.\n"
 "Vær venlig at indsætte opstartsdisk %u."
 
 # password dialog title
@@ -165,9 +154,10 @@ msgstr "Adgangskode"
 # Keep the newlines and spaces after ':'!
 #. txt_password
 #, fuzzy
-msgid "Password:   \n\n\n"
-msgstr ""
-"Skiv dit kodeord her:   \n"
+msgid "Password:   \n"
+"\n"
+"\n"
+msgstr "Skiv dit kodeord her:   \n"
 "\n"
 "\n"
 
@@ -181,12 +171,10 @@ msgid "DVD Error"
 msgstr "DVD fejl"
 
 #. txt_dvd_warning2
-msgid ""
-"This is a two-sided DVD. You have booted from the second side.\n"
+msgid "This is a two-sided DVD. You have booted from the second side.\n"
 "\n"
 "Turn the DVD over then continue."
-msgstr ""
-"Dette er en tosidet DVD. Du har startet op fra den anden side.\n"
+msgstr "Dette er en tosidet DVD. Du har startet op fra den anden side.\n"
 "\n"
 "Vend DVD'en om og prøv igen."
 
@@ -347,8 +335,7 @@ msgid "Firmware Test"
 msgstr ""
 
 #. txt_dud_file_msg
-msgid ""
-"To load driver updates directly from CD-ROM,\n"
+msgid "To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
