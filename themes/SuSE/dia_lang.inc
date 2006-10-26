@@ -34,6 +34,7 @@
   [ "el"    "Ελληνικά" ]
   [ "fi"    "Suomi" ]
   [ "he"    "תירבע" ]
+  [ "id"    "Indonesia" ]
   [ "it"    "Italiano" ]
   [ "ja"    "日本語" ]
   [ "hi"    "\u0939\u093f\u0928\u094d\u0926\u0940" ]	% Hindi
@@ -43,6 +44,7 @@
   [ "km_KH" "Khmer" ]
   [ "ko"    "한글" ]
   [ "lt"    "Lietuvių" ]
+  [ "mk"    "Македонски" ]
   [ "nl"    "Nederlands" ]
   [ "nb"    "Norsk" ]
   [ "pl"    "Polski" ]
