@@ -288,54 +288,62 @@ msgstr ""
 
 #. txt_yes
 msgid "Yes"
-msgstr ""
+msgstr "ਹਾਂ"
 
 #. txt_no
 msgid "No"
-msgstr ""
+msgstr "ਨਹੀਂ"
 
 # menu item for selecting a file
 #. txt_file
+#, fuzzy
 msgid "File"
-msgstr ""
+msgstr "ਫਾਇਲ(_F)"
 
 # input label: share as in "Windows share" (SMB)
 #. txt_share
+#, fuzzy
 msgid "Share\n"
-msgstr ""
+msgstr "ਸਰਵਰ\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
 msgstr ""
 
 #. txt_zenManual
+#, fuzzy
 msgid "Manual Mode"
-msgstr ""
+msgstr "ਦਸਤੀ ਸੈਟਿੰਗ"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
 msgstr ""
 
 #. txt_zenInstall
+#, fuzzy
 msgid "Install or Update ZEN Partition"
-msgstr ""
+msgstr "ਇੰਸਟਾਲੇਸ਼ਨ"
 
 #. txt_zenLilo
+#, fuzzy
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr ""
+msgstr "ਬੂਟ-ਲੋਡਰ ਤਿਆਰ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
 
 #. txt_zenDisable
+#, fuzzy
 msgid "Disable ZEN Partition"
-msgstr ""
+msgstr "ਇੰਸਟਾਲੇਸ਼ਨ"
 
 #. txt_zenEnable
+#, fuzzy
 msgid "Enable ZEN Partition"
-msgstr ""
+msgstr "ਇੰਸਟਾਲੇਸ਼ਨ"
 
 # video mode menu item
 #. txt_text_mode
+#, fuzzy
 msgid "Text Mode"
-msgstr ""
+msgstr "ਮਾਊਸ ਮਾਡਲ"
 
 # menu item, like 'memory test'
 #. txt_firmware

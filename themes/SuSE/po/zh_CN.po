@@ -331,8 +331,9 @@ msgstr "启用 ZEN 分区"
 
 # video mode menu item
 #. txt_text_mode
+#, fuzzy
 msgid "Text Mode"
-msgstr ""
+msgstr "新方式"
 
 # menu item, like 'memory test'
 #. txt_firmware

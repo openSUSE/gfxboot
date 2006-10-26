@@ -118,13 +118,11 @@ msgstr ""
 
 # info box title
 #. txt_info_title
-#, fuzzy
 msgid "Boot Loader"
 msgstr "Program rozruchowy"
 
 # error box title
 #. txt_error_title
-#, fuzzy
 msgid "I/O Error"
 msgstr "Błąd wejścia/wyjścia"
 
@@ -149,7 +147,7 @@ msgstr ""
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format,fuzzy
+#, c-format
 msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
@@ -188,7 +186,7 @@ msgstr "Wyłączanie"
 
 #. txt_power_off
 msgid "Halt the system now?"
-msgstr "Czy zatrzymać system?"
+msgstr "Wstrzymać system?"
 
 # menu entry for hard disk installation
 #. txt_harddisk
@@ -201,9 +199,8 @@ msgid "Hard Disk Installation"
 msgstr "Instalacja na dysku twardym"
 
 #. txt_hd_diskdevice
-#, fuzzy
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Dysk twardy (skanuj wszystkie dyski, jeśli puste)\n"
+msgstr "Dysk do skanowania (skanuj wszystkie dyski, jeśli puste)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -224,9 +221,8 @@ msgstr "Hasło\n"
 
 # label for ftp user input
 #. txt_user1
-#, fuzzy
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "Użytkownik (\"anonymous\" jeśli puste)\n"
+msgstr "Użytkownik (używa \"anonymous\" jeśli puste)\n"
 
 # dialog title for nfs installation
 #. txt_nfs_title
@@ -235,9 +231,8 @@ msgstr "Instalacja NFS"
 
 # label for smb user input
 #. txt_user2
-#, fuzzy
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "Użytkownik (\"guest\", jeśli puste)\n"
+msgstr "Użytkownik (używa \"guest\", jeśli puste)\n"
 
 # dialog title for smb installation
 #. txt_smb_title
@@ -292,54 +287,57 @@ msgstr "Nie"
 # menu item for selecting a file
 #. txt_file
 msgid "File"
-msgstr ""
+msgstr "Plik"
 
 # input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr ""
+msgstr "Udostępnij\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
-msgstr ""
+msgstr "Tryb automatyczny"
 
 #. txt_zenManual
 msgid "Manual Mode"
-msgstr ""
+msgstr "Tryb ręczny"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr ""
+msgstr "Konfiguruj parametry partycji ZEN"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr ""
+msgstr "Instaluj lub Aktualizuj partycję ZEN"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr ""
+msgstr "Przeinstaluj program rozruchowy z partycji ZEN"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr ""
+msgstr "Wyłącz partycję ZEN"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
-msgstr ""
+msgstr "Włącz partycję ZEN"
 
 # video mode menu item
 #. txt_text_mode
 msgid "Text Mode"
-msgstr ""
+msgstr "Tryb tekstowy"
 
 # menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr ""
+msgstr "Test oprogramowania sprzętowego"
 
 #. txt_dud_file_msg
+#, no-strict-newlines
 msgid ""
 "To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
+"Aby załadować aktualizacje sterowników bezpośrednio z CD\n"
+" podaj nazwy plików z aktualizacjami (oddzielone przecinkami ','):\n"

@@ -306,16 +306,18 @@ msgid "Automatic Mode"
 msgstr ""
 
 #. txt_zenManual
+#, fuzzy
 msgid "Manual Mode"
-msgstr ""
+msgstr "Dual Head режим"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
 msgstr ""
 
 #. txt_zenInstall
+#, fuzzy
 msgid "Install or Update ZEN Partition"
-msgstr ""
+msgstr "Инсталирани кръпки: "
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
@@ -331,8 +333,9 @@ msgstr ""
 
 # video mode menu item
 #. txt_text_mode
+#, fuzzy
 msgid "Text Mode"
-msgstr ""
+msgstr "Модел на мишката"
 
 # menu item, like 'memory test'
 #. txt_firmware

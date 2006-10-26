@@ -313,6 +313,7 @@ msgid "Firmware Test"
 msgstr ""
 
 #. txt_dud_file_msg
+#, no-strict-newlines  
 msgid ""
 "To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"

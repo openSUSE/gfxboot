@@ -312,8 +312,9 @@ msgid "Automatic Mode"
 msgstr ""
 
 #. txt_zenManual
+#, fuzzy
 msgid "Manual Mode"
-msgstr ""
+msgstr "Ručné nastavenie"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"

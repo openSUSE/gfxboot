@@ -117,13 +117,11 @@ msgstr ""
 
 # info box title
 #. txt_info_title
-#, fuzzy
 msgid "Boot Loader"
 msgstr "Zavaděč"
 
 # error box title
 #. txt_error_title
-#, fuzzy
 msgid "I/O Error"
 msgstr "Chyba I/O"
 
@@ -148,7 +146,7 @@ msgstr ""
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format,fuzzy
+#, c-format
 msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
@@ -200,7 +198,6 @@ msgid "Hard Disk Installation"
 msgstr "Instalace z disku"
 
 #. txt_hd_diskdevice
-#, fuzzy
 msgid "Disk Device (Scans All Disks If Empty)\n"
 msgstr "Disk (při nevyplnění prohledávání všech disků)\n"
 
@@ -223,9 +220,8 @@ msgstr "Heslo\n"
 
 # label for ftp user input
 #. txt_user1
-#, fuzzy
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "Uživatel (při nevyplnění nastaveno anonymní přihlášení)\n"
+msgstr "Uživatel (při nevyplnění anonymní přihlášení)\n"
 
 # dialog title for nfs installation
 #. txt_nfs_title
@@ -234,7 +230,6 @@ msgstr "NFS instalace"
 
 # label for smb user input
 #. txt_user2
-#, fuzzy
 msgid "User (Uses \"guest\" If Empty)\n"
 msgstr "Uživatel (při nevyplnění nastaveno na \"guest\")\n"
 
@@ -299,49 +294,42 @@ msgid "Share\n"
 msgstr "Sdílení\n"
 
 #. txt_zenAuto
-#, fuzzy
 msgid "Automatic Mode"
 msgstr "Automatický režim"
 
 #. txt_zenManual
-#, fuzzy
 msgid "Manual Mode"
 msgstr "Ruční režim"
 
 #. txt_zenConfig
-#, fuzzy
 msgid "Configure Parameters on ZEN Partition"
-msgstr "Nastavit parametry pro ZEN oddíly"
+msgstr "Nastavit parametry pro ZEN oddíl"
 
 #. txt_zenInstall
-#, fuzzy
 msgid "Install or Update ZEN Partition"
-msgstr "Instalovat/aktualizovat ZEN oddíly"
+msgstr "Instalovat či aktualizovat ZEN oddíl"
 
 #. txt_zenLilo
-#, fuzzy
 msgid "Reinstall ZEN Partition Boot Loader"
 msgstr "Reinstalovat zavaděč ZEN oddílu"
 
 #. txt_zenDisable
-#, fuzzy
 msgid "Disable ZEN Partition"
 msgstr "Zakázat ZEN oddíl"
 
 #. txt_zenEnable
-#, fuzzy
 msgid "Enable ZEN Partition"
 msgstr "Povolit ZEN oddíl"
 
 # video mode menu item
 #. txt_text_mode
 msgid "Text Mode"
-msgstr ""
+msgstr "Textový režim"
 
 # menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr ""
+msgstr "Test firmwaru"
 
 #. txt_dud_file_msg
 msgid ""
@@ -349,3 +337,6 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
+"Pro nahrání aktualizací ovladačů přímo z CD-ROM,\n"
+"zadejte jména souborů aktualizací (oddělená\n"
+"čárkami ','):\n"

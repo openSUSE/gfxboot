@@ -304,8 +304,9 @@ msgid "Automatic Mode"
 msgstr ""
 
 #. txt_zenManual
+#, fuzzy
 msgid "Manual Mode"
-msgstr ""
+msgstr "Κατάσταση Dual Head"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
@@ -329,8 +330,9 @@ msgstr ""
 
 # video mode menu item
 #. txt_text_mode
+#, fuzzy
 msgid "Text Mode"
-msgstr ""
+msgstr "Μοντέλο ποντικιού"
 
 # menu item, like 'memory test'
 #. txt_firmware

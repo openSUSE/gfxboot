@@ -183,7 +183,7 @@ msgstr ""
 # power off dialog title
 #. txt_power_off_title
 msgid "Power Off"
-msgstr "Power off"
+msgstr "Spegnimento"
 
 #. txt_power_off
 msgid "Halt the system now?"
@@ -335,8 +335,9 @@ msgstr "Abilita partizione ZEN"
 
 # video mode menu item
 #. txt_text_mode
+#, fuzzy
 msgid "Text Mode"
-msgstr ""
+msgstr "Nuovo modo"
 
 # menu item, like 'memory test'
 #. txt_firmware

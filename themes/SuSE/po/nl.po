@@ -21,7 +21,7 @@ msgstr ""
 # ok button label
 #. txt_ok
 msgid "OK"
-msgstr "Ok"
+msgstr "OK"
 
 # cancel button label
 #. txt_cancel
@@ -120,13 +120,11 @@ msgstr ""
 
 # info box title
 #. txt_info_title
-#, fuzzy
 msgid "Boot Loader"
 msgstr "Bootloader"
 
 # error box title
 #. txt_error_title
-#, fuzzy
 msgid "I/O Error"
 msgstr "I/O-fout"
 
@@ -151,7 +149,7 @@ msgstr ""
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format,fuzzy
+#, c-format
 msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
@@ -203,9 +201,8 @@ msgid "Hard Disk Installation"
 msgstr "Installatie van harde schijf"
 
 #. txt_hd_diskdevice
-#, fuzzy
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Schijfapparaat (indien leeg: zoek dan op alle schijven)\n"
+msgstr "Schijfapparaat (indien leeg: alle schijven doorzoeken)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -226,7 +223,6 @@ msgstr "Wachtwoord\n"
 
 # label for ftp user input
 #. txt_user1
-#, fuzzy
 msgid "User (Anonymous Login If Empty)\n"
 msgstr "Gebruiker (indien leeg: anonieme aanmelding)\n"
 
@@ -237,9 +233,8 @@ msgstr "NFS-installatie"
 
 # label for smb user input
 #. txt_user2
-#, fuzzy
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "Gebruiker (indien leeg: dan wordt \"guest\" gebruikt)\n"
+msgstr "Gebruiker (indien leeg: \"guest\" gebruiken)\n"
 
 # dialog title for smb installation
 #. txt_smb_title
@@ -273,7 +268,7 @@ msgstr "Taal"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr ""
+msgstr "Installatie - IOAPIC ingeschakeld"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
@@ -281,7 +276,7 @@ msgstr "Installatie - IOAPIC uitgeschakeld"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr ""
+msgstr "Installatie - Local APIC uitgeschakeld"
 
 #. txt_yes
 msgid "Yes"
@@ -294,50 +289,50 @@ msgstr "Nee"
 # menu item for selecting a file
 #. txt_file
 msgid "File"
-msgstr ""
+msgstr "Bestand"
 
 # input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr ""
+msgstr "Bron\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
-msgstr ""
+msgstr "Automatisch"
 
 #. txt_zenManual
 msgid "Manual Mode"
-msgstr ""
+msgstr "Handmatig"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr ""
+msgstr "Parameters op ZEN-partitie instellen"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr ""
+msgstr "ZEN-partitie installeren/updaten"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr ""
+msgstr "Bootloader voor ZEN-partitie herinstalleren"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr ""
+msgstr "ZEN-partitie uitschakelen"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
-msgstr ""
+msgstr "ZEN-partitie inschakelen"
 
 # video mode menu item
 #. txt_text_mode
 msgid "Text Mode"
-msgstr ""
+msgstr "Tekstmodus"
 
 # menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr ""
+msgstr "Firmware-test"
 
 #. txt_dud_file_msg
 msgid ""
@@ -345,3 +340,6 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
+"Om stuurprogramma-updates direct van cd-rom te laden,\n"
+"voer hier de bestandsnamen in van de stuurprogramma-updates\n"
+"(gescheiden door comma's):\n"

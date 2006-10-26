@@ -52,11 +52,11 @@ msgstr "Установка - ACPI выключен"
 
 #. txt_safe_install
 msgid "Installation--Safe Settings"
-msgstr "Установка - безопасные параметры настройки"
+msgstr "Установка - безопасные параметры"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr "Linux - безопасные параметры настройки"
+msgstr "Linux - безопасные параметры"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
@@ -84,7 +84,7 @@ msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"Вы покинули графическое меню загрузки и\n"
+"Вы вышли из графического меню загрузки и\n"
 "запустили текстовый режим интерфейса."
 
 #. txt_help
@@ -120,13 +120,11 @@ msgstr ""
 
 # info box title
 #. txt_info_title
-#, fuzzy
 msgid "Boot Loader"
 msgstr "Загрузчик"
 
 # error box title
 #. txt_error_title
-#, fuzzy
 msgid "I/O Error"
 msgstr "Ошибка ввода/вывода"
 
@@ -151,12 +149,12 @@ msgstr ""
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format,fuzzy
+#, c-format
 msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"Это не <product> загрузочный диск.\n"
+"Это не загрузочный диск <product>.\n"
 "Пожалуйста вставьте загрузочный диск %u."
 
 # password dialog title
@@ -166,7 +164,7 @@ msgstr "Пароль"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr "Пожалуйста, держите ваш гибкий диск с обновлением драйвера на готове."
+msgstr "Пожалуйста, приготовьте дискету драйверами."
 
 # dvd warning title
 #. txt_dvd_warning_title
@@ -190,7 +188,7 @@ msgstr "Выключить питание"
 
 #. txt_power_off
 msgid "Halt the system now?"
-msgstr "Остановить сейчас  систему?"
+msgstr "Остановить систему?"
 
 # menu entry for hard disk installation
 #. txt_harddisk
@@ -203,9 +201,8 @@ msgid "Hard Disk Installation"
 msgstr "Установка с жёсткого диска"
 
 #. txt_hd_diskdevice
-#, fuzzy
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Дисковое устройство (сканировать все диски, если пусто)\n"
+msgstr "Дисковое устройство (Сканировать все диски, если не указано)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -226,9 +223,8 @@ msgstr "Пароль\n"
 
 # label for ftp user input
 #. txt_user1
-#, fuzzy
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "Пользователь (если пусто - использовать анонимный вход)\n"
+msgstr "Пользователь (Анонимный вход, если не указан)\n"
 
 # dialog title for nfs installation
 #. txt_nfs_title
@@ -237,9 +233,8 @@ msgstr "Установка по NFS"
 
 # label for smb user input
 #. txt_user2
-#, fuzzy
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "Пользователь (если пусто - использовать \"guest\")\n"
+msgstr "Пользователь (Использовать \"guest\", если не указан)\n"
 
 # dialog title for smb installation
 #. txt_smb_title
@@ -273,7 +268,7 @@ msgstr "Язык"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr ""
+msgstr "Установка - IOAPIC включен"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
@@ -281,7 +276,7 @@ msgstr "Установка - IOAPIC выключен"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr ""
+msgstr "Установка - локальный APIC выключен"
 
 #. txt_yes
 msgid "Yes"
@@ -294,50 +289,50 @@ msgstr "Нет"
 # menu item for selecting a file
 #. txt_file
 msgid "File"
-msgstr ""
+msgstr "Файл"
 
 # input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr ""
+msgstr "Общий ресурс\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
-msgstr ""
+msgstr "Автоматический режим"
 
 #. txt_zenManual
 msgid "Manual Mode"
-msgstr ""
+msgstr "Ручной режим"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr ""
+msgstr "Настройка параметров на ZEN разделе"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr ""
+msgstr "Установить или Обновить ZEN раздел"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr ""
+msgstr "Переустановить загрузчик ZEN раздела"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr ""
+msgstr "Отключить ZEN раздел"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
-msgstr ""
+msgstr "Включить ZEN раздел"
 
 # video mode menu item
 #. txt_text_mode
 msgid "Text Mode"
-msgstr ""
+msgstr "Текстовый режим"
 
 # menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr ""
+msgstr "Проверка программно-аппаратных средств"
 
 #. txt_dud_file_msg
 msgid ""
@@ -345,3 +340,6 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
+"Чтобы напрямую загрузить обновляемые драйвера с CD-ROM,\n"
+"введите имена файлов обновляемых драйверов (разделенных\n"
+"запятыми ',') :\n"

@@ -119,13 +119,11 @@ msgstr ""
 
 # info box title
 #. txt_info_title
-#, fuzzy
 msgid "Boot Loader"
 msgstr "Oppstartslaster"
 
 # error box title
 #. txt_error_title
-#, fuzzy
 msgid "I/O Error"
 msgstr "Inn/ut-feil"
 
@@ -150,7 +148,7 @@ msgstr ""
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format,fuzzy
+#, c-format
 msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
@@ -202,9 +200,8 @@ msgid "Hard Disk Installation"
 msgstr "Harddiskinstallasjon"
 
 #. txt_hd_diskdevice
-#, fuzzy
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Diskenhet (søk på alle disker hvis tomt)\n"
+msgstr "Diskenhet (søker på alle disker hvis tomt)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -225,7 +222,6 @@ msgstr "Passord\n"
 
 # label for ftp user input
 #. txt_user1
-#, fuzzy
 msgid "User (Anonymous Login If Empty)\n"
 msgstr "Bruker (anonym innlogging hvis tomt)\n"
 
@@ -236,9 +232,8 @@ msgstr "NFS-installasjon"
 
 # label for smb user input
 #. txt_user2
-#, fuzzy
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "Bruker (bruker \"gjest\" hvis tomt)\n"
+msgstr "Bruker (bruker \"guest\" hvis tomt)\n"
 
 # dialog title for smb installation
 #. txt_smb_title
@@ -272,7 +267,7 @@ msgstr "Språk"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr ""
+msgstr "Installasjon--IOAPIC aktivert"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
@@ -280,7 +275,7 @@ msgstr "Installasjon--IOAPIC deaktivert"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr ""
+msgstr "Installasjon--Lokal APIC deaktivert"
 
 #. txt_yes
 msgid "Yes"
@@ -293,50 +288,50 @@ msgstr "Nei"
 # menu item for selecting a file
 #. txt_file
 msgid "File"
-msgstr ""
+msgstr "Fil"
 
 # input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr ""
+msgstr "Delt ressurs\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
-msgstr ""
+msgstr "Automatisk modus"
 
 #. txt_zenManual
 msgid "Manual Mode"
-msgstr ""
+msgstr "Manuell modus"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr ""
+msgstr "Konfigurer parametere for ZEN-partisjon"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr ""
+msgstr "Installerer eller oppdater ZEN-partisjon"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr ""
+msgstr "Installer oppstartslaster for ZEN-partisjon på nytt"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr ""
+msgstr "Deaktiver ZEN-partisjon"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
-msgstr ""
+msgstr "Aktiver ZEN-partisjon"
 
 # video mode menu item
 #. txt_text_mode
 msgid "Text Mode"
-msgstr ""
+msgstr "Tekstmodus"
 
 # menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr ""
+msgstr "Fastvarekontroll"
 
 #. txt_dud_file_msg
 msgid ""
@@ -344,3 +339,6 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
+"For å laste driveroppdateringer direkte fra CD-ROM,\n"
+"angi driveroppdateringsfilenes navn (adskilt\n"
+"av komma ',') her:\n"

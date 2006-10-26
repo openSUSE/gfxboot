@@ -336,8 +336,9 @@ msgstr "Habilitar partición ZEN"
 
 # video mode menu item
 #. txt_text_mode
+#, fuzzy
 msgid "Text Mode"
-msgstr ""
+msgstr "Nuevo modo"
 
 # menu item, like 'memory test'
 #. txt_firmware

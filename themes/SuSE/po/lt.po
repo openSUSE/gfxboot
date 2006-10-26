@@ -15,7 +15,7 @@ msgstr ""
 # ok button label
 #. txt_ok
 msgid "OK"
-msgstr "Gerai"
+msgstr "OK"
 
 # cancel button label
 #. txt_cancel
@@ -120,9 +120,8 @@ msgstr "Įkrovos tvarkyklė"
 
 # error box title
 #. txt_error_title
-#, fuzzy
 msgid "I/O Error"
-msgstr "I/O klaida"
+msgstr "Į/I klaida"
 
 # boot disk change dialog title
 #. txt_change_disk_title
@@ -145,13 +144,13 @@ msgstr ""
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format,fuzzy
+#, c-format
 msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
 "Tai ne <product> įkrovos diskas.\n"
-"Prafome įdėti įkrovos diską %u."
+"Prašome įdėti įkrovos diską %u."
 
 # password dialog title
 #. txt_password_title
@@ -267,7 +266,7 @@ msgstr "Kalba"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr ""
+msgstr "Diegimas--IOAPIC įgalintas "
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
@@ -275,58 +274,61 @@ msgstr "Diegimas--IOAPIC išjungtas"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr ""
+msgstr "Diegimas--Vietinis APIC išjungtas"
 
 #. txt_yes
 msgid "Yes"
-msgstr ""
+msgstr "Taip"
 
 #. txt_no
 msgid "No"
-msgstr ""
+msgstr "Ne"
 
 # menu item for selecting a file
 #. txt_file
 msgid "File"
-msgstr ""
+msgstr "Byla"
 
 # input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr ""
+msgstr "Resursas\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
-msgstr ""
+msgstr "Automatinis režimas"
 
 #. txt_zenManual
 msgid "Manual Mode"
-msgstr ""
+msgstr "Rankinis režimas"
 
 #. txt_zenConfig
+#, fuzzy
 msgid "Configure Parameters on ZEN Partition"
-msgstr ""
+msgstr "Konfigūruoti ZEN skaidinio nustatymus."
 
 #. txt_zenInstall
+#, fuzzy
 msgid "Install or Update ZEN Partition"
-msgstr ""
+msgstr "Įdiegti/atnaujinti ZEN skaidinį"
 
 #. txt_zenLilo
+#, fuzzy
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr ""
+msgstr "Iš naujo įdiegti ZEN skaidinio įkrovos tvarkyklę"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr ""
+msgstr "Uždrausti ZEN skaidinį"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
-msgstr ""
+msgstr "Įgalinti ZEN skaidinį"
 
 # video mode menu item
 #. txt_text_mode
 msgid "Text Mode"
-msgstr ""
+msgstr "Tekstinis režimas"
 
 # menu item, like 'memory test'
 #. txt_firmware

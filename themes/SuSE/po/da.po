@@ -18,7 +18,7 @@ msgstr ""
 # ok button label
 #. txt_ok
 msgid "OK"
-msgstr "Ok"
+msgstr "OK"
 
 # cancel button label
 #. txt_cancel
@@ -37,7 +37,7 @@ msgstr "Fortsæt"
 
 #. txt_install
 msgid "Installation"
-msgstr "Begynd installation"
+msgstr "Installation"
 
 #. txt_manual_install
 msgid "Manual Installation"
@@ -45,19 +45,19 @@ msgstr "Manuel installation"
 
 #. txt_noacpi_install
 msgid "Installation--ACPI Disabled"
-msgstr "Installation uden ACPI understøttelse"
+msgstr "Installation--ACPI deaktiveret"
 
 #. txt_safe_install
 msgid "Installation--Safe Settings"
-msgstr "Fejlsikret installation"
+msgstr "Installation--sikre indstillinger"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr "Fejlsikret opstart"
+msgstr "Linux--sikre indstillinger"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
-msgstr "Indlæs fra harddisk"
+msgstr "Boot fra harddisk"
 
 #. txt_rescue
 msgid "Rescue System"
@@ -117,25 +117,23 @@ msgstr ""
 
 # info box title
 #. txt_info_title
-#, fuzzy
 msgid "Boot Loader"
-msgstr "Opstartsindlæser"
+msgstr "Bootloader"
 
 # error box title
 #. txt_error_title
-#, fuzzy
 msgid "I/O Error"
-msgstr "Ind/Ud fejl"
+msgstr "I/O-fejl"
 
 # boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr "Skift opstartsdisk"
+msgstr "Skift bootdisk"
 
 #. txt_insert_disk
 #, c-format
 msgid "Insert boot disk %u."
-msgstr "Indsæt opstartsdisk %u."
+msgstr "Indsæt bootdisk %u."
 
 #. txt_insert_disk2
 #, c-format
@@ -143,18 +141,18 @@ msgid ""
 "This is boot disk %u.\n"
 "Insert boot disk %u."
 msgstr ""
-"Dette er opstartsdisk %u.\n"
-"Indsæt opstartsdisk %u."
+"Dette er bootdisk %u.\n"
+"Indsæt bootdisk %u."
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format,fuzzy
+#, c-format
 msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"Dette er ikke en SUSE LINUX 10.0 opstartsdisk.\n"
-"Vær venlig at indsætte opstartsdisk %u."
+"Dette er ikke en <product> bootdisk.\n"
+"Indsæt bootdisk %u."
 
 # password dialog title
 #. txt_password_title
@@ -163,12 +161,12 @@ msgstr "Adgangskode"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr "Gør klar til at indlæse din opdateringsdisk."
+msgstr "Gør din driveropdateringsdiskette klar."
 
 # dvd warning title
 #. txt_dvd_warning_title
 msgid "DVD Error"
-msgstr "DVD fejl"
+msgstr "DVD-fejl"
 
 #. txt_dvd_warning2
 msgid ""
@@ -178,7 +176,7 @@ msgid ""
 msgstr ""
 "Dette er en tosidet DVD. Du har startet op fra den anden side.\n"
 "\n"
-"Vend DVD'en om og prøv igen."
+"Vend DVDen om og prøv igen."
 
 # power off dialog title
 #. txt_power_off_title
@@ -197,21 +195,20 @@ msgstr "Harddisk"
 # dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "Harddisk installation"
+msgstr "Harddiskinstallation"
 
 #. txt_hd_diskdevice
-#, fuzzy
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Diskenhed (gennemsøg alle diske hvis blank)\n"
+msgstr "Diskenhed (gennemsøger alle diske hvis blank)\n"
 
 #. txt_directory
 msgid "Directory\n"
-msgstr "Katalog\n"
+msgstr "Mappe\n"
 
 # dialog title for ftp installation
 #. txt_ftp_title
 msgid "FTP Installation"
-msgstr "FTP installation"
+msgstr "FTP-installation"
 
 #. txt_server
 msgid "Server\n"
@@ -223,30 +220,28 @@ msgstr "Adgangskode\n"
 
 # label for ftp user input
 #. txt_user1
-#, fuzzy
 msgid "User (Anonymous Login If Empty)\n"
 msgstr "Bruger (anonymt login hvis blank)\n"
 
 # dialog title for nfs installation
 #. txt_nfs_title
 msgid "NFS Installation"
-msgstr "NFS installation"
+msgstr "NFS-installation"
 
 # label for smb user input
 #. txt_user2
-#, fuzzy
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "Bruger (bruger \"guest\" hvis blank)\n"
+msgstr "Bruger (anvender \"guest\" hvis blank)\n"
 
 # dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "SMB (Windows fildeling) installation"
+msgstr "SMB-installation (Windows fildeling)"
 
 # dialog title for http installation
 #. txt_http_title
 msgid "HTTP Installation"
-msgstr "HTTP installation"
+msgstr "HTTP-installation"
 
 # 'driver' as in '(hardware) driver update'
 #. txt_driver_update
@@ -261,7 +256,7 @@ msgstr "Domæne\n"
 # button label for other/more options
 #. txt_other_options
 msgid "Other Options"
-msgstr "Andre indstillinger"
+msgstr "Andre valgmuligheder"
 
 # label for language selection
 #. txt_language
@@ -270,15 +265,15 @@ msgstr "Sprog"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr ""
+msgstr "Installation--IOAPIC aktiveret"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
-msgstr "Installation uden IOAPIC understøttelse"
+msgstr "Installation--IOAPIC deaktiveret"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr ""
+msgstr "Installation--Lokal APIC deaktiveret"
 
 #. txt_yes
 msgid "Yes"
@@ -291,50 +286,50 @@ msgstr "Nej"
 # menu item for selecting a file
 #. txt_file
 msgid "File"
-msgstr ""
+msgstr "Fil"
 
 # input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr ""
+msgstr "Delt mappe\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
-msgstr ""
+msgstr "Automatisk tilstand"
 
 #. txt_zenManual
 msgid "Manual Mode"
-msgstr ""
+msgstr "Manuel tilstand"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr ""
+msgstr "Konfigurér parametre på ZEN-partition"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr ""
+msgstr "Installér eller opdatér ZEN-partition"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr ""
+msgstr "Geninstallér bootloader for ZEN-partition"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr ""
+msgstr "Deaktivér ZEN-partition"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
-msgstr ""
+msgstr "Aktivér ZEN-partition"
 
 # video mode menu item
 #. txt_text_mode
 msgid "Text Mode"
-msgstr ""
+msgstr "Teksttilstand"
 
 # menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr ""
+msgstr "Firmware-test"
 
 #. txt_dud_file_msg
 msgid ""
@@ -342,3 +337,6 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
+"For at indlæse driveropdateringer direkte fra CD-ROM,\n"
+"angives filnavnene for driveropdateringerne (adskilt\n"
+"af kommaer ',') her:\n"

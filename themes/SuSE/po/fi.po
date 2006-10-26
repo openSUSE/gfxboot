@@ -119,13 +119,11 @@ msgstr ""
 
 # info box title
 #. txt_info_title
-#, fuzzy
 msgid "Boot Loader"
-msgstr "Käynnistyslataaja"
+msgstr "Käynnistyslatain"
 
 # error box title
 #. txt_error_title
-#, fuzzy
 msgid "I/O Error"
 msgstr "I/O-virhe"
 
@@ -150,7 +148,7 @@ msgstr ""
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format,fuzzy
+#, c-format
 msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
@@ -202,7 +200,6 @@ msgid "Hard Disk Installation"
 msgstr "Kiintolevy asennus"
 
 #. txt_hd_diskdevice
-#, fuzzy
 msgid "Disk Device (Scans All Disks If Empty)\n"
 msgstr "Levylaite (tarkistaa kaikki levyt jos tyhjä)\n"
 
@@ -225,7 +222,6 @@ msgstr "Salasana\n"
 
 # label for ftp user input
 #. txt_user1
-#, fuzzy
 msgid "User (Anonymous Login If Empty)\n"
 msgstr "Käyttäjä (anonyymi kirjautuminen jos tyhjä)\n"
 
@@ -236,7 +232,6 @@ msgstr "NFS-asennus"
 
 # label for smb user input
 #. txt_user2
-#, fuzzy
 msgid "User (Uses \"guest\" If Empty)\n"
 msgstr "Käyttäjä (käyttäen \"vieras\" jos tyhjä)\n"
 
@@ -302,41 +297,41 @@ msgstr "Jako\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
-msgstr ""
+msgstr "Automaattinen tila"
 
 #. txt_zenManual
 msgid "Manual Mode"
-msgstr ""
+msgstr "Manuaalinen tila"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr ""
+msgstr "Määritä ZEN osion parametrit"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr ""
+msgstr "Asenna tai päivitä ZEN osio"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr ""
+msgstr "Asenna ZEN osion käynnistyslatain uudelleen"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr ""
+msgstr "Poista ZEN osio käytöstä"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
-msgstr ""
+msgstr "Ota ZEN osio käyttöön"
 
 # video mode menu item
 #. txt_text_mode
 msgid "Text Mode"
-msgstr ""
+msgstr "Tekstitila"
 
 # menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr ""
+msgstr "Laiteohjelmiston testi"
 
 #. txt_dud_file_msg
 msgid ""
@@ -344,3 +339,6 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
+"Ladataksesi ajuripäivityksen suoraan CD-ROM-levyltä,\n"
+"anna ajuripäivityksen tiedostonimet (erotettuina\n"
+"pilkuilla ',') tähän:\n"

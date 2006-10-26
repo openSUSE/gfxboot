@@ -295,37 +295,45 @@ msgid "Share\n"
 msgstr "共用\n"
 
 #. txt_zenAuto
+#, fuzzy
 msgid "Automatic Mode"
-msgstr ""
+msgstr "自動モード"
 
 #. txt_zenManual
+#, fuzzy
 msgid "Manual Mode"
-msgstr ""
+msgstr "手動モード"
 
 #. txt_zenConfig
+#, fuzzy
 msgid "Configure Parameters on ZEN Partition"
-msgstr ""
+msgstr "ZENパーティション上のパラメータの設定"
 
 #. txt_zenInstall
+#, fuzzy
 msgid "Install or Update ZEN Partition"
-msgstr ""
+msgstr "ZENパーティションのインストール/アップデート"
 
 #. txt_zenLilo
+#, fuzzy
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr ""
+msgstr "ZENパーティションブートローダの再インストール"
 
 #. txt_zenDisable
+#, fuzzy
 msgid "Disable ZEN Partition"
-msgstr ""
+msgstr "ZENパーティションを無効にする"
 
 #. txt_zenEnable
+#, fuzzy
 msgid "Enable ZEN Partition"
-msgstr ""
+msgstr "ZENパーティションを有効にする"
 
 # video mode menu item
 #. txt_text_mode
+#, fuzzy
 msgid "Text Mode"
-msgstr ""
+msgstr "テキストモード"
 
 # menu item, like 'memory test'
 #. txt_firmware
