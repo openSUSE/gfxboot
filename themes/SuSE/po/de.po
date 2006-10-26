@@ -5,7 +5,8 @@
 # Antje Faber <afaber@suse.de>, 2004, 2005.
 #
 msgid ""
-msgstr "Project-Id-Version: de\n"
+msgstr ""
+"Project-Id-Version: de\n"
 "PO-Revision-Date: 2006-06-01 11:55\n"
 "Last-Translator: Novell Language <language@novell.com>\n"
 "Language-Team: Novell Language <language@novell.com>\n"
@@ -76,9 +77,11 @@ msgid "Exiting..."
 msgstr "Beenden ..."
 
 #. txt_exit_dialog
-msgid "You are leaving the graphical boot menu and\n"
+msgid ""
+"You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
-msgstr "Sie verlassen das grafische Bootmenü und\n"
+msgstr ""
+"Sie verlassen das grafische Bootmenü und\n"
 "kommen in den Textmodus."
 
 #. txt_help
@@ -92,19 +95,23 @@ msgstr "Starten..."
 
 # Keep the three newlines!
 #. txt_load_kernel
-msgid "Loading Linux Kernel\n"
+msgid ""
+"Loading Linux Kernel\n"
 "\n"
 "\n"
-msgstr "Laden des Linux-Kernels\n"
+msgstr ""
+"Laden des Linux-Kernels\n"
 "\n"
 "\n"
 
 # Keep the three newlines!
 #. txt_load_memtest
-msgid "Loading memtest86\n"
+msgid ""
+"Loading memtest86\n"
 "\n"
 "\n"
-msgstr "Laden von memtest86\n"
+msgstr ""
+"Laden von memtest86\n"
 "\n"
 "\n"
 
@@ -132,34 +139,27 @@ msgstr "Bootdiskette %u einlegen."
 
 #. txt_insert_disk2
 #, c-format
-msgid "This is boot disk %u.\n"
+msgid ""
+"This is boot disk %u.\n"
 "Insert boot disk %u."
-msgstr "Dies ist Bootdiskette %u.\n"
+msgstr ""
+"Dies ist Bootdiskette %u.\n"
 "Legen Sie die Bootdiskette %u ein."
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format
-#, fuzzy
-msgid "This is not a <product> boot disk.\n"
+#, c-format,fuzzy
+msgid ""
+"This is not a <product> boot disk.\n"
 "Insert boot disk %u."
-msgstr "Dies ist keine Bootdiskette für <product>.\n"
+msgstr ""
+"Dies ist keine Bootdiskette für <product>.\n"
 "Legen Sie Bootdiskette %u ein."
 
 # password dialog title
 #. txt_password_title
 msgid "Password"
 msgstr "Passwort"
-
-# Keep the newlines and spaces after ':'!
-#. txt_password
-#, fuzzy
-msgid "Password:   \n"
-"\n"
-"\n"
-msgstr "Geben Sie Ihr Passwort ein:   \n"
-"\n"
-"\n"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
@@ -171,10 +171,12 @@ msgid "DVD Error"
 msgstr "DVD-Fehler"
 
 #. txt_dvd_warning2
-msgid "This is a two-sided DVD. You have booted from the second side.\n"
+msgid ""
+"This is a two-sided DVD. You have booted from the second side.\n"
 "\n"
 "Turn the DVD over then continue."
-msgstr "Dies ist eine doppelseitige DVD. Sie haben von der zweiten Seite gebootet.\n"
+msgstr ""
+"Dies ist eine doppelseitige DVD. Sie haben von der zweiten Seite gebootet.\n"
 "\n"
 "Drehen Sie die DVD um, und fahren Sie dann fort."
 
@@ -342,7 +344,8 @@ msgid "Firmware Test"
 msgstr ""
 
 #. txt_dud_file_msg
-msgid "To load driver updates directly from CD-ROM,\n"
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""

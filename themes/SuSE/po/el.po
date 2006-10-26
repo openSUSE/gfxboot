@@ -6,7 +6,8 @@
 # Hellenic SuSE Translation Team <hstg@billg.gr>, 2005.
 #
 msgid ""
-msgstr "Project-Id-Version: el\n"
+msgstr ""
+"Project-Id-Version: el\n"
 "PO-Revision-Date: 2005-08-09 01:17+0300\n"
 "Last-Translator: Hellenic SuSE Translation Team <hstg@billg.gr>\n"
 "Language-Team: Hellenic-Ελληνικά-Greek <hstg@billg.gr>\n"
@@ -77,9 +78,11 @@ msgid "Exiting..."
 msgstr "Έξοδος..."
 
 #. txt_exit_dialog
-msgid "You are leaving the graphical boot menu and\n"
+msgid ""
+"You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
-msgstr "Εγκαταλείπετε το μενού γραφικής εκκίνησης και\n"
+msgstr ""
+"Εγκαταλείπετε το μενού γραφικής εκκίνησης και\n"
 "ξεκινάτε το περιβάλλον κατάστασης κειμένου."
 
 #. txt_help
@@ -93,19 +96,23 @@ msgstr "Εκκίνηση..."
 
 # Keep the three newlines!
 #. txt_load_kernel
-msgid "Loading Linux Kernel\n"
+msgid ""
+"Loading Linux Kernel\n"
 "\n"
 "\n"
-msgstr "Ο πυρήνας Linux φορτώνεται\n"
+msgstr ""
+"Ο πυρήνας Linux φορτώνεται\n"
 "\n"
 "\n"
 
 # Keep the three newlines!
 #. txt_load_memtest
-msgid "Loading memtest86\n"
+msgid ""
+"Loading memtest86\n"
 "\n"
 "\n"
-msgstr "Το memtest86 φορτώνεται\n"
+msgstr ""
+"Το memtest86 φορτώνεται\n"
 "\n"
 "\n"
 
@@ -133,34 +140,27 @@ msgstr "Παρακαλώ εισάγετε την δισκέτα εκκίνηση
 
 #. txt_insert_disk2
 #, c-format
-msgid "This is boot disk %u.\n"
+msgid ""
+"This is boot disk %u.\n"
 "Insert boot disk %u."
-msgstr "Αυτή είναι η δισκέτα εκκίνησης %u.\n"
+msgstr ""
+"Αυτή είναι η δισκέτα εκκίνησης %u.\n"
 "Παρακαλώ εισάγετε τη δισκέτα εκκίνησης %u."
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format
-#, fuzzy
-msgid "This is not a <product> boot disk.\n"
+#, c-format,fuzzy
+msgid ""
+"This is not a <product> boot disk.\n"
 "Insert boot disk %u."
-msgstr "Αυτή δεν είναι δισκέτα εκκίνησης του <product>.\n"
+msgstr ""
+"Αυτή δεν είναι δισκέτα εκκίνησης του <product>.\n"
 "Παρακαλώ εισάγετε τη δισκέτα εκκίνησης %u."
 
 # password dialog title
 #. txt_password_title
 msgid "Password"
 msgstr "Κωδικός"
-
-# Keep the newlines and spaces after ':'!
-#. txt_password
-#, fuzzy
-msgid "Password:   \n"
-"\n"
-"\n"
-msgstr "Εισάγετε τον κωδικό σας:   \n"
-"\n"
-"\n"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
@@ -172,10 +172,12 @@ msgid "DVD Error"
 msgstr "Σφάλμα DVD"
 
 #. txt_dvd_warning2
-msgid "This is a two-sided DVD. You have booted from the second side.\n"
+msgid ""
+"This is a two-sided DVD. You have booted from the second side.\n"
 "\n"
 "Turn the DVD over then continue."
-msgstr "Αυτό είναι DVD δύο πλευρών. Έχετε κάνει εκκίνηση από την δεύτερη πλευρά.\n"
+msgstr ""
+"Αυτό είναι DVD δύο πλευρών. Έχετε κάνει εκκίνηση από την δεύτερη πλευρά.\n"
 "\n"
 "Γυρίστε το DVD και συνεχίστε."
 
@@ -336,7 +338,8 @@ msgid "Firmware Test"
 msgstr ""
 
 #. txt_dud_file_msg
-msgid "To load driver updates directly from CD-ROM,\n"
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""

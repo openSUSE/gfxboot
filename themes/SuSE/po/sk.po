@@ -6,7 +6,8 @@
 # Andrej Kacian <andrej@kacian.sk>, 2005.
 #
 msgid ""
-msgstr "Project-Id-Version: bootloader\n"
+msgstr ""
+"Project-Id-Version: bootloader\n"
 "PO-Revision-Date: 2005-03-08 20:59+0100\n"
 "Last-Translator: Andrej Kacian <andrej@kacian.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -81,9 +82,11 @@ msgid "Exiting..."
 msgstr ""
 
 #. txt_exit_dialog
-msgid "You are leaving the graphical boot menu and\n"
+msgid ""
+"You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
-msgstr "Opúšťate grafické menu štartu a spúšťate\n"
+msgstr ""
+"Opúšťate grafické menu štartu a spúšťate\n"
 "textové používateľské rozhranie."
 
 #. txt_help
@@ -98,19 +101,23 @@ msgstr "Spúšťam..."
 # Keep the three newlines!
 #. txt_load_kernel
 #, fuzzy
-msgid "Loading Linux Kernel\n"
+msgid ""
+"Loading Linux Kernel\n"
 "\n"
 "\n"
-msgstr "Načítavam jadro Linuxu\n"
+msgstr ""
+"Načítavam jadro Linuxu\n"
 "\n"
 "\n"
 
 # Keep the three newlines!
 #. txt_load_memtest
-msgid "Loading memtest86\n"
+msgid ""
+"Loading memtest86\n"
 "\n"
 "\n"
-msgstr "Načítavam memtest86\n"
+msgstr ""
+"Načítavam memtest86\n"
 "\n"
 "\n"
 
@@ -132,40 +139,33 @@ msgid "Change Boot Disk"
 msgstr "Zmena štartovacej diskety"
 
 #. txt_insert_disk
-#, fuzzy, c-format
+#, c-format,fuzzy
 msgid "Insert boot disk %u."
 msgstr "Prosím, vložte štartovaciu disketu %u."
 
 #. txt_insert_disk2
-#, fuzzy, c-format
-msgid "This is boot disk %u.\n"
+#, c-format,fuzzy
+msgid ""
+"This is boot disk %u.\n"
 "Insert boot disk %u."
-msgstr "Toto je disketa %u.\n"
+msgstr ""
+"Toto je disketa %u.\n"
 "Prosím, vložte disketu %u."
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, fuzzy, c-format
-#, fuzzy
-msgid "This is not a <product> boot disk.\n"
+#, c-format,fuzzy
+msgid ""
+"This is not a <product> boot disk.\n"
 "Insert boot disk %u."
-msgstr "Toto nie je štartovacia disketa <product>.\n"
+msgstr ""
+"Toto nie je štartovacia disketa <product>.\n"
 "Prosím, vložte štartovaciu disketu %u."
 
 # password dialog title
 #. txt_password_title
 msgid "Password"
 msgstr "Heslo"
-
-# Keep the newlines and spaces after ':'!
-#. txt_password
-#, fuzzy
-msgid "Password:   \n"
-"\n"
-"\n"
-msgstr "Prosím, zadajte heslo:   \n"
-"\n"
-"\n"
 
 #. txt_dud_ready
 #, fuzzy
@@ -179,10 +179,12 @@ msgstr ""
 
 #. txt_dvd_warning2
 #, fuzzy
-msgid "This is a two-sided DVD. You have booted from the second side.\n"
+msgid ""
+"This is a two-sided DVD. You have booted from the second side.\n"
 "\n"
 "Turn the DVD over then continue."
-msgstr "Toto je obojstranné médium DVD. Systém ste spustili z druhej strany.\n"
+msgstr ""
+"Toto je obojstranné médium DVD. Systém ste spustili z druhej strany.\n"
 "\n"
 "Prosím, otočte médium a potom pokračujte."
 
@@ -344,7 +346,8 @@ msgid "Firmware Test"
 msgstr ""
 
 #. txt_dud_file_msg
-msgid "To load driver updates directly from CD-ROM,\n"
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""

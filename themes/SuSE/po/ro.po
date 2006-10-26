@@ -4,7 +4,8 @@
 # Claudiu Costin <claudiuc@kde.org>, 2004.
 #
 msgid ""
-msgstr "Project-Id-Version: ro\n"
+msgstr ""
+"Project-Id-Version: ro\n"
 "PO-Revision-Date: 2004-03-27 17:05+0200\n"
 "Last-Translator: Claudiu Costin <claudiuc@kde.org>\n"
 "Language-Team: Romanian <ro-kde@yahoogroups.com>\n"
@@ -78,9 +79,11 @@ msgid "Exiting..."
 msgstr ""
 
 #. txt_exit_dialog
-msgid "You are leaving the graphical boot menu and\n"
+msgid ""
+"You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
-msgstr "Acum veţi părăsi modul grafic de pornire\n"
+msgstr ""
+"Acum veţi părăsi modul grafic de pornire\n"
 "şi veţi intra în interfaţa text."
 
 #. txt_help
@@ -94,19 +97,23 @@ msgstr "Pornesc..."
 
 # Keep the three newlines!
 #. txt_load_kernel
-msgid "Loading Linux Kernel\n"
+msgid ""
+"Loading Linux Kernel\n"
 "\n"
 "\n"
-msgstr "Încarc kernelul Linux\n"
+msgstr ""
+"Încarc kernelul Linux\n"
 "\n"
 "\n"
 
 # Keep the three newlines!
 #. txt_load_memtest
-msgid "Loading memtest86\n"
+msgid ""
+"Loading memtest86\n"
 "\n"
 "\n"
-msgstr "Încarc memtest86\n"
+msgstr ""
+"Încarc memtest86\n"
 "\n"
 "\n"
 
@@ -128,40 +135,33 @@ msgid "Change Boot Disk"
 msgstr "Modificare disc de pornire"
 
 #. txt_insert_disk
-#, fuzzy, c-format
+#, c-format,fuzzy
 msgid "Insert boot disk %u."
 msgstr "Vă rog să introduceţi discul de pornire %u."
 
 #. txt_insert_disk2
-#, fuzzy, c-format
-msgid "This is boot disk %u.\n"
+#, c-format,fuzzy
+msgid ""
+"This is boot disk %u.\n"
 "Insert boot disk %u."
-msgstr "Aceasta este discul de pornire %u.\n"
+msgstr ""
+"Aceasta este discul de pornire %u.\n"
 "Vă rog să introduceţi discul de pornire %u."
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, fuzzy, c-format
-#, fuzzy
-msgid "This is not a <product> boot disk.\n"
+#, c-format,fuzzy
+msgid ""
+"This is not a <product> boot disk.\n"
 "Insert boot disk %u."
-msgstr "Acesta nu este un disc de pornire <product>.\n"
+msgstr ""
+"Acesta nu este un disc de pornire <product>.\n"
 "Inseraţi discul %u."
 
 # password dialog title
 #. txt_password_title
 msgid "Password"
 msgstr "Parolă"
-
-# Keep the newlines and spaces after ':'!
-#. txt_password
-#, fuzzy
-msgid "Password:   \n"
-"\n"
-"\n"
-msgstr "Introduceţi parola:   \n"
-"\n"
-"\n"
 
 #. txt_dud_ready
 #, fuzzy
@@ -175,10 +175,12 @@ msgstr ""
 
 #. txt_dvd_warning2
 #, fuzzy
-msgid "This is a two-sided DVD. You have booted from the second side.\n"
+msgid ""
+"This is a two-sided DVD. You have booted from the second side.\n"
 "\n"
 "Turn the DVD over then continue."
-msgstr "Acesta este un DVD cu două feţe. Aţi pornit sistemul de pe faţa a doua.\n"
+msgstr ""
+"Acesta este un DVD cu două feţe. Aţi pornit sistemul de pe faţa a doua.\n"
 "\n"
 " Întoarceţi DVD-ul şi apoi continuaţi."
 
@@ -340,7 +342,8 @@ msgid "Firmware Test"
 msgstr ""
 
 #. txt_dud_file_msg
-msgid "To load driver updates directly from CD-ROM,\n"
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""

@@ -5,7 +5,8 @@
 # Ivan Petrouchtchak <iip@telus.net>, 2005.
 # Ivan Petrouchtchak <ivanpetrouchtchak@yahoo.com>, 2006.
 msgid ""
-msgstr "Project-Id-Version: uk\n"
+msgstr ""
+"Project-Id-Version: uk\n"
 "PO-Revision-Date: 2006-01-12 12:24-0700\n"
 "Last-Translator: Ivan Petrouchtchak <ivanpetrouchtchak@yahoo.com>\n"
 "Language-Team: Ukrainian <translation@linux.org.ua>\n"
@@ -77,9 +78,11 @@ msgid "Exiting..."
 msgstr "Вихід..."
 
 #. txt_exit_dialog
-msgid "You are leaving the graphical boot menu and\n"
+msgid ""
+"You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
-msgstr "Ви покидаєте графічне меню завантаження\n"
+msgstr ""
+"Ви покидаєте графічне меню завантаження\n"
 "і запускаєте текстовий варіант інтерфейсу."
 
 #. txt_help
@@ -93,19 +96,23 @@ msgstr "Запуск..."
 
 # Keep the three newlines!
 #. txt_load_kernel
-msgid "Loading Linux Kernel\n"
+msgid ""
+"Loading Linux Kernel\n"
 "\n"
 "\n"
-msgstr "Завантаження ядра Linux\n"
+msgstr ""
+"Завантаження ядра Linux\n"
 "\n"
 "\n"
 
 # Keep the three newlines!
 #. txt_load_memtest
-msgid "Loading memtest86\n"
+msgid ""
+"Loading memtest86\n"
 "\n"
 "\n"
-msgstr "Завантаження memtest86\n"
+msgstr ""
+"Завантаження memtest86\n"
 "\n"
 "\n"
 
@@ -133,34 +140,27 @@ msgstr "Вставте завантажувальний диск %u."
 
 #. txt_insert_disk2
 #, c-format
-msgid "This is boot disk %u.\n"
+msgid ""
+"This is boot disk %u.\n"
 "Insert boot disk %u."
-msgstr "Це завантажувальний диск %u.\n"
+msgstr ""
+"Це завантажувальний диск %u.\n"
 "Вставте завантажувальний диск %u."
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format
-#, fuzzy
-msgid "This is not a <product> boot disk.\n"
+#, c-format,fuzzy
+msgid ""
+"This is not a <product> boot disk.\n"
 "Insert boot disk %u."
-msgstr "Це не завантажувальний диск <product>.\n"
+msgstr ""
+"Це не завантажувальний диск <product>.\n"
 "Вставте завантажувальний диск %u."
 
 # password dialog title
 #. txt_password_title
 msgid "Password"
 msgstr "Пароль"
-
-# Keep the newlines and spaces after ':'!
-#. txt_password
-#, fuzzy
-msgid "Password:   \n"
-"\n"
-"\n"
-msgstr "Введіть ваш пароль:   \n"
-"\n"
-"\n"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
@@ -172,10 +172,12 @@ msgid "DVD Error"
 msgstr "Помилка DVD"
 
 #. txt_dvd_warning2
-msgid "This is a two-sided DVD. You have booted from the second side.\n"
+msgid ""
+"This is a two-sided DVD. You have booted from the second side.\n"
 "\n"
 "Turn the DVD over then continue."
-msgstr "Це двобічний DVD. Ви завантажили з другого боку.\n"
+msgstr ""
+"Це двобічний DVD. Ви завантажили з другого боку.\n"
 "\n"
 "Переверніть DVD і продовжуйте."
 
@@ -336,7 +338,8 @@ msgid "Firmware Test"
 msgstr ""
 
 #. txt_dud_file_msg
-msgid "To load driver updates directly from CD-ROM,\n"
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""

@@ -9,7 +9,8 @@
 # Kalman Kemenczy <kkemenczy@novell.com>, 2006.
 # Kéménczy Kálmán <kkemenczy@novell.com>, 2006.
 msgid ""
-msgstr "Project-Id-Version: hu\n"
+msgstr ""
+"Project-Id-Version: hu\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: 2006-05-24 09:18+0200\n"
 "Last-Translator: Kalman Kemenczy <kkemenczy@novell.com>\n"
@@ -81,9 +82,11 @@ msgid "Exiting..."
 msgstr "Kilépés..."
 
 #. txt_exit_dialog
-msgid "You are leaving the graphical boot menu and\n"
+msgid ""
+"You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
-msgstr "Kilép a grafikus rendszerindító menüből.\n"
+msgstr ""
+"Kilép a grafikus rendszerindító menüből.\n"
 "El fog indulni a szöveges módú felület."
 
 #. txt_help
@@ -97,19 +100,23 @@ msgstr "Indítás..."
 
 # Keep the three newlines!
 #. txt_load_kernel
-msgid "Loading Linux Kernel\n"
+msgid ""
+"Loading Linux Kernel\n"
 "\n"
 "\n"
-msgstr "A Linux rendszermag betöltése\n"
+msgstr ""
+"A Linux rendszermag betöltése\n"
 "\n"
 "\n"
 
 # Keep the three newlines!
 #. txt_load_memtest
-msgid "Loading memtest86\n"
+msgid ""
+"Loading memtest86\n"
 "\n"
 "\n"
-msgstr "A memtest86 program betöltése\n"
+msgstr ""
+"A memtest86 program betöltése\n"
 "\n"
 "\n"
 
@@ -137,34 +144,27 @@ msgstr "Kérem, helyezze be a(z) %u indítólemezt."
 
 #. txt_insert_disk2
 #, c-format
-msgid "This is boot disk %u.\n"
+msgid ""
+"This is boot disk %u.\n"
 "Insert boot disk %u."
-msgstr "Ez a(z) %u indítólemez.\n"
+msgstr ""
+"Ez a(z) %u indítólemez.\n"
 "Kérem, helyezze be a(z) %u indítólemezt."
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format
-#, fuzzy
-msgid "This is not a <product> boot disk.\n"
+#, c-format,fuzzy
+msgid ""
+"This is not a <product> boot disk.\n"
 "Insert boot disk %u."
-msgstr "Ez nem egy <product> indítólemez.\n"
+msgstr ""
+"Ez nem egy <product> indítólemez.\n"
 "Kérem, helyezze be a(z) %u indítólemezt."
 
 # password dialog title
 #. txt_password_title
 msgid "Password"
 msgstr "Jelszó"
-
-# Keep the newlines and spaces after ':'!
-#. txt_password
-#, fuzzy
-msgid "Password:   \n"
-"\n"
-"\n"
-msgstr "Kérem, adja meg a jelszót:   \n"
-"\n"
-"\n"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
@@ -176,10 +176,12 @@ msgid "DVD Error"
 msgstr "DVD-hiba"
 
 #. txt_dvd_warning2
-msgid "This is a two-sided DVD. You have booted from the second side.\n"
+msgid ""
+"This is a two-sided DVD. You have booted from the second side.\n"
 "\n"
 "Turn the DVD over then continue."
-msgstr "Ez egy kétoldalas DVD. Ön a rendszerindításhoz a második oldalt használta.\n"
+msgstr ""
+"Ez egy kétoldalas DVD. Ön a rendszerindításhoz a második oldalt használta.\n"
 "\n"
 "Kérem, fordítsa meg a DVD-t, majd folytassa."
 
@@ -347,7 +349,8 @@ msgid "Firmware Test"
 msgstr ""
 
 #. txt_dud_file_msg
-msgid "To load driver updates directly from CD-ROM,\n"
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""

@@ -6,7 +6,8 @@
 # Ines Pozo <Ines.Pozo@novell.com>, 2005.
 #
 msgid ""
-msgstr "Project-Id-Version: es\n"
+msgstr ""
+"Project-Id-Version: es\n"
 "PO-Revision-Date: 2006-06-01 09:22\n"
 "Last-Translator: Novell Language <language@novell.com>\n"
 "Language-Team: Novell Language <language@novell.com>\n"
@@ -77,9 +78,11 @@ msgid "Exiting..."
 msgstr "Saliendo..."
 
 #. txt_exit_dialog
-msgid "You are leaving the graphical boot menu and\n"
+msgid ""
+"You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
-msgstr "Está saliendo del menú gráfico de arranque e\n"
+msgstr ""
+"Está saliendo del menú gráfico de arranque e\n"
 "iniciando la interfaz de modo texto."
 
 #. txt_help
@@ -93,19 +96,23 @@ msgstr "Iniciando..."
 
 # Keep the three newlines!
 #. txt_load_kernel
-msgid "Loading Linux Kernel\n"
+msgid ""
+"Loading Linux Kernel\n"
 "\n"
 "\n"
-msgstr "Cargando el kernel Linux\n"
+msgstr ""
+"Cargando el kernel Linux\n"
 "\n"
 "\n"
 
 # Keep the three newlines!
 #. txt_load_memtest
-msgid "Loading memtest86\n"
+msgid ""
+"Loading memtest86\n"
 "\n"
 "\n"
-msgstr "Cargando memtest86\n"
+msgstr ""
+"Cargando memtest86\n"
 "\n"
 "\n"
 
@@ -133,34 +140,27 @@ msgstr "Inserte el disco de arranque %u."
 
 #. txt_insert_disk2
 #, c-format
-msgid "This is boot disk %u.\n"
+msgid ""
+"This is boot disk %u.\n"
 "Insert boot disk %u."
-msgstr "Este es el disco de arranque %u.\n"
+msgstr ""
+"Este es el disco de arranque %u.\n"
 "Inserte el disco de arranque %u."
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format
-#, fuzzy
-msgid "This is not a <product> boot disk.\n"
+#, c-format,fuzzy
+msgid ""
+"This is not a <product> boot disk.\n"
 "Insert boot disk %u."
-msgstr "Este no es un disco de arranque de <product>.\n"
+msgstr ""
+"Este no es un disco de arranque de <product>.\n"
 "Inserte el disco de arranque %u."
 
 # password dialog title
 #. txt_password_title
 msgid "Password"
 msgstr "Contraseña"
-
-# Keep the newlines and spaces after ':'!
-#. txt_password
-#, fuzzy
-msgid "Password:   \n"
-"\n"
-"\n"
-msgstr "Introduzca la contraseña:   \n"
-"\n"
-"\n"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
@@ -172,10 +172,12 @@ msgid "DVD Error"
 msgstr "Error de DVD"
 
 #. txt_dvd_warning2
-msgid "This is a two-sided DVD. You have booted from the second side.\n"
+msgid ""
+"This is a two-sided DVD. You have booted from the second side.\n"
 "\n"
 "Turn the DVD over then continue."
-msgstr "Este DVD es de doble cara. Ha arrancado desde la segunda cara.\n"
+msgstr ""
+"Este DVD es de doble cara. Ha arrancado desde la segunda cara.\n"
 "\n"
 "Dé la vuelta al DVD y continúe."
 
@@ -343,7 +345,8 @@ msgid "Firmware Test"
 msgstr ""
 
 #. txt_dud_file_msg
-msgid "To load driver updates directly from CD-ROM,\n"
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""

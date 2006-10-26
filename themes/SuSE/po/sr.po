@@ -3,7 +3,8 @@
 # Copyright © 2005 Danilo Segan <danilo@gnome.org>
 #
 msgid ""
-msgstr "Project-Id-Version: bootloader\n"
+msgstr ""
+"Project-Id-Version: bootloader\n"
 "PO-Revision-Date: 2005-08-03 21:03+0200\n"
 "Last-Translator: Данило Шеган <danilo@gnome.org>\n"
 "Language-Team: Serbian <novell@prevod.org>\n"
@@ -73,9 +74,11 @@ msgid "Exiting..."
 msgstr "Завршавам..."
 
 #. txt_exit_dialog
-msgid "You are leaving the graphical boot menu and\n"
+msgid ""
+"You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
-msgstr "Напуштате графички мени за покретање и\n"
+msgstr ""
+"Напуштате графички мени за покретање и\n"
 "покрећете текстуално сучеље."
 
 #. txt_help
@@ -89,19 +92,23 @@ msgstr "Покрећем..."
 
 # Keep the three newlines!
 #. txt_load_kernel
-msgid "Loading Linux Kernel\n"
+msgid ""
+"Loading Linux Kernel\n"
 "\n"
 "\n"
-msgstr "Учитавам Линукс језгро\n"
+msgstr ""
+"Учитавам Линукс језгро\n"
 "\n"
 "\n"
 
 # Keep the three newlines!
 #. txt_load_memtest
-msgid "Loading memtest86\n"
+msgid ""
+"Loading memtest86\n"
 "\n"
 "\n"
-msgstr "Учитавам memtest86\n"
+msgstr ""
+"Учитавам memtest86\n"
 "\n"
 "\n"
 
@@ -129,34 +136,27 @@ msgstr "Уметните диск за покретање %u."
 
 #. txt_insert_disk2
 #, c-format
-msgid "This is boot disk %u.\n"
+msgid ""
+"This is boot disk %u.\n"
 "Insert boot disk %u."
-msgstr "Ово је диск за покретање %u.\n"
+msgstr ""
+"Ово је диск за покретање %u.\n"
 "Уметните диск за покретање %u."
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format
-#, fuzzy
-msgid "This is not a <product> boot disk.\n"
+#, c-format,fuzzy
+msgid ""
+"This is not a <product> boot disk.\n"
 "Insert boot disk %u."
-msgstr "Ово није диск за покретање <product>.\n"
+msgstr ""
+"Ово није диск за покретање <product>.\n"
 "Уметните диск за покретање %u."
 
 # password dialog title
 #. txt_password_title
 msgid "Password"
 msgstr "Лозинка"
-
-# Keep the newlines and spaces after ':'!
-#. txt_password
-#, fuzzy
-msgid "Password:   \n"
-"\n"
-"\n"
-msgstr "Унесите своју лозинку:   \n"
-"\n"
-"\n"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
@@ -168,10 +168,12 @@ msgid "DVD Error"
 msgstr "ДВД грешка"
 
 #. txt_dvd_warning2
-msgid "This is a two-sided DVD. You have booted from the second side.\n"
+msgid ""
+"This is a two-sided DVD. You have booted from the second side.\n"
 "\n"
 "Turn the DVD over then continue."
-msgstr "Ово је двострани ДВД.  Покренули сте са друге стране.\n"
+msgstr ""
+"Ово је двострани ДВД.  Покренули сте са друге стране.\n"
 "\n"
 "Окрените ДВД и затим наставите."
 
@@ -332,7 +334,8 @@ msgid "Firmware Test"
 msgstr ""
 
 #. txt_dud_file_msg
-msgid "To load driver updates directly from CD-ROM,\n"
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
