@@ -333,7 +333,7 @@ msgid "Firmware Test"
 msgstr "Test oprogramowania sprzętowego"
 
 #. txt_dud_file_msg
-#, no-strict-newlines
+#, wrap
 msgid ""
 "To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
