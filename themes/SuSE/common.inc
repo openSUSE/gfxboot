@@ -994,7 +994,7 @@
 
   /menu.text.xofs      10 def
   /menu.text.yofs       2 def
-  /menu.item.height    fontheight dup ptheme { 2 } { 2 } ifelse div add def
+  /menu.item.height    fontheight dup ptheme { 3 } { 2 } ifelse div add def
   /menu.bar.height     fontheight menu.text.yofs dup add add def
 
   font.normal setfont
@@ -1020,7 +1020,7 @@
 
   ptheme {
     /menu.start.x 220 def
-    /menu.start.y 182 def
+    /menu.start.y 163 def
   } if
 
   /menu.bar.width menu.bar.min.width def
@@ -1315,31 +1315,11 @@
 % Global variables.
 %
 
-/ptheme false def
+/ptheme rand pop rand 100 mod penguin.percent lt def
 
-syslinux {
-  rand pop rand 4 shr 11 div 0xffff and
-    date weekday 5 lt { 15 } { 3 } ifelse
-    date month dup 12 eq exch 1 eq or { 1 add 2 div } if
-  mod 0 eq
-
-  date
-  dup 0x7d50c18 ge over 0x7d60101 le and
-  dup 0x7d50c12 eq or
-  dup 0x7d50c0b eq or
-  dup 0x7d50c06 eq or
-  dup 0x7d50c04 eq or
-  dup 0x7d50b1b eq or
-  exch pop or
-
-  0x417 cvp getbyte 0x40 and 0 ne or
-  {
-    /ptheme true def
-  } if
-
+0x417 cvp getbyte 0x40 and 0 ne {
+  /ptheme true def
 } if
-
-/ptheme false def
 
 /transp 0x30 def
 
@@ -1395,7 +1375,7 @@ dup .undef eq { pop "back-low.jpg" findfile } if
 /debug 0 def
 
 ptheme small_layout or CapsLock or
-  true or
+%  true or
 {
   /bsplash.done { } def
 } {

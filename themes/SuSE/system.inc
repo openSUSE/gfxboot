@@ -914,6 +914,16 @@ def
 } def
 
 
+% Penguin theme percentage.
+%
+% (  -- int )
+%
+/penguin.percent {
+  /penguin.percent "penguin" getgfxconfig dup .undef ne { cvn } { pop 0 } ifelse def
+  penguin.percent
+} def
+
+
 % Video memory in kb.
 %
 % (  -- int )

@@ -94,27 +94,14 @@
       [ keyF2 0 "F2" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
       [ keyF3 0 "F3" /panel.options /panel.options.width /panel.options.update .undef ]
     ] def
-
-    /panel.penguin [
-      [ keyF1 0 "F1" /panel.ptheme /panel.ptheme.width /panel.ptheme.update .undef ]
-      [ keyF2 0 "F2" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
-      [ keyF3 0 "F3" /panel.options /panel.options.width /panel.options.update .undef ]
-    ] def
-
-    /panel ptheme {
-      panel.penguin
-    } {
-      panel.full
-      CapsLock { pop panel.full } if
-    } ifelse def
   } {
     /panel.short [
       [ keyF1 0 "F1" /panel.help /panel.help.width /panel.help.update .undef ]
       [ keyF2 0 "F2" /panel.options /panel.options.width /panel.options.update .undef ]
     ] def
-
-    /panel panel.full def
   } ifelse
+
+  /panel panel.full def
 
   panel.show
 } def

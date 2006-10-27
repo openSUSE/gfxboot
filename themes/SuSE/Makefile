@@ -16,7 +16,7 @@ HELPINST_ALL = $(notdir $(HELPINST))
 
 DEFAULT_LANG =
 
-PIC_COMMON   = timer_a.jpg
+PIC_COMMON   = timer_a.jpg pback.jpg phead.jpg panim{,_a}.jpg pabout.txt gfxboot.cfg
 PIC_INSTALL  = back.jpg welcome.jpg text*.pcx
 PIC_BOOT     = back.jpg
 

@@ -4,7 +4,7 @@ use Getopt::Long;
 
 sub nospaces;
 
-$opt_product = "SUSE Linux";
+$opt_product = "openSUSE";
 
 %help_key_rename = (
   'F2' => 'F3',
@@ -27,14 +27,17 @@ while(<>) {
     print STDERR "BOM in line $. found\n";
   }
 
-  s/\s*<\/?(hr|body|html|h\d+)\s*>//gi;
+  # remove XML markup fragments
+  s#<\?xml[^>]*>|<!DOCTYPE.*|\s*\]>\s*##g;
+
+  s#\s*<(/?(hr/?|body|html|h\d+)|/br)\s*>##gi;
   if(/<!--\s*help=(\S+)\s*-->/) {
     $helptype = $1;
   }
   s/\s*<(!|meta).*?>\s*//g;
   s/<(em|strong)>/\x11/gi;
   s/<\/(em|strong)>/\x10/gi;
-  s/&product;/$opt_product/gi;
+  s/(&product;|\@product\@)/$opt_product/gi;
   while(/<a\s/) {
     if(s/\<[aA]\s+name=\"([^"]+)\">([^<]*)<\/a>\s*/\x04\x12$1\x14$2\x10/) {
       if($anchor{$1}) {
@@ -59,7 +62,7 @@ while(<>) {
 
 $txt =~ s/\n( +)(?!\n)/"\n<!" . length($1) . ">"/seg;
 $txt =~ s/\s+/ /sg;
-$txt =~ s/\s*<br>\s*/\n/sgi;
+$txt =~ s/\s*<br\/?>\s*/\n/sgi;
 $txt =~ s/<!(\d+)>/" " x $1/seg;
 $txt =~ s/(\x14.*?\x10)\s*/$1/sg;
 $txt =~ s/\s*(\x04|$)/$1/sg;
