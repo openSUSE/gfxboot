@@ -42,21 +42,13 @@ function tst_isolinux {
   cp -a $src/* $dst/$isodir32
   rm -f $dst/$isodir32/{linux,initrd}64
   cp -a $logo $dst/$isodir32/bootlogo
-  gfx_cfg=$dst/$isodir32/gfxboot.cfg
-  [ -f $gfx_cfg ] && mv $gfx_cfg ${gfx_cfg}.tmp
   bin/unpack_bootlogo $dst/$isodir32
-  [ -f ${gfx_cfg}.tmp ] && cat ${gfx_cfg}.tmp >>$gfx_cfg
-  rm -f ${gfx_cfg}.tmp
 
   cp -a $src/* $dst/$isodir64
   [ -f $dst/$isodir64/linux64 ] && mv $dst/$isodir64/linux64 $dst/$isodir64/linux
   [ -f $dst/$isodir64/initrd64 ] && mv $dst/$isodir64/initrd64 $dst/$isodir64/initrd
   cp -a $logo $dst/$isodir64/bootlogo
-  gfx_cfg=$dst/$isodir64/gfxboot.cfg
-  [ -f $gfx_cfg ] && mv $gfx_cfg ${gfx_cfg}.tmp
   bin/unpack_bootlogo $dst/$isodir64
-  [ -f ${gfx_cfg}.tmp ] && cat ${gfx_cfg}.tmp >>$gfx_cfg
-  rm -f ${gfx_cfg}.tmp
 
   test/2hl --link --quiet $dst
 
