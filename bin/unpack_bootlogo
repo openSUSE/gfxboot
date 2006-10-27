@@ -32,10 +32,20 @@ sub unpack_bootlogo
   }
 
   if($xdir) {
+    rename "$dir/gfxboot.cfg", "$dir/$xdir/gfxboot.cfg.tmp" if -f "$dir/gfxboot.cfg";
     system "chmod -t $tmp/$_ ; mv $tmp/$_ $dir/$xdir ; ln -s $xdir/$_ $tmp/$_" for @ext;
+    if(-f "$dir/$xdir/gfxboot.cfg.tmp") {
+      system "cat $dir/$xdir/gfxboot.cfg.tmp >>$dir/$xdir/gfxboot.cfg";
+      unlink "$dir/$xdir/gfxboot.cfg.tmp";
+    }
   }
   else {
+    rename "$dir/gfxboot.cfg", "$dir/gfxboot.cfg.tmp" if -f "$dir/gfxboot.cfg";
     system "chmod -t $tmp/$_ ; mv $tmp/$_ $dir" for @ext;
+    if(-f "$dir/gfxboot.cfg.tmp") {
+      system "cat $dir/gfxboot.cfg.tmp >>$dir/gfxboot.cfg";
+      unlink "$dir/gfxboot.cfg.tmp";
+    }
   }
 
   open P, "| cd $tmp; cpio --quiet -o >../bootlogo";
