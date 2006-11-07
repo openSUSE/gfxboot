@@ -10,19 +10,18 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: fr\n"
-"PO-Revision-Date: 2006-06-01 08:45\n"
+"Project-Id-Version: bootloader\n"
+"PO-Revision-Date: 2006-11-02 14:16\n"
 "Last-Translator: Novell Language <language@novell.com>\n"
 "Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.9\n"
 
 # ok button label
 #. txt_ok
 msgid "OK"
-msgstr "OK"
+msgstr "Valider"
 
 # cancel button label
 #. txt_cancel
@@ -104,7 +103,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Chargement du noyau Linux\n"
+"Chargement du kernel Linux\n"
 "\n"
 "\n"
 
@@ -121,13 +120,11 @@ msgstr ""
 
 # info box title
 #. txt_info_title
-#, fuzzy
 msgid "Boot Loader"
 msgstr "Chargeur d'amorçage"
 
 # error box title
 #. txt_error_title
-#, fuzzy
 msgid "I/O Error"
 msgstr "Erreur E/S"
 
@@ -139,7 +136,7 @@ msgstr "Changer la disquette d'amorçage"
 #. txt_insert_disk
 #, c-format
 msgid "Insert boot disk %u."
-msgstr "Insérer le disque d'amorçage %u."
+msgstr "Insérez la disquette d'amorçage %u."
 
 #. txt_insert_disk2
 #, c-format
@@ -147,18 +144,18 @@ msgid ""
 "This is boot disk %u.\n"
 "Insert boot disk %u."
 msgstr ""
-"Il s'agit du disque d'amorçage %u.\n"
-"Insérer le disque d'amorçage %u."
+"Il s'agit de la disquette d'amorçage %u.\n"
+"Insérez la disquette d'amorçage %u."
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format,fuzzy
+#, c-format
 msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"Ce n'est pas un disque d'amorçage <product>.\n"
-"Insérez le disque d'amorçage %u."
+"Il ne s'agit pas d'une disquette d'amorçage pour <product>.\n"
+"Insérez la disquette d'amorçage %u."
 
 # password dialog title
 #. txt_password_title
@@ -204,9 +201,8 @@ msgid "Hard Disk Installation"
 msgstr "Installation du disque dur"
 
 #. txt_hd_diskdevice
-#, fuzzy
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Périphérique disque (balayer tous les disques si vide)\n"
+msgstr "Périphérique disque (analyser tous les disques si vide)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -227,7 +223,6 @@ msgstr "Mot de passe\n"
 
 # label for ftp user input
 #. txt_user1
-#, fuzzy
 msgid "User (Anonymous Login If Empty)\n"
 msgstr "Utilisateur (login anonyme si vide)\n"
 
@@ -238,14 +233,13 @@ msgstr "Installation NFS"
 
 # label for smb user input
 #. txt_user2
-#, fuzzy
 msgid "User (Uses \"guest\" If Empty)\n"
 msgstr "Utilisateur (utilisation de \"guest\" si vide)\n"
 
 # dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "Installation SMB (partage Windows)"
+msgstr "Installation SMB (partage Microsoft Windows)"
 
 # dialog title for http installation
 #. txt_http_title
@@ -303,50 +297,42 @@ msgid "Share\n"
 msgstr "Partage\n"
 
 #. txt_zenAuto
-#, fuzzy
 msgid "Automatic Mode"
 msgstr "Mode automatique"
 
 #. txt_zenManual
-#, fuzzy
 msgid "Manual Mode"
 msgstr "Mode manuel"
 
 #. txt_zenConfig
-#, fuzzy
 msgid "Configure Parameters on ZEN Partition"
 msgstr "Configurer les paramètres sur la partition ZEN"
 
 #. txt_zenInstall
-#, fuzzy
 msgid "Install or Update ZEN Partition"
-msgstr "Installer/mettre à jour la partition ZEN"
+msgstr "Installer ou mettre à jour la partition ZEN"
 
 #. txt_zenLilo
-#, fuzzy
 msgid "Reinstall ZEN Partition Boot Loader"
 msgstr "Réinstaller le chargeur d'amorçage de la partition ZEN"
 
 #. txt_zenDisable
-#, fuzzy
 msgid "Disable ZEN Partition"
 msgstr "Désactiver la partition ZEN"
 
 #. txt_zenEnable
-#, fuzzy
 msgid "Enable ZEN Partition"
 msgstr "Activer la partition ZEN"
 
 # video mode menu item
 #. txt_text_mode
-#, fuzzy
 msgid "Text Mode"
-msgstr "Nouveau mode"
+msgstr "Mode texte"
 
 # menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr ""
+msgstr "Test de microprogramme"
 
 #. txt_dud_file_msg
 msgid ""
@@ -354,3 +340,6 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
+"Pour charger les mises à jour de pilote directement depuis un CD,\n"
+"entrez les noms de fichier séparés\n"
+"par des virgules (,) :\n"

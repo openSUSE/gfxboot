@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2006-06-01 11:29\n"
+"PO-Revision-Date: 2006-11-02 14:23\n"
 "Last-Translator: Novell Language <language@novell.com>\n"
 "Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 # ok button label
 #. txt_ok
 msgid "OK"
-msgstr "確定"
+msgstr "確認"
 
 # cancel button label
 #. txt_cancel
@@ -113,13 +113,11 @@ msgstr ""
 
 # info box title
 #. txt_info_title
-#, fuzzy
 msgid "Boot Loader"
 msgstr "開機載入器"
 
 # error box title
 #. txt_error_title
-#, fuzzy
 msgid "I/O Error"
 msgstr "I/O 錯誤"
 
@@ -144,13 +142,13 @@ msgstr ""
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format,fuzzy
+#, c-format
 msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
 "這不是 <product> 開機磁片。\n"
-"請插入開機磁片 %u。"
+"插入開機磁片 %u。"
 
 # password dialog title
 #. txt_password_title
@@ -196,9 +194,8 @@ msgid "Hard Disk Installation"
 msgstr "硬碟安裝"
 
 #. txt_hd_diskdevice
-#, fuzzy
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "磁碟裝置 (如果是空的，將掃描所有磁碟)\n"
+msgstr "磁碟裝置 (如果為空白則掃描所有磁碟)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -219,7 +216,6 @@ msgstr "密碼\n"
 
 # label for ftp user input
 #. txt_user1
-#, fuzzy
 msgid "User (Anonymous Login If Empty)\n"
 msgstr "使用者 (如果是空的，將匿名登入)\n"
 
@@ -230,9 +226,8 @@ msgstr "NFS 安裝"
 
 # label for smb user input
 #. txt_user2
-#, fuzzy
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "使用者 (如果是空的，將使用 \"guest\")\n"
+msgstr "使用者 (如果空白則使用 \"guest\")\n"
 
 # dialog title for smb installation
 #. txt_smb_title
@@ -295,50 +290,42 @@ msgid "Share\n"
 msgstr "共享\n"
 
 #. txt_zenAuto
-#, fuzzy
 msgid "Automatic Mode"
 msgstr "自動模式"
 
 #. txt_zenManual
-#, fuzzy
 msgid "Manual Mode"
 msgstr "手動模式"
 
 #. txt_zenConfig
-#, fuzzy
 msgid "Configure Parameters on ZEN Partition"
 msgstr "設定 ZEN 分割區參數"
 
 #. txt_zenInstall
-#, fuzzy
 msgid "Install or Update ZEN Partition"
-msgstr "安裝/更新 ZEN 分割區"
+msgstr "安裝或更新 ZEN 分割區"
 
 #. txt_zenLilo
-#, fuzzy
 msgid "Reinstall ZEN Partition Boot Loader"
 msgstr "重新安裝 ZEN 分割區開機載入器"
 
 #. txt_zenDisable
-#, fuzzy
 msgid "Disable ZEN Partition"
 msgstr "停用 ZEN 分割區"
 
 #. txt_zenEnable
-#, fuzzy
 msgid "Enable ZEN Partition"
 msgstr "啟用 ZEN 分割區"
 
 # video mode menu item
 #. txt_text_mode
-#, fuzzy
 msgid "Text Mode"
 msgstr "文字模式"
 
 # menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr ""
+msgstr "韌體測試"
 
 #. txt_dud_file_msg
 msgid ""
@@ -346,3 +333,6 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
+"若要從 CD-ROM 直接載入驅動程式更新，\n"
+"請在此輸入驅動程式更新檔案名稱 \n"
+"(由逗號 ',' 分隔)：\n"

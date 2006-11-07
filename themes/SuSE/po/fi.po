@@ -8,10 +8,10 @@
 # Jami Saarikoski <jami.saarikoski@gmail.com>, 2006.
 msgid ""
 msgstr ""
-"Project-Id-Version: fi\n"
-"PO-Revision-Date: 2006-04-18 10:06+0300\n"
-"Last-Translator: Jyri Palokangas <jmp@netti.fi>\n"
-"Language-Team: suomi <yast-trans-fi@kotoistaminen.novell.fi>\n"
+"Project-Id-Version: bootloader\n"
+"PO-Revision-Date: 2006-11-02 17:16+0200\n"
+"Last-Translator: Erkka Hakkarainen <erkka.hakkarainen@pp.inet.fi>\n"
+"Language-Team: Suomi <suser-fi@kotoistaminen.novell.fi>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -102,7 +102,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Linux ytimen lataaminen\n"
+"Ladataan Linux ydin\n"
 "\n"
 "\n"
 
@@ -120,7 +120,7 @@ msgstr ""
 # info box title
 #. txt_info_title
 msgid "Boot Loader"
-msgstr "Käynnistyslatain"
+msgstr "Käynnistyslataaja"
 
 # error box title
 #. txt_error_title
@@ -168,7 +168,7 @@ msgstr "Ota ajurin päivityslevyke valmiiksi."
 # dvd warning title
 #. txt_dvd_warning_title
 msgid "DVD Error"
-msgstr "DVD virhe"
+msgstr "DVD-virhe"
 
 #. txt_dvd_warning2
 msgid ""
@@ -197,7 +197,7 @@ msgstr "Kiintolevy"
 # dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "Kiintolevy asennus"
+msgstr "Asennus kiintolevyltä"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
@@ -233,7 +233,7 @@ msgstr "NFS-asennus"
 # label for smb user input
 #. txt_user2
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "Käyttäjä (käyttäen \"vieras\" jos tyhjä)\n"
+msgstr "Käyttäjä (käyttää \"vieras\" jos tyhjä)\n"
 
 # dialog title for smb installation
 #. txt_smb_title
@@ -305,7 +305,7 @@ msgstr "Manuaalinen tila"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr "Määritä ZEN osion parametrit"
+msgstr "Määritä ZEN-osion parametrit"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
@@ -313,7 +313,7 @@ msgstr "Asenna tai päivitä ZEN osio"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "Asenna ZEN osion käynnistyslatain uudelleen"
+msgstr "Asenna ZEN-osion käynnistyslatain uudelleen"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
@@ -331,7 +331,7 @@ msgstr "Tekstitila"
 # menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr "Laiteohjelmiston testi"
+msgstr "Laiteohjelmiston (firmware) testi"
 
 #. txt_dud_file_msg
 msgid ""

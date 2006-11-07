@@ -14,14 +14,14 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bootloader.pa\n"
-"PO-Revision-Date: 2005-08-06 06:45+0530\n"
-"Last-Translator: Amanpreet Singh Alam[ਆਲਮ] <amanpreetalam@yahoo.com>\n"
-"Language-Team: Panjabi <pa@li.org>\n"
+"Project-Id-Version: bootloader\n"
+"PO-Revision-Date: 2006-11-03 11:37+0530\n"
+"Last-Translator: A S Alam <apbrar@gmail.com>\n"
+"Language-Team: Punjabi <fedora-trans-pa@redhat.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.9.1\n"
+"X-Generator: KBabel 1.11.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 # ok button label
@@ -90,6 +90,8 @@ msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
+"ਤੁਸੀਂ ਗਰਾਫਿਕਲ ਬੂਟ ਮੇਨੂ ਛੱਡ ਕੇ ਪਾਠ ਢੰਗ ਨਾਲ ਇੰਟਰਫੇਸ ਸ਼ੁਰੂ\n"
+"ਕਰ ਰਹੇ ਹੋ।"
 
 #. txt_help
 msgid "Help"
@@ -124,13 +126,11 @@ msgstr ""
 
 # info box title
 #. txt_info_title
-#, fuzzy
 msgid "Boot Loader"
 msgstr "ਬੂਟ ਲੋਡਰ"
 
 # error box title
 #. txt_error_title
-#, fuzzy
 msgid "I/O Error"
 msgstr "I/O ਗਲਤੀ"
 
@@ -155,7 +155,7 @@ msgstr ""
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format,fuzzy
+#, c-format
 msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
@@ -207,7 +207,6 @@ msgid "Hard Disk Installation"
 msgstr "ਹਾਰਡ ਡਿਸਕ ਇੰਸਟਾਲੇਸ਼ਨ"
 
 #. txt_hd_diskdevice
-#, fuzzy
 msgid "Disk Device (Scans All Disks If Empty)\n"
 msgstr "ਡਿਸਕ ਜੰਤਰ (ਜੇਕਰ ਖਾਲੀ ਹੈ ਤਾਂ ਸਭ ਡਿਸਕਾਂ ਦੀ ਜਾਂਚ)\n"
 
@@ -230,9 +229,8 @@ msgstr "ਗੁਪਤ-ਕੋਡ\n"
 
 # label for ftp user input
 #. txt_user1
-#, fuzzy
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "ਉਪਭੋਗੀ (ਅਗਿਆਤ ਲਾਗਿੰਨ, ਜੇਕਰ ਖਾਲੀ ਹੈ ਤਾਂ)\n"
+msgstr "ਉਪਭੋਗੀ (ਅਗਿਆਤ ਲਾਗਇਨ, ਜੇਕਰ ਖਾਲੀ ਹੈ ਤਾਂ)\n"
 
 # dialog title for nfs installation
 #. txt_nfs_title
@@ -242,7 +240,7 @@ msgstr "NFS ਇੰਸਟਾਲੇਸ਼ਨ"
 # label for smb user input
 #. txt_user2
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr ""
+msgstr "ਉਪਭੋਗੀ (ਜੇਕਰ ਖਾਲੀ ਹੋਇਆ ਤਾਂ \"guest\" ਵਰਤੇਗਾ)\n"
 
 # dialog title for smb installation
 #. txt_smb_title
@@ -276,15 +274,15 @@ msgstr "ਭਾਸ਼ਾ"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr ""
+msgstr "ਇੰਸਟਾਲੇਸ਼ਨ--IOAPIC ਆਯੋਗ ਹੈ"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
-msgstr ""
+msgstr "ਇੰਸਟਾਲੇਸ਼ਨ--IOAPIC ਆਯੋਗ ਹੈ"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr ""
+msgstr "ਇੰਸਟਾਲੇਸ਼ਨ-ਲੋਕਲ APIC ਆਯੋਗ ਹੈ"
 
 #. txt_yes
 msgid "Yes"
@@ -296,59 +294,51 @@ msgstr "ਨਹੀਂ"
 
 # menu item for selecting a file
 #. txt_file
-#, fuzzy
 msgid "File"
-msgstr "ਫਾਇਲ(_F)"
+msgstr "ਫਾਇਲ"
 
 # input label: share as in "Windows share" (SMB)
 #. txt_share
-#, fuzzy
 msgid "Share\n"
-msgstr "ਸਰਵਰ\n"
+msgstr "ਸਾਂਝ\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
-msgstr ""
+msgstr "ਆਟੋਮੈਟਿਕ ਢੰਗ"
 
 #. txt_zenManual
-#, fuzzy
 msgid "Manual Mode"
-msgstr "ਦਸਤੀ ਸੈਟਿੰਗ"
+msgstr "ਦਸਤੀ ਢੰਗ"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr ""
+msgstr "ZEN ਭਾਗ ਉੱਤੇ ਪੈਰਾਮੀਟਰ ਸੰਰਚਨਾ"
 
 #. txt_zenInstall
-#, fuzzy
 msgid "Install or Update ZEN Partition"
-msgstr "ਇੰਸਟਾਲੇਸ਼ਨ"
+msgstr "ZEN ਭਾਗ ਇੰਸਟਾਲ ਜਾਂ ਅੱਪਡੇਟ"
 
 #. txt_zenLilo
-#, fuzzy
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "ਬੂਟ-ਲੋਡਰ ਤਿਆਰ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
+msgstr "ZEN ਭਾਗ ਬੂਟ ਲੋਡ ਮੁੜ-ਇੰਸਟਾਲ"
 
 #. txt_zenDisable
-#, fuzzy
 msgid "Disable ZEN Partition"
-msgstr "ਇੰਸਟਾਲੇਸ਼ਨ"
+msgstr "ZEN ਭਾਗ ਆਯੋਗ"
 
 #. txt_zenEnable
-#, fuzzy
 msgid "Enable ZEN Partition"
-msgstr "ਇੰਸਟਾਲੇਸ਼ਨ"
+msgstr "ZEN ਭਾਗ ਯੋਗ"
 
 # video mode menu item
 #. txt_text_mode
-#, fuzzy
 msgid "Text Mode"
-msgstr "ਮਾਊਸ ਮਾਡਲ"
+msgstr "ਪਾਠ ਢੰਗ"
 
 # menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr ""
+msgstr "ਫਾਇਰਮਵੇਅਰ ਜਾਂਚ"
 
 #. txt_dud_file_msg
 msgid ""
@@ -356,3 +346,6 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
+"CD-ROM ਤੋਂ ਡਰਾਇਵਰ ਅੱਪਡੇਟ ਸਿੱਧਾ ਲੋਡ ਕਰਨ ਲਈ,\n"
+"ਅੱਪਡੇਟ ਡਰਾਇਵਰ ਫਾਇਲ ਨਾਂ ਇੱਥੇ ਦਿਓ (',' ਨਾਲ ਵੱਖ\n"
+"ਕਰਕੇ):\n"

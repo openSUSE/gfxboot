@@ -7,19 +7,18 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: es\n"
-"PO-Revision-Date: 2006-06-01 09:22\n"
+"Project-Id-Version: bootloader\n"
+"PO-Revision-Date: 2006-11-02 14:07\n"
 "Last-Translator: Novell Language <language@novell.com>\n"
 "Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.3.1\n"
 
 # ok button label
 #. txt_ok
 msgid "OK"
-msgstr "OK"
+msgstr "Aceptar"
 
 # cancel button label
 #. txt_cancel
@@ -118,15 +117,13 @@ msgstr ""
 
 # info box title
 #. txt_info_title
-#, fuzzy
 msgid "Boot Loader"
 msgstr "Cargador de arranque"
 
 # error box title
 #. txt_error_title
-#, fuzzy
 msgid "I/O Error"
-msgstr "Error E/S"
+msgstr "Errores de E/S"
 
 # boot disk change dialog title
 #. txt_change_disk_title
@@ -149,13 +146,13 @@ msgstr ""
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format,fuzzy
+#, c-format
 msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
 "Este no es un disco de arranque de <product>.\n"
-"Inserte el disco de arranque %u."
+"Introduzca el disco de arranque %u."
 
 # password dialog title
 #. txt_password_title
@@ -201,9 +198,8 @@ msgid "Hard Disk Installation"
 msgstr "Instalación del disco duro"
 
 #. txt_hd_diskdevice
-#, fuzzy
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Dispositivo de disco (examinar todos los discos si está vacío)\n"
+msgstr "Dispositivo de disco (analiza todos los discos si se deja vacío)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -224,7 +220,6 @@ msgstr "Contraseña\n"
 
 # label for ftp user input
 #. txt_user1
-#, fuzzy
 msgid "User (Anonymous Login If Empty)\n"
 msgstr "Usuario (login anónimo si está vacío)\n"
 
@@ -235,9 +230,8 @@ msgstr "Instalación NFS"
 
 # label for smb user input
 #. txt_user2
-#, fuzzy
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "Usuario (usando \"guest\" si estuviera vacío)\n"
+msgstr "Usuario (se utiliza \"guest\" si se deja vacío)\n"
 
 # dialog title for smb installation
 #. txt_smb_title
@@ -300,50 +294,42 @@ msgid "Share\n"
 msgstr "Compartir\n"
 
 #. txt_zenAuto
-#, fuzzy
 msgid "Automatic Mode"
 msgstr "Modo automático"
 
 #. txt_zenManual
-#, fuzzy
 msgid "Manual Mode"
 msgstr "Modo manual"
 
 #. txt_zenConfig
-#, fuzzy
 msgid "Configure Parameters on ZEN Partition"
 msgstr "Configurar parámetros en la partición ZEN"
 
 #. txt_zenInstall
-#, fuzzy
 msgid "Install or Update ZEN Partition"
-msgstr "Instalar/actualizar partición ZEN"
+msgstr "Instalar o actualizar la partición ZEN"
 
 #. txt_zenLilo
-#, fuzzy
 msgid "Reinstall ZEN Partition Boot Loader"
 msgstr "Volver a instalar el cargador de arranque de partición ZEN"
 
 #. txt_zenDisable
-#, fuzzy
 msgid "Disable ZEN Partition"
 msgstr "Inhabilitar partición ZEN"
 
 #. txt_zenEnable
-#, fuzzy
 msgid "Enable ZEN Partition"
 msgstr "Habilitar partición ZEN"
 
 # video mode menu item
 #. txt_text_mode
-#, fuzzy
 msgid "Text Mode"
-msgstr "Nuevo modo"
+msgstr "Modo de texto"
 
 # menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr ""
+msgstr "Prueba de firmware"
 
 #. txt_dud_file_msg
 msgid ""
@@ -351,3 +337,6 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
+"Para cargar las actualizaciones de controlador directamente desde el CD-ROM,\n"
+"indique los nombres de archivo de las actualizaciones de controlador (separados\n"
+"por comas \",\") aquí:\n"

@@ -6,15 +6,15 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: pl\n"
+"Project-Id-Version: bootloader.pl\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2006-04-07 14:27+0200\n"
-"Last-Translator: Wojciech Kapusta <wojciech@aviary.pl>\n"
-"Language-Team:  <pl@li.org>\n"
+"PO-Revision-Date: 2006-10-12 02:08+0200\n"
+"Last-Translator: Marcin Karpeta <asedas[at]pnet.pl>\n"
+"Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.9.1\n"
+"X-Generator: KBabel 1.11.2\n"
 
 # ok button label
 #. txt_ok

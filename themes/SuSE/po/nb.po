@@ -8,14 +8,14 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: nb\n"
-"PO-Revision-Date: 2005-08-11 20:19+0200\n"
+"Project-Id-Version: bootloader\n"
+"PO-Revision-Date: 2006-10-06 17:34+0200\n"
 "Last-Translator: Olav Pettershagen <olav.pet@online.no>\n"
 "Language-Team:  <nb@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.10.2\n"
+"X-Generator: KBabel 1.11.4\n"
 
 # ok button label
 #. txt_ok
