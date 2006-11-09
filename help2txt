@@ -1,7 +1,15 @@
 #! /usr/bin/perl
 
 use Getopt::Long;
+use HTML::Parser;
 
+sub text_handler;
+sub comment_handler;
+sub default_handler;
+sub start_handler;
+sub end_handler;
+sub body_start;
+sub find_tag;
 sub nospaces;
 
 $opt_product = "openSUSE";
@@ -16,61 +24,33 @@ GetOptions(
   'product=s' => \$opt_product
 );
 
-if(!@ARGV) {
-  print "Usage: help2txt help_file\n" .
-  "Converts a help file from HTML to the format used by the boot loader.\n";
-  exit;
-}
+$p = HTML::Parser->new(api_version => 3);
 
-while(<>) {
-  if(/^\xef\xbb\xbf/) {
-    print STDERR "BOM in line $. found\n";
-  }
+# $p->utf8_mode(1);
+$p->unbroken_text(1);
 
-  # remove XML markup fragments
-  s#<\?xml[^>]*>|<!DOCTYPE.*|\s*\]>\s*##g;
+$p->handler(default => "" );
+$p->handler(start => \&body_start, "self,tagname,line");
 
-  s#\s*<(/?(hr/?|body|html|h\d+)|/br)\s*>##gi;
-  if(/<!--\s*help=(\S+)\s*-->/) {
-    $helptype = $1;
-  }
-  s/\s*<(!|meta).*?>\s*//g;
-  s/<(em|strong)>/\x11/gi;
-  s/<\/(em|strong)>/\x10/gi;
-  s/(&product;|\@product\@)/$opt_product/gi;
-  while(/<a\s/) {
-    if(s/\<[aA]\s+name=\"([^"]+)\">([^<]*)<\/a>\s*/\x04\x12$1\x14$2\x10/) {
-      if($anchor{$1}) {
-        die "line $.: anchor \"$1\" already exists\n";
-      }
-      else {
-        $anchor{$1} = 1;
-      }
-      die "line $.: label \"$1\" too long (max. 32)\n" if length $1 > 32;
-    }
-    elsif(s/<a\s+href=\"#([^"]+)\">([^<]*)<\/a>/"\x12" . $1 . "\x13" . nospaces($2) . "\x10"/ei) {
-      $ref{$1}++;
-      die "line $.: label \"$1\" too long (max. 32)\n" if length $1 > 32;
-    }
-    else {
-      die "line $.: invalid 'A' element\n";
-    }
-  }
+$p->parse_file(shift);
 
-  $txt .= $_;
-}
+# print "help type = \"$helptype\"\n";
 
-$txt =~ s/\n( +)(?!\n)/"\n<!" . length($1) . ">"/seg;
-$txt =~ s/\s+/ /sg;
-$txt =~ s/\s*<br\/?>\s*/\n/sgi;
-$txt =~ s/<!(\d+)>/" " x $1/seg;
-$txt =~ s/(\x14.*?\x10)\s*/$1/sg;
-$txt =~ s/\s*(\x04|$)/$1/sg;
 
-# FIXME: drop after 10.0
-$txt =~ s/(\bF[234]\b)/$help_key_rename{$1}/sg if $helptype eq 'install';
+$t .= $_->[1] for @t;
 
-print $txt, "\x00";
+$t =~ s/ +/ /sg;
+$t =~ s/\n /\n/sg;
+$t =~ s/ \n/\n/sg;
+$t =~ s/(\x14.*?\x10)\s*/$1/sg;
+$t =~ s/\s*(\x04|$)/$1/sg;
+$t =~ s/(&product;|\@product\@)/$opt_product/g;
+
+# FIXME: we need a better solution
+$t =~ s/(\bF[234]\b)/$help_key_rename{$1}/sg if $helptype eq 'install';
+
+print $t, "\x00";
+
 
 if($helptype eq 'boot') {
   $ref{help}++;
@@ -82,7 +62,7 @@ if($helptype eq 'install') {
   $ref{bits}++;
 }
 
-for (keys %anchor) {
+for (keys %label) {
   if(!$ref{$_}) {
     $err = 1;
     print STDERR "\"$_\" never referenced\n"
@@ -90,13 +70,142 @@ for (keys %anchor) {
 }
 
 for (keys %ref) {
-  if(!$anchor{$_}) {
+  if(!$label{$_}) {
     $err = 1;
     print STDERR "\"$_\" never defined\n"
   }
 }
 
 warn "*** inconsistencies detected ***\n" if $err;
+
+
+
+sub text_handler
+{
+  local $_;
+
+  $_ = shift;
+  s/\s+/ /g;
+
+  push @t, [ "", $_ ];
+}
+
+
+sub comment_handler
+{
+  $helptype = $1 if $_[0] =~ /\bhelp=([a-z]+)/;
+}
+
+
+sub default_handler
+{
+  my $line = shift;
+
+  die "oops at line $line\n";
+}
+
+
+sub body_start
+{
+  my ($self, $tag) = @_;
+
+  if($tag eq "body") {
+    $self->handler(text => \&text_handler, "text");
+    $self->handler(comment => \&comment_handler, "text" );
+    $self->handler(default => \&default_handler, "line" );
+    $self->handler(start => \&start_handler, "self,tagname,attr,line");
+    $self->handler(end => \&end_handler, "self,tagname,line");
+  }
+}
+
+
+sub start_handler
+{
+  my ($self, $tag, $attr, $line) = @_;
+  my $l;
+
+  return if $tag eq "hr";
+  return if $tag eq "h3";
+
+  if($tag eq "br") {
+    push @t, [ "", "\n" ];
+  }
+  elsif($tag eq "em") {
+    push @t, [ "em" ];
+  }
+  elsif($tag eq "a") {
+    $l = $attr->{href};
+    $l =~ s/^#//;
+    push @t, [ "a", undef, $attr->{name}, $l ];
+  }
+  else {
+    die "line $line: unsupported tag $tag\n";
+  }
+}
+
+
+sub end_handler
+{
+  my ($self, $tag, $line) = @_;
+  my ($i, $j);
+
+  return if $tag eq "h3";
+
+  if($tag eq "body") {
+    $self->handler(text => "");
+    $self->handler(comment => "" );
+    $self->handler(default => "" );
+    $self->handler(start => "");
+    $self->handler(end => "");
+
+    return;
+  }
+
+  $i = find_tag $tag, $line;
+  die "line $line: no matching opening tag for $tag found\n" unless $i;
+
+  if($tag eq "em") {
+    $i = pop @t;
+    pop @t;
+    push @t, [ "", "\x11$i->[1]\x10" ];
+  }
+  elsif($tag eq "a") {
+    $i = pop @t;
+    $j = pop @t;
+    if($j->[2]) {
+      # name
+      die "line $line: label $j->[2] too long (max. 32)\n" if length($j->[2]) > 32;
+      die "line $line: label $j->[2] already exists\n" if $label{$j->[2]};
+      $label{$j->[2]} = 1;
+      push @t, [ "", "\x04\x12$j->[2]\x14$i->[1]\x10" ];
+    }
+    elsif($j->[3]) {
+      # href
+      die "line $line: label $j->[3] too long (max. 32)\n" if length($j->[3]) > 32;
+      $ref{$j->[3]}++;
+      push @t, [ "", "\x12$j->[3]\x13" . nospaces($i->[1]) . "\x10" ];
+    }
+    else {
+      die "line $line: strange tag $tag\n";
+    }
+  }
+  else {
+    die "line $line: unexpected tag $tag\n";
+  }
+
+}
+
+
+sub find_tag
+{
+  my $i = @t - 1;
+
+  return undef if $i < 1;
+
+  return 1 if $t[$i][0] eq "" && $t[$i-1][0] eq $_[0];
+
+  die "line $_[1]: nested tags not supported\n";
+}
 
 
 # \x1f looks like a space but is not a space. This is useful
@@ -106,10 +215,8 @@ sub nospaces
   local $_;
 
   $_ = shift;
-
   s/\s/\x1f/g;
 
-  $_
+  return $_;
 }
-
 
