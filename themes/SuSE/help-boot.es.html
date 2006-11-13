@@ -1,126 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 12 April 2005), see www.w3.org">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+</head>
 <body>
-
 <!-- help=boot -->
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="help">Utilización del sistema de ayuda</a></h3>
-
-La ayuda en línea del cargador de arranque es de carácter contextual 
-y le proporciona información sobre el elemento de menú seleccionado o,
-durante la edición de las opciones de arranque, busca información acerca 
-de la opción sobre la que está colocado el cursor.<br>
+<hr>
+<h3><a name="help">Uso del sistema de ayuda</a></h3>
+La ayuda en línea del cargador de arranque es contextual.
+Proporciona información sobre el elemento de menú seleccionado o,
+si se están modificando las opciones de arranque, intenta buscar
+información sobre la opción en la que está situado el cursor.<br>
 <br>
-Teclas de navegación<br><br>
-
-  <em>Flecha arriba</em>: seleccionar enlace anterior<br>
-  <em>Flecha abajo</em>: seleccionar enlace siguiente<br>
-  <em>Flecha izquierda</em>, <em>Retroceso</em>: volver al punto anterior<br>
-  <em>Flecha derecha</em>, <em>Intro</em>, <em>Espacio</em>: seguir enlace<br>
-  <em>Re. Pág.</em>: retroceder una página<br>
-  <em>Av. Pág.</em>: avanzar una página<br>
-  <em>Inicio</em>: ir al principio de la página<br>
-  <em>Fin</em>: ir al final de la página<br>
-  <em>Esc</em>: abandonar la ayuda<br>
-
-<br>Volver a las <a href="#opt">opciones de arranque</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="keytable">Selección del idioma y de la distribución del teclado</a></h3>
-
-Con <em>F2</em> puede cambiar el idioma y la distribución del teclado del cargador de arranque.
-
-<br><br>Volver a las <a href="#opt">opciones de arranque</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="profile">Seleccionar perfil</a></h3>
-
-Con <em>F3</em> puede seleccionar un perfil. El sistema se iniciará entonces con la configuración
-guardada en ese perfil.
-
-<br><br>Volver a las <a href="#opt">opciones de arranque</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+Teclas de navegación<br>
+<br>
+<em>Flecha arriba</em>: resalta el enlace anterior<br>
+<em>Flecha abajo</em>: resalta el enlace siguiente<br>
+<em>Flecha a la izquierda</em>, <em>Retroceso</em>: vuelve al tema
+anterior<br>
+<em>Flecha a la derecha</em>, <em>Intro</em>, <em>Espacio</em>:
+sigue el enlace<br>
+<em>Re Pág</em>: sube una página<br>
+<em>Av Pág</em>: baja una página<br>
+<em>Inicio</em>: se dirige al inicio de la página<br>
+<em>Fin</em>: se dirige al final de la página<br>
+<em>Esc</em>: sale de la ayuda<br>
+<br>
+Volver a <a href="#opt">Opciones de arranque</a>
+<hr>
+<h3><a name="keytable">Selección de idioma y distribución de
+teclado</a></h3>
+Pulse <em>F2</em> para cambiar el idioma y la distribución del
+teclado que utilizará el cargador de arranque.<br>
+<br>
+Volver a <a href="#opt">Opciones de arranque</a>
+<hr>
+<h3><a name="profile">Elegir perfil</a></h3>
+Pulse <em>F3</em> para seleccionar un perfil. El sistema se
+iniciará usando la configuración guardada en este perfil.<br>
+<br>
+Volver a <a href="#opt">Opciones de arranque</a>
+<hr>
 <h3><a name="opt">Opciones de arranque</a></h3>
-
-  <a href="#o_splash">splash</a> -- determina el comportamiento de la pantalla de bienvenida<br>
-  <a href="#o_apm">apm</a> -- cambia la gestión de energía<br>
-  <a href="#o_acpi">acpi</a> -- Advanced Configuration and Power Interface<br>
-  <a href="#o_ide">ide</a> -- controla el subsistema IDE<br>
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="o_splash">Opciones del kernel: splash</a></h3>
-
-La pantalla de bienvenida es la imagen mostrada durante el inicio del sistema.<br>
+<a href="#o_splash">pantalla inicial</a> -- influye en el
+comportamiento de la pantalla inicial<br>
+<a href="#o_apm">apm</a> -- alterna la gestión de la energía<br>
+<a href="#o_acpi">acpi</a> -- interfaz avanzada de configuración y
+energía (ACPI)<br>
+<a href="#o_ide">IDE</a> -- controla el subsistema IDE<br>
+<hr>
+<h3><a name="o_splash">Opciones del núcleo: pantalla
+inicial</a></h3>
+La pantalla inicial es la imagen que se muestra durante el inicio
+del sistema.<br>
 <br>
 <em>splash=0</em><br>
-La pantalla de bienvenida está desactivada. Esta opción puede resultar de utilidad
-en caso de tener un monitor muy viejo o de que se produzca algún error.<br>
+La pantalla inicial se desactiva. Esto puede ser útil en monitores
+muy antiguos o si se produce algún error.<br>
 <br>
-<em>splash=verbose</em><br> Activa la pantalla de bienvenida mostrando al mismo tiempo los mensajes 
-de arranque y del kernel.<br>
+<em>splash=verbose</em><br>
+Activa la pantalla inicial y se siguen mostrando los mensajes del
+núcleo y de arranque.<br>
 <br>
 <em>splash=silent</em><br>
-Activa la pantalla de bienvenida sin mostrar ningún mensaje. En su lugar aparece en pantalla una barra de progreso.<br>
+Activa la pantalla inicial, pero no los mensajes. En su lugar, se
+muestra una barra de progreso.<br>
 <br>
-Volver a las <a href="#opt">opciones de arranque</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="o_apm">Opciones del kernel: apm</a></h3>
-
-APM es uno de los dos métodos de gestión de energía utilizados en los ordenadores
-actuales. Aunque se emplea principalmente en portátiles para funciones como 'suspend to 
-disk', también puede encargarse de desconectar el ordenador después de apagar el sistema.
-APM depende de que la BIOS funcione correctamente. Si la BIOS tiene una avería, las funciones
-de APM pueden verse restringidas o APM puede hacer incluso que el ordenador deje de 
-funcionar. Así pues, puede desconectarlo con el parámetro<br><br>
-
-  <em>apm=off</em>  -- desactiva APM completamente<br><br>
-
-Algunos ordenadores de fabricación reciente pueden sacarle más partido al método
-<a href="#o_acpi">ACPI</a>, más moderno.
-
-<br><br>Volver a las <a href="#opt">opciones de arranque</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="o_acpi">Opciones del kernel: acpi</a></h3>
-
-ACPI (Advanced Configuration and Power Interface) es un estándar que define
-las interfaces de gestión de energía y configuración entre el sistema operativo
-y la BIOS. Por defecto, <em>acpi</em> se activa cuando se detecta una BIOS de
-fabricación posterior al año 2000. Existen diversos parámetros de uso extendido
-para determinar el comportamiento de ACPI:<br>
+Volver a <a href="#opt">Opciones de arranque</a>
+<hr>
+<h3><a name="o_apm">Opciones del núcleo: apm</a></h3>
+APM es una de las dos estrategias de gestión de la energía que se
+utiliza en los equipos actuales. Se utiliza principalmente en
+portátiles para funciones como la suspensión a disco, pero también
+puede ser responsable de apagar el equipo cuando se corta la
+alimentación. APM se fundamenta en un funcionamiento correcto del
+BIOS. Si el BIOS está dañado, puede que APM tenga un uso limitado,
+o que incluso impida que el equipo funcione. Por lo tanto, es
+posible desactivarlo con el parámetro<br>
 <br>
-  <em>pci=noacpi</em> -- no utilizar ACPI para enrutar interrupciones PCI<br>
-  <em>acpi=oldboot</em> -- sólo permanecen activadas las partes de ACPI relevantes 
-   para el arranque<br>
-  <em>acpi=off</em> -- desactiva ACPI completamente<br>
-  <em>acpi=force</em> -- activa ACPI aunque la BIOS sea anterior a 2000<br>
+<em>apm=off</em> -- desactiva APM por completo<br>
 <br>
-Sustituye al antiguo sistema <a href="#o_apm">apm</a> especialmente en ordenadores de
-fabricación reciente.
-
-
-<br><br>Volver a las <a href="#opt">opciones de arranque</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="o_ide">Opciones del kernel: ide</a></h3>
-
-Al contrario que SCSI, IDE se suele utilizar en la mayoría de los sistemas de sobremesa.
-Para evitar algunos problemas de hardware que afectan a los sistemas IDE, utilice el 
-parámetro del kernel: <br><br> 
-
-  <em>ide=nodma</em>  -- desactiva dma para los dispositivos IDE<br>
-
-
-
-<br><br>Volver a las <a href="#opt">opciones de arranque</a>.
-
-</body></html>
+Algunos equipos muy nuevos pueden beneficiarse más del <a href=
+"#o_acpi">acpi</a> más reciente.<br>
+<br>
+Volver a <a href="#opt">Opciones de arranque</a>
+<hr>
+<h3><a name="o_acpi">Opciones del núcleo: acpi</a></h3>
+ACPI (interfaz avanzada de configuración y energía) es un estándar
+que define las interfaces de gestión de la configuración y la
+energía entre un sistema operativo y el BIOS. Por defecto,
+<em>acpi</em> se activa cuando se detecta que el BIOS es posterior
+al año 2000. Habitualmente, se utilizan varios parámetros para
+controlar el comportamiento de ACPI:<br>
+<br>
+<em>pci=noacpi</em> -- no utiliza ACPI para encaminar las
+interrupciones PCI <em>acpi=oldboot</em> -- sólo permanecen
+activadas las partes de ACPI relevantes para el arranque<br>
+<em>acpi=off</em> -- desactiva ACPI por completo<br>
+<em>acpi=force</em> -- activa ACPI incluso si el BIOS es anterior
+al año 2000<br>
+<br>
+Especialmente en equipos nuevos, sustituye al sistema <a href=
+"#o_apm">apm</a> antiguo.<br>
+<br>
+Volver a <a href="#opt">Opciones de arranque</a>
+<hr>
+<h3><a name="o_ide">Opciones del núcleo: ide</a></h3>
+IDE, a diferencia de SCSI, se utiliza en la mayoría de las
+estaciones de trabajo de escritorio. Para evitar algunos problemas
+de hardware que se producen con los sistemas IDE, utilice el
+parámetro del núcleo:<br>
+<br>
+<em>ide=nodma</em> -- desactiva dma para las unidades IDE<br>
+<br>
+<br>
+Volver a <a href="#opt">Opciones de arranque</a>.
+</body>
+</html>

@@ -1,126 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 12 April 2005), see www.w3.org">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+</head>
 <body>
-
 <!-- help=boot -->
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="help">Verwenden des Hilfesystems</a></h3>
-
-Die Online-Hilfe des Bootloaders ist kontextsensitiv. Sie gibt Informationen
-zum gewählten Menüpunkt aus und versucht beim Bearbeiten von
-Bootoptionen, Informationen zur jeweiligen Option auszugeben, auf der der Cursor sich befindet.<br>
+<hr>
+<h3><a name="help">Hilfesystem verwenden</a></h3>
+Die Online-Hilfe des Bootloaders ist kontextsensitiv. Sie zeigt
+Informationen über die ausgewählte Menüoption an bzw. versucht bei
+der Bearbeitung der Bootoptionen, Informationen über die Option
+bereitzustellen, auf der sich der Mauszeiger zur Zeit befindet.<br>
 <br>
-Navigationstasten<br><br>
-
-  <em>Pfeil nach oben</em>: vorherigen Link markieren<br>
-  <em>Peil nach unten</em>: nächsten Link markieren<br>
-  <em>Linker Pfeil</em>, <em>Backspace</em>: zu vorheriger Option zurückgehen<br>
-  <em>Rechter Pfeil</em>, <em>Enter</em>, <em>Leertaste</em>: Link folgen<br>
-  <em>Bild nach oben</em>: eine Seite nach oben scrollen<br>
-  <em>Bild nach unten</em>: eine Seite nach unten scrollen<br>
-  <em>Home</em>: zur Startseite gehen<br>
-  <em>Ende</em>: zum Seitenende gehen<br>
-  <em>Esc</em>: Hilfe verlassen<br>
-
-<br>Zurück zu den <a href="#opt">Bootoptionen</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="keytable">Sprach- und Tastaturbelegung</a></h3>
-
-Drücken Sie <em>F2</em> zum Ändern der Sprache und des
-Tastatur-Layouts für den Bootloader.
-
-<br><br>Zurück zu den <a href="#opt">Bootoptionen</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="profile">Profil wählen</a></h3>
-
-Drücken Sie <em>F3</em> zum Wählen eines Profils. Ihr System wird mit
-der in diesem Profil gespeicherten Konfiguration gestartet.
-
-<br><br>Zurück zu den <a href="#opt">Bootoptionen</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+Navigationstasten<br>
+<br>
+<em>Pfeil nach oben</em>: Hebt vorherigen Link hervor<br>
+<em>Pfeil nach unten</em>: Hebt nächsten Link hervor<br>
+<em>Pfeil nach links</em>, <em>Rücktaste</em>: Kehrt zum vorherigen
+Thema zurück<br>
+<em>Pfeil nach rechts</em>, <em>Eingabe</em>, <em>Leerzeichen</em>:
+Folgt Link<br>
+<em>Bild auf</em>: Blättert eine Seite nach oben<br>
+<em>Bild ab</em>: Blättert eine Seite nach unten<br>
+<em>Privat</em>: Geht zum Seitenanfang<br>
+<em>Ende</em>: Geht zum Seitenende<br>
+<em>Esc</em>: Beendet die Hilfe<br>
+<br>
+Zurück zu <a href="#opt">Bootoptionen</a>
+<hr>
+<h3><a name="keytable">Auswahl der Sprache und
+Tastaturbelegung</a></h3>
+Drücken Sie <em>F2</em>, um die vom Bootloader verwendete Sprache
+und Tastaturbelegung zu ändern.<br>
+<br>
+Zurück zu <a href="#opt">Bootoptionen</a>
+<hr>
+<h3><a name="profile">Profil auswählen</a></h3>
+Drücken Sie <em>F3</em>, um ein Profil auszuwählen. Ihr System wird
+mit der Konfiguration dieses Profils gestartet.<br>
+<br>
+Zurück zu <a href="#opt">Bootoptionen</a>
+<hr>
 <h3><a name="opt">Bootoptionen</a></h3>
-
-  <a href="#o_splash">splash</a> -- beeinflusst das Verhalten des Splash-Screens<br>
-  <a href="#o_apm">apm</a> -- Power-Management umschalten<br>
-  <a href="#o_acpi">acpi</a> -- erweiterte Konfigurations- und Power-Schnittstelle<br>
-  <a href="#o_ide">ide</a> -- Steuern des IDE-Subsystems<br>
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<a href="#o_splash">splash</a> -- Beeinflusst das Verhalten des
+Splash-Screen<br>
+<a href="#o_apm">apm</a> -- Schaltet die Energieverwaltung
+ein/aus<br>
+<a href="#o_acpi">acpi</a> -- Advanced Configuration and Power
+Interface<br>
+<a href="#o_ide">IDE</a> -- Steuert das IDE-Subsystem<br>
+<hr>
 <h3><a name="o_splash">Kernel-Optionen: splash</a></h3>
-
-Der Splash-Screen ist das beim Systemstart angezeigte Bild.<br>
+Der Splash-Screen ist das Bild, das beim Systemstart eingeblendet
+wird.<br>
 <br>
 <em>splash=0</em><br>
-Der Splash-Screen ist abgeschaltet. Dies mag für sehr alte Monitore
-nützlich sein oder beim Auftreten von Fehlern.<br>
+Der Splash-Screen ist deaktiviert. Diese Einstellung empfiehlt sich
+eventuell bei sehr alten Bildschirmen oder bei bestimmten
+Fehlern.<br>
 <br>
-<em>splash=verbose</em><br> Aktiviert Splash; Kernel- Und Boot-Meldungen werden
-weiterhin angezeigt.<br>
+<em>splash=verbose</em><br>
+Aktiviert den Splash-Screen. Kernel- und Boot-Meldungen werden nach
+wie vor angezeigt.<br>
 <br>
 <em>splash=silent</em><br>
-Aktiviert Splash, jedoch keine Meldungen. Stattdessen wird eine
-Fortschrittsanzeige angezeigt.<br>
+Aktiviert den Splash-Screen, aber keine Meldungen. Stattdessen wird
+ein Fortschrittsbalken angezeigt.<br>
 <br>
-Zurück zu den <a href="#opt">Bootoptionen</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+Zurück zu <a href="#opt">Bootoptionen</a>
+<hr>
 <h3><a name="o_apm">Kernel-Optionen: apm</a></h3>
-
-APM ist eine der beiden Power-Management-Möglichkeiten, die derzeit auf
-aktuellen Rechnern verwendet werden. Es wird hauptsächlich für
-Laptop-Funktionen wie Suspend to Disk verwendet. Es kann jedoch auch zum Ausschalten
-des Rechners nach dem Herunterfahren verwendet werden. APM hängt von einem
-funktionierenden BIOS ab. Ist das BIOS defekt, kann APM möglicherweise nur
-begrenzt eingesetzt werden oder den Rechner sogar funktionsunfähig
-machen. Deshalb kann es mit dem Parameter<br><br>
-
-  <em>apm=off</em>  -- APM komplett abschalten<br><br>
-
-Einige sehr neue Rechner könnten mehr Nutzen aus dem aktuelleren 
-<a href="#o_acpi">ACPI</a> ziehen.
-
-<br><br>Zurück zu den <a href="#opt">Bootoptionen</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+APM ist eine der beiden Energieverwaltungsstrategien heutiger
+Computer. APM wird in erster Linie auf Notebook-Computern für
+Funktionen wie 'Suspend to Disk' eingesetzt, kann aber auch für das
+Abschalten des Computers nach dem Herunterfahren verantwortlich
+sein. Die Funktion von APM hängt in höchstem Maße von der
+einwandfreien Funktion des BIOS ab. Bei einem fehlerhaften BIOS
+funktioniert das APM eventuell nur eingeschränkt, womöglich
+funktioniert der Computer überhaupt nicht mehr. Aus diesem Grund
+kann das APM mit folgendem Parameter deaktiviert werden<br>
+<br>
+<em>apm=off</em> -- Deaktiviert APM vollständig<br>
+<br>
+Einige sehr neue Computer profitieren womöglich mehr von dem
+neueren <a href="#o_acpi">acpi</a>.<br>
+<br>
+Zurück zu <a href="#opt">Bootoptionen</a>
+<hr>
 <h3><a name="o_acpi">Kernel-Optionen: acpi</a></h3>
-
-ACPI (Advanced Configuration and Power Interface) ist ein Standard, der Power-
-und Konfigurations-Management-Schnittstellen zwischen einem Betriebssystem und
-dem BIOS definiert. Standardmäßig wird <em>acpi</em> angeschaltet,
-wenn ein neueres BIOS als das vom Jahr 2000 erkannt wird. Es gibt verschiedene
-gebräuchliche Parameter zum Steuern des Verhaltens von ACPI:<br>
+ACPI (Advanced Configuration and Power Interface) ist ein Standard,
+der die Energie- und Konfigurationsverwaltungsschnittstellen
+zwischen dem Betriebssystem und dem BIOS festlegt. <em>acpi</em>
+ist standardmäßig aktiviert, wenn ein BIOS festgestellt wird, das
+neueren Datums ist (ab dem Jahr 2000). Zur Steuerung des
+ACPI-Verhaltens können verschiedene gängige Parameter verwendet
+werden:<br>
 <br>
-  <em>pci=noacpi</em> -- ACPI nicht zum Weiterleiten von PCI-Interrupts verwenden<br>
-  <em>acpi=oldboot</em> -- nur die ACPI-Bereiche, die für den Systemstart relevant sind, bleiben aktiv<br>
-  <em>acpi=off</em> -- ACPI komplett abschalten<br>
-  <em>acpi=force</em> -- ACPI sogar dann anschalten, wenn Ihr BIOS vor dem Jahr 2000 datiert ist<br>
+<em>pci=noacpi</em> -- Verwendet die ACPI nicht zur Weiterleitung
+von PCI-Interrupts <em>acpi=oldboot</em> -- nur die zum Booten
+erforderlichen Teile der ACPI bleiben aktiviert<br>
+<em>acpi=off</em> -- Deaktiviert die ACPI vollständig<br>
+<em>acpi=force</em> -- Aktiviert die ACPI, selbst wenn Ihr BIOS
+älteren Datums ist (vor dem Jahr 2000)<br>
 <br>
-Besonders auf neuen Rechnern ersetzt es das alte <a href="#o_apm">apm</a>-System.
-
-
-<br><br>Zurück zu den <a href="#opt">Bootoptionen</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+Besonders auf neuen Computern wird dadurch das alte <a href=
+"#o_apm">apm</a>-System ersetzt.<br>
+<br>
+Zurück zu <a href="#opt">Bootoptionen</a>
+<hr>
 <h3><a name="o_ide">Kernel-Optionen: ide</a></h3>
- 
-IDE wird, anders wie SCSI, häufig in den meisten Desktop-Workstations
-verwendet. Um einige Hardware-Probleme zu umgehen, die unter IDE-Systemen
-auftreten, verwenden Sie den Kernel-Parameter: <br><br> 
-
-  <em>ide=nodma</em>  -- DMA für IDE-Treiber abschalten<br>
-
-
-
-<br><br>Zurück zu den <a href="#opt">Bootoptionen</a>.
-
-</body></html>
+IDE wird im Gegensatz zu SCSI auf den meisten
+Desktop-Arbeitsstationen verwendet. Zur Umgehung einiger typischer
+Hardwareprobleme von IDE-Systemen sollten Sie folgenden
+Kernel-Parameter verwenden:<br>
+<br>
+<em>ide=nodma</em> -- Deaktiviert DMA für IDE-Laufwerke<br>
+<br>
+<br>
+Zurück zu <a href="#opt">Bootoptionen</a>.
+</body>
+</html>

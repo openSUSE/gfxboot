@@ -1,107 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 12 April 2005), see www.w3.org">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+</head>
 <body>
-
 <!-- help=boot -->
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="help">Utiliser le système d'aide</a></h3>
-
-L'aide en ligne du chargeur d'amorçage est sensible au contexte. Elle donne des informations relatives à l'élément du menu sélectionné ou, si vous êtes en train de modifier des options d'amorçage, elle cherche à vous renseigner au sujet de l'option sur laquelle le curseur est positionné.<br>
+<hr>
+<h3><a name="help">Utilisation du système d'aide</a></h3>
+L'aide en ligne du chargeur d'amorçage est contextuelle. Elle
+fournit des informations sur l'élément du menu sélectionné. Lors de
+la modification de la configuration d'amorçage, elle recherche des
+informations sur l'option indiquée par l'emplacement du
+curseur.<br>
 <br>
-Touches de navigation<br><br>
-
-  <em>Flèche vers le haut</em> : marquer le lien précédent<br>
-  <em>Flèche vers le bas</em> : marquer le lien suivant<br>
-  <em>Flèche vers la gauche</em>, <em>Effacement arrière</em> : retourner au sujet précédent<br>
-  <em>Flèche vers la droite</em>, <em>Retour</em>, <em>Espace</em> : suivre le lien<br>
-  <em>Page précédente</em> : faire défiler vers le haut (une page)<br>
-  <em>Page suivante</em> : faire défiler vers le bas (une page)<br>
-  <em>Début</em> : aller à la première page<br>
-  <em>Fin</em> : aller à la dernière page<br>
-  <em>Échap.</em> : quitter l'aide<br>
-
-<br>Retour aux <a href="#opt">Options d'amorçage</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="keytable">Sélection de la langue et de la disposition du clavier</a></h3>
-
-Pressez <em>F2</em> pour changer la langue et la disposition du clavier utilisée par le chargeur d'amorçage.<br>
-
-<br>Retour aux <a href="#opt">Options d'amorçage</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="profile">Choix du profil</a></h3>
-
-Pressez <em>F3</em> pour sélectionner un profil. Votre système démarrera en utilisant la configuration enregistrée dans ce profil.<br>
-
-<br>Retour aux <a href="#opt">Options d'amorçage</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+Touches de navigation<br>
+<br>
+<em>Flèche haut</em> : mettre en surbrillance le lien précédent<br>
+<em>Flèche bas</em> : mettre en surbrillance le lien suivant<br>
+<em>Flèche gauche</em> et <em>Retour arrière</em> : retour à la
+rubrique précédente<br>
+<em>Flèche droite</em>, <em>Entrée</em> et <em>Espace</em> : suivre
+le lien<br>
+<em>Page haut</em> : faire défiler une page vers le haut<br>
+<em>Page bas</em> : faire défiler une page vers le bas<br>
+<em>Domicile</em> : aller au début de la page<br>
+<em>Fin</em> : aller à la fin de la page<br>
+<em>Échap</em> : quitter l'aide<br>
+<br>
+Retour à la rubrique <a href="#opt">Options d'amorçage</a>
+<hr>
+<h3><a name="keytable">Sélection de la langue et de la disposition
+du clavier</a></h3>
+Cliquez sur <em>F2</em> pour changer la langue et la disposition du
+clavier utilisées par le chargeur d'amorçage.<br>
+<br>
+Retour à la rubrique <a href="#opt">Options d'amorçage</a>
+<hr>
+<h3><a name="profile">Choisir un profil</a></h3>
+Appuyez sur <em>F3</em> pour sélectionner un profil. Votre système
+démarrera avec la configuration enregistrée dans ce profil.<br>
+<br>
+Retour à la rubrique <a href="#opt">Options d'amorçage</a>
+<hr>
 <h3><a name="opt">Options d'amorçage</a></h3>
-
-  <a href="#o_splash">splash</a> -- comportement de l'écran de démarrage (splash screen)<br>
-  <a href="#o_apm">apm</a> -- gestion d'énergie<br>
-  <a href="#o_acpi">acpi</a> -- interface avancée de configuration et d'énergie<br>
-  <a href="#o_ide">ide</a> -- contrôle du sous-système IDE<br>
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="o_splash">Options de noyau : splash</a></h3>
-
-L'écran de démarrage est l'image affichée durant l'amorçage du système.<br>
+<a href="#o_splash">splash</a> -- détermine le fonctionnement de
+l'écran de démarrage<br>
+<a href="#o_apm">apm</a> -- active ou non la fonction de gestion de
+l'alimentation<br>
+<a href="#o_acpi">acpi</a> -- concerne l'interface de gestion de
+l'alimentation et de configuration avancée<br>
+<a href="#o_ide">ide</a> -- contrôle le sous-système IDE<br>
+<hr>
+<h3><a name="o_splash">Options de kernel : splash</a></h3>
+L'écran de démarrage est l'image affichée durant l'amorçage du
+système.<br>
 <br>
 <em>splash=0</em><br>
-L'écran de démarrage est désactivé. Ceci peut être utile avec de très vieux moniteurs ou lorsqu'une erreur se produit.<br>
+L'écran de démarrage est désactivé. Ce résultat peut être utile
+avec des moniteurs très anciens ou si certaines erreurs
+surviennent.<br>
 <br>
-<em>splash=verbose</em><br> Active l'écran de démarrage, les messages de noyau et d'amorçage sont également affichés.<br>
+<em>splash=verbose</em><br>
+Active l'écran de démarrage sans faire disparaître les messages de
+kernel et d'amorçage.<br>
 <br>
 <em>splash=silent</em><br>
-Active l'écran de démarrage, les messages ne sont pas affichés. À la place, une barre de progression est affichée.<br>
+Active l'écran de démarrage sans les messages. À la place, une
+barre de progression est représentée.<br>
 <br>
-Retour aux <a href="#opt">Options d'amorçage</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="o_apm">Options de noyau : apm</a></h3>
-
-APM est l'une des stratégies de gestion de l'énergie utilisée sur les ordinateurs courants. Elle est utilisée principalement sur les ordinateurs portables pour des fonctions telles que la mise en veille, mais peut également être responsable de l'arrêt de l'ordinateur après sa mise hors tension. APM dépend d'un BIOS fonctionnant correctement. Si le BIOS est déterioré, APM peut n'être que d'une utilité limitée ou même empêcher votre ordinateur de fonctionner. Dans ce cas, il peut être désactivé à l'aide du paramètre<br><br>
-
-  <em>apm=off</em>  -- désactive APM complètement<br><br>
-
-Certains ordinateurs très récents peuvent être équipés du système plus récent
-<a href="#o_acpi">ACPI</a>.
-
-<br><br>Retour aux <a href="#opt">Options d'amorçage</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="o_acpi">Options de noyau : acpi</a></h3>
-
-ACPI (Advanced Configuration and Power Interface) est un standard qui définit les interfaces de gestion d'énergie et de configuration entre un système d'exploitation et le BIOS. Par défaut, <em>acpi</em> est activé lorsqu'un BIOS ultérieur à l'année 2000 est détecté. Il existe plusieurs paramètres utilisés couramment pour contrôler le comportement de ACPI.<br>
+Retour à la rubrique <a href="#opt">Options d'amorçage</a>
+<hr>
+<h3><a name="o_apm">Options de kernel : apm</a></h3>
+APM est l'une des deux stratégies de gestion de l'alimentation des
+ordinateurs actuels. Elle est utilisée principalement sur les
+ordinateurs portables pour des fonctions telles que la mise en
+veille sur disque. Par ailleurs, elle peut désactiver l'ordinateur
+après sa mise hors tension. APM dépend du fonctionnement correct du
+BIOS. Si le BIOS est défectueux, APM peut être d'une utilité
+limitée ou même empêcher l'ordinateur de fonctionner. Dans ces cas,
+elle peut être désactivée à l'aide du paramètre<br>
 <br>
-  <em>pci=noacpi</em> -- ne pas utiliser ACPI pour router les interruptions PCI<br>
-  <em>acpi=oldboot</em> -- uniquement les parties de ACPI qui relèvent de l'amorçage restent activées<br>
-  <em>acpi=off</em> -- désactiver ACPI complètement<br>
-  <em>acpi=force</em> -- activer ACPI même si votre BIOS est antérieur à 2000<br>
+<em>apm=off</em> -- désactiver complètement APM<br>
 <br>
-En particulier dans le cas d'ordinateurs récents, il remplace l'ancien système <a href="#o_apm">apm</a>.
-
-
-<br><br>Retour aux <a href="#opt">Options d'amorçage</a>
-
-
-<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h3><a name="o_ide">Options de noyau : ide</a></h3>
-
-À la différence de SCSI, IDE est utilisé couramment sur la plupart des stations de travail de bureau. Pour réduire certains problèmes matériels qui se produisent avec les systèmes IDE, utilisez le paramètre de noyau : <br><br>
-
-  <em>ide=nodma</em>  -- désactiver dma pour les pilotes IDE<br>
-
-
-
-<br><br>Retour aux <a href="#opt">Options d'amorçage</a>
-
-</body></html>
+Dans certains cas, un tout nouvel ordinateur est équipé du système
+<a href="#o_acpi">acpi</a> plus récent.<br>
+<br>
+Retour à la rubrique <a href="#opt">Options d'amorçage</a>
+<hr>
+<h3><a name="o_acpi">Options de kernel : acpi</a></h3>
+Le standard ACPI (Advanced Configuration and Power Interface)
+définit les interfaces de gestion d'alimentation et de
+configuration entre un système d'exploitation et le BIOS. Par
+défaut, <em>acpi</em> est activé lorsqu'un BIOS ultérieur à l'année
+2000 est détecté. Il existe plusieurs paramètres utilisés
+couramment pour contrôler le fonctionnement de ACPI.<br>
+<br>
+<em>pci=noacpi</em> -- ne pas utiliser ACPI pour router les
+interruptions PCI <em>acpi=oldboot</em> -- seules les parties de
+ACPI en rapport avec l'amorçage restent activées<br>
+<em>acpi=off</em> -- désactiver complètement ACPI<br>
+<em>acpi=force</em> -- activer ACPI même si votre BIOS est
+antérieur à 2000<br>
+<br>
+Le remplacement de l'ancien système <a href="#o_apm">apm</a>
+s'applique notamment aux nouveaux ordinateurs.<br>
+<br>
+Retour à la rubrique <a href="#opt">Options d'amorçage</a>
+<hr>
+<h3><a name="o_ide">Options de kernel : ide</a></h3>
+À la différence de SCSI, IDE est couramment utilisé sur la plupart
+des postes de travail de bureau. Pour contourner certains problèmes
+matériels des systèmes IDE, utilisez le paramètre de kernel
+suivant.<br>
+<br>
+<em>ide=nodma</em> -- désactiver DMA pour les unités IDE<br>
+<br>
+<br>
+Retour à la rubrique <a href="#opt">Options d'amorçage</a>.
+</body>
+</html>
