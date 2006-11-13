@@ -1,3 +1,6 @@
+<!DOCTYPE html [
+<!ENTITY product "@product@">
+]>
 <html>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <body>
@@ -29,18 +32,27 @@ implementations. This selection disables ACPI support in the
 kernel, but still enables many performance features, like DMA for IDE
 hard disks.  <br><br>
 
+<a href="#nolapic">Installation -- Local APIC Disabled</a>:
+If the normal installation fails, this might be due to the
+system hardware not supporting local APIC.
+If this seems to be the case, use this option to
+install without local APIC support.<br><br>
+
 <a href="#failsafe">Installation -- Safe Settings</a>: If you were not
 successful with <em>Installation</em>, this selection might
 solve the issue.<br><br>
 
 <a href="#rescue">Rescue System</a>: This boot image starts a small
 Linux system in RAM. This is useful if the system does not start properly.
-After booting this system, log in as root. <br><br>
+After booting this system, log in as root.<br><br>
+
+<a href="#firmware">Firmware Test</a>: Runs a BIOS test tool that validates
+ACPI and other parts of your BIOS.<br><br>
 
 <a href="#memtest">Memory Test</a>: Memory testing is useful for more than
 checking installation of new memory modules. It is a stress test
 for a big part of your computer system and may indicate hardware
-problems. <br><br>
+problems.<br><br>
 
 <a href="#opt">Boot Options</a>: The boot options may change the
 behavior of your system completely. They are settings for
@@ -51,6 +63,9 @@ show different screens depending on the active element of the
 boot screen. There is also a description of this help system
 available.<br><br>
 
+<a href="#keytable">F4 Language</a>: Set language and keyboard mapping
+used by the boot loader.<br><br>
+
 <a href="#videomode">F2 Video Mode</a>: Here, choose between
 different screen resolutions while installing. If you encounter
 problems with the graphical installation, the <em>text mode</em> may
@@ -59,11 +74,9 @@ be a work-around for you.<br><br>
 <a href="#install_src">F3 Installation Source</a>: Choose the
 installation source.<br><br>
 
-<a href="#keytable">F4 Language</a>: Set language and keyboard mapping
-used by the boot loader.<br><br>
-
 <a href="#driverupdate">F5 Driver Update</a>: For very new machines, a
-driver update may be needed to install the system.<br><br>
+driver update may be needed to install the system.
+
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="help">Using the Help System</a></h3>
@@ -83,7 +96,8 @@ Navigation Keys<br><br>
   <em>Page Down</em>: scroll down one page<br>
   <em>Home</em>: go to page start<br>
   <em>End</em>: go to page end<br>
-  <em>Esc</em>: leave help<br>
+  <em>Esc</em>: leave help
+
 
 <br><br>Return to <a href="#main">Start Page</a>
 
@@ -97,8 +111,8 @@ loading the Linux kernel.<br><br>
 A driver update is typically a floppy with new versions of hardware
 drivers or bug fixes needed during installation.
 
-<br><br>Return to <a href="#main">Start Page</a>
 
+<br><br>Return to <a href="#main">Start Page</a>
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="videomode">Video Mode Selection</a></h3>
@@ -112,16 +126,16 @@ case, select your preferred mode manually.<br><br>
 If your system has problems with the graphics card during the
 installation, the <em>text mode</em> may be a usable work-around.
 
-<br><br>Return to <a href="#main">Start Page</a>
 
+<br><br>Return to <a href="#main">Start Page</a>
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="keytable">Language and Keyboard Layout Selection</a></h3>
 
 Press <em>F4</em> to change language and keyboard layout the boot loader uses.
 
-<br><br>Return to <a href="#main">Start Page</a>
 
+<br><br>Return to <a href="#main">Start Page</a>
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="install_src">Installation Source</a></h3>
@@ -131,8 +145,8 @@ Press <em>F3</em> to choose an installation source.<br><br>
 This is the same as using the <a href="#o_install">install</a>
 boot option.
 
-<br><br>Return to <a href="#main">Start Page</a>
 
+<br><br>Return to <a href="#main">Start Page</a>
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="linux">Installation</a></h3>
@@ -140,10 +154,10 @@ boot option.
 Select <em>Installation</em> to start the default installation. The
 <a href="#opt">boot options</a> entered are used in the
 start-up. This item activates many features of commonly available
-hardware. <br><br>
+hardware.
+
 
 <br><br>Return to <a href="#main">Start Page</a>
-
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="harddisk">Boot from Hard Disk</a></h3>
@@ -155,29 +169,44 @@ The device ID of the first hard disk is provided by the BIOS of
 the computer. <br><br>
 
 Use this if you forgot to remove the CD or DVD from your
-drive and want to start the computer from the hard disk.<br><br>
+drive and want to start the computer from the hard disk.
+
 
 <br><br>Return to <a href="#main">Start Page</a>
-
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="noacpi">Installation -- ACPI Disabled</a></h3>
 
-Very new hardware sometimes
-requires ACPI to control the interrupt handling. ACPI completely
-replaces the old APM system. <br><br>
+Current hardware usually requires ACPI (Advanced Configuration and Power Interface)
+to control the interrupt handling.
+ACPI completely replaces the old APM system.<br><br>
 
 Select <em>Installation -- ACPI Disabled</em> if you encounter
-problems during boot of the kernel.  Known problems with machines that
+problems during boot of the kernel. Known problems with machines that
 have problems with ACPI are:
 <br><br>
 
    * kernel freezes when booting<br>
-   * PCI Cards are not detected or initialized properly<br><br>
+   * PCI Cards are not detected or initialized properly
+<br><br>
+You may also try the <a href="#firmware">Firmware Test</a> boot option
+and look at the test results of the ACPI validation.
 
 
 <br><br>Return to <a href="#main">Start Page</a>
 
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="nolapic">Installation -- Local APIC Disabled</a></h3>
+
+Normally there are no problems with the APIC (Advanced Programmable Interrupt
+Controller). But if you seem to have some, try this option to boot
+without local APIC support.
+<br><br>
+Please don't confuse this with <a href="#noacpi">ACPI</a>
+(Advanced Configuration and Power Interface).
+
+
+<br><br>Return to <a href="#main">Start Page</a>
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="failsafe">Installation -- Safe Settings</a></h3>
@@ -188,8 +217,8 @@ for IDE drives and all power management features.
 See also the kernel options for <a href="#o_apm">apm</a>,
 <a href="#o_acpi">acpi</a> and <a href="#o_ide">ide</a>.
 
-<br><br>Return to <a href="#main">Start Page</a>
 
+<br><br>Return to <a href="#main">Start Page</a>
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="rescue">Rescue System</a></h3>
@@ -197,10 +226,20 @@ See also the kernel options for <a href="#o_apm">apm</a>,
 The <em>Rescue System</em> is a small RAM disk base system. From there,
 it is possible to make all kinds of changes to an installed system. Because
 only low-level tools are available in this system, it is intended for
-experts.<br><br>
+experts.
+
 
 <br><br>Return to <a href="#main">Start Page</a>
 
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="firmware">Firmware Test</a></h3>
+
+Starts a BIOS checker that validates the ACPI tables
+and many other parts of your BIOS.
+Test results can be stored on usb disk or saved via network.
+
+
+<br><br>Return to <a href="#main">Start Page</a>
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="memtest">Memory Test</a></h3>
@@ -210,10 +249,10 @@ stress test the hardware of a system. Its main purpose is to detect
 broken RAM, but it also stresses many other parts of the system. <br>
 
 There is no guarantee that the memory is good if no errors are
-found, although most of memory defects will be found.<br>
+found, although most of memory defects will be found.
+
 
 <br><br>Return to <a href="#main">Start Page</a>
-
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="opt">Boot Options</a></h3>
@@ -232,7 +271,8 @@ b) kernel options<br>
   <a href="#o_splash">splash</a> -- influence the behavior of the splash screen<br>
   <a href="#o_apm">apm</a> -- toggle power management<br>
   <a href="#o_acpi">acpi</a> -- advanced configuration and power interface<br>
-  <a href="#o_ide">ide</a> -- control the IDE subsystem<br>
+  <a href="#o_ide">ide</a> -- control the IDE subsystem
+
 
 <br><br>Return to <a href="#main">Start Page</a>
 
@@ -254,7 +294,8 @@ the source as follows:<br><br>
 
 The network card will either be configured with <em>dhcp</em> or you
 must specify the parameters yourself as described in the
-<a href="#network">network options</a>.<br>
+<a href="#network">network options</a>.
+
 
 <br><br>Return to <a href="#opt">Boot Options</a>
 
@@ -271,9 +312,10 @@ with very old monitors or if some error occurs.<br>
 still shown.<br>
 <br>
 <em>splash=silent</em><br><br>
-Activates splash, but no messages. Instead a progress bar is drawn.<br>
-<br>
-Return to <a href="#opt">Boot Options</a>
+Activates splash, but no messages. Instead a progress bar is drawn.
+
+
+<br><br>Return to <a href="#opt">Boot Options</a>
 
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="network">Installer Options: Network Options</a></h3>
@@ -296,7 +338,8 @@ the network interface with <em>dhcp</em>. If you need a default
 gateway, specify this with the option <em>gateway</em>. For
 example:<br><br>
 
-  <em>gateway=192.168.0.8</em><br>
+  <em>gateway=192.168.0.8</em>
+
 
 <br><br>Return to <a href="#opt">Boot Options</a>
 
@@ -309,7 +352,8 @@ parameters vnc and vncpassword:<br><br>
   <em>vnc=1 vncpassword=example</em><br><br>
 
 The VNC server will be started and you may control YaST2 over any VNC
-client from a remote system.<br>
+client from a remote system.
+
 
 <br><br>Return to <a href="#opt">Boot Options</a>.
 
@@ -342,12 +386,11 @@ switched on when a BIOS is detected that is newer than from year
 2000. There are several commonly
 used parameters to control the behavior of ACPI:<br>
 <br>
-  <em>pci=noacpi</em> -- do not use ACPI to route PCI interrupts
+  <em>pci=noacpi</em> -- do not use ACPI to route PCI interrupts<br>
   <em>acpi=oldboot</em> -- only the parts of ACPI that are relevant
 for booting remain activated<br>
   <em>acpi=off</em> -- switch off ACPI completely<br>
-  <em>acpi=force</em> -- switch on ACPI even if your BIOS is dated
-before 2000<br>
+  <em>acpi=force</em> -- switch on ACPI even if your BIOS is dated before 2000<br>
 <br>
 Especially on new computers, it replaces the old
 <a href="#o_apm">apm</a> system.
@@ -362,19 +405,17 @@ IDE is, unlike SCSI, commonly used in most desktop workstations.
 To circumvent some hardware problems that occur with IDE systems, use the
 kernel parameter: <br><br> 
 
-  <em>ide=nodma</em>  -- switch off DMA for IDE drives<br>
-
+  <em>ide=nodma</em>  -- switch off DMA for IDE drives
 
 
 <br><br>Return to <a href="#opt">Boot Options</a>.
 
-
 <hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h3><a name="bits">Software Type Selection</a></h3>
 
-You have the choice to install the 32-bit or 64-bit version of openSUSE.
+You have the choice to install the 32-bit or 64-bit version of &product;.
+
 
 <br><br>Return to <a href="#main">Start Page</a>
-
 
 </body></html>
