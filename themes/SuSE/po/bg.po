@@ -8,15 +8,15 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bg\n"
+"Project-Id-Version: bootloader.bg\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2006-02-02 00:11+0200\n"
+"PO-Revision-Date: 2006-11-08 18:02+0200\n"
 "Last-Translator: Borislav Mitev <morbid_viper@tkzs.org>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.10.2\n"
+"X-Generator: KBabel 1.11.4\n"
 
 # ok button label
 #. txt_ok
@@ -120,13 +120,11 @@ msgstr ""
 
 # info box title
 #. txt_info_title
-#, fuzzy
 msgid "Boot Loader"
 msgstr "Зареждане на ОС"
 
 # error box title
 #. txt_error_title
-#, fuzzy
 msgid "I/O Error"
 msgstr "Входно/Изходна грешка"
 
@@ -151,7 +149,7 @@ msgstr ""
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format,fuzzy
+#, c-format
 msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
@@ -203,9 +201,8 @@ msgid "Hard Disk Installation"
 msgstr "Инсталиране от твърд диск"
 
 #. txt_hd_diskdevice
-#, fuzzy
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Дисково устройство (ще сканира всички дискове ако е празно)\n"
+msgstr "Дисково устройство (ще сканира всички дискове, ако е празно)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -226,7 +223,6 @@ msgstr "Парола\n"
 
 # label for ftp user input
 #. txt_user1
-#, fuzzy
 msgid "User (Anonymous Login If Empty)\n"
 msgstr "Потребител (анонимен вход, ако е празно)\n"
 
@@ -237,9 +233,8 @@ msgstr "Инсталация от NFS"
 
 # label for smb user input
 #. txt_user2
-#, fuzzy
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "Потребител (ще използва guest, ако е празно)\n"
+msgstr "Потребител (ще използва \"guest\", ако е празно)\n"
 
 # dialog title for smb installation
 #. txt_smb_title
@@ -273,7 +268,7 @@ msgstr "Език"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr ""
+msgstr "Инсталация — разрешено IOAPIC"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
@@ -281,7 +276,7 @@ msgstr "Инсталиране - без IOAPIC"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr ""
+msgstr "Инсталация — забранено локален APIC"
 
 #. txt_yes
 msgid "Yes"
@@ -294,53 +289,50 @@ msgstr "Не"
 # menu item for selecting a file
 #. txt_file
 msgid "File"
-msgstr ""
+msgstr "Файл"
 
 # input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr ""
+msgstr "Споделен ресурс\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
-msgstr ""
+msgstr "Автоматичен режим"
 
 #. txt_zenManual
-#, fuzzy
 msgid "Manual Mode"
-msgstr "Dual Head режим"
+msgstr "Ръчен режим"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr ""
+msgstr "Настройка на параметри на ZEN дял"
 
 #. txt_zenInstall
-#, fuzzy
 msgid "Install or Update ZEN Partition"
-msgstr "Инсталирани кръпки: "
+msgstr "Инсталиране или подновяване на ZEN дял"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr ""
+msgstr "Преинсталиране ОС зареждане на ZEN дял"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr ""
+msgstr "Забраняване на ZEN дял"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
-msgstr ""
+msgstr "Разрешаване на ZEN дял"
 
 # video mode menu item
 #. txt_text_mode
-#, fuzzy
 msgid "Text Mode"
-msgstr "Модел на мишката"
+msgstr "Текстов режим"
 
 # menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr ""
+msgstr "Проба на фърмуер"
 
 #. txt_dud_file_msg
 msgid ""
@@ -348,3 +340,6 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
+"За да заредите драйвери директно от CD-ROM,\n"
+"въведете тук файловите имена на драйверите\n"
+"за обновяване, разделени със запетаи:\n"

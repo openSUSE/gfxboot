@@ -329,7 +329,7 @@ msgstr "Teksttilstand"
 # menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr "Firmware-test"
+msgstr "Firmwaretest"
 
 #. txt_dud_file_msg
 msgid ""
