@@ -681,7 +681,7 @@
 
   /dia window.dialog def
 
-  dia .width.min 330 put
+  dia .width.min 350 put
   dia .position 10 put
 
   dia .title txt_load_kernel_title put
@@ -702,7 +702,7 @@
   dia .text.x get dia .text.y get 28 add rmoveto
 
   /progress.bar.height 19 def
-  /progress.bar.width dia .width get 60 sub def
+  /progress.bar.width dia .width get 75 sub def
 
   /progress.sym.width 10 def
   /progress.bar.width
@@ -716,7 +716,7 @@
   /progress.bar.y exch def
   /progress.bar.x exch def
 
-  /progress.text.x progress.bar.x progress.bar.width 37 add add def
+  /progress.text.x progress.bar.x progress.bar.width 55 add add def
   /progress.text.y progress.bar.y progress.bar.height fontheight sub 2 div add def
 
   /progress.sym.current 0 def

@@ -14,7 +14,7 @@
 /panel.text.Fy	0 def
 /panel.font	font.normal def
 /panel.normal	white def
-/panel.high	blue def
+/panel.high	lightblue def
 /panel.bg	lightgray def
 /panel.border	lightdotcolor def
 
