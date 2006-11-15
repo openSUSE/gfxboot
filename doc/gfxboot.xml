@@ -32,8 +32,8 @@
         of user input.
       </para><para>
         Font files have a special format. Create them using
-        <link linkend="getx11font"><command>getx11font</command></link>.
-        Font dimensions must not exceed a size of 32x32. Maximum font file size is 64kB.
+        <link linkend="mkblfont"><command>mkblfont</command></link>.
+        Maximum font file size is 512kB.
       </para><para>
         If you have written a script, convert it into byte code
         using <link linkend="mkbootmsg"><command>mkbootmsg</command></link>.
@@ -76,9 +76,9 @@
            </programlisting></para></example>
         </para>
       </listitem><listitem>
-        <para id="getx11font">getx11font</para>
+        <para id="mkblfont">mkblfont</para>
         <para>
-           Build font file using glyphs from X11 fonts (no antialiasing).
+           Build font file using the freetype rendering engine.
         </para>
       </listitem><listitem>
         <para id="help2txt">help2txt</para>

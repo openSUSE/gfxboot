@@ -1,3 +1,7 @@
+15/11/2006:	v3.3.15
+	- updated documentation
+	- get initrd size right for progress bar
+
 14/11/2006:	v3.3.14
 	- fix doc file permission
 

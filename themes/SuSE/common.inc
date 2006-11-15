@@ -347,13 +347,10 @@
       ",%04d%04d.spl" splash_file sprintf
     } { pop } ifelse
 
-    % find out splash size for kernel loading progress bar
-    splash_file 1 add filesize dup .undef ne {
-      sectorsize 1 sub add sectorsize div /progress_extra exch def
-    } {
-      pop
+    % check whether splash file exists
+    splash_file 1 add filesize .undef eq {
       splash_file 0 0 put	% empty string
-    } ifelse
+    } if
   } if
 
   /cmdline.hidden over dup length .inp_hidden ge { .inp_hidden get } { pop .undef } ifelse def
@@ -379,15 +376,6 @@
         bc.tmp free /bc.tmp .undef def
       } {
         cmdline.hidden "%s " bc.cmd dup length add sprintf
-      } ifelse
-    } if
-
-    syslinux {
-      % find out initrd size for kernel loading progress bar
-      "initrd" filesize dup .undef ne {
-        sectorsize 1 sub add sectorsize div /progress_extra exch progress_extra add def
-      } {
-        pop
       } ifelse
     } if
   } if
@@ -504,6 +492,31 @@
 
     } if
   } { pop } ifelse
+
+  syslinux {
+    % find out initrd sizes for kernel loading progress bar
+    bc.cmd "initrd" bootopt.find dup .undef ne {
+      "initrd=" length add
+      dup dup skipnonspaces
+      sub neg
+      string
+      exch strcpy
+      % it's a ',' separated list
+      dup ',' split exch free
+      dup
+      {
+        dup
+        % skip leading '+' or '-'
+        dup 0 get dup '+' eq exch '-' eq or { 1 add } if
+        filesize dup .undef ne {
+          sectorsize 1 sub add
+          sectorsize div /progress_extra exch progress_extra add def
+        } { pop } ifelse
+        free
+      } forall
+      free
+    } { pop } ifelse
+  } if
 
   % remove final space
   bc.cmd dropspaces
@@ -1118,10 +1131,15 @@
     % sound test XXXXXXXX
 
     /player 0 def
-    player "hapysuse.mod" findfile mod.load
-    50 sound.setvolume
-    player 0 mod.play
-    /player player 1 add 3 and def
+    player "hapysuse.mod" findfile dup
+    {
+      mod.load
+      50 sound.setvolume
+      player 0 mod.play
+      /player player 1 add 3 and def
+    } {
+      pop
+    } ifelse
 
     pop 0
   } if
