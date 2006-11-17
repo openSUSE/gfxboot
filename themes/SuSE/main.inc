@@ -69,7 +69,7 @@
     dup .inp_x get 10 sub over .inp_y get moveto
     currentpoint
     currentpoint 0 exch moveto
-    currentpoint rot fontheight image
+    currentpoint rot 1 add fontheight image
     moveto
     dup .inp_show get {
       .inp_label get exec showright

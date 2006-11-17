@@ -1027,8 +1027,8 @@
     /menu.start.x 130 def
     /menu.start.y 122 def
   } {
-    /menu.start.x 210 def
-    /menu.start.y 204 def
+    /menu.start.x 253 def
+    /menu.start.y 170 def
   } ifelse
 
   ptheme {
@@ -1339,7 +1339,7 @@
   /ptheme true def
 } if
 
-/transp 0x30 def
+/transp 0x20 def
 
 /testX { 0x417 cvp getbyte 0x10 and 0 ne } def
 
