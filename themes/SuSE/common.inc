@@ -1333,6 +1333,24 @@
 % Global variables.
 %
 
+% more likely during winter...
+penguin.percent 1 eq {
+  date
+  penguin.percent
+
+  over month 11 eq { 5 add } if
+  over month 12 eq { 15 add } if
+  over month 2 le { 6 add } if
+  over weekday 5 eq { 2 mul } if
+  over weekday 6 eq { 4 mul } if
+  over month dup 2 gt exch 11 lt and { pop 1 } if
+  over dup month 12 ge exch day dup 24 ge exch 6 eq or or { pop 100 } if
+  over dup month 1 eq exch day 1 eq or { pop 100 } if
+
+  /penguin.percent exch def
+  pop
+} if
+
 /ptheme rand pop rand 100 mod penguin.percent lt def
 
 0x417 cvp getbyte 0x40 and 0 ne {

@@ -478,12 +478,20 @@ def
 %
 % ( date ) ==> ( weekday )
 %
+% (Monday: 0)
+%
+% d + [26*(m+1)/10] + j + [j/4] + [c/4] - 2 c - 2
+%
 /weekday {
-  dup 8 shr 0xff and 1 sub
-  dup 3 mul over 2 div sub
-  exch 2 mul 0x11000a exch shr 3 and add
-  over 0xff and 6 add add
-  exch 16 shr add
+  dup day exch
+  dup year exch
+  month dup 2 le { 12 add exch 1 sub exch } if
+  1 add 26 mul 10 div
+  exch dup
+  100 mod dup 4 div add
+  exch 100 div dup 4 div exch 2 mul sub
+  add add add
+  7 mod 12 add
   7 mod
 } def
 
