@@ -19,7 +19,7 @@
 /xmenu.selected.bg	0x6c6c6c newcolor
 
 small_layout {
-  /xmenu.maxlines	22 def
+  /xmenu.maxlines	19 def
 } {
   /xmenu.maxlines	24 def	% 28
 } ifelse
