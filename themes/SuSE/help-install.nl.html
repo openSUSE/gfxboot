@@ -37,26 +37,28 @@ verkeerde ACPI-implementatie. Deze selectie schakelt
 ACPI-ondersteuning in de kernel uit, maar laat veel
 prestatiefuncties, zoals DMA voor IDE-stations, geactiveerd.<br>
 <br>
-<a href="#nolapic">Installation -- Local APIC Disabled</a>: If the
-normal installation fails, this might be due to the system hardware
-not supporting local APIC. If this seems to be the case, use this
-option to install without local APIC support.<br>
+<a href="#nolapic">Installatie -- Local APIC uitgeschakeld</a>: Als
+de normale installatie mislukt, dan kan dit worden veroorzaakt
+doordat uw hardware geen local APIC ondersteunt. Als dit het geval
+blijkt, gebruik dan deze optie om te installeren zonder
+ondersteuning voor APIC.<br>
 <br>
 <a href="#failsafe">Installatie - Veilige instellingen</a>: Als u
 niet succesvol was met <em>Installatie</em>, dan kan deze selectie
 het probleem mogelijk oplossen.<br>
 <br>
-<a href="#rescue">Reddingssysteem</a>: This boot image starts a
-small Linux system in RAM. This is useful if the system does not
-start properly. After booting this system, log in as root.<br>
+<a href="#rescue">Reddingssysteem</a>: Deze bootimage start een
+klein Linux-systeem in uw RAM-geheugen. U kunt het gebruiken als uw
+systeem niet goed opstart. Na het starten van dit systeem dient u
+als root in te loggen.<br>
 <br>
-<a href="#firmware">Firmware-test</a>: Runs a BIOS test tool that
-validates ACPI and other parts of your BIOS.<br>
+<a href="#firmware">Firmware-test</a>: Voert een BIOS-test uit die
+ACPI en andere delen van uw BIOS valideert.<br>
 <br>
-<a href="#memtest">Geheugentest</a>: Memory testing is useful for
-more than checking installation of new memory modules. It is a
-stress test for a big part of your computer system and may indicate
-hardware problems.<br>
+<a href="#memtest">Geheugentest</a>:Geheugen testen kunt u voor
+meer gebruiken dan alleen het installeren van nieuwe
+geheugenmodules controleren. Het test een groot deel van uw
+computersysteem en kan hardwareproblemen ontdekken.<br>
 <br>
 <a href="#opt">Opstartopties</a>: De opstartopties kunnen het
 gedrag van uw systeem compleet veranderen. Het zijn instellingen
@@ -78,8 +80,9 @@ kan <em>tekstmodus</em> misschien beter voor u werken.<br>
 <a href="#install_src">F3 Installatiebron</a>: Kies de
 installatiebron.<br>
 <br>
-<a href="#driverupdate">F5 Stuurprogramma-update</a>: For very new
-machines, a driver update may be needed to install the system.
+<a href="#driverupdate">F5 Stuurprogramma-update</a>: Voor zeer
+nieuwe computers kan een stuurprogramma-update nodig zijn om het
+systeem te installeren.
 <hr>
 <h3><a name="help">Het helpsysteem gebruiken</a></h3>
 De online-help van de bootloader is contextgevoelig. Het geeft u
@@ -99,7 +102,7 @@ koppeling<br>
 <em>Page Down</em>: ga een pagina omlaag<br>
 <em>Home</em>: ga naar paginabegin<br>
 <em>End</em>: ga naar pagina-einde<br>
-<em>Esc</em>: leave help<br>
+<em>Esc</em>: verlaat de helpfunctie<br>
 <br>
 Terug naar <a href="#main">Startpagina</a>
 <hr>
@@ -144,10 +147,10 @@ Dit is hetzelfde als de opstartoptie <a href=
 Terug naar <a href="#main">Startpagina</a>
 <hr>
 <h3><a name="linux">Installatie</a></h3>
-Select <em>Installatie</em> to start the default installation. The
-<a href="#opt">opstartopties</a> entered are used in the start-up.
-This item activates many features of commonly available
-hardware.<br>
+Selecteer <em>Installatie</em> om de standaardinstallatie te
+starten. De ingevoerde <a href="#opt">opstartopties</a> worden
+gebruikt tijdens het opstarten. Dit item activeert veel functies
+van algemeen beschikbare hardware.<br>
 <br>
 Terug naar <a href="#main">Startpagina</a>
 <hr>
@@ -158,35 +161,39 @@ moet goed zijn geïnstalleerd, omdat alleen de MBR op de eerste
 harde schijf wordt gestart. De stations-id van de eerste harde
 schijf wordt geleverd door de BIOS van de computer.<br>
 <br>
-Use this if you forgot to remove the CD or DVD from your drive and
-want to start the computer from the hard disk.<br>
+Gebruik dit als u vergeten bent de cd en dvd uit uw station te
+verwijderen en de computer vanaf de harde schijf wilt
+opstarten.<br>
 <br>
 Terug naar <a href="#main">Startpagina</a>
 <hr>
 <h3><a name="noacpi">Installatie - ACPI uitgeschakeld</a></h3>
-Current hardware usually requires ACPI (Advanced Configuration and
-Power Interface) to control the interrupt handling. ACPI completely
-replaces the old APM system.<br>
+Hedendaagse hardware vereist gebruikelijk ACPI (Advanced
+Configuration and Power Interface) voor het aansturen van de
+interrupt handling. ACPI vervangt het oude APM-systeem
+volledig.<br>
 <br>
 Selecteer <em>Installatie - ACPI uitgeschakeld</em> als u problemen
 tegenkomt tijdens het opstarten van de kernel. Bekende problemen
 met computers die problemen met ACPI hebben zijn:<br>
 <br>
 * kernel bevriest tijdens het starten<br>
-* PCI Cards are not detected or initialized properly<br>
+* PCI-kaarten zijn niet goed gedetecteerd of geïnitialiseerd<br>
 <br>
-You may also try the <a href="#firmware">Firmware-test</a> boot
-option and look at the test results of the ACPI validation.<br>
+U kunt ook de opstartoptie <a href="#firmware">Firmware-test</a>
+proberen en de testresultaten van de ACPI-validatie bekijken.<br>
 <br>
 Terug naar <a href="#main">Startpagina</a>
 <hr>
-<h3><a name="nolapic">Installation -- Local APIC Disabled</a></h3>
-Normally there are no problems with the APIC (Advanced Programmable
-Interrupt Controller). But if you seem to have some, try this
-option to boot without local APIC support.<br>
+<h3><a name="nolapic">Installatie -- Local APIC
+uitgeschakeld</a></h3>
+Normaliter zijn er geen problemen met APIC (Advanced Programmable
+Interrupt Controller). Maar als u toch problemen tegenkomt, dan
+kunt u deze opstartoptie proberen om zonder APIC-ondersteuning op
+te starten.<br>
 <br>
-Please don't confuse this with <a href="#noacpi">ACPI</a> (Advanced
-Configuration and Power Interface).<br>
+Verwar dit niet met <a href="#noacpi">ACPI</a> (Advanced
+Configuration and Power Interface<br>
 <br>
 Terug naar <a href="#main">Startpagina</a>
 <hr>
@@ -201,17 +208,17 @@ energiebeheerfuncties. Zie ook de kernelopties voor <a href=
 Terug naar <a href="#main">Startpagina</a>
 <hr>
 <h3><a name="rescue">Reddingssysteem</a></h3>
-The <em>Reddingssysteem</em> is a small RAM disk base system. From
-there, it is possible to make all kinds of changes to an installed
-system. Because only low-level tools are available in this system,
-it is intended for experts.<br>
+<em>Reddingssysteem</em> is een klein RAM-disk gebaseerd systeem. U
+kunt er allerhande wijzigingen aan een geïnstalleerd systeem mee
+aanbrengen. Omdat alleen elementaire programma's beschikbaar zijn
+is het bedoeld voor experts.<br>
 <br>
 Terug naar <a href="#main">Startpagina</a>
 <hr>
 <h3><a name="firmware">Firmware-test</a></h3>
-Starts a BIOS checker that validates the ACPI tables and many other
-parts of your BIOS. Test results can be stored on usb disk or saved
-via network.<br>
+Start een BIOS-controleprogramma dat de ACPI-tabellen en vele
+andere delen van uw BIOS valideert. Testresultaten kunnen worden
+opgeslagen op een USB-stick of over een netwerk.<br>
 <br>
 Terug naar <a href="#main">Startpagina</a>
 <hr>
@@ -220,8 +227,9 @@ De ingesloten <em>Geheugentest</em> levert goede mogelijkheden tot
 test de hardware van een systeem. Het hoofddoel is om kapot
 RAM-geheugen te ontdekken, maar het test ook vele andere onderdelen
 van het systeem.<br>
-There is no guarantee that the memory is good if no errors are
-found, although most of memory defects will be found.<br>
+Er is geen garantie dat het geheugen goed is als er geen fouten
+zijn gevonden alhoewel de meeste fouten in het geheugen zullen
+worden gevonden.<br>
 <br>
 Terug naar <a href="#main">Startpagina</a>
 <hr>
@@ -245,7 +253,7 @@ het opstartscherm<br>
 <a href="#o_apm">apm</a> - energiebeheer aan/uit<br>
 <a href="#o_acpi">acpi</a> -- advanced configuration and power
 interface<br>
-<a href="#o_ide">ide</a> -- control the IDE subsystem<br>
+<a href="#o_ide">ide</a> -- het IDE-subsysteem aansturen<br>
 <br>
 Terug naar <a href="#main">Startpagina</a>
 <hr>
@@ -263,9 +271,9 @@ map /install op deze server, geef dan als volgt de bron op:<br>
 <br>
 <em>install=nfs://192.168.0.1/install</em><br>
 <br>
-The network card will either be configured with <em>dhcp</em> or
-you must specify the parameters yourself as described in the
-<a href="#network">netwerkopties</a>.<br>
+De netwerkkaart zal worden ingesteld met <em>dhcp</em>, of u kunt
+zelf de parameters opgeven zoals beschreven in <a href=
+"#network">netwerkopties</a>.<br>
 <br>
 Terug naar <a href="#opt">Opstartopties</a>
 <hr>
@@ -285,8 +293,8 @@ worden nog wel getoond.<br>
 <br>
 <em>splash=silent</em><br>
 <br>
-Activates splash, but no messages. Instead a progress bar is
-drawn.<br>
+Activeert het opstartscherm (splash) zonder verdere meldingen. In
+plaats daarvan wordt een voortgangsbalk getoond.<br>
 <br>
 Terug naar <a href="#opt">Opstartopties</a>
 <hr>
@@ -302,13 +310,14 @@ of in een kortere vorm:<br>
 <br>
 <em>hostip=192.168.0.10/24</em><br>
 <br>
-If you specified a <a href="#o_install">netwerkinstallatie</a> and
-do not specify both of these options, the installer tries to
-configure the network interface with <em>dhcp</em>. If you need a
-default gateway, specify this with the option <em>gateway</em>. For
-example:<br>
+Als u een <a href="#o_install">netwerkinstallatie</a> hebt
+gespecificeerd maar niet deze beide opties, dan zal het
+installatieprogramma proberen de netwerkinterface in te stellen met
+<em>dhcp</em>. Als u een standaardgateway nodig hebt, geef die dan
+op met de optie <em>gateway</em>. Bijvoorbeeld:<br>
 <br>
 <em>gateway=192.168.0.8</em><br>
+<br>
 <br>
 Terug naar <a href="#opt">Opstartopties</a>
 <hr>
@@ -318,8 +327,9 @@ vncpassword op.<br>
 <br>
 <em>vnc=1 vncpassword=voorbeeld</em><br>
 <br>
-The VNC server will be started and you may control YaST2 over any
-VNC client from a remote system.<br>
+De VNC-server zal worden gestart en u kunt YaST-2 aansturen met een
+VNC-client op een externe computer.<br>
+<br>
 <br>
 Terug naar <a href="#opt">Opstartopties</a>.
 <hr>
@@ -348,9 +358,10 @@ besturingssysteem en de BIOS definieert. Standaard wordt
 dan uit het jaar 2000. Er zijn diverse veelgebruikte parameters die
 het gedrag van ACPI bepalen:<br>
 <br>
-<em>pci=noacpi</em> -- do not use ACPI to route PCI interrupts<br>
-<em>acpi=oldboot</em> -- only the parts of ACPI that are relevant
-for booting remain activated<br>
+<em>pci=noacpi</em> -- gebruik geen ACPI voor het routeren van
+PCI-interrupts<br>
+<em>acpi=oldboot</em> -- alleen de delen van ACPI die relevant zijn
+voor het opstarten blijven geactiveerd<br>
 <em>acpi=off</em> - schakel ACPI volledig uit<br>
 <em>acpi=force</em> - schakel ACPI in, ook als uw BIOS van voor
 2000 is<br>
@@ -365,13 +376,14 @@ IDE wordt, in tegenstelling tot SCSI, algemeen gebruikt op de
 meeste desktopcomputers. Om hardwareproblemen die bij IDE-systemen
 kunnen voorkomen te omzeilen gebruikt u de parameter:<br>
 <br>
-<em>ide=nodma</em> -- switch off DMA for IDE drives<br>
+<em>ide=nodma</em> -- DMA voor IDE-stations uitschakelen<br>
+<br>
 <br>
 Terug naar <a href="#opt">Opstartopties</a>.
 <hr>
 <h3><a name="bits">Softwaretype selecteren</a></h3>
-You have the choice to install the 32-bit or 64-bit version of
-@product@.<br>
+U kunt kiezen uit de installatie van een 32-bits of 64-bits versie
+van @product@.<br>
 <br>
 Terug naar <a href="#main">Startpagina</a>.
 </body>
