@@ -1334,9 +1334,9 @@
 %
 
 % more likely during winter...
-penguin.percent 1 eq {
+penguin.percent -1 eq {
   date
-  penguin.percent
+  0
 
   over month 11 eq { 5 add } if
   over month 12 eq { 15 add } if
