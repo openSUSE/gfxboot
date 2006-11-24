@@ -25,8 +25,8 @@
   [ "cs"    "Čeština" ]
   [ "cy_GB" "Cymraeg" ]
   [ "da"    "Dansk" ]
-  [ "en_GB" "English (UK)" ]
   [ "en_US" "English (US)" ]
+  [ "en_GB" "English (UK)" ]
   [ "fr"    "Français" ]
   [ "de"    "Deutsch" ]
   [ "es"    "Español" ]
@@ -75,6 +75,10 @@
 /lang.getdefname {
   lang.defaultnames {
     dup .la.locale get 2 index eq { .la.name get exch pop exit } { pop } ifelse
+  } forall
+  % try a loose match
+  lang.defaultnames {
+    dup .la.locale get 2 index locale.cmp { .la.name get exch pop exit } { pop } ifelse
   } forall
 } def
 

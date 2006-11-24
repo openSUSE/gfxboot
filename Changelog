@@ -1,3 +1,7 @@
+24/11/2006:	v3.3.18
+	- fixed penguin theme bug (#216991)
+	- lang menu sometimes shows only locale name
+
 20/11/2006:	v3.3.17
 	- translations updated
 	- minor penguin setup correction

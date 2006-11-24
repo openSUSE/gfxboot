@@ -174,3 +174,27 @@
 } def
 
 
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Compare two locale names.
+%
+% ( str1 str2 -- int1 )
+%
+% str1: locale1
+% str2: locale2
+% int1: 0 = no match, 1 = loose match, 2 = identical
+%
+/locale.cmp {
+  over over eq { pop pop 2 return } if
+
+  currenteotchar '_' seteotchar
+
+  rot strdup rot strdup
+
+  over over eq rot free exch free
+
+  exch seteotchar
+
+  { 1 } { 0 } ifelse
+} def
+
+
