@@ -996,7 +996,6 @@
       over exch 0 exch put
       1 add
     } forall
-    tmp 2 0 put % only short locale name
     tmp dup setlang pop setkeymap
   } {
     pop

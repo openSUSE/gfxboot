@@ -36,9 +36,17 @@
 % ( locale ) ==> ( )
 %
 /setkeymap {
-  config.keymap.locale over eq { pop false return } if
+  config.keymap.locale over eq { pop return } if
 
   /config.keymap.locale exch def
+
+  /config.keymap .undef def
+
+  keymaps {
+    dup .km.locale get config.keymap.locale locale.cmp {
+      .km.map get /config.keymap exch def exit
+    } { pop } ifelse
+  } forall
 
   keymaps {
     dup .km.locale get config.keymap.locale eq {

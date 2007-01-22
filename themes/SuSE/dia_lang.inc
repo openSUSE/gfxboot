@@ -168,6 +168,12 @@
 
   /la.tmp.cnt 0 def
   lang.items {
+    config.lang locale.cmp { xmenu .xm_current la.tmp.cnt put exit } if
+    /la.tmp.cnt inc
+  } forall
+
+  /la.tmp.cnt 0 def
+  lang.items {
     config.lang eq { xmenu .xm_current la.tmp.cnt put exit } if
     /la.tmp.cnt inc
   } forall
