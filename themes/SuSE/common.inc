@@ -1362,6 +1362,8 @@ penguin.percent -1 eq {
 
 testX { /ptheme false def } if
 
+# "ddc" findfile test1
+
 800 600 16 findmode setmode not {
   800 600 32 findmode setmode not {
     640 480 16 findmode setmode not {

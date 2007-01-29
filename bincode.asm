@@ -447,6 +447,9 @@ cycles_per_int		dd 0
 next_int		dd 0,0
 
 			align 4, db 0
+
+ddc_external		dd 0
+
 ; temporary vars
 tmp_var_0		dd 0
 tmp_var_1		dd 0
@@ -13713,6 +13716,27 @@ chk_64bit_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; test1 - for internal testing
+;
+; group: system
+;
+; ( ptr1 -- )
+;
+; ptr1: some value with obscure meaning
+;
+; example
+;  0x123 test1
+;
+
+		bits 32
+
+prim_test1:
+		call pr_setptr_or_none
+		mov [ddc_external],eax
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 		bits 32
 
@@ -14643,6 +14667,15 @@ read_ddc_20:
 		push edi
 		rep stosb
 		pop edi
+
+		mov esi,[ddc_external]
+		or esi,esi
+		jz read_ddc_25
+		mov ecx,80h
+		rep movsb
+		jmp read_ddc_30
+
+read_ddc_25:
 
 		mov eax,edi
 		shr eax,4

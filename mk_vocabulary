@@ -73,7 +73,7 @@
 
   memcpy sysconfig _readsector sysinfo
 
-  xxx
+  test1 xxx
 
 );
 
