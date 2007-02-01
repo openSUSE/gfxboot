@@ -16,6 +16,7 @@
 /.la.locale 0 def
 /.la.name   1 def
 /lang.defaultnames [
+  [ "af" "Afrikaans" ]
 %  [ "ar" "\u064a\u0628\u0631\u0639" ]
   [ "ar" "\ufef2\ufe91\ufeae\ufecb" ]
   [ "bn" "Bengali" ]
@@ -30,6 +31,7 @@
   [ "es" "Español" ]
   [ "el" "Ελληνικά" ]
   [ "fi" "Suomi" ]
+  [ "gu" "Gujarati" ]
   [ "he" "תירבע" ]
   [ "it" "Italiano" ]
   [ "ja" "日本語" ]
@@ -39,6 +41,7 @@
   [ "km_KH" "Khmer" ]
   [ "ko" "한글" ]
   [ "lt" "Lietuvių" ]
+  [ "mr" "Marathi" ]
   [ "nl" "Nederlands" ]
   [ "nb" "Norsk" ]
   [ "pl" "Polski" ]
@@ -51,10 +54,13 @@
   [ "sl" "Slovenščina" ]
   [ "sr" "Cрпски" ]
   [ "sv" "Svenska" ]
+  [ "ta" "Tamil" ]
   [ "tr" "Türkçe" ]
   [ "uk" "Українська" ]
+  [ "xh" "isiXhosa" ]
   [ "zh_CN" "简体中文" ]
   [ "zh_TW" "繁體中文 (台灣)" ]
+  [ "zu" "isiZulu" ]
 ] def
 
 

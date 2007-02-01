@@ -34,6 +34,7 @@
 
 % must not be empty
 /keymaps [
+  [ "af"    .undef       ]
   [ "ar"    .undef       ]
   [ "bg"    .undef       ]
   [ "bn"    .undef       ]
@@ -46,12 +47,14 @@
   [ "es"    keymap.es    ]
   [ "fi"    .undef       ]
   [ "fr"    keymap.fr    ]
+  [ "gu"    .undef       ]
   [ "he"    .undef       ]
   [ "hu"    keymap.hu    ]
   [ "it"    keymap.it    ]
   [ "ja"    keymap.ja    ]
   [ "ko"    .undef       ]
   [ "lt"    .undef       ]
+  [ "mr"    .undef       ]
   [ "nb"    keymap.nb    ]
   [ "nl"    .undef       ]
   [ "pa"    .undef       ]
@@ -64,9 +67,12 @@
   [ "sl"    keymap.sl    ]
   [ "sv"    keymap.sv    ]
   [ "tr"    keymap.tr    ]
+  [ "ta"    .undef       ]
   [ "uk"    .undef       ]
+  [ "xh"    .undef       ]
   [ "zh_CN" .undef       ]
   [ "zh_TW" .undef       ]
+  [ "zu"    .undef       ]
 ] def
 
 
