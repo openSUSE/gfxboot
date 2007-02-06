@@ -1,6 +1,5 @@
-# Serbian translations for boot loader
+# LANGUAGE translations for boot loader
 # Copyright (C) 2005 SUSE Linux GmbH
-# Copyright © 2005 Danilo Segan <danilo@gnome.org>
 #
 msgid ""
 msgstr ""
@@ -114,12 +113,14 @@ msgstr ""
 
 # info box title
 #. txt_info_title
-msgid "Boot loader"
+#, fuzzy
+msgid "Boot Loader"
 msgstr "Покретач система"
 
 # error box title
 #. txt_error_title
-msgid "I/O error"
+#, fuzzy
+msgid "I/O Error"
 msgstr "У/И грешка"
 
 # boot disk change dialog title
@@ -143,10 +144,10 @@ msgstr ""
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format
+#, c-format,fuzzy
 msgid ""
 "This is not a <product> boot disk.\n"
-"Please insert boot disk %u."
+"Insert boot disk %u."
 msgstr ""
 "Ово није диск за покретање <product>.\n"
 "Уметните диск за покретање %u."
@@ -155,17 +156,6 @@ msgstr ""
 #. txt_password_title
 msgid "Password"
 msgstr "Лозинка"
-
-# Keep the newlines and spaces after ':'!
-#. txt_password
-msgid ""
-"Enter your password:   \n"
-"\n"
-"\n"
-msgstr ""
-"Унесите своју лозинку:   \n"
-"\n"
-"\n"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
@@ -206,7 +196,8 @@ msgid "Hard Disk Installation"
 msgstr "Инсталација на тврди диск"
 
 #. txt_hd_diskdevice
-msgid "Disk Device (scan all disks if empty)\n"
+#, fuzzy
+msgid "Disk Device (Scans All Disks If Empty)\n"
 msgstr "Диск (прегледај све дискове ако је празно)\n"
 
 #. txt_directory
@@ -228,7 +219,8 @@ msgstr "Лозинка\n"
 
 # label for ftp user input
 #. txt_user1
-msgid "User (anonymous login if empty)\n"
+#, fuzzy
+msgid "User (Anonymous Login If Empty)\n"
 msgstr "Корсиник (анонимна пријава ако је празно)\n"
 
 # dialog title for nfs installation
@@ -238,7 +230,8 @@ msgstr "NFS инсталација"
 
 # label for smb user input
 #. txt_user2
-msgid "User (using \"guest\" if empty)\n"
+#, fuzzy
+msgid "User (Uses \"guest\" If Empty)\n"
 msgstr "Корисник (користи „guest“ ако је празно)\n"
 
 # dialog title for smb installation
@@ -285,11 +278,11 @@ msgstr ""
 
 #. txt_yes
 msgid "Yes"
-msgstr ""
+msgstr "Da"
 
 #. txt_no
 msgid "No"
-msgstr ""
+msgstr "Ne"
 
 # menu item for selecting a file
 #. txt_file
@@ -302,30 +295,47 @@ msgid "Share\n"
 msgstr ""
 
 #. txt_zenAuto
-msgid "Automatic mode"
+msgid "Automatic Mode"
 msgstr ""
 
 #. txt_zenManual
-msgid "Manual mode"
+msgid "Manual Mode"
 msgstr ""
 
 #. txt_zenConfig
-msgid "Configure parameters on ZEN partition"
+msgid "Configure Parameters on ZEN Partition"
 msgstr ""
 
 #. txt_zenInstall
-msgid "Install/Update ZEN partition"
+msgid "Install or Update ZEN Partition"
 msgstr ""
 
 #. txt_zenLilo
-msgid "Reinstall ZEN partition boot loader"
+msgid "Reinstall ZEN Partition Boot Loader"
 msgstr ""
 
 #. txt_zenDisable
-msgid "Disable ZEN partition"
+msgid "Disable ZEN Partition"
 msgstr ""
 
 #. txt_zenEnable
-msgid "Enable ZEN partition"
+msgid "Enable ZEN Partition"
 msgstr ""
 
+# video mode menu item
+#. txt_text_mode
+msgid "Text Mode"
+msgstr ""
+
+# menu item, like 'memory test'
+#. txt_firmware
+msgid "Firmware Test"
+msgstr ""
+
+#. txt_dud_file_msg
+#, wrap
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
+"enter the driver update file names (separated\n"
+"by commas ',') here:\n"
+msgstr ""

@@ -1,11 +1,6 @@
-# translation of fi.po to suomi
-# translation of bootloader.fi.po to
-# translation of bootloader.po to
 # LANGUAGE translations for boot loader
 # Copyright (C) 2005 SUSE Linux GmbH
 #
-# Jyri Palokangas <jmp@netti.fi>, 2005, 2006.
-# Jami Saarikoski <jami.saarikoski@gmail.com>, 2006.
 msgid ""
 msgstr ""
 "Project-Id-Version: fi\n"
@@ -119,12 +114,12 @@ msgstr ""
 
 # info box title
 #. txt_info_title
-msgid "Boot loader"
-msgstr "Käynnistyslataaja"
+msgid "Boot Loader"
+msgstr "Käynnistyslatain"
 
 # error box title
 #. txt_error_title
-msgid "I/O error"
+msgid "I/O Error"
 msgstr "I/O-virhe"
 
 # boot disk change dialog title
@@ -151,7 +146,7 @@ msgstr ""
 #, c-format
 msgid ""
 "This is not a <product> boot disk.\n"
-"Please insert boot disk %u."
+"Insert boot disk %u."
 msgstr ""
 "Tämä ei ole <product> käynnistyslevyke.\n"
 "Anna käynnistyslevyke %u."
@@ -160,17 +155,6 @@ msgstr ""
 #. txt_password_title
 msgid "Password"
 msgstr "Salasana"
-
-# Keep the newlines and spaces after ':'!
-#. txt_password
-msgid ""
-"Enter your password:   \n"
-"\n"
-"\n"
-msgstr ""
-"Anna salasanasi:   \n"
-"\n"
-"\n"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
@@ -211,7 +195,7 @@ msgid "Hard Disk Installation"
 msgstr "Kiintolevy asennus"
 
 #. txt_hd_diskdevice
-msgid "Disk Device (scan all disks if empty)\n"
+msgid "Disk Device (Scans All Disks If Empty)\n"
 msgstr "Levylaite (tarkistaa kaikki levyt jos tyhjä)\n"
 
 #. txt_directory
@@ -233,7 +217,7 @@ msgstr "Salasana\n"
 
 # label for ftp user input
 #. txt_user1
-msgid "User (anonymous login if empty)\n"
+msgid "User (Anonymous Login If Empty)\n"
 msgstr "Käyttäjä (anonyymi kirjautuminen jos tyhjä)\n"
 
 # dialog title for nfs installation
@@ -243,7 +227,7 @@ msgstr "NFS-asennus"
 
 # label for smb user input
 #. txt_user2
-msgid "User (using \"guest\" if empty)\n"
+msgid "User (Uses \"guest\" If Empty)\n"
 msgstr "Käyttäjä (käyttäen \"vieras\" jos tyhjä)\n"
 
 # dialog title for smb installation
@@ -307,30 +291,49 @@ msgid "Share\n"
 msgstr "Jako\n"
 
 #. txt_zenAuto
-msgid "Automatic mode"
-msgstr ""
+msgid "Automatic Mode"
+msgstr "Automaattinen tila"
 
 #. txt_zenManual
-msgid "Manual mode"
-msgstr ""
+msgid "Manual Mode"
+msgstr "Manuaalinen tila"
 
 #. txt_zenConfig
-msgid "Configure parameters on ZEN partition"
-msgstr ""
+msgid "Configure Parameters on ZEN Partition"
+msgstr "Määritä ZEN osion parametrit"
 
 #. txt_zenInstall
-msgid "Install/Update ZEN partition"
-msgstr ""
+msgid "Install or Update ZEN Partition"
+msgstr "Asenna tai päivitä ZEN osio"
 
 #. txt_zenLilo
-msgid "Reinstall ZEN partition boot loader"
-msgstr ""
+msgid "Reinstall ZEN Partition Boot Loader"
+msgstr "Asenna ZEN osion käynnistyslatain uudelleen"
 
 #. txt_zenDisable
-msgid "Disable ZEN partition"
-msgstr ""
+msgid "Disable ZEN Partition"
+msgstr "Poista ZEN osio käytöstä"
 
 #. txt_zenEnable
-msgid "Enable ZEN partition"
-msgstr ""
+msgid "Enable ZEN Partition"
+msgstr "Ota ZEN osio käyttöön"
 
+# video mode menu item
+#. txt_text_mode
+msgid "Text Mode"
+msgstr "Tekstitila"
+
+# menu item, like 'memory test'
+#. txt_firmware
+msgid "Firmware Test"
+msgstr "Laiteohjelmiston testi"
+
+#. txt_dud_file_msg
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
+"enter the driver update file names (separated\n"
+"by commas ',') here:\n"
+msgstr ""
+"Ladataksesi ajuripäivityksen suoraan CD-ROM-levyltä,\n"
+"anna ajuripäivityksen tiedostonimet (erotettuina\n"
+"pilkuilla ',') tähän:\n"

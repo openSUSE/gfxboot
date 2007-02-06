@@ -1,9 +1,5 @@
-# translation of el.po to Hellenic-Ελληνικά-Greek
-# translation of el.po to Hellenic
 # LANGUAGE translations for boot loader
-# Copyright (C) 2004 SUSE LINUX AG
-# Hellenic SuSE Translators Group <hstg@billg.gr>, 2004, 2005.
-# Hellenic SuSE Translation Team <hstg@billg.gr>, 2005.
+# Copyright (C) 2005 SUSE Linux GmbH
 #
 msgid ""
 msgstr ""
@@ -118,12 +114,14 @@ msgstr ""
 
 # info box title
 #. txt_info_title
-msgid "Boot loader"
+#, fuzzy
+msgid "Boot Loader"
 msgstr "Διαχειριστής Εκκίνησης"
 
 # error box title
 #. txt_error_title
-msgid "I/O error"
+#, fuzzy
+msgid "I/O Error"
 msgstr "σφάλμα E/E"
 
 # boot disk change dialog title
@@ -147,10 +145,10 @@ msgstr ""
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format
+#, c-format,fuzzy
 msgid ""
 "This is not a <product> boot disk.\n"
-"Please insert boot disk %u."
+"Insert boot disk %u."
 msgstr ""
 "Αυτή δεν είναι δισκέτα εκκίνησης του <product>.\n"
 "Παρακαλώ εισάγετε τη δισκέτα εκκίνησης %u."
@@ -159,17 +157,6 @@ msgstr ""
 #. txt_password_title
 msgid "Password"
 msgstr "Κωδικός"
-
-# Keep the newlines and spaces after ':'!
-#. txt_password
-msgid ""
-"Enter your password:   \n"
-"\n"
-"\n"
-msgstr ""
-"Εισάγετε τον κωδικό σας:   \n"
-"\n"
-"\n"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
@@ -210,7 +197,8 @@ msgid "Hard Disk Installation"
 msgstr "Εγκατάσταση Σκληρού Δίσκου"
 
 #. txt_hd_diskdevice
-msgid "Disk Device (scan all disks if empty)\n"
+#, fuzzy
+msgid "Disk Device (Scans All Disks If Empty)\n"
 msgstr "Συσκευή Δίσκου (σάρωση όλων των δίσκων αν είναι κενοί)\n"
 
 #. txt_directory
@@ -232,7 +220,8 @@ msgstr "Κωδικός\n"
 
 # label for ftp user input
 #. txt_user1
-msgid "User (anonymous login if empty)\n"
+#, fuzzy
+msgid "User (Anonymous Login If Empty)\n"
 msgstr "Χρήστης (ανώνυμη σύνδεση εάν είναι κενός)\n"
 
 # dialog title for nfs installation
@@ -242,7 +231,8 @@ msgstr "Εγκατάσταση NFS"
 
 # label for smb user input
 #. txt_user2
-msgid "User (using \"guest\" if empty)\n"
+#, fuzzy
+msgid "User (Uses \"guest\" If Empty)\n"
 msgstr "Χρήστης (χρήση \"guest\" αν είναι κενός)\n"
 
 # dialog title for smb installation
@@ -306,30 +296,49 @@ msgid "Share\n"
 msgstr ""
 
 #. txt_zenAuto
-msgid "Automatic mode"
+msgid "Automatic Mode"
 msgstr ""
 
 #. txt_zenManual
-msgid "Manual mode"
-msgstr ""
+#, fuzzy
+msgid "Manual Mode"
+msgstr "Κατάσταση Dual Head"
 
 #. txt_zenConfig
-msgid "Configure parameters on ZEN partition"
+msgid "Configure Parameters on ZEN Partition"
 msgstr ""
 
 #. txt_zenInstall
-msgid "Install/Update ZEN partition"
+msgid "Install or Update ZEN Partition"
 msgstr ""
 
 #. txt_zenLilo
-msgid "Reinstall ZEN partition boot loader"
+msgid "Reinstall ZEN Partition Boot Loader"
 msgstr ""
 
 #. txt_zenDisable
-msgid "Disable ZEN partition"
+msgid "Disable ZEN Partition"
 msgstr ""
 
 #. txt_zenEnable
-msgid "Enable ZEN partition"
+msgid "Enable ZEN Partition"
 msgstr ""
 
+# video mode menu item
+#. txt_text_mode
+#, fuzzy
+msgid "Text Mode"
+msgstr "Μοντέλο ποντικιού"
+
+# menu item, like 'memory test'
+#. txt_firmware
+msgid "Firmware Test"
+msgstr ""
+
+#. txt_dud_file_msg
+#, wrap
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
+"enter the driver update file names (separated\n"
+"by commas ',') here:\n"
+msgstr ""

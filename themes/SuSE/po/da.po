@@ -1,8 +1,5 @@
-# translation of da.po to Dansk
-# translation of bootloader.pot_[g4TXCa].po to Dansk
 # LANGUAGE translations for boot loader
 # Copyright (C) 2005 SUSE Linux GmbH
-# Martin Møller <martin@martinm-76.dk>, 2005.
 #
 msgid ""
 msgstr ""
@@ -117,13 +114,13 @@ msgstr ""
 
 # info box title
 #. txt_info_title
-msgid "Boot loader"
+msgid "Boot Loader"
 msgstr "Opstartsindlæser"
 
 # error box title
 #. txt_error_title
-msgid "I/O error"
-msgstr "Ind/Ud fejl"
+msgid "I/O Error"
+msgstr "I/O-fejl"
 
 # boot disk change dialog title
 #. txt_change_disk_title
@@ -149,26 +146,15 @@ msgstr ""
 #, c-format
 msgid ""
 "This is not a <product> boot disk.\n"
-"Please insert boot disk %u."
+"Insert boot disk %u."
 msgstr ""
-"Dette er ikke en SUSE LINUX 10.0 opstartsdisk.\n"
-"Vær venlig at indsætte opstartsdisk %u."
+"Dette er ikke en <product> opstartsdisk.\n"
+"Indsæt opstartsdisk %u."
 
 # password dialog title
 #. txt_password_title
 msgid "Password"
 msgstr "Adgangskode"
-
-# Keep the newlines and spaces after ':'!
-#. txt_password
-msgid ""
-"Enter your password:   \n"
-"\n"
-"\n"
-msgstr ""
-"Skiv dit kodeord her:   \n"
-"\n"
-"\n"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
@@ -209,8 +195,8 @@ msgid "Hard Disk Installation"
 msgstr "Harddisk installation"
 
 #. txt_hd_diskdevice
-msgid "Disk Device (scan all disks if empty)\n"
-msgstr "Diskenhed (gennemsøg alle diske hvis blank)\n"
+msgid "Disk Device (Scans All Disks If Empty)\n"
+msgstr "Diskenhed (gennemsøger alle diske hvis blank)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -231,7 +217,7 @@ msgstr "Adgangskode\n"
 
 # label for ftp user input
 #. txt_user1
-msgid "User (anonymous login if empty)\n"
+msgid "User (Anonymous Login If Empty)\n"
 msgstr "Bruger (anonymt login hvis blank)\n"
 
 # dialog title for nfs installation
@@ -241,8 +227,8 @@ msgstr "NFS installation"
 
 # label for smb user input
 #. txt_user2
-msgid "User (using \"guest\" if empty)\n"
-msgstr "Bruger (bruger \"guest\" hvis blank)\n"
+msgid "User (Uses \"guest\" If Empty)\n"
+msgstr "Bruger (anvender \"guest\" hvis blank)\n"
 
 # dialog title for smb installation
 #. txt_smb_title
@@ -276,7 +262,7 @@ msgstr "Sprog"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr ""
+msgstr "Installation--IOAPIC aktiveret"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
@@ -284,7 +270,7 @@ msgstr "Installation uden IOAPIC understøttelse"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr ""
+msgstr "Installation--Lokal APIC deaktiveret"
 
 #. txt_yes
 msgid "Yes"
@@ -297,38 +283,57 @@ msgstr "Nej"
 # menu item for selecting a file
 #. txt_file
 msgid "File"
-msgstr ""
+msgstr "Fil"
 
 # input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr ""
+msgstr "Del\n"
 
 #. txt_zenAuto
-msgid "Automatic mode"
-msgstr ""
+msgid "Automatic Mode"
+msgstr "Automatisk tilstand"
 
 #. txt_zenManual
-msgid "Manual mode"
-msgstr ""
+msgid "Manual Mode"
+msgstr "Manuel tilstand"
 
 #. txt_zenConfig
-msgid "Configure parameters on ZEN partition"
-msgstr ""
+msgid "Configure Parameters on ZEN Partition"
+msgstr "Konfigurer parametre på ZEN-partition"
 
 #. txt_zenInstall
-msgid "Install/Update ZEN partition"
-msgstr ""
+msgid "Install or Update ZEN Partition"
+msgstr "Installer eller opdater ZEN-partition"
 
 #. txt_zenLilo
-msgid "Reinstall ZEN partition boot loader"
-msgstr ""
+msgid "Reinstall ZEN Partition Boot Loader"
+msgstr "Geninstaller opstartsindlæser for ZEN-partition"
 
 #. txt_zenDisable
-msgid "Disable ZEN partition"
-msgstr ""
+msgid "Disable ZEN Partition"
+msgstr "Deaktiver ZEN-partition"
 
 #. txt_zenEnable
-msgid "Enable ZEN partition"
-msgstr ""
+msgid "Enable ZEN Partition"
+msgstr "Aktiver ZEN-partition"
 
+# video mode menu item
+#. txt_text_mode
+msgid "Text Mode"
+msgstr "Teksttilstand"
+
+# menu item, like 'memory test'
+#. txt_firmware
+msgid "Firmware Test"
+msgstr "Firmware-test"
+
+#. txt_dud_file_msg
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
+"enter the driver update file names (separated\n"
+"by commas ',') here:\n"
+msgstr ""
+"For at indlæse driveropdateringer direkte fra CD-ROM,\n"
+"angives filnavnene for driveropdateringerne (adskilt\n"
+"af kommaer ',') her:\n"

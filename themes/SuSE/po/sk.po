@@ -1,9 +1,5 @@
-# translation of bootloader.po to
 # LANGUAGE translations for boot loader
-# Copyright (C) 2004 SUSE LINUX AG
-# , 2004.
-# , 2004.
-# Andrej Kacian <andrej@kacian.sk>, 2005.
+# Copyright (C) 2005 SUSE Linux GmbH
 #
 msgid ""
 msgstr ""
@@ -15,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.10\n"
-"Plural-Forms:  nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"Plural-Forms:  nplurals=3; plural=(n==1) ? 0 : (n>=2 & n<=4) ? 1 : 2;\n"
 
 # ok button label
 #. txt_ok
@@ -79,7 +75,7 @@ msgstr "Možnosti štartu"
 # window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
 msgid "Exiting..."
-msgstr ""
+msgstr "Končím..."
 
 #. txt_exit_dialog
 msgid ""
@@ -123,13 +119,13 @@ msgstr ""
 
 # info box title
 #. txt_info_title
-msgid "Boot loader"
+msgid "Boot Loader"
 msgstr "Správca štartu"
 
 # error box title
 #. txt_error_title
-msgid "I/O error"
-msgstr "Chyba V/V"
+msgid "I/O Error"
+msgstr "Chyba I/O"
 
 # boot disk change dialog title
 #. txt_change_disk_title
@@ -137,12 +133,12 @@ msgid "Change Boot Disk"
 msgstr "Zmena štartovacej diskety"
 
 #. txt_insert_disk
-#, fuzzy, c-format
+#, c-format,fuzzy
 msgid "Insert boot disk %u."
 msgstr "Prosím, vložte štartovaciu disketu %u."
 
 #. txt_insert_disk2
-#, fuzzy, c-format
+#, c-format,fuzzy
 msgid ""
 "This is boot disk %u.\n"
 "Insert boot disk %u."
@@ -152,10 +148,10 @@ msgstr ""
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is not a <product> boot disk.\n"
-"Please insert boot disk %u."
+"Insert boot disk %u."
 msgstr ""
 "Toto nie je štartovacia disketa <product>.\n"
 "Prosím, vložte štartovaciu disketu %u."
@@ -165,18 +161,6 @@ msgstr ""
 msgid "Password"
 msgstr "Heslo"
 
-# Keep the newlines and spaces after ':'!
-#. txt_password
-#, fuzzy
-msgid ""
-"Enter your password:   \n"
-"\n"
-"\n"
-msgstr ""
-"Prosím, zadajte heslo:   \n"
-"\n"
-"\n"
-
 #. txt_dud_ready
 #, fuzzy
 msgid "Get your driver update floppy ready."
@@ -185,7 +169,7 @@ msgstr "Prosím, pripravte si disketu s aktualizovanými ovládačmi."
 # dvd warning title
 #. txt_dvd_warning_title
 msgid "DVD Error"
-msgstr ""
+msgstr "Chyba DVD"
 
 #. txt_dvd_warning2
 #, fuzzy
@@ -220,8 +204,8 @@ msgid "Hard Disk Installation"
 msgstr "Inštalácia na pevný disk"
 
 #. txt_hd_diskdevice
-msgid "Disk Device (scan all disks if empty)\n"
-msgstr "Zariadenie disku (nájdi disky, ak prázdne)\n"
+msgid "Disk Device (Scans All Disks If Empty)\n"
+msgstr "Zariadenie disku (vyhľadá disky, ak je prázdne)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -242,8 +226,8 @@ msgstr "Heslo\n"
 
 # label for ftp user input
 #. txt_user1
-msgid "User (anonymous login if empty)\n"
-msgstr "Používateľ (ak prázdne, použiť anonymné prihlásenie)\n"
+msgid "User (Anonymous Login If Empty)\n"
+msgstr "Používateľ (ak necháte prázdne, použije anonymné prihlásenie)\n"
 
 # dialog title for nfs installation
 #. txt_nfs_title
@@ -252,8 +236,8 @@ msgstr "NFS Inštalácia"
 
 # label for smb user input
 #. txt_user2
-msgid "User (using \"guest\" if empty)\n"
-msgstr "Používateľ (ak prázdne, použiť \"guest\")\n"
+msgid "User (Uses \"guest\" If Empty)\n"
+msgstr "Používateľ (ak necháte prázdne, použije \"guest\")\n"
 
 # dialog title for smb installation
 #. txt_smb_title
@@ -278,15 +262,16 @@ msgstr "Doména\n"
 # button label for other/more options
 #. txt_other_options
 msgid "Other Options"
-msgstr ""
+msgstr "Ďalšie možnosti"
 
+# label for language selection
 #. txt_language
 msgid "Language"
 msgstr "Jazyk"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr ""
+msgstr "Inštalácia - IOAPIC povolené"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
@@ -294,7 +279,7 @@ msgstr "Inštalácia - IOAPIC vypnuté"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr ""
+msgstr "Inštalácia - Lokálny APIC vypnuté"
 
 #. txt_yes
 msgid "Yes"
@@ -307,38 +292,57 @@ msgstr "Nie"
 # menu item for selecting a file
 #. txt_file
 msgid "File"
-msgstr ""
+msgstr "Súbor"
 
 # input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr ""
+msgstr "Zdieľanie\n"
 
 #. txt_zenAuto
-msgid "Automatic mode"
-msgstr ""
+msgid "Automatic Mode"
+msgstr "Automatický režim"
 
 #. txt_zenManual
-msgid "Manual mode"
-msgstr ""
+msgid "Manual Mode"
+msgstr "Ručné nastavenie"
 
 #. txt_zenConfig
-msgid "Configure parameters on ZEN partition"
-msgstr ""
+msgid "Configure Parameters on ZEN Partition"
+msgstr "Nastaviť parametre pre ZENový diskový oddiel"
 
 #. txt_zenInstall
-msgid "Install/Update ZEN partition"
-msgstr ""
+msgid "Install or Update ZEN Partition"
+msgstr "Inštalovať alebo obnoviť ZENový diskový oddiel"
 
 #. txt_zenLilo
-msgid "Reinstall ZEN partition boot loader"
-msgstr ""
+msgid "Reinstall ZEN Partition Boot Loader"
+msgstr "Preinštalovať spúšťač systému pre ZEN oddiel"
 
 #. txt_zenDisable
-msgid "Disable ZEN partition"
-msgstr ""
+msgid "Disable ZEN Partition"
+msgstr "Zakázať ZEN diskový oddiel"
 
 #. txt_zenEnable
-msgid "Enable ZEN partition"
-msgstr ""
+msgid "Enable ZEN Partition"
+msgstr "Povoliť ZEN diskový oddiel"
 
+# video mode menu item
+#. txt_text_mode
+msgid "Text Mode"
+msgstr "Textový režim"
+
+# menu item, like 'memory test'
+#. txt_firmware
+msgid "Firmware Test"
+msgstr "Test firmvéru"
+
+#. txt_dud_file_msg
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
+"enter the driver update file names (separated\n"
+"by commas ',') here:\n"
+msgstr ""
+"Ak chcete nahrať aktualizované ovládače priamo\n"
+"z CD, napíšte sem mená súborov ovládačov oddelené\n"
+"čiarkami ',':\n"

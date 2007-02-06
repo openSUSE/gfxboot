@@ -1,4 +1,4 @@
-# LITHUANIAN translations for boot loader
+# LANGUAGE translations for boot loader
 # Copyright (C) 2005 SUSE Linux GmbH
 #
 msgid ""
@@ -114,13 +114,13 @@ msgstr ""
 
 # info box title
 #. txt_info_title
-msgid "Boot loader"
+msgid "Boot Loader"
 msgstr "Įkrovos tvarkyklė"
 
 # error box title
 #. txt_error_title
-msgid "I/O error"
-msgstr "I/O klaida"
+msgid "I/O Error"
+msgstr "Į/I klaida"
 
 # boot disk change dialog title
 #. txt_change_disk_title
@@ -146,26 +146,15 @@ msgstr ""
 #, c-format
 msgid ""
 "This is not a <product> boot disk.\n"
-"Please insert boot disk %u."
+"Insert boot disk %u."
 msgstr ""
 "Tai ne <product> įkrovos diskas.\n"
-"Prafome įdėti įkrovos diską %u."
+"Prašome įdėti įkrovos diską %u."
 
 # password dialog title
 #. txt_password_title
 msgid "Password"
 msgstr "Slaptažodis"
-
-# Keep the newlines and spaces after ':'!
-#. txt_password
-msgid ""
-"Enter your password:   \n"
-"\n"
-"\n"
-msgstr ""
-"Įveskite savo slaptažodį:   \n"
-"\n"
-"\n"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
@@ -206,7 +195,8 @@ msgid "Hard Disk Installation"
 msgstr "Diegimas iš kietojo disko"
 
 #. txt_hd_diskdevice
-msgid "Disk Device (scan all disks if empty)\n"
+#, fuzzy
+msgid "Disk Device (Scans All Disks If Empty)\n"
 msgstr "Diskų įrenginys (jei nėra, skenuoti visus diskus)\n"
 
 #. txt_directory
@@ -228,7 +218,8 @@ msgstr "Slaptažodis\n"
 
 # label for ftp user input
 #. txt_user1
-msgid "User (anonymous login if empty)\n"
+#, fuzzy
+msgid "User (Anonymous Login If Empty)\n"
 msgstr "Vartotojas (jei tuščia, jungiasi anonimas)\n"
 
 # dialog title for nfs installation
@@ -238,7 +229,8 @@ msgstr "Diegimas per NFS"
 
 # label for smb user input
 #. txt_user2
-msgid "User (using \"guest\" if empty)\n"
+#, fuzzy
+msgid "User (Uses \"guest\" If Empty)\n"
 msgstr "Vartotojas (jei tuščia, naudojama „guest“)\n"
 
 # dialog title for smb installation
@@ -273,7 +265,7 @@ msgstr "Kalba"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr ""
+msgstr "Diegimas--IOAPIC įgalintas "
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
@@ -281,51 +273,71 @@ msgstr "Diegimas--IOAPIC išjungtas"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr ""
+msgstr "Diegimas--Vietinis APIC išjungtas"
 
 #. txt_yes
 msgid "Yes"
-msgstr ""
+msgstr "Taip"
 
 #. txt_no
 msgid "No"
-msgstr ""
+msgstr "Ne"
 
 # menu item for selecting a file
 #. txt_file
 msgid "File"
-msgstr ""
+msgstr "Byla"
 
 # input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr ""
+msgstr "Resursas\n"
 
 #. txt_zenAuto
-msgid "Automatic mode"
-msgstr ""
+msgid "Automatic Mode"
+msgstr "Automatinis režimas"
 
 #. txt_zenManual
-msgid "Manual mode"
-msgstr ""
+msgid "Manual Mode"
+msgstr "Rankinis režimas"
 
 #. txt_zenConfig
-msgid "Configure parameters on ZEN partition"
-msgstr ""
+#, fuzzy
+msgid "Configure Parameters on ZEN Partition"
+msgstr "Konfigūruoti ZEN skaidinio nustatymus."
 
 #. txt_zenInstall
-msgid "Install/Update ZEN partition"
-msgstr ""
+#, fuzzy
+msgid "Install or Update ZEN Partition"
+msgstr "Įdiegti/atnaujinti ZEN skaidinį"
 
 #. txt_zenLilo
-msgid "Reinstall ZEN partition boot loader"
-msgstr ""
+#, fuzzy
+msgid "Reinstall ZEN Partition Boot Loader"
+msgstr "Iš naujo įdiegti ZEN skaidinio įkrovos tvarkyklę"
 
 #. txt_zenDisable
-msgid "Disable ZEN partition"
-msgstr ""
+msgid "Disable ZEN Partition"
+msgstr "Uždrausti ZEN skaidinį"
 
 #. txt_zenEnable
-msgid "Enable ZEN partition"
+msgid "Enable ZEN Partition"
+msgstr "Įgalinti ZEN skaidinį"
+
+# video mode menu item
+#. txt_text_mode
+msgid "Text Mode"
+msgstr "Tekstinis režimas"
+
+# menu item, like 'memory test'
+#. txt_firmware
+msgid "Firmware Test"
 msgstr ""
 
+#. txt_dud_file_msg
+#, wrap
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
+"enter the driver update file names (separated\n"
+"by commas ',') here:\n"
+msgstr ""

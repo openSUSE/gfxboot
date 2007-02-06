@@ -1,5 +1,5 @@
 # LANGUAGE translations for boot loader
-# Copyright (C) 2004 SUSE LINUX AG
+# Copyright (C) 2005 SUSE Linux GmbH
 #
 msgid ""
 msgstr ""
@@ -73,8 +73,12 @@ msgid "Exiting..."
 msgstr "Saindo..."
 
 #. txt_exit_dialog
-msgid "You are leaving the graphical boot menu and\nstarting the text mode interface."
-msgstr "Você está saindo do menu de boot gráfico\ne iniciando a interface em modo de texto."
+msgid ""
+"You are leaving the graphical boot menu and\n"
+"starting the text mode interface."
+msgstr ""
+"Você está saindo do menu de boot gráfico\n"
+"e iniciando a interface em modo de texto."
 
 #. txt_help
 msgid "Help"
@@ -87,23 +91,35 @@ msgstr "Iniciando..."
 
 # Keep the three newlines!
 #. txt_load_kernel
-msgid "Loading Linux Kernel\n\n\n"
-msgstr "Carregando Kernel do Linux\n\n\n"
+msgid ""
+"Loading Linux Kernel\n"
+"\n"
+"\n"
+msgstr ""
+"Carregando Kernel do Linux\n"
+"\n"
+"\n"
 
 # Keep the three newlines!
 #. txt_load_memtest
-msgid "Loading memtest86\n\n\n"
-msgstr "Carregando memtest86\n\n\n"
+msgid ""
+"Loading memtest86\n"
+"\n"
+"\n"
+msgstr ""
+"Carregando memtest86\n"
+"\n"
+"\n"
 
 # info box title
 #. txt_info_title
-msgid "Boot loader"
+msgid "Boot Loader"
 msgstr "Carregador de boot"
 
 # error box title
 #. txt_error_title
-msgid "I/O error"
-msgstr "Erro de E/S"
+msgid "I/O Error"
+msgstr "Erro de I/O"
 
 # boot disk change dialog title
 #. txt_change_disk_title
@@ -117,24 +133,27 @@ msgstr "Inserir disco de boot %u."
 
 #. txt_insert_disk2
 #, c-format
-msgid "This is boot disk %u.\nInsert boot disk %u."
-msgstr "Este é o disco de boot %u.\nInsira o disco de boot %u."
+msgid ""
+"This is boot disk %u.\n"
+"Insert boot disk %u."
+msgstr ""
+"Este é o disco de boot %u.\n"
+"Insira o disco de boot %u."
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
 #, c-format
-msgid "This is not a <product> boot disk.\nPlease insert boot disk %u."
-msgstr "Este não é o disco de boot do <product>.\nInsira o disco de boot %u."
+msgid ""
+"This is not a <product> boot disk.\n"
+"Insert boot disk %u."
+msgstr ""
+"Este não é um disco de boot do <product>.\n"
+"Insira o disco de boot %u."
 
 # password dialog title
 #. txt_password_title
 msgid "Password"
 msgstr "Senha"
-
-# Keep the newlines and spaces after ':'!
-#. txt_password
-msgid "Enter your password:   \n\n\n"
-msgstr "Digite sua senha:   \n\n\n"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
@@ -146,8 +165,14 @@ msgid "DVD Error"
 msgstr "Erro de DVD"
 
 #. txt_dvd_warning2
-msgid "This is a two-sided DVD. You have booted from the second side.\n\nTurn the DVD over then continue."
-msgstr "Este é um DVD com dois lados. Você fez a inicialização pelo segundo lado.\n\nVire o DVD e continue."
+msgid ""
+"This is a two-sided DVD. You have booted from the second side.\n"
+"\n"
+"Turn the DVD over then continue."
+msgstr ""
+"Este é um DVD com dois lados. Você fez a inicialização pelo segundo lado.\n"
+"\n"
+"Vire o DVD e continue."
 
 # power off dialog title
 #. txt_power_off_title
@@ -169,8 +194,8 @@ msgid "Hard Disk Installation"
 msgstr "Instalação por Disco Rígido"
 
 #. txt_hd_diskdevice
-msgid "Disk Device (scan all disks if empty)\n"
-msgstr "Dispositivo de Disco (explorar todos os discos, caso esteja vazio)\n"
+msgid "Disk Device (Scans All Disks If Empty)\n"
+msgstr "Dispositivo de Disco (Explora Todos os Discos, Se Vazio)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -191,7 +216,7 @@ msgstr "Senha\n"
 
 # label for ftp user input
 #. txt_user1
-msgid "User (anonymous login if empty)\n"
+msgid "User (Anonymous Login If Empty)\n"
 msgstr "Usuário (login anônimo, se estiver vazio)\n"
 
 # dialog title for nfs installation
@@ -201,8 +226,8 @@ msgstr "Instalação por NFS"
 
 # label for smb user input
 #. txt_user2
-msgid "User (using \"guest\" if empty)\n"
-msgstr "Usuário (usando \"guest\" se estiver vazio)\n"
+msgid "User (Uses \"guest\" If Empty)\n"
+msgstr "Usuário (Usa \"convidado\" Se Vazio)\n"
 
 # dialog title for smb installation
 #. txt_smb_title
@@ -265,30 +290,49 @@ msgid "Share\n"
 msgstr "Compartilhamento\n"
 
 #. txt_zenAuto
-msgid "Automatic mode"
+msgid "Automatic Mode"
 msgstr "Modo Automático"
 
 #. txt_zenManual
-msgid "Manual mode"
+msgid "Manual Mode"
 msgstr "Modo Manual"
 
 #. txt_zenConfig
-msgid "Configure parameters on ZEN partition"
+msgid "Configure Parameters on ZEN Partition"
 msgstr "Configurar parâmetros na partição ZEN"
 
 #. txt_zenInstall
-msgid "Install/Update ZEN partition"
-msgstr "Instalar/Atualizar partição ZEN"
+msgid "Install or Update ZEN Partition"
+msgstr "Instalar ou Atualizar Partição ZEN"
 
 #. txt_zenLilo
-msgid "Reinstall ZEN partition boot loader"
+msgid "Reinstall ZEN Partition Boot Loader"
 msgstr "Reinstalar o carregador de boot da partição ZEN"
 
 #. txt_zenDisable
-msgid "Disable ZEN partition"
+msgid "Disable ZEN Partition"
 msgstr "Desabilitar partição ZEN"
 
 #. txt_zenEnable
-msgid "Enable ZEN partition"
+msgid "Enable ZEN Partition"
 msgstr "Habilitar partição ZEN"
 
+# video mode menu item
+#. txt_text_mode
+msgid "Text Mode"
+msgstr "Modo de Texto"
+
+# menu item, like 'memory test'
+#. txt_firmware
+msgid "Firmware Test"
+msgstr "Teste de Firmware"
+
+#. txt_dud_file_msg
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
+"enter the driver update file names (separated\n"
+"by commas ',') here:\n"
+msgstr ""
+"Para carregar atualizações de driver diretamente do CD-ROM,\n"
+"digite aqui os nomes dos arquivos de atualização de driver (separados\n"
+"por vírgulas ','):\n"

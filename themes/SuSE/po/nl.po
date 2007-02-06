@@ -1,11 +1,6 @@
-# translation of bootloader.po to Nederlands
-# translation of bootloader.po to Dutch
-# translation of nl.po to Dutch
 # LANGUAGE translations for boot loader
-# Copyright (C) 2004 SUSE LINUX AG
-# Proefgelezen op 10-08-2005 door Henk Krus
-# Arthur & Ettie Kerkmeester <a.s.kerkmeester@hccnet.nl>, 2004, 2005.
-# Rinse de Vries <rinsedevries@kde.nl>, 2005.
+# Copyright (C) 2005 SUSE Linux GmbH
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: nl\n"
@@ -120,12 +115,12 @@ msgstr ""
 
 # info box title
 #. txt_info_title
-msgid "Boot loader"
+msgid "Boot Loader"
 msgstr "Bootloader"
 
 # error box title
 #. txt_error_title
-msgid "I/O error"
+msgid "I/O Error"
 msgstr "I/O-fout"
 
 # boot disk change dialog title
@@ -152,7 +147,7 @@ msgstr ""
 #, c-format
 msgid ""
 "This is not a <product> boot disk.\n"
-"Please insert boot disk %u."
+"Insert boot disk %u."
 msgstr ""
 "Dit is geen opstartdiskette van <product>.\n"
 "Plaats a.u.b. opstartdiskette %u."
@@ -161,17 +156,6 @@ msgstr ""
 #. txt_password_title
 msgid "Password"
 msgstr "Wachtwoord"
-
-# Keep the newlines and spaces after ':'!
-#. txt_password
-msgid ""
-"Enter your password:   \n"
-"\n"
-"\n"
-msgstr ""
-"Voer uw wachtwoord in:   \n"
-"\n"
-"\n"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
@@ -212,8 +196,8 @@ msgid "Hard Disk Installation"
 msgstr "Installatie van harde schijf"
 
 #. txt_hd_diskdevice
-msgid "Disk Device (scan all disks if empty)\n"
-msgstr "Schijfapparaat (indien leeg: zoek dan op alle schijven)\n"
+msgid "Disk Device (Scans All Disks If Empty)\n"
+msgstr "Schijfapparaat (indien leeg: alle schijven doorzoeken)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -234,7 +218,7 @@ msgstr "Wachtwoord\n"
 
 # label for ftp user input
 #. txt_user1
-msgid "User (anonymous login if empty)\n"
+msgid "User (Anonymous Login If Empty)\n"
 msgstr "Gebruiker (indien leeg: anonieme aanmelding)\n"
 
 # dialog title for nfs installation
@@ -244,8 +228,8 @@ msgstr "NFS-installatie"
 
 # label for smb user input
 #. txt_user2
-msgid "User (using \"guest\" if empty)\n"
-msgstr "Gebruiker (indien leeg: dan wordt \"guest\" gebruikt)\n"
+msgid "User (Uses \"guest\" If Empty)\n"
+msgstr "Gebruiker (indien leeg: \"guest\" gebruiken)\n"
 
 # dialog title for smb installation
 #. txt_smb_title
@@ -279,7 +263,7 @@ msgstr "Taal"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr ""
+msgstr "Installatie - IOAPIC ingeschakeld"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
@@ -287,7 +271,7 @@ msgstr "Installatie - IOAPIC uitgeschakeld"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr ""
+msgstr "Installatie - Local APIC uitgeschakeld"
 
 #. txt_yes
 msgid "Yes"
@@ -300,38 +284,57 @@ msgstr "Nee"
 # menu item for selecting a file
 #. txt_file
 msgid "File"
-msgstr ""
+msgstr "Bestand"
 
 # input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr ""
+msgstr "Bron\n"
 
 #. txt_zenAuto
-msgid "Automatic mode"
-msgstr ""
+msgid "Automatic Mode"
+msgstr "Automatisch"
 
 #. txt_zenManual
-msgid "Manual mode"
-msgstr ""
+msgid "Manual Mode"
+msgstr "Handmatig"
 
 #. txt_zenConfig
-msgid "Configure parameters on ZEN partition"
-msgstr ""
+msgid "Configure Parameters on ZEN Partition"
+msgstr "Parameters op ZEN-partitie instellen"
 
 #. txt_zenInstall
-msgid "Install/Update ZEN partition"
-msgstr ""
+msgid "Install or Update ZEN Partition"
+msgstr "ZEN-partitie installeren/updaten"
 
 #. txt_zenLilo
-msgid "Reinstall ZEN partition boot loader"
-msgstr ""
+msgid "Reinstall ZEN Partition Boot Loader"
+msgstr "Bootloader voor ZEN-partitie herinstalleren"
 
 #. txt_zenDisable
-msgid "Disable ZEN partition"
-msgstr ""
+msgid "Disable ZEN Partition"
+msgstr "ZEN-partitie uitschakelen"
 
 #. txt_zenEnable
-msgid "Enable ZEN partition"
-msgstr ""
+msgid "Enable ZEN Partition"
+msgstr "ZEN-partitie inschakelen"
 
+# video mode menu item
+#. txt_text_mode
+msgid "Text Mode"
+msgstr "Tekstmodus"
+
+# menu item, like 'memory test'
+#. txt_firmware
+msgid "Firmware Test"
+msgstr "Firmware-test"
+
+#. txt_dud_file_msg
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
+"enter the driver update file names (separated\n"
+"by commas ',') here:\n"
+msgstr ""
+"Om stuurprogramma-updates direct van cd-rom te laden,\n"
+"voer hier de bestandsnamen in van de stuurprogramma-updates\n"
+"(gescheiden door comma's):\n"

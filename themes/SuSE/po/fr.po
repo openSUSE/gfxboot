@@ -1,12 +1,5 @@
-# translation of fr.po to 
-# translation of fr.po to français
-# translation of bootloader.fr.po to Français
-# translation of bootloader.po to Français
 # LANGUAGE translations for boot loader
-# Copyright (C) 2004 SUSE LINUX AG
-# Patricia Vaz <Patricia.Vaz@suse.de>, 2004.
-# Patricia Vaz <patricia.vaz@suse.com>, 2004.
-# Patricia Vaz <patricia@suse.de>, 2005.
+# Copyright (C) 2005 SUSE Linux GmbH
 #
 msgid ""
 msgstr ""
@@ -81,8 +74,12 @@ msgid "Exiting..."
 msgstr "Sortie..."
 
 #. txt_exit_dialog
-msgid "You are leaving the graphical boot menu and\nstarting the text mode interface."
-msgstr "Vous quittez le menu d'amorçage graphique et\ndémarrez l'interface en mode textuel."
+msgid ""
+"You are leaving the graphical boot menu and\n"
+"starting the text mode interface."
+msgstr ""
+"Vous quittez le menu d'amorçage graphique et\n"
+"démarrez l'interface en mode textuel."
 
 #. txt_help
 msgid "Help"
@@ -95,22 +92,34 @@ msgstr "Démarrage..."
 
 # Keep the three newlines!
 #. txt_load_kernel
-msgid "Loading Linux Kernel\n\n\n"
-msgstr "Chargement du noyau Linux\n\n\n"
+msgid ""
+"Loading Linux Kernel\n"
+"\n"
+"\n"
+msgstr ""
+"Chargement du noyau Linux\n"
+"\n"
+"\n"
 
 # Keep the three newlines!
 #. txt_load_memtest
-msgid "Loading memtest86\n\n\n"
-msgstr "Chargement de memtest86\n\n\n"
+msgid ""
+"Loading memtest86\n"
+"\n"
+"\n"
+msgstr ""
+"Chargement de memtest86\n"
+"\n"
+"\n"
 
 # info box title
 #. txt_info_title
-msgid "Boot loader"
+msgid "Boot Loader"
 msgstr "Chargeur d'amorçage"
 
 # error box title
 #. txt_error_title
-msgid "I/O error"
+msgid "I/O Error"
 msgstr "Erreur E/S"
 
 # boot disk change dialog title
@@ -125,24 +134,27 @@ msgstr "Insérer le disque d'amorçage %u."
 
 #. txt_insert_disk2
 #, c-format
-msgid "This is boot disk %u.\nInsert boot disk %u."
-msgstr "Il s'agit du disque d'amorçage %u.\nInsérer le disque d'amorçage %u."
+msgid ""
+"This is boot disk %u.\n"
+"Insert boot disk %u."
+msgstr ""
+"Il s'agit du disque d'amorçage %u.\n"
+"Insérer le disque d'amorçage %u."
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
 #, c-format
-msgid "This is not a <product> boot disk.\nPlease insert boot disk %u."
-msgstr "Ce n'est pas un disque d'amorçage <product>.\nInsérez le disque d'amorçage %u."
+msgid ""
+"This is not a <product> boot disk.\n"
+"Insert boot disk %u."
+msgstr ""
+"Il ne s'agit pas d'une disquette d'amorçage pour <product>.\n"
+"Insérez la disquette d'amorçage %u."
 
 # password dialog title
 #. txt_password_title
 msgid "Password"
 msgstr "Mot de passe"
-
-# Keep the newlines and spaces after ':'!
-#. txt_password
-msgid "Enter your password:   \n\n\n"
-msgstr "Entrez votre mot de passe :   \n\n\n"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
@@ -154,8 +166,14 @@ msgid "DVD Error"
 msgstr "Erreur DVD"
 
 #. txt_dvd_warning2
-msgid "This is a two-sided DVD. You have booted from the second side.\n\nTurn the DVD over then continue."
-msgstr "Il s'agit d'un DVD double face. Vous avez effectué l'amorçage à partir de la seconde face.\n\nRetournez le DVD, puis continuez."
+msgid ""
+"This is a two-sided DVD. You have booted from the second side.\n"
+"\n"
+"Turn the DVD over then continue."
+msgstr ""
+"Il s'agit d'un DVD double face. Vous avez effectué l'amorçage à partir de la seconde face.\n"
+"\n"
+"Retournez le DVD, puis continuez."
 
 # power off dialog title
 #. txt_power_off_title
@@ -177,8 +195,8 @@ msgid "Hard Disk Installation"
 msgstr "Installation du disque dur"
 
 #. txt_hd_diskdevice
-msgid "Disk Device (scan all disks if empty)\n"
-msgstr "Périphérique disque (balayer tous les disques si vide)\n"
+msgid "Disk Device (Scans All Disks If Empty)\n"
+msgstr "Périphérique disque (analyser tous les disques si vide)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -199,7 +217,7 @@ msgstr "Mot de passe\n"
 
 # label for ftp user input
 #. txt_user1
-msgid "User (anonymous login if empty)\n"
+msgid "User (Anonymous Login If Empty)\n"
 msgstr "Utilisateur (login anonyme si vide)\n"
 
 # dialog title for nfs installation
@@ -209,7 +227,7 @@ msgstr "Installation NFS"
 
 # label for smb user input
 #. txt_user2
-msgid "User (using \"guest\" if empty)\n"
+msgid "User (Uses \"guest\" If Empty)\n"
 msgstr "Utilisateur (utilisation de \"guest\" si vide)\n"
 
 # dialog title for smb installation
@@ -273,30 +291,49 @@ msgid "Share\n"
 msgstr "Partage\n"
 
 #. txt_zenAuto
-msgid "Automatic mode"
+msgid "Automatic Mode"
 msgstr "Mode automatique"
 
 #. txt_zenManual
-msgid "Manual mode"
+msgid "Manual Mode"
 msgstr "Mode manuel"
 
 #. txt_zenConfig
-msgid "Configure parameters on ZEN partition"
+msgid "Configure Parameters on ZEN Partition"
 msgstr "Configurer les paramètres sur la partition ZEN"
 
 #. txt_zenInstall
-msgid "Install/Update ZEN partition"
-msgstr "Installer/mettre à jour la partition ZEN"
+msgid "Install or Update ZEN Partition"
+msgstr "Installer ou mettre à jour la partition ZEN"
 
 #. txt_zenLilo
-msgid "Reinstall ZEN partition boot loader"
+msgid "Reinstall ZEN Partition Boot Loader"
 msgstr "Réinstaller le chargeur d'amorçage de la partition ZEN"
 
 #. txt_zenDisable
-msgid "Disable ZEN partition"
+msgid "Disable ZEN Partition"
 msgstr "Désactiver la partition ZEN"
 
 #. txt_zenEnable
-msgid "Enable ZEN partition"
+msgid "Enable ZEN Partition"
 msgstr "Activer la partition ZEN"
 
+# video mode menu item
+#. txt_text_mode
+msgid "Text Mode"
+msgstr "Mode texte"
+
+# menu item, like 'memory test'
+#. txt_firmware
+msgid "Firmware Test"
+msgstr "Test de microprogramme"
+
+#. txt_dud_file_msg
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
+"enter the driver update file names (separated\n"
+"by commas ',') here:\n"
+msgstr ""
+"Pour charger les mises à jour de pilote directement depuis un CD,\n"
+"entrez les noms de fichier séparés\n"
+"par des virgules (,) :\n"
