@@ -1,4 +1,6 @@
 	- added some code to debug monitor detection
+	- language cleanup
+	- added new languages
 
 22/1/2007:	v3.3.19
 	- fix language/keymap setting (#223518)
