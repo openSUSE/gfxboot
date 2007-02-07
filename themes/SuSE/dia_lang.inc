@@ -34,12 +34,12 @@
   [ "et_EE" "Eesti" ]
   [ "fi_FI" "Suomi" ]
   [ "fr_FR" "Français" ]
-  [ "gu_IN" "Gujarati" ]	% Gujarati
+  [ "gu_IN" "\u0a97\u0ac1\u0a9c\u0ab0\u0abe\u0aa4\u0ac0" ]	% Gujarati
   [ "he_IL" "תירבע" ]
   [ "hi_IN" "\u0939\u093f\u0928\u094d\u0926\u0940" ]	% Hindi
   [ "hr_HR" "Hrvatski" ]
   [ "hu_HU" "Magyar" ]
-  [ "id_ID" "Indonesia" ]
+  [ "id_ID" "Bahasa Indonesia" ]
   [ "it_IT" "Italiano" ]
   [ "ja_JP" "日本語" ]
   % [ "km_KH" "\u1781\u17d2\u1798\u17c2\u179a" ]		% Khmer
@@ -47,7 +47,7 @@
   [ "ko_KR" "한글" ]
   [ "lt_LT" "Lietuvių" ]
   [ "mk_MK" "Македонски" ]
-  [ "mr_IN" "Marathi" ]		% Marathi
+  [ "mr_IN" "\u092e\u0930\u093e\u0920\u0940" ]		% Marathi
   [ "nb_NO" "Norsk" ]
   [ "nl_NL" "Nederlands" ]
   [ "pa_IN" "\u0a2a\u0a70\u0a1c\u0a3e\u0a2c\u0a40" ]	% Punjabi
@@ -60,7 +60,7 @@
   [ "sl_SI" "Slovenščina" ]
   [ "sr_CS" "Srpski" ]
   [ "sv_SE" "Svenska" ]
-  [ "ta_IN" "Tamil" ]		% tamil
+  [ "ta_IN" "\u0ba4\u0bae\u0bbf\u0bb4\u0bcd" ]		% Tamil
   [ "tr_TR" "Türkçe" ]
   [ "uk_UA" "Українська" ]
   [ "vi_VN" "Tiếng Việt" ]
