@@ -36,7 +36,8 @@
   [ "fr_FR" "Français" ]
   [ "gu_IN" "\u0a97\u0ac1\u0a9c\u0ab0\u0abe\u0aa4\u0ac0" ]	% Gujarati
   [ "he_IL" "תירבע" ]
-  [ "hi_IN" "\u0939\u093f\u0928\u094d\u0926\u0940" ]	% Hindi
+  % [ "hi_IN" "\u0939\u093f\u0928\u094d\u0926\u0940" ]	% Hindi
+  [ "hi_IN" "\u0939\u093f\u0902\u0926\u0940" ]	% Hindi
   [ "hr_HR" "Hrvatski" ]
   [ "hu_HU" "Magyar" ]
   [ "id_ID" "Bahasa Indonesia" ]
