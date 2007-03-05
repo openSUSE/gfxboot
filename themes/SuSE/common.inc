@@ -1217,7 +1217,7 @@
   /menu.bar.width frame1.width 20 sub def
   /menu.max.entries 7 def
 
-  /boot.label.len 243 def
+  /boot.label.len 252 def
 
   /boot.pos { boot.label.len 10 add ptheme { 480 } { small_layout { 380 } { 490 } ifelse } ifelse } def
 

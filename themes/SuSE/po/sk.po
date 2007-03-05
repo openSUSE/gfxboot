@@ -4,14 +4,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2005-03-08 20:59+0100\n"
-"Last-Translator: Andrej Kacian <andrej@kacian.sk>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2007-02-20 13:45+0100\n"
+"Last-Translator: Ladislav Michnovič <lmichnovic@suse.cz>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.10\n"
-"Plural-Forms:  nplurals=3; plural=(n==1) ? 0 : (n>=2 & n<=4) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 & n<=4) ? 1 : 2;\n"
 
 # ok button label
 #. txt_ok
@@ -42,17 +43,14 @@ msgid "Manual Installation"
 msgstr "Manuálna inštalácia"
 
 #. txt_noacpi_install
-#, fuzzy
 msgid "Installation--ACPI Disabled"
-msgstr "Inštalácia - ACPI vypnuté"
+msgstr "Inštalácia - s vypnutým ACPI"
 
 #. txt_safe_install
-#, fuzzy
 msgid "Installation--Safe Settings"
-msgstr "Inštalácia - Bezpečné nastavenie"
+msgstr "Inštalácia - s bezpečným nastavením"
 
 #. txt_safe_linux
-#, fuzzy
 msgid "Linux--Safe Settings"
 msgstr "Linux - Bezpečné nastavenie"
 
@@ -96,13 +94,12 @@ msgstr "Spúšťam..."
 
 # Keep the three newlines!
 #. txt_load_kernel
-#, fuzzy
 msgid ""
 "Loading Linux Kernel\n"
 "\n"
 "\n"
 msgstr ""
-"Načítavam jadro Linuxu\n"
+"Načítavam linuxové jadro\n"
 "\n"
 "\n"
 
@@ -133,18 +130,18 @@ msgid "Change Boot Disk"
 msgstr "Zmena štartovacej diskety"
 
 #. txt_insert_disk
-#, c-format,fuzzy
+#, c-format
 msgid "Insert boot disk %u."
 msgstr "Prosím, vložte štartovaciu disketu %u."
 
 #. txt_insert_disk2
-#, c-format,fuzzy
+#, c-format
 msgid ""
 "This is boot disk %u.\n"
 "Insert boot disk %u."
 msgstr ""
-"Toto je disketa %u.\n"
-"Prosím, vložte disketu %u."
+"Toto je štartovacia disketa %u.\n"
+"Prosím, vložte štartovaciu disketu %u."
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
@@ -162,7 +159,6 @@ msgid "Password"
 msgstr "Heslo"
 
 #. txt_dud_ready
-#, fuzzy
 msgid "Get your driver update floppy ready."
 msgstr "Prosím, pripravte si disketu s aktualizovanými ovládačmi."
 
@@ -172,26 +168,23 @@ msgid "DVD Error"
 msgstr "Chyba DVD"
 
 #. txt_dvd_warning2
-#, fuzzy
 msgid ""
 "This is a two-sided DVD. You have booted from the second side.\n"
 "\n"
 "Turn the DVD over then continue."
 msgstr ""
-"Toto je obojstranné médium DVD. Systém ste spustili z druhej strany.\n"
+"Toto je obojstranné DVD médium. Systém ste spustili z druhej strany.\n"
 "\n"
 "Prosím, otočte médium a potom pokračujte."
 
 # power off dialog title
 #. txt_power_off_title
-#, fuzzy
 msgid "Power Off"
 msgstr "Vypnúť"
 
 #. txt_power_off
-#, fuzzy
 msgid "Halt the system now?"
-msgstr "Chcete teraz počítač vypnúť?"
+msgstr "Chcete vypnúť počítač teraz?"
 
 # menu entry for hard disk installation
 #. txt_harddisk
@@ -271,15 +264,15 @@ msgstr "Jazyk"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr "Inštalácia - IOAPIC povolené"
+msgstr "Inštalácia - so zapnutým IOAPIC"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
-msgstr "Inštalácia - IOAPIC vypnuté"
+msgstr "Inštalácia - s vypnutým IOAPIC"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr "Inštalácia - Lokálny APIC vypnuté"
+msgstr "Inštalácia - s vypnutým lokálnym APIC"
 
 #. txt_yes
 msgid "Yes"

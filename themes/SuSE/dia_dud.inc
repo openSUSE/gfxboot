@@ -117,14 +117,7 @@
     % Must all be of same size!
     dia .ed.list 1 array put
     dia .ed.buffer.list input.edit.dud_file put
-    dia .ed.text.list [
-
-"To load driver updates directly from CD-ROM,
-enter the driver update file names (separated
-by commas ',') here:\n"
-
-    ] put
-
+    dia .ed.text.list [ txt_dud_file_msg ] put
   } if
 
   pop
