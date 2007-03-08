@@ -1039,7 +1039,7 @@
 
   /menu.max.entries 8 def
 
-  /boot.pos { 253 ptheme { 480 } { small_layout { 380 } { 490 } ifelse } ifelse } def
+  /boot.pos { 263 ptheme { 480 } { small_layout { 380 } { 490 } ifelse } ifelse } def
 
   % false: no boot options line initially
   /boot.show true def
