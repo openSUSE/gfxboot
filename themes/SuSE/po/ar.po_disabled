@@ -1,98 +1,95 @@
-# translation of uk.po to Ukrainian
 # LANGUAGE translations for boot loader
-# Copyright (C) 2004 SUSE LINUX AG
+# Copyright (C) 2005 SUSE Linux GmbH
 #
-# Ivan Petrouchtchak <iip@telus.net>, 2005.
-# Ivan Petrouchtchak <ivanpetrouchtchak@yahoo.com>, 2006.
 msgid ""
 msgstr ""
-"Project-Id-Version: uk\n"
-"PO-Revision-Date: 2006-01-12 12:24-0700\n"
-"Last-Translator: Ivan Petrouchtchak <ivanpetrouchtchak@yahoo.com>\n"
-"Language-Team: Ukrainian <translation@linux.org.ua>\n"
+"Project-Id-Version: bootloader\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-05-18 10:26+0200\n"
+"PO-Revision-Date: 2006-10-26 14:38:25+CEST\n"
+"Last-Translator: Novell Language <language@novell.com>\n"
+"Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 & n%100!=11 ? 0 : n%10>=2 & n%10<=4 & (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 # ok button label
 #. txt_ok
 msgid "OK"
-msgstr "Гаразд"
+msgstr "موافق"
 
 # cancel button label
 #. txt_cancel
 msgid "Cancel"
-msgstr "Скасувати"
+msgstr "إلغاء"
 
 # reboot button label
 #. txt_reboot
 msgid "Reboot"
-msgstr "Перезавантажити комп'ютер"
+msgstr "إعادة تشغيل"
 
 # continue button label
 #. txt_continue
 msgid "Continue"
-msgstr "Продовжити"
+msgstr "متابعة"
 
 #. txt_install
 msgid "Installation"
-msgstr "Встановлення"
+msgstr "التثبيت"
 
 #. txt_manual_install
 msgid "Manual Installation"
-msgstr "Ручне встановлення"
+msgstr "تثبيت يدوي"
 
 #. txt_noacpi_install
 msgid "Installation--ACPI Disabled"
-msgstr "Встановлення -- ACPI вимкнено"
+msgstr "تثبيت--ACPI معطلة"
 
 #. txt_safe_install
 msgid "Installation--Safe Settings"
-msgstr "Встановлення -- безпечні параметри"
+msgstr "تثبيت--إعدادات آمنة"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr "Linux -- безпечні параметри"
+msgstr "Linux--إعدادات آمنة"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
-msgstr "Завантаження з жорсткого диска"
+msgstr "تشغيل من القرص الصلب"
 
 #. txt_rescue
 msgid "Rescue System"
-msgstr "Порятунок системи"
+msgstr "نظام الإنقاذ"
 
 #. txt_memtest
 msgid "Memory Test"
-msgstr "Тест пам'яті"
+msgstr "اختبار الذاكرة"
 
 #. txt_bootoptions
 msgid "Boot Options"
-msgstr "Параметри завантаження"
+msgstr "خيارات التشغيل"
 
 # window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
 msgid "Exiting..."
-msgstr "Вихід..."
+msgstr "إنهاء..."
 
 #. txt_exit_dialog
 msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"Ви покидаєте графічне меню завантаження\n"
-"і запускаєте текстовий варіант інтерфейсу."
+"تتم الآن مغادرة قائمة التشغيل الرسومية و\n"
+"بدء تشغيل واجهة وضع النص."
 
 #. txt_help
 msgid "Help"
-msgstr "Довідка"
+msgstr "تعليمات"
 
 # window title for kernel loading (see txt_load_kernel)
 #. txt_load_kernel_title
 msgid "Starting..."
-msgstr "Запуск..."
+msgstr "بدء..."
 
 # Keep the three newlines!
 #. txt_load_kernel
@@ -101,9 +98,9 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Завантаження ядра Linux\n"
+"تحميل Linux Kernel\n"
 "\n"
-"\n"
+" \n"
 
 # Keep the three newlines!
 #. txt_load_memtest
@@ -112,29 +109,29 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Завантаження memtest86\n"
+"تحميل memtest86\n"
 "\n"
-"\n"
+" \n"
 
 # info box title
 #. txt_info_title
 msgid "Boot Loader"
-msgstr "Завантажувач"
+msgstr "أداة تحميل التشغيل"
 
 # error box title
 #. txt_error_title
 msgid "I/O Error"
-msgstr "Помилка вводу/виводу"
+msgstr "خطأ في المدخلات/المخرجات"
 
 # boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr "Змініть завантажувальний диск"
+msgstr "تغيير قرص التشغيل"
 
 #. txt_insert_disk
 #, c-format
 msgid "Insert boot disk %u."
-msgstr "Вставте завантажувальний диск %u."
+msgstr "أدخل قرص التشغيل %u."
 
 #. txt_insert_disk2
 #, c-format
@@ -142,8 +139,8 @@ msgid ""
 "This is boot disk %u.\n"
 "Insert boot disk %u."
 msgstr ""
-"Це завантажувальний диск %u.\n"
-"Вставте завантажувальний диск %u."
+"هذا هو قرص التشغيل %u.\n"
+"أدخل قرص التشغيل %u."
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
@@ -152,22 +149,22 @@ msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"Це не завантажувальний диск <product>.\n"
-"Вставте завантажувальний диск %u."
+"هذا ليس <product>قرص تشغيل.\n"
+"أدخل قرص التشغيل %u."
 
 # password dialog title
 #. txt_password_title
 msgid "Password"
-msgstr "Пароль"
+msgstr "كلمة السر"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr "Підготуйте дискету з оновленнями драйверів."
+msgstr "قم بتحضير القرص المرن لتحديث برنامج التشغيل بحيث يكون جاهزًا للاستخدام."
 
 # dvd warning title
 #. txt_dvd_warning_title
 msgid "DVD Error"
-msgstr "Помилка DVD"
+msgstr "خطأ في قرص الفيديو الرقمي"
 
 #. txt_dvd_warning2
 msgid ""
@@ -175,162 +172,162 @@ msgid ""
 "\n"
 "Turn the DVD over then continue."
 msgstr ""
-"Це двобічний DVD. Ви завантажили з другого боку.\n"
+"هذا هو قرص فيديو رقمي بوجهين. لقد قمت بالتشغيل من الوجه الثاني.\n"
 "\n"
-"Переверніть DVD і продовжуйте."
+" اقلب قرص الفيديو الرقمي، ثم تابع العمل."
 
 # power off dialog title
 #. txt_power_off_title
 msgid "Power Off"
-msgstr "Вимкнути живлення"
+msgstr "إيقاف التشغيل"
 
 #. txt_power_off
 msgid "Halt the system now?"
-msgstr "Хочете зараз вимкнути систему?"
+msgstr "هل تريد إيقاف النظام الآن؟"
 
 # menu entry for hard disk installation
 #. txt_harddisk
 msgid "Hard Disk"
-msgstr "Жорсткий диск"
+msgstr "القرص الصلب"
 
 # dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "Встановлення з жорсткого диска"
+msgstr "تثبيت القرص الصلب"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Дисковий пристрій (зондувати всі диски, якщо порожнє)\n"
+msgstr "جهاز القرص (مسح كافة الأقرص إذا كان فارغًا)\n"
 
 #. txt_directory
 msgid "Directory\n"
-msgstr "Каталог\n"
+msgstr "الدليل\n"
 
 # dialog title for ftp installation
 #. txt_ftp_title
 msgid "FTP Installation"
-msgstr "Встановлення з FTP"
+msgstr "تثبيت FTP"
 
 #. txt_server
 msgid "Server\n"
-msgstr "Сервер\n"
+msgstr "الخادم\n"
 
 #. txt_password
 msgid "Password\n"
-msgstr "Пароль\n"
+msgstr "كلمة السر\n"
 
 # label for ftp user input
 #. txt_user1
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "Користувач (вживати анонімний вхід, якщо порожнє)\n"
+msgstr "المستخدم (تسجيل دخول مجهول إذا كان الحقل فارغًا)\n"
 
 # dialog title for nfs installation
 #. txt_nfs_title
 msgid "NFS Installation"
-msgstr "Встановлення з NFS"
+msgstr "تثبيت NFS"
 
 # label for smb user input
 #. txt_user2
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "Користувач (вживати \"guest\", якщо порожнє)\n"
+msgstr "المستخدم (يتم استخدام \"ضيف\" إذا كان الحقل فارغًا)\n"
 
 # dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "Встановлення з SMB (Windows Share)"
+msgstr "تثبيت SMB‏ (مشاركة Windows)"
 
 # dialog title for http installation
 #. txt_http_title
 msgid "HTTP Installation"
-msgstr "Встановлення через HTTP"
+msgstr "تثبيت HTTP"
 
 # 'driver' as in '(hardware) driver update'
 #. txt_driver_update
 msgid "Driver"
-msgstr "Драйвер"
+msgstr "برنامج التشغيل"
 
 # as in Windows Authentication Domain
 #. txt_domain
 msgid "Domain\n"
-msgstr "Домен\n"
+msgstr "المجال\n"
 
 # button label for other/more options
 #. txt_other_options
 msgid "Other Options"
-msgstr "Інші параметри"
+msgstr "خيارات أخرى"
 
 # label for language selection
 #. txt_language
 msgid "Language"
-msgstr "Мова"
+msgstr "اللغة"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr "Встановлення -- IOAPIC увімкнено"
+msgstr "تثبيت--IOAPIC ممكَّن"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
-msgstr "Встановлення -- IOAPIC вимкнено"
+msgstr "تثبيت--IOAPIC معطَّل"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr "Встановлення -- локальне APIC вимкнене"
+msgstr "تثبيت--APIC المحلي معطَّل"
 
 #. txt_yes
 msgid "Yes"
-msgstr "Так"
+msgstr "نعم"
 
 #. txt_no
 msgid "No"
-msgstr "Ні"
+msgstr "لا"
 
 # menu item for selecting a file
 #. txt_file
 msgid "File"
-msgstr "Файл"
+msgstr "ملف"
 
 # input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr "Ресурс\n"
+msgstr "مشاركة\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
-msgstr "Автоматичний режим"
+msgstr "وضع تلقائي"
 
 #. txt_zenManual
 msgid "Manual Mode"
-msgstr "Ручний режим"
+msgstr "وضع يدوي"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr "Налаштувати параметри на розділі ZEN"
+msgstr "تكوين معلمات في قسم ZEN"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr "Встановити або оновити розділ ZEN"
+msgstr "تثبيت قسم ZEN أو تحديثه"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "Перевстановити завантажувач розділу ZEN"
+msgstr "إعادة تثبيت أداة تحميل تشغيل قسم ZEN"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr "Вимкнути розділ ZEN"
+msgstr "تعطيل قسم ZEN"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
-msgstr "Увімкнути розділ ZEN"
+msgstr "تمكين قسم ZEN"
 
 # video mode menu item
 #. txt_text_mode
 msgid "Text Mode"
-msgstr "Текстовий режим"
+msgstr "وضع النص"
 
 # menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr "Тест прошивки"
+msgstr "اختبار البرنامج الثابت"
 
 #. txt_dud_file_msg
 msgid ""
@@ -338,6 +335,6 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
-"Щоб завантажити оновлення драйверів з\n"
-"CD-ROM, введіть сюди назви файлів для\n"
-"оновлення драйвера (розділені комами \",\"):\n"
+"لتحميل تحديثات برنامج التشغيل مباشرةً من القرص المضغوط،\n"
+"أدخل أسماء ملفات تحديثات برنامج التشغيل (مفصولة\n"
+" بفواصل ',') هنا:\n"

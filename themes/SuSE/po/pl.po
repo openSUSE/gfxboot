@@ -6,15 +6,15 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bootloader.pl\n"
+"Project-Id-Version: pl\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2006-10-12 02:08+0200\n"
-"Last-Translator: Marcin Karpeta <asedas[at]pnet.pl>\n"
-"Language-Team: Polish\n"
+"PO-Revision-Date: 2007-02-20 21:07+0100\n"
+"Last-Translator: wadim dziedzic <nikdo@aviary.pl>\n"
+"Language-Team:  <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.2\n"
+"X-Generator: KBabel 1.9.1\n"
 
 # ok button label
 #. txt_ok
@@ -186,7 +186,7 @@ msgstr "Wyłączanie"
 
 #. txt_power_off
 msgid "Halt the system now?"
-msgstr "Wstrzymać system?"
+msgstr "Czy zatrzymać system?"
 
 # menu entry for hard disk installation
 #. txt_harddisk
@@ -200,7 +200,7 @@ msgstr "Instalacja na dysku twardym"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Dysk do skanowania (skanuj wszystkie dyski, jeśli puste)\n"
+msgstr "Dysk do skanowania (skanuje wszystkie dyski, jeśli puste)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -292,7 +292,7 @@ msgstr "Plik"
 # input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr "Udostępnij\n"
+msgstr "Zasób\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
@@ -308,7 +308,7 @@ msgstr "Konfiguruj parametry partycji ZEN"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr "Instaluj lub Aktualizuj partycję ZEN"
+msgstr "Instaluj lub aktualizuj partycję ZEN"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
@@ -333,11 +333,11 @@ msgid "Firmware Test"
 msgstr "Test oprogramowania sprzętowego"
 
 #. txt_dud_file_msg
-#, wrap
 msgid ""
 "To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
-"Aby załadować aktualizacje sterowników bezpośrednio z CD\n"
-" podaj nazwy plików z aktualizacjami (oddzielone przecinkami ','):\n"
+"Aby załadować aktualizacje sterowników \n"
+"bezpośrednio z CD, proszę podac nazwy plików\n"
+"z aktualizacjami (oddzielone przecinkami ','):\n"

@@ -1,98 +1,96 @@
-# translation of uk.po to Ukrainian
 # LANGUAGE translations for boot loader
-# Copyright (C) 2004 SUSE LINUX AG
+# Copyright (C) 2005 SUSE Linux GmbH
 #
-# Ivan Petrouchtchak <iip@telus.net>, 2005.
-# Ivan Petrouchtchak <ivanpetrouchtchak@yahoo.com>, 2006.
 msgid ""
 msgstr ""
-"Project-Id-Version: uk\n"
-"PO-Revision-Date: 2006-01-12 12:24-0700\n"
-"Last-Translator: Ivan Petrouchtchak <ivanpetrouchtchak@yahoo.com>\n"
-"Language-Team: Ukrainian <translation@linux.org.ua>\n"
+"Project-Id-Version: YaST (@memory@)\n"
+"Report-Msgid-Bugs-To: translation@suse.de\n"
+"POT-Creation-Date: 2006-05-15 15:07+0200\n"
+"PO-Revision-Date: 2007-02-19 15:09+0100\n"
+"Last-Translator: Olga López\n"
+"Language-Team: Catalan\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 & n%100!=11 ? 0 : n%10>=2 & n%10<=4 & (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 # ok button label
 #. txt_ok
 msgid "OK"
-msgstr "Гаразд"
+msgstr "D'acord"
 
 # cancel button label
 #. txt_cancel
 msgid "Cancel"
-msgstr "Скасувати"
+msgstr "Anul·la"
 
 # reboot button label
 #. txt_reboot
 msgid "Reboot"
-msgstr "Перезавантажити комп'ютер"
+msgstr "Reinicia"
 
 # continue button label
 #. txt_continue
 msgid "Continue"
-msgstr "Продовжити"
+msgstr "Continua"
 
 #. txt_install
 msgid "Installation"
-msgstr "Встановлення"
+msgstr "Instal·lació"
 
 #. txt_manual_install
 msgid "Manual Installation"
-msgstr "Ручне встановлення"
+msgstr "Instal·lació manual"
 
 #. txt_noacpi_install
 msgid "Installation--ACPI Disabled"
-msgstr "Встановлення -- ACPI вимкнено"
+msgstr "Instal·lació -- ACPI inhabilitada"
 
 #. txt_safe_install
 msgid "Installation--Safe Settings"
-msgstr "Встановлення -- безпечні параметри"
+msgstr "Instal·lació -- Configuració segura"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr "Linux -- безпечні параметри"
+msgstr "Linux -- Configuració segura"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
-msgstr "Завантаження з жорсткого диска"
+msgstr "Arrenca des del disc dur"
 
 #. txt_rescue
 msgid "Rescue System"
-msgstr "Порятунок системи"
+msgstr "Sistema de recuperació"
 
 #. txt_memtest
 msgid "Memory Test"
-msgstr "Тест пам'яті"
+msgstr "Prova de memòria"
 
 #. txt_bootoptions
 msgid "Boot Options"
-msgstr "Параметри завантаження"
+msgstr "Opcions d'arrencada"
 
 # window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
 msgid "Exiting..."
-msgstr "Вихід..."
+msgstr "Sortida..."
 
 #. txt_exit_dialog
 msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"Ви покидаєте графічне меню завантаження\n"
-"і запускаєте текстовий варіант інтерфейсу."
+"Esteu sortint del menú d'arrencada gràfic i\n"
+"iniciant la interfície del mode de text."
 
 #. txt_help
 msgid "Help"
-msgstr "Довідка"
+msgstr "Ajuda"
 
 # window title for kernel loading (see txt_load_kernel)
 #. txt_load_kernel_title
 msgid "Starting..."
-msgstr "Запуск..."
+msgstr "Inicialització..."
 
 # Keep the three newlines!
 #. txt_load_kernel
@@ -101,7 +99,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Завантаження ядра Linux\n"
+"Càrrega del nucli de Linux\n"
 "\n"
 "\n"
 
@@ -112,29 +110,29 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Завантаження memtest86\n"
+"Càrrega del memtest86\n"
 "\n"
 "\n"
 
 # info box title
 #. txt_info_title
 msgid "Boot Loader"
-msgstr "Завантажувач"
+msgstr "Carregador de l'arrencada"
 
 # error box title
 #. txt_error_title
 msgid "I/O Error"
-msgstr "Помилка вводу/виводу"
+msgstr "Error d'E/S"
 
 # boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr "Змініть завантажувальний диск"
+msgstr "Canvieu el disc d'arrencada"
 
 #. txt_insert_disk
 #, c-format
 msgid "Insert boot disk %u."
-msgstr "Вставте завантажувальний диск %u."
+msgstr "Inseriu el disc d'arrencada %u."
 
 #. txt_insert_disk2
 #, c-format
@@ -142,8 +140,8 @@ msgid ""
 "This is boot disk %u.\n"
 "Insert boot disk %u."
 msgstr ""
-"Це завантажувальний диск %u.\n"
-"Вставте завантажувальний диск %u."
+"Aquest és el disc d'arrencada %u.\n"
+"Inseriu el disc d'arrencada %u."
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
@@ -152,22 +150,22 @@ msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"Це не завантажувальний диск <product>.\n"
-"Вставте завантажувальний диск %u."
+"Aquest no és un disc d'arrencada per a <product>.\n"
+"Inseriu el disc d'arrencada %u."
 
 # password dialog title
 #. txt_password_title
 msgid "Password"
-msgstr "Пароль"
+msgstr "Contrasenya"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr "Підготуйте дискету з оновленнями драйверів."
+msgstr "Prepareu el disquet d'actualització de controladors."
 
 # dvd warning title
 #. txt_dvd_warning_title
 msgid "DVD Error"
-msgstr "Помилка DVD"
+msgstr "S'ha produït un error de DVD"
 
 #. txt_dvd_warning2
 msgid ""
@@ -175,162 +173,162 @@ msgid ""
 "\n"
 "Turn the DVD over then continue."
 msgstr ""
-"Це двобічний DVD. Ви завантажили з другого боку.\n"
+"Aquest DVD té dues cares. Heu arrencat des de la segona cara.\n"
 "\n"
-"Переверніть DVD і продовжуйте."
+"Gireu el DVD i continueu."
 
 # power off dialog title
 #. txt_power_off_title
 msgid "Power Off"
-msgstr "Вимкнути живлення"
+msgstr "Apaga"
 
 #. txt_power_off
 msgid "Halt the system now?"
-msgstr "Хочете зараз вимкнути систему?"
+msgstr "Voleu aturar el sistema ara?"
 
 # menu entry for hard disk installation
 #. txt_harddisk
 msgid "Hard Disk"
-msgstr "Жорсткий диск"
+msgstr "Disc dur"
 
 # dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "Встановлення з жорсткого диска"
+msgstr "Instal·lació del disc dur"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Дисковий пристрій (зондувати всі диски, якщо порожнє)\n"
+msgstr "Dispositiu de disc (escaneja tots els discs si es deixa buit)\n"
 
 #. txt_directory
 msgid "Directory\n"
-msgstr "Каталог\n"
+msgstr "Directori\n"
 
 # dialog title for ftp installation
 #. txt_ftp_title
 msgid "FTP Installation"
-msgstr "Встановлення з FTP"
+msgstr "Instal·lació per FTP"
 
 #. txt_server
 msgid "Server\n"
-msgstr "Сервер\n"
+msgstr "Servidor\n"
 
 #. txt_password
 msgid "Password\n"
-msgstr "Пароль\n"
+msgstr "Contrasenya\n"
 
 # label for ftp user input
 #. txt_user1
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "Користувач (вживати анонімний вхід, якщо порожнє)\n"
+msgstr "Usuari (entrada anònima si es deixa buit)\n"
 
 # dialog title for nfs installation
 #. txt_nfs_title
 msgid "NFS Installation"
-msgstr "Встановлення з NFS"
+msgstr "Instal·lació per NFS"
 
 # label for smb user input
 #. txt_user2
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "Користувач (вживати \"guest\", якщо порожнє)\n"
+msgstr "Usuari (utilitza \"guest\" si es deixa buit)\n"
 
 # dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "Встановлення з SMB (Windows Share)"
+msgstr "Instal·lació de SMB (recurs compartit del Windows)"
 
 # dialog title for http installation
 #. txt_http_title
 msgid "HTTP Installation"
-msgstr "Встановлення через HTTP"
+msgstr "Instal·lació per HTTP"
 
 # 'driver' as in '(hardware) driver update'
 #. txt_driver_update
 msgid "Driver"
-msgstr "Драйвер"
+msgstr "Controlador"
 
 # as in Windows Authentication Domain
 #. txt_domain
 msgid "Domain\n"
-msgstr "Домен\n"
+msgstr "Domini\n"
 
 # button label for other/more options
 #. txt_other_options
 msgid "Other Options"
-msgstr "Інші параметри"
+msgstr "Altres opcions"
 
 # label for language selection
 #. txt_language
 msgid "Language"
-msgstr "Мова"
+msgstr "Idioma"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr "Встановлення -- IOAPIC увімкнено"
+msgstr "Instal·lació -- IOAPIC habilitat"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
-msgstr "Встановлення -- IOAPIC вимкнено"
+msgstr "Instal·lació -- IOAPIC inhabilitat"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr "Встановлення -- локальне APIC вимкнене"
+msgstr "Instal·lació -- APIC local inhabilitat"
 
 #. txt_yes
 msgid "Yes"
-msgstr "Так"
+msgstr "Sí"
 
 #. txt_no
 msgid "No"
-msgstr "Ні"
+msgstr "No"
 
 # menu item for selecting a file
 #. txt_file
 msgid "File"
-msgstr "Файл"
+msgstr "Fitxer"
 
 # input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr "Ресурс\n"
+msgstr "Recurs compartit\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
-msgstr "Автоматичний режим"
+msgstr "Mode automàtic"
 
 #. txt_zenManual
 msgid "Manual Mode"
-msgstr "Ручний режим"
+msgstr "Mode manual"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr "Налаштувати параметри на розділі ZEN"
+msgstr "Configura els paràmetres a la partició de ZEN"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr "Встановити або оновити розділ ZEN"
+msgstr "Instal·la o actualitza la partició de ZEN"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "Перевстановити завантажувач розділу ZEN"
+msgstr "Torna a instal·lar el carregador de l'arrencada de la partició de ZEN"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr "Вимкнути розділ ZEN"
+msgstr "Inhabilita la partició de ZEN"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
-msgstr "Увімкнути розділ ZEN"
+msgstr "Habilita la partició de ZEN"
 
 # video mode menu item
 #. txt_text_mode
 msgid "Text Mode"
-msgstr "Текстовий режим"
+msgstr "Mode de text"
 
 # menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr "Тест прошивки"
+msgstr "Prova de microprogramari"
 
 #. txt_dud_file_msg
 msgid ""
@@ -338,6 +336,6 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
-"Щоб завантажити оновлення драйверів з\n"
-"CD-ROM, введіть сюди назви файлів для\n"
-"оновлення драйвера (розділені комами \",\"):\n"
+"Per a carregar les actualitzacions dels controladors directament des del CD-ROM,\n"
+"introduïu els noms dels fitxers d'actualització de controladors (separats\n"
+"per comes ',') aquí:\n"

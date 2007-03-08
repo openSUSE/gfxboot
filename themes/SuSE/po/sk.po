@@ -8,14 +8,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2005-03-08 20:59+0100\n"
-"Last-Translator: Andrej Kacian <andrej@kacian.sk>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2007-02-20 13:45+0100\n"
+"Last-Translator: Ladislav Michnovič <lmichnovic@suse.cz>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.10\n"
-"Plural-Forms:  nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 & n<=4) ? 1 : 2;\n"
 
 # ok button label
 #. txt_ok
@@ -47,15 +48,15 @@ msgstr "Manuálna inštalácia"
 
 #. txt_noacpi_install
 msgid "Installation--ACPI Disabled"
-msgstr "Inštalácia - ACPI vypnuté"
+msgstr "Inštalácia - s vypnutým ACPI"
 
 #. txt_safe_install
 msgid "Installation--Safe Settings"
-msgstr "Inštalácia - Bezpečné nastavenia"
+msgstr "Inštalácia - s bezpečným nastavením"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr "Linux - Bezpečné nastavenia"
+msgstr "Linux - Bezpečné nastavenie"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
@@ -67,7 +68,7 @@ msgstr "Záchranný systém"
 
 #. txt_memtest
 msgid "Memory Test"
-msgstr "Test pamäte"
+msgstr "Test pamäti"
 
 #. txt_bootoptions
 msgid "Boot Options"
@@ -102,7 +103,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Načítavam jadro Linuxu\n"
+"Načítavam linuxové jadro\n"
 "\n"
 "\n"
 
@@ -130,7 +131,7 @@ msgstr "Chyba I/O"
 # boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr "Zmeňte štartovací disk(etu)"
+msgstr "Zmena štartovacej diskety"
 
 #. txt_insert_disk
 #, c-format
@@ -144,7 +145,7 @@ msgid ""
 "Insert boot disk %u."
 msgstr ""
 "Toto je štartovacia disketa %u.\n"
-"Prosím, vložte disketu %u."
+"Prosím, vložte štartovaciu disketu %u."
 
 # <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
@@ -176,7 +177,7 @@ msgid ""
 "\n"
 "Turn the DVD over then continue."
 msgstr ""
-"Toto je obojstranné médium DVD. Systém ste spustili z druhej strany.\n"
+"Toto je obojstranné DVD médium. Systém ste spustili z druhej strany.\n"
 "\n"
 "Prosím, otočte médium a potom pokračujte."
 
@@ -187,7 +188,7 @@ msgstr "Vypnúť"
 
 #. txt_power_off
 msgid "Halt the system now?"
-msgstr "Vypnúť počítač teraz?"
+msgstr "Chcete vypnúť počítač teraz?"
 
 # menu entry for hard disk installation
 #. txt_harddisk
@@ -266,15 +267,15 @@ msgstr "Jazyk"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr "Inštalácia - IOAPIC povolené"
+msgstr "Inštalácia - so zapnutým IOAPIC"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
-msgstr "Inštalácia - IOAPIC vypnuté"
+msgstr "Inštalácia - s vypnutým IOAPIC"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr "Inštalácia - Lokálny APIC vypnuté"
+msgstr "Inštalácia - s vypnutým lokálnym APIC"
 
 #. txt_yes
 msgid "Yes"

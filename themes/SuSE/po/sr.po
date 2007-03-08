@@ -279,11 +279,11 @@ msgstr ""
 
 #. txt_yes
 msgid "Yes"
-msgstr "&Da"
+msgstr "Da"
 
 #. txt_no
 msgid "No"
-msgstr "&Ne"
+msgstr "Ne"
 
 # menu item for selecting a file
 #. txt_file

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2006-11-02 14:23\n"
+"PO-Revision-Date: 2006-06-01 11:29\n"
 "Last-Translator: Novell Language <language@novell.com>\n"
 "Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 # ok button label
 #. txt_ok
 msgid "OK"
-msgstr "確認"
+msgstr "確定"
 
 # cancel button label
 #. txt_cancel
