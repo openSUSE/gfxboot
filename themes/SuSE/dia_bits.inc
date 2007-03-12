@@ -55,8 +55,6 @@
   /xmenu xmenu.bits def
 
   /window.action actRedrawPanel def
-
-  pmenu.update
 } def
 
 

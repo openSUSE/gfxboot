@@ -1,7 +1,7 @@
 POFILES	= $(wildcard *.po)
 TEXTS	= $(addsuffix .tr,$(basename $(wildcard *.po)))
 
-PRODUCT ?= "openSUSE 10.2"
+PRODUCT ?= "openSUSE 10.3"
 
 all: text.inc $(TEXTS)
 

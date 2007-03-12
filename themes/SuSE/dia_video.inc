@@ -165,6 +165,7 @@
   % add to menu
 
   xmenu .xm_list video.modes.text put
+  xmenu .xm_title /txt_video_mode put
 
   % select largest mode the monitor supports
 
@@ -210,8 +211,6 @@
   /xmenu xmenu.video def
 
   /window.action actRedrawPanel def
-
-  pmenu.update
 } def
 
 

@@ -341,3 +341,22 @@ msgstr ""
 "Aby załadować aktualizacje sterowników \n"
 "bezpośrednio z CD, proszę podac nazwy plików\n"
 "z aktualizacjami (oddzielone przecinkami ','):\n"
+
+# install source menu title
+# *keep it short*
+#. txt_install_source
+msgid "Source"
+msgstr ""
+
+# video mode/display size menu title
+# *keep it short*
+#. txt_video_mode
+msgid "Video Mode"
+msgstr ""
+
+# driver update dialog title
+# -> txt_dud_file_msg
+#. txt_driver_update2
+msgid "Driver Update"
+msgstr ""
+

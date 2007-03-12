@@ -92,8 +92,6 @@
   /xmenu xmenu.profile def
 
   /window.action actRedrawPanel def
-
-  pmenu.update
 } def
 
 

@@ -18,12 +18,6 @@
 /xmenu.selected.fg	white def
 /xmenu.selected.bg	0x6c6c6c newcolor
 
-small_layout {
-  /xmenu.maxlines	19 def
-} {
-  /xmenu.maxlines	24 def	% 28
-} ifelse
-
 % xmenu layout
 %
 % [ selected_entry string_list x y panel_x ]
@@ -148,6 +142,10 @@ small_layout {
 /xmenu.sizes {
   /xmenu.lheight xmenu.font setfont fontheight xmenu.vspace dup add add def
 
+  /xmenu.maxlines
+    panel.text.y 1 sub xmenu.lheight div
+  def
+
   /xmenu.columns xmenu .xm_list get length xmenu.maxlines add 1 sub xmenu.maxlines div def
 
   /xmenu.lastheight
@@ -161,6 +159,8 @@ small_layout {
   xmenu .xm_width
     0 xmenu .xm_list get { exec strsize pop max } forall xmenu.hspace 2 mul add
   put
+
+  xmenu .xm_y panel.text.y 1 sub xmenu.height sub put
 
 } def
 
@@ -334,10 +334,13 @@ small_layout {
 
   % xmenu .xm_panel_width get xmenu.hspace 2 mul sub
 
-  xmenu .xm_title get dup .undef eq {
-    pop xmenu .xm_list get xmenu .xm_current get get
-  } if
-  exec strsize pop
+  0
+
+  xmenu .xm_title get
+  dup .undef ne { exec strsize pop max } { pop } ifelse
+
+  xmenu .xm_list get xmenu .xm_current get get
+  dup .undef ne { exec strsize pop max } { pop } ifelse
 } def
 
 
@@ -353,15 +356,24 @@ small_layout {
 %  xmenu .xm_panel_width get xmenu.hspace sub xmenu .xm_panel_height get
 %  panel.bg setcolor fillrect
 
-  panel.normal setcolor
+  panel.title setcolor
   panel.font setfont
   xmenu .xm_panel_x get xmenu.hspace add
   panel.text.y
   moveto
-  xmenu .xm_title get dup .undef eq {
-    pop xmenu .xm_list get xmenu .xm_current get get
-  } if
-  exec show
+
+  currentpoint
+
+  xmenu .xm_title get
+  dup .undef ne { exec show } { pop } ifelse
+
+  moveto 0 lineheight 4 add rmoveto
+
+  panel.normal setcolor
+  
+  xmenu .xm_list get xmenu .xm_current get get
+  dup .undef ne { exec show } { pop } ifelse
+
 } def
 
 
@@ -373,7 +385,6 @@ small_layout {
 /pmenu.init {
   xmenu.sizes
 
-  xmenu .xm_y panel.text.y 1 sub xmenu.height sub put
   xmenu .xm_panel_width xmenu.width put
   xmenu .xm_panel_height fontheight put
 } def

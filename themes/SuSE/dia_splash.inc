@@ -43,8 +43,6 @@
   /xmenu xmenu.splash def
 
   /window.action actRedrawPanel def
-
-  pmenu.update
 } def
 
 

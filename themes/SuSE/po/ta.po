@@ -339,3 +339,22 @@ msgstr ""
 "சிடி-ரோமிலிருந்து நேரடியாக டிரைவர் புதுப்பித்தல்களை \n"
 "சேர்ப்பதற்கு, டிரைவர் புதுப்பித்தல் கோப்பு பெயர்களை \n"
 "(காற்புள்ளிகளால்(',') பிரித்து) இங்கு என்டர் செய்யவும்:\n"
+
+# install source menu title
+# *keep it short*
+#. txt_install_source
+msgid "Source"
+msgstr ""
+
+# video mode/display size menu title
+# *keep it short*
+#. txt_video_mode
+msgid "Video Mode"
+msgstr ""
+
+# driver update dialog title
+# -> txt_dud_file_msg
+#. txt_driver_update2
+msgid "Driver Update"
+msgstr ""
+

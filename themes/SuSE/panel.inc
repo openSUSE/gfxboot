@@ -8,12 +8,13 @@
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Some global vars.
 %
-/panel.size     { clip.size pop 24 } def
-/panel.y        { clip.size exch pop panel.size exch pop sub 10 sub } def
+/panel.size     { clip.size pop 48 } def
+/panel.y        { clip.size exch pop panel.size exch pop sub 5 sub } def
 /panel.text.y	{ panel.y 5 add } def
 /panel.text.Fy	0 def
 /panel.font	font.normal def
 /panel.normal	white def
+/panel.title 	white def
 /panel.high	lightblue def
 /panel.bg	lightgray def
 /panel.border	lightdotcolor def

@@ -336,3 +336,22 @@ msgstr ""
 "若要從 CD-ROM 直接載入驅動程式更新，\n"
 "請在此輸入驅動程式更新檔案名稱 \n"
 "(由逗號 ',' 分隔)：\n"
+
+# install source menu title
+# *keep it short*
+#. txt_install_source
+msgid "Source"
+msgstr ""
+
+# video mode/display size menu title
+# *keep it short*
+#. txt_video_mode
+msgid "Video Mode"
+msgstr ""
+
+# driver update dialog title
+# -> txt_dud_file_msg
+#. txt_driver_update2
+msgid "Driver Update"
+msgstr ""
+

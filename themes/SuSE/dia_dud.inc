@@ -50,11 +50,8 @@
 
   xmenu .xm_current get dup .dud_file eq {
     dud.dialog
-  } {
-    /window.action actRedrawPanel def
-  } ifelse
-
-  pmenu.update
+  } if
+  /window.action actRedrawPanel def
 } def
 
 
@@ -112,7 +109,7 @@
       /input.edit.dud_file [ 127 string ] def
     } if
 
-    dia .title "Driver Update" put
+    dia .title txt_driver_update2 put
 
     % Must all be of same size!
     dia .ed.list 1 array put

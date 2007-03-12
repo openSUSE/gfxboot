@@ -343,3 +343,22 @@ msgstr ""
 "За да заредите драйвери директно от CD-ROM,\n"
 "въведете тук файловите имена на драйверите\n"
 "за обновяване, разделени със запетаи:\n"
+
+# install source menu title
+# *keep it short*
+#. txt_install_source
+msgid "Source"
+msgstr ""
+
+# video mode/display size menu title
+# *keep it short*
+#. txt_video_mode
+msgid "Video Mode"
+msgstr ""
+
+# driver update dialog title
+# -> txt_dud_file_msg
+#. txt_driver_update2
+msgid "Driver Update"
+msgstr ""
+

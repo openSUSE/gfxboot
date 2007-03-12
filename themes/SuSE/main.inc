@@ -5,7 +5,7 @@
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 % max number of boot option input fields
-/boot.ed.max 3 def
+/boot.ed.max 2 def
 
 % boot option input line separator
 /boot.splitchar 1 def

@@ -339,3 +339,22 @@ msgstr ""
 "सीडी-रोम से सीधे ड्राइवर अद्यतनों को लोड करने के लिए,\n"
 "यहां पर ड्राइवर अद्यतन फाइल नामों को प्रविष्ट (अल्पविराम\n"
 "',' द्वारा पृथक) करें:\n"
+
+# install source menu title
+# *keep it short*
+#. txt_install_source
+msgid "Source"
+msgstr ""
+
+# video mode/display size menu title
+# *keep it short*
+#. txt_video_mode
+msgid "Video Mode"
+msgstr ""
+
+# driver update dialog title
+# -> txt_dud_file_msg
+#. txt_driver_update2
+msgid "Driver Update"
+msgstr ""
+
