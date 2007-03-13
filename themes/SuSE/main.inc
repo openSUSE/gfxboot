@@ -181,18 +181,21 @@
   /x menu.start.x def
   /y menu.start.y def
 
-  0 1 menu.visible.entries 1 sub {
-   x y moveto currentpoint menu.bar.width menu.bar.height image
-   x menu.text.xofs add y menu.text.yofs add moveto
-   menu.texts exch menu.shift add get menuitemmap
-   currentfont exch font.large setfont show setfont
-   /y y menu.item.height add def
-  } for
+  /menu.bar.width.old menu.bar.width def
 
   /menu.bar.width
     menu.bar.min.width
     menu.texts { menuitemmap strsize pop menu.text.xofs 2 mul add 2 add max } forall
   def
+
+  0 1 menu.visible.entries 1 sub {
+   x y moveto currentpoint menu.bar.width.old menu.bar.height image
+   x config.rtl { menu.bar.width menu.text.xofs sub } { menu.text.xofs } ifelse add
+   y menu.text.yofs add moveto
+   menu.texts exch menu.shift add get menuitemmap
+   currentfont exch font.large setfont show.rtl setfont
+   /y y menu.item.height add def
+  } for
 
 } def
 
@@ -234,7 +237,8 @@
   } ifelse
   moveto
 
-  menu.text.xofs menu.text.yofs rmoveto
+  config.rtl { menu.bar.width menu.text.xofs sub } { menu.text.xofs } ifelse
+  menu.text.yofs rmoveto
   menu.status {
     menu.text.select
   } {
@@ -242,7 +246,7 @@
   } ifelse
   setcolor
   menu.texts menu.idx get menuitemmap
-  currentfont exch font.large setfont show setfont
+  currentfont exch font.large setfont show.rtl setfont
 
   menu.status {
     % init boot options

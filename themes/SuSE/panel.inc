@@ -133,10 +133,12 @@
   % don't change xmenu
   /xmenu xmenu
 
-  /panel.x 0 def
+  /panel.x config.rtl { clip.size pop } { 0 } ifelse def
   panel { dup {
     dup 1 panel.x put
-    dup 4 get exec over 2 get strsize pop add 20 add panel.x add /panel.x exch def
+    dup 4 get exec over 2 get strsize pop add 20 add panel.x exch
+    config.rtl { sub } { add } ifelse
+    /panel.x exch def
     dup 5 get exec
   } { pop } ifelse } forall
 
@@ -163,14 +165,14 @@
 % ( panel ) => ( )
 %
 /panel.text.moveto {
-  /panel.tmp.x over 1 get 10 add def
+  /panel.tmp.x over 1 get 10 config.rtl { sub } { add } ifelse def
   /panel.tmp.F exch 2 get def
   
   panel.tmp.x panel.text.y panel.text.Fy add moveto
-  panel.high setcolor panel.tmp.F show
+  panel.high setcolor panel.tmp.F show.rtl
   panel.normal setcolor
 
-  6 panel.text.Fy neg rmoveto
+  6 config.rtl { neg } if panel.text.Fy neg rmoveto
 } def
 
 

@@ -445,7 +445,17 @@ def
 % ( string ) ==> ( )
 %
 /showright {
-  dup strsize pop neg 0 rmoveto show
+  dup strsize pop neg 0 rmoveto currentpoint rot show moveto
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Show string right/left aligned.
+%
+% ( string ) ==> ( )
+%
+/show.rtl {
+  config.rtl { showright } { show } ifelse
 } def
 
 
@@ -929,6 +939,16 @@ def
 /penguin.percent {
   /penguin.percent "penguin" getgfxconfig dup .undef ne { cvn } { pop 0 } ifelse def
   penguin.percent
+} def
+
+
+% Show welcome splash.
+%
+% (  -- bool )
+%
+/config.welcome {
+  /config.welcome "welcome" getgfxconfig dup .undef ne { cvn } { pop 0 } ifelse 0 ne def
+  config.welcome
 } def
 
 

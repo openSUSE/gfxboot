@@ -110,7 +110,7 @@
     pop 0
   } if 
 
-  dup keyRight eq {
+  dup config.rtl { keyLeft } { keyRight } ifelse eq {
     xmenu .xm_current get
     dup xmenu.maxlines div 1 add xmenu.columns mod xmenu.maxlines mul
     exch xmenu.maxlines mod add
@@ -118,7 +118,7 @@
     pop 0
   } if 
 
-  dup keyLeft eq {
+  dup config.rtl { keyRight } { keyLeft } ifelse eq {
     xmenu .xm_current get
     dup xmenu.maxlines div xmenu.columns add 1 sub xmenu.columns mod xmenu.maxlines mul
     exch xmenu.maxlines mod add
@@ -185,7 +185,7 @@
     dup .saved.areas get xmenu.column
 
     [
-      xmenu.column xmenu.width 2 add mul xmenu.x add 1 sub xmenu.y 1 sub moveto
+      xmenu.column xmenu.width 2 add mul config.rtl { neg } if xmenu.x add 1 sub xmenu.y 1 sub moveto
       currentpoint
 
       xmenu.light xmenu.dark
@@ -242,7 +242,7 @@
   dup xmenu.maxlines mod xmenu.lheight mul xmenu.y add /xmenu.pos.y exch def
 
   dup xmenu.maxlines div /xmenu.column over def
-  xmenu.width 2 add mul xmenu.x add /xmenu.pos.x exch def
+  xmenu.width 2 add mul config.rtl { neg } if xmenu.x add /xmenu.pos.x exch def
 
   xmenu.pos.x xmenu.pos.y moveto
 
@@ -284,11 +284,16 @@
   } if
 
   dup xmenu .xm_current get eq { xmenu.selected.fg } { xmenu.normal.fg } ifelse setcolor
-  xmenu.pos.x xmenu.hspace add xmenu.pos.y xmenu.vspace add moveto
-  xmenu .xm_list get over get exec show
+
+  config.rtl {
+    xmenu.pos.x xmenu.width add xmenu.hspace sub xmenu.pos.y xmenu.vspace add moveto
+  } {
+    xmenu.pos.x xmenu.hspace add xmenu.pos.y xmenu.vspace add moveto
+  } ifelse
+
+  xmenu .xm_list get over get exec show.rtl
 
   pop
-
 
 } def
 
@@ -316,8 +321,8 @@
 /pmenu.panel.update {
   panel.text.moveto
 
-  xmenu .xm_panel_x currentpoint pop xmenu.hspace sub put
-  xmenu .xm_x xmenu .xm_panel_x get put
+  xmenu .xm_panel_x currentpoint pop xmenu.hspace config.rtl { neg } if sub put
+  xmenu .xm_x xmenu .xm_panel_x get config.rtl { xmenu .xm_width get sub } if put
 
   pmenu.update
 } def
@@ -350,29 +355,26 @@
 % ( ) => ( )
 %
 /pmenu.update {
-  xmenu .xm_panel_x get xmenu.hspace add panel.text.y moveto
-
-% currently not needed - we're redrawing the whole panel anyway
-%  xmenu .xm_panel_width get xmenu.hspace sub xmenu .xm_panel_height get
-%  panel.bg setcolor fillrect
+  % note: we're always redrawing the whole panel
 
   panel.title setcolor
   panel.font setfont
-  xmenu .xm_panel_x get xmenu.hspace add
+
+  xmenu .xm_panel_x get xmenu.hspace config.rtl { neg } if add
   panel.text.y
   moveto
 
   currentpoint
 
   xmenu .xm_title get
-  dup .undef ne { exec show } { pop } ifelse
+  dup .undef ne { exec show.rtl } { pop } ifelse
 
   moveto 0 lineheight 4 add rmoveto
 
   panel.normal setcolor
   
   xmenu .xm_list get xmenu .xm_current get get
-  dup .undef ne { exec show } { pop } ifelse
+  dup .undef ne { exec show.rtl } { pop } ifelse
 
 } def
 

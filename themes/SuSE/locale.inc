@@ -15,6 +15,8 @@
 
   /config.lang exch def
 
+  /config.rtl config.lang lang.getrtl def
+
   % clear old help texts
   /help.messages xfree
 

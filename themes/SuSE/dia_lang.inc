@@ -14,62 +14,85 @@
 /lang.names [ "English" ] def
 
 /.la.locale 0 def
-/.la.name   1 def
+/.la.rtl    1 def
+/.la.name   2 def
+
 /lang.defaultnames [
-  [ "af_ZA" "Afrikaans" ]
-  % [ "ar_EG" "\u064a\u0628\u0631\u0639" ]
-  [ "ar_EG" "\ufef2\ufe91\ufeae\ufecb" ]
-  [ "bg_BG" "Български" ]
-  [ "bn_BD" "\u09ac\u09be\u0982\u09b2\u09be" ]		% Bengali
-  [ "bs_BA" "Bosanski" ]
-  [ "ca_ES" "Català" ]
-  [ "cs_CZ" "Čeština" ]
-  [ "cy_GB" "Cymraeg" ]
-  [ "da_DK" "Dansk" ]
-  [ "de_DE" "Deutsch" ]
-  [ "el_GR" "Ελληνικά" ]
-  [ "en_GB" "English (UK)" ]
-  [ "en_US" "English (US)" ]
-  [ "es_ES" "Español" ]
-  [ "et_EE" "Eesti" ]
-  [ "fi_FI" "Suomi" ]
-  [ "fr_FR" "Français" ]
-  [ "gu_IN" "\u0a97\u0ac1\u0a9c\u0ab0\u0abe\u0aa4\u0ac0" ]	% Gujarati
-  [ "he_IL" "תירבע" ]
-  % [ "hi_IN" "\u0939\u093f\u0928\u094d\u0926\u0940" ]	% Hindi
-  [ "hi_IN" "\u0939\u093f\u0902\u0926\u0940" ]	% Hindi
-  [ "hr_HR" "Hrvatski" ]
-  [ "hu_HU" "Magyar" ]
-  [ "id_ID" "Bahasa Indonesia" ]
-  [ "it_IT" "Italiano" ]
-  [ "ja_JP" "日本語" ]
-  % [ "km_KH" "\u1781\u17d2\u1798\u17c2\u179a" ]		% Khmer
-  [ "km_KH" "Khmer" ]
-  [ "ko_KR" "한글" ]
-  [ "lt_LT" "Lietuvių" ]
-  [ "mk_MK" "Македонски" ]
-  [ "mr_IN" "\u092e\u0930\u093e\u0920\u0940" ]		% Marathi
-  [ "nb_NO" "Norsk" ]
-  [ "nl_NL" "Nederlands" ]
-  [ "pa_IN" "\u0a2a\u0a70\u0a1c\u0a3e\u0a2c\u0a40" ]	% Punjabi
-  [ "pl_PL" "Polski" ]
-  [ "pt_BR" "Português (Brasil)" ]
-  [ "pt_PT" "Português" ]
-  [ "ro_RO" "Română" ]
-  [ "ru_RU" "Русский" ]
-  [ "sk_SK" "Slovenčina" ]
-  [ "sl_SI" "Slovenščina" ]
-  [ "sr_CS" "Srpski" ]
-  [ "sv_SE" "Svenska" ]
-  [ "ta_IN" "\u0ba4\u0bae\u0bbf\u0bb4\u0bcd" ]		% Tamil
-  [ "tr_TR" "Türkçe" ]
-  [ "uk_UA" "Українська" ]
-  [ "vi_VN" "Tiếng Việt" ]
-  [ "xh_ZA" "isiXhosa" ]
-  [ "zh_CN" "简体中文" ]
-  [ "zh_TW" "繁體中文 (台灣)" ]
-  [ "zu_ZA" "isiZulu" ]
+  [ "af_ZA" false "Afrikaans" ]
+% [ "ar_EG" true  "\u064a\u0628\u0631\u0639" ]
+  [ "ar_EG" true  "\ufef2\ufe91\ufeae\ufecb" ]
+  [ "bg_BG" false "Български" ]
+  [ "bn_BD" false "\u09ac\u09be\u0982\u09b2\u09be" ]		% Bengali
+  [ "bs_BA" false "Bosanski" ]
+  [ "ca_ES" false "Català" ]
+  [ "cs_CZ" false "Čeština" ]
+  [ "cy_GB" false "Cymraeg" ]
+  [ "da_DK" true  "Dansk" ]
+  [ "de_DE" false "Deutsch" ]
+  [ "el_GR" false "Ελληνικά" ]
+  [ "en_GB" false "English (UK)" ]
+  [ "en_US" false "English (US)" ]
+  [ "es_ES" false "Español" ]
+  [ "et_EE" false "Eesti" ]
+  [ "fi_FI" false "Suomi" ]
+  [ "fr_FR" false "Français" ]
+  [ "gu_IN" false "\u0a97\u0ac1\u0a9c\u0ab0\u0abe\u0aa4\u0ac0" ]	% Gujarati
+  [ "he_IL" false "תירבע" ]
+% [ "hi_IN" false "\u0939\u093f\u0928\u094d\u0926\u0940" ]	% Hindi
+  [ "hi_IN" false "\u0939\u093f\u0902\u0926\u0940" ]	% Hindi
+  [ "hr_HR" false "Hrvatski" ]
+  [ "hu_HU" false "Magyar" ]
+  [ "id_ID" false "Bahasa Indonesia" ]
+  [ "it_IT" false "Italiano" ]
+  [ "ja_JP" false "日本語" ]
+% [ "km_KH" false "\u1781\u17d2\u1798\u17c2\u179a" ]		% Khmer
+  [ "km_KH" false "Khmer" ]
+  [ "ko_KR" false "한글" ]
+  [ "lt_LT" false "Lietuvių" ]
+  [ "mk_MK" false "Македонски" ]
+  [ "mr_IN" false "\u092e\u0930\u093e\u0920\u0940" ]		% Marathi
+  [ "nb_NO" false "Norsk" ]
+  [ "nl_NL" false "Nederlands" ]
+  [ "pa_IN" false "\u0a2a\u0a70\u0a1c\u0a3e\u0a2c\u0a40" ]	% Punjabi
+  [ "pl_PL" false "Polski" ]
+  [ "pt_BR" false "Português (Brasil)" ]
+  [ "pt_PT" false "Português" ]
+  [ "ro_RO" false "Română" ]
+  [ "ru_RU" false "Русский" ]
+  [ "sk_SK" false "Slovenčina" ]
+  [ "sl_SI" false "Slovenščina" ]
+  [ "sr_CS" false "Srpski" ]
+  [ "sv_SE" false "Svenska" ]
+  [ "ta_IN" false "\u0ba4\u0bae\u0bbf\u0bb4\u0bcd" ]		% Tamil
+  [ "tr_TR" false "Türkçe" ]
+  [ "uk_UA" false "Українська" ]
+  [ "vi_VN" false "Tiếng Việt" ]
+  [ "xh_ZA" false "isiXhosa" ]
+  [ "zh_CN" false "简体中文" ]
+  [ "zh_TW" false "繁體中文 (台灣)" ]
+  [ "zu_ZA" false "isiZulu" ]
 ] def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Get language property.
+%
+% Returns .undef if not found.
+%
+% ( locale prop ) ==> ( obj )
+%
+/lang.getprop {
+  lang.defaultnames {
+    dup .la.locale get 3 index eq { exch get exch pop return } { pop } ifelse
+  } forall
+
+  % try a loose match
+  lang.defaultnames {
+    dup .la.locale get 3 index locale.cmp { exch get exch pop return } { pop } ifelse
+  } forall
+
+  pop pop .undef
+} def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -80,13 +103,21 @@
 % ( locale ) ==> ( name )
 %
 /lang.getdefname {
-  lang.defaultnames {
-    dup .la.locale get 2 index eq { .la.name get exch pop exit } { pop } ifelse
-  } forall
-  % try a loose match
-  lang.defaultnames {
-    dup .la.locale get 2 index locale.cmp { .la.name get exch pop exit } { pop } ifelse
-  } forall
+  dup
+  .la.name lang.getprop
+  dup .undef ne { exch } if
+  pop
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Check for rtl.
+%
+% ( locale ) ==> ( bool )
+%
+/lang.getrtl {
+  .la.rtl lang.getprop
+  dup .undef eq { pop false } if
 } def
 
 

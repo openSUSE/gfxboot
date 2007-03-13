@@ -38,7 +38,7 @@
 /panel.help.update {
   panel.text.moveto
 
-  txt_help show
+  txt_help show.rtl
 } def
 
 
