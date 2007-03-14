@@ -215,8 +215,6 @@
     config.lang eq { xmenu .xm_current la.tmp.cnt put exit } if
     /la.tmp.cnt inc
   } forall
-
-  pmenu.init
 } def
 
 

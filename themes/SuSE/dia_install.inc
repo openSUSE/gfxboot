@@ -43,8 +43,6 @@
   xmenu .xm_list [ is_dvd { "DVD" } { "CD-ROM" } ifelse "SLP" "FTP" "HTTP" "NFS" "SMB / CIFS" /txt_harddisk ] put
 
   xmenu .xm_title /txt_install_source put
-
-  pmenu.init
 } def
 
 

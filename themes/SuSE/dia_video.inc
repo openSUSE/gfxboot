@@ -197,8 +197,6 @@
   } forall
 
   pop pop
-
-  pmenu.init
 } def
 
 

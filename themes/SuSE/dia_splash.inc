@@ -29,8 +29,6 @@
 
   xmenu .xm_current splash.default put
   xmenu .xm_list [ "Native" "Verbose" "Silent" ] put
-
-  pmenu.init
 } def
 
 

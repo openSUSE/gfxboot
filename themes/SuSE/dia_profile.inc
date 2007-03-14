@@ -78,8 +78,6 @@
 
   xmenu .xm_current profile.default put
   xmenu .xm_list profile.items put
-
-  pmenu.init
 } def
 
 

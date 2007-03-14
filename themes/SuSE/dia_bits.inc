@@ -41,8 +41,6 @@
   } if
 
   xmenu .xm_current bits.default put
-
-  pmenu.init
 } def
 
 

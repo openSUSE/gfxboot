@@ -29,11 +29,9 @@
 /.xm_width		 4 def		% menu width
 /.xm_height		 5 def		% menu height
 /.xm_panel_x		 6 def		% panel entry x pos
-/.xm_panel_width	 7 def		% panel entry width
-/.xm_panel_height	 8 def		% panel entry height
-/.xm_vspace		 9 def		% vspace per menu
-/.xm_title              10 def          % xmenu title
-/.xm_size		11 def		% xmenu size
+/.xm_vspace		 7 def		% vspace per menu
+/.xm_title               8 def          % xmenu title
+/.xm_size		 9 def		% xmenu size
 
 
 % short hands
@@ -161,6 +159,8 @@
   put
 
   xmenu .xm_y panel.text.y 1 sub xmenu.height sub put
+
+  xmenu .xm_x xmenu .xm_panel_x get config.rtl { xmenu .xm_width get sub } if put
 
 } def
 
@@ -322,7 +322,6 @@
   panel.text.moveto
 
   xmenu .xm_panel_x currentpoint pop xmenu.hspace config.rtl { neg } if sub put
-  xmenu .xm_x xmenu .xm_panel_x get config.rtl { xmenu .xm_width get sub } if put
 
   pmenu.update
 } def
@@ -334,11 +333,6 @@
 % ( ) => ( width )
 %
 /pmenu.width {
-  % Use this instead of the line below and remove the actRedrawPanel
-  % things if you want fixed size panel entries.
-
-  % xmenu .xm_panel_width get xmenu.hspace 2 mul sub
-
   0
 
   xmenu .xm_title get
@@ -376,19 +370,6 @@
   xmenu .xm_list get xmenu .xm_current get get
   dup .undef ne { exec show.rtl } { pop } ifelse
 
-} def
-
-
-% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Panel/xmenu helper function.
-%
-% ( ) => ( )
-%
-/pmenu.init {
-  xmenu.sizes
-
-  xmenu .xm_panel_width xmenu.width put
-  xmenu .xm_panel_height fontheight put
 } def
 
 
