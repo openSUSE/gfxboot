@@ -27,7 +27,7 @@
   [ "ca_ES" false "Català" ]
   [ "cs_CZ" false "Čeština" ]
   [ "cy_GB" false "Cymraeg" ]
-  [ "da_DK" true  "Dansk" ]
+  [ "da_DK" false "Dansk" ]
   [ "de_DE" false "Deutsch" ]
   [ "el_GR" false "Ελληνικά" ]
   [ "en_GB" false "English (UK)" ]

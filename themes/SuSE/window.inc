@@ -574,7 +574,7 @@
 
   dialog.tmp .x get 10 add dialog.tmp .y get 3 add moveto
   dialog.tmp .title.fg get setcolor
-  dialog.tmp .title get show
+  dialog.tmp .title get config.rtl { dialog.tmp .width get 20 sub 0 rmoveto } if show.rtl
 
   dialog.tmp .color.fg get setcolor
   dialog.tmp .x get dialog.tmp .y get moveto
@@ -583,8 +583,11 @@
 
   dialog.tmp .ed.text.list get dup {
     /dialog.tmp.idx 0 def
+    /dialog.tmp.x currentpoint pop def
     {
-      show
+      config.rtl { dialog.tmp .ed.width get 0 rmoveto } if show.rtl
+      currentpoint exch pop dialog.tmp.x exch moveto
+
       dialog.tmp .ed.buffer.list get dialog.tmp.idx get
 
       dup {

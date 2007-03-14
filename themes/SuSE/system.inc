@@ -445,7 +445,7 @@ def
 % ( string ) ==> ( )
 %
 /showright {
-  dup strsize pop neg 0 rmoveto currentpoint rot show moveto
+  dup strsize pop neg 0 rmoveto currentpoint rot show currentpoint exch pop exch pop moveto
 } def
 
 

@@ -8,19 +8,25 @@ use Getopt::Long;
 
 sub read_texts;
 sub join_msg;
+sub fribidi;
 
-$opt_product = "SUSE Linux";
+$opt_product = "openSUSE";
 
 GetOptions(
   'product=s' => \$opt_product
 );
 
 
+chomp ($tmp_file = `mktemp /tmp/po2txt.XXXXXXXXXX`);
+
 for $lang (@ARGV) {
   $lang = 'en' if $lang eq 'bootloader.pot';
   $lang =~ s/\.po$//;
   read_texts $lang;
 }
+
+unlink $tmp_file;
+
 
 sub read_texts
 {
@@ -100,6 +106,7 @@ sub read_texts
     $txt =~ s/\\"/"/g;
     $txt =~ s/\\\\/\\/g;
     $txt =~ s/\\n/\n/g;
+    $txt = fribidi $txt if $lang =~ /^(ar|he)/;
     print "$txt\x00"
   }
 
@@ -163,3 +170,26 @@ sub join_msg
 
   return $m;
 }
+
+
+sub fribidi
+{
+  local $_;
+  my $m;
+
+  $m = shift;
+
+  open F, ">$tmp_file";
+  print F $m;
+  close F;
+
+  open F, "fribidi --nopad --nobreak $tmp_file|";
+  $m = undef;
+  while(read F, $_, 0x10000) {
+    $m .= $_;
+  }
+  close F;
+
+  return $m;
+}
+
