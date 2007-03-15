@@ -440,12 +440,40 @@ def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Show one-line string right aligned.
+%
+% ( string ) ==> ( )
+%
+/showright1 {
+  dup strsize pop neg 0 rmoveto currentpoint rot show currentpoint exch pop exch pop moveto
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Show string right aligned.
 %
 % ( string ) ==> ( )
 %
 /showright {
-  dup strsize pop neg 0 rmoveto currentpoint rot show currentpoint exch pop exch pop moveto
+  '\n' split
+  currentpoint pop
+  false 2 index
+
+  % array x not_first? array
+  {
+    % array x not_first? elem
+
+    over {
+      "\n" show
+      2 index currentpoint exch pop moveto
+    } if
+
+    dup showright1 free
+
+    pop true
+  } forall
+  pop pop
+  free
 } def
 
 

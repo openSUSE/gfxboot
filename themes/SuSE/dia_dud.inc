@@ -123,6 +123,7 @@
   dia .buttons [
     button.ok button.default actNothing button.setaction
     button.cancel button.notdefault actNothing button.setaction
+    config.rtl { exch } if
   ] put
 
   dia window.init

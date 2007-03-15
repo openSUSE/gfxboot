@@ -579,13 +579,20 @@
   dialog.tmp .color.fg get setcolor
   dialog.tmp .x get dialog.tmp .y get moveto
   dialog.tmp .text.x get dialog.tmp .text.y get rmoveto
-  dialog.tmp .text get show
+
+  /dialog.tmp.x currentpoint pop def
+
+  config.rtl { dialog.tmp .text.x get -2 mul dialog.tmp .width get add 0 rmoveto } if
+
+  dialog.tmp .text get show.rtl
+
+  currentpoint exch pop dialog.tmp.x exch moveto
 
   dialog.tmp .ed.text.list get dup {
     /dialog.tmp.idx 0 def
-    /dialog.tmp.x currentpoint pop def
     {
-      config.rtl { dialog.tmp .ed.width get 0 rmoveto } if show.rtl
+      % really '2 add'?
+      config.rtl { dialog.tmp .ed.width get 2 add 0 rmoveto } if show.rtl
       currentpoint exch pop dialog.tmp.x exch moveto
 
       dialog.tmp .ed.buffer.list get dialog.tmp.idx get

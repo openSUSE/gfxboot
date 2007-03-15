@@ -1207,6 +1207,7 @@
   dup .buttons [
     button.ok button.default actExit button.setaction
     button.cancel button.notdefault actNothing button.setaction
+    config.rtl { exch } if
   ] put
   dup window.init
       window.show
@@ -1318,6 +1319,7 @@
   dup .buttons [
     button.ok     button.notdefault    actPowerOff actNoClose or button.setaction
     button.cancel button.default       actNothing                button.setaction
+    config.rtl { exch } if
   ] put
   dup window.init
       window.show

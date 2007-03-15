@@ -203,6 +203,7 @@
   dia .buttons [
     button.ok button.default actInstallOK actNoClose or button.setaction
     button.cancel button.notdefault actInstallCancel button.setaction
+    config.rtl { exch } if
   ] put
 
   dia window.init
