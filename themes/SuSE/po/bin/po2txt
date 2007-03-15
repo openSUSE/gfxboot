@@ -183,7 +183,7 @@ sub fribidi
   print F $m;
   close F;
 
-  open F, "fribidi --nopad --nobreak $tmp_file|";
+  open F, "cat $tmp_file | bin/arabic | fribidi --nopad --nobreak |";
   $m = undef;
   while(read F, $_, 0x10000) {
     $m .= $_;
