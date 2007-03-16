@@ -1203,7 +1203,7 @@
     /frame1.width  400 def
   } {
     /frame1.pos  { 200 192 } def
-    /frame1.width  400 def
+    /frame1.width  425 def
   } ifelse
 
   ptheme {

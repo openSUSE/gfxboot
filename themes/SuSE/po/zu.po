@@ -269,7 +269,7 @@ msgstr "Ukufaka Uhlelo--IOAPIC Icishiwe"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr "Ukufaka Uhlelo--I-ACPI Eseduze Icishiwe"
+msgstr "Ukufaka Uhlelo--I-APIC Eseduze Icishiwe"
 
 #. txt_yes
 msgid "Yes"
