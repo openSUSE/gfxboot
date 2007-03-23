@@ -22,6 +22,7 @@
   [ "bn" "Bengali" ]
   [ "bs" "Bosanski" ]
   [ "bg" "Български" ]
+  [ "ca" "Català" ]
   [ "cs" "Čeština" ]
   [ "cy_GB" "Cymraeg" ]
   [ "da" "Dansk" ]
