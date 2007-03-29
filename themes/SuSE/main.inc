@@ -316,9 +316,7 @@
         over over moveto boot.ed.width boot.ed.height savescreen
         cmdlinelength string
         cmdlinelength
-        0
-        0
-        0
+        .undef
         cmdlinelength string
         "More Options"
         false

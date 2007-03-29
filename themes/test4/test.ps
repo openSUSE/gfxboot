@@ -1,0 +1,175 @@
+% bool values
+/true     0 0 eq def
+/false    0 0 ne def
+
+% type values
+/t_none          0 def
+/t_int           1 def
+/t_unsigned      2 def
+/t_bool          3 def
+/t_string        4 def
+/t_code          5 def
+/t_ret           6 def
+/t_prim          7 def
+/t_sec           8 def
+/t_dict_idx      9 def
+/t_array        10 def
+/t_end          11 def
+/t_ptr          12 def
+
+/.value { t_int settype } def
+/.undef 0 t_none settype def
+/.end 0 t_end settype def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Convert object to pointer.
+%
+% ( obj ) ==> ( ptr )
+%
+/cvp { t_ptr settype } def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Convert object to string.
+%
+% ( obj ) ==> ( string )
+%
+/cvs { t_string settype } def
+
+
+% base num char
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Convert object to number.
+%
+% ( obj ) ==> ( int )
+%
+/cvn {
+  dup gettype t_string eq {
+    1 % sign
+    exch dup 0 get '-' eq {
+      exch pop 1 add -1 exch
+    } if
+    10 % initial base
+    0 % value
+    rot
+    {
+      dup 'a' ge { 0x20 sub } if
+      dup 'X' eq { pop pop pop 16 0 '0' } if
+      '0' sub
+      dup 9 gt { 7 sub } if
+      dup 0 lt over 4 index ge or { pop exit } if
+      exch 2 index mul add
+    } forall
+    exch pop mul
+  } {
+    t_int settype
+  } ifelse
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Arguments like snprintf.
+%
+% ( obj_1 ... obj_n string_1 string_2 ) ==> ( )
+%
+/sprintf {
+  dup cvp length exch snprintf
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Allocate new string.
+%
+% ( size ) ==> ( string )
+/string {
+  1 add malloc cvs
+} def
+
+
+/findmode {
+  0 1 videomodes {
+    videomodeinfo dup .undef eq {
+      pop pop pop pop
+    } {
+      % compare width, height, colors
+      6 index 4 index eq 6 index 4 index eq and 5 index 3 index eq and {
+        7 1 roll 6 { pop } repeat 0xbfff and return
+      } {
+        pop pop pop pop
+      } ifelse
+    } ifelse
+  } for
+
+  pop pop pop .undef
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Keyboard mapping.
+%
+% ( key ) ==> ( key )
+%
+/mapkey {
+   dup 24 shr 0xff and /key.code exch def
+} def
+
+
+/KeyEvent {
+
+  dup 0xff00 and 16 shl over 0xff and dup 0xe0 eq { pop 0 } if add mapkey /key exch def
+
+  "" -1
+
+  key 0x1b eq { 1 return } if
+
+  edit key edit.input
+
+  0
+
+} def
+
+
+800 600 16 findmode setmode not { false .end } if
+
+"normal.fnt" findfile setfont
+
+"cat.jpg" findfile setimage
+
+/black 0x000000 def
+/white 0xffffff def
+/yellow 0xffff00 def
+/red 0xff0000 def
+
+white setcolor
+
+0 0 moveto 0 0 image.size image
+
+/buf 200 string def
+
+/x 100 def
+/y 100 def
+/width 600 def
+/height fontheight 2 add def
+
+/edit [
+  x y
+  x y moveto width height savescreen
+  buf
+  buf cvp length
+  .undef
+] def
+
+0x00ffff setcolor
+
+x 1 sub y moveto x 1 sub y height add 1 sub lineto
+x y 1 sub moveto x width add 1 sub y 1 sub lineto
+
+x width add y moveto x width add y height add 1 sub lineto
+x y height add moveto x width add 1 sub y height add lineto
+
+white setcolor
+
+edit "" edit.init
+

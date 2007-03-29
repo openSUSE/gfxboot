@@ -96,7 +96,7 @@ clip.size pop 800 eq {
   boot.window .ed.list get boot.window .ed.focus get get
   /bo.buf over .inp_buf get def
   /bo.len over .inp_buf_len  get def
-  /bo.pos exch .inp_cur get def
+  /bo.pos exch .inp_int get .inp_int_cur get def
 
   {
     bo.pos 0 eq { exit } if

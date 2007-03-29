@@ -605,7 +605,7 @@
           currentpoint
           dialog.tmp .ed.width get fontheight 2 add savescreen
           0 0
-          0 0 0
+          .undef
         ] def
 
         dialog.tmp.buf 3 2 index put

@@ -669,6 +669,19 @@ sizeof_fb_entry		equ 8
 %endmacro
 
 
+%macro          wait32 0
+		pushf
+		push ecx
+		push eax
+                mov ecx,10000000
+%%wait32_10:
+                in al,80h
+                loop %%wait32_10
+                pop eax
+                pop ecx
+                popf
+%endmacro
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ; Interface functions.
@@ -8085,15 +8098,15 @@ prim_snprintf_90:
 ; ( array1 str1 -- )
 ;
 ; str1: initial input string value
-; array1: 8-dimensional array: [ x y bg buf buf_size 0 0 0 ]. x, y: input field
+; array1: (at least) 6-dimensional array: [ x y bg buf buf_size .undef ]. x, y: input field
 ; position; bg: background pixmap (created with @savescreen) - this determines the
 ; input field dimensions, too; buf: string buffer, large enough
-; for a string of length buf_size. The last 3 elements are used internally and must be 0.
+; for a string of length buf_size. The last element is used internally.
 ;
 ; example
 ;   50 100 moveto 200 20 savescreen /bg exch def
 ;   /buf 100 string def
-;   /ed [ 50 100 bg buf 100 0 0 0 ] def
+;   /ed [ 50 100 bg buf 100 .undef ] def
 ;   ed "foo" edit.init
 ;
 
@@ -8106,11 +8119,10 @@ prim_editinit:
 
 		mov esi,ecx
 
-		push esi
 		push eax
+		call edit_init_params
 		call edit_get_params
 		pop eax
-		pop esi
 
 		mov bp,pserr_invalid_data
 		jc prim_editinit_90
@@ -8168,7 +8180,11 @@ prim_editdone:
 
 		mov bx,dx
 		imul bx,[pixel_bytes]
+		push esi
 		call restore_bg
+		pop esi
+
+		call edit_done_params
 
 		sub word [pstack.ptr],byte 1
 prim_editdone_90:
@@ -8196,9 +8212,14 @@ prim_editshowcursor:
 		mov bp,pserr_invalid_data
 		jc prim_editshowcursor_90
 
+		or edi,edi
+		jz prim_editshowcursor_50
+
 		push dword [gfx_cur]
 		call edit_show_cursor
 		pop dword [gfx_cur]
+
+prim_editshowcursor_50:
 
 		sub dword [pstack.ptr],1
 prim_editshowcursor_90:
@@ -8226,9 +8247,14 @@ prim_edithidecursor:
 		mov bp,pserr_invalid_data
 		jc prim_edithidecursor_90
 
+		or edi,edi
+		jz prim_edithidecursor_50
+
 		push dword [gfx_cur]
 		call edit_hide_cursor
 		pop dword [gfx_cur]
+
+prim_edithidecursor_50:
 
 		sub dword [pstack.ptr],1
 prim_edithidecursor_90:
@@ -8259,14 +8285,15 @@ prim_editinput:
 
 		mov esi,ecx
 
-		push esi
 		push eax
 		call edit_get_params
 		pop eax
-		pop esi
 
 		mov bp,pserr_invalid_data
 		jc prim_editinput_90
+
+		or edi,edi
+		jz prim_editinput_50
 
 		push esi
 
@@ -8285,6 +8312,8 @@ prim_editinput:
 		pop esi
 
 		call edit_put_params
+
+prim_editinput_50:
 
 		sub dword [pstack.ptr],2
 prim_editinput_90:
@@ -10507,7 +10536,7 @@ edit_align:
 		cmp ax,dx
 		jg edit_align_50
 
-		sub ax,5		; still 5 pixel away?
+		sub ax,1		; still 1 pixel away?
 		jge edit_align_90
 		add [edit_shift],ax
 		jge edit_align_90
@@ -10515,7 +10544,7 @@ edit_align:
 		jmp edit_align_90
 edit_align_50:
 		sub cx,ax
-		sub cx,5		; still 5 pixel away?
+		sub cx,1		; still 1 pixel away?
 		jge edit_align_90
 		sub [edit_shift],cx
 edit_align_90:
@@ -10735,6 +10764,8 @@ edit_input_80:
 		xchg al,[es:ebx+esi]
 		mov [edit_cursor],cx
 
+		; wait32
+
 		call edit_align
 		call edit_redraw
 edit_input_90:
@@ -10939,25 +10970,116 @@ edit_init_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Initialize internal edit data.
+;
+;  esi		parameter array
+;
+; return:
+;  CF		invalid array/out of memory
+;
+; Note:
+;  esi unchanged
+;
+
+		bits 32
+
+edit_init_params:
+		cmp word [es:esi],6
+		jc edit_init_params_90
+
+		push esi
+		mov eax,2+3*5
+		call calloc
+		pop esi
+		or eax,eax
+		jz edit_init_params_80
+
+		mov byte [es:esi+2+5*5],t_array
+		mov [es:esi+2+5*5+1],eax
+
+		mov word [es:eax],3
+
+		mov byte [es:eax+2+5*0],t_int
+		mov byte [es:eax+2+5*1],t_int
+		mov byte [es:eax+2+5*2],t_int
+
+		clc
+		jmp edit_init_params_90
+
+edit_init_params_80:
+		stc
+
+edit_init_params_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Free internal edit data.
+;
+;  esi		parameter array
+;
+; Note:
+;  esi unchanged
+;
+
+		bits 32
+
+edit_done_params:
+		cmp word [es:esi],6
+		jc edit_done_params_90
+
+		cmp byte [es:esi+2+5*5],t_array
+		jnz edit_done_params_90
+
+		mov edi,[es:esi+2+5*5+1]
+		cmp word [es:edi],3
+		jc edit_done_params_90
+
+		; mov byte [es:eax+2+5*0],t_int
+		; mov byte [es:eax+2+5*1],t_int
+		; mov byte [es:eax+2+5*2],t_int
+
+		mov eax,edi
+		push esi
+		call free
+		pop esi
+
+		xor eax,eax
+		mov byte [es:esi+2+5*5],t_none
+		mov [es:esi+2+5*5+1],eax
+
+edit_done_params_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; Store internal input field state.
 ;
 ;  esi		parameter array
 ;
-; Note: no consistency checks done, esi _must_ point to a valid array.
+; Notes:
+;  - no consistency checks done, esi _must_ point to a valid array
+;  - esi unchanged
 ;
 
 		bits 32
 
 edit_put_params:
+		cmp byte [es:esi+2+5*5],t_array
+		jnz edit_put_params_90
+
+		mov edi,[es:esi+2+5*5+1]
+
 		push word [edit_buf_ptr]
-		pop word [es:esi+2+5*5+1]
+		pop word [es:edi+2+5*0+1]
 		
 		push word [edit_cursor]
-		pop word [es:esi+2+5*6+1]
+		pop word [es:edi+2+5*1+1]
 		
 		push word [edit_shift]
-		pop word [es:esi+2+5*7+1]
+		pop word [es:edi+2+5*2+1]
 
+edit_put_params_90:
 		ret
 
 
@@ -10967,66 +11089,77 @@ edit_put_params:
 ;  esi		parameter array
 ;
 ; return:
+;  edi:		internal data array
 ;  CF		invalid data
 ;
 
 		bits 32
 
 edit_get_params:
-		es lodsw
-		cmp ax,8
+		cmp word [es:esi],6
 		jc edit_get_params_90
 
-		cmp byte [es:esi+5*0],t_int
+		cmp byte [es:esi+2+5*0],t_int
 		jnz edit_get_params_80
-		push word [es:esi+5*0+1]
+		push word [es:esi+2+5*0+1]
 		pop word [edit_x]
 
-		cmp byte [es:esi+5*1],t_int
+		cmp byte [es:esi+2+5*1],t_int
 		jnz edit_get_params_80
-		push word [es:esi+5*1+1]
+		push word [es:esi+2+5*1+1]
 		pop word [edit_y]
 		
-		cmp byte [es:esi+5*2],t_ptr
+		cmp byte [es:esi+2+5*2],t_ptr
 		jnz edit_get_params_80
-		push dword [es:esi+5*2+1]
+		push dword [es:esi+2+5*2+1]
 		pop dword [edit_bg]
 		
-		cmp byte [es:esi+5*3],t_string
+		cmp byte [es:esi+2+5*3],t_string
 		jnz edit_get_params_80
-		mov eax,[es:esi+5*3+1]
+		mov eax,[es:esi+2+5*3+1]
 		mov [edit_buf],eax
 		
-		cmp byte [es:esi+5*4],t_int
+		cmp byte [es:esi+2+5*4],t_int
 		jnz edit_get_params_80
-		push word [es:esi+5*4+1]
+		push word [es:esi+2+5*4+1]
 		pop word [edit_buf_len]
 		
-		cmp byte [es:esi+5*5],t_int
+		cmp byte [es:esi+2+5*5],t_none
+		jnz edit_get_params_40
+		xor edi,edi
+		jmp edit_get_params_90
+edit_get_params_40:
+		cmp byte [es:esi+2+5*5],t_array
 		jnz edit_get_params_80
-		push word [es:esi+5*5+1]
+		mov edi,[es:esi+2+5*5+1]
+		cmp word [es:edi],3		; array length
+		jb edit_get_params_80
+
+		cmp byte [es:edi+2+5*0],t_int
+		jnz edit_get_params_80
+		push word [es:edi+2+5*0+1]
 		pop word [edit_buf_ptr]
 		
-		cmp byte [es:esi+5*6],t_int
+		cmp byte [es:edi+2+5*1],t_int
 		jnz edit_get_params_80
-		push word [es:esi+5*6+1]
+		push word [es:edi+2+5*1+1]
 		pop word [edit_cursor]
 		
-		cmp byte [es:esi+5*7],t_int
+		cmp byte [es:edi+2+5*2],t_int
 		jnz edit_get_params_80
-		push word [es:esi+5*7+1]
+		push word [es:edi+2+5*2+1]
 		pop word [edit_shift]
 		
-		mov esi,[edit_bg]
-		es lodsw
-		mov [edit_width],ax
-		es lodsw
-		mov [edit_height],ax
+		mov eax,[edit_bg]
+		mov dx,[es:eax]
+		mov [edit_width],dx
+		mov dx,[es:eax+2]
+		mov [edit_height],dx
 
 		mov cx,[font.height]
-		sub ax,cx
-		sar ax,1
-		mov [edit_y_ofs],ax
+		sub dx,cx
+		sar dx,1
+		mov [edit_y_ofs],dx
 
 		cmp word [edit_buf_len],2		; at least 1 char
 		jnc edit_get_params_90
