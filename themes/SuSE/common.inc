@@ -432,7 +432,24 @@
 
     config.lang {
       config.lang "en" ne {
-        config.lang "lang=%s " bc.cmd dup length add sprintf
+        config.lang
+          dup "af" eq { pop "af_ZA" } if
+          dup "ca" eq { pop "ca_ES" } if
+          dup "cy" eq { pop "cy_GB" } if
+          dup "et" eq { pop "et_EE" } if
+          dup "gu" eq { pop "gu_IN" } if
+          dup "hi" eq { pop "hi_IN" } if
+          dup "hr" eq { pop "hr_HR" } if
+          dup "lt" eq { pop "lt_LT" } if
+          dup "mr" eq { pop "mr_IN" } if
+          dup "pa" eq { pop "pa_IN" } if
+          dup "sr" eq { pop "sr_CS" } if
+          dup "ta" eq { pop "ta_IN" } if
+          dup "tr" eq { pop "tr_TR" } if
+          dup "vi" eq { pop "vi_VN" } if
+          dup "xh" eq { pop "xh_ZA" } if
+          dup "zu" eq { pop "zu_ZA" } if
+        "lang=%s " bc.cmd dup length add sprintf
       } if
     } if
 
