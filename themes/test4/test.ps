@@ -21,6 +21,38 @@
 /.undef 0 t_none settype def
 /.end 0 t_end settype def
 
+% input object fields
+/.inp_x          0 def          % x pos
+/.inp_y          1 def          % y pos
+/.inp_back       2 def          % background pixmap
+/.inp_buf        3 def          % input buffer
+/.inp_buf_len    4 def          % input buffer length
+/.inp_int        5 def          % internal state array, see below
+% optional fields
+/.inp_hidden     6 def          % hidden buffer
+/.inp_label      7 def          % input field label
+/.inp_visible    8 def          % field is visible
+/.inp_show       9 def          % field should be visible
+
+/.inp_int_cur           0 def   % current edit char offset
+/.inp_int_cursor        1 def   % cursor pos (pixel)
+/.inp_int_shift         2 def   % input line shifted (pixel)
+/.inp_int_flags         3 def   % bit 0: cursor visible
+/.inp_int_saved_cursor  4 def   % saved cursor background
+
+/keyEsc       0x0000001b def
+/keyEnter     0x0000000d def
+/keyTab       0x00000009 def
+/keyShiftTab  0x0f000000 def
+/keyF1        0x3b000000 def
+/keyF2        0x3c000000 def
+/keyF3        0x3d000000 def
+/keyF4        0x3e000000 def
+/keyF5        0x3f000000 def
+/keyF6        0x40000000 def
+/keyF7        0x41000000 def
+/keyF8        0x42000000 def
+/keyF9        0x43000000 def
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Convert object to pointer.
@@ -107,6 +139,59 @@
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Print string (for debugging).
+%
+% ( string ) ==> ( )
+%
+/string.print {
+  dup
+  currentpoint currentpoint 5 -1 roll strsize image moveto
+  show
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Print number (for debugging).
+%
+% ( number ) ==> ( )
+%
+/number.print {
+  32 string
+  exch over
+  "%08x" exch sprintf
+  dup string.print
+  free
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Print obj (for debugging).
+%
+% ( obj ) ==> ( )
+%
+/obj.print {
+  64 string
+  exch dup
+  .value exch gettype
+  "%x:%08x" 3 index sprintf
+  dup string.print
+  free
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Print (for debugging).
+%
+% ( obj ) ==> ( )
+%
+/print {
+  dup gettype t_int eq { number.print return } if
+  dup gettype t_string eq { string.print return } if
+  obj.print
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Keyboard mapping.
 %
 % ( key ) ==> ( key )
@@ -122,7 +207,34 @@
 
   "" -1
 
-  key 0x1b eq { 1 return } if
+  key keyEsc eq { 1 return } if
+
+  key keyF1 eq {
+    edit edit.hidecursor
+    0 return
+  } if
+
+  key keyF2 eq {
+    edit edit.showcursor
+    0 return
+  } if
+
+  key keyF3 eq {
+    hide_it
+    0 return
+  } if
+
+  key keyF4 eq {
+    .undef show_it
+    0 return
+  } if
+
+  key keyF5 eq {
+    hide_it
+    /width width 10 sub def
+    .undef show_it
+    0 return
+  } if
 
   edit key edit.input
 
@@ -149,27 +261,52 @@ white setcolor
 /buf 200 string def
 
 /x 100 def
-/y 100 def
+/y 300 def
 /width 600 def
 /height fontheight 2 add def
 
 /edit [
-  x y
-  x y moveto width height savescreen
+  .undef .undef
+  .undef
   buf
   buf cvp length
   .undef
 ] def
 
-0x00ffff setcolor
 
-x 1 sub y moveto x 1 sub y height add 1 sub lineto
-x y 1 sub moveto x width add 1 sub y 1 sub lineto
+/show_it {
 
-x width add y moveto x width add y height add 1 sub lineto
-x y height add moveto x width add 1 sub y height add lineto
+  0x00ffff setcolor
 
-white setcolor
+  edit .inp_x x put
+  edit .inp_y y put
+  edit .inp_back get free
+  edit .inp_back x y moveto width height savescreen put
 
-edit "" edit.init
+  x 1 sub y moveto x 1 sub y height add 1 sub lineto
+  x y 1 sub moveto x width add 1 sub y 1 sub lineto
+
+  x width add y moveto x width add y height add 1 sub lineto
+  x y height add moveto x width add 1 sub y height add lineto
+
+  white setcolor
+
+  dup {
+    edit exch edit.init
+  } {
+    pop
+    edit edit.redraw
+    edit edit.showcursor
+  } ifelse
+} def
+
+
+/hide_it {
+  edit edit.hidecursor
+  x 1 sub y 1 sub moveto
+  currentpoint width 2 add height 2 add image
+} def
+
+
+"" show_it
 

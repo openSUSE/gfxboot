@@ -67,6 +67,7 @@
   [ "tr_TR" false "Türkçe" ]
   [ "uk_UA" false "Українська" ]
   [ "vi_VN" false "Tiếng Việt" ]
+  [ "wa_BE" false "Walon" ]
   [ "xh_ZA" false "isiXhosa" ]
   [ "zh_CN" false "简体中文" ]
   [ "zh_TW" false "繁體中文 (台灣)" ]

@@ -1,4 +1,7 @@
+19/7/2007:	v3.3.25
 	- rewrote line edit function
+	- intro aborted if any key pressed (#219570)
+	- added Walloon
 
 15/3/2007:	v3.3.24
 	- basic rtl language support

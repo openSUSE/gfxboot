@@ -97,6 +97,8 @@
 /.inp_int_cur		0 def	% current edit char offset
 /.inp_int_cursor	1 def	% cursor pos (pixel)
 /.inp_int_shift		2 def	% input line shifted (pixel)
+/.inp_int_flags		3 def	% bit 0: cursor visible
+/.inp_int_saved_cursor	4 def	% saved cursor background
 
 % boot loader
 

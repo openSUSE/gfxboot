@@ -356,3 +356,9 @@ msgstr ""
 #. txt_driver_update2
 msgid "Driver Update"
 msgstr ""
+
+# menu label for selecting some kernel options
+#. txt_options
+msgid "Options"
+msgstr ""
+

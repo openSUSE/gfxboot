@@ -44,7 +44,7 @@
 %
 /main.redraw {
 
-  boot.drawlabels
+  % boot.drawlabels
 
   main.drawmenu
   /keepbootoptions 1 def
@@ -169,6 +169,34 @@
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Redraw boot option input field.
+%
+% ( ) == > ( )
+%
+/bootoptions.redraw {
+
+  % clear old options
+
+  boot.text.options setcolor
+  window.current .font get setfont
+  boot.ed.list {
+    dup .inp_x get 10 sub over .inp_y get moveto
+    currentpoint
+    currentpoint 0 exch moveto
+    currentpoint rot 1 add fontheight image
+    moveto
+    dup .inp_show get {
+      .inp_label get exec showright
+    } { pop } ifelse
+  } forall
+
+  boot.drawlabels
+  boot.input.setup
+
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Draw boot menu.
 %
 % No entry is marked as selected.
@@ -264,7 +292,9 @@
       } if
 
       bootoptions.init
-    } if
+    } {
+      bootoptions.redraw
+    } ifelse
 
     % set help context
     "main" help.setcontext

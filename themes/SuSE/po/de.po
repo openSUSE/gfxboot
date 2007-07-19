@@ -361,3 +361,8 @@ msgstr "Bildschirm"
 msgid "Driver Update"
 msgstr "Treiber-Update"
 
+# menu label for selecting some kernel options
+#. txt_options
+msgid "Options"
+msgstr ""
+

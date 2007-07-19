@@ -91,12 +91,15 @@
 
   bsplash.init
 
-  400000 usleep
+  bsplash.skip not { 400000 usleep } if
 
-  {
-    0 usleep
-    bsplash.run { exit } if
-  } loop
+  bsplash.skip not {
+    {
+      0 usleep
+      bsplash.skip { exit } if
+      bsplash.run { exit } if
+    } loop
+  } if
 
   bsplash.free
 
@@ -166,7 +169,25 @@
 % ( ) ==> ( )
 %
 /bsplash.done {
-  1500000 usleep
+  bsplash.skip not {
+    1500000 usleep
+  } if
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Check if we should skip the intro.
+%
+% ( ) ==> ( true|false )
+%
+/bsplash.skip {
+  % any key pressed?
+  getkey 0xffff and {
+    /bsplash.skip true def
+    true
+  } {
+    false
+  } ifelse
 } def
 
 

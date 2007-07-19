@@ -25,7 +25,7 @@
   savescreen restorescreen
   fillrect
   snprintf
-  edit.init edit.done edit.input edit.showcursor edit.hidecursor
+  edit.init edit.done edit.input edit.showcursor edit.hidecursor edit.redraw
   rmoveto strstr
 
   sound.getvolume sound.setvolume
@@ -72,6 +72,8 @@
   blend
 
   memcpy sysconfig _readsector sysinfo
+
+  getkey
 
   test1 xxx
 
