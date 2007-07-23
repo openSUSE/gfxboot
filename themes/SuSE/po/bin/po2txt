@@ -275,7 +275,7 @@ sub arabic_read_map
   }
   close F;
 
-  print STDERR "warning: no arabic support\n" unless !$arabic_map
+  print STDERR "warning: no arabic support\n" unless $arabic_map
 }
 
 
