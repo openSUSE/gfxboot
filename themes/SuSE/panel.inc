@@ -15,7 +15,7 @@
 /panel.font	font.normal def
 /panel.normal	white def
 /panel.title 	white def
-/panel.high	lightblue def
+/panel.high	0xffe050 def
 /panel.bg	lightgray def
 /panel.border	lightdotcolor def
 

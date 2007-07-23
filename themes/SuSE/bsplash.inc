@@ -32,6 +32,7 @@
   [  90 535   0 -20 10 "text4c.pcx" -15 0 0 .undef .undef .undef  ]
 ] def
 
+/bsplash_cnt 10 def
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Init splash.
@@ -101,7 +102,7 @@
     } loop
   } if
 
-  bsplash.free
+  % bsplash.free
 
   setimage
 
@@ -115,6 +116,11 @@
 % ( ) ==> ( true|false )
 %
 /bsplash.run {
+  /bsplash_cnt bsplash_cnt 1 sub def
+  bsplash_cnt 0 lt
+  return
+
+
   true
 
   bsplash.list {

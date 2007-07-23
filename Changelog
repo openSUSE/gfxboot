@@ -1,6 +1,7 @@
 23/7/2007:	v3.3.26
 	- added Sinhala
 	- moved 'install - XXX' variants into submenu, added 'repair' entry (#293827)
+	- go green
 
 19/7/2007:	v3.3.25
 	- rewrote line edit function
