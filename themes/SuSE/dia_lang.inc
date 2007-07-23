@@ -59,7 +59,7 @@
   [ "pt_PT" false "Português" ]
   [ "ro_RO" false "Română" ]
   [ "ru_RU" false "Русский" ]
-  [ "si_LK" false "Sinhala" ]					% Sinhala
+  [ "si_LK" false "\u0dc3\u0dd2\u0d82\u0dc4\u0dbd" ]		% Sinhala
   [ "sk_SK" false "Slovenčina" ]
   [ "sl_SI" false "Slovenščina" ]
   [ "sr_CS" false "Srpski" ]

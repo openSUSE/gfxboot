@@ -96,6 +96,7 @@ aafont:
 	-f lohit_pa:size=19:c=0x0a01-0x0a74:bold=1 \
 	-f lohit_gu:size=18:c=0x0a81-0x0af1:bold=1 \
 	-f TSCu_Paranar:size=18:c=0x0b82-0x0bfa:dy=2:bold=1 \
+	-f lklug:size=17:c=0x0d82-0x0df4:bold=1:dy=1 \
 	-f KhmerOSsys:size=16:c=0x1780-0x17f9:dy=-2 \
 	-f DejaVuSans-Bold:size=14 \
 	-f FZHeiTi:size=17:nobitmap=1 \
