@@ -367,13 +367,13 @@
   menu.entry true MenuSelect
 
   % find default splash mode
-  0 1 splash.options length 1 sub {
-    splash.options over get menu.args menu.entry get exch strstr {
-      /splash.default exch def
-    } {
-      pop
-    } ifelse
-  } for
+  % 0 1 splash.options length 1 sub {
+  %   splash.options over get menu.args menu.entry get exch strstr {
+  %     /splash.default exch def
+  %   } {
+  %     pop
+  %   } ifelse
+  % } for
 
   panel.init
 

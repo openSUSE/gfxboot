@@ -57,7 +57,8 @@
         [ keyF2 0 "F2" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
         [ keyF3 0 "F3" /panel.video /panel.video.width /panel.video.update /video.init ]
         [ keyF4 0 "F4" /panel.install /panel.install.width /panel.install.update /install.init ]
-        [ keyF5 0 "F5" /panel.dud /panel.dud.width /panel.dud.update /dud.init ]
+        [ keyF5 0 "F5" /panel.kernelopts /panel.kernelopts.width /panel.kernelopts.update /kernelopts.init ]
+        [ keyF6 0 "F6" /panel.dud /panel.dud.width /panel.dud.update /dud.init ]
 
         32+64bit_source {
           64bit {
@@ -65,7 +66,7 @@
             64bit_boot_dir .undef ne
             32bit_boot_dir 64bit_boot_dir ne
             and and {
-              [ keyF6 0 "F6" /panel.bits /panel.bits.width /panel.bits.update /bits.init ]
+              [ keyF7 0 "F7" /panel.bits /panel.bits.width /panel.bits.update /bits.init ]
             } if
           } if
         } if
@@ -88,19 +89,6 @@
 
   % initialize all
   panel.full { 6 get dup .undef ne { exec } { pop } ifelse } forall
-
-  syslinux {
-    /panel.short [
-      [ keyF1 0 "F1" /panel.help /panel.help.width /panel.help.update .undef ]
-      [ keyF2 0 "F2" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
-      [ keyF3 0 "F3" /panel.options /panel.options.width /panel.options.update .undef ]
-    ] def
-  } {
-    /panel.short [
-      [ keyF1 0 "F1" /panel.help /panel.help.width /panel.help.update .undef ]
-      [ keyF2 0 "F2" /panel.options /panel.options.width /panel.options.update .undef ]
-    ] def
-  } ifelse
 
   /panel panel.full def
 

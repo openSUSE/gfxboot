@@ -74,7 +74,7 @@ function tst_isolinux {
     vmware -qx $vm_tmp/gfxboot.vmx
   elif [ "$program" = qemu ] ; then
     # qemu
-    qemu -cdrom $img
+    $qemu -cdrom $img
   elif [ "$program" = bd ] ; then
     # bochs debug wrapper
     bd $img
@@ -125,7 +125,7 @@ function tst_lilo {
     vmware -qx $vm_tmp/gfxboot.vmx
   elif [ "$program" = qemu ] ; then
     # qemu
-    qemu -boot c -hda $img
+    $qemu -boot c -hda $img
   elif [ "$program" = bd ] ; then
     # bochs debug wrapper
     bd $img
@@ -179,7 +179,7 @@ function tst_grub {
     vmware -qx $vm_tmp/gfxboot.vmx
   elif [ "$program" = qemu ] ; then
     # qemu
-    qemu -boot c -hda $img
+    $qemu -boot c -hda $img
   elif [ "$program" = bd ] ; then
     # bochs debug wrapper
     bd $img
@@ -226,7 +226,7 @@ function tst_syslinux {
     vmware -qx $vm_tmp/gfxboot.vmx
   elif [ "$program" = qemu ] ; then
     # qemu
-    qemu -boot a -fda $img
+    $qemu -boot a -fda $img
   elif [ "$program" = bd ] ; then
     # bochs debug wrapper
     bd $img
@@ -250,7 +250,9 @@ function usage {
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-while getopts bd:hil:p:s:t: opt ; do
+qemu=qemu
+
+while getopts bd:hil:p:s:t:x opt ; do
   case $opt in
     \:|\?|h) usage
       ;;
@@ -274,6 +276,9 @@ while getopts bd:hil:p:s:t: opt ; do
       ;;
 
     t) theme=$OPTARG
+      ;;
+
+    x) qemu=qemu-system-x86_64
       ;;
   esac
 done

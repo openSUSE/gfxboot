@@ -76,6 +76,8 @@
 
   profile.parsedata
 
+  xmenu .xm_title "Profile" put
+
   xmenu .xm_current profile.default put
   xmenu .xm_list profile.items put
 } def

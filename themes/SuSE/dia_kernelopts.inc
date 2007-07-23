@@ -1,6 +1,6 @@
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 %
-% Splash mode selection dialog.
+% Kernel options dialog.
 %
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -8,53 +8,61 @@
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Some global vars.
 %
-/splash.default 2 def
+/kernelopts.default 0 def
 
-/splash.options [
-  "splash=0"
-  "splash=verbose"
-  "splash=silent"
+/kernelopts.options [
+  ""
+  "apm=off acpi=off mce=off barrier=off ide=nodma idewait=50 i8042.nomux psmouse.proto=bare irqpoll pci=nommconf"
+  "acpi=off"
+  "nolapic"
 ] def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Build splash list.
+% Build kernelopts list.
 %
 % ( ) ==> ( )
 %
-/splash.init {
-  /xmenu.splash .xm_size array def
+/kernelopts.init {
+  /xmenu.kernelopts .xm_size array def
 
-  /xmenu xmenu.splash def
+  /xmenu xmenu.kernelopts def
 
-  xmenu .xm_current splash.default put
-  xmenu .xm_list [ "Native" "Verbose" "Silent" ] put
+  xmenu .xm_current kernelopts.default put
+  xmenu .xm_list [
+    "None"
+    "Safe Settings"
+    "ACPI Disabled"
+    "Local APIC Disabled"
+  ] put
+  xmenu .xm_title "Kernel Options" put
+
 } def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Update splash mode.
+% Update kernelopts mode.
 %
 % ( ) ==> ( )
 %
-/splash.update {
-  /xmenu xmenu.splash def
+/kernelopts.update {
+  /xmenu xmenu.kernelopts def
 
   /window.action actRedrawPanel def
 } def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Show splash menu.
+% Show kernelopts menu.
 %
 % ( ) => ( )
 %
-/panel.splash {
-  "startup" help.setcontext
+/panel.kernelopts {
+  "main" help.setcontext
 
   window.xmenu
-  dup .xmenu xmenu.splash put
-  dup .xmenu.update /splash.update put
+  dup .xmenu xmenu.kernelopts put
+  dup .xmenu.update /kernelopts.update put
   dup window.init
       window.show
 } def
@@ -65,8 +73,8 @@
 %
 % ( ) => ( width )
 %
-/panel.splash.width {
-  /xmenu xmenu.splash def
+/panel.kernelopts.width {
+  /xmenu xmenu.kernelopts def
 
   pmenu.width
 } def
@@ -77,8 +85,8 @@
 %
 % ( panel ) => ( )
 %
-/panel.splash.update {
-  /xmenu xmenu.splash def
+/panel.kernelopts.update {
+  /xmenu xmenu.kernelopts def
 
   pmenu.panel.update
 } def

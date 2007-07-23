@@ -353,6 +353,12 @@
     } if
   } if
 
+  xmenu.kernelopts {
+    kernelopts.options xmenu.kernelopts .xm_current get get dup "" ne {
+      "%s " bc.cmd dup length add sprintf
+    } { pop } ifelse
+  } if
+
   /cmdline.hidden over dup length .inp_hidden ge { .inp_hidden get } { pop .undef } ifelse def
 
   cmdline.hidden {
@@ -856,6 +862,7 @@
     dup "nolapic"    eq { pop txt_nolapic_install return } if
     dup "apic"      eq { pop txt_apic return } if
     dup "manual"    eq { pop txt_manual_install return } if
+    dup "repair"    eq { pop "Repair Installed System" return } if
     dup "rescue"    eq { pop txt_rescue         return } if
     dup "hwcheck"   eq { pop "Hardware Check"   return } if
     dup "harddisk"  eq { pop txt_boot_harddisk  return } if
