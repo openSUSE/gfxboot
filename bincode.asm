@@ -723,8 +723,44 @@ gfx_init:
 		; after pm_init
 		cli
 
+		xor ecx,ecx
+		dec cx
+
 		pm_enter
 
+		; some via cpus have problems with pm switching (bug #231104), so:
+		; checking whether pm switch really worked...
+		inc ecx
+		jnz gfx_init_10
+
+		; ... apparently not; try to get out
+		cmc
+		jnc $+2
+		cmc
+		jnc $+2
+		jz $+2
+
+		pm_leave
+
+		cmc
+		jnc $+2
+		cmc
+		jnc $+2
+		jz $+2
+
+		stc
+
+		pop ds
+		pop es
+		pop fs
+
+		sti
+
+		retf
+
+		bits 32
+
+gfx_init_10:
 		mov esi,[boot.sysconfig]
 		movzx eax,word [es:esi+sc.bootloader_seg]
 		shl eax,4
