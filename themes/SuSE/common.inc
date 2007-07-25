@@ -1152,18 +1152,23 @@
 
   dup keyF11 eq debug 1 ge and {
 
-    /c13.r rand 0x7f and def
-    /c02_13.r rand 0x7f and c13.r sub def
-    /c23.r rand 0x7f and def
-    /c01_23.r rand 0x7f and c23.r sub def
-    /c13.g rand 0x7f and def
-    /c02_13.g rand 0x7f and c13.g sub def
-    /c23.g rand 0x7f and def
-    /c01_23.g rand 0x7f and c23.g sub def
-    /c13.b rand 0x7f and def
-    /c02_13.b rand 0x7f and c13.b sub def
-    /c23.b rand 0x7f and def
-    /c01_23.b rand 0x7f and c23.b sub def
+    /dit {
+      dup 0xff and rand 0xff and gt { 0xff add } if
+      8 shr
+    } def
+
+    /c13.r rand 0x7f00 and def
+    /c02_13.r rand 0x7f00 and c13.r sub def
+    /c23.r rand 0x7f00 and def
+    /c01_23.r rand 0x7f00 and c23.r sub def
+    /c13.g rand 0x7f00 and def
+    /c02_13.g rand 0x7f00 and c13.g sub def
+    /c23.g rand 0x7f00 and def
+    /c01_23.g rand 0x7f00 and c23.g sub def
+    /c13.b rand 0x7f00 and def
+    /c02_13.b rand 0x7f00 and c13.b sub def
+    /c23.b rand 0x7f00 and def
+    /c01_23.b rand 0x7f00 and c23.b sub def
 
     screen.size /h exch def /w exch def
 
@@ -1172,11 +1177,11 @@
         over moveto
 
         currentpoint c01_23.r mul h div exch c02_13.r mul w div add c13.r add c23.r add
-        0 max 0xff min 16 shl
+        dit 0 max 0xff min 16 shl
         currentpoint c01_23.g mul h div exch c02_13.g mul w div add c13.g add c23.g add
-        0 max 0xff min  8 shl
+        dit 0 max 0xff min  8 shl
         currentpoint c01_23.b mul h div exch c02_13.b mul w div add c13.b add c23.b add
-        0 max 0xff min add add
+        dit 0 max 0xff min add add
 
         setcolor putpixel
       } for
