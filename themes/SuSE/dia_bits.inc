@@ -26,12 +26,12 @@
 
   /xmenu xmenu.bits def
 
-  xmenu .xm_list [ "32" ] put
+  xmenu .xm_list [ "x86" ] put
 
   32+64bit_source {
     64bit {
       /bits.default 1 def
-      xmenu .xm_list [ "32" "64" ] put
+      xmenu .xm_list [ "x86" "x86-64" ] put
     } if
   } if
 
@@ -40,7 +40,7 @@
     bits.suffix 1 .undef put
   } if
 
-  xmenu .xm_title "Bits" put
+  xmenu .xm_title "Arch" put
 
   xmenu .xm_current bits.default put
 

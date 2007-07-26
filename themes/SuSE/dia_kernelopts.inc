@@ -30,12 +30,12 @@
 
   xmenu .xm_current kernelopts.default put
   xmenu .xm_list [
-    "None"
+    "Default"
     "Safe Settings"
-    "ACPI Disabled"
-    "Local APIC Disabled"
+    "No ACPI"
+    "No Local APIC"
   ] put
-  xmenu .xm_title "Kernel Options" put
+  xmenu .xm_title "Kernel" put
 
 } def
 
