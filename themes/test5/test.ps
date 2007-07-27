@@ -1,0 +1,71 @@
+% bool values
+/true     0 0 eq def
+/false    0 0 ne def
+
+% type values
+/t_none          0 def
+/t_int           1 def
+/t_unsigned      2 def
+/t_bool          3 def
+/t_string        4 def
+/t_code          5 def
+/t_ret           6 def
+/t_prim          7 def
+/t_sec           8 def
+/t_dict_idx      9 def
+/t_array        10 def
+/t_end          11 def
+/t_ptr          12 def
+
+/.value { t_int settype } def
+/.undef 0 t_none settype def
+/.end 0 t_end settype def
+
+/findmode {
+  0 1 videomodes {
+    videomodeinfo dup .undef eq {
+      pop pop pop pop
+    } {
+      % compare width, height, colors
+      6 index 4 index eq 6 index 4 index eq and 5 index 3 index eq and {
+        7 1 roll 6 { pop } repeat 0xbfff and return
+      } {
+        pop pop pop pop
+      } ifelse
+    } ifelse
+  } for
+
+  pop pop pop .undef
+} def
+
+
+/KeyEvent {
+
+  0xff and /key exch def
+
+  "" -1
+
+  key 0x1b eq { 1 return } if
+
+  % XXX
+
+  0
+
+} def
+
+
+800 600 16 findmode setmode not { false .end } if
+
+"16x16.fnt" findfile setfont
+
+"sky.jpg" findfile setimage
+
+/black 0x000000 def
+/white 0xffffff def
+
+white setcolor
+
+0 0 moveto 0 0 image.size image
+
+10 570 moveto "Press Esc to leave graphics." show
+
