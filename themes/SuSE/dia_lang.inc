@@ -10,8 +10,8 @@
 %
 
 % fallback if there is no "languages"
-/lang.items [ "en" ] def
-/lang.names [ "English" ] def
+/lang.items [ "en_US" ] def
+/lang.names [ "English (US)" ] def
 
 /.la.locale 0 def
 /.la.rtl    1 def

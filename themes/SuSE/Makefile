@@ -60,7 +60,7 @@ themes: bootdir installdir
 bootdir: boot.config po boot $(INCLUDES) $(HELPBOOT)
 	@cp -a po/*.tr boot
 	@for i in $(FILES_BOOT) ; do [ -f $$i ] && cp $$i boot ; done ; true
-	@echo en >boot/languages
+	@echo en_US >boot/languages
 	$(MKBOOTMSG) $(BFLAGS) -l boot/log -c $< boot/init
 ifdef DEFAULT_LANG
 	@echo $(DEFAULT_LANG) >boot/lang

@@ -400,7 +400,7 @@
     } ifelse
 
     config.lang {
-      config.lang "en" ne {
+      config.lang "en_US" ne {
         config.lang "lang=%s " bc.cmd dup length add sprintf
       } if
     } if
