@@ -6,7 +6,7 @@ die "usage: add_text [-c comment] id text_line1 text_line2 ... \nexample:\n  add
 
 while($ARGV[0] eq '-c') {
   shift;
-  push @l, "# $ARGV[0]\n";
+  push @l, "#. $ARGV[0]\n";
   shift;
 }
 

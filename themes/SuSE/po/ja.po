@@ -11,22 +11,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-# ok button label
+#. ok button label
 #. txt_ok
 msgid "OK"
 msgstr "OK"
 
-# cancel button label
+#. cancel button label
 #. txt_cancel
 msgid "Cancel"
 msgstr "キャンセル"
 
-# reboot button label
+#. reboot button label
 #. txt_reboot
 msgid "Reboot"
 msgstr "再起動"
 
-# continue button label
+#. continue button label
 #. txt_continue
 msgid "Continue"
 msgstr "続行する"
@@ -67,7 +67,7 @@ msgstr "メモリテスト"
 msgid "Boot Options"
 msgstr "起動オプション"
 
-# window title for exit dialog
+#. window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
 msgid "Exiting..."
 msgstr "終了中..."
@@ -84,12 +84,12 @@ msgstr ""
 msgid "Help"
 msgstr "ヘルプ"
 
-# window title for kernel loading (see txt_load_kernel)
+#. window title for kernel loading (see txt_load_kernel)
 #. txt_load_kernel_title
 msgid "Starting..."
 msgstr "起動中..."
 
-# Keep the three newlines!
+#. Keep the three newlines!
 #. txt_load_kernel
 msgid ""
 "Loading Linux Kernel\n"
@@ -100,7 +100,7 @@ msgstr ""
 "\n"
 "\n"
 
-# Keep the three newlines!
+#. Keep the three newlines!
 #. txt_load_memtest
 msgid ""
 "Loading memtest86\n"
@@ -111,17 +111,17 @@ msgstr ""
 "\n"
 "\n"
 
-# info box title
+#. info box title
 #. txt_info_title
 msgid "Boot Loader"
 msgstr "ブートローダ"
 
-# error box title
+#. error box title
 #. txt_error_title
 msgid "I/O Error"
 msgstr "I/O エラー"
 
-# boot disk change dialog title
+#. boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
 msgstr "ブートディスクの変更"
@@ -140,7 +140,7 @@ msgstr ""
 "これはブートディスク%uです。\n"
 "ブートディスク%uを挿入してください。"
 
-# <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
+#. <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
 #, c-format
 msgid ""
@@ -150,7 +150,7 @@ msgstr ""
 "これは<product>ブートディスクではありません。\n"
 "ブートディスク %u を挿入します。"
 
-# password dialog title
+#. password dialog title
 #. txt_password_title
 msgid "Password"
 msgstr "パスワード"
@@ -159,7 +159,7 @@ msgstr "パスワード"
 msgid "Get your driver update floppy ready."
 msgstr "ドライバ更新のフロッピーディスクを準備してください。"
 
-# dvd warning title
+#. dvd warning title
 #. txt_dvd_warning_title
 msgid "DVD Error"
 msgstr "DVDエラー"
@@ -174,7 +174,7 @@ msgstr ""
 "\n"
 "DVDをひっくり返してから続行してください。"
 
-# power off dialog title
+#. power off dialog title
 #. txt_power_off_title
 msgid "Power Off"
 msgstr "電源オフ"
@@ -183,12 +183,12 @@ msgstr "電源オフ"
 msgid "Halt the system now?"
 msgstr "システムを中止しますか?"
 
-# menu entry for hard disk installation
+#. menu entry for hard disk installation
 #. txt_harddisk
 msgid "Hard Disk"
 msgstr "ハードディスク"
 
-# dialog title for hard disk installation
+#. dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
 msgstr "ハードディスクインストール"
@@ -201,7 +201,7 @@ msgstr "ディスクデバイス (空の場合に全ディスクのスキャン)
 msgid "Directory\n"
 msgstr "ディレクトリ\n"
 
-# dialog title for ftp installation
+#. dialog title for ftp installation
 #. txt_ftp_title
 msgid "FTP Installation"
 msgstr "FTPインストール"
@@ -214,47 +214,47 @@ msgstr "サーバ\n"
 msgid "Password\n"
 msgstr "パスワード\n"
 
-# label for ftp user input
+#. label for ftp user input
 #. txt_user1
 msgid "User (Anonymous Login If Empty)\n"
 msgstr "ユーザ (空白: 匿名ログイン)\n"
 
-# dialog title for nfs installation
+#. dialog title for nfs installation
 #. txt_nfs_title
 msgid "NFS Installation"
 msgstr "NFSインストール"
 
-# label for smb user input
+#. label for smb user input
 #. txt_user2
 msgid "User (Uses \"guest\" If Empty)\n"
 msgstr "ユーザ (空の場合にguestを使用)\n"
 
-# dialog title for smb installation
+#. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
 msgstr "SMB (Windows共有) インストール"
 
-# dialog title for http installation
+#. dialog title for http installation
 #. txt_http_title
 msgid "HTTP Installation"
 msgstr "HTTPインストール"
 
-# 'driver' as in '(hardware) driver update'
+#. 'driver' as in '(hardware) driver update'
 #. txt_driver_update
 msgid "Driver"
 msgstr "ドライバ"
 
-# as in Windows Authentication Domain
+#. as in Windows Authentication Domain
 #. txt_domain
 msgid "Domain\n"
 msgstr "ドメイン\n"
 
-# button label for other/more options
+#. button label for other/more options
 #. txt_other_options
 msgid "Other Options"
 msgstr "その他のオプション"
 
-# label for language selection
+#. label for language selection
 #. txt_language
 msgid "Language"
 msgstr "言語"
@@ -279,12 +279,12 @@ msgstr "はい"
 msgid "No"
 msgstr "いいえ"
 
-# menu item for selecting a file
+#. menu item for selecting a file
 #. txt_file
 msgid "File"
 msgstr "ファイル"
 
-# input label: share as in "Windows share" (SMB)
+#. input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
 msgstr "共用\n"
@@ -317,12 +317,12 @@ msgstr "ZENパーティションを無効にする"
 msgid "Enable ZEN Partition"
 msgstr "ZENパーティションを有効にする"
 
-# video mode menu item
+#. video mode menu item
 #. txt_text_mode
 msgid "Text Mode"
 msgstr "テキストモード"
 
-# menu item, like 'memory test'
+#. menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
 msgstr "ファームウェアのテスト"
@@ -337,26 +337,62 @@ msgstr ""
 "CD-ROMから直接ドライバのアップデートをロードするには、\n"
 "ドライバアップデートファイル名をここで入力してください(コンマ「,」により}:\n"
 
-# install source menu title
-# *keep it short*
+#. install source menu title
+#. ** please keep it really short (comparable to the english text) **
 #. txt_install_source
 msgid "Source"
 msgstr ""
 
-# video mode/display size menu title
-# *keep it short*
+#. video mode/display size menu title
+#. ** please keep it really short (comparable to the english text) **
 #. txt_video_mode
 msgid "Video Mode"
 msgstr ""
 
-# driver update dialog title
-# -> txt_dud_file_msg
+#. driver update dialog title
+#. -> txt_dud_file_msg
 #. txt_driver_update2
 msgid "Driver Update"
 msgstr ""
 
-# menu label for selecting some kernel options
-#. txt_options
-msgid "Options"
+#. menu label for selecting (cpu) architecture
+#. like i386, x86-64, ppc
+#. ** please keep it really short (comparable to the english text) **
+#. txt_arch
+msgid "Arch"
+msgstr ""
+
+#. menu label for selecting some (linux) kernel variant
+#. ** please keep it really short (comparable to the english text) **
+#. txt_kernel
+msgid "Kernel"
+msgstr ""
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. txt_kernel_default
+msgid "Default"
+msgstr ""
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. -> like in txt_safe_linux
+#. txt_kernel_safe
+msgid "Safe Settings"
+msgstr ""
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. -> similar to txt_noacpi_install
+#. txt_kernel_noacpi
+msgid "No ACPI"
+msgstr ""
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. -> similar to txt_nolapic_install
+#. txt_kernel_nolapic
+msgid "No Local APIC"
+msgstr ""
+
+#. main menu: start in system repair mode
+#. txt_repain_system
+msgid "Repair Installed System"
 msgstr ""
 

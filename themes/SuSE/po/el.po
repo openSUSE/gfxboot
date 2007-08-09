@@ -16,22 +16,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.10\n"
 
-# ok button label
+#. ok button label
 #. txt_ok
 msgid "OK"
 msgstr "Εντάξει"
 
-# cancel button label
+#. cancel button label
 #. txt_cancel
 msgid "Cancel"
 msgstr "Ακύρωση"
 
-# reboot button label
+#. reboot button label
 #. txt_reboot
 msgid "Reboot"
 msgstr "Επανεκκίνηση"
 
-# continue button label
+#. continue button label
 #. txt_continue
 msgid "Continue"
 msgstr "Συνέχεια"
@@ -72,7 +72,7 @@ msgstr "Έλεγχος Μνήμης"
 msgid "Boot Options"
 msgstr "Ρυθμίσεις Εκκίνησης"
 
-# window title for exit dialog
+#. window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
 msgid "Exiting..."
 msgstr "Έξοδος..."
@@ -89,12 +89,12 @@ msgstr ""
 msgid "Help"
 msgstr "Βοήθεια"
 
-# window title for kernel loading (see txt_load_kernel)
+#. window title for kernel loading (see txt_load_kernel)
 #. txt_load_kernel_title
 msgid "Starting..."
 msgstr "Εκκίνηση..."
 
-# Keep the three newlines!
+#. Keep the three newlines!
 #. txt_load_kernel
 msgid ""
 "Loading Linux Kernel\n"
@@ -105,7 +105,7 @@ msgstr ""
 "\n"
 "\n"
 
-# Keep the three newlines!
+#. Keep the three newlines!
 #. txt_load_memtest
 msgid ""
 "Loading memtest86\n"
@@ -116,19 +116,19 @@ msgstr ""
 "\n"
 "\n"
 
-# info box title
+#. info box title
 #. txt_info_title
 #, fuzzy
 msgid "Boot Loader"
 msgstr "Διαχειριστής Εκκίνησης"
 
-# error box title
+#. error box title
 #. txt_error_title
 #, fuzzy
 msgid "I/O Error"
 msgstr "σφάλμα E/E"
 
-# boot disk change dialog title
+#. boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
 msgstr "Αλλαγή Δισκέτας Εκκίνησης"
@@ -147,7 +147,7 @@ msgstr ""
 "Αυτή είναι η δισκέτα εκκίνησης %u.\n"
 "Παρακαλώ εισάγετε τη δισκέτα εκκίνησης %u."
 
-# <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
+#. <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
 #, c-format,fuzzy
 msgid ""
@@ -157,7 +157,7 @@ msgstr ""
 "Αυτή δεν είναι δισκέτα εκκίνησης του <product>.\n"
 "Παρακαλώ εισάγετε τη δισκέτα εκκίνησης %u."
 
-# password dialog title
+#. password dialog title
 #. txt_password_title
 msgid "Password"
 msgstr "Κωδικός"
@@ -166,7 +166,7 @@ msgstr "Κωδικός"
 msgid "Get your driver update floppy ready."
 msgstr "Ετοιμάστε την δισκέτα ενημέρωσης οδηγών."
 
-# dvd warning title
+#. dvd warning title
 #. txt_dvd_warning_title
 msgid "DVD Error"
 msgstr "Σφάλμα DVD"
@@ -181,7 +181,7 @@ msgstr ""
 "\n"
 "Γυρίστε το DVD και συνεχίστε."
 
-# power off dialog title
+#. power off dialog title
 #. txt_power_off_title
 msgid "Power Off"
 msgstr "Διακοπή λειτουργίας"
@@ -190,12 +190,12 @@ msgstr "Διακοπή λειτουργίας"
 msgid "Halt the system now?"
 msgstr "Θέλετε να σταματήσετε το σύστημα τώρα;"
 
-# menu entry for hard disk installation
+#. menu entry for hard disk installation
 #. txt_harddisk
 msgid "Hard Disk"
 msgstr "Σκληρός Δίσκος"
 
-# dialog title for hard disk installation
+#. dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
 msgstr "Εγκατάσταση Σκληρού Δίσκου"
@@ -209,7 +209,7 @@ msgstr "Συσκευή Δίσκου (σάρωση όλων των δίσκων �
 msgid "Directory\n"
 msgstr "Κατάλογος\n"
 
-# dialog title for ftp installation
+#. dialog title for ftp installation
 #. txt_ftp_title
 msgid "FTP Installation"
 msgstr "Εγκατάσταση FTP"
@@ -222,49 +222,49 @@ msgstr "Διακομιστής\n"
 msgid "Password\n"
 msgstr "Κωδικός\n"
 
-# label for ftp user input
+#. label for ftp user input
 #. txt_user1
 #, fuzzy
 msgid "User (Anonymous Login If Empty)\n"
 msgstr "Χρήστης (ανώνυμη σύνδεση εάν είναι κενός)\n"
 
-# dialog title for nfs installation
+#. dialog title for nfs installation
 #. txt_nfs_title
 msgid "NFS Installation"
 msgstr "Εγκατάσταση NFS"
 
-# label for smb user input
+#. label for smb user input
 #. txt_user2
 #, fuzzy
 msgid "User (Uses \"guest\" If Empty)\n"
 msgstr "Χρήστης (χρήση \"guest\" αν είναι κενός)\n"
 
-# dialog title for smb installation
+#. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
 msgstr "Εγκατάσταση SMB (Windows Share)"
 
-# dialog title for http installation
+#. dialog title for http installation
 #. txt_http_title
 msgid "HTTP Installation"
 msgstr "Εγκατάσταση HTTP"
 
-# 'driver' as in '(hardware) driver update'
+#. 'driver' as in '(hardware) driver update'
 #. txt_driver_update
 msgid "Driver"
 msgstr "Οδηγός"
 
-# as in Windows Authentication Domain
+#. as in Windows Authentication Domain
 #. txt_domain
 msgid "Domain\n"
 msgstr "Περιοχή\n"
 
-# button label for other/more options
+#. button label for other/more options
 #. txt_other_options
 msgid "Other Options"
 msgstr "Άλλες Επιλογές"
 
-# label for language selection
+#. label for language selection
 #. txt_language
 msgid "Language"
 msgstr "Γλώσσα"
@@ -289,12 +289,12 @@ msgstr "Ναι"
 msgid "No"
 msgstr "Όχι"
 
-# menu item for selecting a file
+#. menu item for selecting a file
 #. txt_file
 msgid "File"
 msgstr ""
 
-# input label: share as in "Windows share" (SMB)
+#. input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
 msgstr ""
@@ -328,13 +328,13 @@ msgstr ""
 msgid "Enable ZEN Partition"
 msgstr ""
 
-# video mode menu item
+#. video mode menu item
 #. txt_text_mode
 #, fuzzy
 msgid "Text Mode"
 msgstr "Μοντέλο ποντικιού"
 
-# menu item, like 'memory test'
+#. menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
 msgstr ""
@@ -346,26 +346,62 @@ msgid ""
 "by commas ',') here:\n"
 msgstr ""
 
-# install source menu title
-# *keep it short*
+#. install source menu title
+#. ** please keep it really short (comparable to the english text) **
 #. txt_install_source
 msgid "Source"
 msgstr ""
 
-# video mode/display size menu title
-# *keep it short*
+#. video mode/display size menu title
+#. ** please keep it really short (comparable to the english text) **
 #. txt_video_mode
 msgid "Video Mode"
 msgstr ""
 
-# driver update dialog title
-# -> txt_dud_file_msg
+#. driver update dialog title
+#. -> txt_dud_file_msg
 #. txt_driver_update2
 msgid "Driver Update"
 msgstr ""
 
-# menu label for selecting some kernel options
-#. txt_options
-msgid "Options"
+#. menu label for selecting (cpu) architecture
+#. like i386, x86-64, ppc
+#. ** please keep it really short (comparable to the english text) **
+#. txt_arch
+msgid "Arch"
+msgstr ""
+
+#. menu label for selecting some (linux) kernel variant
+#. ** please keep it really short (comparable to the english text) **
+#. txt_kernel
+msgid "Kernel"
+msgstr ""
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. txt_kernel_default
+msgid "Default"
+msgstr ""
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. -> like in txt_safe_linux
+#. txt_kernel_safe
+msgid "Safe Settings"
+msgstr ""
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. -> similar to txt_noacpi_install
+#. txt_kernel_noacpi
+msgid "No ACPI"
+msgstr ""
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. -> similar to txt_nolapic_install
+#. txt_kernel_nolapic
+msgid "No Local APIC"
+msgstr ""
+
+#. main menu: start in system repair mode
+#. txt_repain_system
+msgid "Repair Installed System"
 msgstr ""
 

@@ -17,22 +17,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.10.2\n"
 
-# ok button label
+#. ok button label
 #. txt_ok
 msgid "OK"
 msgstr "OK"
 
-# cancel button label
+#. cancel button label
 #. txt_cancel
 msgid "Cancel"
 msgstr "Avbryt"
 
-# reboot button label
+#. reboot button label
 #. txt_reboot
 msgid "Reboot"
 msgstr "Start på nytt"
 
-# continue button label
+#. continue button label
 #. txt_continue
 msgid "Continue"
 msgstr "Fortsett"
@@ -73,7 +73,7 @@ msgstr "Minnekontroll"
 msgid "Boot Options"
 msgstr "Oppstartsalternativer"
 
-# window title for exit dialog
+#. window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
 msgid "Exiting..."
 msgstr "Avslutter..."
@@ -90,12 +90,12 @@ msgstr ""
 msgid "Help"
 msgstr "Hjelp"
 
-# window title for kernel loading (see txt_load_kernel)
+#. window title for kernel loading (see txt_load_kernel)
 #. txt_load_kernel_title
 msgid "Starting..."
 msgstr "Starter..."
 
-# Keep the three newlines!
+#. Keep the three newlines!
 #. txt_load_kernel
 msgid ""
 "Loading Linux Kernel\n"
@@ -106,7 +106,7 @@ msgstr ""
 "\n"
 "\n"
 
-# Keep the three newlines!
+#. Keep the three newlines!
 #. txt_load_memtest
 msgid ""
 "Loading memtest86\n"
@@ -117,17 +117,17 @@ msgstr ""
 "\n"
 "\n"
 
-# info box title
+#. info box title
 #. txt_info_title
 msgid "Boot Loader"
 msgstr "Oppstartslaster"
 
-# error box title
+#. error box title
 #. txt_error_title
 msgid "I/O Error"
 msgstr "Inn/ut-feil"
 
-# boot disk change dialog title
+#. boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
 msgstr "Endre oppstartsdisk"
@@ -146,7 +146,7 @@ msgstr ""
 "Dette er oppstartsdisk %u.\n"
 "Sett inn oppstartsdisk %u."
 
-# <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
+#. <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
 #, c-format
 msgid ""
@@ -156,7 +156,7 @@ msgstr ""
 "Dette er ikke en oppstartsdisk for <product>.\n"
 "Sett inn oppstartsdisk %u."
 
-# password dialog title
+#. password dialog title
 #. txt_password_title
 msgid "Password"
 msgstr "Passord"
@@ -165,7 +165,7 @@ msgstr "Passord"
 msgid "Get your driver update floppy ready."
 msgstr "Hold disketten med driveroppdateringer klar."
 
-# dvd warning title
+#. dvd warning title
 #. txt_dvd_warning_title
 msgid "DVD Error"
 msgstr "DVD-feil"
@@ -180,7 +180,7 @@ msgstr ""
 "\n"
 "Snu DVD-en og fortsett."
 
-# power off dialog title
+#. power off dialog title
 #. txt_power_off_title
 msgid "Power Off"
 msgstr "Slå av maskinen"
@@ -189,12 +189,12 @@ msgstr "Slå av maskinen"
 msgid "Halt the system now?"
 msgstr "Hvil du avslutte nå?"
 
-# menu entry for hard disk installation
+#. menu entry for hard disk installation
 #. txt_harddisk
 msgid "Hard Disk"
 msgstr "Harddisk"
 
-# dialog title for hard disk installation
+#. dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
 msgstr "Harddiskinstallasjon"
@@ -207,7 +207,7 @@ msgstr "Diskenhet (søker på alle disker hvis tomt)\n"
 msgid "Directory\n"
 msgstr "Katalog\n"
 
-# dialog title for ftp installation
+#. dialog title for ftp installation
 #. txt_ftp_title
 msgid "FTP Installation"
 msgstr "FTP-installasjon"
@@ -220,47 +220,47 @@ msgstr "Server\n"
 msgid "Password\n"
 msgstr "Passord\n"
 
-# label for ftp user input
+#. label for ftp user input
 #. txt_user1
 msgid "User (Anonymous Login If Empty)\n"
 msgstr "Bruker (anonym innlogging hvis tomt)\n"
 
-# dialog title for nfs installation
+#. dialog title for nfs installation
 #. txt_nfs_title
 msgid "NFS Installation"
 msgstr "NFS-installasjon"
 
-# label for smb user input
+#. label for smb user input
 #. txt_user2
 msgid "User (Uses \"guest\" If Empty)\n"
 msgstr "Bruker (bruker \"guest\" hvis tomt)\n"
 
-# dialog title for smb installation
+#. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
 msgstr "SMB-installasjon (delt Windows-ressurs)"
 
-# dialog title for http installation
+#. dialog title for http installation
 #. txt_http_title
 msgid "HTTP Installation"
 msgstr "HTTP-installasjon"
 
-# 'driver' as in '(hardware) driver update'
+#. 'driver' as in '(hardware) driver update'
 #. txt_driver_update
 msgid "Driver"
 msgstr "Driver"
 
-# as in Windows Authentication Domain
+#. as in Windows Authentication Domain
 #. txt_domain
 msgid "Domain\n"
 msgstr "Domene\n"
 
-# button label for other/more options
+#. button label for other/more options
 #. txt_other_options
 msgid "Other Options"
 msgstr "Andre valg"
 
-# label for language selection
+#. label for language selection
 #. txt_language
 msgid "Language"
 msgstr "Språk"
@@ -285,12 +285,12 @@ msgstr "Ja"
 msgid "No"
 msgstr "Nei"
 
-# menu item for selecting a file
+#. menu item for selecting a file
 #. txt_file
 msgid "File"
 msgstr "Fil"
 
-# input label: share as in "Windows share" (SMB)
+#. input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
 msgstr "Delt ressurs\n"
@@ -323,12 +323,12 @@ msgstr "Deaktiver ZEN-partisjon"
 msgid "Enable ZEN Partition"
 msgstr "Aktiver ZEN-partisjon"
 
-# video mode menu item
+#. video mode menu item
 #. txt_text_mode
 msgid "Text Mode"
 msgstr "Tekstmodus"
 
-# menu item, like 'memory test'
+#. menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
 msgstr "Fastvarekontroll"
@@ -343,26 +343,62 @@ msgstr ""
 "angi driveroppdateringsfilenes navn (adskilt\n"
 "av komma ',') her:\n"
 
-# install source menu title
-# *keep it short*
+#. install source menu title
+#. ** please keep it really short (comparable to the english text) **
 #. txt_install_source
 msgid "Source"
 msgstr ""
 
-# video mode/display size menu title
-# *keep it short*
+#. video mode/display size menu title
+#. ** please keep it really short (comparable to the english text) **
 #. txt_video_mode
 msgid "Video Mode"
 msgstr ""
 
-# driver update dialog title
-# -> txt_dud_file_msg
+#. driver update dialog title
+#. -> txt_dud_file_msg
 #. txt_driver_update2
 msgid "Driver Update"
 msgstr ""
 
-# menu label for selecting some kernel options
-#. txt_options
-msgid "Options"
+#. menu label for selecting (cpu) architecture
+#. like i386, x86-64, ppc
+#. ** please keep it really short (comparable to the english text) **
+#. txt_arch
+msgid "Arch"
+msgstr ""
+
+#. menu label for selecting some (linux) kernel variant
+#. ** please keep it really short (comparable to the english text) **
+#. txt_kernel
+msgid "Kernel"
+msgstr ""
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. txt_kernel_default
+msgid "Default"
+msgstr ""
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. -> like in txt_safe_linux
+#. txt_kernel_safe
+msgid "Safe Settings"
+msgstr ""
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. -> similar to txt_noacpi_install
+#. txt_kernel_noacpi
+msgid "No ACPI"
+msgstr ""
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. -> similar to txt_nolapic_install
+#. txt_kernel_nolapic
+msgid "No Local APIC"
+msgstr ""
+
+#. main menu: start in system repair mode
+#. txt_repain_system
+msgid "Repair Installed System"
 msgstr ""
 
