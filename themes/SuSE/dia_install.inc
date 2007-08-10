@@ -31,11 +31,13 @@
 
   /xmenu xmenu.install def
 
-  "install" getgfxconfig "slp" eq {
-    /install.last .inst_slp def
-  } if
+  /input.edit.ftp [ 63 string 127 string 31 string 31 string ] def
+  /input.edit.http [ 63 string 127 string ] def
+  /input.edit.nfs [ 63 string 127 string ] def
+  /input.edit.smb [ 63 string 31 string 127 string 31 string 31 string 31 string ] def
+  /input.edit.hd [ 63 string 127 string ] def
 
-  install.option install.last .inst_cdrom eq { "" } { "install=slp" } ifelse strcpy
+  install.read.config
 
   xmenu .xm_current install.last put
 
@@ -43,6 +45,8 @@
   xmenu .xm_list [ is_dvd { "DVD" } { "CD-ROM" } ifelse "SLP" "FTP" "HTTP" "NFS" "SMB / CIFS" /txt_harddisk ] put
 
   xmenu .xm_title /txt_install_source put
+
+  install.set.install.option
 } def
 
 
@@ -57,13 +61,14 @@
   xmenu .xm_current get dup .inst_cdrom eq exch .inst_slp eq or {
     /install.last xmenu .xm_current get def
 
-    install.option install.last .inst_cdrom eq { "" } { "install=slp" } ifelse strcpy
+    install.set.install.option
 
     /window.action actRedrawPanel def
   } {
     install.dialog
   }
   ifelse
+
 } def
 
 
@@ -119,25 +124,7 @@
 
   xmenu .xm_current get
 
-  dup .inst_hd eq {
-    input.edit.hd .undef eq {
-      /input.edit.hd [ 63 string 127 string ] def
-    } if
-
-    dia .title txt_harddisk_title put
-
-    % Must all be of same size!
-    dia .ed.list 2 array put
-    dia .ed.buffer.list input.edit.hd put
-    dia .ed.text.list [ txt_hd_diskdevice txt_directory ] put
-
-  } if
-
   dup .inst_ftp eq {
-    input.edit.ftp .undef eq {
-      /input.edit.ftp [ 63 string 127 string 31 string 31 string ] def
-    } if
-
     dia .title txt_ftp_title put
 
     % Must all be of same size!
@@ -151,10 +138,6 @@
   } if
 
   dup .inst_http eq {
-    input.edit.http .undef eq {
-      /input.edit.http [ 63 string 127 string ] def
-    } if
-
     dia .title txt_http_title put
 
     % Must all be of same size!
@@ -165,10 +148,6 @@
   } if
 
   dup .inst_nfs eq {
-    input.edit.nfs .undef eq {
-      /input.edit.nfs [ 63 string 127 string ] def
-    } if
-
     dia .title txt_nfs_title put
 
     % Must all be of same size!
@@ -179,10 +158,6 @@
   } if
 
   dup .inst_smb eq {
-    input.edit.smb .undef eq {
-      /input.edit.smb [ 63 string 31 string 127 string 31 string 31 string 31 string ] def
-    } if
-
     dia .title txt_smb_title put
 
     % Must all be of same size!
@@ -192,6 +167,16 @@
 
     dia .ed.font font.normal put
     dia .ed.pw_field 5 put
+
+  } if
+
+  dup .inst_hd eq {
+    dia .title txt_harddisk_title put
+
+    % Must all be of same size!
+    dia .ed.list 2 array put
+    dia .ed.buffer.list input.edit.hd put
+    dia .ed.text.list [ txt_hd_diskdevice txt_directory ] put
 
   } if
 
@@ -224,13 +209,31 @@
 
   pmenu.update
 
+  install.set.install.option
+
+} def
+
+
+/install.cancel {
+  /xmenu xmenu.install def
+
+  xmenu .xm_current install.last put
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Set 'install=' boot option.
+%
+% ( -- )
+%
+/install.set.install.option {
   xmenu .xm_current get
 
-  dup .inst_hd eq {
-    input.edit.hd
-    dup 1 get dup 0 get '/' eq { 1 add } if
-    exch 0 get dup 0 get '/' eq { 1 add } if
-    "install=hd://%s/%s" install.option sprintf
+  % default: .inst_cdrom
+  install.option "" strcpy pop
+
+  dup .inst_slp eq {
+    install.option "install=slp:/" strcpy pop
   } if
 
   dup .inst_ftp eq {
@@ -288,14 +291,49 @@
     "%s/%s/%s" install.option dup length add sprintf
   } if
 
+  dup .inst_hd eq {
+    input.edit.hd
+    dup 1 get dup 0 get '/' eq { 1 add } if
+    exch 0 get dup 0 get '/' eq { 1 add } if
+    "install=hd://%s/%s" install.option sprintf
+  } if
+
+  pop
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Read default values.
+%
+% ( -- )
+%
+/install.read.config {
+  "install" getgfxconfig
+  dup "cdrom" eq { /install.last .inst_cdrom def } if
+  dup "slp"   eq { /install.last .inst_slp   def } if
+  dup "ftp"   eq { /install.last .inst_ftp   def } if
+  dup "http"  eq { /install.last .inst_http  def } if
+  dup "nfs"   eq { /install.last .inst_nfs   def } if
+  dup "smb"   eq { /install.last .inst_smb   def } if
+  dup "hd"    eq { /install.last .inst_hd    def } if
   pop
 
+  "install.http.server"  input.edit.http 0 get getgfxconfig.str
+  "install.http.path"    input.edit.http 1 get getgfxconfig.str
+
+  "install.nfs.server"   input.edit.nfs  0 get getgfxconfig.str
+  "install.nfs.path"     input.edit.nfs  1 get getgfxconfig.str
+
+  "install.smb.server"   input.edit.smb  0 get getgfxconfig.str
+  "install.smb.share"    input.edit.smb  1 get getgfxconfig.str
+  "install.smb.path"     input.edit.smb  2 get getgfxconfig.str
+  "install.smb.domain"   input.edit.smb  3 get getgfxconfig.str
+  "install.smb.user"     input.edit.smb  4 get getgfxconfig.str
+  "install.smb.password" input.edit.smb  5 get getgfxconfig.str
+
+  "install.hd.device"    input.edit.hd   0 get getgfxconfig.str
+  "install.hd.path"      input.edit.hd   1 get getgfxconfig.str
+
 } def
 
-
-/install.cancel {
-  /xmenu xmenu.install def
-
-  xmenu .xm_current install.last put
-} def
 

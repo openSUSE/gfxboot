@@ -641,6 +641,18 @@ def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Read string from config file and store in variable.
+%
+% ( key str -- )
+%
+% Read config value 'key' and copy to 'str' if found.
+%
+/getgfxconfig.str {
+  exch getgfxconfig dup { strcpy } { pop } ifelse pop
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % split - split string
 %
 % group:
