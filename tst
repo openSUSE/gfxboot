@@ -74,7 +74,7 @@ function tst_isolinux {
     vmware -qx $vm_tmp/gfxboot.vmx
   elif [ "$program" = qemu ] ; then
     # qemu
-    qemu -cdrom $img
+    $qemu -cdrom $img
   elif [ "$program" = bd ] ; then
     # bochs debug wrapper
     bd $img
@@ -100,19 +100,22 @@ function tst_lilo {
   rm -rf $dst $vm_tmp
   rm -f $img
 
-  mkdir -p $dst
-  cp -a $src/* $dst
-  cp -a $logo $dst/bootlogo
-  rm -f $dst/lilo.conf
+  mkdir -p $dst/boot
+  cp -a $src/* $dst/boot
+  cp -a $logo $dst/boot/message
 
-  dd if=/dev/zero of="$img" bs=36b count=80
-  mke2fs -F -m 0 "$img"
-  sw 0 mount -oloop=/dev/loop7 "$img" /mnt
-  sw 0 cp -a $dst/* /mnt
-  sw 0 rmdir /mnt/lost+found
-  sw 0 $bin/sbin/lilo -C $src/lilo.conf -m /mnt/map
+  for i in /boot/vmlinuz /boot/initrd ; do
+    [ -f $i ] && cp --parents $i $dst
+  done
+
+  test/hdimg $img
+
+  sw 0 mount -oloop=/dev/loop7,offset=32256 $img /mnt
+  sw 0 cp -r $dst/* /mnt
+  sw 0 losetup /dev/loop6 $img
+  sw 0 $bin/sbin/lilo -w -C /mnt/boot/lilo.conf -m /mnt/boot/map
+  sw 0 losetup -d /dev/loop6
   sw 0 umount /mnt
-  sw 0 losetup -d /dev/loop7 2>/dev/null
 
   if [ "$program" = vmware ] ; then
     # vmware
@@ -122,7 +125,7 @@ function tst_lilo {
     vmware -qx $vm_tmp/gfxboot.vmx
   elif [ "$program" = qemu ] ; then
     # qemu
-    qemu -boot a -fda $img
+    $qemu -boot c -hda $img
   elif [ "$program" = bd ] ; then
     # bochs debug wrapper
     bd $img
@@ -148,21 +151,25 @@ function tst_grub {
   rm -rf $dst $vm_tmp
   rm -f $img
 
-  mkdir -p $dst
-  cp -a $src $dst/grub
-  cp $bin/usr/lib/grub/{fat_stage1_5,stage1,stage2} $dst/grub
-  cp -a $logo $dst/grub/bootlogo
-  sh -c "echo '(fd0) $img' >$dst/grub/device.map"
+  mkdir -p $dst/boot
+  cp -a $src/* $dst/boot
+  cp $bin/usr/lib/grub/{fat_stage1_5,stage1,stage2} $dst/boot/grub
+  cp -a $logo $dst/boot/message
+  for i in /boot/vmlinuz /boot/initrd ; do
+    [ -f $i ] && cp --parents $i $dst
+  done
 
-  test/dosimg $img
+  sh -c "echo '(hd0) $img' >$dst/boot/grub/device.map"
 
-  sw 0 mount -oloop "$img" /mnt
+  test/hdimg $img
+
+  sw 0 mount -oloop,offset=32256 "$img" /mnt
   sw 0 cp -r $dst/* /mnt
-  echo "setup --prefix=/grub (fd0) (fd0)" | \
-  sw 0 $bin/usr/sbin/grub --batch --config-file=/mnt/grub/menu.lst --device-map=/mnt/grub/device.map
-  echo
-
   sw 0 umount /mnt
+
+  echo "setup --prefix=/boot/grub (hd0,0) (hd0,0)" | \
+  $bin/usr/sbin/grub --batch --config-file=$dst/boot/grub/menu.lst --device-map=$dst/boot/grub/device.map
+  echo
 
   if [ "$program" = vmware ] ; then
     # vmware
@@ -172,7 +179,7 @@ function tst_grub {
     vmware -qx $vm_tmp/gfxboot.vmx
   elif [ "$program" = qemu ] ; then
     # qemu
-    qemu -boot a -fda $img
+    $qemu -boot c -hda $img
   elif [ "$program" = bd ] ; then
     # bochs debug wrapper
     bd $img
@@ -219,7 +226,7 @@ function tst_syslinux {
     vmware -qx $vm_tmp/gfxboot.vmx
   elif [ "$program" = qemu ] ; then
     # qemu
-    qemu -boot a -fda $img
+    $qemu -boot a -fda $img
   elif [ "$program" = bd ] ; then
     # bochs debug wrapper
     bd $img
@@ -236,14 +243,16 @@ function tst_syslinux {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 function usage {
-  echo "usage: tst [-b] [-i] [-p program] [-t theme] what"
+  echo "usage: tst [-b] [-d floppy_nr] [-i] [-l language] [-p program] [-s test_src_dir] [-t theme] what"
   exit 1
 }
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-while getopts bd:hil:p:t: opt ; do
+qemu=qemu
+
+while getopts bd:hil:p:s:t:x opt ; do
   case $opt in
     \:|\?|h) usage
       ;;
@@ -263,7 +272,13 @@ while getopts bd:hil:p:t: opt ; do
     p) program=$OPTARG
       ;;
 
+    s) src=$OPTARG
+      ;;
+
     t) theme=$OPTARG
+      ;;
+
+    x) qemu=qemu-system-x86_64
       ;;
   esac
 done
@@ -318,14 +333,18 @@ fi
 tmp=tmp
 mkdir -p "$tmp" || exit
 
-if [ "$what" = isolinux ] ; then
-  tst_isolinux syslinux
-elif [ "$what" = lilo ] ; then
-  tst_lilo lilo
-elif [ "$what" = syslinux ] ; then
-  tst_syslinux syslinux
-elif [ "$what" = grub ] ; then
-  tst_grub grub
+if [ -z "$src" ] ; then
+  src=$what
+  [ $what = isolinux ] && src=syslinux
+fi
+
+if [ ! -d test/$src ] ; then
+  echo "no such directory: $src"
+  usage
+fi
+
+if [ "`type -t tst_$what`" = function ] ; then
+  tst_$what $src
 else
   echo "What is "\""$what"\""?"
   usage
