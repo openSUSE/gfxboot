@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <ctype.h>
 #include <getopt.h>
 #include <iconv.h>
 #include <errno.h>
@@ -82,6 +83,7 @@ typedef struct font_s {
   unsigned ok:1;
   unsigned bold:1;
   unsigned nobitmap:1;
+  unsigned autohint:2;		/* 0: auto, 1: off, 2: on */
 } font_t;
 
 typedef struct char_data_s {
@@ -235,6 +237,10 @@ int main(int argc, char **argv)
               }
               else if(!strcmp(str, "nobitmap")) {
                 font->nobitmap = strtol(s, &s1, 0);
+                if(*s1) err = 1;
+              }
+              else if(!strcmp(str, "autohint")) {
+                font->autohint = strtol(s, &s1, 0) + 1;
                 if(*s1) err = 1;
               }
               else if(!strcmp(str, "c")) {
@@ -896,7 +902,13 @@ void render_char(char_data_t *cd)
     glyph_index = FT_Get_Char_Index(font->face, cd->c);
     if(!glyph_index) continue;
 
-    err = FT_Load_Char(font->face, cd->c, FT_LOAD_RENDER | (font->nobitmap ? FT_LOAD_NO_BITMAP : 0));
+    err = FT_Load_Char(
+      font->face,
+      cd->c,
+      FT_LOAD_RENDER |
+      (font->nobitmap ? FT_LOAD_NO_BITMAP : 0) |
+      (font->autohint ? font->autohint == 1 ? FT_LOAD_NO_AUTOHINT : FT_LOAD_FORCE_AUTOHINT : 0)
+    );
     if(err) continue;
 
     cd->ok = 1;
