@@ -1220,7 +1220,7 @@
     /frame1.pos  { 120 110 } def
     /frame1.width  400 def
   } {
-    /frame1.pos  { 240 220 } def
+    /frame1.pos  { 260 260 } def
     /frame1.width  425 def
   } ifelse
 

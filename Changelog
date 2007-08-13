@@ -1,3 +1,6 @@
+13/8/2007:	v3.2.39
+	- added GRC theme
+
 30/3/2007:	v3.2.38
 	- fix locale strings we pass to yast (#258769)
 
