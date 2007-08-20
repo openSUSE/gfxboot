@@ -7,8 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
-"PO-Revision-Date: 2006-06-01 09:39\n"
-"Last-Translator: Novell Language <language@novell.com>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2007-08-10 15:17+0100\n"
+"Last-Translator: Alberto Passalacqua <alberto.passalacqua@tin.it>\n"
 "Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -345,58 +346,57 @@ msgstr ""
 #. ** please keep it really short (comparable to the english text) **
 #. txt_install_source
 msgid "Source"
-msgstr ""
+msgstr "Sorgente"
 
 #. video mode/display size menu title
 #. ** please keep it really short (comparable to the english text) **
 #. txt_video_mode
 msgid "Video Mode"
-msgstr ""
+msgstr "Modalità video"
 
 #. driver update dialog title
 #. -> txt_dud_file_msg
 #. txt_driver_update2
 msgid "Driver Update"
-msgstr ""
+msgstr "Aggiornamento driver"
 
 #. menu label for selecting (cpu) architecture
 #. like i386, x86-64, ppc
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr ""
+msgstr "Arch."
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
 #. txt_kernel
 msgid "Kernel"
-msgstr ""
+msgstr "Kernel"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
 msgid "Default"
-msgstr ""
+msgstr "Predefinito"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> like in txt_safe_linux
 #. txt_kernel_safe
 msgid "Safe Settings"
-msgstr ""
+msgstr "Impostazioni sicure"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_noacpi_install
 #. txt_kernel_noacpi
 msgid "No ACPI"
-msgstr ""
+msgstr "No ACPI"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_nolapic_install
 #. txt_kernel_nolapic
 msgid "No Local APIC"
-msgstr ""
+msgstr "No Local APIC"
 
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr ""
-
+msgstr "Ripara sistema installato"

@@ -7,14 +7,14 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: el\n"
-"PO-Revision-Date: 2005-08-09 01:17+0300\n"
-"Last-Translator: Hellenic SuSE Translation Team <hstg@billg.gr>\n"
-"Language-Team: Hellenic-Ελληνικά-Greek <hstg@billg.gr>\n"
+"Project-Id-Version: bootloader.el\n"
+"PO-Revision-Date: 2007-02-01 12:01+0000\n"
+"Last-Translator: Vasileios Giannakopoulos <billg@hellug.gr>\n"
+"Language-Team: Ελληνικά\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.10\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #. ok button label
 #. txt_ok
@@ -118,15 +118,13 @@ msgstr ""
 
 #. info box title
 #. txt_info_title
-#, fuzzy
 msgid "Boot Loader"
-msgstr "Διαχειριστής Εκκίνησης"
+msgstr "Διαχειριστής Εκκίνησης "
 
 #. error box title
 #. txt_error_title
-#, fuzzy
 msgid "I/O Error"
-msgstr "σφάλμα E/E"
+msgstr "Σφάλμα Εισ/Εξ"
 
 #. boot disk change dialog title
 #. txt_change_disk_title
@@ -149,7 +147,7 @@ msgstr ""
 
 #. <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format,fuzzy
+#, c-format
 msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
@@ -201,9 +199,8 @@ msgid "Hard Disk Installation"
 msgstr "Εγκατάσταση Σκληρού Δίσκου"
 
 #. txt_hd_diskdevice
-#, fuzzy
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Συσκευή Δίσκου (σάρωση όλων των δίσκων αν είναι κενοί)\n"
+msgstr "Συσκευή Δίσκου (Ελέγχει Όλους τους Δίσκους Αν είναι Κενοί)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -224,9 +221,8 @@ msgstr "Κωδικός\n"
 
 #. label for ftp user input
 #. txt_user1
-#, fuzzy
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "Χρήστης (ανώνυμη σύνδεση εάν είναι κενός)\n"
+msgstr "Χρήστης (Ανώνυμη Σύνδεση Αν είναι Κενό)\n"
 
 #. dialog title for nfs installation
 #. txt_nfs_title
@@ -235,9 +231,8 @@ msgstr "Εγκατάσταση NFS"
 
 #. label for smb user input
 #. txt_user2
-#, fuzzy
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "Χρήστης (χρήση \"guest\" αν είναι κενός)\n"
+msgstr "Χρήστης (Χρήση του \"guest\" Αν είναι Κενό)\n"
 
 #. dialog title for smb installation
 #. txt_smb_title
@@ -271,7 +266,7 @@ msgstr "Γλώσσα"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr ""
+msgstr "Εγκατάσταση -- Ενεργοποιημένο το IOAPIC"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
@@ -279,7 +274,7 @@ msgstr "Εγκατάσταση--IOAPIC Απενεργοποιημένο"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr ""
+msgstr "Εγκατάσταση -- Το Τοπικό APIC είναι Απενεργοποιημένο"
 
 #. txt_yes
 msgid "Yes"
@@ -292,52 +287,50 @@ msgstr "Όχι"
 #. menu item for selecting a file
 #. txt_file
 msgid "File"
-msgstr ""
+msgstr "Αρχείο"
 
 #. input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr ""
+msgstr "Κοινόχρηστο\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
-msgstr ""
+msgstr "Αυτόματο Κατάσταση"
 
 #. txt_zenManual
-#, fuzzy
 msgid "Manual Mode"
-msgstr "Κατάσταση Dual Head"
+msgstr "Χειροκίνητη Κατάσταση"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr ""
+msgstr "Ρύθμιση Παραμέτρων στην Κατάτμηση ΖΕΝ"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr ""
+msgstr "Εγκατάσταση ή Ενημέρωση της Κατάτμησης ΖΕΝ"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr ""
+msgstr "Επανεγκατάσταση του Διαχειριστή Εκκίνησης για την Κατάτμηση ΖΕΝ"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr ""
+msgstr "Απενεργοποίηση Κατάτμησης ΖΕΝ"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
-msgstr ""
+msgstr "Ενεργοποίηση Κατάτμησης ΖΕΝ"
 
 #. video mode menu item
 #. txt_text_mode
-#, fuzzy
 msgid "Text Mode"
-msgstr "Μοντέλο ποντικιού"
+msgstr "Κατάσταση Κειμένου"
 
 #. menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr ""
+msgstr "Δοκιμή Firmware"
 
 #. txt_dud_file_msg
 msgid ""
@@ -345,6 +338,9 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
+"Για να φορτώσετε ενημερώσεις οδηγών κατευθείαν από το CD-ROM,\n"
+"πρέπει να εισάγετε εδώ τα ονόματα των αρχείων των οδηγών ενημέρωσης (χωρισμένα\n"
+"από κόμμα ','):\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
@@ -404,4 +400,3 @@ msgstr ""
 #. txt_repain_system
 msgid "Repair Installed System"
 msgstr ""
-

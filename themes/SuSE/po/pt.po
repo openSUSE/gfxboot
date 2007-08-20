@@ -7,12 +7,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2006-06-01 14:17\n"
-"Last-Translator: Novell Language <language@novell.com>\n"
-"Language-Team: Novell Language <language@novell.com>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2007-08-10 14:41+0100\n"
+"Last-Translator: Carlos Gonçalves <carlos@pinguix.com>\n"
+"Language-Team: Portuguese <opensuse-pt@opensuse.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #. ok button label
 #. txt_ok
@@ -44,19 +46,19 @@ msgstr "Instalação Manual"
 
 #. txt_noacpi_install
 msgid "Installation--ACPI Disabled"
-msgstr "Instalação--ACPI Desabilitada"
+msgstr "Instalação--Desactivar ACPI"
 
 #. txt_safe_install
 msgid "Installation--Safe Settings"
-msgstr "Instalação--Configurações Seguras"
+msgstr "Instalação--Definições de Segurança"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr "Linux--Configurações Seguras"
+msgstr "Linux--Definições de Segurança"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
-msgstr "Inicializar do Disco Rígido"
+msgstr "Iniciar a partir do Disco Rígido"
 
 #. txt_rescue
 msgid "Rescue System"
@@ -68,20 +70,20 @@ msgstr "Teste de Memória"
 
 #. txt_bootoptions
 msgid "Boot Options"
-msgstr "Opções de Boot"
+msgstr "Opções de Arranque"
 
 #. window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
 msgid "Exiting..."
-msgstr "Saindo..."
+msgstr "A sair..."
 
 #. txt_exit_dialog
 msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"Você está saindo do menu de boot gráfico\n"
-"e iniciando a interface em modo de texto."
+"Está a sair do menu de arranque gráfico\n"
+"e a iniciar a interface em modo de texto."
 
 #. txt_help
 msgid "Help"
@@ -90,7 +92,7 @@ msgstr "Ajuda"
 #. window title for kernel loading (see txt_load_kernel)
 #. txt_load_kernel_title
 msgid "Starting..."
-msgstr "Iniciando..."
+msgstr "A iniciar..."
 
 #. Keep the three newlines!
 #. txt_load_kernel
@@ -99,7 +101,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Carregando Kernel do Linux\n"
+"A carregar o Kernel do Linux\n"
 "\n"
 "\n"
 
@@ -110,7 +112,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Carregando memtest86\n"
+"A carregar memtest86\n"
 "\n"
 "\n"
 
@@ -127,12 +129,12 @@ msgstr "Erro de I/O"
 #. boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr "Mudar Disco de Boot"
+msgstr "Mudar Disco de Arranque"
 
 #. txt_insert_disk
 #, c-format
 msgid "Insert boot disk %u."
-msgstr "Inserir disco de boot %u."
+msgstr "Inserir disco de arranque %u."
 
 #. txt_insert_disk2
 #, c-format
@@ -140,8 +142,8 @@ msgid ""
 "This is boot disk %u.\n"
 "Insert boot disk %u."
 msgstr ""
-"Este é o disco de boot %u.\n"
-"Insira o disco de boot %u."
+"Este é o disco de arranque %u.\n"
+"Introduza o disco de arranque %u."
 
 #. <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
@@ -156,16 +158,16 @@ msgstr ""
 #. password dialog title
 #. txt_password_title
 msgid "Password"
-msgstr "Senha"
+msgstr "Palavra Passe"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr "Verifique se o disquete de atualização de driver está pronto."
+msgstr "Certifique-se que tem a disquete com a actualização do driver."
 
 #. dvd warning title
 #. txt_dvd_warning_title
 msgid "DVD Error"
-msgstr "Erro de DVD"
+msgstr "Erro no DVD"
 
 #. txt_dvd_warning2
 msgid ""
@@ -173,7 +175,7 @@ msgid ""
 "\n"
 "Turn the DVD over then continue."
 msgstr ""
-"Este é um DVD com dois lados. Você fez a inicialização pelo segundo lado.\n"
+"Este é um DVD com informação nos dois lados. Arrancou pelo segundo lado.\n"
 "\n"
 "Vire o DVD e continue."
 
@@ -194,7 +196,7 @@ msgstr "Disco Rígido"
 #. dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "Instalação por Disco Rígido"
+msgstr "Instalação pelo Disco Rígido"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
@@ -202,7 +204,7 @@ msgstr "Dispositivo de Disco (Analisar Todos os Discos, caso estejam vazios)\n"
 
 #. txt_directory
 msgid "Directory\n"
-msgstr "Diretório\n"
+msgstr "Directório\n"
 
 #. dialog title for ftp installation
 #. txt_ftp_title
@@ -215,7 +217,7 @@ msgstr "Servidor\n"
 
 #. txt_password
 msgid "Password\n"
-msgstr "Senha\n"
+msgstr "Palavra Passe\n"
 
 #. label for ftp user input
 #. txt_user1
@@ -235,7 +237,7 @@ msgstr "Utilizador (utilizando \"guest\" Se Estiver Vazio)\n"
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "Instalação por SMB (Compartilhamento Windows)"
+msgstr "Instalação por SMB (Partilha Windows)"
 
 #. dialog title for http installation
 #. txt_http_title
@@ -264,15 +266,15 @@ msgstr "Idioma"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr "Instalação--IOAPIC Habilitada"
+msgstr "Instalação--IOAPIC Activo"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
-msgstr "Instalação--IOAPIC Desabilitada"
+msgstr "Instalação--IOAPIC Desactivar"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr "Instalação--APIC Local Desabilitada"
+msgstr "Instalação--APIC Local Desactivar"
 
 #. txt_yes
 msgid "Yes"
@@ -285,12 +287,12 @@ msgstr "Não"
 #. menu item for selecting a file
 #. txt_file
 msgid "File"
-msgstr "Arquivo"
+msgstr "Ficheiro"
 
 #. input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr "Compartilhamento\n"
+msgstr "Partilha\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
@@ -344,58 +346,57 @@ msgstr ""
 #. ** please keep it really short (comparable to the english text) **
 #. txt_install_source
 msgid "Source"
-msgstr ""
+msgstr "Origem"
 
 #. video mode/display size menu title
 #. ** please keep it really short (comparable to the english text) **
 #. txt_video_mode
 msgid "Video Mode"
-msgstr ""
+msgstr "Modo de Vídeo"
 
 #. driver update dialog title
 #. -> txt_dud_file_msg
 #. txt_driver_update2
 msgid "Driver Update"
-msgstr ""
+msgstr "Actualização do Driver"
 
 #. menu label for selecting (cpu) architecture
 #. like i386, x86-64, ppc
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr ""
+msgstr "Arch"
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
 #. txt_kernel
 msgid "Kernel"
-msgstr ""
+msgstr "Kernel"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
 msgid "Default"
-msgstr ""
+msgstr "Pré-definido"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> like in txt_safe_linux
 #. txt_kernel_safe
 msgid "Safe Settings"
-msgstr ""
+msgstr "Definições de Segurança"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_noacpi_install
 #. txt_kernel_noacpi
 msgid "No ACPI"
-msgstr ""
+msgstr "Sem ACPI"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_nolapic_install
 #. txt_kernel_nolapic
 msgid "No Local APIC"
-msgstr ""
+msgstr "Sem Local APIC"
 
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr ""
-
+msgstr "Reparar o Sstema Instalado"

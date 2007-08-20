@@ -8,15 +8,15 @@
 # Rinse de Vries <rinsedevries@kde.nl>, 2005.
 msgid ""
 msgstr ""
-"Project-Id-Version: nl\n"
-"PO-Revision-Date: 2005-08-10 00:45+0200\n"
+"Project-Id-Version: bootloader\n"
+"PO-Revision-Date: 2007-08-11 21:22+0200\n"
 "Last-Translator: Rinse de Vries <rinsedevries@kde.nl>\n"
-"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.10.2\n"
-"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms:  nplurals=2; plural=n != 1;\n"
 
 #. ok button label
 #. txt_ok
@@ -164,7 +164,7 @@ msgstr "Wachtwoord"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr "Houdt uw diskette met de stuurprogramma-update gereed."
+msgstr "Houdt uw diskette met de stuurprogramma-opwaardering gereed."
 
 #. dvd warning title
 #. txt_dvd_warning_title
@@ -310,7 +310,7 @@ msgstr "Parameters op ZEN-partitie instellen"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr "ZEN-partitie installeren/updaten"
+msgstr "ZEN-partitie installeren/opwaarderen"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
@@ -340,34 +340,34 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
-"Om stuurprogramma-updates direct van cd-rom te laden,\n"
-"voer hier de bestandsnamen in van de stuurprogramma-updates\n"
+"Om stuurprogramma-opwaarderingen direct van cd-rom te laden,\n"
+"voer hier de bestandsnamen in van de stuurprogramma-opwaarderings\n"
 "(gescheiden door comma's):\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
 #. txt_install_source
 msgid "Source"
-msgstr ""
+msgstr "Bron"
 
 #. video mode/display size menu title
 #. ** please keep it really short (comparable to the english text) **
 #. txt_video_mode
 msgid "Video Mode"
-msgstr ""
+msgstr "Videomodus"
 
 #. driver update dialog title
 #. -> txt_dud_file_msg
 #. txt_driver_update2
 msgid "Driver Update"
-msgstr ""
+msgstr "Stuurprogramma-opwaardering"
 
 #. menu label for selecting (cpu) architecture
 #. like i386, x86-64, ppc
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr ""
+msgstr "Arch"
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
@@ -378,7 +378,7 @@ msgstr ""
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
 msgid "Default"
-msgstr ""
+msgstr "Standaard"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> like in txt_safe_linux
@@ -402,4 +402,3 @@ msgstr ""
 #. txt_repain_system
 msgid "Repair Installed System"
 msgstr ""
-

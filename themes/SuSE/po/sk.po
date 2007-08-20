@@ -9,14 +9,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-02-20 13:45+0100\n"
-"Last-Translator: Ladislav Michnovič <lmichnovic@suse.cz>\n"
+"PO-Revision-Date: 2007-08-19 15:31+0100\n"
+"Last-Translator: Ladislav Michnovic <lmichnovic@suse.cz>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.10\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 & n<=4) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #. ok button label
 #. txt_ok
@@ -68,7 +68,7 @@ msgstr "Záchranný systém"
 
 #. txt_memtest
 msgid "Memory Test"
-msgstr "Test pamäti"
+msgstr "Test pamäte"
 
 #. txt_bootoptions
 msgid "Boot Options"
@@ -126,7 +126,7 @@ msgstr "Správca štartu"
 #. error box title
 #. txt_error_title
 msgid "I/O Error"
-msgstr "Chyba I/O"
+msgstr "Chyba vstupu/výstupu"
 
 #. boot disk change dialog title
 #. txt_change_disk_title
@@ -202,11 +202,11 @@ msgstr "Inštalácia na pevný disk"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Zariadenie disku (vyhľadá disky, ak je prázdne)\n"
+msgstr "Diskové zariadenie (prehľadá všetky disky, ak necháte prázdne)\n"
 
 #. txt_directory
 msgid "Directory\n"
-msgstr "Priečinok\n"
+msgstr "Adresár\n"
 
 #. dialog title for ftp installation
 #. txt_ftp_title
@@ -259,7 +259,7 @@ msgstr "Doména\n"
 #. button label for other/more options
 #. txt_other_options
 msgid "Other Options"
-msgstr "Ďalšie možnosti"
+msgstr "Ďalšie voľby"
 
 #. txt_language
 msgid "Language"
@@ -301,7 +301,7 @@ msgstr "Automatický režim"
 
 #. txt_zenManual
 msgid "Manual Mode"
-msgstr "Ručné nastavenie"
+msgstr "Ručný režim"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
@@ -313,15 +313,15 @@ msgstr "Inštalovať alebo obnoviť ZENový diskový oddiel"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "Preinštalovať spúšťač systému pre ZEN oddiel"
+msgstr "Preinštalovať spúšťač systému pre ZENový oddiel"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr "Zakázať ZEN diskový oddiel"
+msgstr "Zakázať ZENový diskový oddiel"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
-msgstr "Povoliť ZEN diskový oddiel"
+msgstr "Povoliť ZENový diskový oddiel"
 
 #. video mode menu item
 #. txt_text_mode
@@ -339,66 +339,65 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
-"Ak chcete nahrať aktualizované ovládače priamo\n"
-"z CD, napíšte sem mená súborov ovládačov oddelené\n"
-"čiarkami ',':\n"
+"Ak chcete nahrať aktualizované ovládače priamo z CD,\n"
+"napíšte mená súborov ovládačov oddelené čiarkami ','\n"
+"sem:\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
 #. txt_install_source
 msgid "Source"
-msgstr ""
+msgstr "Zdroj"
 
 #. video mode/display size menu title
 #. ** please keep it really short (comparable to the english text) **
 #. txt_video_mode
 msgid "Video Mode"
-msgstr ""
+msgstr "Zobrazovací režim"
 
 #. driver update dialog title
 #. -> txt_dud_file_msg
 #. txt_driver_update2
 msgid "Driver Update"
-msgstr ""
+msgstr "Aktualizácia ovládačov"
 
 #. menu label for selecting (cpu) architecture
 #. like i386, x86-64, ppc
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr ""
+msgstr "Arch"
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
 #. txt_kernel
 msgid "Kernel"
-msgstr ""
+msgstr "Jadro"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
 msgid "Default"
-msgstr ""
+msgstr "Predvolené"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> like in txt_safe_linux
 #. txt_kernel_safe
 msgid "Safe Settings"
-msgstr ""
+msgstr "Záchranný režim"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_noacpi_install
 #. txt_kernel_noacpi
 msgid "No ACPI"
-msgstr ""
+msgstr "Bez ACPI"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_nolapic_install
 #. txt_kernel_nolapic
 msgid "No Local APIC"
-msgstr ""
+msgstr "Bez Lokálneho APIC"
 
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr ""
-
+msgstr "Opraviť nainštalovaný systém"

@@ -5,9 +5,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bootloader.et\n"
 "POT-Creation-Date: 2003-03-04 15:08+0100\n"
-"PO-Revision-Date: 2006-10-05 09:47+0300\n"
+"PO-Revision-Date: 2007-07-20 09:23+0300\n"
 "Last-Translator: Ain Vagula <avagula@gmail.com>\n"
-"Language-Team: Estonian <et@li.org>\n"
+"Language-Team: Estonian <linux-ee@lists.eenet.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -344,26 +344,26 @@ msgstr ""
 #. ** please keep it really short (comparable to the english text) **
 #. txt_install_source
 msgid "Source"
-msgstr ""
+msgstr "Allikas"
 
 #. video mode/display size menu title
 #. ** please keep it really short (comparable to the english text) **
 #. txt_video_mode
 msgid "Video Mode"
-msgstr ""
+msgstr "Videorežiim"
 
 #. driver update dialog title
 #. -> txt_dud_file_msg
 #. txt_driver_update2
 msgid "Driver Update"
-msgstr ""
+msgstr "Draiverite uuendamine"
 
 #. menu label for selecting (cpu) architecture
 #. like i386, x86-64, ppc
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr ""
+msgstr "Arh."
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
@@ -398,4 +398,3 @@ msgstr ""
 #. txt_repain_system
 msgid "Repair Installed System"
 msgstr ""
-

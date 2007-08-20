@@ -72,7 +72,7 @@ msgstr "خيارات التشغيل"
 #. window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
 msgid "Exiting..."
-msgstr "إنهاء..."
+msgstr "خروج..."
 
 #. txt_exit_dialog
 msgid ""
@@ -197,7 +197,7 @@ msgstr "تثبيت القرص الصلب"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "جهاز القرص (مسح كافة الأقرص إذا كان فارغًا)\n"
+msgstr "جهاز القرص (مسح كافة الأقراص إذا كان فارغًا)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -355,14 +355,14 @@ msgstr ""
 #. -> txt_dud_file_msg
 #. txt_driver_update2
 msgid "Driver Update"
-msgstr ""
+msgstr "تحديث برنامج التشغيل"
 
 #. menu label for selecting (cpu) architecture
 #. like i386, x86-64, ppc
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr ""
+msgstr "الهيكل"
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
@@ -397,4 +397,3 @@ msgstr ""
 #. txt_repain_system
 msgid "Repair Installed System"
 msgstr ""
-

@@ -4,91 +4,84 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: YaST (@memory@)\n"
-"Report-Msgid-Bugs-To: i18n@suse.de\n"
-"POT-Creation-Date: 2005-07-29 06:17+0000\n"
-"PO-Revision-Date: 2005-07-29 15:37+0530\n"
-"Last-Translator: i18n@suse.de\n"
-"Language-Team: Gujarati <i18n@suse.de>\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-07-27 16:23+0200\n"
+"PO-Revision-Date: 2004-08-09 10:24+0200\n"
+"Last-Translator: Priyavert Sharma <priyavert.sharma@agreeya.com>\n"
+"Language-Team: AgreeYa Solutions <linux_team@agreeya.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. ok button label
 #. txt_ok
-#, fuzzy
 msgid "OK"
 msgstr "બરાબર"
 
 #. cancel button label
 #. txt_cancel
-#, fuzzy
 msgid "Cancel"
-msgstr "રદ કરો (C)"
+msgstr "રદ કરો "
 
 #. reboot button label
 #. txt_reboot
 msgid "Reboot"
-msgstr ""
+msgstr "ફરીથી બૂટ કરો"
 
 #. continue button label
 #. txt_continue
-#, fuzzy
 msgid "Continue"
-msgstr "ચાલુ રાખો (o)"
+msgstr "ચાલુ રાખો"
 
 #. txt_install
-#, fuzzy
 msgid "Installation"
-msgstr "નવું  સ્થાપન "
+msgstr "સ્થાપન"
 
 #. txt_manual_install
-#, fuzzy
 msgid "Manual Installation"
-msgstr "સ્થાપના ચાલુ રાખો."
+msgstr " મેન્યુઅલ સ્થાપન "
 
 #. txt_noacpi_install
-#, fuzzy
 msgid "Installation--ACPI Disabled"
-msgstr "સ્થાપન પૂરું થયું"
+msgstr "સ્થાપન -- ACPI અક્ષમ"
 
 #. txt_safe_install
-#, fuzzy
 msgid "Installation--Safe Settings"
-msgstr "સ્થાપન સેટિંગ્સ"
+msgstr "સ્થાપન -- સુરક્ષિત સેટિંગ્સ"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr ""
+msgstr "લિનક્ષ -- સુરક્ષિત સેટિંગ્સ"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
-msgstr ""
+msgstr "હાર્ડ ડિસ્કમાંથી બૂટ કરો"
 
 #. txt_rescue
 msgid "Rescue System"
-msgstr ""
+msgstr "બચાવ સિસ્ટમ"
 
 #. txt_memtest
 msgid "Memory Test"
-msgstr ""
+msgstr "મેમરી પરિક્ષણ"
 
 #. txt_bootoptions
-#, fuzzy
 msgid "Boot Options"
-msgstr "વિકલ્પો"
+msgstr "બૂટ વિકલ્પો"
 
 #. window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
-#, fuzzy
 msgid "Exiting..."
-msgstr "પ્રારંભ થઇ રહ્યો છે..."
+msgstr "બહાર નીકળી રહ્યા છો..."
 
 #. txt_exit_dialog
 msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
+"તમે ગ્રાફિકલ બૂટ મેનુથી બહાર જઇ રહ્યા છો અને\n"
+"ટેક્ષ્ટ ઢબ ઇન્ટરફેસ શરૂ થઇ રહ્યું છે."
 
 #. txt_help
 msgid "Help"
@@ -96,9 +89,8 @@ msgstr "મદદ"
 
 #. window title for kernel loading (see txt_load_kernel)
 #. txt_load_kernel_title
-#, fuzzy
 msgid "Starting..."
-msgstr "પ્રારંભ થઇ રહ્યો છે..."
+msgstr "શરૂ થઇ રહ્યું છે..."
 
 #. Keep the three newlines!
 #. txt_load_kernel
@@ -107,6 +99,9 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
+" લિનક્ષ કર્નલ લોડ થઇ રહ્યું છે \n"
+"\n"
+"\n"
 
 #. Keep the three newlines!
 #. txt_load_memtest
@@ -115,27 +110,29 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
+" memtest86 લોડ થઇ રહ્યું છે \n"
+"\n"
+"\n"
 
 #. info box title
 #. txt_info_title
 msgid "Boot Loader"
-msgstr ""
+msgstr "બૂટ લોડર"
 
 #. error box title
 #. txt_error_title
-#, fuzzy
 msgid "I/O Error"
-msgstr "ભૂલ"
+msgstr "I/O ભૂલ"
 
 #. boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr ""
+msgstr "બૂટ ડિસ્ક બદલો"
 
 #. txt_insert_disk
 #, c-format
 msgid "Insert boot disk %u."
-msgstr ""
+msgstr "%u બૂટ ડિસ્ક દાખલ કરો."
 
 #. txt_insert_disk2
 #, c-format
@@ -143,6 +140,8 @@ msgid ""
 "This is boot disk %u.\n"
 "Insert boot disk %u."
 msgstr ""
+"આ %u બૂટ ડિસ્ક છે.\n"
+"%u બૂટ ડિસ્ક દાખલ કરો "
 
 #. <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
@@ -151,22 +150,22 @@ msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
+"આ < પ્રોડક્ટ > બૂટ ડિસ્ક નથી.\n"
+"%u બૂટ ડિસ્ક દાખલ કરો."
 
 #. password dialog title
 #. txt_password_title
-#, fuzzy
 msgid "Password"
 msgstr "પાસવર્ડ"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr ""
+msgstr "તમારી તૈયાર ડ્રાઇવર અદ્યતન ફ્લોપી મેળવો."
 
 #. dvd warning title
 #. txt_dvd_warning_title
-#, fuzzy
 msgid "DVD Error"
-msgstr "ભૂલ"
+msgstr "ડીવીડી ભૂલ"
 
 #. txt_dvd_warning2
 msgid ""
@@ -174,115 +173,106 @@ msgid ""
 "\n"
 "Turn the DVD over then continue."
 msgstr ""
+" આ બે-બાજુ ડીવીડી છે. તમારે બીજી બાજુથી બૂટ કરવું જોઇશે.\n"
+"\n"
+" ડીવીડી બીજી બાજુ ફેરવો પછી ચાલુ રાખો."
 
 #. power off dialog title
 #. txt_power_off_title
 msgid "Power Off"
-msgstr ""
+msgstr "પાવર બંધ"
 
 #. txt_power_off
 msgid "Halt the system now?"
-msgstr ""
+msgstr "અત્યારે સિસ્ટમ"
 
 #. menu entry for hard disk installation
 #. txt_harddisk
 msgid "Hard Disk"
-msgstr ""
+msgstr "હાર્ડ ડિસ્ક"
 
 #. dialog title for hard disk installation
 #. txt_harddisk_title
-#, fuzzy
 msgid "Hard Disk Installation"
-msgstr "સ્થાપના એબોર્ટ છોડો"
+msgstr "હાર્ડ ડિસ્કનું સ્થાપન"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr ""
+msgstr " ડિસ્ક ઉપકરણ (જો ખાલી હોય તો બધી ડિસ્કસ સ્કેન કરો)\n"
 
 #. txt_directory
-#, fuzzy
 msgid "Directory\n"
-msgstr "સ્થાનિક ડિરેક્ટરી"
+msgstr "ડિરેક્ટરી\n"
 
 #. dialog title for ftp installation
 #. txt_ftp_title
-#, fuzzy
 msgid "FTP Installation"
-msgstr "નવું  સ્થાપન "
+msgstr "FTP સ્થાપન"
 
 #. txt_server
-#, fuzzy
 msgid "Server\n"
-msgstr "DMS સર્વર"
+msgstr "સર્વર\n"
 
 #. txt_password
-#, fuzzy
 msgid "Password\n"
-msgstr "પાસવર્ડ"
+msgstr "પાસવર્ડ\n"
 
 #. label for ftp user input
 #. txt_user1
 msgid "User (Anonymous Login If Empty)\n"
-msgstr ""
+msgstr "વપરાશકર્તા (જો ખાલી હોય તો અનામી લોગીન કરો)\n"
 
 #. dialog title for nfs installation
 #. txt_nfs_title
-#, fuzzy
 msgid "NFS Installation"
-msgstr "નવું  સ્થાપન "
+msgstr " NFS સ્થાપન "
 
 #. label for smb user input
 #. txt_user2
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr ""
+msgstr " વપરાશકર્તા (જો ખાલી હોય તો \" મહેમાન \" તરીકે ઉપયોગ કરો)\n"
 
 #. dialog title for smb installation
 #. txt_smb_title
-#, fuzzy
 msgid "SMB (Windows Share) Installation"
-msgstr "મૂળભ્ત સ્થાપન સમાપ્ત થઇ રહ્યું છે"
+msgstr "SMB (વિન્ડોઝ શેર) સ્થાપન"
 
 #. dialog title for http installation
 #. txt_http_title
-#, fuzzy
 msgid "HTTP Installation"
-msgstr "નવું  સ્થાપન "
+msgstr " HTTP સ્થાપન "
 
 #. 'driver' as in '(hardware) driver update'
 #. txt_driver_update
 msgid "Driver"
-msgstr ""
+msgstr "ડ્રાઇવર"
 
 #. as in Windows Authentication Domain
 #. txt_domain
 msgid "Domain\n"
-msgstr ""
+msgstr "ડોમેઇન\n"
 
 #. button label for other/more options
 #. txt_other_options
-#, fuzzy
 msgid "Other Options"
-msgstr "વિકલ્પો"
+msgstr "અન્ય વિકલ્પો"
 
 #. label for language selection
 #. txt_language
 msgid "Language"
-msgstr ""
+msgstr "ભાષા"
 
 #. txt_apic
-#, fuzzy
 msgid "Installation--IOAPIC Enabled"
-msgstr "સ્થાપન પૂરું થયું"
+msgstr "સ્થાપન -- IOAPIC સક્ષમ"
 
 #. txt_noapic_install
-#, fuzzy
 msgid "Installation--IOAPIC Disabled"
-msgstr "સ્થાપન પૂરું થયું"
+msgstr "સ્થાપન -- IOAPIC અક્ષમ"
 
 #. txt_nolapic_install
-#, fuzzy
 msgid "Installation--Local APIC Disabled"
-msgstr "સ્થાપન પૂરું થયું"
+msgstr "સ્થાપન -- સ્થાનિક IOAPIC અક્ષમ"
 
 #. txt_yes
 msgid "Yes"
@@ -294,68 +284,67 @@ msgstr "ના"
 
 #. menu item for selecting a file
 #. txt_file
-#, fuzzy
 msgid "File"
-msgstr "ફાઈલનામ"
+msgstr "ફાઈલ"
 
 #. input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr ""
+msgstr "શેર \n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
-msgstr ""
+msgstr "સ્વયંચાલિત ઢબ"
 
 #. txt_zenManual
-#, fuzzy
 msgid "Manual Mode"
-msgstr "હસ્તચાલિત"
+msgstr "મેન્યુઅલ ઢબ"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr ""
+msgstr "ZEN પાર્ટિશન પર પારમિતિઓ કન્ફિગર કરો"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr ""
+msgstr "ZEN પાર્ટિશન સ્થાપો અથવા અદ્યતન કરો"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr ""
+msgstr "ZEN પાર્ટિશન બૂટ લોડર ફરીથી સ્થાપો"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr ""
+msgstr "ZEN પાર્ટિશન અક્ષમ કરો"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
-msgstr ""
+msgstr "ZEN પાર્ટિશન સક્ષમ કરો"
 
 #. video mode menu item
 #. txt_text_mode
-#, fuzzy
 msgid "Text Mode"
-msgstr "ઢબ"
+msgstr "ટેક્ષ્ટ ઢબ"
 
 #. menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr ""
+msgstr "ફર્મવેર પરિક્ષણ"
 
 #. txt_dud_file_msg
-#, wrap
 msgid ""
 "To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
+"સીડી-રોમ પરથી સીધું ડ્રાઇવર અદ્યતનો લોડ કરવા,\n"
+" અહીં ડ્રાઇવર અદ્યતનોના ફાઇલ નામો (કોમા દ્વારા \n"
+"જુદા પાડેલા ',') દાખલ કરો:\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
 #. txt_install_source
 msgid "Source"
-msgstr ""
+msgstr "સોર્સ"
 
 #. video mode/display size menu title
 #. ** please keep it really short (comparable to the english text) **
@@ -367,14 +356,14 @@ msgstr ""
 #. -> txt_dud_file_msg
 #. txt_driver_update2
 msgid "Driver Update"
-msgstr ""
+msgstr "ડ્રાયવર અપડેટ"
 
 #. menu label for selecting (cpu) architecture
 #. like i386, x86-64, ppc
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr ""
+msgstr " આર્ક "
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
@@ -385,7 +374,7 @@ msgstr ""
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
 msgid "Default"
-msgstr ""
+msgstr "પ્રાથમિક"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> like in txt_safe_linux
@@ -409,4 +398,3 @@ msgstr ""
 #. txt_repain_system
 msgid "Repair Installed System"
 msgstr ""
-

@@ -269,7 +269,7 @@ msgstr "Ukufaka Uhlelo--IOAPIC Icishiwe"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr "Ukufaka Uhlelo--I-ACPI Eseduze Icishiwe"
+msgstr "Ukufaka Uhlelo--I-APIC Eseduze Icishiwe"
 
 #. txt_yes
 msgid "Yes"
@@ -328,7 +328,6 @@ msgid "Firmware Test"
 msgstr "Uvivinyo Lwe-Firmware"
 
 #. txt_dud_file_msg
-#, wrap
 msgid ""
 "To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
@@ -342,7 +341,7 @@ msgstr ""
 #. ** please keep it really short (comparable to the english text) **
 #. txt_install_source
 msgid "Source"
-msgstr ""
+msgstr "Umthombo"
 
 #. video mode/display size menu title
 #. ** please keep it really short (comparable to the english text) **
@@ -361,7 +360,7 @@ msgstr ""
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr ""
+msgstr "I-Arch"
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
@@ -372,7 +371,7 @@ msgstr ""
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
 msgid "Default"
-msgstr ""
+msgstr "Okufike Nohlelo (default)"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> like in txt_safe_linux
@@ -396,4 +395,3 @@ msgstr ""
 #. txt_repain_system
 msgid "Repair Installed System"
 msgstr ""
-

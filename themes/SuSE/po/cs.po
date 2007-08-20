@@ -5,15 +5,15 @@
 # Klara Cihlarova <koty@seznam.cz>, 2004, 2005, 2006.
 msgid ""
 msgstr ""
-"Project-Id-Version: cs\n"
-"PO-Revision-Date: 2006-05-25 13:11+0200\n"
-"Last-Translator: Klara Cihlarova <koty@seznam.cz>\n"
-"Language-Team: cs_CZ <cs@li.org>\n"
+"Project-Id-Version: bootloader\n"
+"PO-Revision-Date: 2007-08-14 16:58+0200\n"
+"Last-Translator: Jakub Friedl\n"
+"Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.2\n"
-"Plural-Forms:  nplurals=3; plural=(n==1) ? 0 : (n>=2 & n<=4) ? 1 : 2;\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms:  nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #. ok button label
 #. txt_ok
@@ -345,58 +345,57 @@ msgstr ""
 #. ** please keep it really short (comparable to the english text) **
 #. txt_install_source
 msgid "Source"
-msgstr ""
+msgstr "Zdroj"
 
 #. video mode/display size menu title
 #. ** please keep it really short (comparable to the english text) **
 #. txt_video_mode
 msgid "Video Mode"
-msgstr ""
+msgstr "Video režim"
 
 #. driver update dialog title
 #. -> txt_dud_file_msg
 #. txt_driver_update2
 msgid "Driver Update"
-msgstr ""
+msgstr "Aktualizace ovladače"
 
 #. menu label for selecting (cpu) architecture
 #. like i386, x86-64, ppc
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr ""
+msgstr "Arch"
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
 #. txt_kernel
 msgid "Kernel"
-msgstr ""
+msgstr "Jádro"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
 msgid "Default"
-msgstr ""
+msgstr "Výchozí"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> like in txt_safe_linux
 #. txt_kernel_safe
 msgid "Safe Settings"
-msgstr ""
+msgstr "Bezpečné nastavení"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_noacpi_install
 #. txt_kernel_noacpi
 msgid "No ACPI"
-msgstr ""
+msgstr "Bez ACPI"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_nolapic_install
 #. txt_kernel_nolapic
 msgid "No Local APIC"
-msgstr ""
+msgstr "Bez local APIC"
 
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr ""
-
+msgstr "Opravit nainstalovaný systém"

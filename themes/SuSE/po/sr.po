@@ -279,11 +279,11 @@ msgstr ""
 
 #. txt_yes
 msgid "Yes"
-msgstr "Da"
+msgstr "&Da"
 
 #. txt_no
 msgid "No"
-msgstr "Ne"
+msgstr "&Ne"
 
 #. menu item for selecting a file
 #. txt_file
@@ -344,7 +344,7 @@ msgstr ""
 #. ** please keep it really short (comparable to the english text) **
 #. txt_install_source
 msgid "Source"
-msgstr ""
+msgstr "Izvor"
 
 #. video mode/display size menu title
 #. ** please keep it really short (comparable to the english text) **
@@ -398,4 +398,3 @@ msgstr ""
 #. txt_repain_system
 msgid "Repair Installed System"
 msgstr ""
-

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2006-11-03 13:52\n"
+"PO-Revision-Date: 2006-06-16 14:06\n"
 "Last-Translator: Novell Language <language@novell.com>\n"
 "Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +29,7 @@ msgstr "再起動"
 #. continue button label
 #. txt_continue
 msgid "Continue"
-msgstr "続行する"
+msgstr "続ける"
 
 #. txt_install
 msgid "Installation"
@@ -169,10 +169,7 @@ msgid ""
 "This is a two-sided DVD. You have booted from the second side.\n"
 "\n"
 "Turn the DVD over then continue."
-msgstr ""
-"これは両面DVDです。 第2面からブートしています。\n"
-"\n"
-"DVDをひっくり返してから続行してください。"
+msgstr "これは両面DVDです。 第2面からブートしています。\\nDVDをひっくり返してから続行してください。"
 
 #. power off dialog title
 #. txt_power_off_title
@@ -328,7 +325,6 @@ msgid "Firmware Test"
 msgstr "ファームウェアのテスト"
 
 #. txt_dud_file_msg
-#, wrap
 msgid ""
 "To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
@@ -341,7 +337,7 @@ msgstr ""
 #. ** please keep it really short (comparable to the english text) **
 #. txt_install_source
 msgid "Source"
-msgstr ""
+msgstr "ソース"
 
 #. video mode/display size menu title
 #. ** please keep it really short (comparable to the english text) **
@@ -353,14 +349,14 @@ msgstr ""
 #. -> txt_dud_file_msg
 #. txt_driver_update2
 msgid "Driver Update"
-msgstr ""
+msgstr "ドライバ更新"
 
 #. menu label for selecting (cpu) architecture
 #. like i386, x86-64, ppc
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr ""
+msgstr "アーチ"
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
@@ -371,7 +367,7 @@ msgstr ""
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
 msgid "Default"
-msgstr ""
+msgstr "デフォルト"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> like in txt_safe_linux
@@ -395,4 +391,3 @@ msgstr ""
 #. txt_repain_system
 msgid "Repair Installed System"
 msgstr ""
-

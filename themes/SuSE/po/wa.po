@@ -1,106 +1,96 @@
-# translation of bootloader.pa.po to Panjabi
-# translation of bootloader.po to Panjabi
 # LANGUAGE translations for boot loader
 # Copyright (C) 2005 SUSE Linux GmbH
-# Amanpreet Singh Alam[ਆਲਮ] <amanpreetalam@yahoo.com>, 2005.
-# Amanpreet Singh Alam[ਆਲਮ] <amanpreetalam@yahoo.com>, 2005.
-# Amanpreet Singh Alam[ਆਲਮ] <amanpreetalam@yahoo.com>, 2005.
-# Amanpreet Singh Alam[ਆਲਮ] <amanpreetalam@yahoo.com>, 2005.
-# Amanpreet Singh Alam[ਆਲਮ] <amanpreetalam@yahoo.com>, 2005.
-# Amanpreet Singh Alam[ਆਲਮ] <amanpreetalam@yahoo.com>, 2005.
-# Amanpreet Singh Alam[ਆਲਮ] <amanpreetalam@yahoo.com>, 2005.
-# Amanpreet Singh Alam[ਆਲਮ] <amanpreetalam@yahoo.com>, 2005.
-# Amanpreet Singh Alam[ਆਲਮ] <amanpreetalam@yahoo.com>, 2005.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bootloader.pa\n"
-"PO-Revision-Date: 2007-08-13 07:30+0530\n"
-"Last-Translator: A S Alam <aalam@users.sf.net>\n"
-"Language-Team: Panjabi <punjabi-l10n@lists.sf.net>\n"
+"Project-Id-Version: bootloader\n"
+"POT-Creation-Date: 2006-10-01 19:37+0200\n"
+"PO-Revision-Date: 2007-04-30 10:51+0200\n"
+"Last-Translator: jean <jean.cayron@gmail.com>\n"
+"Language-Team: walon\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. ok button label
 #. txt_ok
 msgid "OK"
-msgstr "ਠੀਕ ਹੈ"
+msgstr "'l est Bon"
 
 #. cancel button label
 #. txt_cancel
 msgid "Cancel"
-msgstr "ਰੱਦ ਕਰੋ"
+msgstr "Rinoncî"
 
 #. reboot button label
 #. txt_reboot
 msgid "Reboot"
-msgstr "ਮੁੜ-ਚਾਲੂ"
+msgstr "Renonder l' copiutrece"
 
 #. continue button label
 #. txt_continue
 msgid "Continue"
-msgstr "ਜਾਰੀ ਰੱਖੋ"
+msgstr "Continouwer"
 
 #. txt_install
 msgid "Installation"
-msgstr "ਇੰਸਟਾਲੇਸ਼ਨ"
+msgstr "Astalaedje"
 
 #. txt_manual_install
 msgid "Manual Installation"
-msgstr "ਦਸਤੀ ਇੰਸਟਾਲੇਸ਼ਨ"
+msgstr "Astalaedje al mwin"
 
 #. txt_noacpi_install
 msgid "Installation--ACPI Disabled"
-msgstr "ਇੰਸਟਾਲੇਸ਼ਨ--ACPI ਆਯੋਗ"
+msgstr "Astalaedje--ACPI dismetou"
 
 #. txt_safe_install
 msgid "Installation--Safe Settings"
-msgstr "ਇੰਸਟਾਲੇਸ਼ਨ--ਸੁਰੱਖਿਅਤ ਸੈਟਿੰਗ"
+msgstr "Astalaedje--Tchuzes di såvrité"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr "ਲਿਨਕਸ--ਸੁਰੱਖਿਅਤ ਸੈਟਿੰਗ"
+msgstr "Linux--Tchuzes di såvrité"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
-msgstr "ਹਾਰਡ ਡਿਸਕ ਤੋਂ ਬੂਟ"
+msgstr "Enonder a pårti del deure plake"
 
 #. txt_rescue
 msgid "Rescue System"
-msgstr "ਸੰਕਟਕਾਲੀਨ ਸਿਸਟਮ"
+msgstr "Sistinme di houplaedje"
 
 #. txt_memtest
 msgid "Memory Test"
-msgstr "ਮੈਮੋਰੀ ਟੈਸਟ"
+msgstr "Saye di memwere"
 
 #. txt_bootoptions
 msgid "Boot Options"
-msgstr "ਬੂਟ ਚੋਣਾਂ"
+msgstr "Tchuzes d' enondaedje"
 
 #. window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
 msgid "Exiting..."
-msgstr "ਬੰਦ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ..."
+msgstr "Dji cwite..."
 
 #. txt_exit_dialog
 msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"ਤੁਸੀਂ ਗਰਾਫਿਕਲ ਬੂਟ ਮੇਨੂ ਛੱਡ ਕੇ ਪਾਠ ਢੰਗ ਨਾਲ ਇੰਟਰਫੇਸ ਸ਼ੁਰੂ\n"
-"ਕਰ ਰਹੇ ਹੋ।"
+"Vos cwitez l' menu grafike d' enondaedje sistinme et\n"
+"enondez l' eterface e mode tecse."
 
 #. txt_help
 msgid "Help"
-msgstr "ਮੱਦਦ"
+msgstr "Aidance"
 
 #. window title for kernel loading (see txt_load_kernel)
 #. txt_load_kernel_title
 msgid "Starting..."
-msgstr "ਸ਼ੁਰੂ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ..."
+msgstr "Dj' enonde..."
 
 #. Keep the three newlines!
 #. txt_load_kernel
@@ -109,7 +99,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"ਲਿਨਕਸ ਕਰਨਲ ਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ\n"
+"Dji tchedje li Kernel Linux\n"
 "\n"
 "\n"
 
@@ -120,29 +110,29 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"memtest86 ਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ\n"
+"Dji tchedje memtest86\n"
 "\n"
 "\n"
 
 #. info box title
 #. txt_info_title
 msgid "Boot Loader"
-msgstr "ਬੂਟ ਲੋਡਰ"
+msgstr "Tcherdjeu d' enondaedje sistinme"
 
 #. error box title
 #. txt_error_title
 msgid "I/O Error"
-msgstr "I/O ਗਲਤੀ"
+msgstr "Aroke I/O"
 
 #. boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr "ਬੂਟ ਡਿਸਕ ਬਦਲੋ"
+msgstr "Candjî l' plake d' enondaedje"
 
 #. txt_insert_disk
 #, c-format
 msgid "Insert boot disk %u."
-msgstr "ਬੂਟ ਡਿਸਕ %u ਪਾਓ"
+msgstr "Intrez l' diskete d' enondaedje %u"
 
 #. txt_insert_disk2
 #, c-format
@@ -150,8 +140,8 @@ msgid ""
 "This is boot disk %u.\n"
 "Insert boot disk %u."
 msgstr ""
-"ਇਹ ਬੂਟ ਡਿਸਕ %u ਹੈ।\n"
-"ਬੂਟ ਡਿਸਕ %u ਪਾਓ।"
+"Çouci est l' diskete d' enondaedje %u.\n"
+"Intrez l' diskete d' enondaedje %u."
 
 #. <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
@@ -160,22 +150,22 @@ msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"ਇਹ <product> ਬੂਟ ਡਿਸਕ ਨਹੀਂ ਹੈ।\n"
-"ਬੂਟ ਡਿਸਕ %u ਪਾਓ ਜੀ।"
+"Çouci n' est nén ene diskete d' enondaedje <product>.\n"
+"Intrez l' diskete d' enondaedje %u."
 
 #. password dialog title
 #. txt_password_title
 msgid "Password"
-msgstr "ਗੁਪਤ-ਕੋਡ"
+msgstr "Sicret"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr "ਆਪਣੀ ਡਰਾਇਵਰ ਅੱਪਡੇਟ ਫਲਾਪੀ ਤਿਆਰ ਰੱਖੋ।"
+msgstr "Preparez vosse diskete di metaedje a djoû di moenneu."
 
 #. dvd warning title
 #. txt_dvd_warning_title
 msgid "DVD Error"
-msgstr "DVD ਗਲਤੀ"
+msgstr "Aroke DVD"
 
 #. txt_dvd_warning2
 msgid ""
@@ -183,162 +173,162 @@ msgid ""
 "\n"
 "Turn the DVD over then continue."
 msgstr ""
-"ਇਹ ਦੋਹਰੀ ਪਰਤ DVD ਹੈ। ਤੁਹਾਨੂੰ ਦੂਜੇ ਪਾਸੇ ਤੋਂ ਬੂਟ ਕਰਨਾ ਚਾਹੀਦਾ ਹੈ।\n"
+"Çouci est on DVD a deus costés. Vos avoz enondé a pårti do deujhinme costé.\n"
 "\n"
-"ਜਾਰੀ ਰੱਖਣ ਲਈ DVD ਨੂੰ ਪਲਟੋ।"
+"Ritournez l' DVD et adon continouwez."
 
 #. power off dialog title
 #. txt_power_off_title
 msgid "Power Off"
-msgstr "ਬੰਦ ਕਰੋ"
+msgstr "Distinde"
 
 #. txt_power_off
 msgid "Halt the system now?"
-msgstr "ਕੀ ਹੁਣੇ ਸਿਸਟਮ ਬੰਦ ਕਰਨਾ ਹੈ?"
+msgstr "Arester l' sistinme asteure?"
 
 #. menu entry for hard disk installation
 #. txt_harddisk
 msgid "Hard Disk"
-msgstr "ਹਾਰਡ ਡਿਸਕ"
+msgstr "Deure plake"
 
 #. dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "ਹਾਰਡ ਡਿਸਕ ਇੰਸਟਾਲੇਸ਼ਨ"
+msgstr "Astalaedje del deure plake"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "ਡਿਸਕ ਜੰਤਰ (ਜੇਕਰ ਖਾਲੀ ਹੈ ਤਾਂ ਸਭ ਡਿਸਕਾਂ ਦੀ ਜਾਂਚ)\n"
+msgstr "Éndjin plake (scane totes les plakes si vude)\n"
 
 #. txt_directory
 msgid "Directory\n"
-msgstr "ਡਾਇਰੈਕਟਰੀ\n"
+msgstr "Ridant\n"
 
 #. dialog title for ftp installation
 #. txt_ftp_title
 msgid "FTP Installation"
-msgstr "FTP ਇੰਸਟਾਲੇਸ਼ਨ"
+msgstr "Astalaedje FTP"
 
 #. txt_server
 msgid "Server\n"
-msgstr "ਸਰਵਰ\n"
+msgstr "Sierveu\n"
 
 #. txt_password
 msgid "Password\n"
-msgstr "ਗੁਪਤ-ਕੋਡ\n"
+msgstr "Sicret\n"
 
 #. label for ftp user input
 #. txt_user1
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "ਯੂਜ਼ਰ (ਅਗਿਆਤ ਲਾਗਇਨ, ਜੇਕਰ ਖਾਲੀ ਹੈ ਤਾਂ)\n"
+msgstr "Uzeu (login racamuchyî si vude)\n"
 
 #. dialog title for nfs installation
 #. txt_nfs_title
 msgid "NFS Installation"
-msgstr "NFS ਇੰਸਟਾਲੇਸ਼ਨ"
+msgstr "Astalaedje NFS"
 
 #. label for smb user input
 #. txt_user2
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "ਯੂਜ਼ਰ (ਜੇਕਰ ਖਾਲੀ ਹੋਇਆ ਤਾਂ \"guest\" ਵਰਤੇਗਾ)\n"
+msgstr "Uzeu (eploye \"guest\" si vude)\n"
 
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "SMB (Windows ਸਾਂਝ) ਇੰਸਟਾਲੇਸ਼ਨ"
+msgstr "Astalaedje SMB (pårtaedje avou Windows)"
 
 #. dialog title for http installation
 #. txt_http_title
 msgid "HTTP Installation"
-msgstr "HTTP ਇੰਸਟਾਲੇਸ਼ਨ"
+msgstr "Astalaedje HTTP"
 
 #. 'driver' as in '(hardware) driver update'
 #. txt_driver_update
 msgid "Driver"
-msgstr "ਡਰਾਇਵਰ"
+msgstr "Moenneu"
 
 #. as in Windows Authentication Domain
 #. txt_domain
 msgid "Domain\n"
-msgstr "ਡੋਮੇਨ\n"
+msgstr "Dominne\n"
 
 #. button label for other/more options
 #. txt_other_options
 msgid "Other Options"
-msgstr "ਹੋਰ ਚੋਣਾਂ"
+msgstr "Ôtès tchuzes"
 
 #. label for language selection
 #. txt_language
 msgid "Language"
-msgstr "ਭਾਸ਼ਾ"
+msgstr "Lingaedje"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr "ਇੰਸਟਾਲੇਸ਼ਨ--IOAPIC ਯੋਗ ਹੈ"
+msgstr "Astalaedje--IOAPIC en alaedje"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
-msgstr "ਇੰਸਟਾਲੇਸ਼ਨ--IOAPIC ਆਯੋਗ ਹੈ"
+msgstr "Astalaedje--IOACPI dismetou"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr "ਇੰਸਟਾਲੇਸ਼ਨ-ਲੋਕਲ APIC ਆਯੋਗ ਹੈ"
+msgstr "Astalaedje--Locå APIC en alaedje"
 
 #. txt_yes
 msgid "Yes"
-msgstr "ਹਾਂ"
+msgstr "Oyi"
 
 #. txt_no
 msgid "No"
-msgstr "ਨਹੀਂ"
+msgstr "Nonna"
 
 #. menu item for selecting a file
 #. txt_file
 msgid "File"
-msgstr "ਫਾਇਲ"
+msgstr "Fitchî"
 
 #. input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr "ਸਾਂਝ\n"
+msgstr "Pårtaedje\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
-msgstr "ਆਟੋਮੈਟਿਕ ਮੋਡ"
+msgstr "Mode otomatike"
 
 #. txt_zenManual
 msgid "Manual Mode"
-msgstr "ਦਸਤੀ ਮੋਡ"
+msgstr "Mode al mwin"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr "ZEN ਪਾਰਟੀਸ਼ਨ ਉੱਤੇ ਪੈਰਾਮੀਟਰ ਸੰਰਚਨਾ"
+msgstr "Apontyî les parametes sol pårticion ZEN"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr "ZEN ਪਾਰਟੀਸ਼ਨ ਇੰਸਟਾਲ ਜਾਂ ਅੱਪਡੇਟ"
+msgstr "Astaler ou mete a djoû les pårticion ZEN"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "ZEN ਪਾਰਟੀਸ਼ਨ ਬੂਟ ਲੋਡਰ ਮੁੜ-ਇੰਸਟਾਲ"
+msgstr "Rastaler l' tcherdjeu d' enondaedje del pårticion ZEN"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr "ZEN ਪਾਰਟੀਸ਼ਨ ਆਯੋਗ"
+msgstr "Dismete li pårticion ZEN"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
-msgstr "ZEN ਪਾਰਟੀਸ਼ਨ ਯੋਗ"
+msgstr "Mete en alaedje le pårticion ZEN"
 
 #. video mode menu item
 #. txt_text_mode
 msgid "Text Mode"
-msgstr "ਟੈਕਸਟ ਮੋਡ"
+msgstr "Mode tecse"
 
 #. menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr "ਫਾਇਰਮਵੇਅਰ ਟੈਸਟ"
+msgstr "Saye firmware"
 
 #. txt_dud_file_msg
 msgid ""
@@ -346,65 +336,65 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
-"CD-ROM ਤੋਂ ਡਰਾਇਵਰ ਅੱਪਡੇਟ ਸਿੱਧਾ ਲੋਡ ਕਰਨ ਲਈ,\n"
-"ਅੱਪਡੇਟ ਡਰਾਇਵਰ ਫਾਇਲ ਨਾਂ ਇੱਥੇ ਦਿਓ (',' ਨਾਲ ਵੱਖ\n"
-"ਕਰਕੇ):\n"
+"Po tcherdjî les metaedjes a djoû d' moenneu direk do\n"
+"CD-ROM, intrez les nos d' fitchî di metaedje a djoû\n"
+"(metous a pårt pa des comas ',') vaici:\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
 #. txt_install_source
 msgid "Source"
-msgstr "ਸਰੋਤ"
+msgstr "Sourdant"
 
 #. video mode/display size menu title
 #. ** please keep it really short (comparable to the english text) **
 #. txt_video_mode
 msgid "Video Mode"
-msgstr "ਵੀਡਿਓ ਮੋਡ"
+msgstr ""
 
 #. driver update dialog title
 #. -> txt_dud_file_msg
 #. txt_driver_update2
 msgid "Driver Update"
-msgstr "ਡਰਾਇਵਰ ਅੱਪਡੇਟ"
+msgstr ""
 
 #. menu label for selecting (cpu) architecture
 #. like i386, x86-64, ppc
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr "ਢਾਂਚਾ"
+msgstr ""
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
 #. txt_kernel
 msgid "Kernel"
-msgstr "ਕਰਨਲ"
+msgstr ""
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
 msgid "Default"
-msgstr "ਮੂਲ"
+msgstr "Tchoezi por vos"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> like in txt_safe_linux
 #. txt_kernel_safe
 msgid "Safe Settings"
-msgstr "ਸੁਰੱਖਿਅਤ ਸੈਟਿੰਗ"
+msgstr ""
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_noacpi_install
 #. txt_kernel_noacpi
 msgid "No ACPI"
-msgstr "ACPI ਨਹੀਂ"
+msgstr ""
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_nolapic_install
 #. txt_kernel_nolapic
 msgid "No Local APIC"
-msgstr "ਲੋਕਲ APIC ਨਹੀਂ"
+msgstr ""
 
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr "ਇੰਸਟਾਲ ਹੋਇਆ ਸਿਸਟਮ ਰਿਪੇਅਰ"
+msgstr ""
