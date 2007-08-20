@@ -20,7 +20,7 @@ PIC_COMMON   = timer_a.jpg pback.jpg phead.jpg panim{,_a}.jpg pabout.txt gfxboot
 PIC_INSTALL  = back.jpg welcome.jpg text*.pcx
 PIC_BOOT     = back-boot.jpg
 
-FILES_INST   = init languages $(TRANSLATIONS) 16x16.fnt kroete.dat \
+FILES_INST   = init languages $(TRANSLATIONS) 16x16.fnt 32x32.fnt kroete.dat \
 	       $(PIC_COMMON) $(PIC_INSTALL) $(HELPINST_ALL)
 
 FILES_BOOT   = init languages $(TRANSLATIONS) 16x16.fnt \

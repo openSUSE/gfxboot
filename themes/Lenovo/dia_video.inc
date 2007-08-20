@@ -19,7 +19,6 @@
      1    0	% special: for VESA mode
    800  600
   1024  768
-  1280 1024
 ] def
 
 

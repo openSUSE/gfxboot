@@ -205,17 +205,24 @@
     -1 3 return
   } if
 
-  window.action actStart eq {
+  window.action actStart eq
+  window.action actReallyStart eq or {
+    /really_start window.action actReallyStart eq def
     /window.action actNothing def
     /load_error false def
 
-    syslinux {
+    syslinux really_start not and {
       menu.texts menu.entry 0 max menu.texts length 1 sub min get
       dup "mem.min[%s]" mem.min sprintf
       "mem.msg[%s]" mem.msg sprintf
 
       enough_mem not {
         nomem_popup
+        "" -1 0 return
+      } if
+
+      menu.entry 0 eq {
+        restore_system
         "" -1 0 return
       } if
     } if
@@ -846,14 +853,14 @@
   dup "firmware" eq { pop txt_firmware return } if
   syslinux {
     livecd {
-      dup "linux"     eq { pop "openSUSE 10.3 LiveCD (english)" return } if
+      dup "linux"     eq { pop "Restore System" return } if
       dup "failsafe"  eq { pop "LiveCD - Safe Settings" return } if
       dup "linux2"    eq { pop "openSUSE 10.3 LiveCD (deutsch)" return } if
       dup "failsaf2"  eq { pop "LiveCD - Sichere Einstellungen" return } if
       dup "kde"       eq { pop "LiveCD - KDE" return } if
       dup "gnome"     eq { pop "LiveCD - GNOME" return } if
     } {
-      dup "linux"     eq { pop txt_install        return } if
+      dup "linux"     eq { pop "Restore System"   return } if
       dup "failsafe"  eq { pop txt_safe_install   return } if
     } ifelse
     dup "live"      eq { pop "openSUSE 10.3 LiveCD" return } if
@@ -863,11 +870,11 @@
     dup "apic"      eq { pop txt_apic return } if
     dup "manual"    eq { pop txt_manual_install return } if
     dup "repair"    eq { pop txt_repain_system return } if
-    dup "rescue"    eq { pop txt_rescue         return } if
+    dup "rescue"    eq { pop "Recovery Console" return } if
     dup "hwcheck"   eq { pop "Hardware Check"   return } if
     dup "harddisk"  eq { pop txt_boot_harddisk  return } if
   } {
-    dup "linux"     eq { pop "Linux"        return } if
+    dup "linux"     eq { pop "Restore System"  return } if
     dup "failsafe"  eq { pop txt_safe_linux return } if
     dup "windows"   eq { pop "Windows"      return } if
   } ifelse
@@ -1012,8 +1019,8 @@
   font.large setfont
 
   /menu.text.xofs      10 def
-  /menu.text.yofs       2 def
-  /menu.item.height    fontheight dup ptheme { 3 } { 2 } ifelse div add def
+  /menu.text.yofs       4 def
+  /menu.item.height    fontheight dup ptheme { 3 } { 1 } ifelse div add def
   /menu.bar.height     fontheight menu.text.yofs dup add add def
 
   font.normal setfont
@@ -1360,6 +1367,35 @@
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Lenovo popup.
+%
+% ( ) ==> ( )
+%
+/restore_system {
+  window.dialog
+
+  dup .title "Think again..." put
+  dup .text
+
+"This will destroy ALL data on your computer.
+There is no way back.
+Please save everything you might need before you continue!
+
+Are you really absolutely sure?"
+
+put
+  dup .buttons [
+    button.ok     button.notdefault    actReallyStart  button.setaction
+    button.cancel button.default       actNothing      button.setaction
+    config.rtl { exch } if
+  ] put
+  dup window.init
+      window.show
+
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1398,8 +1434,8 @@ testX { /ptheme false def } if
 
 % "ddc" findfile test1
 
-800 600 16 findmode setmode not {
-  800 600 32 findmode setmode not {
+800 600 32 findmode setmode not {
+  800 600 16 findmode setmode not {
     640 480 16 findmode setmode not {
       640 480 32 findmode setmode not {
         false .end
@@ -1439,7 +1475,7 @@ dup .undef eq { pop "back-low.jpg" findfile } if
 %% include theme_colors.inc
 
 /font.normal "16x16.fnt" findfile def
-/font.large font.normal def
+/font.large "32x32.fnt" findfile def
 
 /kroete.dir 0 def
 
