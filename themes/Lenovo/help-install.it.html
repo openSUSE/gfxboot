@@ -1,0 +1,402 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<body>
+
+<!-- help=install -->
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="main">Boot Loader Help</a></h3>
+Benvenuti a  <em>&product;</em><br><br>
+
+Tramite questo menu potete selezionare la funzione desiderata. Se doveste
+incontrare delle difficoltà navigando attraverso questo sistema di aiuto,
+premete <em>F1</em> per avere la <a href="#help">descrizione</a> del
+sistema di aiuto. Le funzioni principali del menu sono:<br><br>
+
+<a href="#harddisk">Boot dal disco rigido</a>: Questa selezione non
+va ad incidere sul vostro sistema, avvia solamente un sistema operativo
+installato in precedenza.<br><br>
+
+<a href="#linux">Installazione</a>:
+Questa modalità di installazione funziona sulla maggior parte delle
+macchine. Se il sistema si blocca durante il processo di boot o si verificano
+delle difficoltà in relazione al rilevamento delle vostre componenti hardware,
+come ad esempio controller di dischi o schede di rete, provate con una
+delle seguenti opzioni di installazione. <br><br>
+
+<a href="#noacpi">Installazione -- ACPI disabilitato</a>: Molti dei computer
+attualmente in commercio hanno delle implementazioni ACPI incomplete o
+errate. Questa selezione disabilita il supporto ACPI nel kernel, ma rimangono
+comunque abilitate tante caratteristiche interessanti da un punto di vista della
+performance, come ad esempio DMA per dischi rigidi
+IDE.  <br><br>
+
+<a href="#failsafe">Installazione -- Safe Settings</a>: Se la voce
+<em>Installazione</em> non ha portato al risultato sperato, questa voce
+potrebbe risolvere il problema.<br><br>
+
+<a href="#rescue">Sistema di salvataggio</a>: Questa immagine di boot
+avvia un piccolo sistema Linux nella RAM. Ciò è utile se il sistema non
+si avvia correttamente. Dopo il boot del sistema, eseguite il log in come root.
+ <br><br>
+
+<a href="#memtest">Verifica della memoria</a>: Questa verifica è
+utile non solo per controllare l'installazione di nuovi moduli di memoria.
+Si tratta di una dura prova per la maggior parte del vostro sistema e potrebbe
+rilevare dei problemi dovuti all'hardware. <br><br>
+
+<a href="#opt">Opzioni di boot</a>: Le opzioni di boot possono cambiare
+completamente il comportamento del vostro sistema. Si tratta di settaggi
+per il kernel.<br><br>
+
+<a href="#help">F1 Aiuto</a>: Si tratta di un tasto che risponde in base
+al contesto in cui viene utilizzato. Mostrerà differenti schermate in base
+all'elemento attivo della schermata di avvio. Vi è inoltre una descrizione
+del sistema di aiuto.<br><br>
+
+<a href="#videomode">F2 Modo video</a>: Qui potete scegliere tra differenti
+risoluzioni dello schermo durante il processo di installazione. Se incontrate
+delle difficoltà con l'installazione grafica, il <em>modo testo</em> potrebbe
+essere un modo per aggirare le difficoltà.<br><br>
+
+<a href="#install_src">F3 Origine di installazione</a>: Selezionate l'origine di
+installazione.<br><br>
+
+<a href="#keytable">F4 Lingua</a>: Impostate la lingua e la mappatura della
+tastiera utilizzate dal boot loader.<br><br>
+
+
+
+<a href="#driverupdate">F5 Aggiornamento driver</a>: Per pochissime macchine
+recenti potrebbe essere necessario un aggiornamento dei driver per poter installare
+il sistema.<br><br>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="help">Utilizzare il sistema di aiuto</a></h3>
+
+L'aiuto in linea del boot loader dipende dal contesto; fornisce delle
+informazioni sulla voce di menu selezionata, se state modificando delle
+opzioni di boot, cercherà di reperire dell'informazioni relative all' opzione
+su cui è posizionato il cursore.<br>
+<br>
+Tasti di navigazione<br><br>
+
+  <em>Freccia su</em>: evidenzia link precedente<br>
+  <em>Freccia giù</em>: evidenzia prossimo link<br>
+  <em>Freccia sinistra</em>, <em>Backspace</em>: ritorna al topic precedente<br>
+  <em>Freccia destra</em>, <em>Invio</em>, <em>Spazio</em>: segui il link<br>
+  <em>Pag Su</em>: scorri su di una pagina<br>
+  <em>Pag Giù</em>: scrorri giù di una pagina<br>
+  <em>Home</em>: vai alla pagina iniziale<br>
+  <em>Fine</em>: vai alla fine della pagina<br>
+  <em>Esc</em>: esci<br>
+
+<br><br>Ritorna alla <a href="#main">Pagina iniziale</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="driverupdate">Aggiornamento driver</a></h3>
+
+Se vi serve un dischetto o CD-Rom con aggiornamenti di driver,
+premete <em>F5</em>. Il boot loader vi chiederà di inserire il
+dispositivo dopo aver caricato il kernel di Linux.<br><br>
+
+Di solito si tratta di un dischetto con le nuove versioni dei
+driver di hardware o bug fix richiesto durante l'installazione.
+
+<br><br>Ritorna alla <a href="#main">Pagina iniziale</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="videomode">Selezione modo video</a></h3>
+
+Premendo <em>F2</em> ottenete un elenco dei modi video supportati
+dalla vostra scheda grafica. E' preselezionato il modo più elevato
+supportato dal vostro schermo.<br><br>
+
+A volte succede che il monitor non venga rilevato automaticamente.
+In questi casi, selezionate il vostro modo preferito manualmente.
+<br><br>
+
+Se il vostro sistema incontra delle difficoltà con la scheda grafica
+durante il processo di installazione, il <em>modo testo</em>
+potrebbe essere un modo utile per aggirare il problema.
+
+<br><br>Ritorna alla <a href="#main">Pagina iniziale</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="keytable">Selezione lingua e mappatura della tastiera</a></h3>
+
+Premete <em>F4</em> per cambiare la lingua e mappatura della
+tastiera utilizzate dal boot loader.
+
+<br><br>Ritorna alla <a href="#main">Pagina iniziale</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="install_src">Origine di installazione</a></h3>
+
+Premete <em>F3</em> per selezionare un origine di installazione.<br><br>
+
+Corrisponde alla opzione di boot <a href="#o_install">install</a>.
+
+<br><br>Ritorna alla <a href="#main">Pagina iniziale</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="linux">Installazione</a></h3>
+
+Selezionate <em>Installazione</em> per avviare l'installazione di
+default. Le <a href="#opt">opzioni di boot</a> immesse vengono
+utilizzate in fase di avvio. Questa voce abilita una serie di feature
+di hardware largamente diffuso. <br><br>
+
+<br><br>Ritorna alla <a href="#main">Pagina iniziale</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="harddisk">Boot dal disco rigido</a></h3>
+
+Selezionate <em>Boot SO installato</em> per avviare il sistema
+installato sul vostro disco rigido locale. Il sistema deve essere installato
+correttamente, perché viene lanciato solo l'MBR (Master Boot Record)
+sul primo disco rigido. L'ID di dispositivo del primo disco rigido
+viene fornito dal BIOS del computer. <br><br>
+
+Utilizzate questa opzione se avete dimenticato di estrarre il
+CD o DVD dal lettore e volete avviare il computer dal disco
+rigido.<br><br>
+
+<br><br>Ritorna alla <a href="#main">Pagina iniziale</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="noacpi">Installazione -- ACPI disabilitata</a></h3>
+
+Hardware molto recente richiede
+a volte l'ACPI per amministrare gli interrupt. L'ACPI prende il posto
+del più datato sistema APM. <br><br>
+
+Selezionate <em>Installazione -- ACPI disabilitata</em> se doveste
+incontrare delle difficoltà durante il processo di boot del kernel.
+Le difficoltà risapute con macchine che non si sposano bene con
+ACPI sono:
+<br><br>
+
+   * blocco del kernel in fase di boot<br>
+   * le schede PCI non vengono rilevate o non vengono inzializzate
+     correttamente<br><br>
+
+
+<br><br>Ritorna alla <a href="#main">Pagina iniziale</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="failsafe">Installation -- Safe Settings</a></h3>
+
+Selezionate <em>Installazione -- Safe Settings</em> nei casi in
+cui il sistema si blocchi durante il processo di installazione o
+si verificano degli errori per certi versi inspiegabili. Questa opzione
+disabilita il DMA per drive IDE e tutte le feature in tema di risparmio
+energetico. Si vedano anche le opzioni del kernel per
+<a href="#o_apm">apm</a>, <a href="#o_acpi">acpi</a> e
+<a href="#o_ide">ide</a>.
+
+<br><br>Ritorna alla <a href="#main">Pagina iniziale</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="rescue">Sistema di salvataggio</a></h3>
+
+Il <em>Sistema di salvataggio</em> è un piccolo sistema di base
+nella RAM disk. Da lì è possibile apportare tutta una serie di modifiche
+al sistema installato. Dato che in questo sistema sono a disposizione
+solamente tool low-level, questa opzione è indicata solo per utenti
+esperti.<br><br>
+
+<br><br>Ritorna alla <a href="#main">Pagina iniziale</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="memtest">Verifica della memoria</a></h3>
+
+La <em>Verifica della memoria</em> dà l'opportunità di
+mettere a dura prova l'hardware del sistema.  Scopo principale della verifica
+è quello di rilevare disfunzioni della RAM, ma sottopone a dura prova
+anche altre componenti del sistema. <br>
+
+Se non vengono rilevati degli errori nella memoria
+questo non è una garanzia per il fatto che tutto sia a posto, comunque
+verranno rilevati la maggior parte degli errori.<br>
+
+<br><br>Ritorna alla <a href="#main">Pagina iniziale</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="opt">Opzioni di boot</a></h3>
+
+Sono disponibili due tipi di opzioni. Le prime interessano
+l'installer. Le seconde sono opzioni che interessano il kernel.
+Tra le opzioni più comuni vi sono: <br><br>
+a) opzioni per l'installer<br>
+<br>
+  <a href="#o_install">install</a> -- seleziona una origine di installazione<br>
+  <a href="#network">network options</a> -- le opzioni di rete<br>
+  <a href="#o_vnc">vnc options</a> -- opzioni per l'installazione via VNC
+<br><br>
+b) opzioni per il kernel<br>
+<br>
+  <a href="#o_splash">splash</a> -- influisce sul comportamento dello splash screen<br>
+  <a href="#o_apm">apm</a> -- interessa le funzioni di risparmio energetico del sistema<br>
+  <a href="#o_acpi">acpi</a> -- advanced configuration and power interface<br>
+  <a href="#o_ide">ide</a> -- controlla il sottosistema IDE<br>
+
+<br><br>Ritorna alla <a href="#main">Pagina iniziale</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_install">Opzioni dell'installer: install</a></h3>
+
+Di default, si cercano i CD-Rom locali quale origine di installazione.
+Se eseguite l'installazione via rete, selezionate l'opzione
+<em>install</em>. Protocolli di installazione possibili sono<br>
+  * FTP<br>
+  * NFS<br>
+  * HTTP<br>
+La sintassi da utilizzare corrisponde a quella delle URL standard.
+Ad esempio, se il vostro server ha l'indirizzo 192.168.0.1 e volete
+installare tramite NFS dalla directory /install che risiede su questo
+server, specificate l'origine di installazione nel modo seguente:<br><br>
+
+  <em>install=nfs://192.168.0.1/install</em><br><br>
+
+La scheda di rete viene configurata tramite <em>dhcp</em> oppure
+potete specificate i parametri voi stessi come descritto nelle
+<a href="#network">opzioni di rete</a>.<br>
+
+<br><br>Ritorna alle <a href="#opt">Opzioni di boot</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_splash">Opzioni per il kernel: splash</a></h3>
+
+
+Lo splash screen è la grafica visualizzata durante l'avvio del sistema.<br>
+<br>
+<em>splash=0</em><br><br> Lo splash screen è disattivato, opzione
+utile con monitor davvero datati o se si verificano delle difficoltà.<br>
+<br>
+<em>splash=verbose</em><br><br> Attiva lo splash screen, e mostra
+messaggi del kernel e di boot.<br>
+<br>
+<em>splash=silent</em><br><br>
+Attiva lo splash screen, senza visualizzare dei messaggi. Viene mostrata
+invece una barra di avanzamento.<br>
+<br>
+Ritorna alle <a href="#opt">Opzioni di boot</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="network">Opzioni per l'installer: opzioni di rete</a></h3>
+
+Potete configurare l'interfaccia di rete adesso. L'hardware verrà rilevato
+in un secondo momento da YaST2. Per configurare la scheda di rete
+dovrete almeno impostare l'indirizzo IP dell'host e la maschera di rete.
+Per esempio:<br><br>
+
+  <em>hostip=192.168.0.10  netmask=255.255.255.0</em><br>
+<br>
+o in forma più breve:<br><br>
+
+  <em>hostip=192.168.0.10/24</em><br>
+<br>
+
+Se avete specificato <a href="#o_install">installazione via rete</a>
+senza specificare questi due valori, l'installer tenderà di configurare
+l'interfaccia di rete tramite <em>dhcp</em>. Se vi serve un gateway
+di default, specificatelo tramite l'opzione <em>gateway</em>. Ad
+esempio:<br><br>
+
+  <em>gateway=192.168.0.8</em><br>
+
+<br><br>Ritorna alle <a href="#opt">Opzioni di boot</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_vnc">Opzioni per l'installer: vnc</a></h3>
+
+Per abilitare una installazione VNC, specificate i parametri
+ vnc e la vncpassword:<br><br>
+
+  <em>vnc=1 vncpassword=esempio</em><br><br>
+
+Il server VNC si avvierà e potrete gestire YaST2 tramite un client
+VNC qualsiasi da remoto.<br>
+
+<br><br>Ritorna alle <a href="#opt">Opzioni di boot</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_apm">Opzioni per il kernel: apm</a></h3>
+
+APM è una delle due strategie da poter applicare in tema
+di risparmio energetico su computer comunemente diffusi.
+Si usa soprattutto con portatili per funzioni del tipo suspend
+to disk, ma può essere anche preposto allo spegnimento del
+computer dopo lo shutdown. APM si basa sul corretto funzionamento
+del BIOS. Se il BIOS non funziona a dovere, l'utilità dell'APM
+si riduce notevolmente o può addirittura compromettere il
+funzionamento del computer.  Per tale ragione avete la possibilità di
+disabilitarlo tramite questo parametro:<br><br>
+
+  <em>apm=off</em>  -- disattiva completamente APM<br><br>
+
+Su alcuni computer recentissimi si potrà trarre beneficio da
+<a href="#o_acpi">ACPI</a> più recenti.
+
+
+<br><br>Ritorna alle <a href="#opt">Opzioni di boot</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_acpi">Opzioni per il kernel: acpi</a></h3>
+
+ACPI (Advanced Configuration and Power Interface) è uno
+standard di interfaccia posta tra sistema operativo e BIOS.
+Di default, <em>acpi</em> è attivata se è stato rilevato un BIOS
+del dopo 2000. Vi sono una serie d parametri per intervenire
+sul comportamento dell' ACPI:<br>
+<br>
+  <em>pci=noacpi</em> -- non utilizzare ACPI per gestire gli interrupt PCI<br>
+  <em>acpi=oldboot</em> -- solo le parti dell'ACPI che sono rilevanti per il processo di boot rimangono attivate<br>
+  <em>acpi=off</em> -- spegni completamente l'ACPI<br>
+  <em>acpi=force</em> -- attiva ACPI anche se il BIOS è di un anno precedente al 2000<br>
+<br>
+Soprattutto su computer recenti, ACPI si sostituisce al vecchio
+sistema <a href="#o_apm">apm</a>.
+
+
+<br><br>Ritorna alle <a href="#opt">Opzioni di boot</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_ide">Opzioni per il kernel: ide</a></h3>
+
+IDE - a differenza di SCSI- viene utilizzato di solito su postazioni di
+lavoro desktop. Per aggirare degli eventuali problemi dovuti all'
+hardware che si possono verificare con sistemi IDE, utilizzate il
+parametro del kernel: <br><br>
+
+  <em>ide=nodma</em>  -- spengi DMA per drive IDE<br>
+
+<br><br>Ritorna alle <a href="#opt">Opzioni di boot</a>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="bits">Selezione tipo di software</a></h3>
+
+È possibile installare la versione di openSUSE a 32 o 64 bit.
+
+<br><br>Ritorna alle <a href="#main">Pagina iniziale</a>
+
+
+</body></html>
+
+

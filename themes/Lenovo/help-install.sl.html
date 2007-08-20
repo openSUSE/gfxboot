@@ -1,0 +1,363 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<body>
+
+<!-- help=install -->
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="main">Pomoča zagonskega nalagalnika</a></h3>
+Dobrodošli v <em>&product;</em><br><br>
+
+Naslednje možnosti uporabite za izbiro željene funkcije. Za pomoč
+pri uporabi sistema pomoči, pritisnite tipko <em>F1</em> in
+prikazal se bo <a href="#help">opis</a> sistema pomoči. glavne funkcije so:<br><br>
+
+<a href="#harddisk">Zagon s trdega diska</a>: izbira te možnosti na sistemu
+ne naredi nič, saj omogoča zagon že nameščenega sistema na trdem
+disku.<br><br>
+
+<a href="#linux">Namestitev</a>:
+ta način namestitve deluje na večini računalnikov. Če imate v tem načinu
+namestitve težave (računalnik zmrzne ali se pojavijo napake pri
+zaznavanju strojne opreme, npr. omrežne kartice), poizkusite z izbiro
+enega od naslednjih načinov namestitve.<br><br>
+
+<a href="#noacpi">Namestitev - ACPI izključen</a>: veliko računalnikov,
+ki so sedaj v prodaji, ima nepopolno ali napačno izveden ACPI sistem.
+Ta način namestitve v jedru onemogoči podporo ACPI sistemu, vendar
+še vedno omogoča druge možnosti, kot so DMA za IDE trde diske.<br><br>
+
+<a href="#failsafe">Namestitev - varne nastavitve</a>: če način namestitve
+<em>Namestitev</em> ni bila uspešna, je ta način mogoče rešitev težav.<br><br>
+
+<a href="#rescue">Sistem za reševanje</a>: zagonska slika zažene majhen
+Linux sistem, ki se naseli v pomnilniku. Sistem za reševanje je uporaben za
+reševanje zagonskih težav. Po zagonu sistema, se v sistem prijavite kot
+uporabnik root.<br><br>
+
+<a href="#memtest">Testiranje pomnilnika</a>: testiranje pomnilnika
+ni namenjeno le preverjanju namestitve novih pomnilniških modulov, ampak
+je obsežen test za večino delov vašega sistema in lahko pokaže nekatere
+težave strojne opreme.<br><br>
+
+<a href="#opt">Možnosti pri zagonu</a>: možnosti pri zagonu lahko v
+celoti spremenijo obnašanje vašega sistema pri zagonu. Predstavljajo
+nastavitve jedra.<br><br>
+
+<a href="#help">F1 Pomoč</a>: povezava na sistem pomoči, ki prikaže
+različne zaslone pomoči, glede na aktivni element zagonskega ekrana.
+Na voljo je tudi opis sistema pomoči.<br><br>
+
+<a href="#videomode">F2 Video način</a>: omogoča izbiro zaslonske
+ločljivosti med namestitvijo. Če pri namestitvi naletite na težave
+v grafičnem načinu, mogoče <em>tekstivni način</em> predstavlja
+rešitev teh težav.<br><br>
+
+<a href="#install_src">F3 Izvor namestitve</a>: izberite izvor za
+namestitev (kje se nahajajo PRM paketi za namestitev).<br><br>
+
+<a href="#keytable">F4 Jezik</a>: izberite jezik in razporedite tipk
+na tipkovnici za uporabo v zagonskem nalagalniku.<br><br>
+
+<a href="#driverupdate">F5 Posodobitev gonilnikov</a>: za zelo nove
+računalnike bo mogoče potrebno posodobiti gonilnike za uspešno
+namestitev sistema.<br><br>
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="help">Uporaba sistema pomoči</a></h3>
+
+Sistem pomoči zagonskega nalagalnika je odvisen od vašega položaja v programu.
+Vsebuje informacije o izbrani možnosti v meniju. Pri urejanju zagonskih
+možnosti vam prikaže informacije o možnosti, ki je izbrana s kurzorjem.<br>
+<br>
+Navigacijske tipke<br><br>
+
+  <em>Puščica navzgor</em>: osvetli predhodno povezavo<br>
+  <em>Puščica navzdol</em>: osvetli naslednjo povezavo<br>
+  <em>Puščica levo</em>, <em>Backspace</em>: vrnitev na prejšno stran<br>
+  <em>Puščica desno</em>, <em>Enter</em>, <em>Preslednica</em>: sledi povezavi<br>
+  <em>Stran gor</em>: premik za stran navzor<br>
+  <em>Stran dol</em>: premik za stran navzdol<br>
+  <em>Home</em>: na začetek strani<br>
+  <em>End</em>: na konec strani<br>
+  <em>Esc</em>: zapustitev sistema pomoči<br>
+
+<br><br>Vrnitev na <a href="#main">Začetno stran</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="driverupdate">Posodobitev gonilnikov</a></h3>
+
+Če potrebujete posodobitev gonilnikov z disketne enote ali CD-ja,
+pritisnite tipko <em>F5</em>. Zagonski nalagalnik po končanem nalaganju 
+Linux jedra od vas zahteval medij z najnovejšimi gonilniki.<br><br>
+
+Posodobitev gonilnkov je navadno disketna enota z novimi različicami
+gonilnikov za strojno opremo ali popravki, ki so potrebni med
+namestitvijo.
+
+<br><br>Vrnitev na <a href="#main">Začetno stran</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="videomode">Izbira video načina</a></h3>
+
+Pritisk na tipko <em>F2</em> prikaže seznam možnih grafičnih načinov, ki jih
+podpira vaša grafična kartca. Predizbrana je najvišja možna grafična
+ločljivost, ki jo dopušča vaš monitor.<br><br>
+
+Obstaja možnost, da vaš monitor ne bo samodejno zaznan. V tem primeru
+izberite željen grafični način.<br><br>
+
+Če pri namestitvi naletite na težave v grafičnem načinu, 
+mogoče <em>tekstovni način</em> predstavlja rešitev teh težav.<br><br>
+
+<br><br>Vrnitev na <a href="#main">Začetno stran</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="keytable">Izbira jezika in razporeditve tipk na tipkovnici</a></h3>
+
+S pritiskom na tipko <em>F2</em> lahko spremenite jezik in razpored tipk na
+tipkovnici, ki jih uporablja zagonski nalagalnik.
+
+<br><br>Vrnitev na <a href="#main">Začetno stran</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="install_src">Izvor namestitve</a></h3>
+
+S pritiskom na tipko <em>F3</em> izberete izvor namestitve.<br><br>
+
+Rezultate izbire je enak, kot pri zagonski možnosti <a href="#o_install">install</a>.
+
+
+<br><br>Vrnitev na <a href="#main">Začetno stran</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="linux">Namestitev</a></h3>
+
+Izberite <em>Namestitev</em> za začetek privzete namestitve. Pri zagonu se
+uporabijo vpisane <a href="#opt">možnosti pri zagonu</a>. Možnost
+aktivira veliko zmožnosti splošno dostopne strojne opreme.<br><br>
+
+<br><br>Vrnitev na <a href="#main">Začetno stran</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="harddisk">Zagon s trdega diska</a></h3>
+
+Za zagon operacijskega sistema, ki je nameščen na trdem disku, izberite
+možnost <em>Zagon s trdega diska</em>. Operacijski sistem mora biti
+nameščen pravilno, saj se za zagon uporabi le MBR (Master Boot Record)
+na prvem trdem disku. ID naprave za prvi trdi disk določi BIOS
+računalnika. <br><br>
+
+Možnost uporabite v primeru, želite zagnati operacijski sistem na
+trdem disku, vendar ste v enoti pozabili CD/DVD medij.<br><br>
+
+<br><br>Vrnitev na <a href="#main">Začetno stran</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="noacpi">Namestitev - ACPI izključen</a></h3>
+
+Najnovejša strojna oprema za nadzor prekinitev zahteva ACPI sistem. ACPI 
+v celoti nadomesti star APM sistem.<br><br>
+
+Če med zagonom jedra sistema naletite na težave, izberite možnost
+<em>Namestitev - ACPI izključen</em>. Znane težave z računalniki, ki
+imajo težave z ACPI so:
+<br><br>
+
+   * jedro sistema med zagonom zmrzne<br>
+   * PCI kartice so nepravilno zaznane ali inicializirane<br><br>
+
+<br><br>Vrnitev na <a href="#main">Začetno stran</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="failsafe">Namestitev - varne nastavitve</a></h3>
+
+Če med namestitvijo doživite, da se računalnik "obesi" ali se pojavljajo
+neponovljive napake, izberite možnost <em>Namestitev - varne nastavitve</em>.
+Ta možnost onemogoči uporabo DMA za IDE diske in vse možnosti upravljanja
+z energijo. Poglejte tudi možnosti jedra za <a href="#o_apm">apm</a>,
+<a href="#o_acpi">acpi</a> in <a href="#o_ide">ide</a>.
+
+<br><br>Vrnitev na <a href="#main">Začetno stran</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="rescue">Sistem za reševanje</a></h3>
+
+<em>Sistem za reševanje</em> je majhen sistem, ki za delovanje potrebuje
+le pomnilnik. Po zagonu je možno narediti vse vrste sprememb na nameščenem
+sistemu. Ker omogoča uporabo je tekstovnh orodij, je namenjen le
+strokovnjakom.<br><br>
+
+<br><br>Vrnitev na <a href="#main">Začetno stran</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="memtest">Testiranje pomnilnika</a></h3>
+
+Vključena možnost <em>testiranja pomnilnika</em> nudi lepo priložnost
+za poglobljene testiranje strojne opreme vašega sistema. Glavna naloga
+tesiranja je odkrivanje pokvarjenega pomnilnika, vendar lahko pregleduje
+tudi drige dele sistema.<br>
+
+Pri preverjanju ni zagotovila, da je pomnilnik v redu, če se
+test konča brez napak, čeprav testiranje odkrije večini napak.<br>
+
+<br><br>Vrnitev na <a href="#main">Začetno stran</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="opt">Možnosti pri zagonu</a></h3>
+
+Na voljo sta dve vrsti možnosti pri zagonu: prve možnosti vplivajo na 
+postopek namestitve, druge možnosti so možnosti jedra sistema. 
+Nekatere najbolj običajne možnosti so: <br><br>
+a) pri postopku namestitve<br>
+<br>
+  <a href="#o_install">install</a> -- izbira izvora namestitve<br>
+  <a href="#network">network options</a> -- možnosti omrežja<br>
+  <a href="#o_vnc">vnc options</a> -- možnosti za namestitev preko VNC
+<br><br>
+b) možnosti jedra<br>
+<br>
+  <a href="#o_splash">splash</a> -- vplivanje na obnašanje začetnega zaslona<br>
+  <a href="#o_apm">apm</a> -- vplivanje na upravljanje z energijo<br>
+  <a href="#o_acpi">acpi</a> -- advanced configuration and power interface<br>
+  <a href="#o_ide">ide</a> -- nadzor nad IDE podsistemom<br>
+
+<br><br>Vrnitev na <a href="#main">Začetno stran</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_install">Možnosti pri postopku namestitve: install</a></h3>
+
+Privzeti izvor namestitve je lokalna CD-ROM/DVD enota. Za namestitve 
+preko omrežja, izberite možnost <em>install</em>. Možni namestitveni 
+protokoli so:<br>
+  * FTP<br>
+  * NFS<br>
+  * HTTP<br>
+Izvor namestitve se poda v obliki običajnega URL naslova. Primer: 
+če ima vaš strežnik naslov 192.168.0.1 in želite namestiti sistem 
+preko NFS protokola in imenika /install, je izvor namestitve:<br><br>
+
+  <em>install=nfs://192.168.0.1/install</em><br><br>
+
+Nastavitev omrežne kartice se naredi preko protokola <em>dhcp</em> 
+ali pa sami vpišete parametre, kot je opisano v 
+<a href="#network">možnosti omrežja</a>.<br>
+
+Vrnitev na <a href="#opt">Možnosti pri zagonu</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_splash">Možnosti jedra: splash</a></h3>
+
+Začetni zaslon je slika, ki se prikaže med zagonom sistema.<br>
+<br>
+<em>splash=0</em><br>
+Začetni zaslon je izključen. Možnost je uporabna pri uporabi zelo
+starih zaslonov ali pri kakšnih napakah..<br>
+<br>
+<em>splash=verbose</em><br> Vključi začetni zaslon s sporočili jedra in
+zagonskimi sporočili.<br>
+<br>
+<em>splash=silent</em><br>
+Zagonski zaslon je vključen, vendar se prikaže je stolpec napredka.<br>
+<br>
+Vrnitev na <a href="#opt">Možnosti pri zagonu</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="network">Možnosti pri postopku namestitve: možnosti omrežja</a></h3>
+
+Omrežno kartico je možno nastaviti takoj. Omrežno strojno opremo 
+bo kasneje zaznal YaST2. Minimalni set nastavitev za priključitev 
+na omrežje sestavljajo IP naslov in maska omrežja. Primer:<br><br>
+
+  <em>hostip=192.168.0.10  netmask=255.255.255.0</em><br>
+<br>
+ali v krajši obliki:<br><br>
+
+  <em>hostip=192.168.0.10/24</em><br>
+<br>
+
+Če ste izbrali <a href="#o_install">namestitev preko omrežja</a> in 
+niste določili obeh vrednosti, bo namestitveni program poizkusil 
+nastaviti omrežni vmesnik preko protokola <em>DHCP</em>. Če morate 
+določiti privzeti prehod (gateway), lahko to storite s parametrom
+<em>gateway</em>. Primer:<br><br>
+
+  <em>gateway=192.168.0.8</em><br>
+
+<br><br>Vrnitev na <a href="#opt">Možnosti pri zagonu</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_vnc">Možnosti pri postopku namestitve: vnc</a></h3>
+
+Za namestitev preko protokola VNC, napišite parameter vnc in 
+vnc geslo (vncpassword). Primer:<br><br>
+
+  <em>vnc=1 vncpassword=example</em><br><br>
+
+Pri namestitvi se do zagnal VNC strežnik in YaST2 boste lahko 
+upravljali preko VNC protokola z odjemalcem na oddaljenem 
+sistemu.<br>
+
+<br><br>Vrnitev na <a href="#opt">Možnosti pri zagonu</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_apm">Možnosti jedra: apm</a></h3>
+
+APM je eden od dveh možnih strategij upravljanja z energijo na
+računalnikih. V večini primerov se uporablja v prenosnih računalnikih
+za funkcionalnost kot je zaustavitev in shranitev na disk. Lahko pa
+nadzira tudi ugašanje računalnika. APM za delovanje potrebuje pravilno
+delovanje BIOSa. Če BIOS ne deluje pravilno, ima APM omejene možnosti
+delovanja ali pa lahko celo prepreči delovanje računalnika. V primeru
+težav, je možno APM sistem izključiti z naslenjim parametrom:
+<br><br>
+
+  <em>apm=off</em>  -- v celoti izključi APM<br><br>
+
+Nekateri novi računalniki lahko izkoristijo nov sistem -
+<a href="#o_acpi">ACPI</a>.
+
+<br><br>Vrnitev na <a href="#opt">Možnosti pri zagonu</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_acpi">Možnosti jedra: acpi</a></h3>
+
+ACPI (Advanced Configuration and Power Interface) je standard, ki
+določa vmesnik za urejanje nastavitev in upravljanja z energijo med
+operacijskim sistemom in BIOSom. Če je med zagonom zaznan BIOS, ki
+je bil izdelan po letu 2000, je <em>acpi</em> vključen. Najbolj
+uporabni paramteri za določanje obnašanja ACPI sistema:<br>
+<br>
+  <em>pci=noacpi</em> -- ne uporabi ACPI sistem za preusmeritve PCI prekinitev
+  <em>acpi=oldboot</em> -- le za zagon pomebni deli ACPIja ostanejo aktivni<br>
+  <em>acpi=off</em> -- v celoti izključi ACPI<br>
+  <em>acpi=force</em> -- vključi ACPI tudi v primeru, da je bil BIOS narejen pred letom 2000<br>
+<br>
+ACPI sistem zamenjuje sistem <a href="#o_apm">apm</a>, predvsem na novih računalnikih.
+
+
+<br><br>Vrnitev na <a href="#opt">Možnosti pri zagonu</a>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_ide">Možnosti jedra: ide</a></h3>
+
+IDE je, nasprotno kot SCSI, v splošni rabi v večini namiznih računalnikov.
+Za premostitev nekaterih napak strojne opreme, lahko uporabite parameter
+jedra:<br><br>
+
+  <em>ide=nodma</em>  -- za IDE naprave izključi DMA<br>
+
+
+<br><br>Vrnitev na <a href="#opt">Možnosti pri zagonu</a>.
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="bits">Izbira različice programske opreme</a></h3>
+
+Pri namestitvi mora izbrati ali želite namestiti 32-bitno ali 64-bitno 
+različico openSUSEa.
+
+<br><br>Vrnitev na <a href="#main">Začetno stran</a>
+
+
+</body></html>

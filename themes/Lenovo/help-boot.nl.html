@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 12 April 2005), see www.w3.org">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+</head>
+<body>
+<!-- help=boot -->
+<hr>
+<h3><a name="help">Het helpsysteem gebruiken</a></h3>
+De online-help van de bootloader is contextgevoelig. Het geeft u
+informatie over de geselecteerde menuoptie of, als opstartopties
+aan het bewerken bent, probeert informatie over de optie die zich
+onder de cursor bevindt op te zoeken.<br>
+<br>
+Navigatietoetsen<br>
+<br>
+<em>Pijl omhoog</em>: vorige koppeling accentueren<br>
+<em>Pijl omlaag</em>: volgende koppeling accentueren<br>
+<em>Pijl links</em>, <em>Backspace</em>: ga naar vorig
+onderwerp<br>
+<em>Pijl rechts</em>, <em>Enter</em>, <em>Spatie</em>: volg de
+koppeling<br>
+<em>Page Up</em>: ga een pagina omhoog<br>
+<em>Page Down</em>: ga een pagina omlaag<br>
+<em>Home</em>: ga naar paginabegin<br>
+<em>End</em>: ga naar pagina-einde<br>
+<em>Esc</em>: verlaat de helpfunctie<br>
+<br>
+Terug naar <a href="#opt">Opstartopties</a>
+<hr>
+<h3><a name="keytable">Taal en toetsenbordindeling
+selecteren</a></h3>
+Druk op <em>F2</em> om de taal en toetsenbordindeling van de
+bootloader te wijzigen.<br>
+<br>
+Terug naar <a href="#opt">Opstartopties</a>
+<hr>
+<h3><a name="profile">Profiel kiezen</a></h3>
+Druk op <em>F3</em> om een profiel te selecteren. Uw systeem zal
+worden opgestart aan de hand van de configuratie die in dit profiel
+is opgeslagen.<br>
+<br>
+Terug naar <a href="#opt">Opstartopties</a>
+<hr>
+<h3><a name="opt">Opstartopties</a></h3>
+<a href="#o_splash">opstartscherm</a> - beïnvloedt het gedrag van
+het opstartscherm<br>
+<a href="#o_apm">apm</a> - energiebeheer aan/uit<br>
+<a href="#o_acpi">acpi</a> -- advanced configuration and power
+interface<br>
+<a href="#o_ide">ide</a> - het IDE-subsysteem aansturen<br>
+<hr>
+<h3><a name="o_splash">Kernelopties: opstartscherm</a></h3>
+Het opstartscherm is de afbeelding die getoond wordt tijdens de
+systeemstart. Deze wordt ook wel 'splash' genoemd.<br>
+<br>
+<em>splash=0</em><br>
+Het opstartscherm (splash) is uitgeschakeld. Deze optie is bedoeld
+voor zeer oude beeldschermen of als er zich een fout voordoet.<br>
+<br>
+<em>splash=verbose</em><br>
+Activeert het opstartscherm (splash), maar kernel- en
+opstartmeldingen worden nog steeds getoond.<br>
+<br>
+<em>splash=silent</em><br>
+Activeert het opstartscherm (splash) zonder verdere meldingen. In
+plaats daarvan wordt een voortgangsbalk getoond.<br>
+<br>
+Terug naar <a href="#opt">Opstartopties</a>
+<hr>
+<h3><a name="o_apm">Kernelopties: apm</a></h3>
+APM is een van de twee energiebeheerstrategieën die gebruikt wordt
+op de huidige computers. Het wordt voornamelijk gebruikt bij
+laptops voor functies zoals slaapstand naar schijf, maar het kan
+ook verantwoordelijk zijn voor het uitschakelen van de computer
+nadat u deze heeft afgesloten. APM is afhankelijk van een correct
+werkend BIOS. Als een BIOS niet correct werkt, dan kan APM slechts
+gedeeltelijk werken of zelfs het functioneren van de computer
+belemmeren. Daarom kunt u het met deze parameter uitschakelen.<br>
+<br>
+<em>apm=off</em> - APM geheel uitschakelen<br>
+<br>
+Sommige zeer nieuwe computers kunnen voordeel halen uit de nieuwere
+<a href="#o_acpi">ACPI</a>.<br>
+<br>
+Terug naar <a href="#opt">Opstartopties</a>
+<hr>
+<h3><a name="o_acpi">Kernelopties: acpi</a></h3>
+ACPI (Advanced Configuration and Power Interface) is een standaard
+die interfaces voor energie- en configuratiebeheer tussen een
+besturingssysteem en de BIOS definieert. Standaard wordt
+<em>acpi</em>ingeschakeld als een BIOS is gevonden die nieuwer is
+dan uit het jaar 2000. Er zijn diverse veelgebruikte parameters die
+het gedrag van ACPI bepalen:<br>
+<br>
+<em>pci=noacpi</em> - gebruikt geen ACPI voor het routeren van
+PCI-interrupts<em>acpi=oldboot</em> - alleen de delen van ACPI die
+relevant zijn voor het opstarten blijven geactiveerd.<br>
+<em>acpi=off</em> - schakel ACPI volledig uit<br>
+<em>acpi=force</em> - schakel ACPI in, ook als uw BIOS van voor
+2000 is<br>
+<br>
+Vooral bij nieuwe computers, het vervangt het oude <a href=
+"#o_apm">apm</a>-systeem.<br>
+<br>
+Terug naar <a href="#opt">Opstartopties</a>
+<hr>
+<h3><a name="o_ide">Kernelopties: ide</a></h3>
+IDE wordt, in tegenstelling tot SCSI, algemeen gebruikt in de
+meeste desktopcomputers. Om hardwareproblemen die bij IDE-systemen
+kunnen voorkomen te omzeilen gebruikt u de parameter:<br>
+<br>
+<em>ide=nodma</em> - dma uitschakelen voor IDE-stations<br>
+<br>
+<br>
+Terug naar <a href="#opt">Opstartopties</a>.
+</body>
+</html>

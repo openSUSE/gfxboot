@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN"
+[
+<!ENTITY product "@product@">
+]>
+<html>
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 12 April 2005), see www.w3.org">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+</head>
+<body>
+<!-- help=install -->
+<hr>
+<h3><a name="main">Käynnistyslataimen ohje</a></h3>
+Welcome to <em>@product@</em><br>
+<br>
+Valitse tästä valikosta haluttu toiminto. Jos ohjejärjestelmässä
+ilmenee ongelmia liikkumisessa, paina <em>F1</em> päästäksesi
+ohjejärjestelmän <a href="#help">kuvaus</a>. Valikon päätoiminntoja
+ovat:<br>
+<br>
+<a href="#harddisk">Käynnistä kiintolevyltä</a>: Tämä valinta ei
+tee mitään järjestelmälle. Se käynnistää aiemmin asennetun
+käyttöjärjestelmän.<br>
+<br>
+<a href="#linux">Asennus</a>: Tämä asennustila toimii useimmissa
+koneissa. Jos järjestelmä pysähtyy käynnistyksen aikana tai
+laitteiston tunnistamisessa on ongelmia (levyohjaimet ja
+verkkokortit), kokeile jotakin seuraavista asennusvalinnoista.<br>
+<br>
+<a href="#noacpi">Asennus -- ACPI poissa käytöstä</a>: Useissa
+myynnissä olevissa tietokoneissa on keskeneräinen tai virheellinen
+ACPI toteutus. Tämä valinta poistaa ACPI -tuen ytimestä, mutta
+käyttää silti useita suorituskykyä parantavia ominaisuuksia, kuten
+DMA:ta IDE -kiintolevyille.<br>
+<br>
+<a href="#nolapic">Asennus--Paikallinen APIC pois käytöstä</a>: Jos
+normaali asennus epäonnistuu, tämä voi johtua paikallisen APICin
+puutteellisesta tuesta järjestelmän laitteille. Jos nhäin on, käytä
+tätä valintaa suorittaaksesi asennuksen ilman paikallista APIV
+tukea.<br>
+<br>
+<a href="#failsafe">Asennus -- Turvalliset asetukset</a>: Jos et
+onnistunut <em>Asennus</em> kanssa, tämä valinta saattaa ratkaista
+asian.<br>
+<br>
+<a href="#rescue">Korjausjärjestelmä</a>: Tämä käynnistyslevykuva
+käynnistää pienen Linux -järjestelmän RAM -muistiin. Se on
+käytännöllinen, jos järjestelmä ei käynnisty kunnolla. Järjestelmän
+käynnistymisen jälkeen kirjaudu sisään root-käyttäjänä.<br>
+<br>
+<a href="#firmware">Laiteohjelmiston testi</a>: Suorittaa BIOS
+tarkistustyökalun joka vahvistaa ACPIn ja muita BIOSin osia.<br>
+<br>
+<a href="#memtest">Muistitesti</a>: Muistitesti on käytännöllinen
+muutenkin kuin vain uusien muistimoduulien testaamisessa. Se on
+kestotesti suurelle osalle tietokonettasi ja voi osoittaa
+mahdolliset laiteongelmat.<br>
+<br>
+<a href="#opt">Käynnistysvalinnat</a>: Käynnistysvalinnat voivat
+täydellisesti muuttaa järjestelmän käyttäytymistä. Ne ovat ytimen
+asetuksia.<br>
+<br>
+<a href="#help">F1 Ohje</a>: Tämä on kontekstiriippuvainen. Se
+näyttää eri asioita riippuen valitusta käynnistysnäytön kohdasta.
+Myös ohjejärjestelmän kuvaus on saatavilla.<br>
+<br>
+<a href="#keytable">F4 Kieli</a>: Aseta käynnistyslataimen käyttämä
+kieli ja näppäimistökartta.<br>
+<br>
+<a href="#videomode">F2 Videotila</a>: Tässä valitset asennuksen
+aikana käytettävän näytönkoon. Jos kohtaat ongelmia graafisessa
+asennuksessa, <em>tekstitila</em> voi olla toimiva vaihtoehto.<br>
+<br>
+<a href="#install_src">F3 Asennuslähde</a>: Valitse
+asennuslähde.<br>
+<br>
+<a href="#driverupdate">F5 Ohjainpäivitys</a>: Uusimmat tietokoneet
+voivat vaatia ajuripäivityksen, jotta järjestelmän voi asentaa.
+<hr>
+<h3><a name="help">Ohjejärjestelmän käyttäminen</a></h3>
+Käynnistyslataimen ohje on kontekstiriippuvainen. Se antaa tietoja
+valitusta valikon kohdasta tai, jos muokkaat käynnistysvalintoja,
+se yrittää hakea tietoa valinnasta jolla kursori on.<br>
+<br>
+Ohjausnäppäimet<br>
+<br>
+<em>Nuoli ylös</em>: korosta aiempi linkki<br>
+<em>Nuoli alas</em>: korosta seuraava linkki<br>
+<em>Nuoli vasemmalle</em>, <em>Backspace</em>: palaa aiempaan
+ohjeeseen<br>
+<em>Nuoli oikealle</em>, <em>Enter</em>, <em>Välilyönti</em>:
+seuraa linkkiä<br>
+<em>Page Up</em>: vierittää sivun ylöspäin<br>
+<em>Page Down</em>: vierittää sivun alaspäin<br>
+<em>Home</em>: mene sivun alkuun<br>
+<em>End</em>: mene sivun loppuun<br>
+<em>Esc</em>: lopeta ohje<br>
+<br>
+Palaa <a href="#main">Aloitussivu</a>
+<hr>
+<h3><a name="driverupdate">Ohjainpäivitys</a></h3>
+Jos tarvitset ajurin päivitykseen levykkeen tai CD-ROM -levyn,
+paina <em>F5</em>. Käynnistyslatain pyytää syöttämään ajurin
+päivitysmedian Linux-ytimen lataamisen jälkeen.<br>
+<br>
+Ajuripäivitys on yleensä levyke, jossa on uusin versio
+laiteajureista tai virhekorjaus jota tarvitaan asennuksen
+aikana.<br>
+<br>
+Palaa <a href="#main">Aloitussivu</a>
+<hr>
+<h3><a name="videomode">Videotilan valinta</a></h3>
+Paina <em>F2</em> saadaksesi luettelon näytönohjaimesi tukemista
+näyttötiloista. Korkein tila jota näyttösi voi käyttää on
+esivalittu.<br>
+<br>
+On mahdollista että näyttöäsi ei voida tunnistaa automaattisesti.
+Tässä tapauksessa, valitse haluamasi tila käsin.<br>
+<br>
+Jos järjestelmälläsi on ongelmia näytönohjaimen kanssa asennuksen
+aikana, <em>tekstitila</em> voi olla toimiva vaihtoehto.<br>
+<br>
+Palaa <a href="#main">Aloitussivu</a>
+<hr>
+<h3><a name="keytable">Kieli ja näppäimistökartta
+-valinnat</a></h3>
+Paina <em>F4</em> vaihtaaksesi käynnistyslataimen kieltä ja
+näppäimistökarttaa.<br>
+<br>
+Palaa <a href="#main">Aloitussivu</a>
+<hr>
+<h3><a name="install_src">Asennuslähde</a></h3>
+Paina <em>F3</em> valitaksesi asennuslähteen.<br>
+<br>
+Tämä tarkoittaa samaa kuin <a href="#o_install">asenna</a>
+käynnistysvalinnan käyttö.<br>
+<br>
+Palaa <a href="#main">Aloitussivu</a>
+<hr>
+<h3><a name="linux">Asennus</a></h3>
+Valitse<em>Asennus</em> käynnistääksesi oletusasennuksen. <a href=
+"#opt">käynnistysvalinnat</a>:sta käytetään käynnistämiseen.
+Valinta ottaa käyttöön useita yleisesti käytettävien laitteiden
+ominaisuuksia.<br>
+<br>
+Palaa <a href="#main">Aloitussivu</a>
+<hr>
+<h3><a name="harddisk">Käynnistä kiintolevyltä</a></h3>
+Valitse <em>Käynnistä asennettu käyttöjärjestelmä</em>
+käynnistääksesi paikalliselle kiintolevylle asennetun
+käyttöjärjestelmän. Järjestelmän tulee olla oikein asennettu, koska
+vain MBR (Master Boot Record) ensimmäiseltä levyltä käynnistetään.
+Ensimmäisen kiintolevyn laite ID saadaan tietokoneen BIOS:lta.<br>
+<br>
+Käytä tätä jos unohdit poistaa CD- tai DVD -levyn asemasta ja
+haluat käynnistää tietokoneen kiintolevyltä.<br>
+<br>
+Palaa <a href="#main">Aloitussivu</a>
+<hr>
+<h3><a name="noacpi">Asennus -- ACPI poissa käytöstä</a></h3>
+Uusimmat laitteistot vaativat joskus ACPIn (Advanced Configuration
+and Power Interface) ohjaavan keskeytysten hallintaa. ACPI korvaa
+täysin vanhan APM järjestelmän.<br>
+<br>
+Valitse <em>Asennus -- ACPI poissa käytöstä</em> jos kohtaat
+ongelmia ytimen käynnistyksen aikana. Tunnettuja ongelmia ACPI:ta
+käyttävissä koneissa ovat:<br>
+<br>
+* ydin pysähtyy käynnistettäessä<br>
+* PCI -kortteja ei tunnistettu tai alustettu oikein<br>
+<br>
+Voit myös kokeilla <a href="#firmware">Laiteohjelmiston testi</a>
+käynnistysvalintaa ja katsoa ACPI vahvistuksen
+tarkistustuloksen.<br>
+<br>
+Palaa <a href="#main">Aloitussivu</a>
+<hr>
+<h3><a name="nolapic">Asennus--Paikallinen APIC pois
+käytöstä</a></h3>
+Normaalisti APIC:in (Advanced Programmable Interrupt Controller) ei
+ole ongelmia. Mutta jos törmäät sellaisiin, kokeile käynnistää kone
+ilman paikallista APIC tukea tällä valinnalla.<br>
+<br>
+Älä sekoita tätä <a href="#noacpi">ACPI</a>:iin (Advanced
+Configuration and Power Interface).<br>
+<br>
+Palaa <a href="#main">Aloitussivu</a>
+<hr>
+<h3><a name="failsafe">Asennus -- Turvalliset asetukset</a></h3>
+Valitse <em>Asennus -- Turvalliset asetukset</em> jos asennus
+pysähtelee tai esiintyy satunnaisia virheitä. Valinta poistaa
+käytöstä sekä DMA:n IDE -levyiltä, että kaikki virranhallinta
+toiminnot. Katso myös ytimen valinnat <a href="#o_apm">apm</a>,
+<a href="#o_acpi">acpi</a> ja <a href="#o_ide">ide</a>.<br>
+<br>
+Palaa <a href="#main">Aloitussivu</a>
+<hr>
+<h3><a name="rescue">Korjausjärjestelmä</a></h3>
+<em>Korjausjärjestelmä</em> on pieni RAM -levy pohjainen
+perusjärjestelmä. Sen kautta on mahdollista tehdä kaikenlaisia
+muutoksia asennettuun järjestelmään. Koska vain matalan tason
+työkalut ovat saatavilla, se on tarkoitettu asiantuntijoille.<br>
+<br>
+Palaa <a href="#main">Aloitussivu</a>
+<hr>
+<h3><a name="firmware">Laiteohjelmiston testi</a></h3>
+Käynnistää BIOS tarkistuksen joka vahvistaa ACPI taulut ja monta
+muuta BIOSin osaa. Tarkistuksen voi tallentaa usb-tikulle tai
+verkkoon.<br>
+<br>
+Palaa <a href="#main">Aloitussivu</a>
+<hr>
+<h3><a name="memtest">Muistitesti</a></h3>
+Mukana oleva <em>Muistitesti</em> tarjoaa hyvän mahdollisuuden
+suorittaa kestotesti järjestelmän laitteille. Sen päätarkoitus on
+tunnistaa vioittunut RAM -muisti, mutta se rasittaa myös
+järjestelmän muita osia.<br>
+Ei ole taattua että muisti olisi kunnossa vaikka virheitä ei
+löytyisi, vaikka yleensä useimmat muistin viat löytyvät.<br>
+<br>
+Palaa <a href="#main">Aloitussivu</a>
+<hr>
+<h3><a name="opt">Käynnistysvalinnat</a></h3>
+Voit valita kahden tyyppisiä käynnistysvalintoja. 1) valinnat jotka
+vaikuttavat asentimeen. 2) ytimen valinnat. Yleisiä valintoja
+ovat:<br>
+<br>
+a) asentimen valinnat<br>
+<br>
+<a href="#o_install">asenna</a> -- valitse asennuslähde<br>
+<a href="#network">verkon valinnat</a> -- verkon valinnat<br>
+<a href="#o_vnc">vnc valinnat</a> -- valinnat VNC-asennusta
+varten<br>
+<br>
+b) ytimen valinnat<br>
+<br>
+<a href="#o_splash">splash</a> -- muokkaa splash-näytön
+käyttäytymistä<br>
+<a href="#o_apm">apm</a> -- virranhallinta päälle/pois<br>
+<a href="#o_acpi">acpi</a> -- advanced configuration and power
+interface<br>
+<a href="#o_ide">ide</a> -- hallitse IDE alijärjestelmää<br>
+<br>
+Palaa <a href="#main">Aloitussivu</a>
+<hr>
+<h3><a name="o_install">Asentimen valinnat: asenna</a></h3>
+Oletuksena asennuslähteiksietsitään paikallisia CD-ROM-asemia.
+Verkkoasennusta varten valitse <em>asenna</em>. Mahdollisia
+asennuskäytäntöjä ovat<br>
+* FTP<br>
+* NFS<br>
+* HTTP<br>
+Kirjoitusmuoto on kuten normaaleissa URL-osoitteissa. Esim., jos
+palvelin löytyy osoitteesta 192.168.0.1 ja haluat tehdä
+NFS-pohjaisen asennuksen palvelimen /install hakemistosta, määritä
+asennuslähde seuraavasti:<br>
+<br>
+<em>install=nfs://192.168.0.1/install</em><br>
+<br>
+Verkkokortti määritetään joko <em>dhcp</em>:llä, tai sinun pitää
+määrittää parametrit, kuten on kuvattu: <a href="#network">verkon
+valinnat</a>.<br>
+<br>
+Palaa <a href="#opt">Käynnistysvalinnat</a>
+<hr>
+<h3><a name="o_splash">Ytimen valinnat: splash</a></h3>
+splash-näyttö on kuva, joka näytetään järjestelmän käynnistyksen
+yhteydessä.<br>
+<br>
+<em>splash=0</em><br>
+<br>
+Splash-näyttö on poistettu käytöstä. Tämä voi olla käytännöllistä
+todella vanhojen monitoreiden kanssa, tai jos virheitä ilmenee.<br>
+<br>
+<em>splash=verbose</em><br>
+<br>
+Ottaa käyttöön splash-näyttö. Näytä myös ydin- ja
+käynnistysviestit.<br>
+<br>
+<em>splash=silent</em><br>
+Ottaa käyttöön splash-näytön, mutta ei viestejä. Näiden sijasta
+näytetään etenemispalkki.<br>
+<br>
+Palaa <a href="#opt">Käynnistysvalinnat</a>
+<hr>
+<h3><a name="network">Asentimen valinnat: Verkon valinnat</a></h3>
+Verkkoliitäntä on mahdollista määrittää nyt. Laitteisto
+tunnistetaan myöhemmin YaST2 toimesta. Pakolliset valinnat verkon
+määrittämiseksi ovat IP-osoite ja aliverkon peite. Esim:<br>
+<br>
+<em>hostip=192.168.0.10 netmask=255.255.255.0</em><br>
+<br>
+tai lyhyemmässä muodossa:<br>
+<br>
+<em>hostip=192.168.0.10/24</em><br>
+<br>
+Jos määritit <a href="#o_install">asennus verkosta</a>:n etkä
+määritä molempia näistä valinnoista, asennusohjelma yrittää
+määrittää verkkoliitännän <em>dhcp</em>:llä. Jos tarvitset
+oletusyhdyskäytävän, määritä se valinnalla <em>gateway</em>.
+Esim:<br>
+<br>
+<em>gateway=192.168.0.8</em><br>
+<br>
+Palaa <a href="#opt">Käynnistysvalinnat</a>
+<hr>
+<h3><a name="o_vnc">Asentimen valinnat: vnc</a></h3>
+Ottaaksesi käyttöön VNC-asennuksen, määritä parametrit vnc ja
+vncpassword:<br>
+<br>
+<em>vnc=1 vncpassword=esimerkki</em><br>
+<br>
+VNC-palvelin käynnistetään ja voit hallita YaST2:sta millä tahansa
+VNC -asiakasohjelmalla etäjärjestelmästä.<br>
+<br>
+Palaa <a href="#opt">Käynnistysvalinnat</a>
+<hr>
+<h3><a name="o_apm">Ytimen valinnat: apm</a></h3>
+APM on toinen nykyisissä tietokoneissa käytettävistä virranhallinta
+strategioista. Sitä käytetään pääasiassa kannettavien tietokoneiden
+toiminnoissa kuten "suspend to disk", mutta se voi olla vastuussa
+myös tietokoneen sammuttamisesta. APM on riippuvainen toimivasta
+BIOS:sta. Jos BIOS on rikkinäinen, APM:llä voi olla vain
+rajoitettua käyttöä, tai se voi jopa estää tietokonetta toimimasta.
+APM voidaan poistaa käytöstä parametrilla<br>
+<br>
+<em>apm=off</em> -- poistaa APM -toiminnon kokonaan<br>
+<br>
+Uusimmat tietokoneet voivat hyötyä enemmän uudemmasta <a href=
+"#o_acpi">ACPI</a>:sta.<br>
+<br>
+Palaa <a href="#opt">Käynnistysvalinnat</a>
+<hr>
+<h3><a name="o_acpi">Ytimen valinnat: acpi</a></h3>
+ACPI (Advanced Configuration and Power Interface) on standardi,
+joka määrittelee virran- ja laitteistohallinnan liittymän
+käyttöjärjestelmän ja BIOS välillä. Oletuksena, <em>acpi</em>
+otetaan käyttöön kun BIOS on uudempi kuin vuodelta 2000. Muutamia
+yleisesti käytettyjä parametreja ACPI:n ohjaamiseksi ovat:<br>
+<br>
+<em>pci=noacpi</em> - älä käytä ACPI:a ohjaamaan PCI
+keskeytyksiä<br>
+<em>acpi=oldboot</em> - vain ne osat ACPI:sta, jotka kuuluvat
+käynnistykseen jäävät käyttöön<br>
+<em>acpi=off</em> -- poistaa ACPI:n kokonaan käytöstä<br>
+<em>acpi=force</em> -- käyttää ACPI:a vaikka BIOS olisi päivätty
+ennen vuotta 2000<br>
+<br>
+Uusissa tietokoneissa tämä korvaa vanhan <a href=
+"#o_apm">apm</a>-järjestelmän.<br>
+<br>
+Palaa <a href="#opt">Käynnistysvalinnat</a>
+<hr>
+<h3><a name="o_ide">Ytimen valinnat: ide</a></h3>
+IDE (toisin kuin SCSI) on yleisesti käytetty useimmissa
+työasemissa. Ohittaaksesi joitakin IDE -järjestelmien
+laitteisto-ongelmia, käytä ytimen parametria:<br>
+<br>
+<em>ide=nodma</em> -- poistaa DMA:n IDE-levyiltä<br>
+<br>
+Palaa <a href="#opt">Käynnistysvalinnat</a>
+<hr>
+<h3><a name="bits">Ohjelmistotyypin valinta</a></h3>
+Sinulla on mahdollisuus valita asennatko 32-bittisen vai
+64-bittisen @product@ version.<br>
+<br>
+Palaa <a href="#main">Aloitussivu</a>.
+</body>
+</html>

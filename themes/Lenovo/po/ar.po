@@ -1,0 +1,400 @@
+# LANGUAGE translations for boot loader
+# Copyright (C) 2005 SUSE Linux GmbH
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: bootloader\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-05-18 10:26+0200\n"
+"PO-Revision-Date: 2006-10-26 14:38:25+CEST\n"
+"Last-Translator: Novell Language <language@novell.com>\n"
+"Language-Team: Novell Language <language@novell.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. ok button label
+#. txt_ok
+msgid "OK"
+msgstr "موافق"
+
+#. cancel button label
+#. txt_cancel
+msgid "Cancel"
+msgstr "إلغاء"
+
+#. reboot button label
+#. txt_reboot
+msgid "Reboot"
+msgstr "إعادة تشغيل"
+
+#. continue button label
+#. txt_continue
+msgid "Continue"
+msgstr "متابعة"
+
+#. txt_install
+msgid "Installation"
+msgstr "التثبيت"
+
+#. txt_manual_install
+msgid "Manual Installation"
+msgstr "تثبيت يدوي"
+
+#. txt_noacpi_install
+msgid "Installation--ACPI Disabled"
+msgstr "تثبيت--ACPI معطلة"
+
+#. txt_safe_install
+msgid "Installation--Safe Settings"
+msgstr "تثبيت--إعدادات آمنة"
+
+#. txt_safe_linux
+msgid "Linux--Safe Settings"
+msgstr "Linux--إعدادات آمنة"
+
+#. txt_boot_harddisk
+msgid "Boot from Hard Disk"
+msgstr "تشغيل من القرص الصلب"
+
+#. txt_rescue
+msgid "Rescue System"
+msgstr "نظام الإنقاذ"
+
+#. txt_memtest
+msgid "Memory Test"
+msgstr "اختبار الذاكرة"
+
+#. txt_bootoptions
+msgid "Boot Options"
+msgstr "خيارات التشغيل"
+
+#. window title for exit dialog
+#. txt_exit_title (see txt_exit_dialog)
+msgid "Exiting..."
+msgstr "إنهاء..."
+
+#. txt_exit_dialog
+msgid ""
+"You are leaving the graphical boot menu and\n"
+"starting the text mode interface."
+msgstr ""
+"تتم الآن مغادرة قائمة التشغيل الرسومية و\n"
+"بدء تشغيل واجهة وضع النص."
+
+#. txt_help
+msgid "Help"
+msgstr "تعليمات"
+
+#. window title for kernel loading (see txt_load_kernel)
+#. txt_load_kernel_title
+msgid "Starting..."
+msgstr "بدء..."
+
+#. Keep the three newlines!
+#. txt_load_kernel
+msgid ""
+"Loading Linux Kernel\n"
+"\n"
+"\n"
+msgstr ""
+"تحميل Linux Kernel\n"
+"\n"
+" \n"
+
+#. Keep the three newlines!
+#. txt_load_memtest
+msgid ""
+"Loading memtest86\n"
+"\n"
+"\n"
+msgstr ""
+"تحميل memtest86\n"
+"\n"
+" \n"
+
+#. info box title
+#. txt_info_title
+msgid "Boot Loader"
+msgstr "أداة تحميل التشغيل"
+
+#. error box title
+#. txt_error_title
+msgid "I/O Error"
+msgstr "خطأ في المدخلات/المخرجات"
+
+#. boot disk change dialog title
+#. txt_change_disk_title
+msgid "Change Boot Disk"
+msgstr "تغيير قرص التشغيل"
+
+#. txt_insert_disk
+#, c-format
+msgid "Insert boot disk %u."
+msgstr "أدخل قرص التشغيل %u."
+
+#. txt_insert_disk2
+#, c-format
+msgid ""
+"This is boot disk %u.\n"
+"Insert boot disk %u."
+msgstr ""
+"هذا هو قرص التشغيل %u.\n"
+"أدخل قرص التشغيل %u."
+
+#. <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
+#. txt_insert_disk3
+#, c-format
+msgid ""
+"This is not a <product> boot disk.\n"
+"Insert boot disk %u."
+msgstr ""
+"هذا ليس <product>قرص تشغيل.\n"
+"أدخل قرص التشغيل %u."
+
+#. password dialog title
+#. txt_password_title
+msgid "Password"
+msgstr "كلمة السر"
+
+#. txt_dud_ready
+msgid "Get your driver update floppy ready."
+msgstr "قم بتحضير القرص المرن لتحديث برنامج التشغيل بحيث يكون جاهزًا للاستخدام."
+
+#. dvd warning title
+#. txt_dvd_warning_title
+msgid "DVD Error"
+msgstr "خطأ في قرص الفيديو الرقمي"
+
+#. txt_dvd_warning2
+msgid ""
+"This is a two-sided DVD. You have booted from the second side.\n"
+"\n"
+"Turn the DVD over then continue."
+msgstr ""
+"هذا هو قرص فيديو رقمي بوجهين. لقد قمت بالتشغيل من الوجه الثاني.\n"
+"\n"
+" اقلب قرص الفيديو الرقمي، ثم تابع العمل."
+
+#. power off dialog title
+#. txt_power_off_title
+msgid "Power Off"
+msgstr "إيقاف التشغيل"
+
+#. txt_power_off
+msgid "Halt the system now?"
+msgstr "هل تريد إيقاف النظام الآن؟"
+
+#. menu entry for hard disk installation
+#. txt_harddisk
+msgid "Hard Disk"
+msgstr "القرص الصلب"
+
+#. dialog title for hard disk installation
+#. txt_harddisk_title
+msgid "Hard Disk Installation"
+msgstr "تثبيت القرص الصلب"
+
+#. txt_hd_diskdevice
+msgid "Disk Device (Scans All Disks If Empty)\n"
+msgstr "جهاز القرص (مسح كافة الأقرص إذا كان فارغًا)\n"
+
+#. txt_directory
+msgid "Directory\n"
+msgstr "الدليل\n"
+
+#. dialog title for ftp installation
+#. txt_ftp_title
+msgid "FTP Installation"
+msgstr "تثبيت FTP"
+
+#. txt_server
+msgid "Server\n"
+msgstr "الخادم\n"
+
+#. txt_password
+msgid "Password\n"
+msgstr "كلمة السر\n"
+
+#. label for ftp user input
+#. txt_user1
+msgid "User (Anonymous Login If Empty)\n"
+msgstr "المستخدم (تسجيل دخول مجهول إذا كان الحقل فارغًا)\n"
+
+#. dialog title for nfs installation
+#. txt_nfs_title
+msgid "NFS Installation"
+msgstr "تثبيت NFS"
+
+#. label for smb user input
+#. txt_user2
+msgid "User (Uses \"guest\" If Empty)\n"
+msgstr "المستخدم (يتم استخدام \"ضيف\" إذا كان الحقل فارغًا)\n"
+
+#. dialog title for smb installation
+#. txt_smb_title
+msgid "SMB (Windows Share) Installation"
+msgstr "تثبيت SMB‏ (مشاركة Windows)"
+
+#. dialog title for http installation
+#. txt_http_title
+msgid "HTTP Installation"
+msgstr "تثبيت HTTP"
+
+#. 'driver' as in '(hardware) driver update'
+#. txt_driver_update
+msgid "Driver"
+msgstr "برنامج التشغيل"
+
+#. as in Windows Authentication Domain
+#. txt_domain
+msgid "Domain\n"
+msgstr "المجال\n"
+
+#. button label for other/more options
+#. txt_other_options
+msgid "Other Options"
+msgstr "خيارات أخرى"
+
+#. label for language selection
+#. txt_language
+msgid "Language"
+msgstr "اللغة"
+
+#. txt_apic
+msgid "Installation--IOAPIC Enabled"
+msgstr "تثبيت--IOAPIC ممكَّن"
+
+#. txt_noapic_install
+msgid "Installation--IOAPIC Disabled"
+msgstr "تثبيت--IOAPIC معطَّل"
+
+#. txt_nolapic_install
+msgid "Installation--Local APIC Disabled"
+msgstr "تثبيت--APIC المحلي معطَّل"
+
+#. txt_yes
+msgid "Yes"
+msgstr "نعم"
+
+#. txt_no
+msgid "No"
+msgstr "لا"
+
+#. menu item for selecting a file
+#. txt_file
+msgid "File"
+msgstr "ملف"
+
+#. input label: share as in "Windows share" (SMB)
+#. txt_share
+msgid "Share\n"
+msgstr "مشاركة\n"
+
+#. txt_zenAuto
+msgid "Automatic Mode"
+msgstr "وضع تلقائي"
+
+#. txt_zenManual
+msgid "Manual Mode"
+msgstr "وضع يدوي"
+
+#. txt_zenConfig
+msgid "Configure Parameters on ZEN Partition"
+msgstr "تكوين معلمات في قسم ZEN"
+
+#. txt_zenInstall
+msgid "Install or Update ZEN Partition"
+msgstr "تثبيت قسم ZEN أو تحديثه"
+
+#. txt_zenLilo
+msgid "Reinstall ZEN Partition Boot Loader"
+msgstr "إعادة تثبيت أداة تحميل تشغيل قسم ZEN"
+
+#. txt_zenDisable
+msgid "Disable ZEN Partition"
+msgstr "تعطيل قسم ZEN"
+
+#. txt_zenEnable
+msgid "Enable ZEN Partition"
+msgstr "تمكين قسم ZEN"
+
+#. video mode menu item
+#. txt_text_mode
+msgid "Text Mode"
+msgstr "وضع النص"
+
+#. menu item, like 'memory test'
+#. txt_firmware
+msgid "Firmware Test"
+msgstr "اختبار البرنامج الثابت"
+
+#. txt_dud_file_msg
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
+"enter the driver update file names (separated\n"
+"by commas ',') here:\n"
+msgstr ""
+"لتحميل تحديثات برنامج التشغيل مباشرةً من القرص المضغوط،\n"
+"أدخل أسماء ملفات تحديثات برنامج التشغيل (مفصولة\n"
+" بفواصل ',') هنا:\n"
+
+#. install source menu title
+#. ** please keep it really short (comparable to the english text) **
+#. txt_install_source
+msgid "Source"
+msgstr ""
+
+#. video mode/display size menu title
+#. ** please keep it really short (comparable to the english text) **
+#. txt_video_mode
+msgid "Video Mode"
+msgstr ""
+
+#. driver update dialog title
+#. -> txt_dud_file_msg
+#. txt_driver_update2
+msgid "Driver Update"
+msgstr ""
+
+#. menu label for selecting (cpu) architecture
+#. like i386, x86-64, ppc
+#. ** please keep it really short (comparable to the english text) **
+#. txt_arch
+msgid "Arch"
+msgstr ""
+
+#. menu label for selecting some (linux) kernel variant
+#. ** please keep it really short (comparable to the english text) **
+#. txt_kernel
+msgid "Kernel"
+msgstr ""
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. txt_kernel_default
+msgid "Default"
+msgstr ""
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. -> like in txt_safe_linux
+#. txt_kernel_safe
+msgid "Safe Settings"
+msgstr ""
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. -> similar to txt_noacpi_install
+#. txt_kernel_noacpi
+msgid "No ACPI"
+msgstr ""
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. -> similar to txt_nolapic_install
+#. txt_kernel_nolapic
+msgid "No Local APIC"
+msgstr ""
+
+#. main menu: start in system repair mode
+#. txt_repain_system
+msgid "Repair Installed System"
+msgstr ""
+

@@ -1,0 +1,27 @@
+#! /usr/bin/perl
+
+while(<>) {
+  if(/^\s*#|^\s*$/) { $msg[$cnt]{comment} .= $_; next }
+  if(s/^\s*msgid\b\s*//) { $cnt++; $id = 1 }
+  if(s/^\s*msgstr\b\s*//) { $id = 2 }
+  if($id == 1) { $msg[$cnt - 1]{id} .= $_; next }
+  if($id == 2) { $msg[$cnt - 1]{str} .= $_; next }
+
+  die "oops at line $.\n";
+}
+
+for (@msg) {
+  print $_->{comment};
+
+  next unless defined($_->{id}) && defined($_->{str});
+
+  if($_->{id} =~ /^\s*""\s*$/ || $_->{str} =~ /^\s*""\s*$/) {
+    print "msgid ", $_->{id};
+    print "msgstr ", $_->{str};
+  }
+  else {
+    print "msgid ", $_->{str};
+    print "msgstr \"\"\n";
+  }
+}
+

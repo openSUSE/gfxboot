@@ -1,0 +1,131 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<body>
+
+<!-- help=boot -->
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="help">A segítségnyújtó rendszer használata</a></h3>
+
+A rendszertöltő online súgója helyzetfüggő segítséget nyújt az egyes kiválasztott
+menüpontokhoz. Ezen felül az egyes rendszerindítási opciókhoz is információval szolgál.
+Ez akkor lehet hasznos, ha éppen egy bejegyzés szerkesztése válik szükségessé.
+<br>
+<br>
+A rendszer használata<br><br>
+
+  <em>Felfelé nyíl</em>: Előző hivatkozás kiválasztása<br>
+  <em>Lefelé nyíl</em>: Következő hivatkozás kiválasztása<br>
+  <em>Balra nyíl</em>, <em>Visszafelé nyíl</em>: Vissza az előző témához<br>
+  <em>Jobbra nyíl</em>, <em>Enter</em>, <em>Szóköz</em>: Hivatkozás követése<br>
+  <em>PageUp billentyű</em>: Görgetés felfelé<br>
+  <em>PageDown billentyű</em>: Görgetés lefelé<br>
+  <em>Home billentyű</em>: Ugrás az oldal elejére<br>
+  <em>End billentyű</em>: Ugrás az oldal végére<br>
+  <em>Esc billentyű</em>: Kilépés a segítségnyújtó rendszerből<br>
+
+<br>Vissza a <a href="#opt">Rendszerindítási opciók</a>hoz.
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="keytable">Nyelv és billentyűzet kiválasztása</a></h3>
+
+Az <em>F2</em> billentyű megnyomásával ki tudja választani az indítóképernyő és
+a billentyűzet nyelvét.
+
+
+<br><br>Vissza a <a href="#opt">Rendszerindítási opciók</a>hoz.
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="profile">Profil kiválasztása</a></h3>
+
+Egy profil kiválasztásához nyomja meg az <em>F3</em> billentyűt.
+
+<br><br>Vissza a <a href="#opt">Rendszerindítási opciók</a>hoz.
+
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="opt">Rendszerindítási opciók</a></h3>
+
+  <a href="#o_splash">splash</a> -- az indítóképernyő beállítása<br>
+  <a href="#o_apm">apm</a> -- az APM energiakezelési rendszer beállítása<br>
+  <a href="#o_acpi">acpi</a> -- az ACPI energiakezelési rendszer beállítása<br>
+  <a href="#o_ide">ide</a> -- az IDE alrendszer beállítása<br>
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_splash">A splash rendszermagparaméter</a></h3>
+
+A rendszerindításkor látható grafikus képernyőt <em>splash screen</em>nek nevezzük.<br>
+<br>
+<em>splash=0</em><br>
+Nincs grafikus rendszerindítás. Ez akkor lehet hasznos, ha nagyon régi a monitora, illetve
+olyan, amelyen az indítóképernyő hibásan jelenik meg.<br>
+<br>
+<em>splash=verbose</em><br> Bekapcsolja az indítóképernyőt. A rendszermag- és
+a rendszerindítási üzenetek a háttérben láthatók.<br>
+<br>
+<em>splash=silent</em><br>
+Bekapcsolja az indítóképernyőt. A rendszermag üzenetei nem láthatók. Helyette egy grafikus
+kijelző tájékoztatást ad a rendszerindítási folyamatról.<br>
+<br>
+
+Vissza a <a href="#opt">Rendszerindítási opciók</a>hoz.
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_apm">Az apm rendszermagparaméter</a></h3>
+
+Az APM (<em>Advanced Power Management</em>) egy energiakezelő rendszer. Használatának
+leginkább hordozható számítógépeken van értelme, ahol átmenetileg fel lehet függeszteni
+a rendszert futását. Akkor szüksége lehet energiakezelő rendszerre, ha azt szeretné, hogy
+a rendszer leállításakor automatikusan kikapcsoljon a rendszer. Az APM működése
+erősen függ a számítógép BIOS rendszerétől. Ha nem jó a BIOS, vagy rosszul
+van beállítva, akkor az APM bekapcsolása mellékhatásokhoz vezethet. Ilyenkor
+le tilthatja az APM bekapcsolását az
+<br><br>
+
+  <em>apm=off</em>   rendszermag opcióval.<br><br>
+
+Az egy évesnél újabb számítógépeken az APM helyett az <a href="#o_acpi">ACPI</a>
+rendszer használatát javasoljuk.
+
+
+<br><br>Vissza a <a href="#opt">Rendszerindítási opciók</a>hoz.
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_acpi">Az acpi rendszermagparaméter</a></h3>
+
+Az ACPI (<em>Advanced Configuration and Power Interface</em>) szabvány
+meghatározza, hogy az operációs rendszer és a BIOS között hogyan
+működjenek az energiakezelési funkciók. Alapértelmezett esetben
+a openSUSE akkor kapcsolja be az <em>acpi</em> opciót, ha a 2000. évnél
+újabban készült BIOS verziót talál. Az ACPI viselkedését az alábbi opciókkal
+lehet pontosan meghatározni:<br>
+<br>
+  <em>pci=noacpi</em> -- ACPI kikapcsolása a PCI eszközök számára<br>
+  <em>acpi=oldboot</em> -- az ACPI azon részeinek bekapcsolása, melyek a rendszerindításhoz szükségesek<br>
+  <em>acpi=off</em> -- az ACPI teljes kikapcsolása<br>
+  <em>acpi=force</em> -- az ACPI bekapcsolása annak ellenére, hogy a BIOS a 2000. év előtt készült<br>
+<br>
+Új számítógépeken az ACPI teljes mértékben helyettesíti az <a href="#o_apm">apm</a> rendszert.
+
+
+<br><br>Vissza a <a href="#opt">Rendszerindítási opciók</a>hoz.
+
+
+<hr><!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h3><a name="o_ide">Az ide rendszermagparaméter</a></h3>
+
+A legtöbb munkaállomás nem SCSI, hanem IDE alapú háttértárat tartalmaz. Az IDE rendszer
+esetleges hardverproblémáinak kikerüléséhez szüksége lehet az alábbi paraméterre: <br><br>
+
+  <em>ide=nodma</em>  -- kikapcsolja a merevlemez DMA módját<br>
+
+
+
+<br><br>Vissza a <a href="#opt">Rendszerindítási opciók</a>hoz.
+
+</body></html>

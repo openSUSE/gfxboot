@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 12 April 2005), see www.w3.org">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+</head>
+<body>
+<!-- help=boot -->
+<hr>
+<h3><a name="help">使用說明系統</a></h3>
+開機載入器線上說明為智慧型關聯式，它會根據選取的功能表項目來提供資訊，或者，如果您正在編輯開機選項，則它會嘗試查詢游標所在處選項的資訊。<br>
+
+<br>
+巡覽鍵<br>
+<br>
+<em>向上箭號</em>：反白上一個連結<br>
+<em>向下箭號</em>：反白下一個連結<br>
+<em>向左箭號</em>、<em>退格鍵</em>：返回上一個主題<br>
+<em>向右箭號</em>、<em>Enter</em>、<em>空格</em>：追蹤連結<br>
+<em>Page Up</em>：向上捲動一頁<br>
+<em>Page Down</em>：向下捲動一頁<br>
+<em>Home</em>：移至頁首<br>
+<em>End</em>：移至頁底<br>
+<em>Esc</em>: 離開說明<br>
+<br>
+返回 <a href="#opt">開機選項</a>
+<hr>
+<h3><a name="keytable">語言和鍵盤配置選項</a></h3>
+按下 <em>F2</em> 以變更開機載入器使用的語言和鍵盤配置。<br>
+<br>
+返回 <a href="#opt">開機選項</a>
+<hr>
+<h3><a name="profile">選擇設定檔</a></h3>
+按下 <em>F3</em> 以選取設定檔。您的系統會使用儲存在此設定檔中的組態來啟動。<br>
+<br>
+返回 <a href="#opt">開機選項</a>
+<hr>
+<h3><a name="opt">開機選項</a></h3>
+<a href="#o_splash">開頭顯示畫面</a> -- 影響開頭顯示畫面的行為<br>
+<a href="#o_apm">APM</a> -- 切換電源管理<br>
+<a href="#o_acpi">ACPI</a> -- 進階組態和電源界面<br>
+<a href="#o_ide">IDE</a> -- 控制 IDE 子系統<br>
+<hr>
+<h3><a name="o_splash">核心選項：開頭顯示畫面</a></h3>
+開頭顯示畫面是在系統啟動期間顯示的圖片。<br>
+<br>
+<em>splash=0</em><br>
+關閉開頭顯示畫面。這對於非常舊的監視器或是當發生一些錯誤時，非常有用。<br>
+<br>
+<em>splash=verbose</em><br>
+啟動開頭顯示畫面，且仍會顯示核心和開機訊息。<br>
+<br>
+<em>splash=silent</em><br>
+啟動開頭顯示畫面，但未顯示訊息，而是顯示進度列。<br>
+<br>
+返回 <a href="#opt">開機選項</a>
+<hr>
+<h3><a name="o_apm">核心選項：APM</a></h3>
+在目前電腦上使用的電源管理策略有兩種，APM
+是其中一種。它主要是用於筆記型電腦，以提供如暫停磁碟等功能，但它也會在電源中斷後負責關閉電腦。APM 依賴正確運作的 BIOS。如果
+BIOS 壞了，APM 只會限制使用電腦作業，甚或是阻止作業。因此，可使用參數 關閉 APM。<br>
+<br>
+<em>apm=off</em> -- 完全關閉 APM<br>
+<br>
+有些非常新的電腦會從較新的 <a href="#o_acpi">ACPI</a> 獲得較多的益處。<br>
+<br>
+返回 <a href="#opt">開機選項</a>
+<hr>
+<h3><a name="o_acpi">核心選項：ACPI</a></h3>
+ACPI (Advanced Configuration and Power Interface) 是一種標準，用來定義作業系統和
+BIOS 之間的電源和組態管理界面。依預設值，當偵測到 BIOS 比 2000 年新時，便會開啟
+<em>ACPI</em>。有數個常用的參數可控制 ACPI 的行為：<br>
+<br>
+<em>pci=noacpi</em> -- 請勿使用 ACPI 來路由 PCI 插斷 <em>acpi=oldboot</em>
+-- 只有部分與開機有關的 ACPI 會維持已啟動<br>
+<em>acpi=off</em> -- 完全關閉 ACPI<br>
+<em>acpi=force</em> -- 開啟 ACPI，即使您的 BIOS 日期早於 2000 年。<br>
+<br>
+尤其是在新的電腦上，它會取代 <a href="#o_apm">APM</a> 系統。<br>
+<br>
+返回 <a href="#opt">開機選項</a>
+<hr>
+<h3><a name="o_ide">核心選項：IDE</a></h3>
+IDE 和 SCSI 不同，一般用於大部分的桌上型工作站上。若要避開一些 IDE 系統所發生的硬體問題，請使用核心參數：<br>
+<br>
+<em>ide=nodma</em> -- 關閉 IDE 磁碟機的 DMA<br>
+<br>
+<br>
+返回 <a href="#opt">開機選項</a>。
+</body>
+</html>
