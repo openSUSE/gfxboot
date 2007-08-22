@@ -48,9 +48,8 @@
 
       livecd {
 
-        [ keyF2 0 "F2" /panel.video /panel.video.width /panel.video.update /video.init ]
-        [ keyF3 0 "F3" /panel.splash /panel.splash.width /panel.splash.update /splash.init ]
-        [ keyF4 0 "F4" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
+        [ keyF2 0 "F2" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
+        [ keyF3 0 "F3" /panel.video /panel.video.width /panel.video.update /video.init ]
 
       } {
 

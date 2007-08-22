@@ -924,7 +924,7 @@ def
 % (  -- true|false )
 %
 /livecd {
-  /livecd "livecd" getgfxconfig dup .undef ne { 0 ne } { pop false } ifelse def
+  /livecd "livecd" getgfxconfig dup .undef ne { cvn } { pop 0 } ifelse 0 ne def
   livecd
 } def
 
