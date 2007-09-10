@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2007-08-13 19:35+0200\n"
+"PO-Revision-Date: 2007-08-22 14:38+0200\n"
 "Last-Translator: Martin Schlander <suse@linuxin.dk>\n"
 "Language-Team:  <opensuse-translation@opensuse.org>\n"
 "MIME-Version: 1.0\n"
@@ -18,12 +18,12 @@ msgstr ""
 #. ok button label
 #. txt_ok
 msgid "OK"
-msgstr "Ok"
+msgstr "OK"
 
 #. cancel button label
 #. txt_cancel
 msgid "Cancel"
-msgstr "Afbryd"
+msgstr "Annullér"
 
 #. reboot button label
 #. txt_reboot
@@ -45,7 +45,7 @@ msgstr "Manuel installation"
 
 #. txt_noacpi_install
 msgid "Installation--ACPI Disabled"
-msgstr "Installation uden ACPI understøttelse"
+msgstr "Installation uden ACPI-understøttelse"
 
 #. txt_safe_install
 msgid "Installation--Safe Settings"
@@ -118,7 +118,7 @@ msgstr ""
 #. info box title
 #. txt_info_title
 msgid "Boot Loader"
-msgstr "Boot Loader"
+msgstr "Bootloader"
 
 #. error box title
 #. txt_error_title
@@ -166,7 +166,7 @@ msgstr "Gør klar til at indlæse din driver-opdateringsdiskette."
 #. dvd warning title
 #. txt_dvd_warning_title
 msgid "DVD Error"
-msgstr "DVD fejl"
+msgstr "DVD-fejl"
 
 #. txt_dvd_warning2
 msgid ""
@@ -195,20 +195,20 @@ msgstr "Harddisk"
 #. dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "Harddisk installation"
+msgstr "Harddisk-installation"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Diskenhed (gennemsøger alle diske hvis blank)\n"
+msgstr "Diskenhed (gennemsøger alle diske hvis tom)\n"
 
 #. txt_directory
 msgid "Directory\n"
-msgstr "Katalog\n"
+msgstr "Mappe\n"
 
 #. dialog title for ftp installation
 #. txt_ftp_title
 msgid "FTP Installation"
-msgstr "FTP installation"
+msgstr "FTP-installation"
 
 #. txt_server
 msgid "Server\n"
@@ -221,27 +221,27 @@ msgstr "Adgangskode\n"
 #. label for ftp user input
 #. txt_user1
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "Bruger (anonymt login hvis blank)\n"
+msgstr "Bruger (anonymt login hvis tom)\n"
 
 #. dialog title for nfs installation
 #. txt_nfs_title
 msgid "NFS Installation"
-msgstr "NFS installation"
+msgstr "NFS-installation"
 
 #. label for smb user input
 #. txt_user2
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "Bruger (anvender \"guest\" hvis blank)\n"
+msgstr "Bruger (anvender \"guest\" hvis tom)\n"
 
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "SMB (Windows fildeling) installation"
+msgstr "SMB-installation (Windows fildeling)"
 
 #. dialog title for http installation
 #. txt_http_title
 msgid "HTTP Installation"
-msgstr "HTTP installation"
+msgstr "HTTP-installation"
 
 #. 'driver' as in '(hardware) driver update'
 #. txt_driver_update
@@ -269,7 +269,7 @@ msgstr "Installation--IOAPIC aktiveret"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
-msgstr "Installation uden IOAPIC understøttelse"
+msgstr "Installation--IOAPIC-understøttelse deaktiveret"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
@@ -291,7 +291,7 @@ msgstr "Fil"
 #. input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr "Del\n"
+msgstr "Delt ressource\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
@@ -303,15 +303,15 @@ msgstr "Manuel tilstand"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr "Konfigurer parametre på ZEN-partition"
+msgstr "Konfigurér parametre på ZEN-partition"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr "Installer eller opdater ZEN-partition"
+msgstr "Installér eller opdatér ZEN-partition"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "Geninstaller Bootloader for ZEN-partition"
+msgstr "Geninstallér bootloader for ZEN-partition"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
