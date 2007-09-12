@@ -3100,7 +3100,7 @@ set_mode_10:
 		jmp set_mode_90
 set_mode_20:
 		mov ebx,[vbe_buffer]
-		and dword [es:ebx],0
+		mov dword [es:ebx],32454256h	; 'VBE2'
 
 		mov eax,ebx
 		shr eax,4
@@ -3296,7 +3296,7 @@ get_vbe_modes:
 		jnz get_vbe_modes_90
 
 		mov edx,[vbe_buffer]
-		and dword [es:edx],0
+		mov dword [es:edx],32454256h	; 'VBE2'
 
 		mov eax,edx
 		shr eax,4
