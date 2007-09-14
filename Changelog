@@ -1,3 +1,6 @@
+14/9/2007:	v3.3.37
+	- fixed build
+
 12/9/2007:	v3.3.36
 	- always ask for VBE2 info (to e.g. get 1366x768 listed - #298025)
 	- new welcome screen animation

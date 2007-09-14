@@ -17,7 +17,7 @@ HELPINST_ALL = $(notdir $(HELPINST))
 DEFAULT_LANG =
 
 PIC_COMMON   = timer_a.jpg
-PIC_INSTALL  = back.jpg welcome.jpg text*.pcx
+PIC_INSTALL  = back.jpg welcome.jpg grad?.jpg w?.jpg
 PIC_BOOT     = back-low.jpg
 
 FILES_INST   = init languages $(TRANSLATIONS) 16x16.fnt kroete.dat \
