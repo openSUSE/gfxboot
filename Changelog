@@ -1,4 +1,6 @@
+18/9/2007:	v2.4.31
 	- Zen with language selection
+	- add more glyphs to font to cover texts added by yast (#310459)
 
 8/2/2006:	v2.4.30
 	- added Zen theme (#133704)
