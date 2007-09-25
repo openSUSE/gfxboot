@@ -94,7 +94,7 @@
 
   bsplash.init
 
-  bsplash.skip not { 200000 usleep } if
+  bsplash.skip not { 100000 usleep } if
 
   bsplash.skip not {
     {
