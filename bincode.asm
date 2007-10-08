@@ -15546,7 +15546,11 @@ switch_to_pm_20:
 		mov ax,pm_seg.prog_d16
 		mov ds,ax
 
-		mov eax,ss
+		; needed for KVM:
+		; ss:rpl must equal cs:rpl in PM for VT. We can't rely on ss
+		; maintaining its value after the transition.
+
+		movzx eax,word [rm_seg.ss]
 		and esp,0ffffh
 		shl eax,4
 		add esp,eax
