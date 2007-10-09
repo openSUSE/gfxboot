@@ -12,7 +12,8 @@
 
 /bits.suffix [
   .undef
-  "64"
+  % change to "64" if you want to make a bi-arch boot floppy
+  .undef	% "64"
 ] def
 
 

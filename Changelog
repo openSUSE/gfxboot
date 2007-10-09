@@ -1,3 +1,6 @@
+9/10/2007:	v3.2.41
+	- fix x86-64 boot floppy (#330565)
+
 18/9/2007:	v3.2.40
 	- updated GRC theme
 
