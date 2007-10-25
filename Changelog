@@ -1,3 +1,6 @@
+25/10/2007:	v3.2.42
+	- added warning popup needed for preload recovery dvds
+
 9/10/2007:	v3.2.41
 	- fix x86-64 boot floppy (#330565)
 

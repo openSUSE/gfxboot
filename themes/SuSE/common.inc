@@ -209,11 +209,13 @@
     -1 3 return
   } if
 
-  window.action actStart eq {
+  window.action actStart eq
+  window.action actReallyStart eq or {
+    /really_start window.action actReallyStart eq def
     /window.action actNothing def
     /load_error false def
 
-    syslinux {
+    syslinux really_start not and {
       menu.texts menu.entry 0 max menu.texts length 1 sub min get
       dup "mem.min[%s]" mem.min sprintf
       "mem.msg[%s]" mem.msg sprintf
@@ -221,6 +223,11 @@
       enough_mem not {
         nomem_popup
         boot.buf menu.entry 0 return
+      } if
+
+      menu.texts menu.entry get "restore" eq {
+        restore_system
+        "" -1 0 return
       } if
     } if
 
@@ -1053,6 +1060,7 @@
     dup "rescue"    eq { pop txt_rescue         return } if
     dup "hwcheck"   eq { pop "Hardware Check"   return } if
     dup "harddisk"  eq { pop txt_boot_harddisk  return } if
+    dup "restore"   eq { pop "Restore System"   return } if
   } {
     dup "linux"     eq { pop "Linux"        return } if
     dup "failsafe"  eq { pop txt_safe_linux return } if
@@ -1511,6 +1519,34 @@
   dup .buttons [
     button.ok     button.notdefault    actPowerOff actNoClose or button.setaction
     button.cancel button.default       actNothing                button.setaction
+  ] put
+  dup window.init
+      window.show
+
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Restore popup.
+%
+% ( ) ==> ( )
+%
+/restore_system {
+  window.dialog
+
+  dup .title "Think again..." put
+  dup .text
+
+"This will destroy ALL data on your computer.
+There is no way back.
+Please save everything you might need before you continue!
+
+Are you really sure?"
+
+put
+  dup .buttons [
+    button.ok     button.notdefault    actReallyStart  button.setaction
+    button.cancel button.default       actNothing      button.setaction
   ] put
   dup window.init
       window.show
