@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN"
+[
+<!ENTITY product "@product@">
+]>
+<html>
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 12 April 2005), see www.w3.org">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+</head>
+<body>
+<!-- help=install -->
+<hr>
+<h3><a name="main">Aide sur le chargeur d'amorçage</a></h3>
+Welcome to <em>@product@</em><br>
+<br>
+Utilisez ce menu pour sélectionner une fonction. Si vous rencontrez
+des problèmes de navigation dans ce système d'aide, appuyez sur
+<em>F1</em> pour entrer dans la <a href="#help">description</a> du
+système d'aide. Les fonctions principales du menu sont les
+suivantes.<br>
+<br>
+<a href="#harddisk">Amorcer depuis le disque dur</a> : cette
+opération n'agit pas sur le système. Elle permet seulement de
+démarrer un système d'exploitation installé précédemment.<br>
+<br>
+<a href="#linux">Installation</a> : ce mode d'installation
+fonctionne sur la plupart des machines. Si vous rencontrez un gel
+du système lors de l'amorçage ou des problèmes de reconnaissance
+des composants matériels tels que les contrôleurs de disque ou
+cartes réseau, essayez l'une des options d'installation
+suivantes.<br>
+<br>
+<a href="#noacpi">Installation -- ACPI désactivé</a> : en général,
+les ordinateurs vendus actuellement ont des implémentations ACPI
+incomplètes ou défectueuses. Pour désactiver la prise en charge
+ACPI dans le kernel, utilisez la présente option. Celle-ci laisse
+toutefois actives de nombreuses fonctions de performances,
+notamment DMA pour les disques durs IDE.<br>
+<br>
+<a href="#nolapic">Installation -- Local APIC Disabled</a>: If the
+normal installation fails, this might be due to the system hardware
+not supporting local APIC. If this seems to be the case, use this
+option to install without local APIC support.<br>
+<br>
+<a href="#failsafe">Installation -- Paramètres sécurisés</a> : en
+cas d'échec avec <em>Installation</em>, cette option peut résoudre
+votre problème.<br>
+<br>
+<a href="#rescue">Système de secours</a>: This boot image starts a
+small Linux system in RAM. This is useful if the system does not
+start properly. After booting this system, log in as root.<br>
+<br>
+<a href="#firmware">Test de microprogramme</a>: Runs a BIOS test
+tool that validates ACPI and other parts of your BIOS.<br>
+<br>
+<a href="#memtest">Test de mémoire</a>: Memory testing is useful
+for more than checking installation of new memory modules. It is a
+stress test for a big part of your computer system and may indicate
+hardware problems.<br>
+<br>
+<a href="#opt">Options d'amorçage</a> : les options d'amorçage
+peuvent changer complètement le fonctionnement de votre système.
+Elles correspondent aux paramètres du kernel.<br>
+<br>
+<a href="#help">F1 -- Aide</a> : cette aide est contextuelle. Elle
+affichera différents écrans selon l'élément actif de l'écran
+d'amorçage. Une description de ce système d'aide est également
+disponible.<br>
+<br>
+<a href="#keytable">F4 -- Langue</a> : cette fonction permet de
+définir la langue et la disposition du clavier utilisées par le
+chargeur d'amorçage.<br>
+<br>
+<a href="#videomode">F2 -- Mode vidéo</a> : cette fonction permet
+de choisir entre différentes résolutions d'écran lors de
+l'installation. Si vous rencontrez des problèmes avec
+l'installation graphique, le <em>Mode texte</em> peut vous
+permettre de contourner le problème.<br>
+<br>
+<a href="#install_src">F3 -- Source d'installation</a> : cette
+fonction permet de choisir la source d'installation.<br>
+<br>
+<a href="#driverupdate">F5 -- Mise à jour de pilotes</a>: For very
+new machines, a driver update may be needed to install the system.
+<hr>
+<h3><a name="help">Utilisation du système d'aide</a></h3>
+L'aide en ligne du chargeur d'amorçage est contextuelle. Elle
+fournit des informations sur l'élément du menu sélectionné. Lors de
+la modification de la configuration d'amorçage, elle recherche des
+informations sur l'option indiquée par l'emplacement du
+curseur.<br>
+<br>
+Touches de navigation<br>
+<br>
+<em>Flèche haut</em> : mettre en surbrillance le lien précédent<br>
+<em>Flèche bas</em> : mettre en surbrillance le lien suivant<br>
+<em>Flèche gauche</em> et <em>Retour arrière</em> : retour à la
+rubrique précédente<br>
+<em>Flèche droite</em>, <em>Entrée</em> et <em>Espace</em> : suivre
+le lien<br>
+<em>Page haut</em> : faire défiler une page vers le haut<br>
+<em>Page bas</em> : faire défiler une page vers le bas<br>
+<em>Domicile</em> : aller au début de la page<br>
+<em>Fin</em> : aller à la fin de la page<br>
+<em>Échap</em>: leave help<br>
+<br>
+Retour à la rubrique <a href="#main">Page de démarrage</a>
+<hr>
+<h3><a name="driverupdate">Mise à jour de pilotes</a></h3>
+Si vous nécessitez une disquette ou un CD de mise à jour des
+pilotes, appuyez sur <em>F5</em>. Le chargeur d'amorçage vous
+demandera d'insérer le support de mise à jour de pilotes après le
+chargement du kernel Linux.<br>
+<br>
+En général, une mise à jour de pilotes est une disquette contenant
+la nouvelle version de pilotes matériels ou les corrections de
+bogues nécessaires à l'installation.<br>
+<br>
+Retour à la rubrique <a href="#main">Page de démarrage</a>
+<hr>
+<h3><a name="videomode">Sélection du mode vidéo</a></h3>
+Appuyez sur <em>F2</em> pour obtenir la liste des modes vidéo pris
+en charge par votre carte graphique. Le mode d'affichage maximum de
+votre moniteur est présélectionné.<br>
+<br>
+Votre moniteur peut ne pas être détecté automatiquement. Dans ce
+cas, sélectionnez votre mode préféré manuellement.<br>
+<br>
+Si votre système rencontre des problèmes avec la carte graphique
+lors de l'installation, le <em>Mode texte</em> peut vous permettre
+de contourner le problème.<br>
+<br>
+Retour à la rubrique <a href="#main">Page de démarrage</a>
+<hr>
+<h3><a name="keytable">Sélection de la langue et de la disposition
+du clavier</a></h3>
+Cliquez sur <em>F4</em> pour changer la langue et la disposition du
+clavier utilisées par le chargeur d'amorçage.<br>
+<br>
+Retour à la rubrique <a href="#main">Page de démarrage</a>
+<hr>
+<h3><a name="install_src">Source d'installation</a></h3>
+Appuyez sur <em>F3</em> pour choisir une source d'installation.<br>
+<br>
+Cette opération revient au même que d'utiliser l'option d'amorçage
+<a href="#o_install">install</a>.<br>
+<br>
+Retour à la rubrique <a href="#main">Page de démarrage</a>
+<hr>
+<h3><a name="linux">Installation</a></h3>
+Select <em>Installation</em> to start the default installation. The
+<a href="#opt">Options d'amorçage</a> entered are used in the
+start-up. This item activates many features of commonly available
+hardware.<br>
+<br>
+Retour à la rubrique <a href="#main">Page de démarrage</a>
+<hr>
+<h3><a name="harddisk">Amorcer depuis le disque dur</a></h3>
+Sélectionnez <em>Amorcer le système installé</em> pour démarrer le
+système installé sur votre disque dur local. Ce système doit être
+installé correctement parce que seul le MBR (Master Boot Record -
+secteur d'amorçage principal) du premier disque dur est démarré.
+L'ID matériel du premier disque dur est fourni par le BIOS de
+l'ordinateur.<br>
+<br>
+Use this if you forgot to remove the CD or DVD from your drive and
+want to start the computer from the hard disk.<br>
+<br>
+Retour à la rubrique <a href="#main">Page de démarrage</a>
+<hr>
+<h3><a name="noacpi">Installation -- ACPI désactivé</a></h3>
+Current hardware usually requires ACPI (Advanced Configuration and
+Power Interface) to control the interrupt handling. ACPI completely
+replaces the old APM system.<br>
+<br>
+Sélectionnez <em>Installation -- ACPI désactivé</em> si vous
+rencontrez des problèmes lors de l'amorçage du kernel. Les
+problèmes connus avec ACPI sont :<br>
+<br>
+* gel du kernel lors de l'amorçage<br>
+* PCI Cards are not detected or initialized properly<br>
+<br>
+You may also try the <a href="#firmware">Test de microprogramme</a>
+boot option and look at the test results of the ACPI
+validation.<br>
+<br>
+Retour à la rubrique <a href="#main">Page de démarrage</a>
+<hr>
+<h3><a name="nolapic">Installation -- Local APIC Disabled</a></h3>
+Normally there are no problems with the APIC (Advanced Programmable
+Interrupt Controller). But if you seem to have some, try this
+option to boot without local APIC support.<br>
+<br>
+Please don't confuse this with <a href="#noacpi">acpi</a> (Advanced
+Configuration and Power Interface).<br>
+<br>
+Retour à la rubrique <a href="#main">Page de démarrage</a>
+<hr>
+<h3><a name="failsafe">Installation -- Paramètres
+sécurisés</a></h3>
+Sélectionnez <em>Installation -- Paramètres sécurisés</em> si votre
+système reste bloqué lors de l'installation ou si des erreurs non
+reproductibles se produisent. Cette option désactive DMA pour les
+unités IDE et toutes les fonctions de gestion de l'alimentation.
+Reportez-vous également aux options de kernel de <a href=
+"#o_apm">apm</a>, <a href="#o_acpi">acpi</a> et <a href=
+"#o_ide">ide</a>.<br>
+<br>
+Retour à la rubrique <a href="#main">Page de démarrage</a>
+<hr>
+<h3><a name="rescue">Système de secours</a></h3>
+The <em>Système de secours</em> is a small RAM disk base system.
+From there, it is possible to make all kinds of changes to an
+installed system. Because only low-level tools are available in
+this system, it is intended for experts.<br>
+<br>
+Retour à la rubrique <a href="#main">Page de démarrage</a>
+<hr>
+<h3><a name="firmware">Test de microprogramme</a></h3>
+Starts a BIOS checker that validates the ACPI tables and many other
+parts of your BIOS. Test results can be stored on usb disk or saved
+via network.<br>
+<br>
+Retour à la rubrique <a href="#main">Page de démarrage</a>
+<hr>
+<h3><a name="memtest">Test de mémoire</a></h3>
+Le <em>Test de mémoire</em> inclus fournit de bonnes possibilités
+de procéder à des tests de contraintes du matériel. Il vise
+principalement à détecter des RAM défectueuses mais il teste
+également beaucoup d'autres parties du système.<br>
+There is no guarantee that the memory is good if no errors are
+found, although most of memory defects will be found.<br>
+<br>
+Retour à la rubrique <a href="#main">Page de démarrage</a>
+<hr>
+<h3><a name="opt">Options d'amorçage</a></h3>
+Deux types d'options d'amorçage sont disponibles : celles du
+programme d'installation et celles de kernel. Les plus courantes
+sont notamment les suivantes.<br>
+<br>
+a) Options du programme d'installation<br>
+<br>
+<a href="#o_install">install</a> -- détermine une source
+d'installation<br>
+<a href="#network">options réseau</a> -- concerne les options
+réseau<br>
+<a href="#o_vnc">options VNC</a> -- concerne les options
+d'installation VNC<br>
+<br>
+b) Options de kernel<br>
+<br>
+<a href="#o_splash">splash</a> -- détermine le fonctionnement de
+l'écran de démarrage<br>
+<a href="#o_apm">apm</a> -- active ou non la fonction de gestion de
+l'alimentation<br>
+<a href="#o_acpi">acpi</a> -- concerne l'interface de gestion de
+l'alimentation et de configuration avancée<br>
+<a href="#o_ide">ide</a> -- control the IDE subsystem<br>
+<br>
+Retour à la rubrique <a href="#main">Page de démarrage</a>
+<hr>
+<h3><a name="o_install">Options du programme d'installation :
+install</a></h3>
+Par défaut, la source d'installation est recherchée dans les CD
+locaux. Pour une installation réseau, sélectionnez l'option
+<em>install</em>. Les protocoles d'installation possibles sont les
+suivants.<br>
+* FTP<br>
+* NFS<br>
+* HTTP<br>
+La syntaxe à utiliser est simplement comme celle des URL standard.
+Par exemple, si votre serveur se trouve à l'adresse 192.168.0.1 et
+si vous voulez procéder à une installation basée NFS depuis le
+répertoire /install de ce serveur, spécifiez la source comme suit
+:<br>
+<br>
+<em>install=nfs://192.168.0.1/install</em><br>
+<br>
+The network card will either be configured with <em>DHCP</em> or
+you must specify the parameters yourself as described in the
+<a href="#network">options réseau</a>.<br>
+<br>
+Retour à la rubrique <a href="#opt">Options d'amorçage</a>
+<hr>
+<h3><a name="o_splash">Options de kernel : splash</a></h3>
+L'écran de démarrage est l'image affichée durant l'amorçage du
+système.<br>
+<br>
+<em>splash=0</em><br>
+<br>
+L'écran de démarrage est désactivé. Ce résultat peut être utile en
+cas de moniteurs très anciens ou de certaines erreurs.<br>
+<br>
+<em>splash=verbose</em><br>
+<br>
+Active l'écran de démarrage sans faire disparaître les messages de
+kernel et d'amorçage.<br>
+<br>
+<em>splash=silent</em><br>
+<br>
+Activates splash, but no messages. Instead a progress bar is
+drawn.<br>
+<br>
+Retour à la rubrique <a href="#opt">Options d'amorçage</a>
+<hr>
+<h3><a name="network">Options du programme d'installation : options
+réseau</a></h3>
+Il est possible de configurer l'interface réseau dès maintenant. Le
+matériel sera détecté ultérieurement par YaST2. Le jeu minimum
+d'options pour configurer votre carte réseau consiste en l'IP
+d'hôte et le masque réseau. Par exemple :<br>
+<br>
+<em>hostip=192.168.0.10 netmask=255.255.255.0</em><br>
+<br>
+En abrégé :<br>
+<br>
+<em>hostip=192.168.0.10/24</em><br>
+<br>
+If you specified a <a href="#o_install">installation basée
+réseau</a> and do not specify both of these options, the installer
+tries to configure the network interface with <em>DHCP</em>. If you
+need a default gateway, specify this with the option
+<em>Passerelle</em>. For example:<br>
+<br>
+<em>gateway=192.168.0.8</em><br>
+<br>
+Retour à la rubrique <a href="#opt">Options d'amorçage</a>
+<hr>
+<h3><a name="o_vnc">Options du programme d'installation :
+vnc</a></h3>
+Pour activer l'installation VNC, spécifiez les paramètres vnc et
+vncpassword :<br>
+<br>
+<em>vnc=1 vncpassword=example</em><br>
+<br>
+The VNC server will be started and you may control YaST2 over any
+VNC client from a remote system.<br>
+<br>
+Retour à la rubrique <a href="#opt">Options d'amorçage</a>.
+<hr>
+<h3><a name="o_apm">Options de kernel : apm</a></h3>
+APM est l'une des deux stratégies de gestion de l'alimentation des
+ordinateurs actuels. Elle est utilisée principalement sur les
+ordinateurs portables pour des fonctions telles que la mise en
+veille sur disque. Par ailleurs, elle peut désactiver l'ordinateur
+après sa mise hors tension. APM dépend du fonctionnement correct du
+BIOS. Si le BIOS est défectueux, APM peut être d'une utilité
+limitée ou même empêcher l'ordinateur de fonctionner. Dans ces cas,
+elle peut être désactivée à l'aide du paramètre<br>
+<br>
+<em>apm=off</em> -- désactiver complètement APM<br>
+<br>
+Dans certains cas, un tout nouvel ordinateur est équipé du système
+<a href="#o_acpi">acpi</a> plus récent.<br>
+<br>
+Retour à la rubrique <a href="#opt">Options d'amorçage</a>
+<hr>
+<h3><a name="o_acpi">Options de kernel : acpi</a></h3>
+Le standard ACPI (Advanced Configuration and Power Interface)
+définit les interfaces de gestion d'alimentation et de
+configuration entre un système d'exploitation et le BIOS. Par
+défaut, <em>acpi</em> est activé lorsqu'un BIOS ultérieur à l'année
+2000 est détecté. Il existe plusieurs paramètres utilisés
+couramment pour contrôler le fonctionnement de ACPI.<br>
+<br>
+<em>pci=noacpi</em> -- do not use ACPI to route PCI interrupts<br>
+<em>acpi=oldboot</em> -- only the parts of ACPI that are relevant
+for booting remain activated<br>
+<em>acpi=off</em> -- désactiver complètement ACPI<br>
+<em>acpi=force</em> -- activer ACPI même si votre BIOS est
+antérieur à 2000<br>
+<br>
+Le remplacement de l'ancien système <a href="#o_apm">apm</a>
+s'applique notamment aux nouveaux ordinateurs.<br>
+<br>
+Retour à la rubrique <a href="#opt">Options d'amorçage</a>
+<hr>
+<h3><a name="o_ide">Options de kernel : ide</a></h3>
+À la différence de SCSI, IDE est couramment utilisé sur la plupart
+des postes de travail de bureau. Pour contourner certains problèmes
+matériels des systèmes IDE, utilisez le paramètre de kernel
+suivant.<br>
+<br>
+<em>ide=nodma</em> -- switch off DMA for IDE drives<br>
+<br>
+Retour à la rubrique <a href="#opt">Options d'amorçage</a>.
+<hr>
+<h3><a name="bits">Sélection du type de logiciel</a></h3>
+You have the choice to install the 32-bit or 64-bit version of
+@product@.<br>
+<br>
+Retour à la rubrique <a href="#main">Page de démarrage</a>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 12 April 2005), see www.w3.org">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+</head>
+<body>
+<!-- help=boot -->
+<hr>
+<h3><a name="help">Usando o Sistema de Ajuda</a></h3>
+A ajuda online do carregador de boot é sensível ao contexto. Ela
+fornece informações sobre o item de menu selecionado ou, se você
+estiver editando opções de boot, tenta procurar informações sobre a
+opção em que o cursor está posicionado.<br>
+<br>
+Teclas de Navegação<br>
+<br>
+<em>Seta para Cima</em>: realçar link anterior<br>
+<em>Seta para Baixo</em>: realçar próximo link<br>
+<em>Seta para a Esquerda</em>, <em>Backspace</em>: retornar ao
+tópico anterior<br>
+<em>Seta para a Direita</em>, <em>Enter</em>, <em>Espaço</em>:
+seguir link<br>
+<em>Page Up</em>: rolar uma página para cima<br>
+<em>Page Down</em>: rolar uma página para baixo<br>
+<em>Casa</em>: ir para o início da página<br>
+<em>Fim</em>: ir para o final da página<br>
+<em>Esc</em>: sair da ajuda<br>
+<br>
+Retornar a <a href="#opt">Opções de Boot</a>
+<hr>
+<h3><a name="keytable">Seleção de Idioma e Layout de
+Teclado</a></h3>
+Pressione <em>F2</em> para mudar o idioma e o layout de teclado
+usados pelo carregador de boot.<br>
+<br>
+Retornar a <a href="#opt">Opções de Boot</a>
+<hr>
+<h3><a name="profile">Escolher Perfil</a></h3>
+Pressione <em>F3</em> para selecionar um perfil. Seu sistema será
+inicializado usando a configuração gravada nesse perfil.<br>
+<br>
+Retornar a <a href="#opt">Opções de Boot</a>
+<hr>
+<h3><a name="opt">Opções de Boot</a></h3>
+<a href="#o_splash">splash</a> -- influenciar o comportamento da
+splash screen<br>
+<a href="#o_apm">apm</a> -- alternar gerenciamento de energia<br>
+<a href="#o_acpi">acpi</a> -- interface avançada de configuração e
+energia<br>
+<a href="#o_ide">IDE</a> -- controlar o subsistema IDE<br>
+<hr>
+<h3><a name="o_splash">Opções de Kernel: splash</a></h3>
+A splash screen é a imagem mostrada durante a inicialização do
+sistema.<br>
+<br>
+<em>splash=0</em><br>
+A splash screen é desativada. Isso poderá ser útil com monitores
+muito antigos, ou se ocorrerem erros.<br>
+<br>
+<em>splash=verbose</em><br>
+Ativa a splash; as mensagens do kernel e de boot ainda são
+mostradas.<br>
+<br>
+<em>splash=silent</em><br>
+Ativa a splash, mas sem mensagens. Em vez disso, é exibida uma
+barra de andamento.<br>
+<br>
+Retornar a <a href="#opt">Opções de Boot</a>
+<hr>
+<h3><a name="o_apm">Opções de Kernel: apm</a></h3>
+O APM representa uma das duas estratégias de gerenciamento de
+energia usadas nos computadores atuais. Ele é usado principalmente
+com laptops para funções como suspensão para o disco, mas também
+pode ser responsável pela desativação do computador após uma queda
+de energia. O APM depende do correto funcionamento do BIOS. Se o
+BIOS estiver danificado, o APM talvez tenha apenas uso limitado ou
+até impeça o funcionamento do computador. Portanto, ele pode ser
+desativado com o parâmetro<br>
+<br>
+<em>apm=off</em> -- desativar o APM completamente<br>
+<br>
+Alguns computadores muito novos podem tirar mais proveito da
+<a href="#o_acpi">acpi</a> mais recente.<br>
+<br>
+Retornar a <a href="#opt">Opções de Boot</a>
+<hr>
+<h3><a name="o_acpi">Opções de Kernel: acpi</a></h3>
+ACPI (Advanced Configuration and Power Interface - Interface
+Avançada de Configuração e Alimentação) é um padrão que define as
+interfaces de gerenciamento de configuração e energia entre um
+sistema operacional e o BIOS. Por padrão, <em>acpi</em> é ativado
+quando é detectado um BIOS mais recente do que o ano 2000. Há
+vários parâmetros normalmente usados para controlar o comportamento
+da ACPI:<br>
+<br>
+<em>pci=noacpi</em> -- não usar a ACPI para rotear interrupções de
+PCI <em>acpi=oldboot</em> -- apenas as partes da ACPI que são
+relevantes para inicialização permanecem ativadas<br>
+<em>acpi=off</em> -- desativar a ACPI completamente<br>
+<em>acpi=force</em> -- ativar a ACPI mesmo que o BIOS tenha data
+anterior a 2000<br>
+<br>
+Principalmente em novos computadores, ele substitui o antigo
+sistema <a href="#o_apm">apm</a>.<br>
+<br>
+Retornar a <a href="#opt">Opções de Boot</a>
+<hr>
+<h3><a name="o_ide">Opções de Kernel: ide</a></h3>
+Diferentemente do SCSI, o IDE costuma ser usado na maioria das
+estações de trabalho de área de trabalho. Para contornar alguns
+problemas de hardware que ocorrem com sistemas IDE, use o parâmetro
+de kernel:<br>
+<br>
+<em>ide=nodma</em> -- desativar dma para unidades IDE<br>
+<br>
+<br>
+Retornar a <a href="#opt">Opções de Boot</a>.
+</body>
+</html>

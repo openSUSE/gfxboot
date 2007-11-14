@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 12 April 2005), see www.w3.org">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+</head>
+<body>
+<!-- help=boot -->
+<hr>
+<h3><a name="help">Ohjejärjestelmän käyttäminen</a></h3>
+Käynnistyslataimen ohje on kontekstiriippuvainen. Se antaa tietoja
+valitusta valikon kohdasta tai, jos muokkaat käynnistysvalintoja,
+se yrittää hakea tietoa valinnasta jolla kursori on.<br>
+<br>
+Navigointinäppäimet<br>
+<br>
+<em>Nuoli ylös</em>: korosta aiempi linkki<br>
+<em>Nuoli alas</em>: korosta seuraava linkki<br>
+<em>Nuoli vasemmalle</em>, <em>Askelpalautin</em>: palaa aiempaan
+aiheeseen<br>
+<em>Nuoli oikealle</em>, <em>Enter</em>, <em>Välilyönti</em>:
+seuraa linkkiä<br>
+<em>Page Up</em>: vieritä yksi sivu ylös<br>
+<em>Page Down</em>: vieritä yksi sivu alas<br>
+<em>Home</em>: mene sivun alkuun<br>
+<em>End</em>: mene sivun loppuun<br>
+<em>Esc</em>: sulje ohje<br>
+<br>
+Palaa <a href="#opt">Käynnistysvalinnat</a>
+<hr>
+<h3><a name="keytable">Kieli ja näppäimistökartta
+-valinnat</a></h3>
+Paina <em>F2</em> vaihtaaksesi käytettävää käynnistyslataimen
+kieltä ja näppäimistökarttaa.<br>
+<br>
+Palaa <a href="#opt">Käynnistysvalinnat</a>
+<hr>
+<h3><a name="profile">Valitse profiili</a></h3>
+Paina <em>F3</em> valitaksesi käytettävän profiilin. Järjestelmäsi
+käynnistetään käyttäen profiiliin tallennettua määritystä.<br>
+<br>
+Palaa <a href="#opt">Käynnistysvalinnat</a>
+<hr>
+<h3><a name="opt">Käynnistysvalinnat</a></h3>
+<a href="#o_splash">splash</a> -- muuta splash-näytön
+käyttäytymistä<br>
+<a href="#o_apm">apm</a> -- virranhallinta päälle/pois<br>
+<a href="#o_acpi">acpi</a> -- advanced configuration and power
+interface<br>
+<a href="#o_ide">ide</a> -- ohjaa IDE alijärjestelmää<br>
+<hr>
+<h3><a name="o_splash">Ytimen valinnat: splash</a></h3>
+splash-näyttö on kuva, joka näytetään järjestelmän käynnistyksen
+yhteydessä.<br>
+<br>
+<em>splash=0</em><br>
+Splash-näyttö ei ole käytössä. Tämä voi olla käytännöllistä todella
+vanhojen monitoreiden kanssa, tai jos virheitä ilmenee.<br>
+<br>
+<em>splash=verbose</em><br>
+Ottaa käyttöön splash-näytön, ydin- ja käynnistysviestit näkyvät
+silti.<br>
+<br>
+<em>splash=silent</em><br>
+Ottaa käyttöön splash-näytön, mutta ei viestejä. Näiden sijasta
+käytetään etenemispalkki.<br>
+<br>
+Palaa <a href="#opt">Käynnistysvalinnat</a>
+<hr>
+<h3><a name="o_apm">Ytimen valinnat: apm</a></h3>
+APM on toinen nykyisissä tietokoneissa käytettävistä virranhallinta
+strategioista. Sitä käytetään pääasiassa kannettavien tietokoneiden
+toiminnoissa kuten "suspend to disk", mutta se voi olla vastuussa
+myös tietokoneen sammuttamisesta. APM on riippuvainen toimivasta
+BIOS:sta. Jos BIOS on rikkinäinen, APM:llä voi olla vain
+rajoitettua käyttöä, tai se voi jopa estää tietokonetta toimimasta.
+Tämän takia APM voidaan poistaa käytöstä parametrilla<br>
+<br>
+<em>apm=off</em> -- poistaa APM-toiminnon kokonaan<br>
+<br>
+Uusimmat tietokoneet voivat hyötyä enemmän uudemmasta <a href=
+"#o_acpi">ACPI</a>:sta.<br>
+<br>
+Palaa <a href="#opt">Käynnistysvalinnat</a>
+<hr>
+<h3><a name="o_acpi">Ytimen valinnat: acpi</a></h3>
+ACPI (Advanced Configuration and Power Interface) on standardi,
+joka määrittelee virran- ja laitteistohallinnan liittymän
+käyttöjärjestelmän ja BIOS välillä. Oletuksena, <em>acpi</em>
+otetaan käyttöön kun BIOS-versio on otettu käyttöön vuoden 2000
+jälkeen. Useita yleisesti käytettyjä parametreja ACPI:n ohjaamiseen
+ovat:<br>
+<br>
+<em>pci=noacpi</em> -- älä käytä ACPI:a ohjaamaan PCI keskeytyksiä
+<em>acpi=oldboot</em> -- vain osa ACPI:sta, jotka kuuluvat
+käynnistykseen ovat käytössä<br>
+<em>acpi=off</em> -- poistaa ACPI:n kokonaan käytöstä<br>
+<em>acpi=force</em> -- käyttää ACPI:a vaikka BIOS olisi päivätty
+ennen vuotta 2000<br>
+<br>
+Erityisesti uusissa tietokoneissa tämä korvaa vanhan <a href=
+"#o_apm">apm</a>-järjestelmän.<br>
+<br>
+Palaa <a href="#opt">Käynnistysvalinnat</a>
+<hr>
+<h3><a name="o_ide">Ytimen valinnat: ide</a></h3>
+IDE (toisin kuin SCSI) on yleisesti käytetty useimmissa
+työasemissa. Ohittaaksesi joitakin IDE-järjestelmien
+laitteisto-ongelmia, käytä ytimen parametria:<br>
+<br>
+<em>ide=nodma</em> -- poistaa dma:n IDE-levyiltä<br>
+<br>
+<br>
+Palaa <a href="#opt">Käynnistysvalinnat</a>.
+</body>
+</html>
