@@ -305,8 +305,8 @@ if [ ! "$logo" ] ; then
   [ "$what" = syslinux -o "$what" = isolinux ] && logo=install
 fi
 
-[ "$logo" = "boot" ] && logo="themes/$theme/boot/message"
-[ "$logo" = "install" ] && logo="themes/$theme/install/bootlogo"
+[ "$logo" = "boot" ] && logo="themes/$theme/message"
+[ "$logo" = "install" ] && logo="themes/$theme/bootlogo"
 
 [ "$BOOTLOGO" ] && logo=$BOOTLOGO
 
@@ -320,8 +320,8 @@ if [ ! "$what" ] ; then
   usage
 fi
 
-make BINDIR=../../ -C themes/$theme prep
-make BINDIR=../../ -C themes/$theme $lang || exit
+# make BINDIR=../../ -C themes/$theme prep
+make -C themes/$theme $lang || exit
 
 [ -f "$logo" ] || logo="themes/$theme/bootlogo"
 

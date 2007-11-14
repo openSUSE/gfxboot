@@ -1,3 +1,5 @@
+	- source tree layout changed
+
 8/10/2007:	v3.3.39
 	- Avi Kivity: SS does not survive switch to PM in KVM (#307194)
 
