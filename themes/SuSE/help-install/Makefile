@@ -1,14 +1,13 @@
 BINDIR    := $(shell [ -x ../../../mkbootmsg ] && echo ../../../ )
 
-PRODUCT   = "openSUSE 10.3"
-export PRODUCT
+PRODUCT   = $(shell perl -ne 'print if s/^product=//' ../config)
 
 HELP2TXT  = $(BINDIR)help2txt
 
 HELPFILES = $(addsuffix .hlp,$(basename $(wildcard *.html)))
 
 %.hlp: %.html
-	$(HELP2TXT) --product=$(PRODUCT) $< >$@
+	$(HELP2TXT) --product='$(PRODUCT)' $< >$@
 
 all: .ready
 

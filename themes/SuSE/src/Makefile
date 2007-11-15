@@ -1,8 +1,5 @@
 BINDIR      := $(shell [ -x ../../../mkbootmsg ] && echo ../../../ )
 
-PRODUCT      = "openSUSE 10.3"
-export PRODUCT
-
 MKBOOTMSG    = $(BINDIR)mkbootmsg
 BFLAGS       = -O -v -L ../..
 

@@ -1,7 +1,7 @@
 POFILES	= $(wildcard *.po)
 TEXTS	= $(addsuffix .tr,$(basename $(wildcard *.po)))
 
-PRODUCT ?= "openSUSE 10.3"
+PRODUCT = $(shell perl -ne 'print if s/^product=//' ../config)
 
 all: .ready
 
@@ -9,11 +9,11 @@ all: .ready
 	@touch .ready
 
 %.tr: %.po text.inc
-	bin/po2txt --product=$(PRODUCT) $< >$@
+	bin/po2txt --product='$(PRODUCT)' $< >$@
 
 # en.tr uses msgids from bootloader.pot
 en.tr text.inc: bootloader.pot
-	bin/po2txt --product=$(PRODUCT) $< >en.tr
+	bin/po2txt --product='$(PRODUCT)' $< >en.tr
 
 clean:
 	rm -f .ready text.inc *.tr *~

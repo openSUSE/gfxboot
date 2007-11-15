@@ -1,8 +1,14 @@
 BINDIR      := $(shell [ -x ../../mkbootmsg ] && echo ../../ )
 
-PRODUCT      = "openSUSE 10.3"
-export PRODUCT
+BASED_ON     = $(shell perl -ne 'print if s/^based_on=//' config)
 
+ifeq ($(BASED_ON),)
+PREPARED     = 1
+else
+PREPARED     = $(shell [ -f .prepared ] && echo 1)
+endif
+
+ADDDIR       = ../../bin/adddir
 MKBOOTMSG    = $(BINDIR)mkbootmsg
 BFLAGS       = -O -v -L ../..
 
@@ -10,9 +16,21 @@ SUBDIRS      = fonts help-boot help-install po src
 
 DEFAULT_LANG =
 
-.PHONY: all clean $(SUBDIRS)
+.PHONY: all clean distclean $(SUBDIRS)
 
-all: bootlogo message
+ifeq ($(PREPARED), 1)
+
+  all: bootlogo message
+
+else
+
+  all:
+	$(ADDDIR) ../$(BASED_ON) .
+	make clean
+	touch .prepared
+	make
+
+endif
 
 %/.ready: %
 	make -C $*
@@ -23,8 +41,8 @@ src/main.bin: src
 bootlogo: src/main.bin help-install/.ready po/.ready fonts/.ready
 	@rm -rf bootlogo.dir
 	@mkdir bootlogo.dir
-	cp -r languages gfxboot.cfg data-install/* fonts/*.fnt po/*.tr bootlogo.dir
-	cp -r help-install/*.hlp bootlogo.dir
+	cp -rL languages gfxboot.cfg data-install/* fonts/*.fnt po/*.tr bootlogo.dir
+	cp -rL help-install/*.hlp bootlogo.dir
 	cp src/main.bin bootlogo.dir/init
 ifdef DEFAULT_LANG
 	@echo $(DEFAULT_LANG) >bootlogo.dir/lang
@@ -35,19 +53,26 @@ endif
 message: src/main.bin help-boot/.ready po/.ready fonts/.ready
 	@rm -rf message.dir
 	@mkdir message.dir
-	cp -r languages gfxboot.cfg data-boot/* fonts/*.fnt message.dir
-	cp -r po/en.tr help-boot/en.hlp message.dir
+	cp -rL languages gfxboot.cfg data-boot/* fonts/*.fnt message.dir
+	cp -rL po/en.tr help-boot/en.hlp message.dir
 	cp src/main.bin message.dir/init
 	@echo en_US >message.dir/languages
 ifdef DEFAULT_LANG
-	cp -r po/$(DEFAULT_LANG).tr help-boot/$(DEFAULT_LANG).hlp message.dir
+	cp -rL po/$(DEFAULT_LANG).tr help-boot/$(DEFAULT_LANG).hlp message.dir
 	@echo $(DEFAULT_LANG) >message.dir/lang
 	@echo $(DEFAULT_LANG) >>message.dir/languages
 endif
-#	@sh -c 'cd message.dir; chmod +t * ; chmod -t init languages'
 	@sh -c 'cd message.dir; echo * | sed -e "s/ /\n/g" | cpio --quiet -o >../message'
 
 clean:
-	@for i in $(SUBDIRS) ; do make -C $$i clean ; done
+	@for i in $(SUBDIRS) ; do [ ! -f $$i/Makefile ] ||  make -C $$i clean ; done
 	rm -rf bootlogo bootlogo.dir message message.dir *~
 
+distclean: clean
+ifneq ($(BASED_ON),)
+	rm -f .prepared
+	rm -f `find -type l \! -wholename ./Makefile`
+	rmdir `find -depth -type d \! -name . \! -name .svn \! -wholename './.svn/*'` 2>/dev/null || true
+endif
+
+	
