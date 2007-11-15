@@ -4,7 +4,7 @@ CC	 = gcc
 CFLAGS	 = -g -Wall -Wno-pointer-sign -O2 -fomit-frame-pointer
 THEMES	 = $(wildcard themes/*)
 
-.PHONY: all themes clean install doc
+.PHONY: all clean distclean doc install themes
 
 all:	bin2c mkbootmsg bincode mkblfont addblack
 
@@ -49,8 +49,10 @@ clean: themes doc
 	@rm -f mkbootmsg bincode mkblfont addblack bincode.h bin2c *.lst *.map vocabulary.inc vocabulary.h *.o *~
 	@rm -rf tmp
 
+distclean: clean
+
 themes:
-	@for i in $(THEMES) ; do make -C $$i BINDIR=../../ $(MAKECMDGOALS) ; done
+	@for i in $(THEMES) ; do make -C $$i BINDIR=../../ $(MAKECMDGOALS) || break ; done
 
 doc:
 	make -C doc $(MAKECMDGOALS)

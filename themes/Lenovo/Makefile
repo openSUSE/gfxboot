@@ -42,7 +42,7 @@ boot/%.hlp: help-boot.%.html boot
 install/%.hlp: help-install.%.html install
 	$(HELP2TXT) --product=$(PRODUCT) $< >$@
 
-.PHONY: all themes font aafont bitmapfont clean po
+.PHONY: all themes font aafont bitmapfont clean po distclean
 
 all: themes
 
@@ -128,4 +128,6 @@ prep:
 	[ ! -f po/Makefile ] || make -C po clean
 	rm -f bootdir installdir *~
 	rm -rf boot install
+
+distclean: clean
 

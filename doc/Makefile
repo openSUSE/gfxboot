@@ -19,3 +19,6 @@ html: $(XMLSRC)
 
 clean:
 	rm -rf *~ *.pdf *.html *.txt reference.xml *.dsl *.local
+
+distclean: clean
+

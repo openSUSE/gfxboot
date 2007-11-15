@@ -65,7 +65,7 @@ endif
 	@sh -c 'cd message.dir; echo * | sed -e "s/ /\n/g" | cpio --quiet -o >../message'
 
 clean:
-	@for i in $(SUBDIRS) ; do [ ! -f $$i/Makefile ] ||  make -C $$i clean ; done
+	@for i in $(SUBDIRS) ; do [ ! -f $$i/Makefile ] ||  make -C $$i clean || break ; done
 	rm -rf bootlogo bootlogo.dir message message.dir *~
 
 distclean: clean

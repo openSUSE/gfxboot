@@ -6,7 +6,7 @@ ifneq ($(BINDIR),)
   BM_TARGET := $(MKBOOTMSG)
 endif
 
-.PHONY: all themes clean
+.PHONY: all themes clean distclean
 
 all: themes
 
@@ -18,3 +18,6 @@ bootlogo: test.ps $(BM_TARGET)
 
 clean:
 	rm -f *~ log init bootlogo
+
+distclean: clean
+

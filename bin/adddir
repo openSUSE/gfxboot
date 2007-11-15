@@ -1,15 +1,13 @@
 #! /bin/bash
 
 #
-# needs: chmod chown cp ln mktemp mv readlink rm
+# Symlink all files in a tree that are missing.
 #
-
 
 function read_dir {
   local i
 
-  for i in `( cd "$1" && echo .* * )` ; do
-    [ "$i" = . -o "$i" = .. ] && continue
+  for i in `( cd "$1" && echo * )` ; do
     [ -e "$1/$i" -o -L "$1/$i" ] && echo "$i"
   done
 }
@@ -27,20 +25,19 @@ function add_dir {
     if [ -d "$src/$i" -a ! -L "$src/$i" ]; then
       # add directory
       # echo "  add dir $src/$i as $dst/$i"
-      if [ -d "$dst/$i" ] ; then
-        if [ -L "$dst/$i" ] ; then
-          tmp=`mktemp -d "$dst/adddir.XXXXXX"` || exit 2
-          chown --dereference --reference "$dst/$i" "$tmp" 2>/dev/null
-          chmod --reference "$dst/$i" "$tmp"
-          add_dir "`readlink $dst/$i`" "$tmp"
-          rm -f "$dst/$i"
-          mv "$tmp" "$dst/$i"
-        fi
-        add_dir "$src/$i" "$dst/$i"
-      else
+      if [ ! -d "$dst/$i" ] ; then
         rm -f "$dst/$i"
-        ln -s "`( cd $src ; pwd )`/$i" "$dst/$i"
+        mkdir "$dst/$i"
       fi
+      if [ -L "$dst/$i" ] ; then
+        tmp=`mktemp -d "$dst/adddir.XXXXXX"` || exit 2
+        chown --dereference --reference "$dst/$i" "$tmp" 2>/dev/null
+        chmod --reference "$dst/$i" "$tmp"
+        add_dir "`readlink $dst/$i`" "$tmp"
+        rm -f "$dst/$i"
+        mv "$tmp" "$dst/$i"
+      fi
+      add_dir "$src/$i" "$dst/$i"
     else
       if [ ! -e "$dst/$i" ] ; then
         # add non-directory
