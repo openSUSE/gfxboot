@@ -1061,6 +1061,7 @@
     dup "hwcheck"   eq { pop "Hardware Check"   return } if
     dup "harddisk"  eq { pop txt_boot_harddisk  return } if
     dup "restore"   eq { pop "Restore System"   return } if
+    dup "pcdoc"     eq { pop "PC Doctor DOS Diagnostics" return } if
   } {
     dup "linux"     eq { pop "Linux"        return } if
     dup "failsafe"  eq { pop txt_safe_linux return } if
