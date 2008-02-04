@@ -64,6 +64,8 @@ function tst_isolinux {
     -publisher "Tester" \
     -no-emul-boot -boot-load-size 4 -boot-info-table $dst
 
+  # tagmedia --check --md5 $img
+
   rm -f $tmp/cd_sort
 
   if [ "$program" = vmware ] ; then

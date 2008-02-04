@@ -531,6 +531,22 @@
 } def
 
 
+/iso.needscheck {
+  false
+
+  /i_tmp 0x10 readsector def
+  i_tmp {
+    i_tmp dup length 1 sub 0 put
+    /i_tmp2 i_tmp 0x373 add cvs def
+    i_tmp2 "check=1" strstr {
+      pop true
+    } if
+    
+    i_tmp free
+  } if
+} def
+
+
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % ( menu_entries_array cmdline_args_array defaultentry ) == > ( )
 /MenuInit {
@@ -547,6 +563,40 @@
   /menu.dentry exch def
   /menu.args exch def
   /menu.texts exch def
+
+  /mi_name "mediacheck" getgfxconfig def
+  mi_name {
+    /remove.mediachk false def
+    sectorsize 0x800 eq {
+      /remove.mediachk iso.needscheck not def
+    } if
+  } {
+    /remove.mediachk false def
+  } ifelse
+
+  remove.mediachk menu.dentry mi_name ne and {
+    /mi_tmp 0 def
+    menu.texts {
+      mi_name eq { exit } if
+      /mi_tmp inc
+    } forall
+
+    mi_tmp menu.texts length lt {
+      /mi_tmp2 0 def
+      /menu.texts
+      [
+        menu.texts { mi_tmp2 mi_tmp eq { pop } if /mi_tmp2 inc } forall
+      ]
+      def
+
+      /mi_tmp2 0 def
+      /menu.args
+      [
+        menu.args { mi_tmp2 mi_tmp eq { pop } if /mi_tmp2 inc } forall
+      ]
+      def
+    } if
+  } if
 
   window.main
   dup window.init
@@ -859,13 +909,14 @@
     dup "live"      eq { pop "openSUSE 10.3 LiveCD" return } if
     dup "noacpi"    eq { pop txt_noacpi_install return } if
     dup "noapic"    eq { pop txt_noapic_install return } if
-    dup "nolapic"    eq { pop txt_nolapic_install return } if
+    dup "nolapic"   eq { pop txt_nolapic_install return } if
     dup "apic"      eq { pop txt_apic return } if
     dup "manual"    eq { pop txt_manual_install return } if
     dup "repair"    eq { pop txt_repain_system return } if
     dup "rescue"    eq { pop txt_rescue         return } if
     dup "hwcheck"   eq { pop "Hardware Check"   return } if
     dup "harddisk"  eq { pop txt_boot_harddisk  return } if
+    dup "mediachk"  eq { pop "Check Installation Media" return } if
   } {
     dup "linux"     eq { pop "Linux"        return } if
     dup "failsafe"  eq { pop txt_safe_linux return } if
