@@ -2957,7 +2957,7 @@ set_mode_102:
 set_mode_20:
 		les di,[vbe_buffer]
 		mov ax,4f00h
-		and dword [es:di],byte 0
+		mov dword [es:di],32454256h	; 'VBE2'
 		push di			; you never know...
 		int 10h
 		pop di
@@ -3128,7 +3128,7 @@ get_vbe_modes:
 
 		les di,[vbe_buffer]
 		mov ax,4f00h
-		and dword [es:di],byte 0
+		mov dword [es:di],32454256h	; 'VBE2'
 		push di
 		int 10h
 		pop di

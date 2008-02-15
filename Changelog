@@ -1,3 +1,6 @@
+14/2/2008:	v3.2.44
+	- always ask for VBE2 video mode info (#359912, #298025)
+
 4/12/2007:	v3.2.43
 	- added "PC Doctor" label (for preload dvd)
 
