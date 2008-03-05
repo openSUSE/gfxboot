@@ -1,0 +1,1024 @@
+#! /usr/bin/perl
+
+use strict qw ( subs vars );
+
+use Getopt::Long;
+
+sub usage;
+sub new_tmp_file;
+sub new_tmp_dir;
+sub cleanup;
+sub check_root;
+sub susystem;
+sub preview;
+sub has_command;
+sub check_vm;
+sub read_grub_menu;
+sub read_lilo_menu;
+sub fake_menu;
+sub create_hd_image;
+sub find_free_loop;
+sub prepare_grub;
+sub prepare_lilo;
+sub prepare_qemu;
+sub run_qemu;
+sub prepare_vbox;
+sub run_vbox;
+sub run_vboxsdl;
+sub prepare_vmware;
+sub run_vmware;
+sub show_config;
+sub unpack_archive;
+sub pack_archive;
+sub update_archive;
+sub change_config;
+sub rm_config;
+sub add_files;
+sub rm_files;
+sub extract_files;
+
+END { cleanup }     
+$SIG{INT} = \&cleanup;
+$SIG{TERM} = \&cleanup;
+
+my @tmp_files;
+
+my $opt_verbose = 0;
+my $opt_preview = 0;
+my $opt_gfxarchive = "/boot/message";
+my $opt_bootloader;
+my $opt_vm = "qemu";
+my $opt_savetemp = 0;
+my $opt_grub = "/";
+my $opt_lilo = "/";
+my $opt_syslinux = "/";
+my $opt_password = undef;
+my $opt_showconfig = 0;
+my @opt_changeconfig;
+my @opt_rmconfig;
+my $opt_test = 0;
+my $opt_ls = 0;
+my @opt_addfiles;
+my @opt_rmfiles;
+my @opt_extractfiles;
+my $opt_showfile;
+
+my $sudo;
+my %config;
+my $work_dir = undef;
+my $write_archive = 0;
+my $new_archive = undef;
+
+my %vm_list = (
+  qemu       => { cmd => 'qemu', package => 'qemu' },
+  vbox       => { cmd => 'VBoxManage', package => 'virtualbox' },
+  vboxsdl    => { cmd => 'VBoxSDL', package => 'virtualbox' },
+  vmware     => { cmd => 'vmplayer', package => 'vmware-player' },
+);
+
+my @vm_order = qw ( qemu vbox vboxsdl vmware );
+
+my %bl_list = (
+  grub     => '/usr/sbin/grub',
+  lilo     => '/sbin/lilo',
+  isolinux => '/usr/share/syslinux/isolinux.bin',
+  syslinux => '/usr/bin/syslinux',
+);
+
+GetOptions(
+  'help'                => sub { usage 0 },
+  'archive|a=s'         => \$opt_gfxarchive,
+  'verbose|v+'          => \$opt_verbose,
+  'preview|p'           => \$opt_preview,
+  'test|t'              => \$opt_test,
+  'save-temp'           => \$opt_savetemp,
+  'bootloader|b=s'      => \$opt_bootloader,
+  'vm|m=s'              => \$opt_vm,
+  'grub=s'              => \$opt_grub,
+  'lilo=s'              => \$opt_lilo,
+  'isolinux=s'          => \$opt_syslinux,
+  'syslinux=s'          => \$opt_syslinux,
+  'password=s'          => \$opt_password,
+  'show-config'         => \$opt_showconfig,
+  'change-config=s{1,}' => \@opt_changeconfig,
+  'rm-config=s{1,}'     => \@opt_rmconfig,
+  'list-files|ls'       => \$opt_ls,
+  'add-files=s{1,}'     => \@opt_addfiles,
+  'rm-files=s{1,}'      => \@opt_rmfiles,
+  'extract-file=s{1,}'  => \@opt_extractfiles,
+  'show-file=s'         => \$opt_showfile,
+) || usage 1;
+
+$ENV{PATH} = "/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin";
+
+if(open F, "$ENV{HOME}/.gfxbootrc") {
+  while(<F>) {
+    if(/^(\S+?)=\"(.*)\"\s*$/) {
+      $config{$1} = $2;
+    }
+  }
+  close F;
+}
+
+if($config{sudo}) {
+  $sudo = $config{sudo};
+  $sudo =~ s/\s*$/ /;
+}
+
+if(!$vm_list{$opt_vm}) {
+  $_ = join ', ', sort keys %vm_list;
+  die "$opt_vm: unsupported virtual machine; use one of\n  $_\n";
+}
+
+if(!$opt_bootloader) {
+  if(open F, "/etc/sysconfig/bootloader") {
+    while(<F>) {
+      if(/^LOADER_TYPE=\"(grub|lilo)\"/) {
+        $opt_bootloader = $1;
+        last;
+      }
+    }
+    close F;
+  }
+}
+
+die "please use '--bootloader' to select a bootloader\n" if !$opt_bootloader;
+
+if(!$bl_list{$opt_bootloader}) {
+  $_ = join ', ', sort keys %bl_list;
+  die "$opt_bootloader: unsupported boot loader; use one of\n  $_\n";
+}
+
+if(@opt_extractfiles) {
+  $write_archive = 1;
+  $work_dir = unpack_archive $opt_gfxarchive unless $work_dir;
+  extract_files $work_dir;
+}
+
+if(@opt_addfiles) {
+  $write_archive = 1;
+  $work_dir = unpack_archive $opt_gfxarchive unless $work_dir;
+  add_files $work_dir;
+}
+
+if(@opt_rmfiles) {
+  $write_archive = 1;
+  $work_dir = unpack_archive $opt_gfxarchive unless $work_dir;
+  rm_files $work_dir;
+}
+
+if($opt_ls) {
+  $work_dir = unpack_archive $opt_gfxarchive unless $work_dir;
+  system "cd $work_dir ; ls -l | grep -v ^total";
+}
+
+if($opt_showfile) {
+  $work_dir = unpack_archive $opt_gfxarchive unless $work_dir;
+  system "cd $work_dir ; cat $opt_showfile";
+}
+
+if(@opt_changeconfig) {
+  $write_archive = 1;
+  $work_dir = unpack_archive $opt_gfxarchive unless $work_dir;
+  change_config $work_dir;
+}
+
+if(@opt_rmconfig) {
+  $write_archive = 1;
+  $work_dir = unpack_archive $opt_gfxarchive unless $work_dir;
+  rm_config $work_dir;
+}
+
+if($opt_showconfig) {
+  $work_dir = unpack_archive $opt_gfxarchive unless $work_dir;
+  show_config $work_dir;
+}
+
+if($write_archive) {
+  $new_archive = pack_archive $work_dir;
+}
+
+if($opt_preview) {
+  preview $new_archive ? $new_archive : $opt_gfxarchive, $opt_bootloader;
+}
+
+if($new_archive && !$opt_test) {
+  update_archive $new_archive, $opt_gfxarchive;
+}
+
+
+sub usage
+{
+  print <<"  usage";
+Usage: gfxboot [options]
+Graphical boot screen test and config tool.
+  usage
+
+  exit shift;
+}
+
+
+# create new temporary file
+sub new_tmp_file
+{
+  local $_;
+
+  chomp ($_ = `mktemp /tmp/gfxboot.XXXXXXXXXX`);
+  die "error: mktemp failed\n" if $?;
+
+  push @tmp_files, $_;
+
+  return $_;
+}
+
+
+# create new temporary directory
+sub new_tmp_dir
+{
+  local $_;
+
+  chomp ($_ = `mktemp -d /tmp/gfxboot.XXXXXXXXXX`);
+  die "error: mktemp failed\n" if $?;
+
+  push @tmp_files, $_;
+
+  return $_;
+}
+
+
+# remove temporary files
+sub cleanup
+{
+  local $_;
+
+  return if $opt_savetemp;
+
+  for (@tmp_files) {
+    next unless defined $_;
+    next if defined($_[0]) && $_[0] ne $_;
+    system "rm -rf $_" if -d;
+    unlink;
+    $_ = undef if defined $_[0];
+  }
+
+  undef @tmp_files unless defined $_[0];
+}
+
+
+sub check_root
+{
+  my $p;
+
+  undef $sudo if !$>;
+
+  chomp($p = `bash -c 'type -p $sudo'`) if $sudo;
+
+  die "sorry, you must be root\n" if $p eq "";
+}
+
+
+sub susystem
+{
+  system $sudo . $_[0];
+}
+
+
+sub preview
+{
+  local $_;
+
+  my $file = shift;
+  my $bootloader = shift;
+  my ($img, $vm_env);
+
+  check_vm;
+
+  print "vm: using $opt_vm\n" if $opt_verbose;
+
+  check_root;
+
+  if($bootloader eq 'grub') {
+    $img = prepare_grub $file
+  }
+  elsif($bootloader eq 'lilo') {
+    $img = prepare_lilo $file
+  }
+
+  return unless $img;
+
+  $vm_env->{hd0} = $img;
+  $vm_env->{boot} = 'hd';
+
+  if($opt_vm eq 'qemu') {
+    prepare_qemu $vm_env;
+    run_qemu $vm_env;
+  }
+  elsif($opt_vm eq 'vbox') {
+    prepare_vbox $vm_env;
+    run_vbox $vm_env;
+  }
+  elsif($opt_vm eq 'vboxsdl') {
+    prepare_vbox $vm_env;
+    run_vboxsdl $vm_env;
+  }
+  elsif($opt_vm eq 'vmware') {
+    prepare_vmware $vm_env;
+    run_vmware $vm_env;
+  }
+}
+
+
+sub has_command
+{
+  return `which $_[0] 2>/dev/null` ? 1 : 0;
+}
+
+
+sub check_vm
+{
+  local $_;
+  my %vms;
+
+  return if has_command $vm_list{$opt_vm}{cmd};
+
+  for (@vm_order) {
+    if(has_command $_->{cmd}) {
+      $opt_vm = $_;
+      return;
+    }
+  }
+
+  $vms{$vm_list{$_}{package}} = 1 for (keys %vm_list);
+
+  die
+    "No suported virtual machine found. Please install one of:\n  " .
+    join(', ', sort keys %vms) .
+    "\n";
+}
+
+
+sub read_grub_menu
+{
+  local $_;
+  my ($menu, $default);
+
+  print STDERR "/boot/grub/menu.lst: $!\n" unless open ML, "${sudo}cat /boot/grub/menu.lst 2>/dev/null |";
+
+  while(<ML>) {
+    push @{$menu->{list}}, $1 if /^\s*title\s+(.+?)\s*$/;
+    $default = $1 + 0 if /^\s*default\s+(\d+)/;
+  }
+  
+  close ML;
+
+  return $menu unless $menu;
+
+  $default = 0 unless $default < @{$menu->{list}};
+
+  $menu->{default} = $default;
+
+  return $menu;
+}
+
+
+sub read_lilo_menu
+{
+  local $_;
+  my ($menu, $default, $i);
+
+  print STDERR "/etc/lilo.conf: $!\n" unless open ML, "${sudo}cat /etc/lilo.conf 2>/dev/null |";
+
+  while(<ML>) {
+    push @{$menu->{list}}, $1 if /^\s*label\s*=\s*(.+?)\s*$/;
+    $default = $1 if /^\s*default\s*=\s*(.+?)\s*$/;
+  }
+
+  close ML;
+
+  return $menu unless $menu;
+
+  @{$menu->{list}} = map { /^"(.*)"$/ ? $1 : $_ } (@{$menu->{list}});
+  $default = $1 if $default =~ /^"(.*)"$/;
+
+  $menu->{default} = 0;
+
+  $i = 0;
+  for (@{$menu->{list}}) {
+    if(/^${default}$/i) {
+      $menu->{default} = $i;
+      last;
+    }
+    $i++;
+  }
+
+  return $menu;
+}
+
+
+sub fake_menu
+{
+  my $menu;
+
+  $menu->{list} = [ 'Linux1', 'Linux2', 'Linux3' ];
+  $menu->{default} = 0;
+
+  return $menu;
+}
+
+
+sub create_hd_image
+{
+  my $img = shift;
+
+  open C, "| bunzip2 -c >$img";
+
+  print C
+    "\x42\x5a\x68\x39\x31\x41\x59\x26\x53\x59\xa1\x0f\xe8\xb9\x01\xfa" .
+    "\x60\xff\xff\xfd\xd3\x4c\x04\x41\xa5\x21\x00\xa7\xae\x0e\x20\x37" .
+    "\x25\xdf\x66\xe0\x29\x40\x00\x02\x14\x06\x4b\xe1\x26\x20\x20\x08" .
+    "\x18\x1a\x5d\xb0\x00\xf9\xb0\x21\x26\x82\x19\x4c\x26\x21\xa6\x4c" .
+    "\x1a\x4c\x26\x1a\x26\x23\x0d\x4c\x06\x8c\x93\x01\xa4\x78\x6a\x08" .
+    "\xd5\x41\xa0\xd0\x64\x03\x21\xa0\x00\x00\xc8\x00\x00\x19\x00\x00" .
+    "\x01\xb5\x2a\x4c\x9a\x60\x8c\x98\x09\x90\x34\xc9\x88\xc8\xc2\x18" .
+    "\x98\x86\x26\x8c\x20\x0c\x43\x12\x3d\x8f\xe1\x3f\x65\xba\xc9\x24" .
+    "\x02\xbc\xc6\xb6\x00\x01\x02\x00\x67\x68\x76\xc8\x40\x02\x40\x03" .
+    "\xa6\x43\xf6\x48\x00\x12\x00\x1e\x33\x97\x19\x2e\xb9\xdb\x74\xe0" .
+    "\xc9\x8e\x16\xc0\xf5\x90\x40\x00\x08\x80\x00\x1e\x6b\x55\x7f\x2c" .
+    "\x63\x22\xa0\xce\x73\x93\x4c\x09\x51\x5f\x84\xe3\xd5\x96\x96\x05" .
+    "\xb9\x94\x5d\x9d\xce\x27\xab\x88\x2c\x10\x16\xf9\xc3\x6b\x40\x11" .
+    "\x6c\xbe\x4c\x46\x48\xb8\x2f\x1a\xf9\xec\x90\xd2\x7f\x31\x22\x82" .
+    "\xe8\x74\x5c\xbe\xb3\xf2\x64\xe0\xf4\x64\x95\xaf\xcf\x33\x34\x26" .
+    "\x31\xa8\xbb\x1a\x9a\x52\x32\x71\xc7\xb4\xd5\x38\xaa\x41\x26\xc5" .
+    "\x0e\xa4\x9b\x45\xdb\xd1\x8a\x00\x91\x01\xb0\xd0\xad\x1d\xbf\xfa" .
+    "\xb7\xb9\xcd\xcd\x6f\xd6\x1f\xd8\x84\x47\x1a\x27\xbb\x65\xe2\xf6" .
+    "\x73\xa9\x41\xe4\xef\xbd\x27\xc1\x00\x6d\xf7\x5f\x35\xe5\x1f\xa2" .
+    "\x6e\xc7\x88\x00\x88\x88\x80\x08\x88\x8a\xa6\x34\x1b\x70\xc2\xd1" .
+    "\x03\x48\x77\x17\x72\x45\x38\x50\x90\xa1\x0f\xe8\xb9";
+
+  close C;
+
+  print "$img: partition 1 starts at offset 32256\n" if $opt_verbose;
+}
+
+
+sub prepare_grub
+{
+  local $_;
+  my $file = shift;
+
+  die "error: grub not found\n" unless -x "$opt_grub/$bl_list{grub}";
+
+  my $menu = read_grub_menu;
+  $menu = read_lilo_menu unless $menu;
+  $menu = fake_menu unless $menu;
+
+  if($opt_verbose) {
+    print "menu items (default $menu->{default}):\n";
+    print "  $_\n" for (@{$menu->{list}});
+  }
+
+  my $dst = new_tmp_dir;
+  my $img = new_tmp_file;
+
+  mkdir "$dst/boot", 0755;
+  mkdir "$dst/boot/grub", 0755;
+
+  system "cp $opt_grub/usr/lib/grub/{fat_stage1_5,stage1,stage2} $dst/boot/grub" and die "error: no grub\n";
+  system "cp $file $dst/boot/message";
+
+  system "cp /boot/vmlinuz $dst/boot" if -f "/boot/vmlinuz";
+  system "cp /boot/initrd $dst/boot" if -f "/boot/initrd";
+
+  open F, ">$dst/boot/grub/device.map";
+  print F "(hd0) $img\n";
+  close F;
+
+  open F, ">$dst/boot/grub/menu.lst";
+  print F "default $menu->{default}\ntimeout 20\ngfxmenu (hd0,0)/boot/message\n\n";
+
+  for (@{$menu->{list}}) {
+    print F "title $_\n  root (hd0,0)\n  kernel /boot/vmlinuz\n  initrd /boot/initrd\n\n"
+  }
+  close F;
+
+  create_hd_image $img;
+
+  my $mp = new_tmp_dir;
+
+  susystem "mount -oloop,offset=32256 $img $mp";
+  susystem "cp -r $dst/* $mp";
+  susystem "umount $mp";
+
+  cleanup $mp;
+
+  my $log = new_tmp_file;
+
+  open F, "| $opt_grub/usr/sbin/grub --batch --config-file=$dst/boot/grub/menu.lst --device-map=$dst/boot/grub/device.map >$log 2>&1";
+  print F "setup --prefix=/boot/grub (hd0,0) (hd0,0)\n";
+  close F;
+
+  print `cat $log`, "\n" if $opt_verbose >= 2;
+
+  cleanup $log;
+  cleanup $dst;
+
+  return $img;
+}
+
+
+sub find_free_loop
+{
+  local $_;
+  my (@loops, $l);
+
+  my $start = shift;
+
+  @loops = </dev/loop*>;
+
+  @loops = grep {
+    ($l = $_) =~ s#^/dev##;
+    !(`cat /sys/block/$l/size` + 0);
+  } @loops;
+
+  if($start) {
+    @loops = grep { $_ eq $start .. $_ eq "" } @loops;
+    shift @loops;
+  }
+
+  die "error: could not find a free loop device\n" unless $loops[0];
+
+  return $loops[0];
+}
+
+
+sub prepare_lilo
+{
+  local $_;
+  my $file = shift;
+  my $no_initrd;
+
+  die "error: lilo not found\n" unless -x "$opt_grub/$bl_list{lilo}";
+
+  my $menu = read_lilo_menu;
+  $menu = read_grub_menu unless $menu;
+  $menu = fake_menu unless $menu;
+
+  # lilo-ize menu items
+  map { s/\s.*//; $_ = substr $_, 0, 15 } @{$menu->{list}};
+
+  if($opt_verbose) {
+    print "menu items (default $menu->{default}):\n";
+    print "  $_\n" for (@{$menu->{list}});
+  }
+
+  my $loop1 = find_free_loop;
+  my $loop2 = find_free_loop $loop1;
+
+  print "loop devices: using $loop1 & $loop2\n" if $opt_verbose;
+
+  my $dst = new_tmp_dir;
+  my $img = new_tmp_file;
+  my $mp = new_tmp_dir;
+
+  mkdir "$dst/boot", 0755;
+
+  system "cp $file $dst/boot/message";
+
+  if(-f "/boot/vmlinuz") {
+    system "cp /boot/vmlinuz $dst/boot";
+  }
+  else {
+    system "dd if=/dev/zero bs=100k count=1 of=$dst/boot/vmlinuz 2>/dev/null";
+    $no_initrd = "# ";
+  }
+  if(-f "/boot/initrd") {
+    system "cp /boot/initrd $dst/boot";
+  }
+  else {
+    system "dd if=/dev/zero bs=100k count=1 of=$dst/boot/initrd 2>/dev/null";
+  }
+
+  my $pw = "";
+  $pw = "password = \"$opt_password\"\n    restricted\n" if defined $opt_password;
+
+  open F, ">$dst/boot/lilo.conf";
+  print F <<"  lilo_conf";
+    boot = $loop2
+    disk = $loop1
+    bios = 0x80
+    sectors = 63
+    heads = 4   
+    cylinders = 128
+    partition = $loop2
+    start = 63
+    vga = normal
+    change-rules reset
+    read-only
+    prompt
+    lba32
+    timeout = 600
+    message = $mp/boot/message
+    $pw
+    default = $menu->{list}[$menu->{default}]
+
+  lilo_conf
+
+  for (@{$menu->{list}}) {
+    print F "      image = $mp/boot/vmlinuz\n      label = $_\n      ${no_initrd}initrd = $mp/boot/initrd\n\n"
+  }
+  close F;
+
+  create_hd_image $img;
+
+  my $log = new_tmp_file;
+
+  susystem "mount -oloop=$loop2,offset=32256 $img $mp";
+  susystem "cp -r $dst/* $mp";
+  susystem "losetup $loop1 $img";
+  susystem "$opt_lilo/sbin/lilo -v -w -C $mp/boot/lilo.conf -m $mp/boot/map >$log 2>&1";
+  susystem "losetup -d $loop1";
+  susystem "umount $mp";
+
+  print `cat $log`, "\n" if $opt_verbose >= 2;
+  cleanup $log;
+
+  cleanup $mp;
+
+  cleanup $dst;
+
+  return $img;
+}
+
+
+sub prepare_qemu
+{
+}
+
+
+sub run_qemu
+{
+  my $vm_env = shift;
+  my $q = "qemu";
+
+  $q .= " -boot c" if $vm_env->{boot} eq 'hd';
+  $q .= " -boot d" if $vm_env->{boot} eq 'cd';
+  $q .= " -boot a" if $vm_env->{boot} eq 'fd';
+
+  $q .= " -hda $vm_env->{hd0}" if $vm_env->{hd0};
+  $q .= " -hdb $vm_env->{hd1}" if $vm_env->{hd1};
+  $q .= " -fda $vm_env->{fd0}" if $vm_env->{fd0};
+  $q .= " -cdrom $vm_env->{cd0}" if $vm_env->{cd0};
+
+  my $log = new_tmp_file;
+
+  system "$q >$log 2>&1";
+
+  print `cat $log`, "\n" if $opt_verbose >= 2;
+  cleanup $log;
+}
+
+
+sub prepare_vbox
+{
+  my $vm_env = shift;
+
+  $vm_env->{vmname} = sprintf "gfxboot.%04u", int(rand 10000);
+
+  $vm_env->{base} = new_tmp_dir;
+
+  $ENV{VBOX_USER_HOME} = $vm_env->{base};
+  mkdir "$vm_env->{base}/VDI", 0755;
+
+  # print "*** $vm_env->{base}\n";
+
+  my $log = new_tmp_file;
+
+  system "VBoxManage createvm -name $vm_env->{vmname} -register >$log 2>&1";
+  system "VBoxManage setextradata global 'GUI/RegistrationData' 'triesLeft=0' >$log 2>&1";
+  system "VBoxManage setextradata global 'GUI/SuppressMessages' 'remindAboutAutoCapture,remindAboutInputCapture' >$log 2>&1";
+  system "VBoxManage modifyvm $vm_env->{vmname} -biosbootmenu disabled -bioslogofadein off -bioslogofadeout off >$log 2>&1";
+
+  if($vm_env->{hd0}) {
+    system "VBoxManage convertdd $vm_env->{hd0} $vm_env->{base}/VDI/hd0.vdi >$log 2>&1";
+    system "VBoxManage modifyvm $vm_env->{vmname} -hda hd0.vdi >$log 2>&1";
+  }
+
+  if($vm_env->{hd1}) {
+    system "VBoxManage convertdd $vm_env->{hd1} $vm_env->{base}/VDI/hd1.vdi >$log 2>&1";
+    system "VBoxManage modifyvm $vm_env->{vmname} -hdb hd1.vdi >$log 2>&1";
+  }
+
+  if($vm_env->{cd0}) {
+    system "cp $vm_env->{cd0} VDI/cd0.iso >$log 2>&1";
+    system "VBoxManage modifyvm $vm_env->{vmname} -dvd VDI/cd0.iso >$log 2>&1";
+  }
+
+  if($vm_env->{fd00}) {
+    system "cp $vm_env->{fd0} VDI/fd0.img >$log 2>&1";
+    system "VBoxManage modifyvm $vm_env->{vmname} -floppy VDI/fd0.img >$log 2>&1";
+  }
+
+  system "VBoxManage modifyvm $vm_env->{vmname} -boot1 disk >$log 2>&1" if $vm_env->{boot} eq 'hd';
+  system "VBoxManage modifyvm $vm_env->{vmname} -boot1 dvd >$log 2>&1" if $vm_env->{boot} eq 'cd';
+  system "VBoxManage modifyvm $vm_env->{vmname} -boot1 floppy >$log 2>&1" if $vm_env->{boot} eq 'fd';
+
+  print `cat $log`, "\n" if $opt_verbose >= 2;
+  cleanup $log;
+}
+
+
+sub run_vbox
+{
+  my $vm_env = shift;
+  my $i;
+
+  my $log = new_tmp_file;
+
+  system "VBoxManage startvm $vm_env->{vmname} >$log 2>&1";
+
+  # give it 10 seconds to start
+  for($i = 10; $i > 0; $i--) {
+    sleep 1;
+    last if open V, "$vm_env->{base}/Machines/$vm_env->{vmname}/Logs/VBox.log";
+  }
+
+  print `cat $log`, "\n" if $opt_verbose >= 2;
+  cleanup $log;
+
+  # print "*** $i\n";
+
+  return unless $i;
+
+  # monitor log file for hints the vm terminated
+  while(1) {
+    $_ = <V>;
+    if(defined $_) {
+      print if $opt_verbose >= 2;
+    }
+    else {
+      sleep 1;
+    }
+    last if /TERMINATED/;
+  }
+
+  close V;
+
+  # sleep 5;
+}
+
+
+sub run_vboxsdl
+{
+  my $vm_env = shift;
+
+  system "VBoxSDL -vm $vm_env->{vmname}";
+}
+
+
+sub prepare_vmware
+{
+  my $vm_env = shift;
+
+  $vm_env->{base} = new_tmp_dir;
+
+  if($vm_env->{hd0}) {
+    open F, ">$vm_env->{base}/hd0.vmdk";
+    print F <<"    vmdk";
+version=1
+CID=12345678
+parentCID=ffffffff
+createType="fullDevice"
+RW 32256 FLAT \"$vm_env->{hd0}\" 0
+ddb.virtualHWVersion = \"3\"
+ddb.geometry.cylinders = \"128\"
+ddb.geometry.heads = \"4\"
+ddb.geometry.sectors = \"63\"
+ddb.geometry.biosCylinders = \"128\"
+ddb.geometry.biosHeads = \"4\"
+ddb.geometry.biosSectors = \"63\"
+    vmdk
+    close F;
+  }
+
+  if($vm_env->{hd1}) {
+    open F, ">$vm_env->{base}/hd1.vmdk";
+    print F <<"    vmdk";
+version=1
+CID=12345679
+parentCID=ffffffff
+createType="fullDevice"
+RW 32256 FLAT \"$vm_env->{hd1}\" 0
+ddb.virtualHWVersion = \"3\"
+ddb.geometry.cylinders = \"128\"
+ddb.geometry.heads = \"4\"
+ddb.geometry.sectors = \"63\"
+ddb.geometry.biosCylinders = \"128\"
+ddb.geometry.biosHeads = \"4\"
+ddb.geometry.biosSectors = \"63\"
+    vmdk
+    close F;
+  }
+
+  open F, ">$vm_env->{base}/gfxboot.vmx";
+  print F
+    "#!/usr/bin/vmware\n" .
+    "config.version = \"7\"\n" .
+    "virtualHW.version = \"3\"\n" .
+    "memsize = \"128\"\n" .
+    "displayName = \"gfxboot\"\n" .
+    "guestOS = \"linux\"\n";
+
+  if($vm_env->{hd0}) {
+    print F
+      "ide0:0.present = \"TRUE\"\n" .
+      "ide0:0.fileName = \"$vm_env->{base}/hd0.vmdk\"\n";
+  }
+
+  if($vm_env->{hd1}) {
+    print F
+      "ide0:1.present = \"TRUE\"\n" .
+      "ide0:1.fileName = \"$vm_env->{base}/hd1.vmdk\"\n";
+  }
+
+  if($vm_env->{cd0}) {
+    print F
+      "ide1:0.present = \"TRUE\"\n" .
+      "ide1:0.fileName = \"$vm_env->{cd0}\"\n" .
+      "ide1:0.deviceType = \"cdrom-image\"\n" .
+      "ide1:0.startConnected = \"TRUE\"\n";
+  }
+
+  if($vm_env->{fd0}) {
+    print F
+      "floppy0.present = \"TRUE\"\n" .
+      "floppy0.fileName = \"$vm_env->{fd0}\"\n" .
+      "floppy0.fileType = \"file\"\n" .
+      "floppy0.startConnected = \"TRUE\"\n";
+  }
+  else {
+    print F
+      "floppy0.present = \"FALSE\"\n";
+  }
+
+  close F;
+}
+
+
+sub run_vmware
+{
+  my $vm_env = shift;
+
+  my $log = new_tmp_file;
+
+  system "vmplayer $vm_env->{base}/gfxboot.vmx >$log 2>&1";
+
+  print `cat $log`, "\n" if $opt_verbose >= 2;
+  cleanup $log;
+}
+
+
+sub show_config
+{
+  my $dir = shift;
+
+  system "cat $dir/gfxboot.cfg 2>/dev/null";
+}
+
+
+sub unpack_archive
+{
+  my $file = shift;
+
+  my $dir = new_tmp_dir;
+
+  my $i = system "cat $file | ( cd $dir ; cpio --quiet -dmi 2>/dev/null)";
+  die "$file: failed to unpack archive\n" if $i;
+
+  return $dir;
+}
+
+
+sub pack_archive
+{
+  my $dir = shift;
+
+  my $file = new_tmp_file;
+
+  my $i = system "cd $dir ; find . | cpio --quiet -o >$file 2>/dev/null";
+  die "$file: failed to create archive\n" if $i;
+
+  return $file;
+}
+
+
+sub update_archive
+{
+  my $src = shift;
+  my $dst = shift;
+
+  my $backup = "$dst.old";
+
+  check_root;
+
+  if(! -e $backup) {
+    susystem "mv $dst $backup";
+  }
+  else {
+    susystem "rm -f $dst";
+  }
+
+  susystem "cp $src $dst";
+  susystem "chmod 644 $dst";
+}
+
+
+sub change_config
+{
+  local $_;
+  my ($key, $val, $c);
+  my $dir = shift;
+
+  my @conf = `cat $dir/gfxboot.cfg 2>/dev/null`;
+
+  for (@opt_changeconfig) {
+    next unless /^\s*(\S+)=(.*?)\s*$/;
+    $key = $1;
+    $val = $2;
+
+    for $c (@conf) {
+      if($c =~ /^\s*(\S+)=(.*?)\s*$/ && $key eq $1) {
+        $c = "$key=$val\n";
+        undef $key;
+        last;
+      }
+    }
+    push @conf, "$key=$val\n" if defined $key;
+  }
+
+  open CC, ">$dir/gfxboot.cfg";
+  print CC @conf;
+  close CC;
+}
+
+
+sub rm_config
+{
+  local $_;
+  my ($key, $c);
+  my $dir = shift;
+
+  my @conf = `cat $dir/gfxboot.cfg 2>/dev/null`;
+
+  $key = join ('|', @opt_rmconfig);
+
+  for $c (@conf) {
+    if($c =~ /^\s*($key)=/) {
+      undef $c;
+    }
+  }
+
+  open CC, ">$dir/gfxboot.cfg";
+  print CC @conf;
+  close CC;
+}
+
+
+sub add_files
+{
+  local $_;
+  my $dir = shift;
+
+  for (@opt_addfiles) {
+    system "cp $_ $dir" and die "error copying file\n";
+  }
+}
+
+
+sub rm_files
+{
+  local $_;
+  my $dir = shift;
+
+  for (@opt_rmfiles) {
+    s#^/+##;
+    system "cd $dir ; rm $_" and die "error deleting file\n";
+  }
+}
+
+
+sub extract_files
+{
+  local $_;
+  my $dir = shift;
+
+  for (@opt_extractfiles) {
+    if(-f "$dir/$_") {
+      system "cp $dir/$_ ." and die "error copying file\n";
+    }
+    else {
+      die "$_: No such file\n";
+    }
+  }
+}
+
+
