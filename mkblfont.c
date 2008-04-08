@@ -354,7 +354,7 @@ int main(int argc, char **argv)
   // FreeSans[size=16 prop=2 space_width=4 dy=16 c=0x1200,0x1000-0x2000]
   if(argc != 1) {
     fprintf(stderr,
-      "Usage: mkblfont [options] fontfile\n"
+      "Usage: gfxboot-font [options] fontfile\n"
       "Build font for boot loader.\n"
       "  -a, --add=first[-last]\n\tAdd chars from this range.\n"
       "  -c, --add-charset=charset\n\tAdd all chars from this charset.\n"
