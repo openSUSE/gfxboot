@@ -1,6 +1,6 @@
-BINDIR      := $(shell [ -x ../../../mkblfont ] && echo ../../../ )
+BINDIR      := $(shell [ -x ../../../gfxboot-font ] && echo ../../../ )
 
-MKBLFONT     = $(BINDIR)mkblfont
+GFXBOOT_FONT = $(BINDIR)gfxboot-font
 KEYMAPCHARS  = $(BINDIR)bin/keymapchars
 
 all: .ready
@@ -12,7 +12,7 @@ fonts: 16x16.fnt
 
 16x16.fnt: ../po/en.tr ../bootlogo.log ../message.log
 	cat ../po/*.tr ../help-*/*.html >tmp.txt
-	$(MKBLFONT) -v -l 18 \
+	$(GFXBOOT_FONT) -v -l 18 \
 	-c ISO-8859-15 -c ISO-8859-2 -c koi8-r \
 	`$(KEYMAPCHARS) ../keymaps/keymap.*.inc` \
 	-t tmp.txt \

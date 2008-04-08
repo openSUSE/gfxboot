@@ -7,9 +7,9 @@ THEMES	 = themes/upstream themes/openSUSE
 
 .PHONY: all clean distclean doc install installsrc themes
 
-all:	bin2c gfxboot-compile bincode mkblfont addblack
+all:	bin2c gfxboot-compile bincode gfxboot-font addblack
 
-mkblfont: mkblfont.c
+gfxboot-font: gfxboot-font.c
 	$(CC) $(CFLAGS) -I /usr/include/freetype2 -lfreetype $< -o $@
 
 gfxboot-compile: gfxboot-compile.c vocabulary.h bincode.h
@@ -42,7 +42,7 @@ jpeg.o: jpeg.S
 
 install: all
 	install -d -m 755 $(DESTDIR)/usr/sbin
-	install -m 755 gfxboot gfxboot-compile mkblfont $(DESTDIR)/usr/sbin
+	install -m 755 gfxboot gfxboot-compile gfxboot-font $(DESTDIR)/usr/sbin
 	@for i in $(THEMES) ; do \
 	  install -d -m 755 $(DESTDIR)/etc/bootsplash/$$i/{bootloader,cdrom} ; \
 	  cp $$i/bootlogo $(DESTDIR)/etc/bootsplash/$$i/cdrom ; \
@@ -59,7 +59,7 @@ installsrc:
 	cp -a bin $(DESTDIR)/usr/share/gfxboot
 
 clean: themes doc
-	@rm -f gfxboot-compile bincode mkblfont addblack bincode.h bin2c *.lst *.map vocabulary.inc vocabulary.h *.o *~
+	@rm -f gfxboot-compile bincode gfxboot-font addblack bincode.h bin2c *.lst *.map vocabulary.inc vocabulary.h *.o *~
 	@rm -rf tmp
 
 distclean: clean
