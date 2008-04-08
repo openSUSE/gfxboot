@@ -1,1 +1,1 @@
-../SuSE/Makefile
+../openSUSE/Makefile

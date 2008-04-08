@@ -291,7 +291,7 @@ if [ "$disk" ] ; then
   exit
 fi
 
-theme=${theme:-SuSE}
+theme=${theme:-openSUSE}
 
 program=${program:-qemu}
 
