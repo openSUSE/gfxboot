@@ -1,1 +1,1 @@
-../upstream/Makefile
+../openSUSE/Makefile
