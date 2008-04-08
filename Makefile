@@ -2,7 +2,8 @@ ARCH    := $(shell uname -m)
 
 CC	 = gcc
 CFLAGS	 = -g -Wall -Wno-pointer-sign -O2 -fomit-frame-pointer
-THEMES	 = $(wildcard themes/*)
+# THEMES	 = $(wildcard themes/*)
+THEMES	 = themes/upstream themes/openSUSE
 
 .PHONY: all clean distclean doc install themes
 
