@@ -85,6 +85,8 @@ my %bl_list = (
   syslinux => '/usr/bin/syslinux',
 );
 
+usage 0 if !@ARGV;
+
 GetOptions(
   'help'                => sub { usage 0 },
   'archive|a=s'         => \$opt_gfxarchive,
@@ -212,6 +214,46 @@ sub usage
   print <<"  usage";
 Usage: gfxboot [options]
 Graphical boot screen test and config tool.
+
+General options:
+
+  -a, --archive FILE            Use FILE as gfxboot archive (default is /boot/message).
+  -v, --verbose                 Increase verbosity.
+      --save-temp               Keep temporary files.
+      --help                    Write this help text.
+
+Changing gfxboot config:
+
+      --show-config             Show gfxboot config file (gfxboot.cfg).
+      --change-config OPTION1=FOO1 OPTION2=FOO2 ...
+                                Change gfxboot config options.
+      --rm-config OPTION1 OPTION2 ...
+                                Delete gfxboot config options.
+
+Preview/test gfxboot setup:
+
+  -p, --preview                 Try current config (needs some virtual machine).
+  -t, --test                    Test only (don't actually change any files).
+  -b, --bootloader BOOTLOADER   Use BOOTLOADER (grub, lilo, isolinux, syslinux) for
+                                preview.
+  -m, --vm VM                   Use virtual machine VM (qemu, vbox, vboxsdl, vmware)
+                                for preview.
+      --grub DIRECTORY|RPM      Use grub from DIRECTORY or RPM (default is /).
+      --lilo DIRECTORY|RPM      Use lilo from DIRECTORY or RPM (default is /).
+      --syslinux DIRECTORY|RPM  Use syslinux from DIRECTORY or RPM (default is /).
+      --isolinux DIRECTORY|RPM  Use isolinux from DIRECTORY or RPM (default is /).
+      --password PASSWORD       Create test config with PASSWORD for preview.
+
+Adding/removing files from gfxboot archive:
+
+      --ls, --list-files        List gfxboot archive files.
+      --add-files FILE1 FILE2 ...
+                                Add files to gfxboot archive.
+      --extract-files FILE1 FILE2 ...
+                                Copy files from gfxboot archive to current
+                                working directory.
+      --show-file FILE          Print FILE.
+
   usage
 
   exit shift;

@@ -1,0 +1,101 @@
+.TH GFXBOOT 8 "April 2008" "gfxboot" "System configuration"
+.\"
+.SH NAME
+gfxboot \- graphical boot screen test and config tool
+.\"
+.SH SYNOPSIS
+.B gfxboot [
+.I options
+.B ]
+.\"
+.SH DESCRIPTION
+.B gfxboot
+modifies and tests graphical boot loader configuration.
+.\"
+.SH OPTIONS
+.SS General options
+.TP
+\fB-a\fR, \fB--archive\fR \fIFILE\fR
+Use FILE as gfxboot archive (default is /boot/message).
+.TP
+\fB-v\fR, \fB--verbose\fR
+Increase verbosity.
+.TP
+\fB--save-temp\fR
+Keep temporary files.
+.TP
+\fB--help\fR
+Print usage.
+.SS Changing gfxboot config
+.TP
+\fB--show-config\fR
+Show gfxboot config file (gfxboot.cfg).
+.TP
+\fB--change-config \fIOPTION1=FOO1\fR \fIOPTION2=FOO2\fR ...
+Change gfxboot config options.
+.TP
+\fB--rm-config \fIOPTION1\fR \fIOPTION2\fR ...
+Delete gfxboot config options.
+.SS Preview/test gfxboot setup
+.TP
+\fB-p\fR, \fB--preview \fR
+Try current config (needs some virtual machine).
+.TP
+\fB-t\fR, \fB--test\fR
+Test only (don't actually change any files).
+.TP
+\fB-b\fR, \fB--bootloader\fR \fIBOOTLOADER\fR
+Use BOOTLOADER (grub, lilo, isolinux, syslinux) for preview.
+.TP
+\fB-m\fR, \fB--vm\fR \fIVM\fR
+Use virtual machine VM (qemu, vbox, vboxsdl, vmware) for preview.
+.TP
+\fB--grub\fR \fIDIRECTORY|RPM\fR
+Use grub from DIRECTORY or RPM (default is /).
+.TP
+\fB--lilo\fR \fIDIRECTORY|RPM\fR
+Use lilo from DIRECTORY or RPM (default is /).
+.TP
+\fB--syslinux\fR \fIDIRECTORY|RPM\fR
+Use syslinux from DIRECTORY or RPM (default is /).
+.TP
+\fB--isolinux\fR \fIDIRECTORY|RPM\fR
+Use isolinux from DIRECTORY or RPM (default is /).
+.TP
+\fB--password\fR \fIPASSWORD\fR
+Create test config with PASSWORD for preview.
+.SS Adding/removing files from gfxboot archive
+\fB--ls\fR, \fB--list-files\fR
+List gfxboot archive files.
+.TP
+\fB--add-files\fR \fIFILE1\fR \fIFILE2\fR ...
+Add files to gfxboot archive.
+.TP
+\fB--extract-files\fR \fIFILE1\fR \fIFILE2\fR ...
+Copy files from gfxboot archive to current working directory.
+.TP
+\fB--show-file\fR \fIFILE\fR
+Print FILE.
+.\"
+.SH FILES
+.TP 18n
+.B /boot/message
+bootloader graphics archive (actually a cpio achive)
+.TP
+.B /etc/bootsplash/themes
+theme directory
+.TP
+.B /etc/sysconfig/bootsplash
+default theme
+.\"
+.SH BUGS
+None.
+.\"
+.SH AUTHOR
+.nf
+Written by Steffen Winterfeldt.
+.fi
+.\"
+.SH "SEE ALSO"
+If you want to create your own theme look at the gfxboot-devel package.
+.\"

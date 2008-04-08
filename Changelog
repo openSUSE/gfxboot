@@ -1,4 +1,6 @@
+8/4/2008:	v4.0.2
 	- added 'gfxboot' (boot screen config tool)
+	- added man page
 
 4/2/2008:	v4.0.1
 	- added optional 'mediacheck'
