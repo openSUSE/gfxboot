@@ -36,9 +36,9 @@
         Maximum font file size is 512kB.
       </para><para>
         If you have written a script, convert it into byte code
-        using <link linkend="mkbootmsg"><command>mkbootmsg</command></link>.
+        using <link linkend="gfxboot-compile"><command>gfxboot-compile</command></link>.
       </para><para>
-        Debugging this script is rather tedious. For this, <command>mkbootmsg -l</command>
+        Debugging this script is rather tedious. For this, <command>gfxboot-compile -l</command>
         will give you debug information that is useful together with the <function>dtrace</function>
         command.
       </para>
@@ -54,7 +54,7 @@
 
     <itemizedlist>
       <listitem>
-        <para id="mkbootmsg">mkbootmsg</para>
+        <para id="gfxboot-compile">gfxboot-compile</para>
         <para>
            Compile source into byte code. The result (together with any
            other files you might need) has to be put into a cpio archive. If
@@ -65,7 +65,7 @@
            <example><title/><para><programlisting>
   # compile 'foo.ps' to 'foo', writing log to foo.log
   # Note: '-O' turns on the optimizer. You'll always want to do this.
-  mkbootmsg -O -v -l foo.log -c foo.ps foo
+  gfxboot-compile -O -v -l foo.log -c foo.ps foo
 
   # put it into a cpio archive
   # we'll assume you need a picture 'foo.jpg' and are using font 'foo.fnt'
