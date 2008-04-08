@@ -1,12 +1,12 @@
-BINDIR      := $(shell [ -x ../../../mkbootmsg ] && echo ../../../ )
+BINDIR      := $(shell [ -x ../../../gfxboot-compile ] && echo ../../../ )
 
-MKBOOTMSG    = $(BINDIR)mkbootmsg
+GFXBOOT_COMPILE = $(BINDIR)gfxboot-compile
 BFLAGS       = -O -v -L ../..
 
 all: main.bin
 
 main.bin: main.bc *.inc ../po/.ready
-	$(MKBOOTMSG) $(BFLAGS) -l main.log -c main.bc $@
+	$(GFXBOOT_COMPILE) $(BFLAGS) -l main.log -c main.bc $@
 
 ../po/.ready:
 	make -C ../po

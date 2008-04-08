@@ -1,4 +1,4 @@
-BINDIR      := $(shell [ -x ../../mkbootmsg ] && echo ../../ )
+BINDIR      := $(shell [ -x ../../gfxboot-compile ] && echo ../../ )
 
 BASED_ON     = $(shell perl -ne 'print if s/^based_on=//' config)
 
@@ -9,7 +9,6 @@ PREPARED     = $(shell [ -f .prepared ] && echo 1)
 endif
 
 ADDDIR       = ../../bin/adddir
-MKBOOTMSG    = $(BINDIR)mkbootmsg
 BFLAGS       = -O -v -L ../..
 
 SUBDIRS      = fonts help-boot help-install po src

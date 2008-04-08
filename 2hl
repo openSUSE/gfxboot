@@ -1,0 +1,74 @@
+#! /usr/bin/perl
+
+# replace identical files with hard links
+
+use Getopt::Long;
+use File::stat;
+
+$md5_0 = "d41d8cd98f00b204e9800998ecf8427e";
+
+$opt_link = 0;
+$opt_quiet = 0;
+
+GetOptions(
+  link  => \$opt_link,
+  quiet => \$opt_quiet,
+);
+
+for $dir (@ARGV) {
+  for (`find '$dir' -type f -print0 | xargs -0r md5sum`) {
+    chomp;
+    if(/^(\S+)  (.*)/) {
+      $m = $1;
+      $f = $2;
+      push @{$md5{$m}}, $f;
+    }
+  }
+}
+
+$total_size = 0;
+$empty_files = 0;
+
+for $m (sort keys %md5) {
+  if(@{$md5{$m}} > 1) {
+    $size = 0;
+    $cnt = 0;
+    undef %ino;
+    undef @buf;
+    for $f (@{$md5{$m}}) {
+      $sb = stat $f;
+      die "oops: stat failed on \"$f\"\n" unless defined $sb;
+      $size = $sb->size;
+      $cnt++ unless $ino{$sb->ino};
+      $ino{$sb->ino} = 1;
+      push @buf, sprintf("  %04o %04d:%04d %5d %6d \"%s\"\n",
+        $sb->mode & 07777, $sb->uid, $sb->gid, $sb->ino, $sb->size, $f);
+    }
+    if(!$opt_quiet) {
+      printf "%s: %d (%d)\n", $m, ($cnt - 1) * $size, $cnt - 1;
+      print @buf;
+    }
+
+    $total_size += ($cnt - 1) * $size;
+
+    if($opt_link && $m ne $md5_0) {
+      $ref = undef;
+      for $f (@{$md5{$m}}) {
+        if($ref) {
+          unlink $f;
+          link $ref, $f;
+        }
+        else {
+          $ref = $f;
+        }
+      }
+    }
+  }
+}
+
+$empty_files = @{$md5{$md5_0}};
+
+print "\n" unless $opt_quiet;
+printf "total saved size: %d\n", $total_size;
+printf "     empty files: %d\n", $empty_files;
+

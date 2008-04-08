@@ -1,4 +1,4 @@
-BINDIR    := $(shell [ -x ../../../mkbootmsg ] && echo ../../../ )
+BINDIR    := $(shell [ -x ../../../gfxboot-compile ] && echo ../../../ )
 
 PRODUCT   = $(shell perl -ne 'print if s/^product=//' ../config)
 
