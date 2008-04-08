@@ -5,7 +5,7 @@ CFLAGS	 = -g -Wall -Wno-pointer-sign -O2 -fomit-frame-pointer
 # THEMES	 = $(wildcard themes/*)
 THEMES	 = themes/upstream themes/openSUSE
 
-.PHONY: all clean distclean doc install themes
+.PHONY: all clean distclean doc install installsrc themes
 
 all:	bin2c mkbootmsg bincode mkblfont addblack
 
@@ -41,9 +41,21 @@ jpeg.o: jpeg.S
 	as --32 -ahlsn=jpeg.lst -o $@ $<
 
 install: all
-	install -d -m 755 $(DESTDIR)/usr/sbin $(DESTDIR)/usr/share/gfxboot
-	install -m 755 mkbootmsg mkblfont help2txt $(DESTDIR)/usr/sbin
-	cp -a themes $(DESTDIR)/usr/share/gfxboot
+	install -d -m 755 $(DESTDIR)/usr/sbin
+	install -m 755 gfxboot mkbootmsg mkblfont $(DESTDIR)/usr/sbin
+	@for i in $(THEMES) ; do \
+	  install -d -m 755 $(DESTDIR)/etc/bootsplash/$$i/{bootloader,cdrom} ; \
+	  cp $$i/bootlogo $(DESTDIR)/etc/bootsplash/$$i/cdrom ; \
+	  bin/unpack_bootlogo $(DESTDIR)/etc/bootsplash/$$i/cdrom ; \
+          install -m 644 $$i/{message,po/*.tr,help-boot/*.hlp} $(DESTDIR)/etc/bootsplash/$$i/bootloader ; \
+	  ./2hl --link --quiet $(DESTDIR)/etc/bootsplash/$$i/* ; \
+	done
+
+installsrc:
+	install -d -m 755 $(DESTDIR)/usr/share/gfxboot/themes
+	@for i in $(THEMES) ; do \
+	  cp -a $$i $(DESTDIR)/usr/share/gfxboot/themes ; \
+	done
 	cp -a bin $(DESTDIR)/usr/share/gfxboot
 
 clean: themes doc
@@ -53,7 +65,7 @@ clean: themes doc
 distclean: clean
 
 themes:
-	@for i in $(THEMES) ; do make -C $$i BINDIR=../../ $(MAKECMDGOALS) || break ; done
+	@for i in $(THEMES) ; do make -C $$i $(MAKECMDGOALS) || break ; done
 
 doc:
 	make -C doc $(MAKECMDGOALS)

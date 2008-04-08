@@ -229,7 +229,7 @@ int main(int argc, char **argv)
 void help()
 {
   fprintf(stderr, "%s",
-    "mkbootmsg: Usage mkbootmsg [options] out_file\n"
+    "gfxboot-compile: Usage gfxboot-compile [options] out_file\n"
     "  Options are:\n"
     "  -c config_file, --config config_file\n"
     "    Create a boot message file using this configuration.\n"
@@ -555,7 +555,7 @@ void show_info(char *name)
   }
 
   if(header.magic_id != MAGIC) {
-    fprintf(stderr, "No mkbootmsg file.\n");
+    fprintf(stderr, "No gfxboot file.\n");
     return;
   }
 

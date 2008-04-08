@@ -16,7 +16,7 @@ SUBDIRS      = fonts help-boot help-install po src
 
 DEFAULT_LANG =
 
-.PHONY: all clean distclean $(SUBDIRS)
+.PHONY: all clean distclean themes $(SUBDIRS)
 
 ifeq ($(PREPARED), 1)
 
@@ -31,6 +31,8 @@ else
 	make
 
 endif
+
+themes: all
 
 %/.ready: %
 	make -C $*
