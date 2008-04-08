@@ -32,7 +32,7 @@
         of user input.
       </para><para>
         Font files have a special format. Create them using
-        <link linkend="mkblfont"><command>mkblfont</command></link>.
+        <link linkend="gfxboot-font"><command>gfxboot-font</command></link>.
         Maximum font file size is 512kB.
       </para><para>
         If you have written a script, convert it into byte code
@@ -76,7 +76,7 @@
            </programlisting></para></example>
         </para>
       </listitem><listitem>
-        <para id="mkblfont">mkblfont</para>
+        <para id="gfxboot-font">gfxboot-font</para>
         <para>
            Build font file using the freetype rendering engine.
         </para>
