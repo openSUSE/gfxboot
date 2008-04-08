@@ -312,8 +312,8 @@ fi
 
 [ "$BOOTLOGO" ] && logo=$BOOTLOGO
 
-[ -x mkbootmsg ] || {
-  echo "error: mkbootmsg missing. Try make."
+[ -x gfxboot-compile ] || {
+  echo "error: gfxboot-compile missing. Try make."
   exit 2
 }
 
