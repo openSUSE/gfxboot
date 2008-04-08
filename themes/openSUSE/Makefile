@@ -72,7 +72,7 @@ distclean: clean
 ifneq ($(BASED_ON),)
 	rm -f .prepared
 	rm -f `find -type l \! -wholename ./Makefile`
-	rmdir `find -depth -type d \! -name . \! -name .svn \! -wholename './.svn/*'` 2>/dev/null || true
+	rmdir `find -depth -type d \! -name . \! -name .svn \! -wholename './.svn/*' \! -wholename './*/.svn/*'` 2>/dev/null || true
 endif
 
 	
