@@ -26,6 +26,13 @@ Keep temporary files.
 .TP
 \fB--help\fR
 Print usage.
+.SS Switching themes
+.TP
+\fB--new-theme \fITHEME\fR
+Activate THEME. Theme files are stored in /etc/bootsplash/themes/THEME/bootloader.
+.TP
+\fB--update-theme \fITHEME\fR
+Activate THEME but keep language settings from current gfxboot archive.
 .SS Changing gfxboot config
 .TP
 \fB--show-config\fR
@@ -36,6 +43,15 @@ Change gfxboot config options.
 .TP
 \fB--rm-config \fIOPTION1\fR \fIOPTION2\fR ...
 Delete gfxboot config options.
+.TP
+\fB--default-language \fILANG\fR
+Make LANG the default language. LANG is a locale string (e.g. en_US).
+.TP
+\fB--add-languages \fILANG1\fR \fILANG2\fR ...
+Add translation files.
+.TP
+\fB--rm-languages \fILANG1\fR \fILANG2\fR ...
+Remove translation files.
 .SS Preview/test gfxboot setup
 .TP
 \fB-p\fR, \fB--preview \fR

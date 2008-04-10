@@ -42,7 +42,7 @@ src/main.bin: src
 bootlogo: src/main.bin help-install/.ready po/.ready fonts/.ready
 	@rm -rf bootlogo.dir
 	@mkdir bootlogo.dir
-	cp -rL languages gfxboot.cfg data-install/* fonts/*.fnt po/*.tr bootlogo.dir
+	cp -rL data-install/* fonts/*.fnt po/*.tr bootlogo.dir
 	cp -rL help-install/*.hlp bootlogo.dir
 	cp src/main.bin bootlogo.dir/init
 ifdef DEFAULT_LANG
@@ -54,10 +54,9 @@ endif
 message: src/main.bin help-boot/.ready po/.ready fonts/.ready
 	@rm -rf message.dir
 	@mkdir message.dir
-	cp -rL languages gfxboot.cfg data-boot/* fonts/*.fnt message.dir
+	cp -rL data-boot/* fonts/*.fnt message.dir
 	cp -rL po/en.tr help-boot/en.hlp message.dir
 	cp src/main.bin message.dir/init
-	@echo en_US >message.dir/languages
 ifdef DEFAULT_LANG
 	cp -rL po/$(DEFAULT_LANG).tr help-boot/$(DEFAULT_LANG).hlp message.dir
 	@echo $(DEFAULT_LANG) >message.dir/lang

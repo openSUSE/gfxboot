@@ -36,6 +36,12 @@ sub rm_config;
 sub add_files;
 sub rm_files;
 sub extract_files;
+sub update_theme;
+sub short_locale;
+sub add_languages;
+sub rm_languages;
+sub default_language;
+sub get_theme;
 
 END { cleanup }     
 $SIG{INT} = \&cleanup;
@@ -62,12 +68,20 @@ my @opt_addfiles;
 my @opt_rmfiles;
 my @opt_extractfiles;
 my $opt_showfile;
+my $opt_theme;
+my $opt_theme_update;
+my @opt_addlanguages;
+my @opt_rmlanguages;
+my $opt_defaultlanguage;
 
 my $sudo;
 my %config;
-my $work_dir = undef;
+my $work_dir;
+my $work_dir2;
 my $write_archive = 0;
-my $new_archive = undef;
+my $new_archive;
+my $theme_dir;
+my $theme_archive;
 
 my %vm_list = (
   qemu       => { cmd => 'qemu', package => 'qemu' },
@@ -107,8 +121,13 @@ GetOptions(
   'list-files|ls'       => \$opt_ls,
   'add-files=s{1,}'     => \@opt_addfiles,
   'rm-files=s{1,}'      => \@opt_rmfiles,
-  'extract-file=s{1,}'  => \@opt_extractfiles,
+  'extract-files=s{1,}' => \@opt_extractfiles,
   'show-file=s'         => \$opt_showfile,
+  'new-theme=s'         => sub { $opt_theme = $_[1]; $opt_theme_update = 0 },
+  'update-theme=s'      => sub { $opt_theme = $_[1]; $opt_theme_update = 1 },
+  'add-languages=s{1,}' => \@opt_addlanguages,
+  'rm-languages=s{1,}'  => \@opt_rmlanguages,
+  'default-language=s'  => \$opt_defaultlanguage,
 ) || usage 1;
 
 $ENV{PATH} = "/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin";
@@ -155,6 +174,36 @@ if(@opt_extractfiles) {
   $write_archive = 1;
   $work_dir = unpack_archive $opt_gfxarchive unless $work_dir;
   extract_files $work_dir;
+}
+
+if($opt_theme) {
+  $theme_dir = "/etc/bootsplash/themes/$opt_theme/bootloader";
+  $theme_archive = "$theme_dir/message";
+  die "$opt_theme: no such theme\n" unless -f $theme_archive;
+  $write_archive = 1;
+  $work_dir = unpack_archive $theme_archive unless $work_dir;
+  if($opt_theme_update) {
+    $work_dir2 = unpack_archive $opt_gfxarchive;
+    update_theme $opt_theme, $theme_dir, $work_dir, $work_dir2;
+  }
+}
+
+if(@opt_addlanguages) {
+  $write_archive = 1;
+  $work_dir = unpack_archive $opt_gfxarchive unless $work_dir;
+  add_languages $work_dir;
+}
+
+if(@opt_rmlanguages) {
+  $write_archive = 1;
+  $work_dir = unpack_archive $opt_gfxarchive unless $work_dir;
+  rm_languages $work_dir;
+}
+
+if($opt_defaultlanguage) {
+  $write_archive = 1;
+  $work_dir = unpack_archive $opt_gfxarchive unless $work_dir;
+  system "echo '$opt_defaultlanguage' >$work_dir/lang";
 }
 
 if(@opt_addfiles) {
@@ -222,6 +271,13 @@ General options:
       --save-temp               Keep temporary files.
       --help                    Write this help text.
 
+Switching themes:
+
+      --new-theme THEME         Activate THEME. Theme files are stored in
+                                /etc/bootsplash/themes/THEME/bootloader.
+      --update-theme THEME      Activate THEME but keep language settings from
+                                current gfxboot archive.
+
 Changing gfxboot config:
 
       --show-config             Show gfxboot config file (gfxboot.cfg).
@@ -229,6 +285,12 @@ Changing gfxboot config:
                                 Change gfxboot config options.
       --rm-config OPTION1 OPTION2 ...
                                 Delete gfxboot config options.
+      --default-language LANG   Make LANG the default language. LANG is a
+                                locale string (e.g. en_US).
+      --add-languages LANG1 LANG2 ...
+                                Add translation files.
+      --rm-languages LANG1 LANG2 ...
+                                Remove translation files.
 
 Preview/test gfxboot setup:
 
@@ -1061,6 +1123,158 @@ sub extract_files
       die "$_: No such file\n";
     }
   }
+}
+
+
+sub update_theme
+{
+  my $theme = shift;
+  my $theme_dir = shift;
+  my $dst = shift;
+  my $src = shift;
+  local $_;
+
+  for (<$src/lang>, <$src/languages>, <$src/translations.*>) {
+    system "cp $_ $dst";
+  }
+
+  for (<$src/*.hlp>, <$src/*.tr>) {
+    $_ = substr $_, length($src) + 1;
+    system "cp $src/$_ $dst";
+    system "cp $theme_dir/$_ $dst" if -f "$theme_dir/$_";
+  }
+}
+
+
+sub short_locale
+{
+  my $l = shift;
+
+  $l =~ s/\_.*//;
+
+  return $l;
+}
+
+
+sub add_languages
+{
+  local $_;
+  my $dir = shift;
+  my ($theme, $theme_dir, $sl, %lang);
+
+  $theme = get_theme $dir;
+  $theme_dir = "/etc/bootsplash/themes/$theme/bootloader";
+  print "using theme \"$theme\"\n" if $opt_verbose;
+
+  for (`cat $dir/languages`) {
+    chomp;
+    $lang{$_} = 1;
+  }
+
+  for (@opt_addlanguages) {
+    $sl = short_locale $_;
+    if(-f "$theme_dir/$_.tr") {
+      system "cp $theme_dir/$_.tr $dir";
+    }
+    elsif(-f "$theme_dir/$sl.tr") {
+      system "cp $theme_dir/$sl.tr $dir";
+    }
+    if(-f "$theme_dir/$_.hlp") {
+      system "cp $theme_dir/$_.hlp $dir";
+    }
+    elsif(-f "$theme_dir/$sl.hlp") {
+      system "cp $theme_dir/$sl.hlp $dir";
+    }
+    if(!$lang{$_}) {
+      system "echo '$_' >>$dir/languages";
+      $lang{$_} = 1;
+    }
+  }
+}
+
+
+sub rm_languages
+{
+  local $_;
+  my $dir = shift;
+  my ($l, $sl, @lang, %lang, %rmlang);
+
+  for (`cat $dir/languages`) {
+    chomp;
+    push @lang, $_;
+    $lang{$_} = 1;
+  }
+
+  for (@opt_rmlanguages) {
+    $sl = short_locale $_;
+    if($lang{$_}) {
+      $rmlang{$_} = 1;
+    }
+    elsif($sl eq $_) {
+      for $l (@lang) {
+        $rmlang{$l} = 1 if short_locale($l) eq $sl;
+      }
+    }
+  }
+
+  @lang = grep { !$rmlang{$_} } @lang;
+
+  undef %lang;
+  open L, ">$dir/languages";
+  for (@lang) {
+    print L "$_\n";
+    $lang{$_} = 1;
+    $lang{short_locale $_} = 1;
+  }
+  close L;
+
+  for (<$dir/*.tr>, <$dir/*.hlp>) {
+    system "rm -f $_" unless m#/([^/]+)\.(tr|hlp)# && $lang{$1};
+  }
+
+  for (<$dir/translations.*>) {
+    system "rm -f $_" unless m#/translations\.([^/]+)$# && $lang{$1};
+  }
+}
+
+
+sub get_theme
+{
+  local $_;
+  my $dir = shift;
+  my $theme;
+
+  for (`cat $dir/gfxboot.cfg 2>/dev/null`) {
+    if(/^\s*theme=(.*?)\s*$/) {
+      if( -d "/etc/bootsplash/themes/$1/bootloader") {
+        $theme = $1;
+        last;
+      }
+    }
+  }
+
+  if(!$theme) {
+    for (`cat /etc/sysconfig/bootsplash 2>/dev/null`) {
+      if(/^\s*THEME=\"(.*?)\"\s*$/) {
+        if( -d "/etc/bootsplash/themes/$1/bootloader") {
+          $theme = $1;
+          last;
+        }
+      }
+    }
+  }
+
+  if(!$theme) {
+    $_ = (</etc/bootsplash/themes/*/bootloader>)[0];
+    if(m#themes/(.*?)/bootloader#) {
+      $theme = $1;
+      print STDERR "could not find out current theme, using \"$theme\"\n";
+    }
+  }
+
+  die "sorry, no usable theme found\n" unless $theme;
+
+  return $theme;
 }
 
 
