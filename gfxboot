@@ -374,7 +374,10 @@ sub check_root
 {
   my $p;
 
-  undef $sudo if !$>;
+  if(!$>) {
+    undef $sudo;
+    return;
+  }
 
   chomp($p = `bash -c 'type -p $sudo'`) if $sudo;
 
@@ -1140,7 +1143,7 @@ sub update_theme
   local $_;
 
   for (<$src/lang>, <$src/languages>, <$src/translations.*>) {
-    system "cp $_ $dst";
+    system "cp $_ $dst" if -f $_;
   }
 
   for (<$src/*.hlp>, <$src/*.tr>) {
