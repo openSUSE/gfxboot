@@ -1,3 +1,6 @@
+11/4/2008:	v4.0.4
+	- fix gfxboot script
+
 10/4/2008:	v4.0.3
 	- gfxboot can handle themes & translations
 	- fixed typo in gfxboot.cfg

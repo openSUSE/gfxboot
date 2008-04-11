@@ -42,6 +42,7 @@ sub add_languages;
 sub rm_languages;
 sub default_language;
 sub get_theme;
+sub unpack_rpm;
 
 END { cleanup }     
 $SIG{INT} = \&cleanup;
@@ -182,7 +183,7 @@ if($opt_theme) {
   die "$opt_theme: no such theme\n" unless -f $theme_archive;
   $write_archive = 1;
   $work_dir = unpack_archive $theme_archive unless $work_dir;
-  if($opt_theme_update) {
+  if($opt_theme_update && -f $opt_gfxarchive) {
     $work_dir2 = unpack_archive $opt_gfxarchive;
     update_theme $opt_theme, $theme_dir, $work_dir, $work_dir2;
   }
@@ -570,6 +571,8 @@ sub prepare_grub
   local $_;
   my $file = shift;
 
+  $opt_grub = unpack_rpm $opt_grub if -f $opt_grub;
+
   die "error: grub not found\n" unless -x "$opt_grub/$bl_list{grub}";
 
   my $menu = read_grub_menu;
@@ -661,7 +664,9 @@ sub prepare_lilo
   my $file = shift;
   my $no_initrd;
 
-  die "error: lilo not found\n" unless -x "$opt_grub/$bl_list{lilo}";
+  $opt_lilo = unpack_rpm $opt_lilo if -f $opt_lilo;
+
+  die "error: lilo not found\n" unless -x "$opt_lilo/$bl_list{lilo}";
 
   my $menu = read_lilo_menu;
   $menu = read_grub_menu unless $menu;
@@ -1275,6 +1280,17 @@ sub get_theme
   die "sorry, no usable theme found\n" unless $theme;
 
   return $theme;
+}
+
+
+sub unpack_rpm
+{
+  my $rpm = shift;
+  my $dir = new_tmp_dir;
+
+  system "rpm2cpio $rpm | ( cd $dir ; cpio --quiet --sparse -dimu --no-absolute-filenames )";
+
+  return $dir;
 }
 
 
