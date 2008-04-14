@@ -1,3 +1,6 @@
+14/4/2008:	v4.0.5
+	- gfxboot doesn't always need a bootloader
+
 11/4/2008:	v4.0.4
 	- fix gfxboot script
 
