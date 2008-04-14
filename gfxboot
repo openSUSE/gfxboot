@@ -152,23 +152,26 @@ if(!$vm_list{$opt_vm}) {
   die "$opt_vm: unsupported virtual machine; use one of\n  $_\n";
 }
 
-if(!$opt_bootloader) {
-  if(open F, "/etc/sysconfig/bootloader") {
-    while(<F>) {
-      if(/^LOADER_TYPE=\"(grub|lilo)\"/) {
-        $opt_bootloader = $1;
-        last;
+# we'll need a bootloader
+if($opt_preview) {
+  if(!$opt_bootloader) {
+    if(open F, "/etc/sysconfig/bootloader") {
+      while(<F>) {
+        if(/^LOADER_TYPE=\"(grub|lilo)\"/) {
+          $opt_bootloader = $1;
+          last;
+        }
       }
+      close F;
     }
-    close F;
   }
-}
 
-die "please use '--bootloader' to select a bootloader\n" if !$opt_bootloader;
+  die "please use '--bootloader' to select a bootloader\n" if !$opt_bootloader;
 
-if(!$bl_list{$opt_bootloader}) {
-  $_ = join ', ', sort keys %bl_list;
-  die "$opt_bootloader: unsupported boot loader; use one of\n  $_\n";
+  if(!$bl_list{$opt_bootloader}) {
+    $_ = join ', ', sort keys %bl_list;
+    die "$opt_bootloader: unsupported boot loader; use one of\n  $_\n";
+  }
 }
 
 if(@opt_extractfiles) {
