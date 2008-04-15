@@ -1201,6 +1201,41 @@
     pop 0
   } if
 
+  dup keyShiftF2 eq {
+    % sound test XXXXXXXX
+
+    "foo.wav" findfile dup
+    {
+      50 sound.setvolume
+      wav.play
+    } {
+      pop
+    } ifelse
+
+    pop 0
+  } if
+
+  dup keyShiftF3 eq {
+    % sound test XXXXXXXX
+
+    "fsfsong.wav" findfile dup
+    {
+      50 sound.setvolume
+      wav.play
+    } {
+      pop
+    } ifelse
+
+    pop 0
+  } if
+
+  dup keyShiftF4 eq {
+    % sound test XXXXXXXX
+
+    sound.done
+
+  } if
+
   dup keyF11 eq debug 1 ge and {
 
     /dit {

@@ -437,7 +437,7 @@ sound_timer1		dw 0
 sound_vol		db 0
 sound_ok		db 0
 sound_int_active	db 0
-sound_playing		db 0
+sound_playing		db 0		; bits 0-3: mod, 4-7: wav
 sound_sample		dd 0
 sound_buf		dd 0		; (seg:ofs)
 sound_buf.lin		dd 0		; buffer for sound player
@@ -449,6 +449,8 @@ int8_count		dd 0
 cycles_per_tt		dd 0
 cycles_per_int		dd 0
 next_int		dd 0,0
+wav_current		dd 0		; pointer to currently played way file
+wav_end			dd 0		; stop here
 
 			align 4, db 0
 
@@ -9329,7 +9331,7 @@ prim_soundgetsamplerate:
 		jb prim_sgsr_90
 		mov [pstack.ptr],eax
 		mov dl,t_int
-		movzx eax,byte [sound_sample]
+		mov eax,[sound_sample]
 		xor ecx,ecx
 		call set_pstack_tos
 prim_sgsr_90:
@@ -9340,7 +9342,7 @@ prim_sgsr_90:
 ;
 ; group: sound
 ;
-; ( -- int1 )
+; (int1 -- )
 ;
 ; int1: sample rate
 ;
@@ -9543,6 +9545,59 @@ prim_modplaysample:
 
 		clc
 prim_modps_90:
+		ret
+
+
+;; wav.play - play wav file
+;
+; group: sound
+;
+; ( ptr1 -- )
+;
+; ptr1: wav file
+;
+
+		bits 32
+
+prim_wavplay:
+		call pr_setptr_or_none
+
+		; eax file
+
+		push eax
+		call find_mem_size
+		pop esi
+		cmp eax,44		; WAV header size
+		jbe prim_wavplay_90
+		add eax,esi
+		cmp dword [es:esi+0],46464952h
+		jnz prim_wavplay_90
+		cmp dword [es:esi+8],45564157h
+		jnz prim_wavplay_90
+		cmp word [es:esi+20],1
+		jnz prim_wavplay_90
+		cmp word [es:esi+34],8
+		jnz prim_wavplay_90
+		cmp word [es:esi+22],1
+		jnz prim_wavplay_90
+		mov ecx,[es:esi+24]	; sample rate
+		cmp ecx,1
+		jb prim_wavplay_90
+		cmp ecx,18000
+		jae prim_wavplay_90
+		add esi,44
+		mov [wav_end],eax
+		mov [wav_current],esi
+		push ecx
+		call sound_init
+		pop eax
+		jc prim_wavplay_90
+		call sound_setsample
+
+		or byte [sound_playing],0f0h
+
+prim_wavplay_90:
+		clc
 		ret
 
 
@@ -13615,7 +13670,19 @@ new_int8_40:
 new_int8_60:
 		cmp ax,160
 		jae new_int8_80
-		pm32_call mod_get_samples
+
+		pm_enter
+
+		test byte [sound_playing],0fh
+		jz new_int8_70
+		call mod_get_samples
+new_int8_70:
+		test byte [sound_playing],0f0h
+		jz new_int8_75
+		call wav_get_samples
+new_int8_75:
+
+		pm_leave
 
 new_int8_80:
 
@@ -13898,7 +13965,7 @@ mod_load:
 mod_play:
 		mov esi,[mod_buf]
 		call playmod
-		mov byte [sound_playing],1
+		or byte [sound_playing],0fh
 		ret
 
 
@@ -13909,7 +13976,7 @@ mod_play:
 mod_playsample:
 		mov esi,[mod_buf]
 		call playsamp
-		mov byte [sound_playing],1
+		or byte [sound_playing],0fh
 		ret
 
 
@@ -13982,6 +14049,65 @@ mod_setvolume_50:
 		lea eax,[ecx-1]
 		call setvol
 mod_setvolume_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+		bits 32
+
+wav_get_samples:
+		mov esi,[wav_current]
+		or esi,esi
+		jz mod_get_samples_90
+		cmp esi,[wav_end]
+		jae mod_get_samples_90
+
+		mov ecx,num_samples
+		mov edi,[sound_buf.lin]
+		mov ebp,[sound_end]
+		cld
+
+wav_get_samples_20:
+		cmp esi,[wav_end]
+		jb wav_get_samples_25
+		mov al,0ffh
+		jmp wav_get_samples_50
+wav_get_samples_25:
+		es lodsb
+		sub al,128
+		movsx eax,al
+		movzx edx,byte [sound_vol]
+		imul edx
+		mov ebx,100
+		idiv ebx
+		cmp eax,7fh
+		jle wav_get_samples_30
+		mov al,7fh
+wav_get_samples_30:
+		cmp eax,-80h
+		jg wav_get_samples_40
+		mov al,-80h
+wav_get_samples_40:
+		add al,80h
+		movzx eax,al
+		mov al,[pctab+eax]
+
+wav_get_samples_50:
+		mov [es:edi+ebp],al
+		inc ebp
+		cmp ebp,sound_buf_size
+		jb wav_get_samples_60
+		xor ebp,ebp
+wav_get_samples_60:
+
+		dec ecx
+		jnz wav_get_samples_20
+
+		mov [sound_end],ebp
+		mov [wav_current],esi
+
+wav_get_samples_90:
 		ret
 
 
