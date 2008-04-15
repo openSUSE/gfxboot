@@ -1086,3 +1086,26 @@ def
 } def
 
 
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% pc speaker beep.
+%
+% ( freq duration -- )
+%
+% freq in Hz, duration in microseconds.
+%
+/beep {
+  exch
+  0x61 inbyte
+  dup 3 or 0x61 exch outbyte
+  0x43 0xb6 outbyte
+  exch 2386360 exch div
+
+  dup 0x42 exch outbyte
+  8 shr 0x42 exch outbyte
+
+  exch usleep
+
+  0x61 exch outbyte
+} def
+
+

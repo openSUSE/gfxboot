@@ -602,6 +602,8 @@
   dup window.init
       window.show
 
+  3000 50000 beep
+
   syslinux {
     32+64bit_source not {
 
@@ -1132,6 +1134,16 @@
   } if
 
   dup keyF9 eq syslinux and {
+    3000 100000 beep
+
+    /v_impaired true def
+
+    xmenu.video .xm_current 0 put
+    % redraw unless another menu is still open
+    window.current {
+      window.current .xmenu get .undef eq { video.update } if
+    } if
+
     .undef 0 idle
     kroete.file free /kroete.file .undef def
     pop 0
@@ -1530,6 +1542,8 @@ dup .undef eq { pop "back-low.jpg" findfile } if
 /kroete.dir 0 def
 
 /debug 0 def
+
+/v_impaired false def
 
 ptheme
 small_layout or

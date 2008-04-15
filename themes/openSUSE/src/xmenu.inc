@@ -110,17 +110,25 @@
 
   dup config.rtl { keyLeft } { keyRight } ifelse eq {
     xmenu .xm_current get
-    dup xmenu.maxlines div 1 add xmenu.columns mod xmenu.maxlines mul
-    exch xmenu.maxlines mod add
-    xmenu .xm_list get length 1 sub min xmenu.select
+    xmenu .xm_list get length over sub xmenu.maxlines lt v_impaired and {
+      pop
+    } {
+      dup xmenu.maxlines div 1 add xmenu.columns mod xmenu.maxlines mul
+      exch xmenu.maxlines mod add
+      xmenu .xm_list get length 1 sub min xmenu.select
+    } ifelse
     pop 0
   } if 
 
   dup config.rtl { keyRight } { keyLeft } ifelse eq {
     xmenu .xm_current get
-    dup xmenu.maxlines div xmenu.columns add 1 sub xmenu.columns mod xmenu.maxlines mul
-    exch xmenu.maxlines mod add
-    xmenu .xm_list get length 1 sub min xmenu.select
+    dup xmenu.maxlines lt v_impaired and {
+      pop
+    } {
+      dup xmenu.maxlines div xmenu.columns add 1 sub xmenu.columns mod xmenu.maxlines mul
+      exch xmenu.maxlines mod add
+      xmenu .xm_list get length 1 sub min xmenu.select
+    } ifelse
     pop 0
   } if 
 
@@ -304,8 +312,8 @@
 % ( new_entry ) ==> ( )
 %
 /xmenu.select {
-  dup 0 lt { xmenu .xm_list get length add } if
-  dup xmenu .xm_list get length ge { xmenu .xm_list get length sub } if
+  dup 0 lt { v_impaired { 1 } { xmenu .xm_list get length } ifelse add } if
+  dup xmenu .xm_list get length ge { v_impaired { 1 } { xmenu .xm_list get length } ifelse sub } if
 
   xmenu .xm_current get over xmenu .xm_current rot put
   xmenu.viewentry
