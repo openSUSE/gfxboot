@@ -236,6 +236,12 @@
 %
 /xmenu.show {
   window.push
+
+  v_impaired 2 ge {
+    xmenu .xm_title get dup .undef ne { exec speak } { pop } ifelse
+    xmenu .xm_list get xmenu .xm_current get get exec speak
+  } if
+
 } def
 
 
@@ -318,6 +324,10 @@
   xmenu .xm_current get over xmenu .xm_current rot put
   xmenu.viewentry
   xmenu.viewentry
+
+  v_impaired 2 ge {
+    xmenu .xm_list get xmenu .xm_current get get exec speak
+  } if
 } def
 
 

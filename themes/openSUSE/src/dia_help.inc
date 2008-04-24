@@ -17,6 +17,8 @@
      "" eq { pop } { help.setcontext } ifelse
    } if
    show_help
+
+   v_impaired 2 ge { txt_help speak } if
 } def
 
 

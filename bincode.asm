@@ -451,6 +451,8 @@ cycles_per_int		dd 0
 next_int		dd 0,0
 wav_current		dd 0		; pointer to currently played way file
 wav_end			dd 0		; stop here
+wav_next_start		dd 0		; dto, next
+wav_next_end		dd 0		; dto, next
 
 			align 4, db 0
 
@@ -9601,6 +9603,60 @@ prim_wavplay_90:
 		ret
 
 
+;; wav.playlater - play wav file after current one
+;
+; group: sound
+;
+; ( ptr1 -- )
+;
+; ptr1: wav file
+;
+
+		bits 32
+
+prim_wavplaylater:
+		mov eax,[wav_current]
+		or eax,eax
+		jz prim_wavplay
+		cmp eax,[wav_end]
+		jz prim_wavplay
+
+		call pr_setptr_or_none
+
+		; eax file
+
+		push eax
+		call find_mem_size
+		pop esi
+		cmp eax,44		; WAV header size
+		jbe prim_wavplaylater_90
+		add eax,esi
+		cmp dword [es:esi+0],46464952h
+		jnz prim_wavplaylater_90
+		cmp dword [es:esi+8],45564157h
+		jnz prim_wavplaylater_90
+		cmp word [es:esi+20],1
+		jnz prim_wavplaylater_90
+		cmp word [es:esi+34],8
+		jnz prim_wavplaylater_90
+		cmp word [es:esi+22],1
+		jnz prim_wavplaylater_90
+		mov ecx,[es:esi+24]	; sample rate
+		cmp ecx,1
+		jb prim_wavplaylater_90
+		cmp ecx,18000
+		jae prim_wavplaylater_90
+		add esi,44
+		mov [wav_next_end],eax
+		mov [wav_next_start],esi
+
+		or byte [sound_playing],0f0h
+
+prim_wavplaylater_90:
+		clc
+		ret
+
+
 ;; settextwrap - set text wrap column
 ;
 ; group: text
@@ -13564,8 +13620,8 @@ new_int8:
 		push cs
 		pop ds
 
-		mov al,20h
-		out 20h,al
+;		mov al,20h
+;		out 20h,al
 
 		inc dword [int8_count]
 
@@ -13661,7 +13717,7 @@ new_int8_40:
 
 		mov byte [sound_int_active],1
 
-		sti
+		; sti
 
 		mov ax,[sound_end]
 		sub ax,[sound_start]
@@ -13671,23 +13727,49 @@ new_int8_60:
 		cmp ax,160
 		jae new_int8_80
 
+		push word [cs:rm_seg.ss]
+		push word [cs:rm_seg.ds]
+		push word [cs:rm_seg.es]
+		push word [cs:rm_seg.fs]
+		push word [cs:rm_seg.gs]
+
 		pm_enter
 
 		test byte [sound_playing],0fh
 		jz new_int8_70
 		call mod_get_samples
+		jmp new_int8_75
 new_int8_70:
 		test byte [sound_playing],0f0h
 		jz new_int8_75
 		call wav_get_samples
+
+		mov eax,[wav_current]
+		cmp eax,[wav_end]
+		jnz new_int8_75
+		xor eax,eax
+		xchg eax,[wav_next_start]
+		mov [wav_current],eax
+		xor eax,eax
+		xchg eax,[wav_next_end]
+		mov [wav_end],eax
 new_int8_75:
 
 		pm_leave
+
+		pop word [cs:rm_seg.gs]
+		pop word [cs:rm_seg.fs]
+		pop word [cs:rm_seg.es]
+		pop word [cs:rm_seg.ds]
+		pop word [cs:rm_seg.ss]
 
 new_int8_80:
 
 		mov byte [sound_int_active],0
 new_int8_90:
+
+		mov al,20h
+		out 20h,al
 
 		pop gs
 		pop fs

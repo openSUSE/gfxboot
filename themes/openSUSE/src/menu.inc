@@ -274,6 +274,7 @@
   } ifelse
   setcolor
   menu.texts menu.idx get menuitemmap
+  menu.status { v_impaired 2 ge { dup speak } if } if
   currentfont exch font.large setfont show.rtl setfont
 
   menu.status {

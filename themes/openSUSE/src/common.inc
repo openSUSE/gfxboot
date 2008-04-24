@@ -1112,6 +1112,12 @@
 } def
 
 
+/chksum {
+  0 exch
+  { add } forall
+} def
+
+
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Some special debug & test keys.
 %
@@ -1134,9 +1140,24 @@
   } if
 
   dup keyF9 eq syslinux and {
-    3000 100000 beep
+    /v_impaired inc
 
-    /v_impaired true def
+    v_impaired 2 eq {
+      16000 sound.setsamplerate
+
+      window.dialog
+
+      dup .title "Just a second..." put
+      dup .text "Please wait while speech files are being loaded..." put
+      dup window.init window.show
+
+      update_speech_table
+      50 sound.setvolume
+
+      window.done
+
+      menu.texts menu.idx get menuitemmap speak
+    } if
 
     xmenu.video .xm_current 0 put
     % redraw unless another menu is still open
@@ -1216,7 +1237,8 @@
   dup keyShiftF2 eq {
     % sound test XXXXXXXX
 
-    "foo.wav" findfile dup
+    "foo.wav" findfile dup dup
+    % chksum dtrace pop
     {
       50 sound.setvolume
       wav.play
@@ -1543,7 +1565,7 @@ dup .undef eq { pop "back-low.jpg" findfile } if
 
 /debug 0 def
 
-/v_impaired false def
+/v_impaired 0 def
 
 ptheme
 small_layout or
