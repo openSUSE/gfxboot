@@ -602,7 +602,12 @@
   dup window.init
       window.show
 
-  3000 50000 beep
+  config.beep { 3000 50000 beep } if
+
+  config.talk {
+    load_talk_dialog
+    menu.texts menu.idx get menuitemmap speak
+  } if
 
   syslinux {
     32+64bit_source not {
@@ -1142,20 +1147,9 @@
   dup keyF9 eq syslinux and {
     /v_impaired inc
 
-    v_impaired 2 eq {
-      16000 sound.setsamplerate
-
-      window.dialog
-
-      dup .title "Just a second..." put
-      dup .text "Please wait while speech files are being loaded..." put
-      dup window.init window.show
-
-      update_speech_table
-      50 sound.setvolume
-
-      window.done
-
+    v_impaired 1 eq config.talk not and {
+      /config.talk true def
+      load_talk_dialog
       menu.texts menu.idx get menuitemmap speak
     } if
 
@@ -1242,6 +1236,7 @@
     {
       50 sound.setvolume
       wav.play
+      % { getkey 0xff and 'q' eq { exit } if } loop
     } {
       pop
     } ifelse

@@ -995,6 +995,26 @@ def
 } def
 
 
+% Beep when ready.
+%
+% (  -- bool )
+%
+/config.beep {
+  /config.beep "beep" getgfxconfig dup .undef ne { cvn } { pop 0 } ifelse 0 ne def
+  config.beep
+} def
+
+
+% Speech output.
+%
+% (  -- bool )
+%
+/config.talk {
+  /config.talk "talk" getgfxconfig dup .undef ne { cvn } { pop 0 } ifelse 0 ne def
+  config.talk
+} def
+
+
 % Video memory in kb.
 %
 % (  -- int )
@@ -1114,9 +1134,9 @@ def
 % ( text -- )
 %
 /speak {
-  speech_table {
-    dup .st_text get 2 index eq {
-      .st_sound get wav.playlater
+  talk_array {
+    dup .talk_text get 2 index eq {
+      .talk_sound get wav.playlater
       exit
     } {
       pop
@@ -1126,67 +1146,55 @@ def
 } def
 
 
+/.talk_text  0 def
+/.talk_sound 1 def
+
+
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Load sound samples.
 %
 % ( -- )
 %
-/update_speech_table {
-  speech_table {
-    dup .st_sound get .undef eq {
-      dup .st_file get findfile over .st_sound rot put
-    } if
-    pop
-  }
-  forall
+/load_talk {
+  /talk_file "en.tlk" findfile def
+
+  talk_file .undef eq { return } if
+
+  talk_file getdword 0x692741e8 ne { return } if
+
+  talk_array .undef ne {
+    talk_array { free } forall
+  } if
+
+  /talk_array xfree
+
+  /talk_array [
+    0 1 talk_file 4 add getdword 1 sub {
+      [
+        exch 8 mul 8 add talk_file add
+        dup getdword talk_file add cvs
+        exch 4 add getdword talk_file add
+      ]
+    } for
+  ] def
 } def
 
 
-/.st_text 0 def
-/.st_file 1 def
-/.st_sound 2 def
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Load sound samples.
+%
+% ( -- )
+%
+/load_talk_dialog {
+  window.dialog
+  dup .title "Just a second..." put
+  dup .text "Please wait while speech files are being loaded..." put
+  dup window.init window.show
 
-/speech_table [
-  [ "Boot from Hard Disk"     "s01_en.wav" .undef ]
-  [ "Firmware Test"           "s02_en.wav" .undef ]
-  [ "Installation"            "s03_en.wav" .undef ]
-  [ "Memory Test"             "s04_en.wav" .undef ]
-  [ "Repair Installed System" "s05_en.wav" .undef ]
-  [ "Rescue System"           "s06_en.wav" .undef ]
+  load_talk
+  70 sound.setvolume 
 
-  [ "Help"                    "s10_en.wav" .undef ]
-  [ "Language"                "s11_en.wav" .undef ]
-  [ "Video Mode"              "s12_en.wav" .undef ]
-  [ "Source"                  "s13_en.wav" .undef ]
-  [ "Kernel"                  "s14_en.wav" .undef ]
-  [ "Driver"                  "s15_en.wav" .undef ]
-
-  [ "English (UK)"            "s20_en.wav" .undef ]
-  [ "English (US)"            "s21_en.wav" .undef ]
-  [ "Deutsch"                 "s22_en.wav" .undef ]
-
-  [ "Text Mode"               "s30_en.wav" .undef ]
-  [ "VESA"                    "s31_en.wav" .undef ]
-  [ "800 x 600"               "s32_en.wav" .undef ]
-  [ "1024 x 768"              "s33_en.wav" .undef ]
-  [ "1280 x 1024"             "s34_en.wav" .undef ]
-
-  [ "CD-ROM"                  "s40_en.wav" .undef ]
-  [ "SLP"                     "s41_en.wav" .undef ]
-  [ "FTP"                     "s42_en.wav" .undef ]
-  [ "HTTP"                    "s43_en.wav" .undef ]
-  [ "NFS"                     "s44_en.wav" .undef ]
-  [ "SMB / CIFS"              "s45_en.wav" .undef ]
-  [ "Hard Disk"               "s46_en.wav" .undef ]
-
-  [ "Default"                 "s50_en.wav" .undef ]
-  [ "Safe Settings"           "s51_en.wav" .undef ]
-  [ "No ACPI"                 "s52_en.wav" .undef ]
-  [ "No Local APIC"           "s53_en.wav" .undef ]
-
-  [ "Yes"                     "s60_en.wav" .undef ]
-  [ "No"                      "s61_en.wav" .undef ]
-  [ "File"                    "s62_en.wav" .undef ]
-] def
+  window.done
+} def
 
 

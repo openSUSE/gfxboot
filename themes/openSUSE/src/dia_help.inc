@@ -18,7 +18,7 @@
    } if
    show_help
 
-   v_impaired 2 ge { txt_help speak } if
+   config.talk { txt_help speak } if
 } def
 
 
