@@ -1,50 +1,115 @@
+# main menu
+
+msgid "Boot from Hard Disk"
+msgstr ""
+
 msgid "Installation"
 msgstr ""
 
-msgid "Boot from Hard Disk"
+msgid "Repair Installed System"
 msgstr ""
 
 msgid "Rescue System"
 msgstr ""
 
+msgid "Firmware Test"
+msgstr ""
+
 msgid "Memory Test"
 msgstr ""
 
-msgid "Help"
-msgstr ""
 
-msgid "Driver"
+# panel texts
+
+msgid "Help"
 msgstr ""
 
 msgid "Language"
 msgstr ""
 
-msgid "Yes"
+msgid "Video Mode"
 msgstr ""
 
-msgid "No"
+msgid "Source"
+msgstr "Installation Source"
+
+msgid "Kernel"
 msgstr ""
 
-msgid "File"
+msgid "Driver"
+msgstr "Driver Update"
+
+msgid "Arch"
+msgstr "Architecture"
+
+
+# language menu
+
+msgid "English (UK)"
 msgstr ""
+
+msgid "English (US)"
+msgstr ""
+
+msgid "Deutsch"
+msgstr "German"
+
+
+# video menu
 
 msgid "Text Mode"
 msgstr ""
 
-msgid "Firmware Test"
+msgid "VESA"
 msgstr ""
 
-msgid "Source"
+msgid "800 x 600"
+msgstr "800 times 600"
+
+msgid "1024 x 768"
+msgstr "1024 times 768"
+
+msgid "1280 x 1024"
+msgstr "1280 times 1024"
+
+msgid "1400 x 1050"
+msgstr "1400 times 1050"
+
+msgid "1600 x 1200"
+msgstr "1600 times 1200"
+
+
+# source menu
+
+msgid "CD-ROM"
 msgstr ""
 
-msgid "Video Mode"
+msgid "DVD"
 msgstr ""
 
-msgid "Arch"
+msgid "SLP"
 msgstr ""
 
-msgid "Kernel"
+msgid "FTP"
 msgstr ""
+
+msgid "HTTP"
+msgstr ""
+
+
+msgid "NFS"
+msgstr ""
+
+
+msgid "SMB / CIFS"
+msgstr ""
+
+
+msgid "Hard Disk"
+msgstr ""
+
+
+# kernel menu
 
 msgid "Default"
 msgstr ""
@@ -58,6 +123,25 @@ msgstr ""
 msgid "No Local APIC"
 msgstr ""
 
-msgid "Repair Installed System"
+
+# driver menu
+
+msgid "Yes"
 msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "File"
+msgstr ""
+
+
+# arch menu
+
+msgid "x86"
+msgstr ""
+
+msgid "x86-64"
+msgstr ""
+
 
