@@ -37,6 +37,9 @@ for $msg (@{$po}) {
 
   next unless $id ne "";
 
+  eval '$id = "' . $id . '"';
+  eval '$str = "' . $str . '"';
+
   $str = $id if $str eq "";
 
   open W, ">$tmp_txt";

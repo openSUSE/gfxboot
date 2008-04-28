@@ -424,20 +424,21 @@ edit_length		dw 0		; string length in pixel
 kbd_status		dw 0
 
 
-sound_buf_size		equ 8*1024
+sound_buf_size		equ 4*1024
+sound_buf_mask		equ sound_buf_size - 1
+
 
 			align 4, db 0
-sound_x			dd 0
+sound_unpack_buf	dd 0		; buffer for unpacked sound samples
+sound_unpack_buf_size	dd 0
+cnt0_acc		dw 0
+cnt0_start_val		dw 0
 sound_old_int8		dd 0
-sound_old_61		db 0
-sound_61		db 0
-sound_cnt0		dw 0
-sound_timer0		dw 0
-sound_timer1		dw 0
 sound_vol		db 0
 sound_ok		db 0
 sound_int_active	db 0
 sound_playing		db 0		; bits 0-3: mod, 4-7: wav
+sound_scale		db 0
 sound_sample		dd 0
 sound_buf		dd 0		; (seg:ofs)
 sound_buf.lin		dd 0		; buffer for sound player
@@ -446,16 +447,11 @@ sound_end		dd 0		; rel. to sound_buf
 playlist		times playlist_entries * sizeof_playlist db 0
 mod_buf			dd 0 		; buffer for mod player
 int8_count		dd 0
-cycles_per_tt		dd 0
-cycles_per_int		dd 0
-next_int		dd 0,0
 wav_current		dd 0		; pointer to currently played way file
 wav_end			dd 0		; stop here
-wav_next_start		dd 0		; dto, next
-wav_next_end		dd 0		; dto, next
-wav_seg			dw 0
-wav_ofs_cur		dw 0
-wav_ofs_end		dw 0
+wav_next		dd 0		; next sound sample
+wav_type		db 0
+need_sound_update	db 0
 
 			align 4, db 0
 
@@ -925,10 +921,23 @@ gfx_init_58:
 		jc gfx_init_90
 		mov [vbe_info_buffer],eax
 
+		mov eax,sound_buf_size
+		call calloc
+		cmp eax,1
+		jc gfx_init_90
+		mov [sound_buf.lin],eax
+		mov edx,eax
+		and eax,~0fh
+		shl eax,12
+		and edx,0fh
+		mov ax,dx
+		mov [sound_buf],eax
+
 		; those must be low memory addresses:
 		mov eax,[gfx_pal_tmp]
 		or eax,[vbe_buffer]
 		or eax,[vbe_info_buffer]
+		or eax,[sound_buf.lin]
 		cmp eax,100000h
 		cmc
 		jc gfx_init_90
@@ -5285,8 +5294,14 @@ prim_add:
 		cmp dx,t_int + (t_string << 8)
 		jz prim_add_50
 		cmp dx,t_int + (t_ptr << 8)
+		jz prim_add_50
+		cmp dx,t_string + (t_int << 8)
+		jz prim_add_40
+		cmp dx,t_ptr + (t_int << 8)
 		stc
 		jnz prim_add_90
+prim_add_40:
+		xchg dl,dh
 prim_add_50:
 		add eax,ecx
 		dec dword [pstack.ptr]
@@ -9447,24 +9462,6 @@ prim_sounddone:
 		ret
 
 
-%if 0
-
-		bits 32
-
-prim_soundtest:
-		mov dl,t_int
-		call get_1arg
-		jc prim_stest_90
-		dec dword [pstack.ptr]
-
-		mov [sound_x],eax
-		call sound_test
-		clc
-prim_stest_90:
-		ret
-%endif
-
-
 ;; mod.load - assign mod file to player
 ;
 ; group: sound
@@ -9611,67 +9608,34 @@ prim_modps_90:
 prim_wavplay:
 		call pr_setptr_or_none
 
-		; eax file
+		call snd_activate
 
-		push eax
-		call find_mem_size
-		pop esi
-		cmp eax,44		; WAV header size
-		jbe prim_wavplay_90
-		add eax,esi
-		cmp dword [es:esi+0],46464952h
-		jnz prim_wavplay_90
-		cmp dword [es:esi+8],45564157h
-		jnz prim_wavplay_90
-		cmp word [es:esi+20],1
-		jnz prim_wavplay_90
-		cmp word [es:esi+34],8
-		jnz prim_wavplay_90
-		cmp word [es:esi+22],1
-		jnz prim_wavplay_90
-		mov ecx,[es:esi+24]	; sample rate
-		cmp ecx,1
-		jb prim_wavplay_90
-		cmp ecx,18000
-		jae prim_wavplay_90
-		add esi,44
-		mov [wav_end],eax
-		mov [wav_current],esi
-		mov ebx,esi
-		shr ebx,4
-		mov [wav_seg],bx
-		mov ebx,esi
-		and ebx,~0fh
-		sub esi,ebx
-		mov [wav_ofs_cur],si
-		sub eax,ebx
-		mov [wav_ofs_end],ax
-		push ecx
-		call sound_init
-		pop eax
-		jc prim_wavplay_90
-		call sound_setsample
-
-		or byte [sound_playing],0f0h
-
-prim_wavplay_90:
 		clc
 		ret
 
 prim_test2:
-		mov eax,[prog.base]
-		add eax,wav_seg
+		mov eax,wav_current
+		add eax,[prog.base]
 		jmp pr_getptr_or_none
 
 prim_test3:
-		movzx eax,word [sound_timer1]
+		movzx eax,word [cnt0_start_val]
 		jmp pr_getint
 
 prim_test4:
 		mov eax,[int8_count]
 		jmp pr_getint
 
+prim_test5:
+		xor eax,eax
+		mov al,[sound_playing]
+		mov ah,[need_sound_update]
+		jmp pr_getint
 
+prim_test6:
+		mov eax,sound_start
+		add eax,[prog.base]
+		jmp pr_getptr_or_none
 
 
 
@@ -9697,34 +9661,10 @@ prim_wavplaylater:
 
 		; eax file
 
-		push eax
-		call find_mem_size
-		pop esi
-		cmp eax,44		; WAV header size
-		jbe prim_wavplaylater_90
-		add eax,esi
-		cmp dword [es:esi+0],46464952h
-		jnz prim_wavplaylater_90
-		cmp dword [es:esi+8],45564157h
-		jnz prim_wavplaylater_90
-		cmp word [es:esi+20],1
-		jnz prim_wavplaylater_90
-		cmp word [es:esi+34],8
-		jnz prim_wavplaylater_90
-		cmp word [es:esi+22],1
-		jnz prim_wavplaylater_90
-		mov ecx,[es:esi+24]	; sample rate
-		cmp ecx,1
-		jb prim_wavplaylater_90
-		cmp ecx,18000
-		jae prim_wavplaylater_90
-		add esi,44
-		mov [wav_next_end],eax
-		mov [wav_next_start],esi
+		mov [wav_next],eax
 
 		or byte [sound_playing],0f0h
 
-prim_wavplaylater_90:
 		clc
 		ret
 
@@ -13675,6 +13615,173 @@ fill_rect_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Activate sound file.
+;
+;  eax		buffer
+;
+
+snd_activate:
+		push eax
+		call find_mem_size
+		pop esi
+
+		cmp eax,16
+		jbe sa_90
+
+		cmp dword [es:esi],7d53b605h
+		jnz sa_50
+
+		; our format
+
+		mov ecx,[es:esi+12]	; sample rate
+		cmp ecx,1
+		jb sa_90
+		cmp ecx,24000
+		jae sa_90
+
+		mov edx,[es:esi+8]	; unpacked size
+		add esi,16
+		sub eax,16
+
+		cmp eax,[es:esi-16+4]	; packed size
+		jbe sa_10
+		mov eax,[es:esi-16+4]
+sa_10:
+
+		cmp edx,[sound_unpack_buf_size]
+		jbe sa_20
+
+		push edx
+		push ecx
+		push esi
+		push eax
+
+		push edx
+		mov eax,[sound_unpack_buf]
+		call free
+		pop eax
+		call calloc
+
+		pop ebp
+		pop esi
+		pop ecx
+		pop edx
+
+		or eax,eax
+		jz sa_90
+		mov [sound_unpack_buf],eax
+		mov [sound_unpack_buf_size],edx
+		mov eax,ebp
+sa_20:
+
+		mov edi,[sound_unpack_buf]
+		add edx,edi
+
+		; esi: src
+		; edi: dst
+		; eax: src size
+		; edx: dst end
+
+		mov [wav_end],edx
+		mov [wav_current],edi
+
+		mov [tmp_var_0],edi
+		add eax,esi
+		mov [tmp_var_1],eax
+
+		push ecx
+
+sa_30:
+		cmp esi,[tmp_var_1]
+		jae sa_49
+		mov eax,[es:esi]
+		cmp al,0ffh
+		jz sa_40
+		stosb
+		inc esi
+		cmp edi,edx
+		jb sa_30
+		jmp sa_49
+sa_40:
+		add esi,4
+		shr eax,8
+		mov ecx,eax
+		and ecx,7fh
+		add ecx,5
+		lea ebx,[edi+ecx] 
+		cmp ebx,edx
+		ja sa_49
+		shr eax,7
+		add eax,[tmp_var_0]
+		push esi
+		mov esi,eax
+		es rep movsb
+		pop esi
+		jmp sa_30
+sa_49:
+
+		pop ecx
+
+		jmp sa_70
+
+sa_50:
+		cmp eax,44		; WAV header size
+		jbe sa_90
+
+		; could be WAV
+
+		cmp dword [es:esi+0],46464952h
+		jnz sa_90
+		cmp dword [es:esi+8],45564157h
+		jnz sa_90
+		cmp word [es:esi+20],1
+		jnz sa_90
+		cmp word [es:esi+34],8
+		jnz sa_90
+		cmp word [es:esi+22],1
+		jnz sa_90
+		mov ecx,[es:esi+24]	; sample rate
+		cmp ecx,1
+		jb sa_90
+		cmp ecx,24000
+		jae sa_90
+
+		add esi,44
+		sub eax,44
+
+		cmp eax,[es:esi-44+40]	; size
+		jbe sa_60
+		mov eax,[es:esi-44+40]
+sa_60:
+
+		add eax,esi
+
+		mov [wav_end],eax
+		mov [wav_current],esi
+
+sa_70:
+
+		mov byte [sound_scale],0
+		cmp ecx,12000
+		jae sa_80
+		add ecx,ecx
+		mov byte [sound_scale],1
+		dec dword [wav_current]
+sa_80:
+
+		push ecx
+		call sound_init
+		pop eax
+		jc sa_90
+		call sound_setsample
+
+		or byte [sound_playing],0f0h
+
+sa_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; Our timer interrut handler.
 ;
 ; Needed to play sound via pc-speaker.
@@ -13692,178 +13799,73 @@ new_int8:
 		push cs
 		pop ds
 
-;		mov al,20h
-;		out 20h,al
-
 		inc dword [int8_count]
 
 		cmp byte [sound_playing],0
-		jnz new_int8_10
+		jz new_int8_50
 
-%if 0
-		mov ax,[sound_timer1]
-		out 40h,al
-		mov al,ah
-		out 40h,al
-%endif
+		; play sound
 
-		jmp new_int8_90
-
-new_int8_10:
-
-new_int8_20:
-
-%if 0
-		rdtsc
-		mov edi,edx
-		mov esi,eax
-
-		sub eax,[next_int]
-		sbb edx,[next_int + 4]
-		jb new_int8_20
-
-		add esi,[cycles_per_int]
-		adc edi,0
-		mov [next_int],esi
-		mov [next_int + 4],edi
-%endif
-
-
-%if 0
 		mov si,[sound_start]
 		cmp si,[sound_end]
-		jz new_int8_25
+		jz new_int8_30
 
 		les bx,[sound_buf]
-		mov dl,[es:bx+si]
+		movzx ax,byte [es:bx+si]
 
-		cmp dl,0ffh
-		jz new_int8_22
+		; 0ffh = off
+
+		cmp al,0ffh
+		jz new_int8_10
+
+%if 0
+
+		; not slower than timer
+
+		mov cx,[cnt0_start_val]
+		sub cx,4
+
+		cmp ax,cx
+		jb new_int8_05
+		mov ax,cx
+new_int8_05:
 %endif
 
-		mov si,[wav_ofs_cur]
-		cmp si,[wav_ofs_end]
-		jae new_int8_25
-		inc word [wav_ofs_cur]
-		mov es,[wav_seg]
-		
-		es lodsb
-		sub al,128
-		movsx eax,al
-		movzx edx,byte [sound_vol]
-		imul edx
-		mov ebx,100
-		idiv ebx
-		cmp eax,7fh
-		jle .xxx_20
-		mov al,7fh
-.xxx_20:
-		cmp eax,-80h
-		jg .xxx_30
-		mov al,-80h
-.xxx_30:
-		add al,80h
-		movzx eax,al
-		mov dl,[pctab+eax]
-
-
-		mov al,dl
 		out 42h,al
 
-		mov al,[sound_61]
-		out 61h,al
-		and al,0xfe
-		out 61h,al
-
-%if 0
-new_int8_22:
+new_int8_10:
 		inc si
-		cmp si,sound_buf_size
-		jb new_int8_23
-		xor si,si
-new_int8_23:
-
+		and si,sound_buf_mask
 		mov [sound_start],si
-%endif
 
-new_int8_25:
-%if 0
-		mov ax,[sound_timer1]
-		out 40h,al
-		mov al,ah
-		out 40h,al
-%endif
-
-		mov ax,[sound_timer0]
-		or ax,ax
-		jz new_int8_30
-		add [sound_cnt0],ax
-		jnc new_int8_40
 new_int8_30:
-		push word 40h
-		pop es
-		inc dword [es:6ch]
-new_int8_40:
 
-		cmp byte [sound_int_active],0
-		jnz new_int8_90
-
-		mov byte [sound_int_active],1
-
-
-%if 0
-		; sti
+		; refill sound buffer
 
 		mov ax,[sound_end]
 		sub ax,[sound_start]
-		jnc new_int8_60
+		jnc new_int8_40
 		add ax,sound_buf_size
-new_int8_60:
+new_int8_40:
 		cmp ax,160
-		jae new_int8_80
+		jae new_int8_50
 
-		push word [cs:rm_seg.ss]
-		push word [cs:rm_seg.ds]
-		push word [cs:rm_seg.es]
-		push word [cs:rm_seg.fs]
-		push word [cs:rm_seg.gs]
+		mov byte [need_sound_update],1
 
-		pm_enter
+new_int8_50:
 
-		test byte [sound_playing],0fh
-		jz new_int8_70
-		call mod_get_samples
-		jmp new_int8_75
+		; run bios timer
+
+		mov ax,[cnt0_start_val]
+		or ax,ax
+		jz new_int8_60
+		add [cnt0_acc],ax
+		jnc new_int8_70
+new_int8_60:
+		push word 40h
+		pop es
+		inc dword [es:6ch]
 new_int8_70:
-		test byte [sound_playing],0f0h
-		jz new_int8_75
-		call wav_get_samples
-
-		mov eax,[wav_current]
-		cmp eax,[wav_end]
-		jnz new_int8_75
-		xor eax,eax
-		xchg eax,[wav_next_start]
-		mov [wav_current],eax
-		xor eax,eax
-		xchg eax,[wav_next_end]
-		mov [wav_end],eax
-new_int8_75:
-
-		pm_leave
-
-		pop word [cs:rm_seg.gs]
-		pop word [cs:rm_seg.fs]
-		pop word [cs:rm_seg.es]
-		pop word [cs:rm_seg.ds]
-		pop word [cs:rm_seg.ss]
-
-new_int8_80:
-
-%endif
-
-		mov byte [sound_int_active],0
-new_int8_90:
 
 		mov al,20h
 		out 20h,al
@@ -13878,6 +13880,39 @@ new_int8_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Add sound samples to buffer.
+;
+
+		bits 32
+
+sound_update:
+
+		test byte [sound_playing],0fh
+		jz sound_update_20
+		call mod_get_samples
+		jmp sound_update_50
+sound_update_20:
+		test byte [sound_playing],0f0h
+		jz sound_update_50
+		call wav_get_samples
+
+		mov eax,[wav_current]
+		cmp eax,[wav_end]
+		jnz sound_update_50
+		mov eax,[wav_next]
+		or eax,eax
+		jz sound_update_50
+		call snd_activate
+		mov dword [wav_next],0
+
+sound_update_50:
+
+		mov byte [need_sound_update],0
+
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; Prepare sound subsystem.
 ;
 ; Installs a new timer interrupt handler and increases timer frequency.
@@ -13889,9 +13924,6 @@ sound_init:
 		cmp byte [sound_ok],0
 		jnz sound_init_90
 
-		call chk_tsc
-		jc sound_init_90
-
 		mov eax,ar_sizeof
 		call calloc
 		cmp eax,1
@@ -13900,24 +13932,13 @@ sound_init:
 
 		call mod_init
 
-		mov eax,sound_buf_size
-		call calloc
-		cmp eax,1
-		jc sound_init_90
-		mov [sound_buf.lin],eax
-		mov edx,eax
-		and eax,~0fh
-		shl eax,12
-		and edx,0fh
-		mov ax,dx
-		mov [sound_buf],eax
-
 		xor eax,eax
 		mov [int8_count],eax
 		mov [sound_start],eax
 		mov [sound_end],eax
 		mov [sound_playing],al
 		mov [sound_int_active],al
+		mov [need_sound_update],al
 
 		mov edi,playlist
 		add edi,[prog.base]
@@ -13927,12 +13948,7 @@ sound_init:
 		pushf
 		cli
 
-		in al,61h
-		mov [sound_old_61],al
-		or al,3
-		mov [sound_61],al
-
-		mov al,92h
+		mov al,90h
 		out 43h,al
 
 		mov al,34h
@@ -13941,6 +13957,10 @@ sound_init:
 		xor ax,ax
 		out 40h,al
 		out 40h,al
+
+		in al,61h
+		or al,3
+		out 61h,al
 
 		push dword [es:8*4]
 		pop dword [sound_old_int8]
@@ -13951,40 +13971,8 @@ sound_init:
 
 		popf
 
-		mov eax,[int8_count]
-sound_init_40:
-		cmp eax,[int8_count]
-		jz sound_init_40
-
-		rdtsc
-
-		mov edi,edx
-		mov esi,eax
-
-		mov eax,[int8_count]
-		add eax,4
-sound_init_50:
-		cmp eax,[int8_count]
-		jnz sound_init_50
-
-		rdtsc
-
-		sub eax,esi
-		sbb edx,edi
-
-		shrd eax,edx,18
-		adc eax,0
-		mov [cycles_per_tt],eax
-
-		mov [tmp_var_0],eax
-		mov [tmp_var_1],edx
-
 		mov eax,16000
 		call sound_setsample
-
-		xor eax,eax
-		mov [next_int],eax
-		mov [next_int+4],eax
 
 		mov byte [sound_ok],1
 sound_init_90:
@@ -14006,20 +13994,23 @@ sound_done:
 		pushf
 		cli
 
-		mov al,[sound_old_61]
+		in al,61h
+		and al,~3
 		out 61h,al
 
 		mov al,36h
 		out 43h,al
 
-		xor ax,ax
+		xor eax,eax
 		out 40h,al
 		out 40h,al
 
-		mov [sound_timer0],ax
-		mov [sound_timer1],ax
-		mov [sound_cnt0],ax
+		mov [cnt0_start_val],ax
+		mov [cnt0_acc],ax
 		mov [sound_playing],al
+		mov [need_sound_update],al
+		mov [sound_start],eax
+		mov [sound_end],eax
 
 		push dword [sound_old_int8]
 		pop dword [es:8*4]
@@ -14031,8 +14022,13 @@ sound_done:
 		mov eax,[mod_buf]
 		call free
 
-		mov eax,[sound_buf.lin]
+		mov eax,[sound_unpack_buf]
 		call free
+
+		xor eax,eax
+		mov [mod_buf],eax
+		mov [sound_unpack_buf],eax
+		mov [sound_unpack_buf_size],eax
 
 sound_done_90:
 		ret
@@ -14051,70 +14047,26 @@ sound_setsample:
 		jae sound_setsample_20
 		mov eax,20
 sound_setsample_20:
-		cmp eax,18000
+		cmp eax,24000
 		jbe sound_setsample_50
-		mov eax,18000
+		mov eax,24000
 sound_setsample_50:
 		mov [sound_sample],eax
 		xchg eax,ecx
 		mov eax,1193180
 		xor edx,edx
 		div ecx
-		mov [sound_timer0],ax
-		push eax
-		mul dword [cycles_per_tt]
-		mov [cycles_per_int],eax
+		mov [cnt0_start_val],ax
 
-		mov [tmp_var_2],eax
-
-		pop eax
-
-%if 0
-		; 5/4 faster
-		imul eax,eax,4
-		mov ecx,5
-		div ecx
-%endif
-
-		mov [sound_timer1],ax
-		
 		pushf
 		cli
 		out 40h,al
 		mov al,ah
 		out 40h,al
 		popf
+
 sound_setsample_90:
 		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; Test sound subsystem.
-;
-
-%if 0
-
-		bits 32
-
-sound_test:
-		cmp dword [sound_x],0
-		jz sound_test_80
-
-		call sound_init
-		jc sound_test_90
-
-		mov eax,16000
-		call sound_setsample
-
-		mov byte [sound_playing],1
-
-		jmp sound_test_90
-
-sound_test_80:
-		call sound_done
-sound_test_90:
-		ret
-%endif
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -14187,11 +14139,7 @@ mod_get_samples_20:
 		or al,dl		; 0ffh if we play nothing
 		mov [es:ebx+edi],al
 		inc edi
-		cmp edi,sound_buf_size
-		jb mod_get_samples_50
-		xor edi,edi
-
-mod_get_samples_50:
+		and edi,sound_buf_mask
 
 		dec ecx
 		jnz mod_get_samples_20
@@ -14255,31 +14203,28 @@ wav_get_samples_20:
 		jmp wav_get_samples_50
 wav_get_samples_25:
 		es lodsb
-		sub al,128
-		movsx eax,al
-		movzx edx,byte [sound_vol]
-		imul edx
-		mov ebx,100
-		idiv ebx
-		cmp eax,7fh
-		jle wav_get_samples_30
-		mov al,7fh
+
+		cmp byte [sound_scale],0
+		jz wav_get_samples_30
+
+		mov dl,al
+		call calc_delay
+		
+		mov [es:edi+ebp],al
+		inc ebp
+		and ebp,sound_buf_mask
+
+		mov al,dl
+		add al,[es:esi]
+		rcr al,1
+
 wav_get_samples_30:
-		cmp eax,-80h
-		jg wav_get_samples_40
-		mov al,-80h
-wav_get_samples_40:
-		add al,80h
-		movzx eax,al
-		mov al,[pctab+eax]
+		call calc_delay
 
 wav_get_samples_50:
 		mov [es:edi+ebp],al
 		inc ebp
-		cmp ebp,sound_buf_size
-		jb wav_get_samples_60
-		xor ebp,ebp
-wav_get_samples_60:
+		and ebp,sound_buf_mask
 
 		dec ecx
 		jnz wav_get_samples_20
@@ -14288,6 +14233,33 @@ wav_get_samples_60:
 		mov [wav_current],esi
 
 wav_get_samples_90:
+		ret
+
+
+calc_delay:
+		push edx
+		push ebx
+
+		sub al,128
+		movsx eax,al
+		movzx edx,byte [sound_vol]
+		imul edx
+		mov ebx,100
+		idiv ebx
+		cmp eax,7fh
+		jle calc_delay_30
+		mov al,7fh
+calc_delay_30:
+		cmp eax,-80h
+		jg calc_delay_40
+		mov al,-80h
+calc_delay_40:
+		add al,80h
+		movzx eax,al
+		mov al,[pctab+eax]
+
+		pop ebx
+		pop edx
 		ret
 
 
@@ -14317,27 +14289,6 @@ chk_cpuid:
 		jz chk_cpuid_90
 		clc
 chk_cpuid_90:
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; Check for time stamp counter.
-;
-; return:
-;  CF		0/1	yes/no
-;
-
-		bits 32
-
-chk_tsc:
-		call chk_cpuid
-		jc chk_tsc_90
-		mov eax,1
-		cpuid
-		test dl,1 << 4
-		jnz chk_tsc_90
-		stc
-chk_tsc_90:
 		ret
 
 
@@ -15867,6 +15818,12 @@ switch_to_pm_20:
 		mov fs,ax
 		mov gs,ax
 
+		cmp byte [need_sound_update],0
+		jz switch_to_pm_80
+		pusha
+		call sound_update
+		popa
+switch_to_pm_80:
 		pop eax
 		popfw
 		o16 ret

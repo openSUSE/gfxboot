@@ -18,61 +18,62 @@
 /.la.name   2 def
 
 /lang.defaultnames [
-  [ "af_ZA" false "Afrikaans" ]
-% [ "ar_EG" true  "\u064a\u0628\u0631\u0639" ]
-  [ "ar_EG" true  "\ufef2\ufe91\ufeae\ufecb" ]
-  [ "bg_BG" false "Български" ]
-  [ "bn_BD" false "\u09ac\u09be\u0982\u09b2\u09be" ]		% Bengali
-  [ "bs_BA" false "Bosanski" ]
-  [ "ca_ES" false "Català" ]
-  [ "cs_CZ" false "Čeština" ]
-  [ "cy_GB" false "Cymraeg" ]
-  [ "da_DK" false "Dansk" ]
-  [ "de_DE" false "Deutsch" ]
-  [ "el_GR" false "Ελληνικά" ]
-  [ "en_GB" false "English (UK)" ]
-  [ "en_US" false "English (US)" ]
-  [ "es_ES" false "Español" ]
-  [ "et_EE" false "Eesti" ]
-  [ "fi_FI" false "Suomi" ]
-  [ "fr_FR" false "Français" ]
+  [ "af_ZA" false "Afrikaans" ]						% Afrikaans
+% [ "ar_EG" true  "\u064a\u0628\u0631\u0639" ]				% Arabic
+  [ "ar_EG" true  "\ufef2\ufe91\ufeae\ufecb" ]				% Arabic
+  [ "bg_BG" false "Български" ]						% Bulgarian
+  [ "bn_BD" false "\u09ac\u09be\u0982\u09b2\u09be" ]			% Bengali
+  [ "bs_BA" false "Bosanski" ]						% Bosnian
+  [ "ca_ES" false "Català" ]						% Catalan
+  [ "cs_CZ" false "Čeština" ]						% Czech
+  [ "cy_GB" false "Cymraeg" ]						% Welsh
+  [ "da_DK" false "Dansk" ]						% Danish
+  [ "de_DE" false "Deutsch" ]						% German
+  [ "el_GR" false "Ελληνικά" ]						% Greek
+  [ "en_GB" false "English (UK)" ]					% English
+  [ "en_US" false "English (US)" ]					% English
+  [ "es_ES" false "Español" ]						% Spanish
+  [ "et_EE" false "Eesti" ]						% Estonian
+  [ "fi_FI" false "Suomi" ]						% Finnish
+  [ "fr_FR" false "Français" ]						% French
   [ "gu_IN" false "\u0a97\u0ac1\u0a9c\u0ab0\u0abe\u0aa4\u0ac0" ]	% Gujarati
-  [ "he_IL" false "תירבע" ]
-% [ "hi_IN" false "\u0939\u093f\u0928\u094d\u0926\u0940" ]	% Hindi
-  [ "hi_IN" false "\u0939\u093f\u0902\u0926\u0940" ]	% Hindi
-  [ "hr_HR" false "Hrvatski" ]
-  [ "hu_HU" false "Magyar" ]
-  [ "id_ID" false "Bahasa Indonesia" ]
-  [ "it_IT" false "Italiano" ]
-  [ "ja_JP" false "日本語" ]
-% [ "km_KH" false "\u1781\u17d2\u1798\u17c2\u179a" ]		% Khmer
-  [ "km_KH" false "Khmer" ]
-  [ "ko_KR" false "한글" ]
-  [ "lt_LT" false "Lietuvių" ]
-  [ "mk_MK" false "Македонски" ]
-  [ "mr_IN" false "\u092e\u0930\u093e\u0920\u0940" ]		% Marathi
-  [ "nb_NO" false "Norsk" ]
-  [ "nl_NL" false "Nederlands" ]
-  [ "pa_IN" false "\u0a2a\u0a70\u0a1c\u0a3e\u0a2c\u0a40" ]	% Punjabi
-  [ "pl_PL" false "Polski" ]
-  [ "pt_BR" false "Português (Brasil)" ]
-  [ "pt_PT" false "Português" ]
-  [ "ro_RO" false "Română" ]
-  [ "ru_RU" false "Русский" ]
-  [ "si_LK" false "\u0dc3\u0dd2\u0d82\u0dc4\u0dbd" ]		% Sinhala
-  [ "sk_SK" false "Slovenčina" ]
-  [ "sl_SI" false "Slovenščina" ]
-  [ "sr_CS" false "Srpski" ]
-  [ "sv_SE" false "Svenska" ]
-  [ "ta_IN" false "\u0ba4\u0bae\u0bbf\u0bb4\u0bcd" ]		% Tamil
-  [ "tr_TR" false "Türkçe" ]
-  [ "uk_UA" false "Українська" ]
-  [ "vi_VN" false "Tiếng Việt" ]
-  [ "wa_BE" false "Walon" ]
-  [ "xh_ZA" false "isiXhosa" ]
-  [ "zh_CN" false "简体中文" ]
-  [ "zh_TW" false "繁體中文 (台灣)" ]
-  [ "zu_ZA" false "isiZulu" ]
+  [ "he_IL" false "תירבע" ]						% Hebrew
+% [ "hi_IN" false "\u0939\u093f\u0928\u094d\u0926\u0940" ]		% Hindi
+  [ "hi_IN" false "\u0939\u093f\u0902\u0926\u0940" ]			% Hindi
+  [ "hr_HR" false "Hrvatski" ]						% Croatian
+  [ "hu_HU" false "Magyar" ]						% Hungarian
+  [ "id_ID" false "Bahasa Indonesia" ]					% Indonesian
+  [ "it_IT" false "Italiano" ]						% Italian
+  [ "ja_JP" false "日本語" ]						% Japanese
+% [ "km_KH" false "\u1781\u17d2\u1798\u17c2\u179a" ]			% Khmer
+  [ "km_KH" false "Khmer" ]						% Khmer
+  [ "ko_KR" false "한글" ]						% Korean
+  [ "lt_LT" false "Lietuvių" ]						% Lithuanian
+  [ "mk_MK" false "Македонски" ]					% Macedonian
+  [ "mr_IN" false "\u092e\u0930\u093e\u0920\u0940" ]			% Marathi
+  [ "nb_NO" false "Norsk" ]						% Norwegian
+  [ "nl_NL" false "Nederlands" ]					% Dutch
+  [ "pa_IN" false "\u0a2a\u0a70\u0a1c\u0a3e\u0a2c\u0a40" ]		% Punjabi
+  [ "pl_PL" false "Polski" ]						% Polish
+  [ "pt_BR" false "Português (Brasil)" ]				% Portuguese (Brazilian)
+  [ "pt_PT" false "Português" ]						% Portuguese
+  [ "ro_RO" false "Română" ]						% Romanian
+  [ "ru_RU" false "Русский" ]						% Russian
+  [ "si_LK" false "\u0dc3\u0dd2\u0d82\u0dc4\u0dbd" ]			% Sinhala
+  [ "sk_SK" false "Slovenčina" ]					% Slovak
+  [ "sl_SI" false "Slovenščina" ]					% Slovenian
+  [ "sr_CS" false "Srpski" ]						% Serbian
+  [ "sv_SE" false "Svenska" ]						% Swedish
+  [ "ta_IN" false "\u0ba4\u0bae\u0bbf\u0bb4\u0bcd" ]			% Tamil
+  [ "th_TH" false "\u0e20\u0e32\u0e29\u0e32\u0e44\u0e17\u0e22" ] 	% Thai
+  [ "tr_TR" false "Türkçe" ]						% Turkish
+  [ "uk_UA" false "Українська" ]					% Ukrainian
+  [ "vi_VN" false "Tiếng Việt" ]					% Vietnamese
+  [ "wa_BE" false "Walon" ]						% Walloon
+  [ "xh_ZA" false "isiXhosa" ]						% Xhosa
+  [ "zh_CN" false "简体中文" ]						% Simplified Chinese
+  [ "zh_TW" false "繁體中文 (台灣)" ]					% Traditional Chinese
+  [ "zu_ZA" false "isiZulu" ]						% Zulu
 ] def
 
 

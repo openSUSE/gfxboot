@@ -45,14 +45,164 @@ msgstr "Architecture"
 
 # language menu
 
-msgid "English (UK)"
-msgstr ""
+msgid "\xef\xbb\xb2\xef\xba\x91\xef\xba\xae\xef\xbb\x8b"
+msgstr "Arabic"
 
-msgid "English (US)"
-msgstr ""
+msgid "Afrikaans"
+msgstr "Afrikaans"
+
+msgid "Български"
+msgstr "Bulgarian"
+
+msgid "\xe0\xa6\xac\xe0\xa6\xbe\xe0\xa6\x82\xe0\xa6\xb2\xe0\xa6"
+msgstr "Bengali"
+
+msgid "Bosanski"
+msgstr "Bosnian"
+
+msgid "Català"
+msgstr "Catalan"
+
+msgid "Čeština"
+msgstr "Czech"
+
+msgid "Cymraeg"
+msgstr "Welsh"
+
+msgid "Dansk"
+msgstr "Danish"
 
 msgid "Deutsch"
 msgstr "German"
+
+msgid "Ελληνικά"
+msgstr "Greek"
+
+msgid "English (UK)"
+msgstr "English (UK)"
+
+msgid "English (US)"
+msgstr "English (US)"
+
+msgid "Español"
+msgstr "Spanish"
+
+msgid "Eesti"
+msgstr "Estonian"
+
+msgid "Suomi"
+msgstr "Finnish"
+
+msgid "Français"
+msgstr "French"
+
+msgid "\xe0\xaa\x97\xe0\xab\x81\xe0\xaa\x9c\xe0\xaa\xb0\xe0\xaa\xbe\xe0\xaa\xa4\xe0\xab\x80"
+msgstr "Gujarati"
+
+msgid "תירבע"
+msgstr "Hebrew"
+
+msgid "\xe0\xa4\xb9\xe0\xa4\xbf\xe0\xa4\x82\xe0\xa4\xa6\xe0\xa5\x80"
+msgstr "Hindi"
+
+msgid "Hrvatski"
+msgstr "Croatian"
+
+msgid "Magyar"
+msgstr "Hungarian"
+
+msgid "Bahasa Indonesia"
+msgstr "Indonesian"
+
+msgid "Italiano"
+msgstr "Italian"
+
+msgid "日本語"
+msgstr "Japanese"
+
+msgid "Khmer"
+msgstr "Khmer"
+
+msgid "한글"
+msgstr "Korean"
+
+msgid "Lietuvių"
+msgstr "Lithuanian"
+
+msgid "Македонски"
+msgstr "Macedonian"
+
+msgid "\xe0\xa4\xae\xe0\xa4\xb0\xe0\xa4\xbe\xe0\xa4\xa0\xe0\xa5\x80"
+msgstr "Marathi"
+
+msgid "Norsk"
+msgstr "Norwegian"
+
+msgid "Nederlands"
+msgstr "Dutch"
+
+msgid "\xe0\xa8\xaa\xe0\xa9\xb0\xe0\xa8\x9c\xe0\xa8\xbe\xe0\xa8\xac\xe0\xa9\x80"
+msgstr "Punjabi"
+
+msgid "Polski"
+msgstr "Polish"
+
+msgid "Português (Brasil)"
+msgstr "Portuguese (Brazilian)"
+
+msgid "Português"
+msgstr "Portuguese"
+
+msgid "Română"
+msgstr "Romanian"
+
+msgid "Русский"
+msgstr "Russian"
+
+msgid "\xe0\xb7\x83\xe0\xb7\x92\xe0\xb6\x82\xe0\xb7\x84\xe0\xb6\xbd"
+msgstr "Sinhala"
+
+msgid "Slovenčina"
+msgstr "Slovak"
+
+msgid "Slovenščina"
+msgstr "Slovenian"
+
+msgid "Srpski"
+msgstr "Serbian"
+
+msgid "Svenska"
+msgstr "Swedish"
+
+msgid "\xe0\xae\xa4\xe0\xae\xae\xe0\xae\xbf\xe0\xae\xb4\xe0\xaf\x8d"
+msgstr "Tamil"
+
+msgid "\xe0\xb8\xa0\xe0\xb8\xb2\xe0\xb8\xa9\xe0\xb8\xb2\xe0\xb9\x84\xe0\xb8\x97\xe0\xb8\xa2"
+msgstr "Thai"
+
+msgid "Türkçe"
+msgstr "Turkish"
+
+msgid "Українська"
+msgstr "Ukrainian"
+
+msgid "Tiếng Việt"
+msgstr "Vietnamese"
+
+msgid "Walon"
+msgstr "Walloon"
+
+msgid "isiXhosa"
+msgstr "Xhosa"
+
+msgid "简体中文"
+msgstr "Simplified Chinese"
+
+msgid "繁體中文 (台灣)"
+msgstr "Traditional Chinese"
+
+msgid "isiZulu"
+msgstr "Zulu"
 
 
 # video menu

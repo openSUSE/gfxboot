@@ -1134,14 +1134,12 @@
     currentpoint 0 0 moveto
     64 string biosmem "mem = %u  " 2 index sprintf dup show free
     moveto setcolor
-    pop 0
   } if
 
   dup keyF8 eq syslinux and {
     kroete.file .undef eq { /kroete.file "kroete.dat" findfile def } if
     kroete.file kroete.dir idle
     /kroete.dir kroete.dir 1 xor def
-    pop 0
   } if
 
   dup keyF9 eq syslinux and {
@@ -1151,7 +1149,9 @@
       /config.talk true def
       load_talk_dialog
       menu.texts menu.idx get menuitemmap speak
-    } if
+    } {
+      sound.getsamplerate { sound.getsamplerate sound.setsamplerate } if
+    } ifelse
 
     xmenu.video .xm_current 0 put
     % redraw unless another menu is still open
@@ -1169,7 +1169,6 @@
     currentpoint 0 0 moveto
     "eject  " print bootdrive eject print
     moveto setcolor
-    pop 0
   } if
 
   dup keyShiftF5 eq syslinux and debug 3 ge and {
@@ -1177,7 +1176,6 @@
     currentpoint 100 0 moveto
     bootdrive print
     moveto setcolor
-    pop 0
   } if
 
   dup keyShiftF8 eq debug 3 ge and {
@@ -1195,24 +1193,27 @@
     2 memsize print "/" print print "  " print
     moveto
 
+    currentpoint 300 60 moveto
+    3 memsize print "/" print print "  " print
+    moveto
+
+    currentpoint 300 80 moveto
+    4 memsize print "/" print print "  " print
+    moveto
+
     setcolor
-    pop 0
   } if
 
   dup keyShiftF9 eq debug 3 ge and {
     dumpmem
-    pop 0
   } if
 
   dup keyShiftF10 eq {
-    /debug debug 1 add def ""
-    pop 0
+    /debug debug 1 add def
   } if
 
   dup keyShiftF1 eq {
     /transp transp 0x10 sub 0 max def
-
-    % sound test XXXXXXXX
 
     /player 0 def
     player "hapysuse.mod" findfile dup
@@ -1228,25 +1229,7 @@
     pop 0
   } if
 
-  dup keyShiftF2 eq {
-    % sound test XXXXXXXX
-
-    "foo.wav" findfile dup dup
-    % chksum dtrace pop
-    {
-      50 sound.setvolume
-      wav.play
-      % { getkey 0xff and 'q' eq { exit } if } loop
-    } {
-      pop
-    } ifelse
-
-    pop 0
-  } if
-
   dup keyShiftF3 eq {
-    % sound test XXXXXXXX
-
     "fsfsong.wav" findfile dup
     {
       50 sound.setvolume
