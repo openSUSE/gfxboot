@@ -1,0 +1,63 @@
+msgid "Installation"
+msgstr ""
+
+msgid "Boot from Hard Disk"
+msgstr ""
+
+msgid "Rescue System"
+msgstr ""
+
+msgid "Memory Test"
+msgstr ""
+
+msgid "Help"
+msgstr ""
+
+msgid "Driver"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "File"
+msgstr ""
+
+msgid "Text Mode"
+msgstr ""
+
+msgid "Firmware Test"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Video Mode"
+msgstr ""
+
+msgid "Arch"
+msgstr ""
+
+msgid "Kernel"
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+msgid "Safe Settings"
+msgstr ""
+
+msgid "No ACPI"
+msgstr ""
+
+msgid "No Local APIC"
+msgstr ""
+
+msgid "Repair Installed System"
+msgstr ""
+
