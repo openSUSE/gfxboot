@@ -1,0 +1,136 @@
+/true 0 0 eq def
+/false 0 0 ne def
+
+/t_none 0 def
+/t_int           1 def
+/t_string 4 def
+/t_end 11 def
+/t_ptr 12 def
+
+/.undef 0 t_none settype def
+/.end 0 t_end  settype def
+
+/cvp { t_ptr settype } def
+/cvs { t_string settype } def
+/cvn { t_int settype } def
+
+/sprintf { dup cvp length exch snprintf } def
+
+/string { 1 add malloc cvs } def
+
+/clearscreen {
+  0xb8000 2 0xb8000 160 25 mul add 1 sub {
+    cvp 0x0720 putword
+  } for
+} def
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% pc speaker beep.
+%
+% ( freq duration -- )
+%
+% freq in Hz, duration in microseconds.
+%
+/beep {
+  exch
+  0x61 inbyte
+  dup 3 or 0x61 exch outbyte
+  0x43 0xb6 outbyte
+  exch 2386360 exch div
+
+  dup 0x42 exch outbyte
+  8 shr 0x42 exch outbyte
+
+  exch usleep
+
+  0x61 exch 0xfc and outbyte
+} def
+
+
+/waitkey { { getkey dup 0 ne { exit } { pop } ifelse } loop } def
+
+/print {
+  exch 80 mul
+  rot add 2 mul 0xb8000 add cvp
+  exch { over exch putbyte 2 add } forall
+  pop
+} def
+
+/print.number {
+  32 string
+  exch over
+  "%08x" exch sprintf
+  dup 4 1 roll print
+  free
+} def
+
+
+/showinfo {
+  40 1
+  0x46c cvp getdword print.number
+  50 1
+  test4 print.number
+
+  40 2
+  test2 getdword print.number
+  50 2
+  test2 4 add getdword print.number
+
+  60 2
+  test6 getdword print.number
+  70 2
+  test6 4 add getdword print.number
+
+  60 1
+  test5 print.number
+
+  40 3
+  test3 print.number
+
+  50 3
+  sound.getsamplerate print.number
+
+} def
+
+clearscreen
+
+/wav1 "s01_en.wav" findfile def
+/wav3 "foo.wav" findfile def
+
+0 0 wav1 cvn print.number
+20 0 wav1 cvn print.number
+
+50 sound.setvolume
+
+{
+  showinfo
+
+  getkey 0xff and
+  dup 0 ne { dup 1 string dup 0 4 -1 roll put 1 24 2 index print free } if
+  dup 'q' eq { exit } if
+  dup 'V' eq { 100 sound.setvolume } if
+  dup 'v' eq { 50 sound.setvolume } if
+  dup 'd' eq { sound.done } if
+  dup 'b' eq { 3000 50000 beep } if
+  dup 's' eq { 2000 sound.setsamplerate } if
+  dup 'm' eq {
+    0 memsize 0 10 rot print.number 10 10 rot print.number
+    1 memsize 0 11 rot print.number 10 11 rot print.number
+    2 memsize 0 12 rot print.number 10 12 rot print.number
+  } if
+  dup '1' eq { wav1 wav.play } if
+  dup '3' eq { wav3 wav.play } if
+  dup '2' eq {
+    /wav2 "s05_en.wav" findfile def
+    10 0 wav2 cvn print.number
+    wav2 wav.play
+    wav2 free
+  } if
+
+  pop
+} loop
+
+
+dtrace
+
+true
