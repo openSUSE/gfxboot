@@ -1,0 +1,177 @@
+#! /usr/bin/perl
+
+use Getopt::Long;
+
+sub help;
+sub read_po;
+sub join_id;
+sub new_tmp_file;
+sub cleanup;
+
+GetOptions(
+  'help' => \&help,
+);
+
+END { cleanup }     
+$SIG{INT} = \&cleanup;
+$SIG{TERM} = \&cleanup;
+
+my @tmp_files;
+
+$espeak = "espeak";
+
+$magic = 0x692741e8;
+
+help if @ARGV != 2;
+
+$po = read_po $ARGV[0];
+
+$tmp_txt = new_tmp_file;
+$tmp_wav = new_tmp_file;
+$tmp_snd = new_tmp_file;
+
+for $msg (@{$po}) {
+  $id = join_id $msg, 'id';
+  $str = join_id $msg, 'str';
+
+  next unless $id ne "";
+
+  $str = $id if $str eq "";
+
+  open W, ">$tmp_txt";
+  print W $str;
+  close W;
+
+  system "$espeak -f $tmp_txt -w $tmp_wav";
+  system "sox $tmp_wav -b -u -c 1 -r 16000 -t .wav $tmp_snd";
+
+  open F, $tmp_snd;
+  sysread F, $snd_buf, -s $tmp_snd;
+  close F;
+
+  $snd{$id} = $snd_buf;
+}
+
+$file_ofs = 0;
+@snds = sort keys %snd;
+
+for $snd (@snds) {
+  $txt_ofs{$snd} = $file_ofs;
+  $file_ofs += length($snd) + 1;
+}
+
+for $snd (@snds) {
+  $snd_ofs{$snd} = $file_ofs;
+  $file_ofs += length($snd{$snd});
+}
+
+$head_size = 8 + 8 * @snds;
+
+open W, ">$ARGV[1]";
+
+print W pack("VV", $magic, scalar(@snds));
+for $snd (@snds) {
+  print W pack("VV", ($txt_ofs{$snd} + $head_size, $snd_ofs{$snd} + $head_size));
+}
+for $snd (@snds) {
+  print W $snd, "\x00";
+}
+for $snd (@snds) {
+  print W $snd{$snd};
+}
+
+close W;
+
+
+sub help
+{
+  print STDERR
+  "Usage: po2talk [options] po_file talk_file\n" .
+  "Run po file through espeak.\n";
+
+  exit 0;
+}
+
+
+sub read_po
+{
+  local $_;
+  my ($msg, $cnt, $id, $f);
+
+  $cnt = 0;
+
+  open F, $_[0];
+  while(<F>) {
+    s/^\s*|\s*$//g;
+    next if $_ eq "";
+    if(/^#,/) {
+      s/^#,\s*//;
+      for $f (split /\s*,\s*/) {
+        ${$msg->[$cnt]{flags}{$f}} = 1 if $f ne "";
+      }
+      next
+    }
+    if(/^#(\s|$)/) { push @{$msg->[$cnt]{u_comment}}, $_ ; next }
+    if(/^#/) { push @{$msg->[$cnt]{a_comment}}, $_; next }
+    if(s/^msg(id\b|id_plural\b|str(\[\d+\])?)\s*//) {
+      $id = $1;
+      if($id eq 'id') {
+        $msg->[$cnt]{line} = $. unless exists $msg->[$cnt]{$line};
+        $cnt++;
+      }
+    }
+    if($cnt && /^"(.*)"$/) {
+      push @{$msg->[$cnt - 1]{$id}}, $1;
+    }
+    else {
+      print STDERR "$_[0]:$.: invalid po format\n";
+      return undef;
+    }
+  }
+  close F;
+
+  # trailing comments
+  pop @$msg if @$msg > 0 && !$msg->[-1]{id};
+
+  return $msg;
+}
+
+
+sub join_id
+{
+  my ($msg, $id);
+
+  ($msg, $id) = @_;
+
+  return join '', @{$msg->{$id}};
+}
+
+
+# create new temporary file
+sub new_tmp_file
+{
+  local $_;
+
+  chomp ($_ = `mktemp /tmp/po2talk.XXXXXXXXXX`);
+  die "error: mktemp failed\n" if $?;
+
+  push @tmp_files, $_;
+
+  return $_;
+}
+
+
+# remove temporary files
+sub cleanup
+{
+  local $_;
+
+  for (@tmp_files) {
+    next unless defined $_;
+    unlink;
+    $_ = undef;
+  }
+
+  undef @tmp_files;
+}
+
