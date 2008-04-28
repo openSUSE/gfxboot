@@ -12,6 +12,9 @@ msgstr ""
 msgid "Rescue System"
 msgstr ""
 
+msgid "Check Installation Media"
+msgstr ""
+
 msgid "Firmware Test"
 msgstr ""
 
