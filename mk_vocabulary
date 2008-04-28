@@ -55,7 +55,7 @@
 
   64bit
 
-  getbyte putbyte getdword putdword
+  getbyte putbyte getword putword getdword putdword
   inbyte outbyte
   findfile filesize getcwd chdir
 
@@ -76,7 +76,7 @@
 
   getkey
 
-  test1 xxx
+  xxx test1 test2 test3 test4
 
 );
 

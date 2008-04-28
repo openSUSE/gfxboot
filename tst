@@ -73,7 +73,7 @@ function tst_isolinux {
     cp -a $vm_src $vm_tmp
     perl -pi -e "s/^\s*#\s*(floppy0.startConnected)/\$1/" $vm_tmp/gfxboot.vmx
     perl -pi -e "s:<isoimage>:`pwd`/$img:g" $vm_tmp/gfxboot.vmx
-    vmware -qx $vm_tmp/gfxboot.vmx
+    vmplayer $vm_tmp/gfxboot.vmx
   elif [ "$program" = qemu ] ; then
     # qemu
     $qemu -cdrom $img

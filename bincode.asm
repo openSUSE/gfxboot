@@ -453,6 +453,9 @@ wav_current		dd 0		; pointer to currently played way file
 wav_end			dd 0		; stop here
 wav_next_start		dd 0		; dto, next
 wav_next_end		dd 0		; dto, next
+wav_seg			dw 0
+wav_ofs_cur		dw 0
+wav_ofs_end		dw 0
 
 			align 4, db 0
 
@@ -8536,6 +8539,50 @@ prim_putbyte_90:
 		ret
 
 
+;; getword - get word from memory
+;
+; group: system
+;
+; ( ptr1 -- int1 )
+;
+; int1: word at ptr1
+;
+
+		bits 32
+
+prim_getword:
+		mov dl,t_ptr
+		call get_1arg
+		jc prim_getword_90
+		movzx eax,word [es:eax]
+		mov dl,t_int
+		xor ecx,ecx
+		call set_pstack_tos
+prim_getword_90:
+		ret
+
+
+;; putword - write word to memory 
+;
+; group: system
+;
+; ( ptr1 int1 -- )
+;
+; Write word int1 at ptr1.
+;
+
+		bits 32
+
+prim_putword:
+		mov dx,t_int + (t_ptr << 8)
+		call get_2args
+		jc prim_putword_90
+		mov [es:ecx],ax
+		sub dword [pstack.ptr],2
+prim_putword_90:
+		ret
+
+
 ;; getdword - get dword from memory
 ;
 ; group: system
@@ -9590,6 +9637,15 @@ prim_wavplay:
 		add esi,44
 		mov [wav_end],eax
 		mov [wav_current],esi
+		mov ebx,esi
+		shr ebx,4
+		mov [wav_seg],bx
+		mov ebx,esi
+		and ebx,~0fh
+		sub esi,ebx
+		mov [wav_ofs_cur],si
+		sub eax,ebx
+		mov [wav_ofs_end],ax
 		push ecx
 		call sound_init
 		pop eax
@@ -9601,6 +9657,22 @@ prim_wavplay:
 prim_wavplay_90:
 		clc
 		ret
+
+prim_test2:
+		mov eax,[prog.base]
+		add eax,wav_seg
+		jmp pr_getptr_or_none
+
+prim_test3:
+		movzx eax,word [sound_timer1]
+		jmp pr_getint
+
+prim_test4:
+		mov eax,[int8_count]
+		jmp pr_getint
+
+
+
 
 
 ;; wav.playlater - play wav file after current one
@@ -13628,33 +13700,20 @@ new_int8:
 		cmp byte [sound_playing],0
 		jnz new_int8_10
 
+%if 0
 		mov ax,[sound_timer1]
 		out 40h,al
 		mov al,ah
 		out 40h,al
+%endif
 
 		jmp new_int8_90
 
 new_int8_10:
 
-%if 0
-		rdtsc
-		mov esi,[next_int]
-		mov edi,[next_int + 4]
-		sub esi,eax
-		sbb edi,edx
-		jnc new_int8_20
-
-		xor eax,eax
-		xor edx,edx
-		sub eax,esi
-		sbb edx,edi
-
-		mov [tmp_var_0],eax
-		mov [tmp_var_1],edx
-%endif
-
 new_int8_20:
+
+%if 0
 		rdtsc
 		mov edi,edx
 		mov esi,eax
@@ -13667,7 +13726,10 @@ new_int8_20:
 		adc edi,0
 		mov [next_int],esi
 		mov [next_int + 4],edi
+%endif
 
+
+%if 0
 		mov si,[sound_start]
 		cmp si,[sound_end]
 		jz new_int8_25
@@ -13677,15 +13739,43 @@ new_int8_20:
 
 		cmp dl,0ffh
 		jz new_int8_22
+%endif
+
+		mov si,[wav_ofs_cur]
+		cmp si,[wav_ofs_end]
+		jae new_int8_25
+		inc word [wav_ofs_cur]
+		mov es,[wav_seg]
+		
+		es lodsb
+		sub al,128
+		movsx eax,al
+		movzx edx,byte [sound_vol]
+		imul edx
+		mov ebx,100
+		idiv ebx
+		cmp eax,7fh
+		jle .xxx_20
+		mov al,7fh
+.xxx_20:
+		cmp eax,-80h
+		jg .xxx_30
+		mov al,-80h
+.xxx_30:
+		add al,80h
+		movzx eax,al
+		mov dl,[pctab+eax]
+
+
+		mov al,dl
+		out 42h,al
 
 		mov al,[sound_61]
 		out 61h,al
 		and al,0xfe
 		out 61h,al
 
-		mov al,dl
-		out 42h,al
-
+%if 0
 new_int8_22:
 		inc si
 		cmp si,sound_buf_size
@@ -13694,12 +13784,15 @@ new_int8_22:
 new_int8_23:
 
 		mov [sound_start],si
+%endif
 
 new_int8_25:
+%if 0
 		mov ax,[sound_timer1]
 		out 40h,al
 		mov al,ah
 		out 40h,al
+%endif
 
 		mov ax,[sound_timer0]
 		or ax,ax
@@ -13717,6 +13810,8 @@ new_int8_40:
 
 		mov byte [sound_int_active],1
 
+
+%if 0
 		; sti
 
 		mov ax,[sound_end]
@@ -13764,6 +13859,8 @@ new_int8_75:
 		pop word [cs:rm_seg.ss]
 
 new_int8_80:
+
+%endif
 
 		mov byte [sound_int_active],0
 new_int8_90:
@@ -13838,7 +13935,7 @@ sound_init:
 		mov al,92h
 		out 43h,al
 
-		mov al,30h
+		mov al,34h
 		out 43h,al
 
 		xor ax,ax
@@ -13972,13 +14069,14 @@ sound_setsample_50:
 
 		pop eax
 
+%if 0
 		; 5/4 faster
 		imul eax,eax,4
 		mov ecx,5
 		div ecx
+%endif
 
 		mov [sound_timer1],ax
-		mov [tmp_var_3],eax
 		
 		pushf
 		cli
