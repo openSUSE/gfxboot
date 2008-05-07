@@ -405,6 +405,13 @@
       } if
     } if
 
+    v_impaired 1 ge {
+      "braille=1 " bc.cmd dup length add sprintf
+    } if
+
+    v_impaired 2 ge {
+      "linemode=1 " bc.cmd dup length add sprintf
+    } if
   } if
 
   xmenu.dud {

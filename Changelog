@@ -1,3 +1,6 @@
+7/5/2008:	v4.0.7
+	- 'F9' adds 'braille=1' to command line
+
 28/4/2008:	v4.0.6
 	- WAV file playback works again
 	- added beep when bootloader is ready (fate #303482)
