@@ -626,6 +626,8 @@
       } ifelse
 
     } if
+
+    show_f9_hint
   } if
 
 } def
@@ -850,7 +852,48 @@
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % ( time ) ==> ( )
-% /Timer { pop } def
+/Timer {
+  pop
+
+  f9_hint_cnt .undef eq { return } if
+
+  /f9_hint_cnt inc
+
+  f9_hint_cnt 20 lt { return } if
+
+  currentpoint currentcolor
+
+  f9_hint_orig .undef eq {
+    60 30 moveto
+    "Press F9 to try speech output."
+    dup strsize savescreen /f9_hint_orig exch def
+    0xd0e000 setcolor show
+
+    60 30 moveto
+    /f9_hint_new f9_hint_orig imgsize savescreen def
+    /f9_hint_tmp f9_hint_orig imgsize savescreen def
+  } {
+
+    f9_hint_cnt 30 gt {
+      f9_hint_tmp f9_hint_new dup length memcpy
+      0 0 moveto f9_hint_orig f9_hint_cnt 30 sub 8 mul 255 min f9_hint_tmp blend
+      60 30 moveto f9_hint_tmp restorescreen
+    } if
+
+    f9_hint_cnt 30 sub 4 mul 255 ge {
+      /f9_hint_cnt .undef def
+    } if
+
+  } ifelse
+
+  setcolor moveto
+
+} def
+
+
+/show_f9_hint {
+  /f9_hint_cnt 0 def
+} def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
