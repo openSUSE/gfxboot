@@ -1,0 +1,409 @@
+# LANGUAGE translations for boot loader
+# Copyright (C) 2005 SUSE Linux GmbH
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: bootloader.ko\n"
+"Report-Msgid-Bugs-To: translation@suse.de\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2008-03-18 01:14+0900\n"
+"Last-Translator: YunSeok Choi <xein@naver.com>\n"
+"Language-Team: Korean <xein@naver.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-Language: Korean\n"
+"X-Poedit-Country: KOREA, REPUBLIC OF\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#. ok button label
+#. txt_ok
+msgid "OK"
+msgstr "확인"
+
+#. cancel button label
+#. txt_cancel
+msgid "Cancel"
+msgstr "취소"
+
+#. reboot button label
+#. txt_reboot
+msgid "Reboot"
+msgstr "재부팅"
+
+#. continue button label
+#. txt_continue
+msgid "Continue"
+msgstr "계속"
+
+#. txt_install
+msgid "Installation"
+msgstr "설치"
+
+#. txt_manual_install
+msgid "Manual Installation"
+msgstr "수동 설치"
+
+#. txt_noacpi_install
+msgid "Installation--ACPI Disabled"
+msgstr "설치--ACPI 비활성"
+
+#. txt_safe_install
+msgid "Installation--Safe Settings"
+msgstr "설치--안전 설정"
+
+#. txt_safe_linux
+msgid "Linux--Safe Settings"
+msgstr "리눅스--안전 설정"
+
+#. txt_boot_harddisk
+msgid "Boot from Hard Disk"
+msgstr "하드디스크로 부팅"
+
+#. txt_rescue
+msgid "Rescue System"
+msgstr "시스템 복구"
+
+#. txt_memtest
+msgid "Memory Test"
+msgstr "메모리 테스트"
+
+#. txt_bootoptions
+msgid "Boot Options"
+msgstr "부트 옵션"
+
+#. window title for exit dialog
+#. txt_exit_title (see txt_exit_dialog)
+msgid "Exiting..."
+msgstr "종료 중..."
+
+#. txt_exit_dialog
+msgid ""
+"You are leaving the graphical boot menu and\n"
+"starting the text mode interface."
+msgstr ""
+"그래픽 부트메뉴에서 떠나\n"
+"텍스트 모드 인터페이스로 시작합니다."
+
+#. txt_help
+msgid "Help"
+msgstr "도움말"
+
+#. window title for kernel loading (see txt_load_kernel)
+#. txt_load_kernel_title
+msgid "Starting..."
+msgstr "시작 중..."
+
+#. Keep the three newlines!
+#. txt_load_kernel
+msgid ""
+"Loading Linux Kernel\n"
+"\n"
+"\n"
+msgstr ""
+"리눅스 커널 불러오는 중\n"
+"\n"
+"\n"
+
+#. Keep the three newlines!
+#. txt_load_memtest
+msgid ""
+"Loading memtest86\n"
+"\n"
+"\n"
+msgstr ""
+"memtest84 불러오는 중\n"
+"\n"
+"\n"
+
+#. info box title
+#. txt_info_title
+msgid "Boot Loader"
+msgstr "부트로더"
+
+#. error box title
+#. txt_error_title
+msgid "I/O Error"
+msgstr "I/O 에러"
+
+#. boot disk change dialog title
+#. txt_change_disk_title
+msgid "Change Boot Disk"
+msgstr "부트 디스크 변경"
+
+#. txt_insert_disk
+#, c-format
+msgid "Insert boot disk %u."
+msgstr "%u 부트 디스크 삽입하세요."
+
+#. txt_insert_disk2
+#, c-format
+msgid ""
+"This is boot disk %u.\n"
+"Insert boot disk %u."
+msgstr ""
+"이것은 %u 부트디스크 입니다.\n"
+"%u 부트디스크를 삽입하세요."
+
+#. <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
+#. txt_insert_disk3
+#, c-format
+msgid ""
+"This is not a <product> boot disk.\n"
+"Insert boot disk %u."
+msgstr ""
+"이것은 <product> 부트디스크가 아닙니다.\n"
+"%u 부트디스크를 삽입하세요."
+
+#. password dialog title
+#. txt_password_title
+msgid "Password"
+msgstr "열쇠글"
+
+#. txt_dud_ready
+msgid "Get your driver update floppy ready."
+msgstr "플로피디스크에서 드라이버를 업데이트 준비"
+
+#. dvd warning title
+#. txt_dvd_warning_title
+msgid "DVD Error"
+msgstr "DVD 에러"
+
+#. txt_dvd_warning2
+msgid ""
+"This is a two-sided DVD. You have booted from the second side.\n"
+"\n"
+"Turn the DVD over then continue."
+msgstr ""
+"이것은 양면으로 된 DVD 입니다. 두번째 면으로 부팅 되었습니다.\n"
+"\n"
+"DVD를 뒤집어서 계속할 수 있습니다."
+
+#. power off dialog title
+#. txt_power_off_title
+msgid "Power Off"
+msgstr "전원 OFF"
+
+#. txt_power_off
+msgid "Halt the system now?"
+msgstr "시스템을 지금 종료하시겠습니까?"
+
+#. menu entry for hard disk installation
+#. txt_harddisk
+msgid "Hard Disk"
+msgstr "하드디스크"
+
+#. dialog title for hard disk installation
+#. txt_harddisk_title
+msgid "Hard Disk Installation"
+msgstr "하드디스크 설치"
+
+#. txt_hd_diskdevice
+msgid "Disk Device (Scans All Disks If Empty)\n"
+msgstr "디스크 장치 (비어있을 경우 모든 디스크 검색)\n"
+
+#. txt_directory
+msgid "Directory\n"
+msgstr "디렉토리\n"
+
+#. dialog title for ftp installation
+#. txt_ftp_title
+msgid "FTP Installation"
+msgstr "FTP 설치"
+
+#. txt_server
+msgid "Server\n"
+msgstr "서버\n"
+
+#. txt_password
+msgid "Password\n"
+msgstr "열쇠글\n"
+
+#. label for ftp user input
+#. txt_user1
+msgid "User (Anonymous Login If Empty)\n"
+msgstr "사용자 (비어있을 경우 익명 로그인)\n"
+
+#. dialog title for nfs installation
+#. txt_nfs_title
+msgid "NFS Installation"
+msgstr "NFS 설치"
+
+#. label for smb user input
+#. txt_user2
+msgid "User (Uses \"guest\" If Empty)\n"
+msgstr "사용자 (비어있을 경우 \"guest\" 사용)\n"
+
+#. dialog title for smb installation
+#. txt_smb_title
+msgid "SMB (Windows Share) Installation"
+msgstr "SMB (윈도우 공유) 설치"
+
+#. dialog title for http installation
+#. txt_http_title
+msgid "HTTP Installation"
+msgstr "HTTP 설치"
+
+#. 'driver' as in '(hardware) driver update'
+#. txt_driver_update
+msgid "Driver"
+msgstr "드라이버"
+
+#. as in Windows Authentication Domain
+#. txt_domain
+msgid "Domain\n"
+msgstr "도메인\n"
+
+#. button label for other/more options
+#. txt_other_options
+msgid "Other Options"
+msgstr "다른 옵션"
+
+#. label for language selection
+#. txt_language
+msgid "Language"
+msgstr "언어"
+
+#. txt_apic
+msgid "Installation--IOAPIC Enabled"
+msgstr "설치--IOAPIC 활성"
+
+#. txt_noapic_install
+msgid "Installation--IOAPIC Disabled"
+msgstr "설치--IOAPIC 비활성"
+
+#. txt_nolapic_install
+msgid "Installation--Local APIC Disabled"
+msgstr "설치--내부 APIC 비활성"
+
+#. txt_yes
+msgid "Yes"
+msgstr "예"
+
+#. txt_no
+msgid "No"
+msgstr "아니오"
+
+#. menu item for selecting a file
+#. txt_file
+msgid "File"
+msgstr "파일"
+
+#. input label: share as in "Windows share" (SMB)
+#. txt_share
+msgid "Share\n"
+msgstr "공유\n"
+
+#. txt_zenAuto
+msgid "Automatic Mode"
+msgstr "자동 모드"
+
+#. txt_zenManual
+msgid "Manual Mode"
+msgstr "수동 모드"
+
+#. txt_zenConfig
+msgid "Configure Parameters on ZEN Partition"
+msgstr "ZEN 파티션 매개변수 구성"
+
+#. txt_zenInstall
+msgid "Install or Update ZEN Partition"
+msgstr "ZEN 파티션 설치 또는 업데이트"
+
+#. txt_zenLilo
+msgid "Reinstall ZEN Partition Boot Loader"
+msgstr "ZEN 파티션 부트로더 재설치"
+
+#. txt_zenDisable
+msgid "Disable ZEN Partition"
+msgstr "ZEN 파티션 비활성"
+
+#. txt_zenEnable
+msgid "Enable ZEN Partition"
+msgstr "ZEN 파티션 활성"
+
+#. video mode menu item
+#. txt_text_mode
+msgid "Text Mode"
+msgstr "텍스트 모드"
+
+#. menu item, like 'memory test'
+#. txt_firmware
+msgid "Firmware Test"
+msgstr "펌웨어 테스트"
+
+#. txt_dud_file_msg
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
+"enter the driver update file names (separated\n"
+"by commas ',') here:\n"
+msgstr ""
+"CD-ROM으로 바로 업데이트 드라이버를 불러옵니다\n"
+"이곳에 업데이트 드라이버 이름을 입력하세요\n"
+"(쉼표로 구분하세요 ','):\n"
+
+#. install source menu title
+#. ** please keep it really short (comparable to the english text) **
+#. txt_install_source
+msgid "Source"
+msgstr "소스"
+
+#. video mode/display size menu title
+#. ** please keep it really short (comparable to the english text) **
+#. txt_video_mode
+msgid "Video Mode"
+msgstr "비디오 모드"
+
+#. driver update dialog title
+#. -> txt_dud_file_msg
+#. txt_driver_update2
+msgid "Driver Update"
+msgstr "드라이버 업데이트"
+
+#. menu label for selecting (cpu) architecture
+#. like i386, x86-64, ppc
+#. ** please keep it really short (comparable to the english text) **
+#. txt_arch
+msgid "Arch"
+msgstr "Arch"
+
+#. menu label for selecting some (linux) kernel variant
+#. ** please keep it really short (comparable to the english text) **
+#. txt_kernel
+msgid "Kernel"
+msgstr "커널"
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. txt_kernel_default
+msgid "Default"
+msgstr "기본"
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. -> like in txt_safe_linux
+#. txt_kernel_safe
+msgid "Safe Settings"
+msgstr "안전 설정"
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. -> similar to txt_noacpi_install
+#. txt_kernel_noacpi
+msgid "No ACPI"
+msgstr "ACPI 없음"
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. -> similar to txt_nolapic_install
+#. txt_kernel_nolapic
+msgid "No Local APIC"
+msgstr "내부 APIC 없음"
+
+#. main menu: start in system repair mode
+#. txt_repain_system
+msgid "Repair Installed System"
+msgstr "설치된 시스템 복원"
+
+#. menu item
+#. txt_mediacheck
+msgid "Check Installation Media"
+msgstr ""
+
