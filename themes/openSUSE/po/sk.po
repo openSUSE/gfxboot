@@ -401,3 +401,9 @@ msgstr "Bez Lokálneho APIC"
 #. txt_repain_system
 msgid "Repair Installed System"
 msgstr "Opraviť nainštalovaný systém"
+
+#. menu item
+#. txt_mediacheck
+msgid "Check Installation Media"
+msgstr ""
+

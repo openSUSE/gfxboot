@@ -408,3 +408,9 @@ msgstr "ਲੋਕਲ APIC ਨਹੀਂ"
 #. txt_repain_system
 msgid "Repair Installed System"
 msgstr "ਇੰਸਟਾਲ ਹੋਇਆ ਸਿਸਟਮ ਰਿਪੇਅਰ"
+
+#. menu item
+#. txt_mediacheck
+msgid "Check Installation Media"
+msgstr ""
+

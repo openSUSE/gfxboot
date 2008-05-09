@@ -399,3 +399,9 @@ msgstr "Bez local APIC"
 #. txt_repain_system
 msgid "Repair Installed System"
 msgstr "Opravit nainstalovaný systém"
+
+#. menu item
+#. txt_mediacheck
+msgid "Check Installation Media"
+msgstr ""
+

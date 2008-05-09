@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: bootloader\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: 2007-08-10 14:41+0100\n"
-"Last-Translator: Carlos Gonçalves <carlos@pinguix.com>\n"
+"Last-Translator: Carlos Gonçalves <cgoncalves@opensuse.org>\n"
 "Language-Team: Portuguese <opensuse-pt@opensuse.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -400,3 +400,9 @@ msgstr "Sem Local APIC"
 #. txt_repain_system
 msgid "Repair Installed System"
 msgstr "Reparar o Sstema Instalado"
+
+#. menu item
+#. txt_mediacheck
+msgid "Check Installation Media"
+msgstr ""
+

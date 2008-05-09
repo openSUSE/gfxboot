@@ -8,14 +8,15 @@
 # Jami Saarikoski <jami.saarikoski@gmail.com>, 2006.
 msgid ""
 msgstr ""
-"Project-Id-Version: bootloader.fi\n"
-"PO-Revision-Date: 2007-08-10 18:37+0300\n"
-"Last-Translator: Jyri Palokangas <jmp@opensuse.fi>\n"
-"Language-Team: Suomi <fi@li.org>\n"
+"Project-Id-Version: bootloader\n"
+"PO-Revision-Date: 2008-04-27 11:07+0300\n"
+"Last-Translator: Mikko Piippo <mikko.piippo@opensuse.fi>\n"
+"Language-Team:  <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
+"Plural-Forms:  nplurals=2; plural=n != 1;\n"
 
 #. ok button label
 #. txt_ok
@@ -102,7 +103,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Linux ytimen lataaminen\n"
+"Linux-ytimen lataaminen\n"
 "\n"
 "\n"
 
@@ -168,7 +169,7 @@ msgstr "Ota ajurin päivityslevyke valmiiksi."
 #. dvd warning title
 #. txt_dvd_warning_title
 msgid "DVD Error"
-msgstr "DVD virhe"
+msgstr "DVD-virhe"
 
 #. txt_dvd_warning2
 msgid ""
@@ -223,7 +224,7 @@ msgstr "Salasana\n"
 #. label for ftp user input
 #. txt_user1
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "Käyttäjä (anonyymi kirjautuminen jos tyhjä)\n"
+msgstr "Käyttäjä (anonyymi kirjautuminen, jos tyhjä)\n"
 
 #. dialog title for nfs installation
 #. txt_nfs_title
@@ -233,12 +234,12 @@ msgstr "NFS-asennus"
 #. label for smb user input
 #. txt_user2
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "Käyttäjä (käyttäen \"vieras\" jos tyhjä)\n"
+msgstr "Käyttäjä (tunnuksella \"guest\", jos tyhjä)\n"
 
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "SMB (Windows jako) asennus"
+msgstr "SMB-asennus (Windows-jako) "
 
 #. dialog title for http installation
 #. txt_http_title
@@ -305,23 +306,23 @@ msgstr "Manuaalinen tila"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr "Määritä ZEN osion parametrit"
+msgstr "Määritä ZEN-osion parametrit"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr "Asenna tai päivitä ZEN osio"
+msgstr "Asenna tai päivitä ZEN-osio"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "Asenna ZEN osion käynnistyslatain uudelleen"
+msgstr "Asenna ZEN-osion käynnistyslatain uudelleen"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr "Poista ZEN osio käytöstä"
+msgstr "Poista ZEN-osio käytöstä"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
-msgstr "Ota ZEN osio käyttöön"
+msgstr "Ota ZEN-osio käyttöön"
 
 #. video mode menu item
 #. txt_text_mode
@@ -339,9 +340,9 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
-"Ladataksesi ajuripäivityksen suoraan CD-ROM-levyltä,\n"
+"Jos haluat ladata ajuripäivityksen suoraan CD-ROM-levyltä,\n"
 "anna ajuripäivityksen tiedostonimet (erotettuina\n"
-"pilkuilla ',') tähän:\n"
+"pilkuilla ','):\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
@@ -401,3 +402,9 @@ msgstr "Ei paikallinen APIC"
 #. txt_repain_system
 msgid "Repair Installed System"
 msgstr "Korjaa asennettu järjestelmä"
+
+#. menu item
+#. txt_mediacheck
+msgid "Check Installation Media"
+msgstr ""
+

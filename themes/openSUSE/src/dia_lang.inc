@@ -36,6 +36,7 @@
   [ "et_EE" false "Eesti" ]						% Estonian
   [ "fi_FI" false "Suomi" ]						% Finnish
   [ "fr_FR" false "Français" ]						% French
+  [ "gl_ES" false "Galego" ]						% Galician
   [ "gu_IN" false "\u0a97\u0ac1\u0a9c\u0ab0\u0abe\u0aa4\u0ac0" ]	% Gujarati
   [ "he_IL" false "תירבע" ]						% Hebrew
 % [ "hi_IN" false "\u0939\u093f\u0928\u094d\u0926\u0940" ]		% Hindi

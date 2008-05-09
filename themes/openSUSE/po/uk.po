@@ -400,3 +400,9 @@ msgstr "Без локального APIC"
 #. txt_repain_system
 msgid "Repair Installed System"
 msgstr "Поремонтувати встановлену систему"
+
+#. menu item
+#. txt_mediacheck
+msgid "Check Installation Media"
+msgstr ""
+

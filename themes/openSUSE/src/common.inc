@@ -910,9 +910,9 @@
   dup "firmware" eq { pop txt_firmware return } if
   syslinux {
     livecd {
-      dup "linux"     eq { pop "openSUSE 10.3 LiveCD (english)" return } if
+      dup "linux"     eq { pop "openSUSE LiveCD (english)" return } if
       dup "failsafe"  eq { pop "LiveCD - Safe Settings" return } if
-      dup "linux2"    eq { pop "openSUSE 10.3 LiveCD (deutsch)" return } if
+      dup "linux2"    eq { pop "openSUSE LiveCD (deutsch)" return } if
       dup "failsaf2"  eq { pop "LiveCD - Sichere Einstellungen" return } if
       dup "kde"       eq { pop "LiveCD - KDE" return } if
       dup "gnome"     eq { pop "LiveCD - GNOME" return } if
@@ -920,7 +920,7 @@
       dup "linux"     eq { pop txt_install        return } if
       dup "failsafe"  eq { pop txt_safe_install   return } if
     } ifelse
-    dup "live"      eq { pop "openSUSE 10.3 LiveCD" return } if
+    dup "live"      eq { pop "openSUSE LiveCD" return } if
     dup "noacpi"    eq { pop txt_noacpi_install return } if
     dup "noapic"    eq { pop txt_noapic_install return } if
     dup "nolapic"   eq { pop txt_nolapic_install return } if
@@ -930,7 +930,7 @@
     dup "rescue"    eq { pop txt_rescue         return } if
     dup "hwcheck"   eq { pop "Hardware Check"   return } if
     dup "harddisk"  eq { pop txt_boot_harddisk  return } if
-    dup "mediachk"  eq { pop "Check Installation Media" return } if
+    dup "mediachk"  eq { pop txt_mediacheck return } if
   } {
     dup "linux"     eq { pop "Linux"        return } if
     dup "failsafe"  eq { pop txt_safe_linux return } if

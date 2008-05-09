@@ -5,12 +5,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2005-08-03 21:03+0200\n"
-"Last-Translator: Данило Шеган <danilo@gnome.org>\n"
-"Language-Team: Serbian <novell@prevod.org>\n"
+"PO-Revision-Date: 2007-09-30 01:20+0200\n"
+"Last-Translator: Жарко Михајловић <developer@beotel.net>\n"
+"Language-Team: Serbian (Српски језик) <sr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #. ok button label
 #. txt_ok
@@ -114,13 +115,11 @@ msgstr ""
 
 #. info box title
 #. txt_info_title
-#, fuzzy
 msgid "Boot Loader"
 msgstr "Покретач система"
 
 #. error box title
 #. txt_error_title
-#, fuzzy
 msgid "I/O Error"
 msgstr "У/И грешка"
 
@@ -145,7 +144,7 @@ msgstr ""
 
 #. <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
-#, c-format,fuzzy
+#, c-format
 msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
@@ -197,7 +196,6 @@ msgid "Hard Disk Installation"
 msgstr "Инсталација на тврди диск"
 
 #. txt_hd_diskdevice
-#, fuzzy
 msgid "Disk Device (Scans All Disks If Empty)\n"
 msgstr "Диск (прегледај све дискове ако је празно)\n"
 
@@ -220,7 +218,6 @@ msgstr "Лозинка\n"
 
 #. label for ftp user input
 #. txt_user1
-#, fuzzy
 msgid "User (Anonymous Login If Empty)\n"
 msgstr "Корсиник (анонимна пријава ако је празно)\n"
 
@@ -231,7 +228,6 @@ msgstr "NFS инсталација"
 
 #. label for smb user input
 #. txt_user2
-#, fuzzy
 msgid "User (Uses \"guest\" If Empty)\n"
 msgstr "Корисник (користи „guest“ ако је празно)\n"
 
@@ -267,7 +263,7 @@ msgstr "Језик"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr ""
+msgstr "Инсталација — IOAPIC укључен"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
@@ -275,63 +271,63 @@ msgstr "Инсталација — IOAPIC искључен"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr ""
+msgstr "Инсталација — APIC искључен"
 
 #. txt_yes
 msgid "Yes"
-msgstr "&Da"
+msgstr "Да"
 
 #. txt_no
 msgid "No"
-msgstr "&Ne"
+msgstr "Не"
 
 #. menu item for selecting a file
 #. txt_file
 msgid "File"
-msgstr ""
+msgstr "Датотека"
 
 #. input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr ""
+msgstr "Дељено\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
-msgstr ""
+msgstr "Аутоматски режим"
 
 #. txt_zenManual
 msgid "Manual Mode"
-msgstr ""
+msgstr "Ручни режим"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr ""
+msgstr "Подеси параметре ZEN партиције"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr ""
+msgstr "Инсталирај или ажурирај ZEN партицију"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr ""
+msgstr "Реинсталирај ZEN Boot Loader"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr ""
+msgstr "Онемогући ZEN партицију"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
-msgstr ""
+msgstr "Омогући ZEN партицију"
 
 #. video mode menu item
 #. txt_text_mode
 msgid "Text Mode"
-msgstr ""
+msgstr "Текст режим"
 
 #. menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr ""
+msgstr "Firmware тест"
 
 #. txt_dud_file_msg
 msgid ""
@@ -339,62 +335,71 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
+"Да учитате нове драјвере са CD-ROM-а,\n"
+"упишите имена нових фајлова (одвојена\n"
+"зарезима ',') овде:\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
 #. txt_install_source
 msgid "Source"
-msgstr "Izvor"
+msgstr "Извор"
 
 #. video mode/display size menu title
 #. ** please keep it really short (comparable to the english text) **
 #. txt_video_mode
 msgid "Video Mode"
-msgstr ""
+msgstr "Видео режим"
 
 #. driver update dialog title
 #. -> txt_dud_file_msg
 #. txt_driver_update2
 msgid "Driver Update"
-msgstr ""
+msgstr "Ажурирање драјвера"
 
 #. menu label for selecting (cpu) architecture
 #. like i386, x86-64, ppc
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr ""
+msgstr "Арх."
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
 #. txt_kernel
 msgid "Kernel"
-msgstr ""
+msgstr "Језгро"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
 msgid "Default"
-msgstr ""
+msgstr "Подразумевано"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> like in txt_safe_linux
 #. txt_kernel_safe
 msgid "Safe Settings"
-msgstr ""
+msgstr "Безбедна подешавања"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_noacpi_install
 #. txt_kernel_noacpi
 msgid "No ACPI"
-msgstr ""
+msgstr "Без ACPI"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_nolapic_install
 #. txt_kernel_nolapic
 msgid "No Local APIC"
-msgstr ""
+msgstr "Без локалног APIC"
 
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
+msgstr "Поправи систем"
+
+#. menu item
+#. txt_mediacheck
+msgid "Check Installation Media"
 msgstr ""
+

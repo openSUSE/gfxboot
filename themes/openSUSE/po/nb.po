@@ -401,3 +401,9 @@ msgstr "Ikke bruk lokal APIC"
 #. txt_repain_system
 msgid "Repair Installed System"
 msgstr "Reparer installert system"
+
+#. menu item
+#. txt_mediacheck
+msgid "Check Installation Media"
+msgstr ""
+

@@ -4,13 +4,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2007-08-27 17:10-0300\n"
-"Last-Translator: Luiz Fernando Ranghetti <elchevive68@gmail.com>\n"
-"Language-Team: Novell Language <language@novell.com>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2008-05-08 21:57-0300\n"
+"Last-Translator: \n"
+"Language-Team: Brazilian Portuguese <pt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: \n"
+"Plural-Forms: nplurals=2; plural=n>1;\n"
+"X-Poedit-Language: Portuguese\n"
+"X-Poedit-Country: BRAZIL\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #. ok button label
 #. txt_ok
@@ -66,7 +71,7 @@ msgstr "Teste de Memória"
 
 #. txt_bootoptions
 msgid "Boot Options"
-msgstr "Opções de Boot"
+msgstr "Opções de Inicialização"
 
 #. window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
@@ -78,7 +83,7 @@ msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"Você está saindo do menu de boot gráfico\n"
+"Você está saindo do menu de inicialização gráfica\n"
 "e iniciando a interface em modo de texto."
 
 #. txt_help
@@ -97,7 +102,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Carregando Kernel do Linux\n"
+"Carregando o Kernel do Linux\n"
 "\n"
 "\n"
 
@@ -108,29 +113,29 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Carregando memtest86\n"
+"Carregando o memtest86\n"
 "\n"
 "\n"
 
 #. info box title
 #. txt_info_title
 msgid "Boot Loader"
-msgstr "Carregador de boot"
+msgstr "Carregador de Inicialização"
 
 #. error box title
 #. txt_error_title
 msgid "I/O Error"
-msgstr "Erro de I/O"
+msgstr "Erro de E/S"
 
 #. boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr "Mudar Disco de Boot"
+msgstr "Alterar Disco de Inicialização"
 
 #. txt_insert_disk
 #, c-format
 msgid "Insert boot disk %u."
-msgstr "Inserir disco de boot %u."
+msgstr "Inserir disco de inicialização %u."
 
 #. txt_insert_disk2
 #, c-format
@@ -138,8 +143,8 @@ msgid ""
 "This is boot disk %u.\n"
 "Insert boot disk %u."
 msgstr ""
-"Este é o disco de boot %u.\n"
-"Insira o disco de boot %u."
+"Este é o disco de inicialização %u.\n"
+"Insira o disco de inicialização %u."
 
 #. <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
@@ -148,8 +153,8 @@ msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"Este não é um disco de boot do <product>.\n"
-"Insira o disco de boot %u."
+"Este não é um disco de inicialização do <product>.\n"
+"Insira o disco de inicialização %u."
 
 #. password dialog title
 #. txt_password_title
@@ -158,12 +163,12 @@ msgstr "Senha"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr "Verifique se o disquete de atualização de driver está pronto."
+msgstr "Tenha o disquete de atualização de driver pronto."
 
 #. dvd warning title
 #. txt_dvd_warning_title
 msgid "DVD Error"
-msgstr "Erro de DVD"
+msgstr "Erro no DVD"
 
 #. txt_dvd_warning2
 msgid ""
@@ -171,7 +176,7 @@ msgid ""
 "\n"
 "Turn the DVD over then continue."
 msgstr ""
-"Este é um DVD com dois lados. Você fez a inicialização pelo segundo lado.\n"
+"Este é um DVD de dois lados. Você fez a inicialização pelo segundo lado.\n"
 "\n"
 "Vire o DVD e continue."
 
@@ -192,11 +197,11 @@ msgstr "Disco Rígido"
 #. dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "Instalação por Disco Rígido"
+msgstr "Instalação pelo Disco Rígido"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Dispositivo de Disco (Explora Todos os Discos, Se Vazio)\n"
+msgstr "Dispositivo de Disco (Varre Todos os Discos se Vazio)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -218,7 +223,7 @@ msgstr "Senha\n"
 #. label for ftp user input
 #. txt_user1
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "Usuário (login anônimo, se estiver vazio)\n"
+msgstr "Usuário (Efetua Logon Anônimo se Vazio)\n"
 
 #. dialog title for nfs installation
 #. txt_nfs_title
@@ -228,7 +233,7 @@ msgstr "Instalação por NFS"
 #. label for smb user input
 #. txt_user2
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "Usuário (Usa \"convidado\" Se Vazio)\n"
+msgstr "Usuário (Utiliza \"guest\" se Vazio)\n"
 
 #. dialog title for smb installation
 #. txt_smb_title
@@ -300,7 +305,7 @@ msgstr "Modo Manual"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr "Configurar parâmetros na partição ZEN"
+msgstr "Configurar os Parâmetros na Partição ZEN"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
@@ -308,15 +313,15 @@ msgstr "Instalar ou Atualizar Partição ZEN"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "Reinstalar o carregador de boot da partição ZEN"
+msgstr "Reinstalar o Carregador de Inicialização na Partição ZEN"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr "Desabilitar partição ZEN"
+msgstr "Desabilitar Partição ZEN"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
-msgstr "Habilitar partição ZEN"
+msgstr "Habilitar Partição ZEN"
 
 #. video mode menu item
 #. txt_text_mode
@@ -390,9 +395,15 @@ msgstr "Sem ACPI"
 #. -> similar to txt_nolapic_install
 #. txt_kernel_nolapic
 msgid "No Local APIC"
-msgstr "Sem APIC local"
+msgstr "Sem APIC Local"
 
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
 msgstr "Reparar o Sistema Instalado"
+
+#. menu item
+#. txt_mediacheck
+msgid "Check Installation Media"
+msgstr ""
+

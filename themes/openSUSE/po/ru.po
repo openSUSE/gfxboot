@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-08-12 23:29+0400\n"
-"Last-Translator: Igor Kondrashkin <poseidos@mail.ru>\n"
-"Language-Team: Russian <ru@li.org>\n"
+"PO-Revision-Date: 2007-09-10 21:30+0400\n"
+"Last-Translator: Nikolay Derkach <nderkach@gmail.com>\n"
+"Language-Team:  <opensuse-ru@opensuse.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -65,7 +65,7 @@ msgstr "Загрузка с жёсткого диска"
 
 #. txt_rescue
 msgid "Rescue System"
-msgstr "Восстановление системы"
+msgstr "Спасательная система"
 
 #. txt_memtest
 msgid "Memory Test"
@@ -402,4 +402,10 @@ msgstr "Без локального APIC"
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr "Восстановить установленную систему"
+msgstr "Восстановление установленной системы"
+
+#. menu item
+#. txt_mediacheck
+msgid "Check Installation Media"
+msgstr ""
+

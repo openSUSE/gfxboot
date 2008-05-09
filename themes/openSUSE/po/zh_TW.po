@@ -395,3 +395,9 @@ msgstr "關閉本機 APIC"
 #. txt_repain_system
 msgid "Repair Installed System"
 msgstr "修復已安裝的系統"
+
+#. menu item
+#. txt_mediacheck
+msgid "Check Installation Media"
+msgstr ""
+

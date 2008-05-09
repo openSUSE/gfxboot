@@ -399,3 +399,9 @@ msgstr "Ingen lokal APIC"
 #. txt_repain_system
 msgid "Repair Installed System"
 msgstr "Reparér installeret system"
+
+#. menu item
+#. txt_mediacheck
+msgid "Check Installation Media"
+msgstr ""
+

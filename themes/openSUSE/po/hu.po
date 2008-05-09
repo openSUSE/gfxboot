@@ -405,3 +405,9 @@ msgstr "Helyi APIC nélkül"
 #. txt_repain_system
 msgid "Repair Installed System"
 msgstr "A telepített rendszer javítása"
+
+#. menu item
+#. txt_mediacheck
+msgid "Check Installation Media"
+msgstr ""
+
