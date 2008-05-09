@@ -21,6 +21,15 @@ msgstr ""
 msgid "Memory Test"
 msgstr ""
 
+msgid "openSUSE-11.0"
+msgstr ""
+
+msgid "Failsafe-openSUSE-11.0"
+msgstr ""
+
+msgid "Hard-Disk"
+msgstr ""
+
 
 # panel texts
 
@@ -98,6 +107,9 @@ msgstr "Finnish"
 
 msgid "Français"
 msgstr "French"
+
+msgid "Galego"
+msgstr "Galician"
 
 msgid "\xe0\xaa\x97\xe0\xab\x81\xe0\xaa\x9c\xe0\xaa\xb0\xe0\xaa\xbe\xe0\xaa\xa4\xe0\xab\x80"
 msgstr "Gujarati"
