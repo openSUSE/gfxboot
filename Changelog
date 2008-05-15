@@ -1,5 +1,5 @@
 15/5/2008:	v4.0.10
-	- rewrote config parser
+	- rewrote config file parser
 	- move most layout parameters to config file
 
 9/5/2008:	v4.0.9
