@@ -308,7 +308,7 @@
 % ( -- )
 %
 /install.read.config {
-  "install" getgfxconfig
+  install.default
   dup "cdrom" eq { /install.last .inst_cdrom def } if
   dup "slp"   eq { /install.last .inst_slp   def } if
   dup "ftp"   eq { /install.last .inst_ftp   def } if
@@ -318,21 +318,26 @@
   dup "hd"    eq { /install.last .inst_hd    def } if
   pop
 
-  "install.http.server"  input.edit.http 0 get getgfxconfig.str
-  "install.http.path"    input.edit.http 1 get getgfxconfig.str
+  input.edit.http 0 get install.http.server strcpy pop
+  input.edit.http 1 get install.http.path strcpy pop
 
-  "install.nfs.server"   input.edit.nfs  0 get getgfxconfig.str
-  "install.nfs.path"     input.edit.nfs  1 get getgfxconfig.str
+  input.edit.nfs  0 get install.nfs.server strcpy pop
+  input.edit.nfs  1 get install.nfs.path strcpy pop
 
-  "install.smb.server"   input.edit.smb  0 get getgfxconfig.str
-  "install.smb.share"    input.edit.smb  1 get getgfxconfig.str
-  "install.smb.path"     input.edit.smb  2 get getgfxconfig.str
-  "install.smb.domain"   input.edit.smb  3 get getgfxconfig.str
-  "install.smb.user"     input.edit.smb  4 get getgfxconfig.str
-  "install.smb.password" input.edit.smb  5 get getgfxconfig.str
+  input.edit.ftp  0 get install.ftp.server strcpy pop
+  input.edit.ftp  1 get install.ftp.path strcpy pop
+  input.edit.ftp  2 get install.ftp.user strcpy pop
+  input.edit.ftp  3 get install.ftp.password strcpy pop
 
-  "install.hd.device"    input.edit.hd   0 get getgfxconfig.str
-  "install.hd.path"      input.edit.hd   1 get getgfxconfig.str
+  input.edit.smb  0 get install.smb.server strcpy pop
+  input.edit.smb  1 get install.smb.share strcpy pop
+  input.edit.smb  2 get install.smb.path strcpy pop
+  input.edit.smb  3 get install.smb.domain strcpy pop
+  input.edit.smb  4 get install.smb.user strcpy pop
+  input.edit.smb  5 get install.smb.password strcpy pop
+
+  input.edit.hd   0 get install.hd.device strcpy pop
+  input.edit.hd   1 get install.hd.path strcpy pop
 
 } def
 

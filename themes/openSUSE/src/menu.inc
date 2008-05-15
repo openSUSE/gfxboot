@@ -256,7 +256,7 @@
   menu.status {
     menu.bar.color setcolor
     currenttransparency
-    ptheme { 120 } { 70 } ifelse settransparency
+    menu.bar.transparency settransparency
     menu.bar.width menu.bar.height
     fillrect
     settransparency
@@ -335,7 +335,7 @@
 
   window.current .font get setfont
 
-  /boot.ed.width screen.size pop boot.pos pop sub ptheme { 60 } { 20 } ifelse sub def
+  /boot.ed.width screen.size pop boot.pos.x boot.pos.y pop sub ptheme { 60 } { 20 } ifelse sub def
   /boot.ed.height fontheight 2 add def
 
   /boot.window window.current def
@@ -343,7 +343,7 @@
   /boot.ed.list [
     0 1 boot.ed.max 1 sub {
       [
-        boot.pos exch 10 add exch 1 sub 4 -1 roll boot.ed.height 5 add mul add
+        boot.pos.x boot.pos.y exch 10 add exch 1 sub 4 -1 roll boot.ed.height 5 add mul add
         over over moveto boot.ed.width boot.ed.height savescreen
         cmdlinelength string
         cmdlinelength

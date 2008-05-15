@@ -80,6 +80,8 @@
 
 /CapsLock { 0x417 cvp getbyte 0x40 and 0 ne } def
 
+/black 0 def
+/white 0xffffff def
 
 % input object fields
 /.inp_x		 0 def		% x pos
@@ -597,58 +599,349 @@ def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% getgfxconfig - get gfxboot config file entry
+% gfxconfig.data - return array with gfxboot config entries
+%
+% Reads and parses "gfxboot.cfg" when called first time.
+%
+% group: system
+%
+% ( -- array1 )
+%
+% array1: config values
+%
+% array1 may be empty but is never .undef.
+% Elements of array1 (if any) are arrays of three strings: [ section key value ].
+%
+/gfxconfig.data {
+
+  % read file and copy to temp string (we need the final 0)
+  "gfxboot.cfg" findfile dup .undef ne {
+    dup dup length dup string dup cvp 4 2 roll memcpy exch free
+  } {
+    pop ""
+  } ifelse
+
+  % free temp string and create temp array
+  /gfxconfig.data over '\n' split def free
+
+  % modifies gfxconfig.data
+  /gfxconfig.data [
+
+    "base"	% default section
+
+    gfxconfig.data {
+
+      skipspaces 
+
+      dup 0 get dup 0 eq over ';' eq or exch '#' eq or {
+        % empty or comment
+        pop
+      } {
+        dup 0 get '[' eq {
+          % [section]
+          1 add
+          dup "]" strstr dup {
+            % put new section on stack
+            1 sub over exch 0 put
+            exch free
+          } {
+           % wrong [section] entry 
+           pop pop
+          } ifelse
+        } {
+          % key=value?
+          dup "=" strstr dup {
+            over over 1 sub over exch 0 put add
+            [ 3 index 4 2 roll ] exch
+          } {
+            % no "="
+            pop pop
+          } ifelse
+        } ifelse
+      } ifelse
+    } forall
+
+    free
+  ]
+
+    % free temp array
+    gfxconfig.data free
+
+  def
+
+  gfxconfig.data
+
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% gfxconfig.layout - return array with config file sections
+%
+% group: system
+%
+% ( -- array1 )
+%
+% array1: section names
+%
+% array1 may be empty but is never .undef.
+%
+/gfxconfig.layout {
+
+  /gfxconfig.layout [ "base" ] def
+
+  "layout" gfxconfig.array_str
+  dup .undef ne {
+    gfxconfig.layout free
+    [ exch { } forall "base" ] /gfxconfig.layout exch def
+  } {
+    pop
+  } ifelse
+
+  gfxconfig.layout
+
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% gfxconfig.getentry_s - return gfxboot config file entry
+%
+% group: system
+%
+% ( str1 str2 -- str3 )
+%
+% str1: section
+% str2: config entry key
+% str3: config value (or .undef)
+%
+/gfxconfig.getentry_s {
+  .undef
+  gfxconfig.data {
+    3 index over 0 get eq 3 index 2 index 1 get eq and {
+      2 get exch pop exit
+    } {
+      pop
+    } ifelse
+  } forall
+
+  exch pop exch pop
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% gfxconfig.getentry - return raw gfxboot config file entry
 %
 % group: system
 %
 % ( str1 -- str2 )
 %
-% str1: key for config entry
-% str2: config string (or .undef)
+% str1: config entry key
+% str2: config value (or .undef)
 %
-/getgfxconfig {
-  gfxconfig.data .undef eq {
-    "gfxboot.cfg" findfile dup .undef ne {
-      dup dup length dup string dup cvp 4 2 roll memcpy exch free
-    } {
-      pop ""
-    } ifelse
-
-    /gfxconfig.data over '\n' split def free
-
-  } if
-
-  currenteotchar '=' seteotchar
-
+/gfxconfig.getentry {
   .undef
 
-  gfxconfig.data {
-
-    % overkill because string compare does not honor eotchar
-    dup strdup dup 5 index eq {
-      dup length exch free 1 add add exch pop exit
+  gfxconfig.layout {
+    2 index gfxconfig.getentry_s
+    dup .undef eq {
+      pop
     } {
-      free pop
+      exch pop
+      exit
     } ifelse
-
   } forall
 
-  exch seteotchar exch pop
-
+  exch pop
 } def
-
-/gfxconfig.data .undef def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Read string from config file and store in variable.
+% gfxconfig.str - return gfxboot config file entry: string
 %
-% ( key str -- )
+% group: system
 %
-% Read config value 'key' and copy to 'str' if found.
+% ( str1 -- str2 )
 %
-/getgfxconfig.str {
-  exch getgfxconfig dup { strcpy } { pop } ifelse pop
+% str1: config entry key
+% str2: config value (or .undef)
+%
+/gfxconfig.str {
+  gfxconfig.getentry dup .undef ne { strdup dup dropspaces } if
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% gfxconfig.int - return gfxboot config file entry: integer
+%
+% group: system
+%
+% ( str1 -- int1 )
+%
+% str1: config entry key
+% int1: config value (or .undef)
+%
+/gfxconfig.int {
+  gfxconfig.getentry dup .undef ne { cvn } if
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% gfxconfig.int2 - return gfxboot config file entry: two integers
+%
+% group: system
+%
+% ( str1 -- int1 int2 )
+%
+% str1: config entry key
+% int1: first config value (or .undef)
+% int2: second config value (or .undef)
+%
+/gfxconfig.int2 {
+  gfxconfig.array_int dup .undef eq { pop [ ] } if
+  dup 0 aget over 1 aget rot free
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% gfxconfig.array_str - return gfxboot config file entry: array of strings
+%
+% group: system
+%
+% ( str1 -- array1 )
+%
+% str1: config entry key
+% array1: config value (or .undef)
+%
+/gfxconfig.array_str {
+  gfxconfig.getentry dup .undef ne { ',' split } if
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% gfxconfig.array_int - return gfxboot config file entry: array of integers
+%
+% group: system
+%
+% ( str1 -- array1 )
+%
+% str1: config entry key
+% array1: config value (or .undef)
+%
+/gfxconfig.array_int {
+  gfxconfig.array_str dup .undef ne {
+    [ exch
+      { dup .undef ne { cvn } if } forall
+    ]
+  } if
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% gfxconfig.set.str - initialize variable with gfxboot config file entry
+%
+% group: system
+%
+% ( dict1 str1 str2 -- )
+%
+% dict1: variable to modify
+% str1: config entry key
+% str2: default value
+%
+/gfxconfig.set.str {
+  exch gfxconfig.str
+  dup .undef ne { exch } if pop def
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% gfxconfig.set.int - initialize variable with gfxboot config file entry
+%
+% group: system
+%
+% ( dict1 str1 int1 -- )
+%
+% dict1: variable to modify
+% str1: config entry key
+% int1: default value
+%
+/gfxconfig.set.int {
+  exch gfxconfig.int
+  dup .undef ne { exch } if pop def
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% gfxconfig.set.int2 - initialize two variables with gfxboot config file entry
+%
+% group: system
+%
+% ( dict1 dict2 str1 int1 int2 -- )
+%
+% dict1: first variable to modify
+% dict2: second variable to modify
+% str1: config entry key
+% int1: first default value
+% int2: second default value
+%
+/gfxconfig.set.int2 {
+  rot gfxconfig.int2
+  % dict1 dict2 def1 def2 val1 val2
+  exch 4 -1 roll exch
+  % dict1 dict2 def2 val2 def1 val1
+  dup .undef ne { exch } if pop
+  5 -1 roll exch def
+  % dict2 def2 val2
+  dup .undef ne { exch } if pop def
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% gfxconfig.set.bool - initialize variable with gfxboot config file entry
+%
+% group: system
+%
+% ( dict1 str1 bool1 -- )
+%
+% dict1: variable to modify
+% str1: config entry key
+% bool1: default value
+%
+/gfxconfig.set.bool {
+  exch gfxconfig.int
+  dup .undef ne { 0 ne exch } if pop def
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% gfxconfig.set.array_str - initialize variable with gfxboot config file entry
+%
+% group: system
+%
+% ( dict1 str1 array1 -- )
+%
+% dict1: variable to modify
+% str1: config entry key
+% array1: default value
+%
+/gfxconfig.set.array_str {
+  exch gfxconfig.array_str
+  dup .undef ne { exch } if pop def
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% gfxconfig.set.array_int - initialize variable with gfxboot config file entry
+%
+% group: system
+%
+% ( dict1 str1 array1 -- )
+%
+% dict1: variable to modify
+% str1: config entry key
+% array1: default value
+%
+/gfxconfig.set.array_int {
+  exch gfxconfig.array_int
+  dup .undef ne { exch } if pop def
 } def
 
 
@@ -919,102 +1212,6 @@ def
 } def
 
 
-% Test whether we run in Live-CD mode
-%
-% (  -- true|false )
-%
-/livecd {
-  /livecd "livecd" getgfxconfig dup .undef ne { cvn } { pop 0 } ifelse 0 ne def
-  livecd
-} def
-
-
-% Mininum required memory in MB.
-%
-% (  -- int )
-%
-/mem.check {
-  mem.min getgfxconfig dup .undef ne { cvn } { pop 0 } ifelse
-} def
-
-
-% Message to print if we fail minimum memory requirement.
-%
-% (  -- str1 )
-%
-/mem.show {
-  mem.msg getgfxconfig dup .undef eq { pop "Not enough memory." } if
-} def
-
-
-% List of menu entries with no boot option input field.
-%
-% (  -- array )
-%
-/config.nobootoptions {
-  "nobootoptions" getgfxconfig dup .undef ne {
-    ',' split
-  } {
-    pop [ ]
-  } ifelse
-  /config.nobootoptions over def
-} def
-
-
-% List of menu entries which should not get an 'install' option appended.
-%
-% (  -- array )
-%
-/config.noinstallopt {
-  "noinstallopt" getgfxconfig dup .undef ne {
-    ',' split
-  } {
-    pop [ ]
-  } ifelse
-  /config.noinstallopt over def
-} def
-
-
-% Penguin theme percentage.
-%
-% (  -- int )
-%
-/penguin.percent {
-  /penguin.percent "penguin" getgfxconfig dup .undef ne { cvn } { pop 0 } ifelse def
-  penguin.percent
-} def
-
-
-% Show welcome splash.
-%
-% (  -- bool )
-%
-/config.welcome {
-  /config.welcome "welcome" getgfxconfig dup .undef ne { cvn } { pop 0 } ifelse 0 ne def
-  config.welcome
-} def
-
-
-% Beep when ready.
-%
-% (  -- bool )
-%
-/config.beep {
-  /config.beep "beep" getgfxconfig dup .undef ne { cvn } { pop 0 } ifelse 0 ne def
-  config.beep
-} def
-
-
-% Speech output.
-%
-% (  -- bool )
-%
-/config.talk {
-  /config.talk "talk" getgfxconfig dup .undef ne { cvn } { pop 0 } ifelse 0 ne def
-  config.talk
-} def
-
-
 % Video memory in kb.
 %
 % (  -- int )
@@ -1192,7 +1389,7 @@ def
   dup window.init window.show
 
   load_talk
-  70 sound.setvolume 
+  config.volume sound.setvolume 
 
   window.done
 } def

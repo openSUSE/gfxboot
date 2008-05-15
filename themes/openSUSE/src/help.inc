@@ -12,12 +12,8 @@
 /help.light white def
 /help.dark black def
 /help.font font.normal def
-/help.normal.bg lightgray def
-/help.normal.fg black def
-/help.highlight.fg green def
-/help.link.fg blue def
-/help.link.selected.fg white def
-/help.link.selected.bg blue def
+/help.normal.bg window.color.bg def
+/help.normal.fg window.color.fg def
 
 /help.x 80 def
 /help.y 50 def
@@ -168,7 +164,7 @@ clip.size pop 800 eq {
 
   /help.currenttext over def
 
-  title.bg setcolor
+  window.title.bg setcolor
   help.x 1 add help.y 1 add moveto
   help.width 2 sub help.title.height 1 sub fillrect
 

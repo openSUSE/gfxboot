@@ -38,11 +38,14 @@ Activate THEME but keep language settings from current gfxboot archive.
 \fB--show-config\fR
 Show gfxboot config file (gfxboot.cfg).
 .TP
-\fB--change-config \fIOPTION1=FOO1\fR \fIOPTION2=FOO2\fR ...
-Change gfxboot config options.
+\fB--change-config \fR[\fISECTION1::\fR]\fIOPTION1\fR=\fIFOO1\fR [\fISECTION2::\fR]\fIOPTION2\fR=\fIFOO2\fR ...
+Change gfxboot config options. If sections are omitted, section "base" is used.
 .TP
-\fB--rm-config \fIOPTION1\fR \fIOPTION2\fR ...
-Delete gfxboot config options.
+\fB--rm-config \fR[\fISECTION1::\fR]\fIOPTION1\fR [\fISECTION2::\fR]\fIOPTION2\fR ...
+Delete gfxboot config options. If sections are omitted, section "base" is used.
+.TP
+\fB--rm-section \fISECTION1\fR \fISECTION2\fR ...
+Delete sections in gfxboot config file.
 .TP
 \fB--default-language \fILANG\fR
 Make LANG the default language. LANG is a locale string (e.g. en_US).
@@ -52,6 +55,9 @@ Add translation files.
 .TP
 \fB--rm-languages \fILANG1\fR \fILANG2\fR ...
 Remove translation files.
+.TP
+\fB--config-file\fR \fIFILE\fR
+Don't work on gfxboot.cfg from gfxboot archive but on FILE. NOTE: FILE will be modified even with "--test".
 .SS Preview/test gfxboot setup
 .TP
 \fB-p\fR, \fB--preview \fR

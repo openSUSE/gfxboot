@@ -13,10 +13,6 @@
 /xmenu.light		white def
 /xmenu.dark		black def
 /xmenu.font		font.normal def
-/xmenu.normal.bg	lightgray def
-/xmenu.normal.fg	black def
-/xmenu.selected.fg	white def
-/xmenu.selected.bg	0x6c6c6c newcolor
 
 % xmenu layout
 %
@@ -369,7 +365,7 @@
 /pmenu.update {
   % note: we're always redrawing the whole panel
 
-  panel.title setcolor
+  panel.title.fg setcolor
   panel.font setfont
 
   xmenu .xm_panel_x get xmenu.hspace config.rtl { neg } if add
@@ -383,7 +379,7 @@
 
   moveto 0 lineheight 4 add rmoveto
 
-  panel.normal setcolor
+  panel.normal.fg setcolor
   
   xmenu .xm_list get xmenu .xm_current get get
   dup .undef ne { exec show.rtl } { pop } ifelse

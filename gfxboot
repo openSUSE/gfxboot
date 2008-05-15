@@ -31,8 +31,11 @@ sub show_config;
 sub unpack_archive;
 sub pack_archive;
 sub update_archive;
+sub read_gfxboot_config;
+sub write_gfxboot_config;
 sub change_config;
 sub rm_config;
+sub rm_section;
 sub add_files;
 sub rm_files;
 sub extract_files;
@@ -63,6 +66,7 @@ my $opt_password = undef;
 my $opt_showconfig = 0;
 my @opt_changeconfig;
 my @opt_rmconfig;
+my @opt_rmsection;
 my $opt_test = 0;
 my $opt_ls = 0;
 my @opt_addfiles;
@@ -74,6 +78,7 @@ my $opt_theme_update;
 my @opt_addlanguages;
 my @opt_rmlanguages;
 my $opt_defaultlanguage;
+my $opt_gfxboot_cfg;
 
 my $sudo;
 my %config;
@@ -105,6 +110,7 @@ usage 0 if !@ARGV;
 GetOptions(
   'help'                => sub { usage 0 },
   'archive|a=s'         => \$opt_gfxarchive,
+  'config-file=s'       => \$opt_gfxboot_cfg,
   'verbose|v+'          => \$opt_verbose,
   'preview|p'           => \$opt_preview,
   'test|t'              => \$opt_test,
@@ -119,6 +125,7 @@ GetOptions(
   'show-config'         => \$opt_showconfig,
   'change-config=s{1,}' => \@opt_changeconfig,
   'rm-config=s{1,}'     => \@opt_rmconfig,
+  'rm-section=s{1,}'    => \@opt_rmsection,
   'list-files|ls'       => \$opt_ls,
   'add-files=s{1,}'     => \@opt_addfiles,
   'rm-files=s{1,}'      => \@opt_rmfiles,
@@ -232,21 +239,47 @@ if($opt_showfile) {
   system "cd $work_dir ; cat $opt_showfile";
 }
 
-if(@opt_changeconfig) {
-  $write_archive = 1;
-  $work_dir = unpack_archive $opt_gfxarchive unless $work_dir;
-  change_config $work_dir;
+if(@opt_rmsection) {
+  if($opt_gfxboot_cfg) {
+    rm_section;
+  }
+  else {
+    $write_archive = 1;
+    $work_dir = unpack_archive $opt_gfxarchive unless $work_dir;
+    rm_section $work_dir;
+  }
 }
 
 if(@opt_rmconfig) {
-  $write_archive = 1;
-  $work_dir = unpack_archive $opt_gfxarchive unless $work_dir;
-  rm_config $work_dir;
+  if($opt_gfxboot_cfg) {
+    rm_config;
+  }
+  else {
+    $write_archive = 1;
+    $work_dir = unpack_archive $opt_gfxarchive unless $work_dir;
+    rm_config $work_dir;
+  }
+}
+
+if(@opt_changeconfig) {
+  if($opt_gfxboot_cfg) {
+    change_config;
+  }
+  else {
+    $write_archive = 1;
+    $work_dir = unpack_archive $opt_gfxarchive unless $work_dir;
+    change_config $work_dir;
+  }
 }
 
 if($opt_showconfig) {
-  $work_dir = unpack_archive $opt_gfxarchive unless $work_dir;
-  show_config $work_dir;
+  if($opt_gfxboot_cfg) {
+    show_config;
+  }
+  else {
+    $work_dir = unpack_archive $opt_gfxarchive unless $work_dir;
+    show_config $work_dir;
+  }
 }
 
 if($write_archive) {
@@ -285,16 +318,22 @@ Switching themes:
 Changing gfxboot config:
 
       --show-config             Show gfxboot config file (gfxboot.cfg).
-      --change-config OPTION1=FOO1 OPTION2=FOO2 ...
-                                Change gfxboot config options.
-      --rm-config OPTION1 OPTION2 ...
-                                Delete gfxboot config options.
+      --change-config [SECTION1::]OPTION1=FOO1 [SECTION2::]OPTION2=FOO2 ...
+                                Change gfxboot config options. If sections are omitted,
+                                section "base" is used.
+      --rm-config [SECTION1::]OPTION1 [SECTION2::]OPTION2 ...
+                                Delete gfxboot config options. If sections are omitted,
+                                section "base" is used.
+      --rm-section SECTION1 SECTION2 ...
+                                Delete sections in gfxboot config file.
       --default-language LANG   Make LANG the default language. LANG is a
                                 locale string (e.g. en_US).
       --add-languages LANG1 LANG2 ...
                                 Add translation files.
       --rm-languages LANG1 LANG2 ...
                                 Remove translation files.
+      --config-file FILE        Don't work on gfxboot.cfg from gfxboot archive but on FILE.
+                                NOTE: FILE will be modified even with "--test".
 
 Preview/test gfxboot setup:
 
@@ -996,7 +1035,10 @@ sub show_config
 {
   my $dir = shift;
 
-  system "cat $dir/gfxboot.cfg 2>/dev/null";
+  my $cfg_file = "$dir/gfxboot.cfg";
+  $cfg_file = $opt_gfxboot_cfg if defined $opt_gfxboot_cfg;
+
+  system "cat $cfg_file 2>/dev/null";
 }
 
 
@@ -1047,54 +1089,166 @@ sub update_archive
 }
 
 
+sub read_gfxboot_config
+{
+  local $_;
+  my $dir = shift;
+  my $section = "base";
+  my ($cfg, $l);
+
+  my $cfg_file = "$dir/gfxboot.cfg";
+  $cfg_file = $opt_gfxboot_cfg if defined $opt_gfxboot_cfg;
+
+  push @{$cfg->{sections}}, $section;
+  $cfg->{sectionnames}{$section} = 1;
+
+  my $first_section = 1;
+
+  open G, $cfg_file;
+  while(<G>) {
+    chomp;
+    s/^\s*//;
+
+    next if $_ eq "";
+
+    if(/^\[(.*?)\]/) {
+      if($first_section) {
+        $first_section = 0;
+
+        # only comments at beginning of file? -> not part of any section
+        if((grep { !/^;/ } @{$cfg->{section}{$section}}) == 0) {
+          $cfg->{comment} = $cfg->{section}{$section};
+          delete $cfg->{section}{$section};
+        }
+      }
+
+      $section = $1 eq "" ? "base" : $1;
+      if(!$cfg->{sectionnames}{$section}) {
+        push @{$cfg->{sections}}, $section;
+        $cfg->{sectionnames}{$section} = 1;
+      }
+      next;
+    }
+
+    push @{$cfg->{section}{$section}}, $_;
+  }
+  close G;
+
+  return $cfg;
+}
+
+
+sub write_gfxboot_config
+{
+  local $_;
+  my $dir = shift;
+  my $cfg = shift;
+  my $section;
+  my $idx = 0;
+
+  my $cfg_file = "$dir/gfxboot.cfg";
+  $cfg_file = $opt_gfxboot_cfg if defined $opt_gfxboot_cfg;
+
+  open G, ">$cfg_file";
+
+  if(@{$cfg->{comment}}) {
+    print G join("\n", @{$cfg->{comment}}), "\n\n";
+  }
+
+  for $section (@{$cfg->{sections}}) {
+    print G "\n" if $idx++;
+    print G "[$section]\n";
+    for (@{$cfg->{section}{$section}}) {
+      print G "$_\n" if $_ ne "";
+    }
+  }
+
+  close G;
+}
+
+
 sub change_config
 {
   local $_;
-  my ($key, $val, $c);
+  my ($section, $key, $val);
   my $dir = shift;
 
-  my @conf = `cat $dir/gfxboot.cfg 2>/dev/null`;
+  my $cfg = read_gfxboot_config $dir;
 
   for (@opt_changeconfig) {
     next unless /^\s*(\S+)=(.*?)\s*$/;
     $key = $1;
     $val = $2;
 
-    for $c (@conf) {
-      if($c =~ /^\s*(\S+)=(.*?)\s*$/ && $key eq $1) {
-        $c = "$key=$val\n";
+    $section = "base";
+    if($key =~ s/^(\S*?)::(\S+)/$2/) {
+      $section = $1 eq "" ? "base" : $1;
+    }
+
+    if(!$cfg->{sectionnames}{$section}) {
+      push @{$cfg->{sections}}, $section;
+      $cfg->{sectionnames}{$section} = 1;
+    }
+
+    for (@{$cfg->{section}{$section}}) {
+      if(/^(\S+?)=(.*)$/ && $key eq $1) {
+        $_ = "$key=$val";
         undef $key;
         last;
       }
     }
-    push @conf, "$key=$val\n" if defined $key;
+
+    push @{$cfg->{section}{$section}}, "$key=$val" if defined $key;
   }
 
-  open CC, ">$dir/gfxboot.cfg";
-  print CC @conf;
-  close CC;
+  write_gfxboot_config $dir, $cfg;
 }
 
 
 sub rm_config
 {
   local $_;
-  my ($key, $c);
+  my ($section, $key);
   my $dir = shift;
 
-  my @conf = `cat $dir/gfxboot.cfg 2>/dev/null`;
+  my $cfg = read_gfxboot_config $dir;
 
-  $key = join ('|', @opt_rmconfig);
+  for (@opt_rmconfig) {
+    $key = $_;
 
-  for $c (@conf) {
-    if($c =~ /^\s*($key)=/) {
-      undef $c;
+    $section = "base";
+    if($key =~ s/^(\S*?)::(\S+)/$2/) {
+      $section = $1 eq "" ? "base" : $1;
+    }
+
+    next unless $cfg->{sectionnames}{$section};
+
+    for (@{$cfg->{section}{$section}}) {
+      if(/^${key}=/) {
+        undef $_;
+      }
     }
   }
 
-  open CC, ">$dir/gfxboot.cfg";
-  print CC @conf;
-  close CC;
+  write_gfxboot_config $dir, $cfg;
+}
+
+
+sub rm_section
+{
+  local $_;
+  my ($section);
+  my $dir = shift;
+
+  my $cfg = read_gfxboot_config $dir;
+
+  for (@opt_rmsection) {
+    $cfg->{sectionnames}{$_} = 0;
+  }
+
+  $cfg->{sections} = [ grep { $cfg->{sectionnames}{$_} } @{$cfg->{sections}} ];
+
+  write_gfxboot_config $dir, $cfg;
 }
 
 
@@ -1255,7 +1409,10 @@ sub get_theme
   my $dir = shift;
   my $theme;
 
-  for (`cat $dir/gfxboot.cfg 2>/dev/null`) {
+  my $cfg_file = "$dir/gfxboot.cfg";
+  $cfg_file = $opt_gfxboot_cfg if defined $opt_gfxboot_cfg;
+
+  for (`cat $cfg_file 2>/dev/null`) {
     if(/^\s*theme=(.*?)\s*$/) {
       if( -d "/etc/bootsplash/themes/$1/bootloader") {
         $theme = $1;

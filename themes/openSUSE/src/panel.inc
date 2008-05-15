@@ -13,11 +13,6 @@
 /panel.text.y	{ panel.y 5 add } def
 /panel.text.Fy	0 def
 /panel.font	font.normal def
-/panel.normal	white def
-/panel.title 	white def
-/panel.high	0xffe050 def
-/panel.bg	lightgray def
-/panel.border	lightdotcolor def
 
 /panel.expert   false def
 
@@ -113,7 +108,7 @@
 %  settransparency
 %  moveto
 
-%  panel.border setcolor
+%  panel.border.color setcolor
 %  0 -1 rmoveto
 %  0 1 clip.size pop 3 div { pop putpixel 3 0 rmoveto } for
 
@@ -156,8 +151,8 @@
   /panel.tmp.F exch 2 get def
   
   panel.tmp.x panel.text.y panel.text.Fy add moveto
-  panel.high setcolor panel.tmp.F show.rtl
-  panel.normal setcolor
+  panel.f-key.fg setcolor panel.tmp.F show.rtl
+  panel.normal.fg setcolor
 
   6 config.rtl { neg } if panel.text.Fy neg rmoveto
 } def

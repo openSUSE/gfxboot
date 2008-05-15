@@ -128,11 +128,11 @@
   dup .x 0 put
   dup .y 0 put
   dup .width.min 0 put
-  dup .color.fg black put
-  dup .color.bg lightgray put
+  dup .color.fg window.color.fg put
+  dup .color.bg window.color.bg put
   dup .font font.normal put
-  dup .title.fg white put
-  dup .title.bg title.bg put
+  dup .title.fg window.title.fg put
+  dup .title.bg window.title.bg put
   dup .title.height help.title.height put
   dup .text.x 12 put
   dup .text.y help.title.height 10 add put

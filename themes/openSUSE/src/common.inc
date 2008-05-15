@@ -571,7 +571,8 @@
   /menu.args exch def
   /menu.texts exch def
 
-  /mi_name "mediacheck" getgfxconfig def
+  /mi_name "mediacheck" "" gfxconfig.set.str
+
   mi_name {
     /remove.mediachk false def
     sectorsize 0x800 eq {
@@ -654,7 +655,7 @@
   window.dialog
 
   info.type 1 eq {
-    dup .title.bg red put
+    dup .title.bg window.title.error.bg put
     dup .title txt_error_title put
     dup .buttons
     [
@@ -751,7 +752,7 @@
   progress.sym.width progress.sym.current 1 sub mul 1 add 1 rmoveto
   progress.sym.width 2 sub
   progress.bar.height 2 sub
-  loading_color setcolor
+  progress.bar.color setcolor
   fillrect
 
 } def
@@ -1052,21 +1053,6 @@
 } def
 
 
-% Allocate and define a new color.
-%
-% ( palette ) ==> ( color )
-%
-/newcolor {
-  colorbits 8 le {
-    newcolor.count .undef eq { /newcolor.count 0 def } if
-    max_image_colors newcolor.count add
-    dup rot setpalette
-    /newcolor.count newcolor.count 1 add def
-  } if
-  def
-} def
-
-
 % ( img ) => ( width heigh )
 /imgsize {
   dup .undef eq {
@@ -1126,43 +1112,10 @@
 
   font.normal setfont
 
-  /menu.text.normal    white             def
-  /menu.text.select    black             def
-  /boot.text.options   white             def
-  /boot.text.normal    white             def
-  /infobox.bg          lightgray         def
-  /infobox.text.normal black             def
-
-  /menu.bar.color      white       def
-
-  /menu.bar.min.width  300 def
-
-  small_layout {
-    /menu.start.x 130 def
-    /menu.start.y 122 def
-  } {
-    /menu.start.x 253 def
-    /menu.start.y 170 def
-  } ifelse
-
-  ptheme {
-    /menu.start.x 220 def
-    /menu.start.y 163 def
-  } if
-
   /menu.bar.width menu.bar.min.width def
-
-  /menu.max.entries 8 def
-
-  /boot.pos { 263 ptheme { 480 } { small_layout { 380 } { 490 } ifelse } ifelse } def
 
   % false: no boot options line initially
   /boot.show true def
-
-  /update.pos {
-    clip.size pop txt_dud_ready strsize pop sub ptheme { 60 } { 20 } ifelse sub
-    clip.size exch pop ptheme { 100 } { 75 } ifelse sub
-  } def
 
 } def
 
@@ -1269,7 +1222,7 @@
     player "hapysuse.mod" findfile dup
     {
       mod.load
-      50 sound.setvolume
+      config.volume sound.setvolume
       player 0 mod.play
       /player player 1 add 3 and def
     } {
@@ -1282,7 +1235,7 @@
   dup keyShiftF3 eq {
     "fsfsong.wav" findfile dup
     {
-      50 sound.setvolume
+      config.volume sound.setvolume
       wav.play
     } {
       pop
@@ -1345,7 +1298,7 @@
     1 keepmode
 
     /mouse xxx def
-    red setcolor
+    0xc00000 setcolor
     mouse .undef eq {
       700 580 moveto "no mouse" show
     } {
@@ -1355,9 +1308,9 @@
         moveto 4 4 fillrect
 
         mouse 4 add getdword 7 and
-        dup 1 and { red setcolor } if
-        dup 2 and { blue setcolor } if
-        dup 4 and { green setcolor } if
+        dup 1 and { 0xc00000 setcolor } if
+        dup 2 and { 0x0000a0 setcolor } if
+        dup 4 and { 0x009000 setcolor } if
 
         3 and 3 eq { exit } if
 
@@ -1509,13 +1462,49 @@
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Global variables.
+% Set global config variables.
 %
 
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% For monitor tests: fake DDC info.
+%
+
+% "ddc" findfile test1
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% First, figure out video mode.
+%
+
+/config.screen.width /config.screen.height "screen.size" 800 600 gfxconfig.set.int2
+
+/screen.fallback false def
+
+config.screen.width config.screen.height 16 findmode setmode not {
+  config.screen.width config.screen.height 32 findmode setmode not {
+    /screen.fallback true def
+    640 480 16 findmode setmode not {
+      640 480 32 findmode setmode not {
+        false .end
+      } if
+    } if
+  } if
+} if
+
+% prepend fallback section to layout section list
+screen.fallback {
+  /gfxconfig.layout [ "640x480" gfxconfig.layout { } forall ] gfxconfig.layout free def
+} if
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Figure out whether to use penguin theme.
+%
+
+/config.penguin       "penguin"               0 gfxconfig.set.int
+
 % more likely during winter...
-penguin.percent -1 eq {
+config.penguin -1 eq {
   date
   0
 
@@ -1528,75 +1517,137 @@ penguin.percent -1 eq {
   over dup month 12 eq exch day dup 24 ge exch 6 eq or and { pop 100 } if
   over dup month 1 eq exch day 1 eq and { pop 100 } if
 
-  /penguin.percent exch def
+  /config.penguin exch def
   pop
 } if
 
-/ptheme rand pop rand 100 mod penguin.percent lt def
+/ptheme rand pop rand 100 mod config.penguin lt def
 
-0x417 cvp getbyte 0x40 and 0 ne {
-  /ptheme true def
+0x417 cvp getbyte 0x40 and 0 ne { /ptheme  true def } if
+0x417 cvp getbyte 0x10 and 0 ne { /ptheme false def } if
+
+% prepend penguin section to layout section list
+ptheme {
+  /gfxconfig.layout [ "penguin" gfxconfig.layout { } forall ] gfxconfig.layout free def
 } if
 
-/transp 0x20 def
 
-/testX { 0x417 cvp getbyte 0x10 and 0 ne } def
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Then, read the other config variables (might depend on video mode).
+%
 
-testX { /ptheme false def } if
+/config.welcome        "welcome"                  false gfxconfig.set.bool
+/config.beep           "beep"                     false gfxconfig.set.bool
+/config.volume         "volume"                      70 gfxconfig.set.int
+/config.talk           "talk"                     false gfxconfig.set.bool
+/livecd                "livecd"                   false gfxconfig.set.bool
+/transp                "menu.transparency"         0x20 gfxconfig.set.int
+/config.screen.width
+/config.screen.height  "screen.size"            800 600 gfxconfig.set.int2
+/config.background     "background"          "back.jpg" gfxconfig.set.str
+/config.font.normal    "font.normal"        "16x16.fnt" gfxconfig.set.str
+/config.font.large     "font.large"         "16x16.fnt" gfxconfig.set.str
+/progress.bar.color    "progress.bar.color"       white gfxconfig.set.int
+/xmenu.normal.bg       "menu.normal.bg"           black gfxconfig.set.int
+/xmenu.normal.fg       "menu.normal.fg"           white gfxconfig.set.int
+/xmenu.selected.bg     "menu.selected.bg"         white gfxconfig.set.int
+/xmenu.selected.fg     "menu.selected.fg"         black gfxconfig.set.int
+/window.color.bg       "window.bg"                white gfxconfig.set.int
+/window.color.fg       "window.fg"                black gfxconfig.set.int
+/window.title.bg       "window.title.bg"          black gfxconfig.set.int
+/window.title.fg       "window.title.fg"          white gfxconfig.set.int
+/window.title.error.bg "window.title.error.bg" 0xc00000 gfxconfig.set.int
+/help.link.fg          "help.link.fg"          0x0000a0 gfxconfig.set.int
+/help.link.selected.fg "help.link.selected.fg"    white gfxconfig.set.int
+/help.link.selected.bg "help.link.selected.bg" 0x0000a0 gfxconfig.set.int
+/help.highlight.fg     "help.highlight.fg"     0x009000 gfxconfig.set.int
+/menu.text.normal      "mainmenu.normal.fg"       white gfxconfig.set.int
+/menu.text.select      "mainmenu.selected.fg"     black gfxconfig.set.int
+/boot.text.options     "bootopt.label.fg"         white gfxconfig.set.int
+/boot.text.normal      "bootopt.text.fg"          white gfxconfig.set.int
+/menu.bar.color        "mainmenu.bar.color"       white gfxconfig.set.int
+/menu.bar.min.width    "mainmenu.bar.minwidth"      300 gfxconfig.set.int
+/menu.bar.transparency "mainmenu.bar.transparency"   70 gfxconfig.set.int
+/menu.start.x
+/menu.start.y          "mainmenu.pos"           253 170 gfxconfig.set.int2
+/menu.max.entries      "mainmenu.entries"             8 gfxconfig.set.int
+/boot.pos.x
+/boot.pos.y            "bootopt.pos"            263 480 gfxconfig.set.int2
+/panel.normal.fg       "panel.normal.fg"          white gfxconfig.set.int
+/panel.title.fg        "panel.title.fg"           white gfxconfig.set.int
+/panel.f-key.fg        "panel.f-key.fg"           black gfxconfig.set.int
 
-% "ddc" findfile test1
+/install.default       "install"                     "" gfxconfig.set.str
+/install.http.server   "install.http.server"         "" gfxconfig.set.str
+/install.http.path     "install.http.path"           "" gfxconfig.set.str
 
-800 600 16 findmode setmode not {
-  800 600 32 findmode setmode not {
-    640 480 16 findmode setmode not {
-      640 480 32 findmode setmode not {
-        false .end
-      } if
-    } if
-  } if
-} if
+/install.nfs.server    "install.nfs.server"          "" gfxconfig.set.str
+/install.nfs.path      "install.nfs.path"            "" gfxconfig.set.str
 
-% /with_transp vscreen.size exch pop screen.size exch pop div 1 gt colorbits 8 gt and def
+/install.ftp.server    "install.ftp.server"          "" gfxconfig.set.str
+/install.ftp.path      "install.ftp.path"            "" gfxconfig.set.str
+/install.ftp.user      "install.ftp.user"            "" gfxconfig.set.str
+/install.ftp.password  "install.ftp.password"        "" gfxconfig.set.str
 
+/install.smb.server    "install.smb.server"          "" gfxconfig.set.str
+/install.smb.share     "install.smb.share"           "" gfxconfig.set.str
+/install.smb.path      "install.smb.path"            "" gfxconfig.set.str
+/install.smb.domain    "install.smb.domain"          "" gfxconfig.set.str
+/install.smb.user      "install.smb.user"            "" gfxconfig.set.str
+/install.smb.password  "install.smb.password"        "" gfxconfig.set.str
+
+/install.hd.device     "install.hd.device"           "" gfxconfig.set.str
+/install.hd.path       "install.hd.path"             "" gfxconfig.set.str
+
+
+% Array of menu entries with no boot option input field.
+/config.nobootoptions "nobootoptions"       [ ] gfxconfig.set.array_str
+
+% Array of menu entries which should not get an 'install' option appended.
+/config.noinstallopt  "noinstallopt"        [ ] gfxconfig.set.array_str
+
+% Mininum required memory in MB.
+/mem.check {
+  mem.min gfxconfig.int dup .undef eq { pop 0 } if
+} def
+
+% Message to print if we fail minimum memory requirement.
+/mem.show {
+  mem.msg gfxconfig.str dup .undef eq { pop "Not enough memory." } if
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+% drawing area size
 /clip.size { screen.size } def
 
-/small_layout screen.size pop 640 eq def
+% set background image
+config.background findfile setimage
 
-ptheme { "pback.jpg" } { "back.jpg" } ifelse findfile
-dup .undef eq { pop "back-low.jpg" findfile } if
-/background.file over def setimage loadpalette
-/max_image_colors image.colors def
+% get font(s)
+/font.normal config.font.normal findfile def
+/font.large
+  % don't load it twice
+  config.font.normal config.font.large eq {
+    font.normal
+  } {
+    config.font.large findfile
+  } ifelse
+def
 
-% 7 dup 0xffffff setpalette setcolor
-
-% color & font definitions must be global
-
-/black               0x000000          newcolor
-/white               0xffffff          newcolor
-/blue                0x0000a0          newcolor
-/red                 0xc00000          newcolor
-/green               0x009000          newcolor
-/yellow              0xffff20          newcolor
-/lightgray           0xd8deed          newcolor
-/dotcolor            0xa9bbcd          newcolor
-/lightdotcolor       0xeff2f6          newcolor
-/somegreen           0x78a424          newcolor
-
-/lightblue 0x7da3d1 def
-
-%% include theme_colors.inc
-
-/font.normal "16x16.fnt" findfile def
-/font.large font.normal def
-
+% default kroet direction (idle task)
 /kroete.dir 0 def
 
+% default debug level
 /debug 0 def
 
+% no specials for visual impaired people
 /v_impaired 0 def
 
+% show welcome animation?
 ptheme
-small_layout or
+screen.fallback or
 CapsLock or
 config.welcome not or
 {
@@ -1605,5 +1656,6 @@ config.welcome not or
   bsplash.show
 } ifelse
 
+% check for bi-arch config
 check_arch_boot_dir
 
