@@ -1395,3 +1395,37 @@ def
 } def
 
 
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Play movie.
+%
+% ( str1 -- )
+%
+% Image filename template.
+%
+/play_movie {
+  64 string
+
+  0
+
+  {
+    1 add
+    dup 3 index 3 index sprintf
+
+    over findfile dup .undef eq {
+      pop exit
+    } {
+      10000 usleep
+      currentimage
+      over setimage 0 0 image.size image
+      setimage
+      free
+    } ifelse
+
+
+  } loop
+
+  pop free pop
+
+} def
+
+

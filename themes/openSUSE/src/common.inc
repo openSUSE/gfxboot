@@ -245,6 +245,8 @@
 
       "" -1 0
     } {
+      sound.done
+
       xxx.cmdline .undef ne {
         xxx.cmdline xxx.menu
         /xxx.cmdline .undef def
@@ -1215,6 +1217,10 @@
     /debug debug 1 add def
   } if
 
+  dup keyShiftF11 eq {
+    400 0 moveto "ani_%04d.jpg" play_movie
+  } if
+
   dup keyShiftF1 eq {
     /transp transp 0x10 sub 0 max def
 
@@ -1480,8 +1486,8 @@
 
 /screen.fallback false def
 
-config.screen.width config.screen.height 16 findmode setmode not {
-  config.screen.width config.screen.height 32 findmode setmode not {
+config.screen.width config.screen.height 32 findmode setmode not {
+  config.screen.width config.screen.height 16 findmode setmode not {
     /screen.fallback true def
     640 480 16 findmode setmode not {
       640 480 32 findmode setmode not {
