@@ -417,14 +417,20 @@
   } if
 
   xmenu.dud {
-    xmenu.dud .xm_current get .dud_file eq {
-      input.edit.dud_file 0 get dup "" ne {
-        "driverupdate=%s " bc.cmd dup length add sprintf
+    xmenu.dud .xm_current get .dud_url eq {
+      input.edit.dud_url 0 get dup "" ne {
+        "dud=%s " bc.cmd dup length add sprintf
       } { pop } ifelse
     } {
-      dud.options xmenu.dud .xm_current get get dup "" ne {
-        "%s " bc.cmd dup length add sprintf
-      } { pop } ifelse
+      xmenu.dud .xm_current get .dud_file eq {
+        input.edit.dud_file 0 get dup "" ne {
+          "driverupdate=%s " bc.cmd dup length add sprintf
+        } { pop } ifelse
+      } {
+        dud.options xmenu.dud .xm_current get get dup "" ne {
+          "%s " bc.cmd dup length add sprintf
+        } { pop } ifelse
+      } ifelse
     } ifelse
   } if
 
@@ -1562,6 +1568,10 @@ ptheme {
 /install.hd.device     "install.hd.device"           "" gfxconfig.set.str
 /install.hd.path       "install.hd.path"             "" gfxconfig.set.str
 
+/dud.default           "dud"                         "" gfxconfig.set.str
+/dud.file              "dud.file"                    "" gfxconfig.set.str
+/dud.url               "dud.url"                     "" gfxconfig.set.str
+/dud.url.name          "dud.url.name"                "" gfxconfig.set.str
 
 % Array of menu entries with no boot option input field.
 /config.nobootoptions "nobootoptions"       [ ] gfxconfig.set.array_str
