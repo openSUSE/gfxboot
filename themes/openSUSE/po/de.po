@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: bootloader.de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-27 16:23+0200\n"
-"PO-Revision-Date: 2008-04-13 23:50+0200\n"
+"PO-Revision-Date: 2008-05-20 11:09+0200\n"
 "Last-Translator: Michael Skiba <trans@michael-skiba.de>\n"
 "Language-Team: German <opensuse-translation-de@opensuse.org>\n"
 "MIME-Version: 1.0\n"
@@ -406,5 +406,4 @@ msgstr "Installiertes System reparieren"
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr ""
-
+msgstr "Prüfe Installationsmedium"

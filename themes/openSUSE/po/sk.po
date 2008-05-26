@@ -405,5 +405,4 @@ msgstr "Opraviť nainštalovaný systém"
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr ""
-
+msgstr "Kontrola integrity média"

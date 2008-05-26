@@ -300,6 +300,9 @@ msgstr ""
 msgid "File"
 msgstr ""
 
+msgid "URL"
+msgstr ""
+
 
 # arch menu
 

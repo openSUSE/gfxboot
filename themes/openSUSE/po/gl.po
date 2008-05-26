@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: YaST (@memory@)\n"
 "Report-Msgid-Bugs-To: translation@suse.de\n"
 "POT-Creation-Date: 2006-05-15 15:07+0200\n"
-"PO-Revision-Date: 2008-04-19 18:47+0100\n"
+"PO-Revision-Date: 2008-05-16 12:59+0100\n"
 "Last-Translator: Leandro Regueiro <leandro DOT regueiro AT gmail DOT com>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
@@ -402,5 +402,4 @@ msgstr "Reparar Sistema Instalado"
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr ""
-
+msgstr "Comprobar o Soporte de Instalación"

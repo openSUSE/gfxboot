@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: bootloader.hr\n"
 "Report-Msgid-Bugs-To: translation@suse.de\n"
 "POT-Creation-Date: 2006-05-15 15:07+0200\n"
-"PO-Revision-Date: 2007-09-20 21:34+0200\n"
+"PO-Revision-Date: 2008-05-22 22:06+0100\n"
 "Last-Translator: Krešimir Jozić <kjozic@gmail.com>\n"
 "Language-Team: Hrvatski\n"
 "MIME-Version: 1.0\n"
@@ -403,5 +403,4 @@ msgstr "Popravi instalirani sustav"
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr ""
-
+msgstr "Provjeri instalacijski medij"

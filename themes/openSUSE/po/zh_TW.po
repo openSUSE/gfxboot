@@ -4,12 +4,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2006-06-01 11:29\n"
-"Last-Translator: Novell Language <language@novell.com>\n"
-"Language-Team: Novell Language <language@novell.com>\n"
+"PO-Revision-Date: 2008-05-13 22:16+0800\n"
+"Last-Translator: swyear <swyear@gmail.com>\n"
+"Language-Team: Chinese Traditional <zh@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #. ok button label
 #. txt_ok
@@ -124,12 +125,12 @@ msgstr "I/O 錯誤"
 #. boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr "變更開機磁片"
+msgstr "變更開機磁碟"
 
 #. txt_insert_disk
 #, c-format
 msgid "Insert boot disk %u."
-msgstr "插入開機磁片 %u。"
+msgstr "插入開機磁碟 %u。"
 
 #. txt_insert_disk2
 #, c-format
@@ -399,5 +400,4 @@ msgstr "修復已安裝的系統"
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr ""
-
+msgstr "檢查安裝媒體"

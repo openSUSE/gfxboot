@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: bootloader.ko\n"
 "Report-Msgid-Bugs-To: translation@suse.de\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-03-18 01:14+0900\n"
+"PO-Revision-Date: 2008-05-15 04:56+0900\n"
 "Last-Translator: YunSeok Choi <xein@naver.com>\n"
 "Language-Team: Korean <xein@naver.com>\n"
 "MIME-Version: 1.0\n"
@@ -405,5 +405,4 @@ msgstr "설치된 시스템 복원"
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr ""
-
+msgstr "설치 미디어 확인"

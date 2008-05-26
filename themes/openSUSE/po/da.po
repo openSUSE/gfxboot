@@ -7,9 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2007-08-22 14:38+0200\n"
-"Last-Translator: Martin Schlander <suse@linuxin.dk>\n"
-"Language-Team:  <opensuse-translation@opensuse.org>\n"
+"PO-Revision-Date: 2008-05-17 13:08+0100\n"
+"Last-Translator: Jan Madsen <jan.madsen.pt@gmail.com>\n"
+"Language-Team: dansk <opensuse-translation@opensuse.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -37,7 +37,7 @@ msgstr "Fortsæt"
 
 #. txt_install
 msgid "Installation"
-msgstr "Begynd installation"
+msgstr "Installation"
 
 #. txt_manual_install
 msgid "Manual Installation"
@@ -45,15 +45,15 @@ msgstr "Manuel installation"
 
 #. txt_noacpi_install
 msgid "Installation--ACPI Disabled"
-msgstr "Installation uden ACPI-understøttelse"
+msgstr "Installation--ACPI deaktiveret"
 
 #. txt_safe_install
 msgid "Installation--Safe Settings"
-msgstr "Fejlsikret installation"
+msgstr "Installation--fejlsikret"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr "Fejlsikret opstart"
+msgstr "Linux--fejlsikret"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
@@ -69,7 +69,7 @@ msgstr "Hukommelsestest"
 
 #. txt_bootoptions
 msgid "Boot Options"
-msgstr "Bootmuligheder"
+msgstr "Boot-valgmuligheder"
 
 #. window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
@@ -81,8 +81,8 @@ msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"Du forlader nu den grafiske opstartsmenu og\n"
-"starter tekstbrugerfladen i stedet."
+"Du forlader den grafiske bootmenu, og\n"
+"starter grænsefladen i teksttilstand."
 
 #. txt_help
 msgid "Help"
@@ -100,7 +100,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Indlæser Linuxkernen\n"
+"Indlæser Linux-kernen\n"
 "\n"
 "\n"
 
@@ -111,7 +111,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Indlæser memtest86\n"
+"Indlæser 'memtest86'\n"
 "\n"
 "\n"
 
@@ -161,7 +161,7 @@ msgstr "Adgangskode"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr "Gør klar til at indlæse din driver-opdateringsdiskette."
+msgstr "Gør din driver-opdateringsdiskette klar."
 
 #. dvd warning title
 #. txt_dvd_warning_title
@@ -256,7 +256,7 @@ msgstr "Domæne\n"
 #. button label for other/more options
 #. txt_other_options
 msgid "Other Options"
-msgstr "Andre indstillinger"
+msgstr "Andre valgmuligheder"
 
 #. label for language selection
 #. txt_language
@@ -269,7 +269,7 @@ msgstr "Installation--IOAPIC aktiveret"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
-msgstr "Installation--IOAPIC-understøttelse deaktiveret"
+msgstr "Installation--IOAPIC deaktiveret"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
@@ -311,7 +311,7 @@ msgstr "Installér eller opdatér ZEN-partition"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "Geninstallér bootloader for ZEN-partition"
+msgstr "Geninstallér ZEN-partitionens bootloader"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
@@ -364,7 +364,7 @@ msgstr "Driveropdatering"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr "Arkitektur"
+msgstr "Ark."
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
@@ -403,5 +403,4 @@ msgstr "Reparér installeret system"
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr ""
-
+msgstr "Tjek installationsmedie"

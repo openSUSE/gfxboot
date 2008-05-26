@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader.uk\n"
-"PO-Revision-Date: 2007-08-13 20:47-0700\n"
-"Last-Translator: Ivan Petrouchtchak <ivanpetrouchtchak@yahoo.com>\n"
+"PO-Revision-Date: 2008-05-20 19:32-0700\n"
+"Last-Translator: Ivan Petrouchtchak <fr.ivan@ukrainian-orthodox.org>\n"
 "Language-Team: Ukrainian <translation@linux.org.ua>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -58,7 +58,7 @@ msgstr "Linux -- безпечні параметри"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
-msgstr "Завантаження з жорсткого диска"
+msgstr "Завантажити з жорсткого диска"
 
 #. txt_rescue
 msgid "Rescue System"
@@ -200,7 +200,7 @@ msgstr "Встановлення з жорсткого диска"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Дисковий пристрій (зондувати всі диски, якщо порожнє)\n"
+msgstr "Дисковий пристрій (зондує всі диски, якщо порожнє)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -222,7 +222,7 @@ msgstr "Пароль\n"
 #. label for ftp user input
 #. txt_user1
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "Користувач (вживати анонімний вхід, якщо порожнє)\n"
+msgstr "Користувач (анонімний вхід, якщо порожнє)\n"
 
 #. dialog title for nfs installation
 #. txt_nfs_title
@@ -232,7 +232,7 @@ msgstr "Встановлення з NFS"
 #. label for smb user input
 #. txt_user2
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "Користувач (вживати \"guest\", якщо порожнє)\n"
+msgstr "Користувач (вживає «guest», якщо порожнє)\n"
 
 #. dialog title for smb installation
 #. txt_smb_title
@@ -376,7 +376,7 @@ msgstr "Ядро"
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
 msgid "Default"
-msgstr "Типовий"
+msgstr "Типове"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> like in txt_safe_linux
@@ -404,5 +404,4 @@ msgstr "Поремонтувати встановлену систему"
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr ""
-
+msgstr "Перевірити носій для встановлення"

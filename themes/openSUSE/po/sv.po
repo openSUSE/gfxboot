@@ -404,4 +404,3 @@ msgstr "Reparea installerat system"
 #. txt_mediacheck
 msgid "Check Installation Media"
 msgstr ""
-

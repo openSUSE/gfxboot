@@ -403,4 +403,3 @@ msgstr "Paigaldatud süsteemi parandamine"
 #. txt_mediacheck
 msgid "Check Installation Media"
 msgstr ""
-

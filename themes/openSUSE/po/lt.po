@@ -400,4 +400,3 @@ msgstr "Taisyti įdiegtą sistemą"
 #. txt_mediacheck
 msgid "Check Installation Media"
 msgstr ""
-

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-09-20 11:54+0100\n"
+"PO-Revision-Date: 2008-05-13 13:10+0100\n"
 "Last-Translator: Guillaume GARDET <guillaume.gardet@free.fr>\n"
 "Language-Team: French Team <opensuse-fr@opensuse.org>\n"
 "MIME-Version: 1.0\n"
@@ -407,5 +407,4 @@ msgstr "Réparer le système installé"
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr ""
-
+msgstr "Vérifier le média d'installation"
