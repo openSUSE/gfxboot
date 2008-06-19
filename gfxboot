@@ -495,14 +495,16 @@ my $theme_dir;
 my $theme_archive;
 
 my %vm_list = (
-  qemu       => { cmd => 'qemu', package => 'qemu' },
-  vbox       => { cmd => 'VBoxManage', package => 'virtualbox' },
-  vboxsdl    => { cmd => 'VBoxSDL', package => 'virtualbox' },
-  vmplayer   => { cmd => 'vmplayer', package => 'vmware-player' },
-  vmware     => { cmd => 'vmware', package => 'VMwareWorkstation' },
+  'qemu'        => { cmd => 'qemu', package => 'qemu' },
+  'qemu-i386'   => { cmd => 'qemu-system-i386', package => 'qemu' },
+  'qemu-x86_64' => { cmd => 'qemu-system-x86_64', package => 'qemu' },
+  'vbox'        => { cmd => 'VBoxManage', package => 'virtualbox' },
+  'vboxsdl'     => { cmd => 'VBoxSDL', package => 'virtualbox' },
+  'vmplayer'    => { cmd => 'vmplayer', package => 'vmware-player' },
+  'vmware'      => { cmd => 'vmware', package => 'VMwareWorkstation' },
 );
 
-my @vm_order = qw ( qemu vbox vboxsdl vmplayer vmware );
+my @vm_order = qw ( qemu vbox vboxsdl vmplayer vmware qemu-i386 qemu-x86_64 );
 
 my %bl_list = (
   grub     => '/usr/sbin/grub',
@@ -720,7 +722,7 @@ Graphical boot screen test and config tool.
 
 General options:
 
-  -a, --archive FILE|DIR        Use FILE as gfxboot archive (default is /boot/message).
+  -a, --archive FILE|DIRECTORY  Use FILE as gfxboot archive (default is /boot/message).
                                 If it points to a directory, assume it is an expanded archive
                                 (see --expand-archive option below).
   -v, --verbose                 Increase verbosity.
@@ -760,8 +762,8 @@ Preview/test gfxboot setup:
   -t, --test                    Test only (don't actually change any files).
   -b, --bootloader BOOTLOADER   Use BOOTLOADER (grub, lilo, isolinux, syslinux) for
                                 preview.
-  -m, --vm VM                   Use virtual machine VM (qemu, vbox, vboxsdl, vmplayer, vmware)
-                                for preview.
+  -m, --vm VM                   Use virtual machine VM (qemu, qemu-i386, qemu-x86_64,
+                                vbox, vboxsdl, vmplayer, vmware) for preview.
       --grub DIRECTORY|RPM      Use grub from DIRECTORY or RPM (default is /).
       --lilo DIRECTORY|RPM      Use lilo from DIRECTORY or RPM (default is /).
       --syslinux DIRECTORY|RPM  Use syslinux from DIRECTORY or RPM (default is /).
@@ -781,10 +783,11 @@ Adding/removing files from gfxboot archive:
                                 Copy files from gfxboot archive to current
                                 working directory.
       --show-file FILE          Print FILE.
-      --expand-archive DIR      Create expanded gfxboot archive version in DIR. That is,
-                                only files that cannot be read directly from file system
-                                are kept in a cpio archive. All others are unpacked.
-                                Use only for isolinux and syslinux.
+      --expand-archive DIRECTORY
+                                Create expanded gfxboot archive version in DIRECTORY.
+                                That is, only files that cannot be read directly from
+                                file system are kept in a cpio archive. All others are
+                                unpacked. Use only for isolinux and syslinux.
       --pack-archive FILE       Pack all gfxboot files into cpio archive FILE.
 
   usage
@@ -852,7 +855,7 @@ sub preview
     return;
   }
 
-  if($opt_vm eq 'qemu') {
+  if($opt_vm =~ /^qemu(|-i386|-x86_64)$/) {
     prepare_qemu $vm_env;
     run_qemu $vm_env;
   }
@@ -1264,7 +1267,7 @@ sub prepare_qemu
 sub run_qemu
 {
   my $vm_env = shift;
-  my $q = "qemu";
+  my $q = $vm_list{$opt_vm}{cmd};
 
   $q .= " -boot c" if $vm_env->{boot} eq 'hd';
   $q .= " -boot d" if $vm_env->{boot} eq 'cd';

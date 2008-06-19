@@ -15,7 +15,7 @@ modifies and tests graphical boot loader configuration.
 .SH OPTIONS
 .SS General options
 .TP
-\fB-a\fR, \fB--archive\fR \fIFILE\fR|\fIDIR\fR
+\fB-a\fR, \fB--archive\fR \fIFILE\fR|\fIDIRECTORY\fR
 Use FILE as gfxboot archive (default is /boot/message).
 If it points to a directory, assume it is an expanded archive (see \fB--expand-archive\fR option below).
 .TP
@@ -71,7 +71,7 @@ Test only (don't actually change any files).
 Use BOOTLOADER (grub, lilo, isolinux, syslinux) for preview.
 .TP
 \fB-m\fR, \fB--vm\fR \fIVM\fR
-Use virtual machine VM (qemu, vbox, vboxsdl, vmplayer, vmware) for preview.
+Use virtual machine VM (qemu, qemu-i386, qemu-x86_64, vbox, vboxsdl, vmplayer, vmware) for preview.
 .TP
 \fB--grub\fR \fIDIRECTORY|RPM\fR
 Use grub from DIRECTORY or RPM (default is /).
@@ -112,13 +112,13 @@ Copy files from gfxboot archive to current working directory.
 \fB--show-file\fR \fIFILE\fR
 Print FILE.
 .TP
-\fB--expand-archive\fR \fIDIR\fR
-Create expanded gfxboot archive version in \fIDIR\fR. That is, only files that
+\fB--expand-archive\fR \fIDIRECTORY\fR
+Create expanded gfxboot archive version in DIRECTORY. That is, only files that
 cannot be read directly from file system are kept in a cpio archive. All
 others are unpacked.  Use only for isolinux and syslinux.
 .TP
 \fB--pack-archive\fR \fIFILE\fR
-Pack all gfxboot files into cpio archive \fIFILE\fR.
+Pack all gfxboot files into cpio archive FILE.
 .\"
 .SH FILES
 .TP 18n
