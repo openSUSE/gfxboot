@@ -15,8 +15,9 @@ modifies and tests graphical boot loader configuration.
 .SH OPTIONS
 .SS General options
 .TP
-\fB-a\fR, \fB--archive\fR \fIFILE\fR
+\fB-a\fR, \fB--archive\fR \fIFILE\fR|\fIDIR\fR
 Use FILE as gfxboot archive (default is /boot/message).
+If it points to a directory, assume it is an expanded archive (see \fB--expand-archive\fR option below).
 .TP
 \fB-v\fR, \fB--verbose\fR
 Increase verbosity.
@@ -70,7 +71,7 @@ Test only (don't actually change any files).
 Use BOOTLOADER (grub, lilo, isolinux, syslinux) for preview.
 .TP
 \fB-m\fR, \fB--vm\fR \fIVM\fR
-Use virtual machine VM (qemu, vbox, vboxsdl, vmware) for preview.
+Use virtual machine VM (qemu, vbox, vboxsdl, vmplayer, vmware) for preview.
 .TP
 \fB--grub\fR \fIDIRECTORY|RPM\fR
 Use grub from DIRECTORY or RPM (default is /).
@@ -86,6 +87,18 @@ Use isolinux from DIRECTORY or RPM (default is /).
 .TP
 \fB--password\fR \fIPASSWORD\fR
 Create test config with PASSWORD for preview.
+.TP
+\fB--biarch\fR
+Create biarch test image.
+.TP
+\fB--cdrom\fR, \fB--dvd\fR
+Create iso image for preview.
+.TP
+\fB--disk\fR
+Create harddisk image for preview.
+.TP
+\fB--floppy\fR
+Create floppy image for preview.
 .SS Adding/removing files from gfxboot archive
 \fB--ls\fR, \fB--list-files\fR
 List gfxboot archive files.
@@ -98,6 +111,14 @@ Copy files from gfxboot archive to current working directory.
 .TP
 \fB--show-file\fR \fIFILE\fR
 Print FILE.
+.TP
+\fB--expand-archive\fR \fIDIR\fR
+Create expanded gfxboot archive version in \fIDIR\fR. That is, only files that
+cannot be read directly from file system are kept in a cpio archive. All
+others are unpacked.  Use only for isolinux and syslinux.
+.TP
+\fB--pack-archive\fR \fIFILE\fR
+Pack all gfxboot files into cpio archive \fIFILE\fR.
 .\"
 .SH FILES
 .TP 18n
