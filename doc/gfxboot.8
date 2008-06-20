@@ -71,7 +71,7 @@ Test only (don't actually change any files).
 Use BOOTLOADER (grub, lilo, isolinux, syslinux) for preview.
 .TP
 \fB-m\fR, \fB--vm\fR \fIVM\fR
-Use virtual machine VM (qemu, qemu-i386, qemu-x86_64, vbox, vboxsdl, vmplayer, vmware) for preview.
+Use virtual machine VM (bochs, qemu, qemu-i386, qemu-x86_64, vbox, vboxsdl, vmplayer, vmware) for preview.
 .TP
 \fB--grub\fR \fIDIRECTORY|RPM\fR
 Use grub from DIRECTORY or RPM (default is /).
@@ -99,6 +99,9 @@ Create harddisk image for preview.
 .TP
 \fB--floppy\fR
 Create floppy image for preview.
+.TP
+\fB--save-image\fR \fIFILE\fR
+Copy preview image to FILE.
 .SS Adding/removing files from gfxboot archive
 \fB--ls\fR, \fB--list-files\fR
 List gfxboot archive files.

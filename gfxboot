@@ -430,6 +430,10 @@ sub run_vboxsdl;
 sub prepare_vmware;
 sub run_vmplayer;
 sub run_vmware;
+sub prepare_bd;
+sub run_bd;
+sub prepare_bochs;
+sub run_bochs;
 sub find_free_loop;
 sub show_config;
 sub is_cpio;
@@ -483,6 +487,7 @@ my $opt_expand_archive;
 my $opt_pack_archive;
 my $opt_biarch;
 my $opt_media;
+my $opt_save_image;
 
 my $sudo;
 my %config;
@@ -493,6 +498,7 @@ my $write_archive = 0;
 my $new_archive;
 my $theme_dir;
 my $theme_archive;
+my $preview_image;
 
 my %vm_list = (
   'qemu'        => { cmd => 'qemu', package => 'qemu' },
@@ -502,15 +508,19 @@ my %vm_list = (
   'vboxsdl'     => { cmd => 'VBoxSDL', package => 'virtualbox' },
   'vmplayer'    => { cmd => 'vmplayer', package => 'vmware-player' },
   'vmware'      => { cmd => 'vmware', package => 'VMwareWorkstation' },
+  'bd'          => { cmd => 'bd' },
+  'bochs'       => { cmd => 'bochs', package => 'bochs' },
 );
 
-my @vm_order = qw ( qemu vbox vboxsdl vmplayer vmware qemu-i386 qemu-x86_64 );
+my @vm_order = qw ( qemu vbox vboxsdl vmplayer vmware qemu-i386 qemu-x86_64 bochs );
 
 my %bl_list = (
   grub     => '/usr/sbin/grub',
   lilo     => '/sbin/lilo',
   isolinux => '/usr/share/syslinux/isolinux.bin',
   syslinux => '/usr/bin/syslinux',
+  bd       => '/usr/bin/bd',
+  bochs    => '/usr/bin/bochs',
 );
 
 usage 0 if !@ARGV;
@@ -550,6 +560,7 @@ GetOptions(
   'disk'                => sub { $opt_media = 'disk' },
   'floppy'              => sub { $opt_media = 'floppy' },
   'biarch'              => \$opt_biarch,
+  'save-image=s'        => \$opt_save_image,
 ) || usage 1;
 
 $ENV{PATH} = "/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin";
@@ -713,6 +724,10 @@ if($new_archive && !$opt_test) {
   update_archive $new_archive, $opt_gfxarchive;
 }
 
+if($opt_save_image && $preview_image) {
+  system "cp $preview_image $opt_save_image";
+}
+
 
 sub usage
 {
@@ -762,7 +777,7 @@ Preview/test gfxboot setup:
   -t, --test                    Test only (don't actually change any files).
   -b, --bootloader BOOTLOADER   Use BOOTLOADER (grub, lilo, isolinux, syslinux) for
                                 preview.
-  -m, --vm VM                   Use virtual machine VM (qemu, qemu-i386, qemu-x86_64,
+  -m, --vm VM                   Use virtual machine VM (bochs, qemu, qemu-i386, qemu-x86_64,
                                 vbox, vboxsdl, vmplayer, vmware) for preview.
       --grub DIRECTORY|RPM      Use grub from DIRECTORY or RPM (default is /).
       --lilo DIRECTORY|RPM      Use lilo from DIRECTORY or RPM (default is /).
@@ -773,6 +788,7 @@ Preview/test gfxboot setup:
       --cdrom, --dvd            Create iso image for preview.
       --disk                    Create harddisk image for preview.
       --floppy                  Create floppy image for preview.
+      --save-image FILE         Copy preview image to FILE.
 
 Adding/removing files from gfxboot archive:
 
@@ -842,14 +858,17 @@ sub preview
   if($bootloader eq 'grub') {
     $vm_env->{hd0} = prepare_grub $file;
     $vm_env->{boot} = 'hd';
+    $preview_image = $vm_env->{hd0}{image_name};
   }
   elsif($bootloader eq 'lilo') {
     $vm_env->{hd0} = prepare_lilo $file;
     $vm_env->{boot} = 'hd';
+    $preview_image = $vm_env->{hd0}{image_name};
   }
   elsif($bootloader eq 'isolinux') {
     $vm_env->{cd0} = prepare_isolinux $file;
     $vm_env->{boot} = 'cd';
+    $preview_image = $vm_env->{cd0}{image_name};
   }
   else {
     return;
@@ -874,6 +893,14 @@ sub preview
   elsif($opt_vm eq 'vmware') {
     prepare_vmware $vm_env;
     run_vmware $vm_env;
+  }
+  elsif($opt_vm eq 'bd') {
+    prepare_bd $vm_env;
+    run_bd $vm_env;
+  }
+  elsif($opt_vm eq 'bochs') {
+    prepare_bochs $vm_env;
+    run_bochs $vm_env;
   }
 }
 
@@ -901,8 +928,8 @@ sub check_vm
   $vms{$vm_list{$_}{package}} = 1 for (keys %vm_list);
 
   die
-    "No suported virtual machine found. Please install one of:\n  " .
-    join(', ', sort keys %vms) .
+    "No supported virtual machine found. Please install one of:\n  " .
+    join(', ', grep { $_ } sort keys %vms) .
     "\n";
 }
 
@@ -1187,7 +1214,7 @@ sub prepare_isolinux
   }
 
   my $dst = $gfxboot_tmp->dir('isolinux');
-  my $img = $gfxboot_tmp->file('cd.iso');
+  my $img = $gfxboot_tmp->file('isolinux.iso');
 
   my $loader = "";
   if(-x "$opt_syslinux/usr/bin/isolinux-config") {
@@ -1491,6 +1518,75 @@ sub run_vmware
   system "vmware -qx $vm_env->{base}/gfxboot.vmx >$log 2>&1";
 
   print `cat $log`, "\n" if $opt_verbose >= 2;
+}
+
+
+sub prepare_bd
+{
+}
+
+
+sub run_bd
+{
+  my $vm_env = shift;
+  my $q = $vm_list{$opt_vm}{cmd};
+
+  $q .= " $vm_env->{hd0}{image_name}" if $vm_env->{boot} eq 'hd';
+  $q .= " $vm_env->{cd0}{image_name}" if $vm_env->{boot} eq 'cd';
+  $q .= " $vm_env->{fd0}{image_name}" if $vm_env->{boot} eq 'fd';
+
+  system $q;
+}
+
+
+sub prepare_bochs
+{
+}
+
+
+sub run_bochs
+{
+  my $vm_env = shift;
+  my $q = $vm_list{$opt_vm}{cmd};
+
+  if($vm_env->{boot} eq 'hd') {
+    $q .= 
+      " -q 'boot: disk'" .
+      " 'ata0-master: type=disk, path=$vm_env->{hd0}{image_name}, cylinders=$vm_env->{hd0}{c}, heads=$vm_env->{hd0}{h}, spt=$vm_env->{hd0}{s}'".
+      " 'panic: action=report'" .
+      " 'debugger_log: /dev/null'" .
+      " 'log: /dev/null'" .
+      " 'parport1: enabled=0'" .
+      " 'clock: sync=realtime, time0=local'" .
+      " 2>&1";
+  }
+
+  if($vm_env->{boot} eq 'cd') {
+    $q .= 
+      " -q 'boot: cdrom'" .
+      " 'ata0-master: type=cdrom, path=$vm_env->{cd0}{image_name}, status=inserted'".
+      " 'panic: action=report'" .
+      " 'debugger_log: /dev/null'" .
+      " 'log: /dev/null'" .
+      " 'parport1: enabled=0'" .
+      " 'clock: sync=realtime, time0=local'" .
+      " 2>&1";
+  }
+
+  if($vm_env->{boot} eq 'fd') {
+    $q .=
+      " -q 'boot: a'" .
+      " 'floppya: image=$vm_env->{fd0}{image_name}, status=inserted'" .
+      " 'ata0-master: type=disk, path=/dev/null'".
+      " 'panic: action=report'" .
+      " 'debugger_log: /dev/null'" .
+      " 'log: /dev/null'" .
+      " 'parport1: enabled=0'" .
+      " 'clock: sync=realtime, time0=local'" .
+      " 2>&1";
+  }
+
+  system $q;
 }
 
 
