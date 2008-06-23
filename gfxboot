@@ -84,7 +84,7 @@
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# package HDImage version 1.3
+# package HDImage version 1.4
 #
 # Create disk image with partition table and a single partition.
 #
@@ -219,6 +219,13 @@
     return $self->{size};
   }
 
+  sub extra_size
+  {
+    my $self = shift;
+
+    $self->{extra_size} = shift;
+  }
+
   sub type
   {
     my $self = shift;
@@ -289,6 +296,8 @@
 
     my $file = shift;
     $self->{image_name} = $file;
+
+    $self->chs(0, 255, 63) unless $self->{s};
 
     my $c = $self->{c};
     my $h = $self->{h};
@@ -398,6 +407,14 @@
       syswrite W1, "\x00", 1;
       close W1;
     }
+
+    if($self->{extra_size}) {
+      open W1, "+<$file";
+      sysseek W1, $self->{extra_size} * 512 - 1, 2;
+      syswrite W1, "\x00", 1;
+      close W1;
+    }
+
   }
 }
 
