@@ -1,5 +1,6 @@
-- needs master-boot-code dosfstools mtools
+[needs master-boot-code dosfstools mtools]
 
+	- cooperate with mboot module
 	- enhanced gfxboot script
 
 26/5/2008:	v4.0.14

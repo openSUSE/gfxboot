@@ -1137,6 +1137,7 @@ def
 /bootopt.find {
   /_bo.opt exch def
   /_bo.cmdline exch def
+  /_bo.= _bo.opt dup length 1 sub get '=' eq def
 
   {
     _bo.cmdline _bo.opt strstr
@@ -1152,6 +1153,7 @@ def
         dup '=' eq
         over ' ' eq or
         exch 0 eq or
+        _bo.= or
       } {
         false
       } ifelse

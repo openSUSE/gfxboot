@@ -367,7 +367,7 @@
     cmdline.hidden "" ne { 
       splash_file {
         /bc.tmp cmdline.hidden length splash_file length add string def
-        cmdline.hidden "initrd" bootopt.find dup .undef ne {
+        cmdline.hidden "initrd=" bootopt.find dup .undef ne {
           skipnonspaces
           dup
           dup 0 get over 0 0 put
