@@ -1788,7 +1788,7 @@ sub update_archive
     }
   }
   else {
-    if(-w $dst) {
+    if(-w $dst || !-e $dst) {
       system "cp $src $dst";
       system "chmod 644 $dst";
     }
