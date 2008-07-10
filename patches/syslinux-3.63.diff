@@ -1,0 +1,2352 @@
+--- Makefile
++++ Makefile
+@@ -146,15 +146,16 @@
+ 	$(PERL) genhash.pl < keywords > kwdhash.gen
+ 
+ # Standard rule for {isolinux,isolinux-debug}.bin
+-iso%.bin: iso%.asm kwdhash.gen version.gen
++iso%.bin: iso%.asm kwdhash.gen version.gen gfxboot.inc
+ 	$(NASM) $(NASMOPT) -f bin -DDATE_STR="'$(DATE)'" -DHEXDATE="$(HEXDATE)" \
+ 		-DMAP=$(@:.bin=.map) -l $(@:.bin=.lsr) -o $@ $<
+ 	$(PERL) lstadjust.pl $(@:.bin=.lsr) $(@:.bin=.map) $(@:.bin=.lst)
+ 	$(PERL) checksumiso.pl $@
+ 	$(PERL) checkov.pl $(@:.bin=.map) $@
++	-./add_crc $@
+ 
+ # Standard rule for {ldlinux,pxelinux,extlinux}.bin
+-%.bin: %.asm kwdhash.gen version.gen
++%.bin: %.asm kwdhash.gen version.gen gfxboot.inc
+ 	$(NASM) $(NASMOPT) -f bin -DDATE_STR="'$(DATE)'" -DHEXDATE="$(HEXDATE)" \
+ 		-DMAP=$(@:.bin=.map) -l $(@:.bin=.lsr) -o $@ $<
+ 	$(PERL) lstadjust.pl $(@:.bin=.lsr) $(@:.bin=.map) $(@:.bin=.lst)
+--- README.gfxboot
++++ README.gfxboot
+@@ -0,0 +1,41 @@
++Graphical boot screen
++=====================
++
++  syslinux/isolinux support a graphical boot screen using VESA BIOS
++  extensions. (Note that this is different from the graphics support that
++  syslinux comes with).
++
++  To use it you have to prepare a special boot logo file and put a line like
++  this into syslinux.cfg/isolinux.cfg:
++
++    gfxboot foo
++
++  The tools to create 'foo' from the above example are in the gfxboot
++  package. Please _do_ have a look at its documentation before you begin.
++
++  Note that you cannot use comboot images and graphics at the same time as
++  the memory used overlaps the comboot loading area.
++
++  If you encouter problems with the graphics code, hold down SHIFT while
++  syslinux starts. This will put it into 'failsafe' mode that lets you
++  interactively skip critical parts (like monitor detection).
++
++
++
++Spread boot images over several floppy disks (syslinux)
++=======================================================
++
++  You can prepare boot disks with a file system that spans several disks.
++  The 'mkbootdisk' script from the openSUSE project can create a suitable
++  file system.
++
++  syslinux will ask you for disk changes if necessary. To enable this
++  feature, use
++
++    disksize <size_of_single_disk_in_sectors>
++
++  Note that every individual disk must have at least a valid FAT boot
++  sector. syslinux will use the serial number stored there to verify that
++  the correct disk has been inserted (its last hex digit is the zero based
++  disk number).
++
+--- abort.inc
++++ abort.inc
+@@ -21,6 +21,11 @@
+ ; abort_check: let the user abort with <ESC> or <Ctrl-C>
+ ;
+ abort_check:
++%ifdef WITH_GFX
++		; don't
++		cmp byte [gfx_ok],0
++		jnz .ret1
++%endif
+ 		call pollchar
+ 		jz .ret1
+ 		pusha
+--- add_crc
++++ add_crc
+@@ -0,0 +1,57 @@
++#! /usr/bin/perl
++
++use integer;
++
++# for isolinux
++#
++# Ensure checksum over (first sector - 64 bytes) [internally: FirstSecSum]
++# is 0 by adjusting the variable csum_value.
++#
++# Though isolinux checks the integrity with a separate checksum after all
++# data has been loaded this does not help with BIOSes that don't get even
++# the first 2k right. Hence this additional check. :-(
++#
++
++$file = shift;
++$list = "$file";
++$list =~ s/\.bin$/.lsr/;
++
++open F, $list;
++
++while(<F>) {
++  if(/^\s*\d+\s*(\S+)\s*0+\s*(\<\d+\>\s*)?csum_value\s*dd\s*0/) {
++    $ofs = hex $1;
++  }
++}
++close F;
++
++die "oops 1\n" unless $ofs && !($ofs & 3);
++
++# print "$ofs\n";
++
++open F, $file or die "$file: $!\n";
++
++$file_size = -s $file;
++
++sysread F, $buf, $file_size;
++
++close F;
++
++die "oops 1\n" if $file_size != length($buf);
++
++@x = unpack "V512", $buf;
++
++for ($sum = 0, $i = 16; $i < 512; $i++) {
++  $sum += $x[$i];
++}
++
++# printf "0x%08x\n", $sum;
++
++$ns = pack "V", -$sum;
++
++substr($buf, $ofs, 4) = $ns;
++
++open F, ">$file" or die "$file: $!\n";
++
++syswrite F, $buf;
++
+--- com32/libutil/get_key.c
++++ com32/libutil/get_key.c
+@@ -42,6 +42,10 @@
+ #include <getkey.h>
+ #include <libutil.h>
+ 
++#ifndef CLK_TCK
++# define CLK_TCK __sysconf(2)
++#endif
++
+ struct keycode {
+   int code;
+   int seqlen;
+--- com32/modules/cpuid.c
++++ com32/modules/cpuid.c
+@@ -254,7 +254,7 @@
+ 
+ static int smp_scan_config (unsigned long base, unsigned long length)
+ {
+-        unsigned long *bp = base;
++        unsigned long *bp = (unsigned long *) base;
+         struct intel_mp_floating *mpf;
+ 
+ //        printf("Scan SMP from %p for %ld bytes.\n", bp,length);
+--- com32/samples/keytest.c
++++ com32/samples/keytest.c
+@@ -25,6 +25,10 @@
+ #include <consoles.h>		/* Provided by libutil */
+ #include <getkey.h>
+ 
++#ifndef CLK_TCK
++# define CLK_TCK __sysconf(2)
++#endif
++
+ static void cooked_keys(void)
+ {
+   int key;
+--- conio.inc
++++ conio.inc
+@@ -49,6 +49,14 @@
+ ;		Assumes CS == DS == ES.
+ ;
+ get_msg_file:
++%ifdef WITH_GFX
++		; don't load if graphics code is active
++		cmp byte [gfx_ok],0
++		jz .nogfx
++		jmp close
++.nogfx:
++%endif
++
+                 mov byte [TextAttribute],07h	; Default grey on white
+ 		mov byte [DisplayMask],07h	; Display text in all modes
+ 		call msg_initvars
+--- doc/syslinux.txt
++++ doc/syslinux.txt
+@@ -230,7 +230,7 @@
+         Append nothing.  APPEND with a single hyphen as argument in a
+         LABEL section can be used to override a global APPEND.
+ 
+-  LOCALBOOT type			[ISOLINUX, PXELINUX]
++  LOCALBOOT type			[ISOLINUX, SYSLINUX, PXELINUX]
+ 	On PXELINUX, specifying "LOCALBOOT 0" instead of a "KERNEL"
+ 	option means invoking this particular label will cause a local
+ 	disk boot instead of booting a kernel.
+@@ -244,12 +244,11 @@
+ 	UNDI or PXE stacks are, don't worry -- you don't want them,
+ 	just specify 0.
+ 
+-	On ISOLINUX, the "type" specifies the local drive number to
+-	boot from; 0x00 is the primary floppy drive and 0x80 is the
+-	primary hard drive.  The special value -1 causes ISOLINUX to
+-	report failure to the BIOS, which, on recent BIOSes, should
+-	mean that the next boot device in the boot sequence should be
+-	activated.
++	On ISOLINUX and SYSLINUX, the "type" specifies the local drive
++	number to boot from; 0x00 is the primary floppy drive and 0x80 is
++	the primary hard drive.  The special value -1 causes them to report
++	failure to the BIOS, which, on recent BIOSes, should mean that the
++	next boot device in the boot sequence should be activated.
+ 
+ IMPLICIT flag_val
+         If flag_val is 0, do not load a kernel image unless it has been
+--- gfxboot.inc
++++ gfxboot.inc
+@@ -0,0 +1,1355 @@
++		section .text
++
++load_gfx_msg	db 'Loading...', 0
++no_msg		db 0
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++; do a reboot
++;
++do_reboot:
++		call gfx_done
++		mov word [472h],1234h
++		push word 0ffffh
++		push word 0
++		retf
++		int 19h
++		jmp $
++
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++;
++; wait for 'enter' key pressed
++;
++wait_for_key:
++		pusha
++wait_for_key_10:
++		mov ah,0
++		int 16h
++		cmp al,13
++		jnz wait_for_key_10
++		popa
++		ret
++
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++; read gfx data
++get_gfx_file:
++		push si
++		mov si,load_gfx_msg
++		call cwritestr
++		pop si
++		mov word [gfx_mem_start_seg],first_free_seg
++		push ds
++		push 40h
++		pop ds
++		mov bx,[13h]			; mem size in kb
++		pop ds
++		shl bx,6
++		mov word [gfx_mem_end_seg],bx
++
++		call gfx_init			; Load and display file
++		cmp byte [gfx_ok],0
++		jz .done
++		mov si,crlf_msg
++		call cwritestr
++.done:
++		ret
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++; read from disk, ask for disk change, if necessary
++
++;       EAX - Linear sector number
++;       ES:BX   - Target buffer
++;       BP      - Sector count
++;
++;       (es:)bx gets updated
++
++%if IS_SYSLINUX
++
++; %define DEBUG_XXX
++
++getlinsec3:
++%ifdef DEBUG_XXX
++		mov si,txt0
++		call dump_params
++		call crlf
++%endif
++		mov cx,[DiskSize]
++		or cx,cx
++		jz getlinsec3_70		; unlimited
++
++		xor dx,dx
++		div cx
++		xchg ax,dx
++		movzx eax,ax
++
++		mov si,ax
++		add si,bp
++		sub si,cx
++		jbe getlinsec3_40
++		; split
++
++		sub bp,si
++		movzx ebp,bp
++		push ebp
++		push eax
++		push si
++		push dx
++		call getlinsec3_40
++		pop dx
++		pop bp
++		pop eax
++		pop esi
++		add eax,esi
++		movzx ebp,bp
++		inc dl
++
++getlinsec3_40:
++		push es
++		pushad
++		call disk_change
++		popad
++		pop es
++		jc kaboom
++getlinsec3_70:
++%ifdef DEBUG_XXX
++		mov si,txt1
++		call dump_params
++		mov si,txt3
++		call cwritestr
++		push ax
++		mov al,[CurrentDisk]
++		call writehex2
++		pop ax
++		call crlf
++		pushad
++		call getchar
++		popad
++%endif
++		xor edx,edx
++		call getlinsec.jmp
++		ret
++
++%ifdef DEBUG_XXX
++dump_params:
++		push eax
++		call cwritestr
++		mov ax,es
++		call writehex4
++		mov si,txt2
++		call cwritestr
++		mov ax,bx
++		call writehex4
++		mov si,txt3
++		call cwritestr
++		pop eax
++		push eax
++		call writehex8
++		mov si,txt3
++		call cwritestr
++		mov ax,bp
++		call writehex4
++		pop eax
++		ret
++
++txt0		db 'linsec3: ', 0
++txt1		db 'linsec:  ', 0
++txt2		db ':', 0
++txt3		db ', ', 0
++
++%include "writehex.inc"
++
++%endif
++
++
++; dl: new disk
++; return: CF = 1 -> error
++disk_change:
++		cmp dl,[CurrentDisk]
++		jz disk_change_90
++
++		mov [CurrentDisk],dl
++		movzx eax,dl
++		mov [gfx_user_info_0],eax
++		add dl,'1'
++		mov [boot_disk_msg0],dl
++		mov [boot_ndisk_msg0],dl
++
++disk_change_20:
++		cmp byte [gfx_ok],0
++		jz disk_change_40
++		mov al,3
++		xor di,di
++		xor si,si
++		call gfx_infobox
++
++		jmp disk_change_50
++disk_change_40:
++		mov si,clrln_msg
++		call cwritestr
++		mov si,boot_disk_msg
++		call cwritestr
++		call wait_for_key
++		mov si,clrln_msg
++		call cwritestr
++disk_change_50:
++		xor eax,eax
++		mov bp,1
++		push bx
++		xor edx,edx
++		call getlinsec.jmp
++		pop bx
++		mov eax,[es:bx+27h]
++		sub eax,[bsVolumeID]
++		movzx edx,byte [CurrentDisk]
++		cmp eax,edx
++		jz disk_change_90
++		mov [gfx_user_info_1],eax
++
++		cmp byte [gfx_ok],0
++		jz disk_change_70
++		mov al,4
++		xor di,di
++		xor si,si
++		call gfx_infobox
++
++		jmp disk_change_50
++disk_change_70:
++		mov si,clrln_msg
++		call cwritestr
++		mov si,boot_ndisk_msg
++		call cwritestr
++;		mov eax,[es:bx+27h]
++;		call writehex8
++		call wait_for_key
++		mov si,clrln_msg
++		call cwritestr
++
++		jmp disk_change_20
++disk_change_90:
++		ret
++
++
++bsVolumeID	equ bsHugeSectors+7
++
++boot_disk_msg	db 'Please insert boot disk '
++boot_disk_msg0	db '0; then press ENTER to continue.', 0
++boot_ndisk_msg	db 'This is not boot disk '
++boot_ndisk_msg0	db '0. Press ENTER to continue.', 0
++
++DiskSize	dw 0			; unlimited
++CurrentDisk	db 0			; current disk
++
++clrln_msg	db 0dh, '                                                            ', 0dh, 0
++
++
++cache_metadata:
++		cmp word [DiskSize],0
++		jz cache_md_90
++
++		mov eax,[FAT]
++		mov ecx,[bxFATsecs]
++cache_md_20:
++		push eax
++		push cx
++		call getcachesector
++		pop cx
++		pop eax
++		inc eax
++		loop cache_md_20
++
++		mov eax,[RootDir]
++cache_md_40:
++		push eax
++		call getcachesector
++		pop eax
++		call nextsector
++		jnc cache_md_40
++		
++cache_md_90:
++		ret
++
++
++%endif
++
++
++
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++;
++; gfx stuff
++;
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++
++; != 0 -> graphics active
++gfx_ok			db 0
++gfx_cwritestr_old	db 0c3h		; 'ret'
++gfx_cpio_swab		db 0
++gfx_cd_changed		db 0
++
++gfx_mem_start_seg	dw 0
++gfx_mem_end_seg		dw 0
++
++			align 4, db 0
++; the memory area we are working with
++gfx_mem			dd 0		; linear address
++
++gfx_save_area1		dd 0		; 64k
++gfx_save_area1_used	db 0		; != 0 if area1 is in use
++
++; interface to loadable gfx extension (seg:ofs values)
++gfx_bc_jt		dd 0
++
++gfx_bc_init		dd 0
++gfx_bc_done		dd 0
++gfx_bc_input		dd 0
++gfx_bc_menu_init	dd 0
++gfx_bc_infobox_init	dd 0
++gfx_bc_infobox_done	dd 0
++gfx_bc_progress_init	dd 0
++gfx_bc_progress_done	dd 0
++gfx_bc_progress_update	dd 0
++gfx_bc_progress_limit	dd 0
++gfx_bc_password_init	dd 0
++gfx_bc_password_done	dd 0
++
++; menu entry descriptor
++menu_entries		equ 0
++menu_default		equ 2		; seg:ofs
++menu_ent_list		equ 6		; seg:ofs
++menu_ent_size		equ 10
++menu_arg_list		equ 12		; seg:ofs
++menu_arg_size		equ 16
++sizeof_menu_desc	equ 18
++
++menu_desc		zb sizeof_menu_desc
++
++; system config data (52 bytes)
++gfx_sysconfig		equ $
++gfx_bootloader		db 1			;  0: boot loader type (0: lilo, 1: syslinux, 2: grub)
++gfx_sector_shift	db SECTOR_SHIFT		;  1: sector shift
++gfx_media_type		db 0			;  2: media type (0: disk, 1: floppy, 2: cdrom)
++gfx_failsafe		db 0			;  3: turn on failsafe mode (bitmask)
++						;     0: SHIFT pressed
++						;     1: skip gfxboot
++						;     2: skip monitor detection
++gfx_sysconfig_size	db gfx_sysconfig_end-gfx_sysconfig	;  4: size of sysconfig data
++gfx_boot_drive		db 0			;  5: BIOS boot drive
++gfx_callback		dw gfx_cb		;  6: offset to callback handler
++gfx_bootloader_seg	dw 0			;  8: code/data segment used by bootloader; must follow gfx_callback
++gfx_reserved_1		dw 0			; 10
++gfx_user_info_0		dd 0			; 12: data for info box
++gfx_user_info_1		dd 0			; 16: data for info box
++gfx_bios_mem_size	dd 0			; 20: BIOS memory size (in bytes)
++gfx_xmem_0		dw 0			; 24: extended mem area 0 (start:size in MB; 12:4 bits)
++gfx_xmem_1		dw 0			; 26: extended mem area 1
++gfx_xmem_2		dw 0			; 28: extended mem area 2
++gfx_xmem_3		dw 0			; 20: extended mem area 3
++gfx_file		dd 0			; 32: start of gfx file
++gfx_archive_start	dd 0			; 36: start of cpio archive
++gfx_archive_end		dd 0			; 40: end of cpio archive
++gfx_mem0_start		dd 0			; 44: low free memory start
++gfx_mem0_end		dd 0			; 48: low free memory end
++gfx_sysconfig_end	equ $
++
++gfx_slash		db '/', 0
++
++%macro		lin2segofs 3
++		push %1
++		call gfx_l2so
++		pop %3
++		pop %2
++%endmacro
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++; must not change registers!
++;
++gfx_get_sysconfig:
++		push ax
++		mov al,[DriveNumber]
++		mov [gfx_boot_drive],al
++
++%if IS_ISOLINUX
++		mov ah,2
++%else
++		mov ah,0
++%endif
++		cmp al,80h	; floppy ?
++		jae gfx_get_sysconfig_20
++		mov ah,1
++gfx_get_sysconfig_20:
++
++		mov [gfx_media_type],ah
++
++		mov [gfx_bootloader_seg],cs
++
++		pop ax
++		ret
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++;
++; Initialize graphics code. Load and display graphics data.
++;
++;  dx:ax	file length
++;  si		start cluster
++;
++;  return:	[gfx_ok] = 0/1
++;
++gfx_init:
++		push es
++
++		test byte [KbdFlags],3
++		jz gfx_init_10
++		mov byte [gfx_failsafe],1
++		call ask_user
++gfx_init_10:
++
++		test byte [gfx_failsafe],2
++		jnz gfx_init_80
++
++		call highmemsize
++
++		; setup extended memory areas
++		pusha
++		mov eax,[HighMemSize]
++		mov [gfx_bios_mem_size],eax
++		mov eax,[VKernelEnd]
++		shr eax,20
++		cmp ax,16
++		jb gfx_init_40			; at least 16MB
++		mov word [gfx_xmem_0],81h	; 1MB at 8MB
++		mov word [gfx_xmem_1],0a1h	; 1MB at 10MB
++
++		mov dword [gfx_save_area1],7f0000h	; 8MB-64k
++gfx_init_40:
++		popa
++
++		cld
++
++		movzx ebx,word [gfx_mem_start_seg]
++		shl ebx,4
++		jz gfx_init_80
++
++		movzx ecx,word [gfx_mem_end_seg]
++		shl ecx,4
++		jz gfx_init_80
++
++		cmp ecx,ebx
++		jbe gfx_init_80
++
++		; define our memory area
++		; gfx_mem _must_ be 16-byte aligned
++		mov dword [gfx_mem],ebx
++		mov dword [gfx_mem0_start],ebx
++		mov dword [gfx_mem0_end],ecx
++
++		call gfx_read_file
++		cmp byte [gfx_ok],0
++		jz near gfx_init_90
++
++		call gfx_get_sysconfig
++
++		; align 4
++		mov eax,[gfx_mem0_start]
++		add eax,3
++		and eax,~3
++		mov [gfx_mem0_start],eax
++
++		; setup jump table
++		les bx,[gfx_bc_jt]
++
++		mov ax,[es:bx]
++		mov [gfx_bc_init],ax
++		mov [gfx_bc_init+2],es
++
++		mov ax,[es:bx+2]
++		mov [gfx_bc_done],ax
++		mov [gfx_bc_done+2],es
++
++		mov ax,[es:bx+4]
++		mov [gfx_bc_input],ax
++		mov [gfx_bc_input+2],es
++
++		mov ax,[es:bx+6]
++		mov [gfx_bc_menu_init],ax
++		mov [gfx_bc_menu_init+2],es
++
++		mov ax,[es:bx+8]
++		mov [gfx_bc_infobox_init],ax
++		mov [gfx_bc_infobox_init+2],es
++
++		mov ax,[es:bx+10]
++		mov [gfx_bc_infobox_done],ax
++		mov [gfx_bc_infobox_done+2],es
++
++		mov ax,[es:bx+12]
++		mov [gfx_bc_progress_init],ax
++		mov [gfx_bc_progress_init+2],es
++
++		mov ax,[es:bx+14]
++		mov [gfx_bc_progress_done],ax
++		mov [gfx_bc_progress_done+2],es
++
++		mov ax,[es:bx+16]
++		mov [gfx_bc_progress_update],ax
++		mov [gfx_bc_progress_update+2],es
++
++		mov ax,[es:bx+18]
++		mov [gfx_bc_progress_limit],ax
++		mov [gfx_bc_progress_limit+2],es
++
++		mov ax,[es:bx+20]
++		mov [gfx_bc_password_init],ax
++		mov [gfx_bc_password_init+2],es
++
++		mov ax,[es:bx+22]
++		mov [gfx_bc_password_done],ax
++		mov [gfx_bc_password_done+2],es
++
++		mov esi,cs
++		shl esi,4
++		add esi,gfx_sysconfig
++		call far [gfx_bc_init]
++		jc gfx_init_80
++
++		mov byte [gfx_ok],1
++
++		; turn off 'cwritestr'
++		mov al,[cwritestr]
++		cmp al,0c3h
++		jz gfx_init_90
++		mov [gfx_cwritestr_old],al
++		mov byte [cwritestr],0c3h
++
++		jmp gfx_init_90
++
++gfx_init_80:
++		mov byte [gfx_ok],0
++gfx_init_90:
++		pop es
++		ret
++
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++;
++; Back to text mode.
++;
++;  return:	[gfx_ok] = 0
++;
++gfx_done:
++		push ax
++		cmp byte [gfx_ok],0
++		jz gfx_done_90
++		call far [gfx_bc_done]
++		mov byte [gfx_ok],0
++
++		; reactivate 'cwritestr'
++		mov al,[gfx_cwritestr_old]
++		cmp al,0c3h
++		jz gfx_done_90
++		mov [cwritestr],al
++gfx_done_90:
++		pop ax
++		ret
++
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++;
++gfx_input:
++		cmp byte [gfx_ok],0
++		jz gfx_input_90
++		cmp byte [gfx_save_area1_used],0
++		jz gfx_input_10
++		; recover saved menu layout, gfxboot has references into it
++		pushad
++		mov esi,[gfx_save_area1]
++		mov edi,gfx_menu_seg << 4
++		mov ecx,10000h
++		call bcopy
++		popad
++gfx_input_10:
++		call far [gfx_bc_input]
++		jnc gfx_input_50
++		mov ax,1
++gfx_input_50:
++		cmp ax,1
++		jnz gfx_input_90
++		push ax
++		call gfx_done
++		pop ax
++gfx_input_90:
++		ret
++
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++;
++; es:di		string
++; return:
++;  cx		length
++gfx_strlen:
++		mov cx,-1
++		mov al,0
++		repnz scasb
++		not cx
++		dec cx
++		ret
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++;
++gfx_setup_menu:
++		push es
++		cmp byte [gfx_ok],0
++		jz gfx_setup_menu_90
++
++		mov dword [menu_desc+menu_default],gfx_menu_seg << 16
++
++		push ds
++		pop es
++		mov si,default_cmd
++		mov di,trackbuf
++		call mangle_name
++		mov si,trackbuf
++		les di,[menu_desc+menu_default]
++		call unmangle_name
++		inc di
++
++		mov [menu_desc+menu_ent_list],di
++		mov [menu_desc+menu_ent_list+2],es
++		mov [menu_desc+menu_arg_list],di
++		mov [menu_desc+menu_arg_list+2],es
++
++		; first, count entries and find max kernel and append length
++
++		push ds
++		pop es
++
++		mov esi,[HighMemSize]
++		jmp gfx_setup_menu_20
++gfx_setup_menu_10:
++		mov di,VKernelBuf
++		call rllunpack
++
++		; count only non empty entries
++		cmp byte [VKernelBuf],0
++		jz gfx_setup_menu_20
++
++		inc word [menu_desc+menu_entries]
++
++		push esi
++		mov si,VKernelBuf
++		mov di,KernelCName
++		push di
++		call unmangle_name
++		pop di
++		pop esi
++
++		call gfx_strlen
++
++		cmp cx,[menu_desc+menu_ent_size]
++		jbe gfx_setup_menu_15
++		mov [menu_desc+menu_ent_size],cx
++gfx_setup_menu_15:
++		mov ax,[VKernelBuf+vk_appendlen]
++		cmp ax,[menu_desc+menu_arg_size]
++		jbe gfx_setup_menu_20
++		mov [menu_desc+menu_arg_size],ax
++
++gfx_setup_menu_20:
++		cmp esi,[VKernelEnd]
++		ja gfx_setup_menu_10
++
++		inc word [menu_desc+menu_ent_size]
++		mov ax,[menu_desc+menu_ent_size]
++		inc ax
++		add [menu_desc+menu_arg_size],ax
++
++		; ...and again, but this time copy entries
++
++		mov word [menu_desc+menu_entries],0
++
++		mov esi,[HighMemSize]
++		jmp gfx_setup_menu_60
++gfx_setup_menu_30:
++		mov di,VKernelBuf
++		call rllunpack
++
++		; count only non empty entries
++		cmp byte [VKernelBuf],0
++		jz gfx_setup_menu_60
++
++		mov di,[menu_desc+menu_arg_list]
++		add di,[menu_desc+menu_arg_size]
++		jc gfx_setup_menu_60
++
++		inc word [menu_desc+menu_entries]
++
++		push esi
++
++		mov si,VKernelBuf
++		mov di,KernelCName
++		push di
++		call unmangle_name
++		pop si
++		mov cx,[menu_desc+menu_ent_size]
++		les di,[menu_desc+menu_arg_list]
++
++		rep movsb
++
++		mov cx,[VKernelBuf+vk_appendlen]
++		mov si,VKernelBuf+vk_append
++		rep movsb
++		mov byte [es:di],0
++
++		pop esi
++
++		push ds
++		pop es
++
++		mov ax,[menu_desc+menu_arg_size]
++		add [menu_desc+menu_arg_list],ax
++
++gfx_setup_menu_60:
++		cmp esi,[VKernelEnd]
++		ja gfx_setup_menu_30
++
++		mov ax,[menu_desc+menu_ent_size]
++		mov bx,[menu_desc+menu_arg_size]
++		mov [menu_desc+menu_ent_size],bx
++		add ax,[menu_desc+menu_ent_list]
++		mov [menu_desc+menu_arg_list],ax
++
++		mov esi,ds
++		shl esi,4
++		add esi,menu_desc
++
++		call far [gfx_bc_menu_init]
++
++		; save menu structure, gfxboot uses references into it
++		mov edi,[gfx_save_area1]
++		or edi,edi
++		jz gfx_setup_menu_90
++		mov esi,gfx_menu_seg << 4
++		mov ecx,10000h
++		call bcopy
++		mov byte [gfx_save_area1_used],1
++
++gfx_setup_menu_90:
++		pop es
++		ret
++
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++;
++gfx_infobox:
++		pushad
++		cmp byte [gfx_ok],0
++		jz gfx_infobox_90
++		mov ecx,ds
++		shl ecx,4
++		movzx esi,si
++		movzx edi,di
++		or si,si
++		jz gfx_infobox_20
++		add esi,ecx
++gfx_infobox_20:
++		or di,di
++		jz gfx_infobox_30
++		add edi,ecx
++gfx_infobox_30:
++		call far [gfx_bc_infobox_init]
++		xor edi,edi
++		xor eax,eax
++		call far [gfx_bc_input]
++		call far [gfx_bc_infobox_done]
++gfx_infobox_90:
++		popad
++		ret
++
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++;
++gfx_progress_init:
++		pushad
++		cmp byte [gfx_ok],0
++		jz gfx_progress_init_90
++		call far [gfx_bc_progress_init]
++gfx_progress_init_90:
++		popad
++		ret
++
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++;
++gfx_progress_done:
++		pushad
++		cmp byte [gfx_ok],0
++		jz gfx_progress_done_90
++		call far [gfx_bc_progress_done]
++gfx_progress_done_90:
++		popad
++		ret
++
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++;
++gfx_progress_update:
++		pushad
++		cmp byte [gfx_ok],0
++		jz gfx_progress_update_90
++		movzx eax,cx
++		call far [gfx_bc_progress_update]
++gfx_progress_update_90:
++		popad
++		ret
++
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++;
++gfx_progress_limit:
++		pushad
++		cmp byte [gfx_ok],0
++		jz gfx_progress_limit_90
++		movzx eax,ax
++		movzx edx,dx
++		call far [gfx_bc_progress_limit]
++gfx_progress_limit_90:
++		popad
++		ret
++
++
++%if 0
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++;
++gfx_password:
++		pushad
++		cmp byte [gfx_ok],0
++		stc
++		jz gfx_password_90
++		call far [gfx_bc_password_init]
++		mov edi,ds
++		shl edi,4
++		add edi,gfx_password_buf
++		mov ecx,32
++		xor eax,eax
++		call far [gfx_bc_input]
++		mov esi,ds
++		shl esi,4
++		add esi,gfx_password_buf
++		call far [gfx_bc_password_done]
++		jnc gfx_password_90
++		mov esi,ds
++		shl esi,4
++		add esi,gfx_msg_wrong_password
++		xor edi,edi
++		mov al,0
++		call far [gfx_bc_infobox_init]
++		xor edi,edi
++		xor eax,eax
++		call far [gfx_bc_input]
++		call far [gfx_bc_infobox_done]
++		stc
++gfx_password_90:
++                popad
++                ret
++%endif
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++;
++; Read graphics data and store them at [gfx_mem].
++;
++;  dx:ax	file length
++;  si		start cluster
++;
++;  return:	[gfx_ok] = 0/1
++;
++gfx_read_file:
++		push es
++		mov byte [gfx_ok],0
++		mov edi,[gfx_mem]
++		push dx                         ; DX:AX = length of file
++                push ax
++		pop edx
++		mov [gfx_archive_end],edx
++		mov eax,[gfx_mem0_start]
++		lea eax,[eax+edx+0fh]		; add space for alignment
++		cmp eax,[gfx_mem0_end]		; max. length
++		ja near gfx_read_file_90
++		mov [gfx_mem0_start],eax
++
++gfx_read_file_10:
++		mov bx,trackbuf
++		mov cx,[BufSafe]
++		push edi
++		push edx
++		call getfssec
++		pop edx
++		pop edi
++		movzx ecx,word [BufSafeBytes]
++		cmp edx,ecx
++		jae gfx_read_file_20
++		mov ecx,edx
++gfx_read_file_20:
++		push ecx
++		push edi
++		push si				; Save current cluster
++		push es
++		mov si,trackbuf
++		push edi
++		call gfx_l2so
++		pop di
++		pop es
++		rep movsb
++		pop es
++		pop si
++		pop edi
++		pop ecx
++		add edi,ecx
++		sub edx,ecx
++		ja gfx_read_file_10
++
++		call find_file
++		or eax,eax
++		jz gfx_read_file_90
++		push edi
++		push eax
++		add eax,edi
++		call align_it
++		pop eax
++		pop edi
++		sub edi,[gfx_mem]
++		mov ecx,[gfx_archive_start]
++		add edi,ecx
++		mov [gfx_file],edi
++		add [gfx_archive_end],ecx
++		add eax,edi
++		shr eax,4
++		mov [gfx_bc_jt+2],ax
++
++		mov byte [gfx_ok],1
++
++gfx_read_file_90:
++		pop es
++		ret
++
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++;
++; locate graphics file
++;
++; return:	eax: code offset (0 -> no file found)
++; 		edi: gfx file start
++;
++find_file:
++		mov edi,[gfx_mem]
++		lin2segofs edi,es,bx
++		call magic_ok
++		or eax,eax
++		jnz find_file_90
++
++		; ok, maybe it's a cpio archive
++
++		; note: edi must be properly aligned (2)!
++
++find_file_20:
++		mov ecx,[gfx_mem0_start]
++		sub ecx,26 + 12			; min cpio header + gfx header
++		cmp edi,ecx
++		jae find_file_90
++
++		lin2segofs edi,es,bx
++		cmp word [es:bx],71c7h
++		jz find_file_30			; normal cpio record
++		cmp word [es:bx],0c771h		; maybe byte-swapped?
++		jnz find_file_90		; no cpio record
++		mov byte [gfx_cpio_swab],1
++
++find_file_30:
++		mov ax,[es:bx+20]		; file name size
++		call cpio_swab
++		movzx esi,ax
++
++		inc si
++		and si,~1			; align
++
++		mov eax,[es:bx+22]		; data size
++		call cpio_swab
++		rol eax,16			; get word order right
++		call cpio_swab
++		mov ecx,eax
++
++		inc ecx
++		and ecx,byte ~1			; align
++
++		add si,26			; skip header
++
++		add edi,esi
++		add bx,si
++		call magic_ok
++		or eax,eax
++		jnz find_file_90
++
++		add edi,ecx
++		jmp find_file_20
++
++find_file_90:
++		ret
++
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++;
++; byte-swap cpio data if appropriate
++;
++; ax:		word to swap
++;
++; return:	ax: swapped if [gfx_cpio_swab], otherwise same as input
++;
++cpio_swab:
++		cmp byte [gfx_cpio_swab],0
++		jz cpio_swab_90
++		xchg ah,al
++
++cpio_swab_90:
++		ret
++
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++;
++;  es:bx	file start
++;
++;  return:	eax:	offset to code entry
++;
++; Notes:
++;  - changes no regs except eax
++;
++magic_ok:
++		xor eax,eax
++		cmp dword [es:bx],0b2d97f00h	; header.magic_id
++		jnz magic_ok_90
++		cmp byte [es:bx+4],8		; header.version
++		jnz magic_ok_90
++		mov eax,[es:bx+8]
++magic_ok_90:
++		ret
++
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++;
++;  eax		address to be aligned
++;
++align_it:
++		push dword [gfx_mem]
++		pop dword [gfx_archive_start]
++		neg al
++		and eax,byte 0fh
++		jz align_it_90
++		add [gfx_archive_start],eax
++		mov esi,[gfx_mem]
++		mov ebx,[gfx_mem0_start]
++		sub ebx,esi
++		sub ebx,byte 0fh
++		add esi,ebx
++		dec esi
++
++		std
++
++align_it_30:
++		or ebx,ebx
++		jz align_it_60
++		mov ecx,ebx
++		cmp ebx,8000h
++		jb align_it_40
++		mov ecx,8000h
++align_it_40:
++		push esi
++		sub ebx,ecx
++		sub [esp],ecx
++		push esi
++		call gfx_l2so
++		pop si
++		add si,8000h
++		sub word [esp],(8000h >> 4)
++		pop es
++		mov di,si
++		add di,ax
++		es rep movsb
++		pop esi
++		jmp align_it_30
++align_it_60:
++
++		cld
++
++align_it_90:
++		ret
++
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++;
++; Ask user whether to continue.
++;
++; don't change regs
++;
++ask_user:
++		pushad
++
++		mov si,failsafe_msg_0
++		call cwritestr
++
++		mov dx,2
++		mov si,failsafe_msg_1
++		call ask_question
++
++		test byte [gfx_failsafe],2
++		jnz ask_user_90
++
++		mov dx,4
++		mov si,failsafe_msg_2
++		call ask_question
++
++ask_user_90:
++
++		popad
++		ret
++
++
++; si: text
++; dh: 'yes'-mask
++; dl: 'no'-mask
++ask_question:
++		push dx
++		call cwritestr
++		mov si,failsafe_msg_q
++		call cwritestr
++		pop dx
++
++ask_question_20:
++		push dx
++		mov ah,0
++		int 16h
++		pop dx
++
++		cmp al,13
++		jnz ask_question_30
++		mov al,'y'
++ask_question_30:
++		or al,20h		; force lower case
++
++		cmp al,'y'
++		jz ask_question_40
++		cmp al,'n'
++		jnz ask_question_20
++		or byte [gfx_failsafe],dl
++		jmp ask_question_50
++ask_question_40:
++		or byte [gfx_failsafe],dh
++ask_question_50:
++
++		mov si,failsafe_key
++		mov [si],al
++		call cwritestr
++
++		ret
++
++failsafe_msg_q	db ' (y/n)? y', 8, 0
++
++failsafe_msg_0	db 13, 10, 10, 10, 0
++failsafe_msg_1	db 'Load boot graphics', 0
++failsafe_msg_2	db 'Detect display size', 0
++
++failsafe_key	db 0, 13, 10, 0
++
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++;
++; Convert 32bit linear address to seg:ofs.
++;
++;  dword [esp + 2]:	linear address
++;
++; return:
++;  dword [esp + 2]:	seg:ofs
++;
++; Notes:
++;  - changes no regs
++;
++gfx_l2so:
++		push eax
++		mov eax,[esp + 6]
++		shr eax,4
++		mov [esp + 8],ax
++		and word [esp + 6],byte 0fh
++		pop eax
++		ret
++
++
++; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++;
++cb_table	dw cb_status
++		dw cb_fopen
++		dw cb_fread
++		dw cb_getcwd
++		dw cb_chdir
++		dw cb_readsector
++cb_len		equ ($-cb_table)/2
++
++f_handle	dw 0
++f_size		dd 0
++fname_buf	times 64 db 0
++fname_buf_len	equ $ - fname_buf
++
++
++gfx_cb:
++		push cs
++		pop ds
++
++		cmp al,cb_len
++		jae gfx_cb_80
++
++		movzx bx,al
++		add bx,bx
++		call word [bx+cb_table]
++		jmp gfx_cb_90
++
++gfx_cb_80:
++		mov al,0ffh
++gfx_cb_90:
++		retf
++
++
++; Return status info.
++;
++; return:
++;  edx		filename buffer (64 bytes)
++;
++cb_status:
++		mov edx,cs
++		shl edx,4
++		add edx,fname_buf
++
++		xor al,al
++		ret
++
++; Open file.
++;
++; return:
++;    al		0: ok, 1: file not found
++;   ecx		file length (al = 0)
++;
++cb_fopen:
++		mov si,fname_buf
++		mov di,VGAFileMBuf	; we just need some space
++		push ds
++		pop es
++		push di
++		call mangle_name
++		pop di
++		call searchdir
++		xchg ax,bx
++		mov al,1
++		jz cb_fopen_90
++		mov [f_handle],si
++		mov cx,dx
++		shl ecx,16
++		mov cx,bx
++		mov [f_size],ecx
++cb_fopen_80:
++		xor al,al
++cb_fopen_90:
++		ret
++
++
++; Read next chunk.
++;
++; return:
++;   edx		buffer address (linear)
++;   ecx		data length (< 64k)
++;
++cb_fread:
++		cmp dword [f_size],0
++		jz cb_fread_80
++		push cs
++		pop es
++		mov bx,trackbuf
++		mov cx,[BufSafe]
++		mov si,[f_handle]
++		call getfssec
++		mov [f_handle],si
++		mov ecx,[f_size]
++		movzx edx,word [BufSafeBytes]
++		cmp ecx,edx
++		jbe cb_fread_50
++		mov ecx,edx
++cb_fread_50:
++		sub [f_size],ecx
++		mov edx,cs
++		shl edx,4
++		add edx,trackbuf
++
++cb_fread_80:
++		xor al,al
++cb_fread_90:
++		ret
++
++
++; Return current working directory.
++;
++; return:
++;  edx		filename
++;
++cb_getcwd:
++		mov edx,cs
++		shl edx,4
++%if IS_ISOLINUX
++		add edx,isolinux_dir
++%else
++		add edx,gfx_slash
++%endif
++		xor al,al
++		ret
++
++
++; Set current working directory.
++;
++cb_chdir:
++%if IS_ISOLINUX
++
++		push cs
++		pop es
++		mov si,fname_buf
++		mov di,isolinux_dir
++cb_chdir_20:
++		lodsb
++		stosb
++		or al,al
++		jz cb_chdir_60
++		cmp di,config_name - 1
++		jb cb_chdir_20
++		xor al,al
++		stosb
++cb_chdir_60:
++		call get_fs_structures
++
++%endif
++		xor al,al
++		ret
++
++
++; read sector
++;
++;  edx		sector
++;
++; return:
++;  edx		buffer (linear address)
++;
++;  Note: does not return on error!
++;
++cb_readsector:
++		mov eax,edx
++		push ds
++		pop es
++		mov bx,trackbuf
++		call getonesec
++		mov edx,ds
++		shl edx,4
++		add edx,trackbuf
++		xor al,al
++		ret
++
+--- isolinux.asm
++++ isolinux.asm
+@@ -19,6 +19,10 @@
+ ; ****************************************************************************
+ 
+ %define IS_ISOLINUX 1
++
++%define WITH_GFX 1
++; %define DEBUG_DISKIO
++
+ %include "head.inc"
+ 
+ ;
+@@ -70,6 +74,8 @@
+ real_mode_seg	equ 2000h
+ xfer_buf_seg	equ 1000h		; Bounce buffer for I/O to high mem
+ comboot_seg	equ real_mode_seg	; COMBOOT image loading zone
++gfx_menu_seg	equ 3000h		; temporary storage to setup menu
++first_free_seg	equ 4000h		; end of isolinux used memory
+ 
+ ;
+ ; File structure.  This holds the information for each currently open file.
+@@ -259,6 +265,21 @@
+ 		mov [FirstSecSum],edi
+ 
+ 		mov [DriveNumber],dl
++
++		; check whether the BIOS did load us correctly
++		cmp dl,80h			; some BIOSes try to do floppy emulation...
++		jb bios_err
++		cmp dword [FirstSecSum], byte 0
++		jz bios_ok
++bios_err:
++		mov si,broken_bios_msg
++		call writemsg
++		jmp short $
++broken_bios_msg	db 13, 10, 'Cannot boot from this CD. Please try a BIOS update.', 13, 10, 0
++		align 4
++csum_value	dd 0
++bios_ok:
++
+ %ifdef DEBUG_MESSAGES
+ 		mov si,startup_msg
+ 		call writemsg
+@@ -283,6 +304,9 @@
+ 		; Other nonzero fields
+ 		inc word [dsp_sectors]
+ 
++%if 0
++		; Some BIOSes don't like that call.
++
+ 		; Now figure out what we're actually doing
+ 		; Note: use passed-in DL value rather than 7Fh because
+ 		; at least some BIOSes will get the wrong value otherwise
+@@ -303,6 +327,8 @@
+ 		call crlf
+ %endif
+ 
++%endif
++
+ found_drive:
+ 		; Alright, we have found the drive.  Now, try to find the
+ 		; boot file itself.  If we have a boot info table, life is
+@@ -427,6 +453,9 @@
+ %endif
+ 		jmp all_read			; Jump to main code
+ 
++%if 0
++		; doesn't work anyway, see above
++
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Start of BrokenAwardHack --- 10-nov-2002           Knut_Petersen@t-online.de
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+@@ -618,6 +647,7 @@
+ 		mov si,trysbm_msg
+ 		call writemsg
+ 		jmp .found_drive		; Pray that this works...
++%endif
+ 
+ fatal_error:
+ 		mov si,nothing_msg
+@@ -694,10 +724,17 @@
+ ;
+ getlinsec:
+ 		mov si,dapa			; Load up the DAPA
+-		mov [si+4],bx
+-		mov bx,es
+-		mov [si+6],bx
+ 		mov [si+8],eax
++		; seems that some BIOSes have problems if the target
++		; segment is 0 (don't ask); to avoid this, we normalize
++		; the buffer address here
++		; -> seen on Acer TravelMate C102Ti
++		mov [si+4],bx
++		and word [si+4],0fh
++		mov ax,es
++		shr bx,4
++		add ax,bx
++		mov [si+6],ax
+ .loop:
+ 		push bp				; Sectors left
+ 		cmp bp,[MaxTransfer]
+@@ -724,15 +761,78 @@
+ 		; INT 13h with retry
+ xint13:		mov byte [RetryCount],retry_count
+ .try:		pushad
++%ifdef DEBUG_DISKIO
++		pushad
++		mov cx,16
++.zap:
++		lodsb
++		call writehex2
++		mov al,' '
++		call writechr
++		loop .zap
++		mov ah,0
++		int 16h
++		popad
++%endif
++		; seen buggy bios that overwrites buffer address on error...
++		push dword [dapa + 4]
+ 		call int13
++		pop dword [dapa + 4]
++%ifdef DEBUG_DISKIO   
++		pushad
++		pushf
++		push ax
++		mov al,':'
++		call writechr
++		mov al,' '
++		call writechr
++		pop ax
++		sbb al,al
++		call writehex4
++		call crlf
++		mov ah,0
++		int 16h
++		popf
++		popad
++%endif
+ 		jc .error
++.noerror:
+ 		add sp,byte 8*4			; Clean up stack
+ 		ret
+ .error:
++		or ah,ah
++		jz .noerror
+ 		mov [DiskError],ah		; Save error code
+ 		popad
+ 		mov [DiskSys],ax		; Save system call number
+-		dec byte [RetryCount]
++
++%if 0
++		; eject currently not supported - doesn't work anyway with
++		; most BIOSes
++
++		test byte [gfx_user_note],1
++		jz .noeject
++		cmp byte [RetryCount],4
++		ja .noeject
++		cmp byte [DiskError],0aah	; drive not ready
++		jnz .noeject
++		; might have been cdrom eject, wait a bit
++		cmp byte [gfx_ok],0
++		jz .noeject
++		push si
++		push di
++		push ax
++		mov si,err_not_ready
++		xor di,di
++		mov al,0
++		call gfx_infobox
++		pop ax
++		pop di
++		pop si
++%endif
++.noeject:
++
++ 		dec byte [RetryCount]
+ 		jz .real_error
+ 		push ax
+ 		mov al,[RetryCount]
+@@ -774,6 +874,17 @@
+ ;
+ kaboom:
+ 		RESET_STACK_AND_SEGS AX
++
++		cmp byte [gfx_ok],0
++		jz .nogfx
++		mov si,err_failed_gfx
++		xor di,di
++		mov al,1
++		call gfx_infobox
++		call gfx_done
++		call do_reboot
++.nogfx:
++
+ 		mov si,err_bootfailed
+ 		call cwritestr
+ 		call getchar
+@@ -825,6 +936,9 @@
+ crlf_msg	db CR, LF
+ null_msg	db 0
+ 
++err_failed_gfx	db 'Error reading boot CD.', 0
++err_not_ready	db 'CDROM drive not ready.', 0
++
+ 		alignb 4, db 0
+ MaxTransfer	dw 32				; Max sectors per transfer
+ 
+@@ -882,6 +996,9 @@
+ ; (which will be at 16 only for a single-session disk!); from the PVD
+ ; we should be able to find the rest of what we need to know.
+ ;
++		call get_fs_structures
++		jmp get_fs_struct_done
++
+ get_fs_structures:
+ 		mov eax,[bi_pvd]
+ 		mov bx,trackbuf
+@@ -907,10 +1024,15 @@
+ 		; Look for an isolinux directory, and if found,
+ 		; make it the current directory instead of the root
+ 		; directory.
++
++		cmp byte [gfx_ok],0		; don't look at both
++		jnz .gfx
++
+ 		mov di,boot_dir			; Search for /boot/isolinux
+ 		mov al,02h
+ 		call searchdir_iso
+ 		jnz .found_dir
++.gfx:
+ 		mov di,isolinux_dir
+ 		mov al,02h			; Search for /isolinux
+ 		call searchdir_iso
+@@ -931,6 +1053,9 @@
+ 		call crlf
+ %endif
+ .no_isolinux_dir:
++		ret
++
++get_fs_struct_done:
+ 
+ ;
+ ; Locate the configuration file
+@@ -1096,6 +1221,9 @@
+ ; 0xFFFF in case we should execute INT 18h ("next device.")
+ ;
+ local_boot:
++%ifdef WITH_GFX
++		call gfx_done
++%endif
+ 		call vgaclearmode
+ 		lss sp,[cs:Stack]		; Restore stack pointer
+ 		xor dx,dx
+@@ -1113,7 +1241,7 @@
+ 		xor dh,dh
+ 		push dx
+ 		xor ax,ax			; Reset drive
+-		call xint13
++		int 13h				; we don't care about errors here...
+ 		mov ax,0201h			; Read one sector
+ 		mov cx,0001h			; C/H/S = 0/0/1 (first sector)
+ 		mov bx,trackbuf
+@@ -1488,6 +1616,9 @@
+ %include "rawcon.inc"		; Console I/O w/o using the console functions
+ %include "adv.inc"		; Auxillary Data Vector
+ 
++%include "gfxboot.inc"		; add gfx things
++
++
+ ; -----------------------------------------------------------------------------
+ ;  Begin data section
+ ; -----------------------------------------------------------------------------
+@@ -1499,6 +1630,7 @@
+ default_len	equ ($-default_str)
+ boot_dir	db '/boot'			; /boot/isolinux
+ isolinux_dir	db '/isolinux', 0
++zb 64
+ config_name	db 'isolinux.cfg', 0
+ err_disk_image	db 'Cannot load disk image (invalid file)?', CR, LF, 0
+ 
+--- keywords
++++ keywords
+@@ -42,3 +42,5 @@
+ f10
+ f11
+ f12
++gfxboot
++disksize
+--- keywords.inc
++++ keywords.inc
+@@ -90,8 +90,15 @@
+ %if IS_PXELINUX
+ 		keyword ipappend,	pc_ipappend
+ %endif
+-%if IS_PXELINUX || IS_ISOLINUX
++%if IS_PXELINUX || IS_ISOLINUX || IS_SYSLINUX
+ 		keyword localboot,	pc_localboot
+ %endif
+ 
++%ifdef WITH_GFX
++		keyword gfxboot,   pc_filecmd,  get_gfx_file
++%if IS_SYSLINUX
++		keyword disksize,  pc_disksize, DiskSize
++%endif
++%endif
++
+ keywd_count	equ ($-keywd_table)/keywd_size
+--- layout.inc
++++ layout.inc
+@@ -88,7 +88,11 @@
+ 		section .uibss		nobits align=16 follows=.adv
+ 
+ 		; Normal bss...
++%if IS_ISOLINUX
++		section .bss1		nobits align=16 follows=.bss2
++%else
+ 		section .bss1		nobits align=16 follows=.uibss
++%endif
+ 
+ 		; Reserve space for stack
+ 		section .stack		nobits align=16 start=STACK_START
+--- ldlinux.asm
++++ ldlinux.asm
+@@ -24,6 +24,9 @@
+ %ifndef IS_MDSLINUX
+ %define IS_SYSLINUX 1
+ %endif
++
++%define WITH_GFX 1
++
+ %include "head.inc"
+ 
+ ;
+@@ -82,6 +85,8 @@
+ cache_seg	equ 2000h		; 64K area for metadata cache
+ xfer_buf_seg	equ 1000h		; Bounce buffer for I/O to high mem
+ comboot_seg	equ real_mode_seg	; COMBOOT image loading zone
++gfx_menu_seg	equ 4000h		; temporary storage to setup menu
++first_free_seg	equ 5000h		; end of syslinux used memory
+ 
+ ;
+ ; File structure.  This holds the information for each currently open file.
+@@ -357,6 +362,8 @@
+ 		add eax,[bsHidden]		; Add partition offset
+ 		xor edx,edx			; Zero-extend LBA (eventually allow 64 bits)
+ 
++.patch:		jmp strict near .jmp
++
+ .jmp:		jmp strict short getlinsec_cbios
+ 
+ ;
+@@ -906,6 +913,48 @@
+ ;
+ %include "ui.inc"
+ 
++; Boot a specified local disk.  AX specifies the BIOS disk number; or
++; 0xFFFF in case we should execute INT 18h ("next device.")
++;
++local_boot:
++%ifdef WITH_GFX
++               call gfx_done
++%endif
++               call vgaclearmode
++               lss sp,[cs:Stack]               ; Restore stack pointer
++               xor dx,dx
++               mov ds,dx
++               mov es,dx
++               mov fs,dx
++               mov gs,dx
++               mov si,localboot_msg
++               call cwritestr
++               cmp ax,-1
++               je .int18
++
++               ; Load boot sector from the specified BIOS device and jump to it.
++               mov dl,al
++               xor dh,dh
++               push dx
++               xor ax,ax                       ; Reset drive
++               int 13h
++               mov ax,0201h                    ; Read one sector
++               mov cx,0001h                    ; C/H/S = 0/0/1 (first sector)
++               mov bx,trackbuf
++               int 13h
++               pop dx
++               cli                             ; Abandon hope, ye who enter here
++               mov si,trackbuf
++               mov di,07C00h
++               mov cx,512                      ; Probably overkill, but should be safe
++               rep movsd
++               mov ss,cx
++               mov sp,7c00h
++               jmp 0:07C00h                    ; Jump to new boot sector
++.int18:
++               int 18h                         ; Hope this does the right thing...
++               jmp kaboom                      ; If we returned, oh boy...
++
+ ;
+ ; allocate_file: Allocate a file structure
+ ;
+@@ -1126,6 +1175,15 @@
+ ;	   starting with "kaboom.patch" with this part
+ 
+ kaboom2:
++		cmp byte [gfx_ok],0
++		jz .nogfx
++		mov si,err_failed_gfx
++		xor di,di
++		mov al,1
++		call gfx_infobox
++		call gfx_done
++		call do_reboot
++.nogfx:
+ 		mov si,err_bootfailed
+ 		call cwritestr
+ 		cmp byte [kaboom.again+1],18h	; INT 18h version?
+@@ -1530,6 +1588,8 @@
+ %include "cache.inc"		; Metadata disk cache
+ %include "adv.inc"		; Auxillary Data Vector
+ 
++%include "gfxboot.inc"		; add gfx things
++
+ ; -----------------------------------------------------------------------------
+ ;  Begin data section
+ ; -----------------------------------------------------------------------------
+@@ -1539,6 +1599,8 @@
+ 		db CR, LF, 0
+ err_bootfailed	db CR, LF, 'Boot failed: please change disks and press '
+ 		db 'a key to continue.', CR, LF, 0
++err_failed_gfx	db 'Error reading from disk.', 0
++localboot_msg	db 'Booting from local disk...', CR, LF, 0
+ syslinux_cfg1	db '/boot'			; /boot/syslinux/syslinux.cfg
+ syslinux_cfg2	db '/syslinux'			; /syslinux/syslinux.cfg
+ syslinux_cfg3	db '/'				; /syslinux.cfg
+--- loadhigh.inc
++++ loadhigh.inc
+@@ -47,7 +47,12 @@
+ .read_loop:
+ 		and si,si			; If SI == 0 then we have end of file
+ 		jz .eof
++%ifdef WITH_GFX
++		cmp byte [gfx_ok],0
++		jnz .no_message
++%endif
+ 		call bx
++.no_message:
+ 		push bx				; <AA> Pausebird function
+ 
+ 		push eax			; <A> Total bytes to transfer
+@@ -63,7 +68,15 @@
+ 		push edi			; <C> Target buffer
+ 		mov cx,ax
+ 		xor bx,bx			; ES:0
++
++%ifdef WITH_GFX
++		call gfx_progress_update
++%endif
++
++		push dx
+ 		call getfssec			; Load the data into xfer_buf_seg
++						; getfssec destroys dx!
++		pop dx
+ 		pop edi				; <C> Target buffer
+ 		pop ecx				; <B> Byte count this round
+ 		push ecx			; <B> Byte count this round
+--- parsecmd.inc
++++ parsecmd.inc
+@@ -107,6 +107,14 @@
+ FKeyName	resb MAX_FKEYS*FILENAME_MAX	; File names for F-key help
+ KernelCNameLen	resw 1			; Length of unmangled kernel name
+ InitRDCNameLen	resw 1			; Length of unmangled initrd name
++
++%if IS_ISOLINUX
++%ifdef DEBUG_MESSAGES
++; we need to rearrange memory a bit to make isolinux-debug.bin fit
++		section .bss
++%endif
++%endif
++
+ %if IS_SYSLINUX
+ KernelName      resb FILENAME_MAX+1	; Mangled name for kernel
+ KernelCName     resb FILENAME_MAX+2	; Unmangled kernel name
+--- parseconfig.inc
++++ parseconfig.inc
+@@ -81,7 +81,7 @@
+ ;
+ ; "localboot" command (PXELINUX, ISOLINUX)
+ ;
+-%if IS_PXELINUX || IS_ISOLINUX
++%if IS_PXELINUX || IS_ISOLINUX || IS_SYSLINUX
+ pc_localboot:	call getint
+ 		cmp byte [VKernel],0		; ("label" section only)
+ 		je .err
+@@ -286,6 +286,25 @@
+ 		mov [SerialPort], word 0
+ 		ret
+ 
++%ifdef WITH_GFX
++%if IS_SYSLINUX
++;
++; like pc_setint16, but patch sector read funtion, too
++;
++pc_disksize:
++		push ax
++		call getint
++		pop si
++		jc .err
++		mov [si],bx
++		mov word [getlinsec.patch+1], getlinsec3 - getlinsec.patch - 3
++		or bx,bx
++		jz .err
++		call cache_metadata
++.err:		ret
++%endif
++%endif
++
+ ;
+ ; "F"-key command
+ ;
+--- pxelinux.asm
++++ pxelinux.asm
+@@ -846,6 +846,9 @@
+ ; AX contains the appropriate return code.
+ ;
+ local_boot:
++%ifdef WITH_GFX
++		call gfx_done
++%endif
+ 		push cs
+ 		pop ds
+ 		mov [LocalBootType],ax
+--- runkernel.inc
++++ runkernel.inc
+@@ -206,6 +206,15 @@
+                 pop ds
+ 		sub si,cmd_line_here
+ 		mov [CmdLineLen],si		; Length including final null
++
++%ifdef WITH_GFX
++		mov eax,[KernelSects]
++		mov esi,ds
++		shl esi,4
++		add esi,KernelCName
++		call gfx_progress_init
++%endif
++
+ ;
+ ; Now check if we have a large kernel, which needs to be loaded high
+ ;
+@@ -312,6 +321,19 @@
+                 jz nk_noinitrd
+ 		call parse_load_initrd
+ nk_noinitrd:
++
++%ifdef WITH_GFX
++		call gfx_progress_done
++
++		cmp byte [gfx_cd_changed],0
++		jz .no_cd_change
++		mov al,6
++		xor si,si
++		xor di,di
++		call gfx_infobox
++.no_cd_change:
++%endif 
++
+ ;
+ ; Abandon hope, ye that enter here!  We do no longer permit aborts.
+ ;
+@@ -320,6 +342,10 @@
+ 		mov si,ready_msg
+ 		call cwritestr
+ 
++%ifdef WITH_GFX
++		call gfx_done
++%endif
++
+ 		call vgaclearmode		; We can't trust ourselves after this
+ 
+ 		UNLOAD_PREP			; Module-specific hook
+@@ -552,6 +578,34 @@
+ 
+ .got_start:
+ 		push si
++
++%ifdef WITH_GFX
++		cmp byte [si],'+'
++		jnz .got_start_10
++		mov byte [cs:gfx_cd_changed],1
++		inc si
++		push es
++		push ds
++		push si
++		push cs
++		pop es
++		mov cx,100h
++		mov di,trackbuf
++		push di
++		rep movsb
++		mov byte [es:di],0
++		pop si
++		xor di,di
++		mov al,5		; ask for cd change
++		push cs
++		pop ds
++		call gfx_infobox
++		pop si
++		pop ds
++		pop es
++.got_start_10:
++%endif
++
+ 		mov di,InitRD		; Target buffer for mangled name
+ 		call mangle_name
+ 		call loadinitrd
+@@ -645,6 +699,20 @@
+ 		ret
+ 
+ .notthere:
++
++%ifdef WITH_GFX
++		cmp byte [gfx_ok],0
++		jz .nogfx
++		mov si,InitRDCName
++		xor di,di
++		mov al,2
++		call gfx_infobox
++		call gfx_progress_done
++		mov si,no_msg
++		jmp abort_load
++.nogfx:
++%endif
++
+                 mov si,err_noinitrd
+                 call cwritestr
+                 mov si,InitRDCName
+@@ -653,7 +721,21 @@
+                 jmp abort_load
+ 
+ no_high_mem:					; Error routine
++
++%ifdef WITH_GFX
++		cmp byte [gfx_ok],0
++		jz .nogfx
+ 		mov si,err_nohighmem
++		xor di,di
++		mov al,0 
++		call gfx_infobox
++		call gfx_progress_done
++		mov si,no_msg
++		jmp abort_load
++.nogfx:
++%endif
++
++ 		mov si,err_nohighmem
+                 jmp abort_load
+ 
+                 ret
+@@ -666,7 +748,8 @@
+ ready_msg	db 'ready.', CR, LF, 0
+ err_oldkernel   db 'Cannot load a ramdisk with an old kernel image.'
+                 db CR, LF, 0
+-err_noinitrd    db CR, LF, 'Could not find ramdisk image: ', 0
++err_noinitrd    db CR, LF
++err_noinitrda	db 'Could not find ramdisk image: ', 0
+ err_nohighmem   db 'Not enough memory to load specified kernel.', CR, LF, 0
+ 
+ boot_image      db 'BOOT_IMAGE='
+--- ui.inc
++++ ui.inc
+@@ -44,6 +44,11 @@
+ 
+ .no_bootonce:
+ 
++%ifdef WITH_GFX
++		; build gfx menu
++		call gfx_setup_menu
++%endif
++
+ ;
+ ; Check whether or not we are supposed to display the boot prompt.
+ ;
+@@ -57,6 +62,21 @@
+ 		cmp word [NoEscape],0		; If NOESCAPE, no prompt,
+ 		jne auto_boot			; always run default cmd
+ 
++%ifdef WITH_GFX
++		cmp byte [gfx_ok],0
++		jz .nogfx
++		mov edi,ds
++		shl edi,4
++		add edi,command_line
++		mov ecx,max_cmd_len
++		xor eax,eax
++		xchg eax,[KbdTimeout]		; only the first time
++		call gfx_input
++		cmp ax,1
++		jnz load_kernel
++.nogfx:
++%endif
++
+ 		mov si,boot_prompt
+ 		call cwritestr
+ 
+@@ -323,9 +343,21 @@
+ 		push word real_mode_seg
+ 		pop es
+ 		mov di,cmd_line_here
++
++%ifdef WITH_GFX
++		; gfx code includes them
++		cmp byte [gfx_ok],0
++		jnz .isgfx
++%endif
++
+ 		mov si,VKernelBuf+vk_append
+ 		mov cx,[VKernelBuf+vk_appendlen]
+ 		rep movsb
++
++%ifdef WITH_GFX
++.isgfx:
++%endif
++
+ 		mov [CmdLinePtr],di		; Where to add rest of cmd
+ 		pop es
+ 		mov di,KernelName
+@@ -343,7 +375,7 @@
+ 		mov al, [VKernelBuf+vk_type]
+ 		mov [KernelType], al
+ 
+-%if IS_PXELINUX || IS_ISOLINUX
++%if IS_PXELINUX || IS_ISOLINUX || IS_SYSLINUX
+ 		; Is this a "localboot" pseudo-kernel?
+ %if IS_PXELINUX
+ 		cmp byte [VKernelBuf+vk_rname+4], 0
+@@ -421,6 +453,19 @@
+ 		push di
+                 call unmangle_name              ; Get human form
+ 		mov si,err_notfound		; Complain about missing kernel
++
++%ifdef WITH_GFX
++		cmp byte [gfx_ok],0
++		jz .nogfx
++		pop si
++		xor di,di
++		mov al,2
++		call gfx_infobox
++		mov si,no_msg
++		jmp abort_load
++.nogfx:
++%endif
++
+ 		call cwritestr
+ 		pop si				; KernelCName
+                 call cwritestr
+--- gfxboot.inc
++++ gfxboot.inc
+@@ -417,8 +417,10 @@
+ 		shr eax,20
+ 		cmp ax,16
+ 		jb gfx_init_40			; at least 16MB
+-		mov word [gfx_xmem_0],81h	; 1MB at 8MB
++		mov word [gfx_xmem_0], 81h	; 1MB at 8MB
+ 		mov word [gfx_xmem_1],0a1h	; 1MB at 10MB
++		mov word [gfx_xmem_2],0c1h	; 1MB at 12MB
++		mov word [gfx_xmem_3],0e1h	; 1MB at 14MB
+ 
+ 		mov dword [gfx_save_area1],7f0000h	; 8MB-64k
+ gfx_init_40:
