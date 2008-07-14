@@ -13,6 +13,7 @@ fonts: 16x16.fnt
 16x16.fnt: ../po/en.tr ../src/main.log
 	cat ../po/*.tr ../help-*/*.html >tmp.txt
 	$(GFXBOOT_FONT) -v -l 18 \
+	-a 0x2022-0x2023 \
 	-c ISO-8859-15 -c ISO-8859-2 -c koi8-r \
 	`$(KEYMAPCHARS) ../keymaps/keymap.*.inc` \
 	-t tmp.txt \
