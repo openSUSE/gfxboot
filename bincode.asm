@@ -324,6 +324,7 @@ gfx_cur_y		dw 0		; must follow gfx_cur_x
 gfx_width		dw 0
 gfx_height		dw 0
 line_wrap		dd 0
+gfx_indent		dw 0
 
 ; clip region (incl)
 clip_l			dw 0		; left, incl
@@ -370,6 +371,7 @@ idle.invalid		db 0		; idle loop has been left
 
 			align 4, db 0
 row_text		times max_text_rows dd 0
+ind_text		times max_text_rows dw 0
 
 			; note: link_list relies on row_start
 link_list		times li.size * link_entries db 0
@@ -7404,6 +7406,7 @@ prim_show:
 		call get_1arg
 		jc prim_show_90
 		dec dword [pstack.ptr]
+		xor cx,cx
 		mov esi,eax
 		mov ebx,[start_row]
 		or ebx,ebx
@@ -7411,7 +7414,9 @@ prim_show:
 		cmp ebx,[cur_row2]
 		jae prim_show_90
 		mov esi,[row_text+4*ebx]
+		mov cx,[ind_text+2*ebx]
 prim_show_50:
+		mov [gfx_indent],cx
 		call text_xy
 		clc
 prim_show_90:
@@ -9799,6 +9804,9 @@ prim_formattext:
 		mov ecx,max_text_rows
 		mov edi,row_text
 		rep stosd
+		mov ecx,max_text_rows
+		mov edi,ind_text
+		rep stosw
 		mov ecx,link_entries * li.size
 		mov edi,link_list
 		rep stosb
@@ -9807,6 +9815,7 @@ prim_formattext:
 
 		pop esi
 		or byte [txt_state],2
+		mov word [gfx_indent],0
 		call text_xy
 		and byte [txt_state],~2
 		clc
@@ -12001,17 +12010,21 @@ font_init_90:
 ; Write a string. '\n' is a line break.
 ;
 ;  esi		string
+;  [gfx_indent]	initial indentation (normally 0)
 ;
 ; return:
 ;  cursor position gets advanced
 ;
 ; special chars:
 ;   char_eot	same as \x00
-;   \x10	back to normal
+;   \x10	back to normal (color, text output)
 ;   \x11	set alternative text color (gfx_color1)
-;   \x12	label start, no text output
-;   \x13	set link text color (gfx_color2); typically label end
-;   \x14	start page description
+;   \x12	label start, no text output; label end = \x13
+;   \x13	set link text color (gfx_color2/3); typically label end
+;   \x14	start page description; ends with \x10
+;   \x15	vspace
+;   \x16	start list item (ends with \x15 or \x16 or text end)
+;   \x17	set indentation
 ;
 
 		bits 32
@@ -12038,6 +12051,8 @@ text_xy:
 		inc dword [cur_row2]
 text_xy_05:
 		push word [gfx_cur_x]
+		mov ax,[gfx_indent]
+		add [gfx_cur_x],ax
 text_xy_10:
 		mov edi,esi
 		call utf8_dec
@@ -12082,10 +12097,12 @@ text_xy_60:
 		cmp eax,0ah
 		jnz text_xy_70
 text_xy_65:
+		; newline
 		mov ax,[font.line_height]
 		add [gfx_cur_y],ax
 		pop ax
 		push ax
+		add ax,[gfx_indent]
 		mov [gfx_cur_x],ax
 		inc dword [cur_row]
 		mov edx,[max_rows]
@@ -12102,8 +12119,34 @@ text_xy_67:
 		mov [cur_row2],eax
 		inc dword [cur_row2]
 		mov [row_text+4*eax],esi
+		push word [gfx_indent]
+		pop word [ind_text+2*eax]
 		jmp text_xy_10
 text_xy_70:
+		cmp eax,15h		; vspace
+		jz text_xy_71
+		cmp eax,16h		; list item
+		jnz text_xy_74
+text_xy_71:
+		; vspace/list item are basically optional newlines
+		mov word [gfx_indent],0
+		pop ax
+		push ax
+		cmp ax,[gfx_cur_x]
+		jnz text_xy_65
+		jmp text_xy_10
+
+text_xy_74:
+		cmp eax,17h		; set indentation
+		jnz text_xy_78
+		pop ax
+		push ax
+		sub ax,[gfx_cur_x]
+		neg ax
+		mov [gfx_indent],ax
+		jmp text_xy_10
+
+text_xy_78:
 		push esi
 		cmp eax,1fh
 		jae text_xy_80

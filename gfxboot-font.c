@@ -811,8 +811,6 @@ int parse_int_list(list_t *list, char *str)
   int err = 0, i, j, k;
   char *s, *s1, *t;
 
-  list->start = list->end = NULL;
-
   if(!str) return 0;
 
   while(isspace(*str)) str++;

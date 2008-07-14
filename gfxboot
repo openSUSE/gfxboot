@@ -420,6 +420,429 @@
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+{
+  package Help;
+
+  use HTML::Parser;
+  use strict 'vars';
+  use integer;
+
+  sub new;
+  sub set_entity;
+  sub navi;
+  sub decode_file;
+  sub add_html;
+  sub check;
+  sub write;
+  sub encode_file;
+  sub text_handler;
+  sub comment_handler;
+  sub default_handler;
+  sub start_handler;
+  sub end_handler;
+  sub pop_elements;
+
+  my %markup = (
+    page         => "\x04",		# start new page
+
+    normal       => "\x10",		# back to normal (color, text output)
+    em           => "\x11",		# set alternative text color (gfx_color1)
+    label        => "\x12",		# label start, no text output; label end = "\x13"
+    link         => "\x13",		# label end; set link text color (gfx_color2/3)
+    title        => "\x14",		# start page description; ends with "\x10"
+    vspace       => "\x15",		# add empty line
+    li           => "\x16",		# start list item; ends with "\x15" or "\x16"
+    ind          => "\x17",		# set indentation
+
+    br           => "\x1e",		# internal: fake <br>
+
+    vspace_extra => "\n",			# new line
+    li_extra     => "  \xe2\x80\xa2 \x17",	# list item prefix (\u2022, \u2023)
+  );
+
+  sub new
+  {
+    my $self = {};
+
+    bless $self;
+
+    return $self;
+  }
+
+  sub set_entity
+  {
+    my $self = shift;
+
+    $self->{entity}{$_[0]} = $_[1];
+  }
+
+  sub navi
+  {
+    my $self = shift;
+    my $file = shift;
+
+    my $res = $self->encode_file($file);
+    $self->{navi} = $res->{text};
+    die "$file: no link to foobar\n" unless $res->{ref}{foobar};
+  }
+
+  sub decode_file
+  {
+    my $self = shift;
+    my $file = shift;
+    local ($_, $/);
+    my ($page_id, $buf, $f);
+
+    open $f, $file or die "$file: $!\n";
+    $buf = <$f>;
+    close $f;
+
+    if(substr($buf, 0, 1) eq "\x04" && substr($buf, -1, 1) eq "\x00") {
+      substr($buf, 0, 1) = undef;
+      substr($buf, -1, 1) = undef;
+    }
+    else {
+      die "$file: not a gfxboot help file\n";
+    }
+
+    my @pages = split /\x04/, $buf;
+
+    $buf = "<html>\n<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" />\n<body>\n\n";
+
+    for (@pages) {
+      undef $page_id;
+      s#\x1f#\xc2\xa0#g;	# utf8: \xa0
+
+      s#($markup{vspace})$markup{vspace_extra}#$1#g;
+      s#($markup{li})\Q$markup{li_extra}\E#$1#g;
+
+      s#\n#<br/>\n#g;
+
+      s#$markup{em}([^\x00-\x1e]*)$markup{normal}#<em>$1</em>#g;
+
+      if(s#$markup{label}([^\x00-\x1e]+)$markup{title}([^\x00-\x1e]*)$markup{normal}#<h3>\n<a name="$1">$2</a>\n</h3>\n$markup{vspace}#) {
+        $page_id = $1;
+      }
+
+      s:$markup{label}([^\x00-\x1e]+)$markup{link}([^\x00-\x1e]*)$markup{normal}:<a href="#$1">$2</a>:g;
+
+      s#$markup{vspace}($markup{li}.*?)($markup{vspace}|$)#\n<ul>$1\n</ul>\n#gs;
+
+      { } while s#$markup{li}(.*?)($markup{li}|\n</ul>)#\n  <li>$1</li>$2#s;
+
+      { } while s#$markup{vspace}(.*?)($markup{vspace}|$)#\n<p>\n$1\n</p>\n$2#s;
+
+      s/([\x10-\x1f])/sprintf("<!-- %02x -->", ord $1)/ge;
+
+      $buf .= "<div id=\"$page_id\">\n$_\n</div>\n\n";
+    }
+
+    $buf .= "\n</body>\n</html>\n";
+
+    return $buf;
+  }
+
+
+  sub add_html
+  {
+    my $self = shift;
+    my $file = shift;
+    local $_;
+    my ($x, $up);
+
+    my $res = $self->encode_file($file);
+    $self->{out_buf} .= $res->{text};
+
+    $self->{label}{$_} = $res->{label}{$_} for keys %{$res->{label}};
+    $self->{ref}{$_} += $res->{ref}{$_} for keys %{$res->{ref}};
+
+    if($file =~ /([^:\/]+)::([^:\/]+)\.html$/) {
+      $up = $1;
+
+      $self->{ref}{$up}++;
+
+      $x = $self->{navi};
+      $x =~ s/foobar/$up/;
+      $x =~ s/FOOBAR/$self->{label}{$up}/;
+
+      $self->{out_buf} .= $x if $self->{label}{$up};
+    }
+  }
+
+  sub check
+  {
+    my $self = shift;
+    local $_;
+    my ($first, $err);
+
+    $first = 1;
+    for (sort keys %{$self->{label}}) {
+      if(!/^o_./ && !$self->{ref}{$_}) {
+        if($first) {
+          print STDERR "unused pages:\n";
+          $err = 1;
+          $first = 0;
+        }
+        print STDERR "  $_\n";
+      }
+    }
+
+    $first = 1;
+    for (sort keys %{$self->{ref}}) {
+      if(!$self->{label}{$_}) {
+        if($first) {
+          print STDERR "missing pages:\n";
+          $err = 2;
+          $first = 0;
+        }
+        print STDERR "  $_\n";
+      }
+    }
+
+    return $err;
+  }
+
+  sub write
+  {
+    my $self = shift;
+    my $file = shift;
+    my $f;
+
+    if($file) {
+      open $f, ">$file";
+      print $f $self->{out_buf}, "\x00";
+      close $f;
+    }
+    else {
+      print $self->{out_buf}, "\x00";
+    }
+  }
+
+  sub encode_file
+  {
+    my $self = shift;
+    my $file = shift;
+    my ($x, $t, $p);
+
+    $p = HTML::Parser->new(api_version => 3);
+
+    # $p->utf8_mode(1);
+    # $p->xml_mode(1);
+    $p->unbroken_text(1);
+    $p->empty_element_tags(1);
+
+    $p->handler(text => \&text_handler, "self,tagname,attr,text,line");
+    $p->handler(comment => \&comment_handler, "self,tagname,attr,text,line" );
+    $p->handler(default => \&default_handler, "self,tagname,attr,text,line" );
+    $p->handler(start => \&start_handler, "self,tagname,attr,text,line");
+    $p->handler(end => \&end_handler, "self,tagname,attr,text,line");
+    $p->handler(start_document => "");
+    $p->handler(end_document => "");
+
+    $p->{file} = $file;
+    $p->parse_file($p->{file});
+
+    for $x (@{$p->{elements}}) {
+      die "$p->{file} line $x->[3], <$x->[0]>: not text\n" unless $x->[0] eq 'text';
+      $t .= $x->[2];
+    }
+
+    $t =~ s/\s*$//;
+    $t =~ s/\s+/ /g;
+    $t =~ s/($markup{vspace})(\s*$markup{vspace})+/$1/g;
+    $t =~ s/($markup{page})$markup{vspace}*/$1/g;
+    $t =~ s/$markup{vspace}*($markup{page}|$)/$1/gs;
+    $t =~ s/\s+($markup{page})/$1/g;
+    $t =~ s/$markup{br}/\n/g;
+
+    # remove the vspace at page start
+    $t =~ s/($markup{label}([^\x00-\x1e]+)$markup{title}([^\x00-\x1e]*)$markup{normal})$markup{vspace}/$1/;
+
+    $t =~ s/($markup{vspace})/$1$markup{vspace_extra}/g;
+    $t =~ s/($markup{li})/$1$markup{li_extra}/g;
+
+    for $x (keys %{$self->{entity}}) {
+      $t =~ s/(&$x;|\@$x\@)/$self->{entity}{$x}/g;
+    }
+
+    return { text => $t, label => $p->{label}, ref => $p->{ref} };
+  }
+
+  sub text_handler
+  {
+    my ($self, $tag, $attr, $text, $line) = @_;
+
+    $text =~ s/^\s+$//;
+
+    push @{$self->{elements}}, [ 'text', $attr, $text, $line ];
+  }
+
+
+  sub comment_handler
+  {
+    my ($self, $tag, $attr, $text, $line) = @_;
+
+    # $helptype = $1 if $text =~ /\bhelp=([a-z]+)/;
+  }
+
+
+  sub default_handler
+  {
+    my ($self, $tag, $attr, $text, $line) = @_;
+
+    # return if $tag =~ /^doctype|DOCTYPE$/;
+
+    die "invalid help text at line=$line, tag='$tag', attr='$attr', text='$text'\n";
+  }
+
+
+  sub start_handler
+  {
+    my ($self, $tag, $attr, $text, $line) = @_;
+
+    return if $tag =~ /^(html|body|meta)$/;
+
+    if($tag =~ /^(a|h\d|em|p|ul|li|br|div)$/) {
+      $self->{state}{$tag}++;
+      push @{$self->{elements}}, [ $tag, $attr, $text, $line ];
+    }
+    else {
+      die "$self->{file} line $line, <$tag>: unsupported element\n";
+    }
+  }
+
+
+  sub end_handler
+  {
+    my ($self, $tag, $attr, $text, $line) = @_;
+    my ($elem_text, $elem_tag, $label);
+
+    return if $tag =~ /^(html|body|meta)$/;
+
+    die "$self->{file} line $line, </$tag>: element not started\n" unless $self->{state}{$tag} > 0;
+
+    if($tag =~ /^h\d$/) {
+      $elem_text = pop_elements $self, 'text', $tag;
+      $elem_tag = pop_elements $self, $tag;
+      push @{$self->{elements}}, $elem_text;
+    }
+    elsif($tag eq "em") {
+      $elem_text = pop_elements $self, 'text', $tag;
+      $elem_tag = pop_elements $self, $tag;
+      die "$self->{file} line $line, <$tag>: empty element\n" unless defined $elem_text;
+      $elem_text->[2] = $markup{em} . $elem_text->[2] . $markup{normal};
+      push @{$self->{elements}}, $elem_text;
+    }
+    elsif($tag eq "p") {
+      $elem_text = pop_elements $self, 'text', $tag;
+      $elem_tag = pop_elements $self, $tag;
+      $elem_text->[2] = $markup{vspace} . $elem_text->[2] . $markup{vspace};
+      push @{$self->{elements}}, $elem_text;
+    }
+    elsif($tag eq "br") {
+      $elem_tag = pop_elements $self, $tag;
+      push @{$self->{elements}}, [ 'text', undef , $markup{br},  ];
+    }
+    elsif($tag eq "ul") {
+      $elem_text = pop_elements $self, 'text', $tag;
+      $elem_tag = pop_elements $self, $tag;
+      $elem_text->[2] = $markup{vspace} . $elem_text->[2] . $markup{vspace};
+      push @{$self->{elements}}, $elem_text;
+    }
+    elsif($tag eq "li") {
+      $elem_text = pop_elements $self, 'text', $tag;
+      $elem_tag = pop_elements $self, $tag;
+      $elem_text->[2] = $markup{li} . $elem_text->[2];
+      push @{$self->{elements}}, $elem_text;
+    }
+    elsif($tag eq "div") {
+      $elem_text = pop_elements $self, 'text', $tag;
+      $elem_tag = pop_elements $self, $tag;
+      push @{$self->{elements}}, $elem_text;
+    }
+    elsif($tag eq "a") {
+      $elem_text = pop_elements $self, 'text', $tag;
+      $elem_tag = pop_elements $self, $tag;
+      die "$self->{file} line $line, <$tag>: empty element\n" unless defined $elem_text;
+
+      if($elem_tag->[1]{name}) {
+        # name -> page title
+        $label = $elem_tag->[1]{name};
+        die "$self->{file} line $line, <$tag>: label '$label' too long (max. 32)\n" if length($label) > 32;
+        die "$self->{file} line $line, <$tag>: label '$label' redefined\n" if $self->{label}{$label};
+        $self->{label}{$label} = $elem_text->[2];
+        $elem_text->[2] = $markup{page} . $markup{label} . $label . $markup{title} . $elem_text->[2] . $markup{normal};
+        push @{$self->{elements}}, $elem_text;
+      }
+      elsif($elem_tag->[1]{href}) {
+        # href -> link
+        $label = $elem_tag->[1]{href};
+        $label =~ s/^#//;
+        die "$self->{file} line $line, <$tag>: label '$label' too long (max. 32)\n" if length($label) > 32;
+        $self->{ref}{$label}++;
+        $elem_text->[2] =~ s/\s/\xc2\xa0/g;
+        $elem_text->[2] = $markup{label} . $label . $markup{link} . $elem_text->[2] . $markup{normal};
+        push @{$self->{elements}}, $elem_text;
+      }
+      else {
+        die "$self->{file} line $line, <$tag>: neither 'name' nor 'href' attribute\n";
+      }
+    }
+    else {
+      die "$self->{file} line $line, <$tag>: unsupported element\n";
+    }
+
+    $self->{state}{$tag}--;
+  }
+
+  sub pop_elements
+  {
+    my ($self, $tag, $tag_limit) = @_;
+    my ($elem, $line, $all, $x);
+
+    return undef if @{$self->{elements}} == 0;
+
+    $line = $self->{elements}[-1][3];
+
+    while(defined($elem = pop @{$self->{elements}})) {
+      if($elem->[0] eq $tag) {
+        $all->[0] = $elem->[0];
+        $all->[1] = $elem->[1];
+        $x = $elem->[2];
+        $x = "" if $x =~ /^\s*$/;
+        $all->[2] = $x . $all->[2];
+        $all->[3] = $elem->[3];
+        next;
+      }
+      if(!defined($tag_limit) || $elem->[0] eq $tag_limit) {
+        push @{$self->{elements}}, $elem;
+        last;
+      }
+    }
+
+    die "$self->{file} line $line, <$tag>: no start found\n" unless defined $all;
+
+    if($tag eq 'text') {
+      $all->[2] =~ s/(^\s*|\s*$)//g;
+      $all->[2] =~ s/\s+/ /g;
+      $all->[2] = "" if $all->[2] eq " ";
+    }
+
+    return $all;
+  }
+
+  sub set_used
+  {
+    my $self = shift;
+    local $_;
+
+    $self->{ref}{$_}++ for @_;
+  }
+}
+
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #
 use strict qw ( subs vars );
@@ -505,6 +928,11 @@ my $opt_pack_archive;
 my $opt_biarch;
 my $opt_media;
 my $opt_save_image;
+my $opt_help_create;
+my $opt_help_view;
+my $opt_help_navi;
+my $opt_help_product;
+my @opt_help_used;
 
 my $sudo;
 my %config;
@@ -578,6 +1006,11 @@ GetOptions(
   'floppy'              => sub { $opt_media = 'floppy' },
   'biarch'              => \$opt_biarch,
   'save-image=s'        => \$opt_save_image,
+  'help-create=s'       => \$opt_help_create,
+  'help-view=s'         => \$opt_help_view,
+  'used-pages=s{1,}'    => \@opt_help_used,
+  'navi=s'              => \$opt_help_navi,
+  'product=s'           => \$opt_help_product,
 ) || usage 1;
 
 $ENV{PATH} = "/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin";
@@ -595,6 +1028,26 @@ if($config{sudo}) {
   $sudo = $config{sudo};
   $sudo =~ s/\s*$/ /;
 }
+
+if($opt_help_view) {
+  usage 1 if @ARGV;
+  print Help::new()->decode_file($opt_help_view);
+  exit 0;
+}
+
+if($opt_help_create) {
+  usage 1 if !@ARGV;
+
+  my $help = Help::new;
+  $help->navi($opt_help_navi) if $opt_help_navi;
+  $help->set_entity('product', $opt_help_product ? $opt_help_product : "Linux");
+  $help->set_used(@opt_help_used) if @opt_help_used;
+  $help->add_html($_) for (@ARGV);
+  $help->check;
+  exit $help->write($opt_help_create);
+}
+
+
 
 my $gfxboot_tmp = Tmp::new($opt_savetemp);
 
@@ -749,7 +1202,7 @@ if($opt_save_image && $preview_image) {
 sub usage
 {
   print <<"  usage";
-Usage: gfxboot [options]
+Usage: gfxboot [OPTIONS] ARGS
 Graphical boot screen test and config tool.
 
 General options:
@@ -822,6 +1275,15 @@ Adding/removing files from gfxboot archive:
                                 file system are kept in a cpio archive. All others are
                                 unpacked. Use only for isolinux and syslinux.
       --pack-archive FILE       Pack all gfxboot files into cpio archive FILE.
+
+Modifying help files:
+
+      --help-view FILE          Print FILE (internal help file format) as HTML.
+      --help-create FILE        Convert HTML files passed as ARGS to FILE (internal format).
+      --used-pages LINK1 LINK2 ...
+                                Mark pages as referenced.
+      --navi FILE               Use FILE as template for navigation links.
+      --product PRODUCT         Replace entity 'product' with PRODUCT.
 
   usage
 
