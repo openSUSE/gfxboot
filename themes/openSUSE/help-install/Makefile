@@ -1,13 +1,14 @@
 BINDIR    := $(shell [ -x ../../../gfxboot-compile ] && echo ../../../ )
+GFXBOOT   = $(BINDIR)gfxboot
 
 PRODUCT   = $(shell perl -ne 'print if s/^product=//' ../config)
 
 HELP2TXT  = ../../../bin/help2txt
 
-HELPFILES = $(addsuffix .hlp,$(basename $(wildcard *.html)))
+HELPFILES = $(addsuffix .hlp, $(shell for i in * ; do [ -d $$i ] && echo $$i ; done))
 
-%.hlp: %.html
-	$(HELP2TXT) --product='$(PRODUCT)' $< >$@
+%.hlp: %
+	$(GFXBOOT) --product='$(PRODUCT)' --help-create $@ --navi $</navi.html $</main*.html || true
 
 all: .ready
 
