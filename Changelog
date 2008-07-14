@@ -2,6 +2,8 @@
 
 	- cooperate with mboot module
 	- enhanced gfxboot script
+	- fixed bug in gfxboot-font ('--add' option cleared char list)
+	- support new text formatting tags (<p> & <ul>)
 
 26/5/2008:	v4.0.14
 	- updated translations
