@@ -18,7 +18,7 @@ html: $(XMLSRC)
 	xmlto html-nochunks $(PROJECT).xml
 
 clean:
-	rm -rf *~ *.pdf *.html *.txt reference.xml *.dsl *.local
+	rm -rf *~ *.pdf *.html gfxboot.txt reference.xml *.dsl *.local
 
 distclean: clean
 
