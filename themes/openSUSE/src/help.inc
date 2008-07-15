@@ -127,12 +127,15 @@ clip.size pop 800 eq {
 %
 % ( label ) ==> ( help_text )
 %
+% Shows first help page if label is not found.
+%
 /help.findpage {
   dup length 3 add dup string
   "\x12%s\x14"
   3 1 roll dup 5 1 roll snprintf
   help.getmessages over strstr
-  dup { help.getmessages exch 1 sub add } { pop "" } ifelse
+  dup { 2 sub } if 1 add
+  help.getmessages add
   exch free
 } def
 
@@ -671,6 +674,8 @@ clip.size pop 800 eq {
 %
 % ( ) ==> ( start_of_help_messages )
 %
+% Note: must always return something (fake a message if necessary).
+%
 /help.getmessages {
 
   help.messages .undef eq {
@@ -678,7 +683,7 @@ clip.size pop 800 eq {
     /help.messages
       config.lang "%s.hlp" locale.findfile
       dup .undef eq { pop "en_US" "%s.hlp" locale.findfile } if
-      dup .undef eq { pop 0 string } if
+      dup .undef eq { pop "\x04\x12\x14No Help Texts\x10Sorry, no help texts found." } if
       cvs
     def
   } if

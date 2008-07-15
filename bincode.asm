@@ -541,7 +541,9 @@ dtrace_count		db 0
 
 fms_cpio_swab		db 0
 
-hello			db 10, 'Initializing gfx code...', 10, 0
+hello			db 10, 'Initializing gfx code...', 10
+msg_0			db 0
+
 msg_10			db 0b3h, 'ip %4x:  %8x.%x           ', 0b3h, 10, 0
 msg_11			db 0b3h, '%2x: %8x.%2x', 0
 msg_12			db 0b3h, '  :            ', 0
@@ -10118,6 +10120,11 @@ prim_lineheight:
 
 prim_currenttitle:
 		mov eax,[page_title]
+		or eax,eax
+		jnz prim_currenttitle_10
+		add eax,[prog.base]
+		add eax,msg_0
+prim_currenttitle_10:
 		mov dl,t_string
 		jmp pr_getobj
 
