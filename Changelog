@@ -4,6 +4,7 @@
 	- enhanced gfxboot script
 	- fixed bug in gfxboot-font ('--add' option cleared char list)
 	- support new text formatting tags (<p> & <ul>)
+	- new help texts
 
 26/5/2008:	v4.0.14
 	- updated translations

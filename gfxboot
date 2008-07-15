@@ -640,7 +640,7 @@
     $p->handler(end_document => "");
 
     $p->{file} = $file;
-    $p->parse_file($p->{file});
+    $p->parse_file($p->{file}) or die "$file: $!\n";
 
     for $x (@{$p->{elements}}) {
       die "$p->{file} line $x->[3], <$x->[0]>: not text\n" unless $x->[0] eq 'text';
@@ -929,10 +929,10 @@ my $opt_biarch;
 my $opt_media;
 my $opt_save_image;
 my $opt_help_create;
-my $opt_help_view;
+my $opt_help_show;
 my $opt_help_navi;
-my $opt_help_product;
 my @opt_help_used;
+my %opt_help_entity;
 
 my $sudo;
 my %config;
@@ -1007,10 +1007,10 @@ GetOptions(
   'biarch'              => \$opt_biarch,
   'save-image=s'        => \$opt_save_image,
   'help-create=s'       => \$opt_help_create,
-  'help-view=s'         => \$opt_help_view,
+  'help-show=s'         => \$opt_help_show,
   'used-pages=s{1,}'    => \@opt_help_used,
   'navi=s'              => \$opt_help_navi,
-  'product=s'           => \$opt_help_product,
+  'define=s%{1,}'       => \%opt_help_entity,
 ) || usage 1;
 
 $ENV{PATH} = "/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin";
@@ -1029,9 +1029,9 @@ if($config{sudo}) {
   $sudo =~ s/\s*$/ /;
 }
 
-if($opt_help_view) {
+if($opt_help_show) {
   usage 1 if @ARGV;
-  print Help::new()->decode_file($opt_help_view);
+  print Help::new()->decode_file($opt_help_show);
   exit 0;
 }
 
@@ -1040,7 +1040,9 @@ if($opt_help_create) {
 
   my $help = Help::new;
   $help->navi($opt_help_navi) if $opt_help_navi;
-  $help->set_entity('product', $opt_help_product ? $opt_help_product : "Linux");
+
+  $opt_help_entity{product} = 'Linux' unless exists $opt_help_entity{product};
+  $help->set_entity($_, $opt_help_entity{$_}) for (sort keys %opt_help_entity);
   $help->set_used(@opt_help_used) if @opt_help_used;
   $help->add_html($_) for (@ARGV);
   $help->check;
@@ -1278,12 +1280,13 @@ Adding/removing files from gfxboot archive:
 
 Modifying help files:
 
-      --help-view FILE          Print FILE (internal help file format) as HTML.
+      --help-show FILE          Print FILE (internal help file format) as HTML.
       --help-create FILE        Convert HTML files passed as ARGS to FILE (internal format).
       --used-pages LINK1 LINK2 ...
                                 Mark pages as referenced.
       --navi FILE               Use FILE as template for navigation links.
-      --product PRODUCT         Replace entity 'product' with PRODUCT.
+      --define ENTITY1=VALUE1 ENTITY2=VALUE2 ...
+                                Define ENTITYx with VALUEx.
 
   usage
 
