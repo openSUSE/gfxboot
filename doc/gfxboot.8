@@ -1,12 +1,13 @@
-.TH GFXBOOT 8 "April 2008" "gfxboot" "System configuration"
+.TH GFXBOOT 8 "July 2008" "gfxboot" "System configuration"
 .\"
 .SH NAME
 gfxboot \- graphical boot screen test and config tool
 .\"
 .SH SYNOPSIS
 .B gfxboot [
-.I options
+.I OPTIONS
 .B ]
+.I ARGS
 .\"
 .SH DESCRIPTION
 .B gfxboot
@@ -103,6 +104,7 @@ Create floppy image for preview.
 \fB--save-image\fR \fIFILE\fR
 Copy preview image to FILE.
 .SS Adding/removing files from gfxboot archive
+.TP
 \fB--ls\fR, \fB--list-files\fR
 List gfxboot archive files.
 .TP
@@ -123,6 +125,22 @@ others are unpacked.  Use only for isolinux and syslinux.
 \fB--pack-archive\fR \fIFILE\fR
 Pack all gfxboot files into cpio archive FILE.
 .\"
+.SS Modifying help files
+.TP
+\fB--help-show\fR \fIFILE\fR
+Print FILE (internal help file format) as HTML.
+.TP
+\fB--help-create\fR \fIFILE\fR
+Convert HTML files passed as ARGS to FILE (internal format).
+.TP
+\fB--used-pages\fR \fILINK1\fR \fILINK2\fR ...
+Mark pages as referenced.
+.TP
+\fB--navi\fR \fIFILE\fR
+Use FILE as template for navigation links.
+.TP
+\fB--define\fR \fIENTITY1\fR=\fIVALUE1\fR \fIENTITY2\fR=\fIVALUE2\fR ...
+Define ENTITYx with VALUEx.
 .SH FILES
 .TP 18n
 .B /boot/message

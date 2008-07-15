@@ -1203,6 +1203,14 @@ if($opt_save_image && $preview_image) {
 
 sub usage
 {
+  my $err = shift;
+
+  if($err) {
+    print STDERR "Try 'gfxboot --help' for more information.\n";
+
+    exit $err;
+  }
+
   print <<"  usage";
 Usage: gfxboot [OPTIONS] ARGS
 Graphical boot screen test and config tool.
@@ -1290,7 +1298,7 @@ Modifying help files:
 
   usage
 
-  exit shift;
+  exit $err;
 }
 
 
