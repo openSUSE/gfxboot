@@ -662,7 +662,7 @@
     $t =~ s/($markup{li})/$1$markup{li_extra}/g;
 
     for $x (keys %{$self->{entity}}) {
-      $t =~ s/(&$x;|\@$x\@)/$self->{entity}{$x}/g;
+      $t =~ s/(&$x;|\@{3}$x\@{3})/$self->{entity}{$x}/g;
     }
 
     return { text => $t, label => $p->{label}, ref => $p->{ref} };
