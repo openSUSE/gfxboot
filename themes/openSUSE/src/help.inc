@@ -54,22 +54,11 @@ clip.size pop 800 eq {
 %
 % ( context ) ==> ( new_context )
 %
+% Note: obsolete.
+%
 /help.mapcontext {
-  dup "o_vncpassword" eq { pop "o_vnc" } if
-  dup "o_hostip" eq { pop "network" } if
-  dup "o_netmask" eq { pop "network" } if
-  dup "o_gateway" eq { pop "network" } if
-  dup "o_pci" eq { pop "o_acpi" } if
+  % dup "xxx" eq { pop "yyy" } if
 
-  syslinux not livecd or {
-    % only help, startup, keytable and option pages
-    dup "o_" strstr 1 ne {
-      dup "help" ne
-      over "startup" ne and
-      over "keytable" ne and
-      over "profile" ne and { pop "opt" } if
-    } if
-  } if
 } def
 
 

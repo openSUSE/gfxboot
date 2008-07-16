@@ -520,7 +520,9 @@
 
       s#$markup{em}([^\x00-\x1e]*)$markup{normal}#<em>$1</em>#g;
 
-      if(s#$markup{label}([^\x00-\x1e]+)$markup{title}([^\x00-\x1e]*)$markup{normal}#<h3>\n<a name="$1">$2</a>\n</h3>\n$markup{vspace}#) {
+      s#$markup{label}([^\x00-\x1e]+)$markup{title}$markup{normal}#<a name="$1"/>\n#g;
+
+      if(s#$markup{label}([^\x00-\x1e]+)$markup{title}([^\x00-\x1e]+)$markup{normal}#<h3>\n<a name="$1">$2</a>\n</h3>\n$markup{vspace}#) {
         $page_id = $1;
       }
 
@@ -647,6 +649,8 @@
       $t .= $x->[2];
     }
 
+    $t = $markup{page} . $t;
+
     $t =~ s/\s*$//;
     $t =~ s/\s+/ /g;
     $t =~ s/($markup{vspace})(\s*$markup{vspace})+/$1/g;
@@ -771,7 +775,7 @@
         die "$self->{file} line $line, <$tag>: label '$label' too long (max. 32)\n" if length($label) > 32;
         die "$self->{file} line $line, <$tag>: label '$label' redefined\n" if $self->{label}{$label};
         $self->{label}{$label} = $elem_text->[2];
-        $elem_text->[2] = $markup{page} . $markup{label} . $label . $markup{title} . $elem_text->[2] . $markup{normal};
+        $elem_text->[2] = $markup{label} . $label . $markup{title} . $elem_text->[2] . $markup{normal};
         push @{$self->{elements}}, $elem_text;
       }
       elsif($elem_tag->[1]{href}) {
@@ -820,12 +824,20 @@
       }
     }
 
-    die "$self->{file} line $line, <$tag>: no start found\n" unless defined $all;
+    # for tag 'text': always return something
 
     if($tag eq 'text') {
-      $all->[2] =~ s/(^\s*|\s*$)//g;
-      $all->[2] =~ s/\s+/ /g;
-      $all->[2] = "" if $all->[2] eq " ";
+      if(defined $all) {
+        $all->[2] =~ s/(^\s*|\s*$)//g;
+        $all->[2] =~ s/\s+/ /g;
+        $all->[2] = "" if $all->[2] eq " ";
+      }
+      else {
+        $all = [ 'text' ];
+      }
+    }
+    else {
+      die "$self->{file} line $line, <$tag>: no start found\n" unless defined $all;
     }
 
     return $all;
