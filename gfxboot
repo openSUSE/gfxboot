@@ -12,6 +12,7 @@
 {
   package Tmp;
 
+  use File::Temp;
   use strict 'vars';
 
   sub new
@@ -26,19 +27,16 @@
     $x =~ s/(\s+|"|\\|')/_/;
     $x = 'tmp' if$x eq "";
 
-    chomp (my $t = `mktemp -d /tmp/$x.XXXXXXXXXX`);
-    die "error: mktemp failed\n" if $?;
+    my $t = File::Temp::tempdir("/tmp/$x.XXXXXXXX", CLEANUP => $save_tmp ? 0 : 1);
 
     $self->{base} = $t;
 
     if(!$save_tmp) {
-      eval 'END { system "rm -rf $t" }';
-
       my $s_t = $SIG{TERM};
-      $SIG{TERM} = sub { system "rm -rf $t"; &$s_t if $s_t };
+      $SIG{TERM} = sub { File::Temp::cleanup; &$s_t if $s_t };
 
       my $s_i = $SIG{INT};
-      $SIG{INT} = sub { system "rm -rf $t"; &$s_i if $s_i };
+      $SIG{INT} = sub { File::Temp::cleanup; &$s_i if $s_i };
     }
 
     return $self
