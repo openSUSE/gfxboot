@@ -1,11 +1,11 @@
-[needs master-boot-code dosfstools mtools]
-
+18/8/2008:	v4.1.0
 	- cooperate with mboot module
 	- enhanced gfxboot script
 	- fixed bug in gfxboot-font ('--add' option cleared char list)
 	- support new text formatting tags (<p> & <ul>)
 	- new help texts
 	- fix help to better tolerate broken help setup
+	- bootloader always beeps
 
 26/5/2008:	v4.0.14
 	- updated translations
