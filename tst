@@ -76,7 +76,7 @@ function tst_isolinux {
     vmplayer $vm_tmp/gfxboot.vmx
   elif [ "$program" = qemu ] ; then
     # qemu
-    $qemu -cdrom $img
+    $qemu -cdrom $img -serial pty
   elif [ "$program" = bd ] ; then
     # bochs debug wrapper
     bd $img

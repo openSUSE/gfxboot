@@ -77,7 +77,7 @@ sc.sysconfig_size	equ 4
 sc.boot_drive		equ 5
 sc.callback		equ 6
 sc.bootloader_seg	equ 8
-sc.reserved_1		equ 10
+sc.serial_port		equ 10
 sc.user_info_0		equ 12
 sc.user_info_1		equ 16
 sc.bios_mem_size	equ 20
@@ -425,6 +425,18 @@ edit_length		dw 0		; string length in pixel
 
 kbd_status		dw 0
 
+sl.port			equ 0
+sl.baud			equ 2
+sl.scancode		equ 4
+sl.status		equ 5		; bit 0: valid config; 1: input received
+sl.size			equ 6
+
+			; 5 serial lines
+serial.lines.max	equ 5
+serial.lines		times serial.lines.max * sl.size db 0
+
+serial.port_noinit	dw 0		; port that was setup by bootloader
+serial.key		dd 0		; serial input
 
 sound_buf_size		equ 4*1024
 sound_buf_mask		equ sound_buf_size - 1
@@ -783,6 +795,8 @@ gfx_init_10:
 		pop dword [mem0.start]
 		push dword [es:esi+sc.mem0_end]
 		pop dword [mem0.end]
+		mov ax,[es:esi+sc.serial_port]
+		mov [serial.port_noinit],ax
 
 		mov eax,[es:esi+sc.callback]
 		or ax,ax				; check only offset
@@ -3950,12 +3964,19 @@ ps_status_info_80:
 		bits 32
 
 get_key:
+		xor eax,eax
+		xchg eax,[serial.key]
+		or eax,eax
+		jnz get_key_90
+get_key_30:
 		mov ah,10h
 		int 16h
+get_key_80:
 		and eax,0ffffh
 		mov ecx,[es:417h-2]
 		xor cx,cx
 		add eax,ecx
+get_key_90:
 		ret
 
 
@@ -3987,6 +4008,34 @@ get_key_to_25:
 		jmp get_key_to_60
 
 get_key_to_30:
+		mov esi,serial.lines
+get_key_to_32:
+		test byte [esi+sl.status],1
+		jz get_key_to_36
+
+		mov ax,[esi+sl.port]
+
+		push edx
+		lea edx,[eax+5]
+		in al,dx
+		sub dx,5
+		test al,1
+		jz get_key_to_34
+		xor eax,eax
+		in al,dx
+		or byte [esi+sl.status],2
+		mov ah,[esi+sl.scancode]
+		mov [serial.key],eax
+get_key_to_34:
+		pop edx
+		jnz get_key_to_60
+
+get_key_to_36:
+		add esi,sl.size
+		cmp esi,serial.lines + serial.lines.max * sl.size
+		jb get_key_to_32
+
+get_key_to_50:
 		call get_time
 		cmp edx,eax
 		jz get_key_to_20
@@ -4044,6 +4093,155 @@ clear_kbd_queue:
 		int 16h
 		jmp clear_kbd_queue
 clear_kbd_queue_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Setup serial lines.
+;
+
+		bits 32
+
+serial_setup:
+		mov esi,serial.lines
+
+		; add bootloader configured port to end of our list
+		mov ax,[serial.port_noinit]
+		or ax,ax
+		jz serial_setup_10
+		mov [esi + (serial.lines.max - 1) * sl.size + sl.port],ax
+		mov byte [esi + (serial.lines.max - 1) * sl.size + sl.scancode],0xf0 + serial.lines.max - 1
+		mov byte [esi + (serial.lines.max - 1) * sl.size + sl.status],1
+
+		; ensure every port is listed only once
+
+serial_setup_10:
+		test byte [esi+sl.status],1
+		jz serial_setup_40
+		mov ax,[esi+sl.port]
+		lea edi,[esi+sl.size]
+serial_setup_20:
+		test byte [edi+sl.status],1
+		jz serial_setup_30
+		cmp ax,[edi+sl.port]
+		jnz serial_setup_30
+		mov byte [edi+sl.status],0
+serial_setup_30:
+		add edi,sl.size
+		cmp edi,serial.lines + serial.lines.max * sl.size
+		jb serial_setup_20
+
+serial_setup_40:
+		add esi,sl.size
+		cmp esi,serial.lines + (serial.lines.max - 1) * sl.size
+		jb serial_setup_10
+
+		; set them up
+
+		mov esi,serial.lines
+serial_setup_50:
+		test byte [esi+sl.status],1
+		jz serial_setup_70
+
+		mov ax,[esi+sl.port]
+		cmp ax,[serial.port_noinit]
+		jz serial_setup_70
+
+		; serial port init taken from syslinux
+		lea edx,[eax+3]			; DX -> LCR
+		mov al,83h			; Enable DLAB
+		call slow_out
+		sub dx,3			; DX -> LS
+		mov al,[esi+sl.baud]		; Divisor, low
+		call slow_out
+		inc dx				; DX -> MS
+		mov al,[esi+sl.baud+1]		; Divisor, high
+		call slow_out
+		mov al,03h			; Disable DLAB
+		inc dx				; DX -> LCR
+		inc dx
+		call slow_out
+		in al,dx			; Read back LCR (detect missing hw)
+		cmp al,03h			; If nothing here we'll read 00 or FF
+		jz serial_setup_60
+		mov byte [esi+sl.status],0
+		jmp serial_setup_70
+serial_setup_60:
+		dec dx
+		dec dx				; DX -> IER
+		xor al,al			; IRQ disable
+		call slow_out
+		inc dx				; DX -> FCR/IIR
+		mov al,01h
+		call slow_out			; Enable FIFOs if present
+		in al,dx
+		cmp al,0C0h			; FIFOs enabled and usable?
+		jae serial_setup_70
+		xor ax,ax			; Disable FIFO if unusable
+		call slow_out
+
+serial_setup_70:
+		add esi,sl.size
+		cmp esi,serial.lines + (serial.lines.max - 1) * sl.size
+		jb serial_setup_50
+
+serial_setup_90:
+		ret
+
+
+slow_out:
+		out dx,al
+
+		out 80h,al
+		out 80h,al
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Setup serial lines.
+;
+;  eax		char
+;
+
+		bits 32
+
+serial_putc:
+		mov ebx,eax
+		mov ah,al
+		mov esi,serial.lines
+		shr ebx,24
+serial_putc_20:
+		test byte [esi+sl.status],2
+		jz serial_putc_70
+
+		or bl,bl
+		jz serial_putc_30
+		cmp bl,[esi+sl.scancode]
+		jnz serial_putc_70
+serial_putc_30:
+		mov dx,[esi+sl.port]
+
+		add dx,5
+		mov edi,[es:46ch]
+		add edi,3
+serial_putc_50:
+		; wait until output reg ready (about 1/10s)
+		cmp edi,[es:46ch]
+		jb serial_putc_70
+
+		in al,dx
+		test al,20h
+		jz serial_putc_50
+		sub dx,5
+		mov al,ah
+		call slow_out
+
+serial_putc_70:
+		add esi,sl.size
+		cmp esi,serial.lines + serial.lines.max * sl.size
+		jb serial_putc_20
+
+serial_putc_90:
 		ret
 
 
@@ -10214,6 +10412,104 @@ prim_time:
 prim_date:
 		call get_date
 		jmp pr_getint
+
+
+;; serialputc - write char to serial line
+;
+; group: text
+;
+; ( int1 -- )
+;
+; int1: char (bit 0-23: char, bit 24-31: console id)
+;
+
+		bits 32
+
+prim_serialputc:
+		call pr_setint
+		call serial_putc
+		clc
+		ret
+
+
+;; serialsetconfig - set serial line config
+;
+; group: system
+;
+; ( int1 int2 int3 -- )
+;
+; int1: line number (0-4)
+; int2: port
+; int3: baud
+;
+
+		bits 32
+
+prim_serialsetconfig:
+		mov bp,pserr_pstack_underflow
+		cmp dword [pstack.ptr],3
+		jc prim_ssc_90
+		mov ecx,2
+		call get_pstack_tos
+		cmp dl,t_int
+		stc
+		mov bp,pserr_wrong_arg_types
+		jnz prim_ssc_90
+		push eax
+		mov dx,t_int + (t_int << 8)
+		call get_2args
+		pop ebx
+		jc prim_ssc_90
+		sub dword [pstack.ptr],3
+		; ebx: line
+		; ecx: port
+		; eax: baud
+
+		cmp ebx,serial.lines.max - 1
+		jae prim_ssc_80
+		imul esi,ebx,sl.size
+		add esi,serial.lines
+		mov byte [esi+sl.status],0
+		add bl,0f0h
+		mov [esi+sl.scancode],bl
+		cmp ecx,10000h
+		jae prim_ssc_80
+		cmp ecx,4
+		jae prim_ssc_40
+		mov cx,[es:0x400+ecx*2]
+		or cx,cx
+		jz prim_ssc_80
+prim_ssc_40:
+		mov [esi+sl.port],cx
+		cmp eax,75
+		jb prim_ssc_80
+		mov ebx,115200
+		cmp eax,ebx
+		ja prim_ssc_80
+		xchg eax,ebx
+		cdq
+		div ebx
+		mov [esi+sl.baud],ax
+		mov byte [esi+sl.status],1
+prim_ssc_80:
+		clc
+prim_ssc_90:
+		ret
+
+
+;; serial.init - program serial lines
+;
+; group: system
+;
+; ( -- )
+;
+
+		bits 32
+
+prim_serialinit:
+		call serial_setup
+		clc
+		ret
 
 
 ;; idle - run stuff when idle

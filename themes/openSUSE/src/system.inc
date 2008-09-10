@@ -365,6 +365,16 @@ def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Decrement variable.
+%
+% ( dict_ref ) ==> ( )
+%
+/dec {
+  dup exec 1 sub def
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Copy src to dst.
 %
 % Watch overlapping src & dst!

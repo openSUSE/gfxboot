@@ -27,7 +27,8 @@
 /.xm_panel_x		 6 def		% panel entry x pos
 /.xm_vspace		 7 def		% vspace per menu
 /.xm_title               8 def          % xmenu title
-/.xm_size		 9 def		% xmenu size
+/.xm_text                9 def          % xmenu text
+/.xm_size		10 def		% xmenu size
 
 
 % short hands

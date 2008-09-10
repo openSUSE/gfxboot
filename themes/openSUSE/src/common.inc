@@ -142,6 +142,8 @@
   dup 0xff00 and 16 shl over 0xff and dup 0xe0 eq { pop 0 } if add /key exch def
   16 shr 0xffff and /keystat exch def
 
+  key 24 shr 0xff and dup 0xf0 ge exch 0xf4 le and { key serial.input return } if
+
   key
 
   config.keymap { mapkey } if
@@ -1572,6 +1574,15 @@ ptheme {
 /dud.file              "dud.file"                    "" gfxconfig.set.str
 /dud.url               "dud.url"                     "" gfxconfig.set.str
 /dud.url.name          "dud.url.name"                "" gfxconfig.set.str
+
+/serial.line0          "serial.line0"               [ ] gfxconfig.set.array_str
+/serial.line1          "serial.line1"               [ ] gfxconfig.set.array_str
+/serial.line2          "serial.line2"               [ ] gfxconfig.set.array_str
+/serial.line3          "serial.line3"               [ ] gfxconfig.set.array_str
+
+/serial.lines [
+  serial.line0 serial.line1 serial.line2 serial.line3
+] def
 
 % Array of menu entries with no boot option input field.
 /config.nobootoptions "nobootoptions"       [ ] gfxconfig.set.array_str

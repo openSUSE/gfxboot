@@ -3,6 +3,7 @@
 
 %% include timeout.inc
 %% include common.inc
+%% include serial.inc
 
 %% include ../po/text.inc
 %% include window.inc
