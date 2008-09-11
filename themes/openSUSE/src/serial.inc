@@ -492,7 +492,7 @@ Edit boot options.
   serial.lines length serial.tmp.bm le { .undef return } if
 
   serial.lines serial.tmp.bm get 2 aget dup .undef ne {
-    serial.lines serial.tmp.bm get 1 get cvn exch
+    serial.tmp.bm serial.getbaud exch
     "console=%s,%d" serial.console.buf sprintf
     serial.console.buf
   } if

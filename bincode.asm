@@ -428,8 +428,14 @@ kbd_status		dw 0
 sl.port			equ 0
 sl.baud			equ 2
 sl.scancode		equ 4
-sl.status		equ 5		; bit 0: valid config; 1: input received
-sl.size			equ 6
+sl.status		equ 5		; bits:
+					;   0: valid config
+					;   1: input received
+					;   2: baud autodetect
+sl.recv_mask		equ 6		; for autodetect
+sl.recv_cnt		equ 7		; dto.
+sl.baud_idx		equ 8		; dto.
+sl.size			equ 9
 
 			; 5 serial lines
 serial.lines.max	equ 5
@@ -437,6 +443,9 @@ serial.lines		times serial.lines.max * sl.size db 0
 
 serial.port_noinit	dw 0		; port that was setup by bootloader
 serial.key		dd 0		; serial input
+
+			; baud divisors
+serial.baud_tab		db 1, 3, 6, 12, 0
 
 sound_buf_size		equ 4*1024
 sound_buf_mask		equ sound_buf_size - 1
@@ -4009,31 +4018,17 @@ get_key_to_25:
 
 get_key_to_30:
 		mov esi,serial.lines
-get_key_to_32:
+get_key_to_35:
 		test byte [esi+sl.status],1
-		jz get_key_to_36
+		jz get_key_to_40
 
-		mov ax,[esi+sl.port]
-
-		push edx
-		lea edx,[eax+5]
-		in al,dx
-		sub dx,5
-		test al,1
-		jz get_key_to_34
-		xor eax,eax
-		in al,dx
-		or byte [esi+sl.status],2
-		mov ah,[esi+sl.scancode]
-		mov [serial.key],eax
-get_key_to_34:
-		pop edx
+		call serial_get_byte
 		jnz get_key_to_60
 
-get_key_to_36:
+get_key_to_40:
 		add esi,sl.size
 		cmp esi,serial.lines + serial.lines.max * sl.size
-		jb get_key_to_32
+		jb get_key_to_35
 
 get_key_to_50:
 		call get_time
@@ -4078,6 +4073,155 @@ get_key_to_90:
 		mov byte [idle.invalid],1
 		ret
 
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Read serial line input.
+;
+;  [esi]	serial info struct
+;
+; return:
+;  ZF		0: ok, key in [serial.key]
+;		1: no key
+;
+
+serial_get_byte:
+		pusha
+		mov dx,[esi+sl.port]
+		add dx,5
+		in al,dx
+		test al,1
+		jz serial_gb_80
+		mov ah,al
+		sub dx,5
+		in al,dx
+		test byte [esi+sl.status],4		; autodetect?
+		jz serial_gb_70				; no
+		mov bl,[esi+sl.recv_cnt]
+		inc bl
+		mov [esi+sl.recv_cnt],bl
+		mov bh,[esi+sl.recv_mask]
+		test ax,1880h
+		jz serial_gb_50
+		stc
+serial_gb_50:
+		adc bh,bh
+		mov [esi+sl.recv_mask],bh
+
+		cmp bl,1
+		ja serial_gb_62
+		; 1 char
+		; if ok, return it, else skip
+		test bh,1
+		jz serial_gb_70
+		jmp serial_gb_80
+serial_gb_62:
+		cmp bl,2
+		ja serial_gb_63
+		; 2 chars
+		; if last 2 were ok, return it, else skip
+		test bh,3
+		jz serial_gb_70
+		jmp serial_gb_80
+serial_gb_63:
+		cmp bl,3
+		ja serial_gb_64
+		; 3 chars
+		; if last 2 were ok, return it
+		; if last 2 broken: choose new freq
+		test bh,3
+		jz serial_gb_70
+		and bh,3
+		cmp bh,3
+		jnz serial_gb_80
+		call serial_new_baud
+		jmp serial_gb_80
+serial_gb_64:
+		cmp bl,4
+		ja serial_gb_65
+		; 4 chars
+		; if last 2 were ok, return it
+		; if last 2 broken: choose new freq
+		test bh,3
+		jz serial_gb_70
+		and bh,3
+		cmp bh,3
+		jnz serial_gb_80
+		call serial_new_baud
+		jmp serial_gb_80
+serial_gb_65:
+		; 5 chars & more
+		; if last 4 ok, return it & turn off autodetect
+		; if last 2 were ok, return it
+		; if last 2 broken: choose new freq
+		test bh,0fh
+		jnz serial_gb_66
+		and byte [esi+sl.status],~4
+serial_gb_66:
+		test bh,3
+		jz serial_gb_70
+		and bh,3
+		cmp bh,3
+		jnz serial_gb_80
+		call serial_new_baud
+		jmp serial_gb_80
+
+serial_gb_70:
+		and eax,0ffh
+		mov ah,[esi+sl.scancode]
+		mov [serial.key],eax
+		; ZF = 0
+		or byte [esi+sl.status],2
+		jmp serial_gb_90
+serial_gb_80:
+		; ZF = 1
+		xor ax,ax
+serial_gb_90:
+		popa
+		ret
+
+
+serial_new_baud:
+		movzx ebx,byte [esi+sl.baud_idx]
+		inc ebx
+		mov al,[serial.baud_tab+ebx]
+		or al,al
+		jnz serial_nb_20
+		xor ebx,ebx
+		mov al,[serial.baud_tab]
+serial_nb_20:
+		mov [esi+sl.baud_idx],bl
+		mov [esi+sl.baud],al
+
+		mov dx,[esi+sl.port]
+		add dx,3
+		mov al,83h
+		call slow_out
+		sub dx,3
+		mov al,[esi+sl.baud]
+		call slow_out
+		inc dx
+		mov al,[esi+sl.baud+1]
+		call slow_out
+		mov al,03h
+		add dx,2
+		call slow_out
+
+		xor eax,eax
+		mov [esi+sl.recv_mask],al
+		mov [esi+sl.recv_cnt],al
+
+serial_nb_80:
+		mov dx,[esi+sl.port]
+		add dx,5
+		in al,dx
+		test al,1
+		jz serial_nb_90
+		sub dx,5
+		in al,dx
+		jmp serial_nb_80
+
+serial_nb_90:
+		ret
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ; Clear keyboard input buffer.
@@ -10481,7 +10625,16 @@ prim_serialsetconfig:
 		jz prim_ssc_80
 prim_ssc_40:
 		mov [esi+sl.port],cx
-		cmp eax,75
+		or eax,eax
+		jnz prim_ssc_60
+		mov byte [esi+sl.recv_mask],al
+		mov byte [esi+sl.recv_cnt],al
+		mov byte [esi+sl.baud_idx],al
+		movzx eax,byte [serial.baud_tab]
+		or byte [esi+sl.status],4
+		jmp prim_ssc_70
+prim_ssc_60:
+		cmp eax,450
 		jb prim_ssc_80
 		mov ebx,115200
 		cmp eax,ebx
@@ -10489,12 +10642,45 @@ prim_ssc_40:
 		xchg eax,ebx
 		cdq
 		div ebx
+prim_ssc_70:
 		mov [esi+sl.baud],ax
-		mov byte [esi+sl.status],1
+		or byte [esi+sl.status],1
 prim_ssc_80:
 		clc
 prim_ssc_90:
 		ret
+
+
+;; serialgetbaud - get current baud rate
+;
+; group: text
+;
+; ( int1 -- int2 )
+;
+; int1: console
+; int2: baud (0 = undefined)
+;
+
+		bits 32
+
+prim_serialgetbaud:
+		call pr_setint
+		cmp eax,serial.lines.max
+		jae prim_serialgetbaud_80
+		imul ebx,eax,sl.size
+		xor eax,eax
+		test byte [serial.lines+ebx+sl.status],1
+		jz prim_serialgetbaud_80
+		mov ax,[serial.lines+ebx+sl.baud]
+		mov ecx,115200
+		xchg eax,ecx
+		cdq
+		div ecx
+		jmp prim_serialgetbaud_90
+prim_serialgetbaud_80:
+		xor eax,eax
+prim_serialgetbaud_90:
+		jmp pr_getint
 
 
 ;; serial.init - program serial lines

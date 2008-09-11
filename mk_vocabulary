@@ -74,7 +74,7 @@
 
   memcpy sysconfig _readsector sysinfo
 
-  getkey serial.init serial.putc serial.setconfig
+  getkey serial.init serial.putc serial.setconfig serial.getbaud
 
   xxx test1 test2 test3 test4 test5 test6
 
