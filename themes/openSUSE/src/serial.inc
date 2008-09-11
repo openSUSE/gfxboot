@@ -44,8 +44,13 @@
 
   1 eq { serial.menu.ok } { serial.menu.prev } ifelse
 
+  window.action actCloseInfo eq {
+    /window.action actNothing def
+    window.done
+  } if
+
   serial.action act.boot eq {
-    /serial.setup serial.menu.layout serial.menu.index get .sm.setup get def
+    % /serial.setup serial.menu.layout serial.menu.index get .sm.setup get def
 
     serial.cmdline serial.menu_idx 2
     return
@@ -167,6 +172,7 @@
     xmenu.bits .xm_list get length 1 gt { [ /serial.bits.setup /serial.bits.ok ] } if
     xmenu.kernelopts .undef ne { [ /serial.kernel.setup /serial.kernel.ok ] } if
     [ /serial.options.setup /serial.options.ok ]
+    [ /serial.infobox.setup /serial.infobox.ok ]
   ] def
 
   % go for text mode (or use 0?)
@@ -334,9 +340,38 @@ Edit boot options.
 /serial.options.ok {
   serial.cmdline serial.edit.buf strcpy pop
 
-  /serial.menu.index 0 def
+  % point to infobox
+  /serial.menu.index inc
 
   /serial.action act.boot def
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Setup infobox.
+%
+% ( -- )
+%
+/serial.infobox.setup {
+  /smenu serial.infobox def
+
+  serial.smenu.init
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Leave infobox.
+%
+% ( -- )
+%
+/serial.infobox.ok {
+  serial.edit.buf to_number
+  serial.smenu.select {
+    serial.menu.prev
+    /window.action actCloseInfo def
+  } {
+    serial.menu.again
+  } ifelse
 } def
 
 

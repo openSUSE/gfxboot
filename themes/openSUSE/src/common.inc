@@ -716,6 +716,19 @@
 
   dup .text info.msg put
 
+  serial.line.status {
+    serial.infobox .undef eq {
+      /serial.infobox .xm_size array def
+      serial.infobox .xm_current 0 put
+    } if
+
+    serial.infobox .xm_title 2 index .title get put
+    serial.infobox .xm_text info.msg put
+    serial.infobox .xm_list [ info.type 1 eq { "reboot" } { "ok" } ifelse ] put
+
+    serial.infobox.setup
+  } if
+
   dup window.init
       window.show
 
@@ -743,6 +756,12 @@
 
   dup strsize pop neg progress.text.x add progress.text.y moveto
   window.current .color.fg get setcolor
+
+  serial.line.status {
+    "\x08\x08\x08\x08" serial.show
+    dup serial.show
+  } if
+
   dup show
   free
 
@@ -817,6 +836,12 @@
 
   0 progress.percent
 
+  serial.line.status {
+    "\n" serial.show
+    dia .text get serial.show
+    "  0%" serial.show
+  } if
+
 } def
 
 
@@ -829,6 +854,9 @@
     /load_error false def
     boot.ed.list boot.window .ed.focus get get edit.showcursor
   } if
+
+  serial.line.status { "\n\n" serial.show } if
+
 } def
 
 
