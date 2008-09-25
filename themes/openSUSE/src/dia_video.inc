@@ -18,8 +18,14 @@
      0    0	% special: for text mode
      1    0	% special: for VESA mode
    800  600
+  1024  600
   1024  768
+  1280  800
   1280 1024
+  1400 1050
+  1600 1200
+  1680 1050
+  1920 1200
 ] def
 
 
@@ -185,16 +191,19 @@
   } if 
 
   xmenu .xm_current -1 put
+
+  -1
   video.modes.list {
-    dup .vm_width get 3 index le
-    over .vm_height get 3 index le and
+    exch 1 add exch
+
+    dup .vm_width get 4 index le
+    over .vm_height get 4 index le and
     exch video.havesplash and {
-      xmenu .xm_current over over get 1 add put
-    } {
-      exit
-    } ifelse
+      xmenu .xm_current 2 index put
+    } if
 
   } forall
+  pop
 
   pop pop
 } def

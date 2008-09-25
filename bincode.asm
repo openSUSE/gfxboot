@@ -488,7 +488,8 @@ tmp_var_3		dd 0
 
 ddc_timings		dw 0		; standard ddc timing info
 ddc_xtimings		dd 0		; converted standard timing/final timing value
-ddc_xtimings1		dd 0, 0, 0, 0
+ddc_xtimings1		dd 0, 0, 0, 0	; must follow ddc_xtimings
+ddc_xtimings2		dd 0, 0, 0, 0	; must follow ddc_xtimings1
 ddc_mult		dd 0, 1		; needed for ddc timing calculation
 			dd 3, 4
 			dd 4, 5
@@ -15753,7 +15754,7 @@ get_mon_res_24:
 
 		; find max. resolution
 
-		mov ecx,5
+		mov ecx,9
 		mov esi,ddc_xtimings
 
 get_mon_res_30:
@@ -15802,7 +15803,7 @@ read_ddc_20:
 		or esi,esi
 		jz read_ddc_25
 		mov ecx,80h
-		rep movsb
+		es rep movsb
 		jmp read_ddc_30
 
 read_ddc_25:
@@ -15841,7 +15842,7 @@ read_ddc_30:
 read_ddc_40:
 		es lodsb
 		cmp al,1
-		jbe read_ddc_70
+		jbe read_ddc_50
 		
 		movzx ebp,al
 		add ebp,31
@@ -15849,7 +15850,7 @@ read_ddc_40:
 
 		mov al,[es:esi]
 		shr al,6
-		jz read_ddc_70
+		jz read_ddc_50
 		movzx ebx,al
 		shl ebx,3
 
@@ -15857,16 +15858,51 @@ read_ddc_40:
 		mul dword [ebx+ddc_mult]
 		div dword [ebx+ddc_mult+4]
 		
-		jz read_ddc_70
+		jz read_ddc_50
 
 		shl eax,16
 		add eax,ebp
 		mov [edi],eax
 
-read_ddc_70:
+read_ddc_50:
 		inc esi
 		add edi,4
 		loop read_ddc_40
+
+		mov ecx,4
+		mov esi,[vbe_buffer]
+		add esi,36h
+		mov edi,ddc_xtimings2
+read_ddc_60:
+		mov eax,[es:esi]
+		bswap eax
+		cmp eax,100h
+		jb read_ddc_80
+		cmp eax,1010101h
+		jz read_ddc_80
+		movzx edx,byte [es:esi+4]
+		and dl,0f0h
+		shl edx,4
+		mov dl,[es:esi+2]
+		movzx ebx,byte [es:esi+7]
+		and bl,0f0h
+		shl ebx,4
+		mov bl,[es:esi+5]
+		or edx,edx
+		jz read_ddc_80
+		or ebx,ebx
+		jz read_ddc_80
+		cmp edx,0fffh
+		jz read_ddc_80
+		cmp ebx,0fffh
+		jz read_ddc_80
+		shl ebx,16
+		add edx,ebx
+		mov [edi],edx
+		add edi,4
+read_ddc_80:
+		add esi,12h
+		loop read_ddc_60
 
 read_ddc_90:
 		ret
