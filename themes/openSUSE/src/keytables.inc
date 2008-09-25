@@ -10,8 +10,10 @@
 % key_code, plain, shift, altgr
 %
 
-/.km.locale 0 def
-/.km.map    1 def
+/.km.name   0 def
+/.km.locale 1 def
+/.km.id     2 def
+/.km.map    3 def
 
 %% include ../keymaps/keymap.cs_CZ.inc
 %% include ../keymaps/keymap.da_DK.inc
@@ -35,25 +37,26 @@
 
 % array must not be empty
 /keymaps [
-  [ "cs_CZ" keymap.cs_CZ ]
-  [ "da_DK" keymap.da_DK ]
-  [ "de_DE" keymap.de_DE ]
-  [ "et_EE" keymap.et_EE ]
-  [ "el_GR" keymap.el_GR ]
-  [ "es_ES" keymap.es_ES ]
-  [ "fr_FR" keymap.fr_FR ]
-  [ "hu_HU" keymap.hu_HU ]
-  [ "it_IT" keymap.it_IT ]
-  [ "ja_JP" keymap.ja_JP ]
-  [ "nb_NO" keymap.nb_NO ]
-  [ "pl_PL" keymap.pl_PL ]
-  [ "pt_BR" keymap.pt_BR ]
-  [ "pt_PT" keymap.pt_PT ]
-  [ "ru_RU" keymap.ru_RU ]
-  [ "sk_SK" keymap.sk_SK ]
-  [ "sl_SI" keymap.sl_SI ]
-  [ "sv_SE" keymap.sv_SE ]
-  [ "tr_TR" keymap.tr_TR ]
+  [ "Czech"        "cs_CZ" "czech"        keymap.cs_CZ ]
+  [ "Danish"       "da_DK" "danish"       keymap.da_DK ]
+  [ "German"       "de_DE" "german"       keymap.de_DE ]
+  [ "Estonian"     "et_EE" "estonian"     keymap.et_EE ]
+  [ "English-US"   "en_US" "english-us"   .undef       ]
+  [ "Greek"        "el_GR" "greek"        keymap.el_GR ]
+  [ "Spanish"      "es_ES" "spanish"      keymap.es_ES ]
+  [ "French"       "fr_FR" "french"       keymap.fr_FR ]
+  [ "Hungarian"    "hu_HU" "hungarian"    keymap.hu_HU ]
+  [ "Italian"      "it_IT" "italian"      keymap.it_IT ]
+  [ "Japanese"     "ja_JP" "japanese"     keymap.ja_JP ]
+  [ "Norwegian"    "nb_NO" "norwegian"    keymap.nb_NO ]
+  [ "Polish"       "pl_PL" "polish"       keymap.pl_PL ]
+  [ "Portugese-BR" "pt_BR" "portugese-br" keymap.pt_BR ]
+  [ "Portugese"    "pt_PT" "portugese"    keymap.pt_PT ]
+  [ "Russian"      "ru_RU" "russian"      keymap.ru_RU ]
+  [ "Slovak"       "sk_SK" "slovak"       keymap.sk_SK ]
+  [ "Slovene"      "sl_SI" "slovene"      keymap.sl_SI ]
+  [ "Swedish"      "sv_SE" "swedish"      keymap.sv_SE ]
+  [ "Turkish"      "tr_TR" "turkish"      keymap.tr_TR ]
 ] def
 
 

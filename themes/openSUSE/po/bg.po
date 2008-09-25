@@ -407,3 +407,9 @@ msgstr "Поправка на инсталирана система"
 #. txt_mediacheck
 msgid "Check Installation Media"
 msgstr "Проверка на инсталационен носител"
+
+#. menu item for keyboard layout (please keep it short)
+#. txt_keyboard
+msgid "Keyboard"
+msgstr ""
+

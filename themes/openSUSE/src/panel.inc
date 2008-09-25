@@ -65,6 +65,10 @@
           } if
         } if
 
+        keymap.mainmenu {
+          [ keyF8 0 "F8" /panel.keymap /panel.keymap.width /panel.keymap.update /keymap.init ]
+        } if
+
       } ifelse
 
       xmenu.bits .undef eq { bits.init } if
@@ -76,6 +80,10 @@
         /profile.data exch def
         [ keyF3 0 "F3" /panel.profile /panel.profile.width /panel.profile.update /profile.init ]
       } { pop } ifelse
+
+      keymap.mainmenu {
+        [ keyF4 0 "F4" /panel.keymap /panel.keymap.width /panel.keymap.update /keymap.init ]
+      } if
 
     } ifelse
 

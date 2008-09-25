@@ -401,3 +401,9 @@ msgstr "修复已安装系统"
 #. txt_mediacheck
 msgid "Check Installation Media"
 msgstr "检查安装媒体"
+
+#. menu item for keyboard layout (please keep it short)
+#. txt_keyboard
+msgid "Keyboard"
+msgstr ""
+

@@ -20,6 +20,7 @@
 %% include dia_bits.inc
 %% include dia_about.inc
 %% include dia_kernelopts.inc
+%% include dia_keymap.inc
 %% include panel.inc
 %% include keytables.inc
 %% include locale.inc

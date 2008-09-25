@@ -35,29 +35,64 @@
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Set keyboard map.
 %
-% ( locale ) ==> ( )
+% ( locale|keymap ) ==> ( )
 %
 /setkeymap {
-  config.keymap.locale over eq { pop return } if
+  config.keymap.name over eq { pop return } if
+  /config.keymap.name exch def
 
-  /config.keymap.locale exch def
+  config.keymap.id config.keymap.name eq { return } if
 
   /config.keymap .undef def
+  /config.keymap.id .undef def
 
   keymaps {
-    dup .km.locale get config.keymap.locale locale.cmp {
-      .km.map get /config.keymap exch def exit
+    dup .km.id get config.keymap.name eq
+    over .km.locale get config.keymap.name eq or {
+      dup .km.map get /config.keymap exch def
+      .km.id get /config.keymap.id exch def
     } { pop } ifelse
   } forall
 
-  keymaps {
-    dup .km.locale get config.keymap.locale eq {
-      .km.map get /config.keymap exch def exit
-    } { pop } ifelse
-  } forall
+  config.keymap.id .undef eq {
+    keymaps {
+      dup .km.locale get config.keymap.name locale.cmp {
+        dup .km.map get /config.keymap exch def
+        .km.id get /config.keymap.id exch def
+      } { pop } ifelse
+    } forall
+  } if
+
+  config.keymap.id .undef eq {
+    /config.keymap.id "en_US" def
+  } if
 
 } def
 
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Look up keymap in languale locale list.
+%
+% ( locale ) ==> ( keymap|locale )
+%
+/getkeymapfromlocale {
+  /kbd.tmp exch def
+  /kbd.tmp.locale .undef def
+
+  lang.defaultnames {
+    dup .la.locale get kbd.tmp eq { .la.keymap get /kbd.tmp.locale exch def exit } { pop } ifelse
+  } forall
+
+  kbd.tmp.locale .undef eq {
+    lang.defaultnames {
+      dup .la.locale get kbd.tmp locale.cmp { .la.keymap get /kbd.tmp.locale exch def exit } { pop } ifelse
+    } forall
+  } if
+
+  kbd.tmp.locale .undef ne { /kbd.tmp kbd.tmp.locale def } if
+
+  kbd.tmp
+} def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

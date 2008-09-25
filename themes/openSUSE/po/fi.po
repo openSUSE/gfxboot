@@ -407,3 +407,9 @@ msgstr "Korjaa asennettu järjestelmä"
 #. txt_mediacheck
 msgid "Check Installation Media"
 msgstr "Tarkista asennustietoväline"
+
+#. menu item for keyboard layout (please keep it short)
+#. txt_keyboard
+msgid "Keyboard"
+msgstr ""
+

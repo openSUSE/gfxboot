@@ -406,3 +406,9 @@ msgstr "설치된 시스템 복원"
 #. txt_mediacheck
 msgid "Check Installation Media"
 msgstr "설치 미디어 확인"
+
+#. menu item for keyboard layout (please keep it short)
+#. txt_keyboard
+msgid "Keyboard"
+msgstr ""
+

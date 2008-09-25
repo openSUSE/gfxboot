@@ -404,3 +404,9 @@ msgstr "Popravi instalirani sustav"
 #. txt_mediacheck
 msgid "Check Installation Media"
 msgstr "Provjeri instalacijski medij"
+
+#. menu item for keyboard layout (please keep it short)
+#. txt_keyboard
+msgid "Keyboard"
+msgstr ""
+

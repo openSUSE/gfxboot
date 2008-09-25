@@ -1092,11 +1092,13 @@
       over exch 0 exch put
       1 add
     } forall
-    tmp dup setlang pop setkeymap
+    tmp dup setlang pop getkeymapfromlocale setkeymap
   } {
     pop
-    "en_US" dup setlang pop setkeymap
+    "en_US" dup setlang pop getkeymapfromlocale setkeymap
   } ifelse
+
+  keymap.default "" ne { keymap.default setkeymap } if
 
   font.large setfont
 
@@ -1575,6 +1577,9 @@ ptheme {
 /panel.normal.fg       "panel.normal.fg"          white gfxconfig.set.int
 /panel.title.fg        "panel.title.fg"           white gfxconfig.set.int
 /panel.f-key.fg        "panel.f-key.fg"           black gfxconfig.set.int
+/keymap.submenu        "keymap.submenu"           false gfxconfig.set.bool
+/keymap.mainmenu       "keymap.mainmenu"          false gfxconfig.set.bool
+/keymap.default        "keymap"                      "" gfxconfig.set.str
 
 /install.default       "install"                     "" gfxconfig.set.str
 /install.http.server   "install.http.server"         "" gfxconfig.set.str

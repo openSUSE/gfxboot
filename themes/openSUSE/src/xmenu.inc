@@ -28,7 +28,8 @@
 /.xm_vspace		 7 def		% vspace per menu
 /.xm_title               8 def          % xmenu title
 /.xm_text                9 def          % xmenu text
-/.xm_size		10 def		% xmenu size
+/.xm_last               10 def          % last selected entry
+/.xm_size		11 def		% xmenu size
 
 
 % short hands
@@ -61,7 +62,7 @@
   dup 0 eq { return } if
 
   dup keyEsc eq {
-    xmenu 0 xmenu.oldentry put
+    xmenu .xm_current over .xm_last get put
     window.done
     pop 0
   } if
@@ -205,7 +206,7 @@
 
   0 1 xmenu .xm_list get length 1 sub { xmenu.viewentry } for
 
-  /xmenu.oldentry xmenu .xm_current get def
+  xmenu .xm_last over .xm_current get put
 
   dup .x xmenu.x put
       .y xmenu.y put
@@ -302,7 +303,30 @@
     xmenu.pos.x xmenu.hspace add xmenu.pos.y xmenu.vspace add moveto
   } ifelse
 
-  xmenu .xm_list get over get exec show.rtl
+  xmenu .xm_list get over get exec
+    dup 0 get '\x09' eq {
+      1 add
+      currentpoint
+      currentcolor
+
+      xmenu.dark setcolor
+      xmenu.pos.x xmenu.pos.y moveto
+      xmenu.pos.x xmenu.width add xmenu.pos.y lineto
+      xmenu.light setcolor
+      xmenu.pos.x xmenu.pos.y 1 add moveto
+      xmenu.pos.x xmenu.width add xmenu.pos.y 1 add lineto
+
+      setcolor
+      moveto
+      show.rtl
+      config.rtl {
+        xmenu.pos.x 8 add xmenu.pos.y moveto "\u25c0" show
+      } {
+        xmenu.pos.x xmenu.width add 8 sub xmenu.pos.y moveto "\u25b6" showright1
+      } ifelse
+    } {
+      show.rtl
+    } ifelse
 
   pop
 

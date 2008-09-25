@@ -384,3 +384,8 @@ msgstr ""
 msgid "Check Installation Media"
 msgstr ""
 
+#. menu item for keyboard layout (please keep it short)
+#. txt_keyboard
+msgid "Keyboard"
+msgstr ""
+

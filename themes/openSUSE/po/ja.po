@@ -400,3 +400,9 @@ msgstr "インストール済みのシステムを修復"
 #. txt_mediacheck
 msgid "Check Installation Media"
 msgstr "インストールメディアのチェック"
+
+#. menu item for keyboard layout (please keep it short)
+#. txt_keyboard
+msgid "Keyboard"
+msgstr ""
+

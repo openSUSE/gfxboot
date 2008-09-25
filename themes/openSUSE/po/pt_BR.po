@@ -406,3 +406,9 @@ msgstr "Reparar o Sistema Instalado"
 #. txt_mediacheck
 msgid "Check Installation Media"
 msgstr "Verificar a Mídia de Instalação"
+
+#. menu item for keyboard layout (please keep it short)
+#. txt_keyboard
+msgid "Keyboard"
+msgstr ""
+

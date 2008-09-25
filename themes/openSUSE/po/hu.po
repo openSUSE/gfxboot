@@ -410,3 +410,9 @@ msgstr "A telepített rendszer javítása"
 #. txt_mediacheck
 msgid "Check Installation Media"
 msgstr "Telepítőkészlet ellenőrzése"
+
+#. menu item for keyboard layout (please keep it short)
+#. txt_keyboard
+msgid "Keyboard"
+msgstr ""
+
