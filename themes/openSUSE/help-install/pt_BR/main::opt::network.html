@@ -1,0 +1,13 @@
+<a name="o_hostip"/>
+<a name="o_netmask"/>
+<a name="o_gateway"/>
+
+<h3>
+<a name="network">Opções do instalador: opções de rede</a>
+</h3>
+
+<p>É possível configurar a interface de rede agora. O hardware será detectado mais tarde pelo YaST2. O conjunto mínimo de opções para configurar a placa de rede consiste em máscara de rede e IP de host. Por exemplo: <ul><li>hostip=192.168.0.10 netmask=255.255.255.0</li></ul></p>
+
+<p>ou numa forma mais curta: <ul><li>hostip=192.168.0.10/24</li></ul></p>
+
+<p>Se você tiver especificado uma <a href="#o_install">instalação baseada em rede</a> e não especificar essas duas opções, o instalador tentará configurar a interface de rede com <em>dhcp</em>. Se precisar de um gateway padrão, especifique-o com a opção <em>gateway</em>. Por exemplo: <ul><li>gateway=192.168.0.8</li></ul></p>

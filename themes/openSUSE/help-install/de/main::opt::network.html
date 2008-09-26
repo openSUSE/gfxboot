@@ -1,0 +1,13 @@
+<a name="o_hostip"/>
+<a name="o_netmask"/>
+<a name="o_gateway"/>
+
+<h3>
+<a name="network">Installiereroptionen: Netzwerkoptionen</a>
+</h3>
+
+<p>Es ist möglich die Netzwerkschnittstelle sofort zu konfigurieren. Die Hardwarewird später durch YaST2 erkannt. Der minimale Satz an Optionen, um IhreNetzwerkkarte zu konfigurieren besteht aus Host-IP und Netzmaske.Beispiel: <ul><li>hostip=192.168.0.10 netmask=255.255.255.0</li></ul></p>
+
+<p>oder in einer kürzeren Form: <ul><li>hostip=192.168.0.10/24</li></ul></p>
+
+<p>Wenn Sie <a href="#o_install">netzwerkbasierte Installation</a> bestimmt haben, aber diese beiden Optionen nichtbestimmen, versucht der Installierer die Netzwerkschnittstelle mit <em>dhcp</em>zu konfigurieren. Wenn Sie eine Standardschnittstelle benötigen, bestimmen Sie diesmit der Option <em>Gateway</em>. Beispiel: <ul><li>gateway=192.168.0.8</li></ul></p>

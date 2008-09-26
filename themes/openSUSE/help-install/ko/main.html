@@ -1,0 +1,66 @@
+<h3>
+<a name="main">부트 로더 도움말</a>
+</h3>
+
+<p><em>@@@product@@@</em> 에 오신것을 환영합니다</p>
+
+<p>이 메뉴를 사용하여 원하는 기능을 선택합니다. 이 도움말 시스템에서 문제가 발생하면 <em>@@@fkey_help@@@</em>를 눌러 도움말 시스템의 <a href="#help">설명</a> 에 들어가세요. 이 메뉴에서 주요 기능은 다음과 같습니다:</p>
+
+<p><a href="#harddisk">하드디스크로 부팅</a>: 이 선택사항은 앞서 설치된 운영체제만 시작할 뿐 시스템에 아무런 영향을 주지 않습니다.</p>
+
+<p><a href="#linux">설치</a>: 대부분의 머신은 이 설치 모드를 사용합니다. 부팅 도중 시스템이 멈추거나 하드웨어 관련 문제(디스크 제어기, 네트워크 카드 같은)가 발생하면, 다음의 설치 옵션 중 하나를 선택하세요.</p>
+
+<p><a href="#noacpi">설치 -- ACPI 비활성화</a>: 현재 판매되는 대부분의 컴퓨터가 불완전하거나, ACPI의 구현에 결함이 있습니다. 이 선택사항은 커널에서 ACPI 지원을 비활성화 시킵니다. 하지만 IDE 하드디스크의 DMA 기능 같은것들은 활성화합니다.</p>
+
+<p><a href="#nolapic">설치 -- 내부 APIC 비활성화</a>: 만약 정상적인 설치에 실패했다면, 시스템 하드웨어가 로컬 APIC를 지원하지 않을 수 있습니다. 그런 경우라면, 이 옵션을 사용하여 로컬 APIC 지원 없이 설치를 해보세요.</p>
+
+<p><a href="#failsafe">설치 -- 안전 설정</a>: <em>설치</em>에 성공하지 못한 경우에는, 이 선택 항목으로 문제를 해결 할 수도 있습니다.</p>
+
+<p><a href="#rescue">시스템 복구</a>: 이 부팅 이미지는 RAM 을 이용한 작은 리눅스 시스템을 시작 시킵니다. 이것은 시스템에 문제가 발생한 경우에 유용합니다. 이것으로 부팅시킨 뒤, 루트로 로그인 할 수 있습니다.</p>
+
+<p>
+<a href="#firmware">펌웨어 검사</a>: Runs a BIOS test tool that validates
+ACPI and other parts of your BIOS.
+</p>
+
+<p>
+<a href="#memtest">메모리 검사</a>: Memory testing is useful for more than
+checking installation of new memory modules. It is a stress test
+for a big part of your computer system and may indicate hardware
+problems.
+</p>
+
+<p>
+<a href="#opt">부트 옵션</a>: The boot options may change the
+behavior of your system completely. They are settings for
+the kernel.
+</p>
+
+<p>
+<a href="#help">@@@fkey_help@@@ 도움말</a>: This is context sensitive. It will
+show different screens depending on the active element of the
+boot screen. There is also a description of this help system
+available.
+</p>
+
+<p>
+<a href="#keytable">@@@fkey_lang@@@</a>: Set language and keyboard mapping
+used by the boot loader.
+</p>
+
+<p>
+<a href="#videomode">@@@fkey_video@@@ 비디오 모드</a>: Here, choose between
+different screen resolutions while installing. If you encounter
+problems with the graphical installation, the <em>텍스트 모드</em> may
+be a work-around for you.
+</p>
+
+<p>
+<a href="#install_src">@@@fkey_inst@@@ 설치 소스</a>: Choose the
+installation source.
+</p>
+
+<p>
+<a href="#driverupdate">@@@fkey_dud@@@ Driver Update</a>: For very new machines, a
+driver update may be needed to install the system.
+</p>

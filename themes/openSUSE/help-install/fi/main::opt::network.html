@@ -1,0 +1,13 @@
+<a name="o_hostip"/>
+<a name="o_netmask"/>
+<a name="o_gateway"/>
+
+<h3>
+<a name="network">Asentimen valinnat: Verkon valinnat</a>
+</h3>
+
+<p>Verkkoliitäntä on mahdollista määrittää nyt. Laitteisto tunnistetaan myöhemmin YaST2 toimesta. Pakolliset valinnat verkon määrittämiseksi ovat IP-osoite ja aliverkon peite. Esim: <ul><li>hostip=192.168.0.10 netmask=255.255.255.0</li></ul></p>
+
+<p>tai lyhyemmässä muodossa: <ul><li>hostip=192.168.0.10/24</li></ul></p>
+
+<p>Jos määritit <a href="#o_install">asennus verkosta</a>:n etkä määritä molempia näistä valinnoista, asennusohjelma yrittää määrittää verkkoliitännän <em>dhcp</em>:llä. Jos tarvitset oletusyhdyskäytävän, määritä se valinnalla <em>gateway</em>. Esim: <ul><li>gateway=192.168.0.8</li></ul></p>

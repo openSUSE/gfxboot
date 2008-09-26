@@ -1,0 +1,35 @@
+<a name="o_hostip"/>
+<a name="o_netmask"/>
+<a name="o_gateway"/>
+
+<h3>
+<a name="network"> स्थापनेचे विकल्प : नेटवर्क विकल्प </a>
+</h3>
+
+<p>
+It is possible to configure the network interface right now. The
+hardware will be detected later by YaST2. The minimum set of options
+to configure your network card consists of host IP and netmask. For
+example:
+<ul>
+  <li>होस्टाआइपि=१९२.१६८.०.१० नेट्मास्क्= २५५.२५५.२५५.०</li>
+</ul>
+</p>
+
+<p>
+or in a shorter form:
+<ul>
+  <li> होस्टाआइपि=१९२.१६८.०.१० </li>
+</ul>
+</p>
+
+<p>
+If you specified a <a href="#o_install"> नेटवर्क बेस्ड स्थापना </a> and do
+not specify both of these options, the installer tries to configure
+the network interface with <em>डिएचसिपि</em>. If you need a default
+gateway, specify this with the option <em>गेटवे</em>. For
+example:
+<ul>
+  <li>गेटवे= १९२.१६८.०.१० </li>
+</ul>
+</p>
