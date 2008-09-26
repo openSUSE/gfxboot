@@ -409,4 +409,3 @@ msgstr "Tjek installationsmedie"
 #. txt_keyboard
 msgid "Keyboard"
 msgstr ""
-

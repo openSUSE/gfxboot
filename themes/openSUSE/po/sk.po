@@ -411,4 +411,3 @@ msgstr "Kontrola integrity média"
 #. txt_keyboard
 msgid "Keyboard"
 msgstr ""
-

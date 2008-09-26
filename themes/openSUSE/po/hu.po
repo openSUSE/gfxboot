@@ -415,4 +415,3 @@ msgstr "Telepítőkészlet ellenőrzése"
 #. txt_keyboard
 msgid "Keyboard"
 msgstr ""
-

@@ -410,4 +410,3 @@ msgstr "Перевірити носій для встановлення"
 #. txt_keyboard
 msgid "Keyboard"
 msgstr ""
-

@@ -409,4 +409,3 @@ msgstr "Provjeri instalacijski medij"
 #. txt_keyboard
 msgid "Keyboard"
 msgstr ""
-

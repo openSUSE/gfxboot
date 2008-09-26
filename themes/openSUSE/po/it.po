@@ -410,4 +410,3 @@ msgstr "Verifica del supporto di installazione"
 #. txt_keyboard
 msgid "Keyboard"
 msgstr ""
-

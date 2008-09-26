@@ -8,9 +8,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader.el\n"
-"PO-Revision-Date: 2008-03-31 11:20+0100\n"
+"PO-Revision-Date: 2008-06-06 12:52+0100\n"
 "Last-Translator: Vasileios Giannakopoulos <billg@billg.gr>\n"
-"Language-Team: Hellenic <billg@billg.gr>\n"
+"Language-Team: Ελληνικά <billg@billg.gr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -101,7 +101,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Ο πυρήνας Linux φορτώνεται\n"
+"Ο πυρήνας του Linux φορτώνεται\n"
 "\n"
 "\n"
 
@@ -352,7 +352,7 @@ msgstr "Πηγή"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_video_mode
 msgid "Video Mode"
-msgstr ""
+msgstr "Ρύθμιση Οθόνης"
 
 #. driver update dialog title
 #. -> txt_dud_file_msg
@@ -371,43 +371,42 @@ msgstr "Τόξο"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_kernel
 msgid "Kernel"
-msgstr ""
+msgstr "Πυρήνας"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
 msgid "Default"
-msgstr ""
+msgstr "Προκαθορισμένο"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> like in txt_safe_linux
 #. txt_kernel_safe
 msgid "Safe Settings"
-msgstr ""
+msgstr "Ασφαλείς Ρυθμίσεις"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_noacpi_install
 #. txt_kernel_noacpi
 msgid "No ACPI"
-msgstr ""
+msgstr "Χωρίς ACPI"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_nolapic_install
 #. txt_kernel_nolapic
 msgid "No Local APIC"
-msgstr ""
+msgstr "Χωρίς Τοπικό ACPI"
 
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr ""
+msgstr "Επισκευή Εγκατεστημένου Συστήματος"
 
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr ""
+msgstr "Έλεγχος Μέσου Εγκατάστασης"
 
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
 msgid "Keyboard"
 msgstr ""
-

@@ -409,4 +409,3 @@ msgstr "Kontrola instalačního média"
 #. txt_keyboard
 msgid "Keyboard"
 msgstr ""
-

@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-05-13 13:10+0100\n"
-"Last-Translator: Guillaume GARDET <guillaume.gardet@free.fr>\n"
+"PO-Revision-Date: 2008-05-27 22:18+0100\n"
+"Last-Translator: li-nox <chadup@caramail.com>\n"
 "Language-Team: French Team <opensuse-fr@opensuse.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -86,7 +86,7 @@ msgid ""
 "starting the text mode interface."
 msgstr ""
 "Vous quittez le menu d'amorçage graphique et\n"
-"démarrez l'interface en mode textuel."
+"démarrez l'interface en mode texte."
 
 #. txt_help
 msgid "Help"
@@ -132,7 +132,7 @@ msgstr "Erreur E/S"
 #. boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr "Changer la disquette d'amorçage"
+msgstr "Changer le disque d'amorçage"
 
 #. txt_insert_disk
 #, c-format
@@ -155,8 +155,8 @@ msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"Il ne s'agit pas d'une disquette d'amorçage pour <product>.\n"
-"Insérez la disquette d'amorçage %u."
+"Il ne s'agit pas d'un disque d'amorçage pour <product>.\n"
+"Insérez le disque d'amorçage %u."
 
 #. password dialog title
 #. txt_password_title
@@ -199,7 +199,7 @@ msgstr "Disque dur"
 #. dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "Installation du disque dur"
+msgstr "Installation sur disque dur"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
@@ -333,7 +333,7 @@ msgstr "Mode texte"
 #. menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr "Test de microprogramme"
+msgstr "Test de programme"
 
 #. txt_dud_file_msg
 msgid ""
@@ -341,7 +341,7 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
-"Pour charger les mises à jour de pilote directement depuis un CD,\n"
+"Pour charger les mises à jour de pilote directement depuis un CD-ROM,\n"
 "entrez les noms de fichier séparés\n"
 "par des virgules (,) :\n"
 
@@ -361,7 +361,7 @@ msgstr "Mode vidéo"
 #. -> txt_dud_file_msg
 #. txt_driver_update2
 msgid "Driver Update"
-msgstr "Mise à jour de pilotes"
+msgstr "Mise à jour de pilote"
 
 #. menu label for selecting (cpu) architecture
 #. like i386, x86-64, ppc
@@ -374,7 +374,7 @@ msgstr "Arch"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_kernel
 msgid "Kernel"
-msgstr "Kernel"
+msgstr "Noyau"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
@@ -413,4 +413,3 @@ msgstr "Vérifier le média d'installation"
 #. txt_keyboard
 msgid "Keyboard"
 msgstr ""
-

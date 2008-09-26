@@ -412,4 +412,3 @@ msgstr "Verificar el medio de instalación"
 #. txt_keyboard
 msgid "Keyboard"
 msgstr ""
-

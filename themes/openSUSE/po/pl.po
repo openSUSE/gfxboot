@@ -410,4 +410,3 @@ msgstr "Sprawdzenie płyty instalacyjnej"
 #. txt_keyboard
 msgid "Keyboard"
 msgstr ""
-

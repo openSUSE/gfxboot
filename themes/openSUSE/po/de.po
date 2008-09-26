@@ -412,4 +412,3 @@ msgstr "Prüfe Installationsmedium"
 #. txt_keyboard
 msgid "Keyboard"
 msgstr "Tastatur"
-

@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: bootloader.ko\n"
 "Report-Msgid-Bugs-To: translation@suse.de\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-05-15 04:56+0900\n"
+"PO-Revision-Date: 2008-06-14 18:12+0900\n"
 "Last-Translator: YunSeok Choi <xein@naver.com>\n"
 "Language-Team: Korean <xein@naver.com>\n"
 "MIME-Version: 1.0\n"
@@ -39,7 +39,7 @@ msgstr "계속"
 
 #. txt_install
 msgid "Installation"
-msgstr "설치"
+msgstr "오픈수세 설치"
 
 #. txt_manual_install
 msgid "Manual Installation"
@@ -63,7 +63,7 @@ msgstr "하드디스크로 부팅"
 
 #. txt_rescue
 msgid "Rescue System"
-msgstr "시스템 복구"
+msgstr "시스템 복구(콘솔)"
 
 #. txt_memtest
 msgid "Memory Test"
@@ -125,7 +125,7 @@ msgstr "부트로더"
 #. error box title
 #. txt_error_title
 msgid "I/O Error"
-msgstr "I/O 에러"
+msgstr "I/O 오류"
 
 #. boot disk change dialog title
 #. txt_change_disk_title
@@ -168,7 +168,7 @@ msgstr "플로피디스크에서 드라이버를 업데이트 준비"
 #. dvd warning title
 #. txt_dvd_warning_title
 msgid "DVD Error"
-msgstr "DVD 에러"
+msgstr "DVD 오류"
 
 #. txt_dvd_warning2
 msgid ""
@@ -283,7 +283,7 @@ msgstr "예"
 
 #. txt_no
 msgid "No"
-msgstr "아니오"
+msgstr "아니요"
 
 #. menu item for selecting a file
 #. txt_file
@@ -400,7 +400,7 @@ msgstr "내부 APIC 없음"
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr "설치된 시스템 복원"
+msgstr "설치된 시스템 복원(복구 도구)"
 
 #. menu item
 #. txt_mediacheck
@@ -411,4 +411,3 @@ msgstr "설치 미디어 확인"
 #. txt_keyboard
 msgid "Keyboard"
 msgstr ""
-

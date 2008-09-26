@@ -405,4 +405,3 @@ msgstr "インストールメディアのチェック"
 #. txt_keyboard
 msgid "Keyboard"
 msgstr ""
-

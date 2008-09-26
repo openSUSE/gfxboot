@@ -406,4 +406,3 @@ msgstr "檢查安裝媒體"
 #. txt_keyboard
 msgid "Keyboard"
 msgstr ""
-

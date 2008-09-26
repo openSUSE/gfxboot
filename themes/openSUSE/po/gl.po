@@ -408,4 +408,3 @@ msgstr "Comprobar o Soporte de Instalación"
 #. txt_keyboard
 msgid "Keyboard"
 msgstr ""
-

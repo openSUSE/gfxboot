@@ -413,4 +413,3 @@ msgstr "Проверка носителя установки"
 #. txt_keyboard
 msgid "Keyboard"
 msgstr ""
-

@@ -35,9 +35,11 @@
   [ "en_US" "en_US" false "English (US)" ]					% English
   [ "es_ES" "spanish" false "Español" ]						% Spanish
   [ "et_EE" "estonian" false "Eesti" ]						% Estonian
+  [ "fa_IR" "en_US" true "\ufbfd\ufeb4\u0631\ufe8e\ufed3" ]			% Farsi
   [ "fi_FI" "en_US" false "Suomi" ]						% Finnish
   [ "fr_FR" "french" false "Français" ]						% French
   [ "gl_ES" "en_US" false "Galego" ]						% Galician
+  [ "ka_GE" "en_US" false "ქართული" ]						% Kartuli
   [ "gu_IN" "en_US" false "\u0a97\u0ac1\u0a9c\u0ab0\u0abe\u0aa4\u0ac0" ]	% Gujarati
   [ "he_IL" "en_US" false "תירבע" ]						% Hebrew
 % [ "hi_IN" "en_US" false "\u0939\u093f\u0928\u094d\u0926\u0940" ]		% Hindi
@@ -47,9 +49,11 @@
   [ "id_ID" "en_US" false "Bahasa Indonesia" ]					% Indonesian
   [ "it_IT" "italian" false "Italiano" ]						% Italian
   [ "ja_JP" "japanese" false "日本語" ]						% Japanese
+  [ "jv_ID" "en_US" false "Basa Jawa" ]						% Javanese
 % [ "km_KH" "en_US" false "\u1781\u17d2\u1798\u17c2\u179a" ]			% Khmer
   [ "km_KH" "en_US" false "Khmer" ]						% Khmer
   [ "ko_KR" "en_US" false "한글" ]						% Korean
+  [ "lo_LA" "en_US" false "\u0e9e\u0eb2\u0eaa\u0eb2\u0ea5\u0eb2\u0ea7" ]	% Lao
   [ "lt_LT" "en_US" false "Lietuvių" ]						% Lithuanian
   [ "mk_MK" "en_US" false "Македонски" ]					% Macedonian
   [ "mr_IN" "en_US" false "\u092e\u0930\u093e\u0920\u0940" ]			% Marathi

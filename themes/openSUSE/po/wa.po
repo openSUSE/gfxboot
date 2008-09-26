@@ -408,4 +408,3 @@ msgstr "Verifyî media d' astalaedje"
 #. txt_keyboard
 msgid "Keyboard"
 msgstr ""
-

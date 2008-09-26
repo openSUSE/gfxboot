@@ -412,4 +412,3 @@ msgstr "Tarkista asennustietoväline"
 #. txt_keyboard
 msgid "Keyboard"
 msgstr ""
-

@@ -9,14 +9,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2008-05-17 23:47+0200\n"
-"Last-Translator: Freek de Kruijf <f.de.kruijf@hetnet.nl>\n"
-"Language-Team: Dutch <vertaling@vrijschrift.org>\n"
+"PO-Revision-Date: 2008-05-28 02:02+0200\n"
+"Last-Translator: Rinse de Vries <rinsedevries@kde.nl>\n"
+"Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+"Plural-Forms:  nplurals=2; plural=n != 1;\n"
 
 #. ok button label
 #. txt_ok
@@ -206,7 +206,7 @@ msgstr "Schijfapparaat (indien leeg: alle schijven doorzoeken)\n"
 
 #. txt_directory
 msgid "Directory\n"
-msgstr "Directory\n"
+msgstr "Map\n"
 
 #. dialog title for ftp installation
 #. txt_ftp_title
@@ -239,7 +239,7 @@ msgstr "Gebruiker (indien leeg: \"guest\" gebruiken)\n"
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "SMB (Windows share) installatie"
+msgstr "SMB-installatie (Windows-netwerk)"
 
 #. dialog title for http installation
 #. txt_http_title
@@ -412,4 +412,3 @@ msgstr "Controleer installatiemedia"
 #. txt_keyboard
 msgid "Keyboard"
 msgstr ""
-
