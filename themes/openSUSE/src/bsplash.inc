@@ -12,18 +12,17 @@
 /.b_done	 1 def
 /.b_run		 2 def
 
-/bsplash.list [
-  [ /b1.init /b1.done /b1.run ]
-  [ /b2.init /b2.done /b2.run ]
-] def
-
-
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Init splash.
 %
 % ( ) ==> ( )
 %
 /bsplash.init {
+  /bsplash.list [
+    config.welcome 2 eq { [ /b1.init /b1.done /b1.run ] } if
+    [ /b2.init /b2.done /b2.run ]
+  ] def
+
   bsplash.list { dup .b_init get exec } forall
 } def
 

@@ -1537,7 +1537,7 @@ ptheme {
 % Then, read the other config variables (might depend on video mode).
 %
 
-/config.welcome        "welcome"                  false gfxconfig.set.bool
+/config.welcome        "welcome"                      0 gfxconfig.set.int
 /config.beep           "beep"                     false gfxconfig.set.bool
 /config.volume         "volume"                      70 gfxconfig.set.int
 /config.talk           "talk"                     false gfxconfig.set.bool
@@ -1666,7 +1666,7 @@ def
 ptheme
 screen.fallback or
 CapsLock or
-config.welcome not or
+config.welcome 0 eq or
 {
   /bsplash.done { } def
 } {
