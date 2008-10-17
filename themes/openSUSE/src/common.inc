@@ -1153,10 +1153,12 @@
       sound.getsamplerate { sound.getsamplerate sound.setsamplerate } if
     } ifelse
 
-    xmenu.video .xm_current 0 put
-    % redraw unless another menu is still open
-    window.current {
-      window.current .xmenu get .undef eq { video.update } if
+    config.livecd not {
+      xmenu.video .xm_current 0 put
+      % redraw unless another menu is still open
+      window.current {
+        window.current .xmenu get .undef eq { video.update } if
+      } if
     } if
 
     .undef 0 idle

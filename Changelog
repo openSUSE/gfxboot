@@ -1,3 +1,5 @@
+	- for livecds: don't switch to text mode with F9 (bnc #391313)
+
 16/10/2008:	v4.1.8
 	- new openSUSE theme
 
