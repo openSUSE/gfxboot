@@ -41,7 +41,7 @@
 
     syslinux {
 
-      livecd {
+      config.livecd {
 
         [ keyF2 0 "F2" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
         [ keyF3 0 "F3" /panel.video /panel.video.width /panel.video.update /video.init ]
@@ -179,7 +179,7 @@
   syslinux not { return } if
 
   % not for live cd
-  livecd { return } if
+  config.livecd { return } if
 
   % not for F1
   dup keyF1 eq { return } if

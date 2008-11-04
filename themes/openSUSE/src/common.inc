@@ -945,10 +945,19 @@
 % ( text ) == > ( new_text )
 /menuitemmap {
   translate
+  config._2space {
+    /mmm.tmp xfree
+    strdup /mmm.tmp over def
+    dup length 0 gt {
+      0 1 2 index length 1 sub {
+        over over get '_' eq { over exch ' ' put } { pop } ifelse
+      } for
+    } if
+  } if
   dup "memtest" eq over "memtest86" eq or { pop txt_memtest return } if
   dup "firmware" eq { pop txt_firmware return } if
   syslinux {
-    livecd {
+    config.livecd {
       dup "linux"     eq { pop "openSUSE LiveCD (english)" return } if
       dup "failsafe"  eq { pop "LiveCD - Safe Settings" return } if
       dup "linux2"    eq { pop "openSUSE LiveCD (deutsch)" return } if
@@ -1543,7 +1552,8 @@ ptheme {
 /config.beep           "beep"                     false gfxconfig.set.bool
 /config.volume         "volume"                      70 gfxconfig.set.int
 /config.talk           "talk"                     false gfxconfig.set.bool
-/livecd                "livecd"                   false gfxconfig.set.bool
+/config.livecd         "livecd"                   false gfxconfig.set.bool
+/config._2space        "_2space"                  false gfxconfig.set.bool
 /transp                "menu.transparency"         0x20 gfxconfig.set.int
 /config.screen.width
 /config.screen.height  "screen.size"            800 600 gfxconfig.set.int2
