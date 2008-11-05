@@ -412,3 +412,14 @@ msgstr "Prüfe Installationsmedium"
 #. txt_keyboard
 msgid "Keyboard"
 msgstr "Tastatur"
+
+#. menu title
+#. txt_dud_download
+msgid "Download Driver Update"
+msgstr ""
+
+#. input label
+#. txt_dud_enter_url
+msgid "Enter Driver Update URL\n"
+msgstr ""
+

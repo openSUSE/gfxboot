@@ -26,6 +26,7 @@
   fillrect
   snprintf
   edit.init edit.done edit.input edit.showcursor edit.hidecursor edit.redraw
+  edit.getleft
   rmoveto strstr
 
   sound.getvolume sound.setvolume

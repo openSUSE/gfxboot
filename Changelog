@@ -1,3 +1,7 @@
+5/11/2008:	v4.1.11
+	- all menus have speech support now
+	- in input lines the char at cursor position is spelled
+
 4/11/2008:	v4.1.10
 	- fix last livecd patch
 	- can replace '_' with space in menu entries

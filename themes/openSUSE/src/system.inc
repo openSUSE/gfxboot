@@ -455,6 +455,20 @@ def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Test for password mode.
+%
+% ( font -- true|false )
+%
+/is.pwmode {
+   dup gettype t_ptr eq {
+     .value 0x80000000 and 0 ne
+   } {
+     false
+   } ifelse
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Show one-line string right aligned.
 %
 % ( string ) ==> ( )
@@ -1343,6 +1357,9 @@ def
 % ( text -- )
 %
 /speak {
+  /last.spoken xfree
+  /last.spoken over strdup def
+
   talk_array {
     dup .talk_text get 2 index eq {
       .talk_sound get wav.playlater

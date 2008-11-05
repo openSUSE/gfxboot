@@ -119,12 +119,12 @@
   } if
 
   dup .dud_url eq {
-    dia .title "Download Driver Update" put
+    dia .title txt_dud_download put
 
     % Must all be of same size!
     dia .ed.list 1 array put
     dia .ed.buffer.list input.edit.dud_url put
-    dia .ed.text.list [ "Enter Driver Update URL\n" ] put
+    dia .ed.text.list [ txt_dud_enter_url ] put
   } if
 
   pop

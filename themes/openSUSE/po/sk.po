@@ -411,3 +411,14 @@ msgstr "Kontrola integrity média"
 #. txt_keyboard
 msgid "Keyboard"
 msgstr ""
+
+#. menu title
+#. txt_dud_download
+msgid "Download Driver Update"
+msgstr ""
+
+#. input label
+#. txt_dud_enter_url
+msgid "Enter Driver Update URL\n"
+msgstr ""
+

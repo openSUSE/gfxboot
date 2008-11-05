@@ -7634,13 +7634,13 @@ prim_setfont:
 ;   setfont				% back to normal font
 ;
 
-; FIXME: [font.properties] are lost
-;
-
 		bits 32
 
 prim_currentfont:
 		mov eax,[font]
+		movzx ecx,byte [font.properties]
+		shl ecx,31
+		or eax,ecx
 		jmp pr_getptr_or_none
 
 
@@ -8776,6 +8776,48 @@ prim_editinput_50:
 
 		sub dword [pstack.ptr],2
 prim_editinput_90:
+		ret
+
+
+;; edit.getleft - get chat left from cursor
+;
+; group: edit
+;
+; ( array1 -- int1 )
+;
+; array1: see @edit.init
+; int1: char (0 = start of line)
+;
+
+		bits 32
+
+prim_editgetleft:
+		mov dl,t_array
+		call get_1arg
+		jc prim_editgetleft_90
+
+		mov esi,eax
+		call edit_get_params
+		mov bp,pserr_invalid_data
+		jc prim_editgetleft_90
+
+		or edi,edi
+		jz prim_editgetleft_50
+
+		mov ebx,[edit_buf]
+		movzx esi,word [edit_buf_ptr]
+		xor eax,eax
+		or esi,esi
+		jz prim_editgetleft_50
+		call utf8_prev
+		add esi,ebx
+		call utf8_dec
+
+prim_editgetleft_50:
+		mov dl,t_int
+		xor ecx,ecx
+		call set_pstack_tos
+prim_editgetleft_90:
 		ret
 
 

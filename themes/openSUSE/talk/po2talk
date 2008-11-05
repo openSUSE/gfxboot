@@ -46,7 +46,9 @@ for $msg (@{$po}) {
   print W $str;
   close W;
 
-  system "$espeak -f $tmp_txt -w $tmp_wav";
+  $punc = length($id) == 1 ? "--punc" : "";
+
+  system "$espeak $punc -f $tmp_txt -w $tmp_wav";
   system "sox $tmp_wav -b -u -c 1 -r 16000 -t .wav $tmp_snd";
   if($opt_compress) {
     system "./sc $tmp_snd $tmp_snd";

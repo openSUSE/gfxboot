@@ -54,6 +54,9 @@ msgstr "Driver Update"
 msgid "Arch"
 msgstr "Architecture"
 
+msgid "Keyboard"
+msgstr ""
+
 
 # language menu
 
@@ -312,4 +315,278 @@ msgstr ""
 msgid "x86-64"
 msgstr ""
 
+
+# install sources
+
+msgid "FTP Installation"
+msgstr ""
+
+msgid "NFS Installation"
+msgstr ""
+
+msgid "HTTP Installation"
+msgstr ""
+
+msgid "SMB (Windows Share) Installation"
+msgstr ""
+
+msgid "Hard Disk Installation"
+msgstr ""
+
+msgid "Server\n"
+msgstr ""
+
+msgid "Directory\n"
+msgstr ""
+
+msgid "User (Anonymous Login If Empty)\n"
+msgstr ""
+
+msgid "User (Uses \"guest\" If Empty)\n"
+msgstr ""
+
+msgid "Password\n"
+msgstr ""
+
+msgid "Domain\n"
+msgstr ""
+
+msgid "Share\n"
+msgstr ""
+
+msgid "Disk Device (Scans All Disks If Empty)\n"
+msgstr ""
+
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
+"enter the driver update file names (separated\n"
+"by commas ',') here:\n"
+msgstr ""
+
+msgid "Driver Update"
+msgstr ""
+
+msgid "Download Driver Update"
+msgstr ""
+
+msgid "Enter Driver Update URL\n"
+msgstr ""
+
+msgid "Exiting..."
+msgstr ""
+
+msgid ""
+"You are leaving the graphical boot menu and\n"
+"starting the text mode interface."
+msgstr ""
+
+msgid "Power Off"
+msgstr ""
+
+msgid "Halt the system now?"
+msgstr ""
+
+
+# ascii
+
+msgid " "
+msgstr "space"
+
+msgid "!"
+msgstr ""
+
+msgid "\""
+msgstr ""
+
+msgid "#"
+msgstr ""
+
+msgid "$"
+msgstr ""
+
+msgid "%"
+msgstr ""
+
+msgid "&"
+msgstr ""
+
+msgid "'"
+msgstr ""
+
+msgid "("
+msgstr ""
+
+msgid ")"
+msgstr ""
+
+msgid "*"
+msgstr ""
+
+msgid "+"
+msgstr ""
+
+msgid ","
+msgstr ""
+
+msgid "-"
+msgstr ""
+
+msgid "."
+msgstr ""
+
+msgid "/"
+msgstr ""
+
+msgid "0"
+msgstr ""
+
+msgid "1"
+msgstr ""
+
+msgid "2"
+msgstr ""
+
+msgid "3"
+msgstr ""
+
+msgid "4"
+msgstr ""
+
+msgid "5"
+msgstr ""
+
+msgid "6"
+msgstr ""
+
+msgid "7"
+msgstr ""
+
+msgid "8"
+msgstr ""
+
+msgid "9"
+msgstr ""
+
+msgid ":"
+msgstr ""
+
+msgid ";"
+msgstr ""
+
+msgid "<"
+msgstr ""
+
+msgid "="
+msgstr ""
+
+msgid ">"
+msgstr ""
+
+msgid "?"
+msgstr ""
+
+msgid "@"
+msgstr ""
+
+msgid "["
+msgstr ""
+
+msgid "\\"
+msgstr ""
+
+msgid "]"
+msgstr ""
+
+msgid "_"
+msgstr ""
+
+msgid "a"
+msgstr ""
+
+msgid "b"
+msgstr ""
+
+msgid "c"
+msgstr ""
+
+msgid "d"
+msgstr ""
+
+msgid "e"
+msgstr ""
+
+msgid "f"
+msgstr ""
+
+msgid "g"
+msgstr ""
+
+msgid "h"
+msgstr ""
+
+msgid "i"
+msgstr ""
+
+msgid "j"
+msgstr ""
+
+msgid "k"
+msgstr ""
+
+msgid "l"
+msgstr ""
+
+msgid "m"
+msgstr ""
+
+msgid "n"
+msgstr ""
+
+msgid "o"
+msgstr ""
+
+msgid "p"
+msgstr ""
+
+msgid "q"
+msgstr ""
+
+msgid "r"
+msgstr ""
+
+msgid "s"
+msgstr ""
+
+msgid "t"
+msgstr ""
+
+msgid "u"
+msgstr ""
+
+msgid "v"
+msgstr ""
+
+msgid "w"
+msgstr ""
+
+msgid "x"
+msgstr ""
+
+msgid "y"
+msgstr ""
+
+msgid "z"
+msgstr ""
+
+msgid "{"
+msgstr ""
+
+msgid "|"
+msgstr ""
+
+msgid "}"
+msgstr ""
+
+msgid "~"
+msgstr ""
 
