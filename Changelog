@@ -1,6 +1,7 @@
 5/11/2008:	v4.1.11
 	- all menus have speech support now
-	- in input lines the char at cursor position is spelled
+	- speech works with languages != english
+	- in input lines the char at cursor position is spoken
 
 4/11/2008:	v4.1.10
 	- fix last livecd patch

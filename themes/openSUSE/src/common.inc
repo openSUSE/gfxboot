@@ -979,6 +979,7 @@
     dup "hwcheck"   eq { pop "Hardware Check"   return } if
     dup "harddisk"  eq { pop txt_boot_harddisk  return } if
     dup "mediachk"  eq { pop txt_mediacheck return } if
+    dup "mediacheck" eq { pop txt_mediacheck return } if
   } {
     dup "linux"     eq { pop "Linux"        return } if
     dup "failsafe"  eq { pop txt_safe_linux return } if

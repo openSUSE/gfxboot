@@ -42,31 +42,36 @@ for $msg (@{$po}) {
 
   $str = $id if $str eq "";
 
-  open W, ">$tmp_txt";
-  print W $str;
-  close W;
+  if(!$snd{$str}) {
+    open W, ">$tmp_txt";
+    print W $str;
+    close W;
 
-  $punc = length($id) == 1 ? "--punc" : "";
+    $punc = length($id) == 1 ? "--punc" : "";
 
-  system "$espeak $punc -f $tmp_txt -w $tmp_wav";
-  system "sox $tmp_wav -b -u -c 1 -r 16000 -t .wav $tmp_snd";
-  if($opt_compress) {
-    system "./sc $tmp_snd $tmp_snd";
+    system "$espeak $punc -f $tmp_txt -w $tmp_wav";
+    system "sox $tmp_wav -b -u -c 1 -r 16000 -t .wav $tmp_snd";
+    if($opt_compress) {
+      system "./sc $tmp_snd $tmp_snd";
+    }
+
+    open F, $tmp_snd;
+    sysread F, $snd_buf, -s $tmp_snd;
+    close F;
+
+    $snd{$str} = $snd_buf;
   }
 
-  open F, $tmp_snd;
-  sysread F, $snd_buf, -s $tmp_snd;
-  close F;
-
-  $snd{$id} = $snd_buf;
+  $snd_id{$id} = $str;
 }
 
 $file_ofs = 0;
 @snds = sort keys %snd;
+@snd_ids = sort keys %snd_id;
 
-for $snd (@snds) {
-  $txt_ofs{$snd} = $file_ofs;
-  $file_ofs += length($snd) + 1;
+for $snd_id (@snd_ids) {
+  $txt_ofs{$snd_id} = $file_ofs;
+  $file_ofs += length($snd_id) + 1;
 }
 
 for $snd (@snds) {
@@ -74,16 +79,16 @@ for $snd (@snds) {
   $file_ofs += length($snd{$snd});
 }
 
-$head_size = 8 + 8 * @snds;
+$head_size = 8 + 8 * @snd_ids;
 
 open W, ">$ARGV[1]";
 
-print W pack("VV", $magic, scalar(@snds));
-for $snd (@snds) {
-  print W pack("VV", ($txt_ofs{$snd} + $head_size, $snd_ofs{$snd} + $head_size));
+print W pack("VV", $magic, scalar(@snd_ids));
+for $snd_id (@snd_ids) {
+  print W pack("VV", ($txt_ofs{$snd_id} + $head_size, $snd_ofs{$snd_id{$snd_id}} + $head_size));
 }
-for $snd (@snds) {
-  print W $snd, "\x00";
+for $snd_id (@snd_ids) {
+  print W $snd_id, "\x00";
 }
 for $snd (@snds) {
   print W $snd{$snd};

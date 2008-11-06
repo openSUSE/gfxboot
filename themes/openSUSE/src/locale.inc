@@ -96,31 +96,53 @@
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Find texts for current language.
+% Set texts for current language.
 %
 % ( ) ==> ( )
 %
 /findtexts {
-  /texts.file xfree
+  /locale.texts afree
+  /locale.texts config.lang "%s.tr" loadtexts def
 
-  config.lang "%s.tr" locale.findfile
+  0 texts {
+    over locale.texts exch aget dup .undef eq { pop "No Texts!" } if def
+    1 add
+  } forall
+  pop
+
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Load texts for current language.
+%
+% ( str1 str2 -- array1 )
+%
+%   str1: locale
+%   str2: file name template (like "foo.%s")
+% array1: array with texts (empty if no file was found)
+%
+/loadtexts {
+  locale.findfile
   dup .undef eq { pop "en_US" "%s.tr" locale.findfile } if
+  dup .undef eq { pop [ ] return } if
 
-  /texts.file over def
-  dup .undef eq { pop 0 cvp } if
-  cvs
-  /ft.len over cvp length def
-  /ft.str exch def
+  /ft.len over length def
+  /ft.str over cvs def
   /ft.pos 0 def
 
-  texts {
-    ft.pos ft.str length add ft.len lt {
-      ft.str def
-      /ft.str ft.str dup length 1 add /ft.pos over ft.pos add def add def
-    } {
-      "No Texts!" def
-    } ifelse
-  } forall
+  [
+    {
+      ft.pos ft.str length add ft.len lt {
+        ft.str strdup
+        /ft.str ft.str dup length 1 add /ft.pos over ft.pos add def add def
+      } {
+        exit
+      } ifelse
+    } loop
+  ]
+
+  exch free
 } def
 
 

@@ -21,10 +21,10 @@ msgstr ""
 msgid "Memory Test"
 msgstr ""
 
-msgid "openSUSE-11.0"
+msgid "openSUSE-11.1"
 msgstr ""
 
-msgid "Failsafe-openSUSE-11.0"
+msgid "Failsafe-openSUSE-11.1"
 msgstr ""
 
 msgid "Hard-Disk"
@@ -60,11 +60,11 @@ msgstr ""
 
 # language menu
 
-msgid "\xef\xbb\xb2\xef\xba\x91\xef\xba\xae\xef\xbb\x8b"
-msgstr "Arabic"
-
 msgid "Afrikaans"
 msgstr "Afrikaans"
+
+msgid "\xef\xbb\xb2\xef\xba\x91\xef\xba\xae\xef\xbb\x8b"
+msgstr "Arabic"
 
 msgid "Български"
 msgstr "Bulgarian"
@@ -105,6 +105,9 @@ msgstr "Spanish"
 msgid "Eesti"
 msgstr "Estonian"
 
+msgid "\xef\xaf\xbd\xef\xba\xb4\xd8\xb1\xef\xba\x8e\xef\xbb\x93"
+msgstr "Farsi"
+
 msgid "Suomi"
 msgstr "Finnish"
 
@@ -113,6 +116,9 @@ msgstr "French"
 
 msgid "Galego"
 msgstr "Galician"
+
+msgid "ქართული"
+msgstr "Kartuli"
 
 msgid "\xe0\xaa\x97\xe0\xab\x81\xe0\xaa\x9c\xe0\xaa\xb0\xe0\xaa\xbe\xe0\xaa\xa4\xe0\xab\x80"
 msgstr "Gujarati"
@@ -138,11 +144,17 @@ msgstr "Italian"
 msgid "日本語"
 msgstr "Japanese"
 
+msgid "Basa Jawa"
+msgstr "Javanese"
+
 msgid "Khmer"
 msgstr "Khmer"
 
 msgid "한글"
 msgstr "Korean"
+
+msgid "\xe0\xba\x9e\xe0\xba\xb2\xe0\xba\xaa\xe0\xba\xb2\xe0\xba\xa5\xe0\xba\xb2\xe0\xba\xa7"
+msgstr "Lao"
 
 msgid "Lietuvių"
 msgstr "Lithuanian"
@@ -221,6 +233,68 @@ msgstr "Traditional Chinese"
 
 msgid "isiZulu"
 msgstr "Zulu"
+
+# keymap menu
+
+msgid "Czech"
+msgstr ""
+
+msgid "Danish"
+msgstr ""
+
+msgid "German"
+msgstr ""
+
+msgid "Estonian"
+msgstr ""
+
+msgid "English-US"
+msgstr ""
+
+msgid "Greek"
+msgstr ""
+
+msgid "Spanish"
+msgstr ""
+
+msgid "French"
+msgstr ""
+
+msgid "Hungarian"
+msgstr ""
+
+msgid "Italian"
+msgstr ""
+
+msgid "Japanese"
+msgstr ""
+
+msgid "Norwegian"
+msgstr ""
+
+msgid "Polish"
+msgstr ""
+
+msgid "Portugese-BR"
+msgstr ""
+
+msgid "Portugese"
+msgstr ""
+
+msgid "Russian"
+msgstr ""
+
+msgid "Slovak"
+msgstr ""
+
+msgid "Slovene"
+msgstr ""
+
+msgid "Swedish"
+msgstr ""
+
+msgid "Turkish"
+msgstr ""
 
 
 # video menu
@@ -497,7 +571,13 @@ msgstr ""
 msgid "]"
 msgstr ""
 
+msgid "^"
+msgstr ""
+
 msgid "_"
+msgstr ""
+
+msgid "`"
 msgstr ""
 
 msgid "a"
