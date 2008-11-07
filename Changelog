@@ -1,3 +1,6 @@
+7/11/2008:	v4.1.12
+	- fixed 'portuguese' spelling (bnc #442407)
+
 5/11/2008:	v4.1.11
 	- all menus have speech support now
 	- speech works with languages != english

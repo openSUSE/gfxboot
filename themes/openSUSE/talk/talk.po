@@ -30,6 +30,12 @@ msgstr ""
 msgid "Hard-Disk"
 msgstr ""
 
+msgid "Live-System-GNOME"
+msgstr ""
+
+msgid "Live-System-KDE"
+msgstr ""
+
 
 # panel texts
 
@@ -275,10 +281,10 @@ msgstr ""
 msgid "Polish"
 msgstr ""
 
-msgid "Portugese-BR"
+msgid "Portuguese-BR"
 msgstr ""
 
-msgid "Portugese"
+msgid "Portuguese"
 msgstr ""
 
 msgid "Russian"
