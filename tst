@@ -213,12 +213,13 @@ function tst_syslinux {
   cp -a $logo $dst/bootlogo
 
   rm -f $dst/*~
+  bin/unpack_bootlogo $dst
 
   sw 0 test/mkbootdisk --syslinux=$syslx --out=${img}_ $dst
 
   sw 0 chown --reference=tmp $img*
 
-  cp $dst.img_1 $img
+  cp $dst.img_01 $img
 
   if [ "$program" = vmware ] ; then
     # vmware
