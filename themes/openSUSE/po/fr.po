@@ -412,7 +412,7 @@ msgstr "Vérifier le média d'installation"
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
 msgid "Keyboard"
-msgstr ""
+msgstr "Clavier"
 
 #. menu title
 #. txt_dud_download
@@ -423,4 +423,3 @@ msgstr ""
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
 msgstr ""
-

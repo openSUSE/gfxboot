@@ -10,11 +10,11 @@
 # Kéménczy Kálmán <kkemenczy@novell.com>, 2006.
 msgid ""
 msgstr ""
-"Project-Id-Version: bootloader.hu\n"
+"Project-Id-Version: bootloader\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-05-13 13:46+0200\n"
+"PO-Revision-Date: 2008-11-18 09:05+0100\n"
 "Last-Translator: Kalman Kemenczy <kkemenczy@novell.com>\n"
-"Language-Team:  <hu@li.org>\n"
+"Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -106,7 +106,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"A Linux rendszermag betöltése\n"
+"A Linux kernel betöltése\n"
 "\n"
 "\n"
 
@@ -124,7 +124,7 @@ msgstr ""
 #. info box title
 #. txt_info_title
 msgid "Boot Loader"
-msgstr "Rendszerbetöltő"
+msgstr "Rendszertöltő"
 
 #. error box title
 #. txt_error_title
@@ -343,8 +343,8 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
-"Amennyiben a meghajtóprogram-frissítéseket közvetlenül\n"
-"CD-ről tölti be, adja meg a meghajtóprogramok nevét\n"
+"Amennyiben az illesztőprogram-frissítéseket közvetlenül\n"
+"CD-ről tölti be, adja meg az illesztőprogramok nevét\n"
 "(vesszővel elválasztva ','):\n"
 
 #. install source menu title
@@ -363,7 +363,7 @@ msgstr "Videomód"
 #. -> txt_dud_file_msg
 #. txt_driver_update2
 msgid "Driver Update"
-msgstr "Meghajtóprogram-frissítés"
+msgstr "Illesztőprogram-frissítés"
 
 #. menu label for selecting (cpu) architecture
 #. like i386, x86-64, ppc
@@ -404,7 +404,7 @@ msgstr "Helyi APIC nélkül"
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr "A telepített rendszer javítása"
+msgstr "Telepített rendszer javítása"
 
 #. menu item
 #. txt_mediacheck
@@ -414,7 +414,7 @@ msgstr "Telepítőkészlet ellenőrzése"
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
 msgid "Keyboard"
-msgstr ""
+msgstr "Billentyűzet"
 
 #. menu title
 #. txt_dud_download
@@ -425,4 +425,3 @@ msgstr ""
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
 msgstr ""
-

@@ -410,7 +410,7 @@ msgstr "설치 미디어 확인"
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
 msgid "Keyboard"
-msgstr ""
+msgstr "키보드"
 
 #. menu title
 #. txt_dud_download
@@ -421,4 +421,3 @@ msgstr ""
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
 msgstr ""
-

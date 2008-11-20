@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: bootloader.de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-27 16:23+0200\n"
-"PO-Revision-Date: 2008-05-20 11:09+0200\n"
-"Last-Translator: Michael Skiba <trans@michael-skiba.de>\n"
-"Language-Team: German <opensuse-translation-de@opensuse.org>\n"
+"PO-Revision-Date: 2008-11-11 21:44+0100\n"
+"Last-Translator: Hermann J. Beckers <hj.beckers@onlinehome.de>\n"
+"Language-Team: German <kde-i18n-de@lists.kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 0.2\n"
 
 #. ok button label
 #. txt_ok
@@ -26,7 +26,7 @@ msgstr "OK"
 #. cancel button label
 #. txt_cancel
 msgid "Cancel"
-msgstr "Verwerfen"
+msgstr "Abbrechen"
 
 #. reboot button label
 #. txt_reboot
@@ -340,8 +340,8 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
-"Wenn Sie Treiber-Updates direkt von der CD-ROM laden möchten,\n"
-"geben Sie hier die Dateinamen der Treiber-Updates\n"
+"Wenn Sie Treiber-Aktualisierungen direkt von der CD-ROM laden möchten,\n"
+"geben Sie hier die Dateinamen der Treiber-Aktualisierungen\n"
 "(durch Kommas getrennt) ein:\n"
 
 #. install source menu title
@@ -360,7 +360,7 @@ msgstr "Videomodus"
 #. -> txt_dud_file_msg
 #. txt_driver_update2
 msgid "Driver Update"
-msgstr "Treiber-Update"
+msgstr "Treiber-Aktualisierung"
 
 #. menu label for selecting (cpu) architecture
 #. like i386, x86-64, ppc
@@ -422,4 +422,3 @@ msgstr ""
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
 msgstr ""
-

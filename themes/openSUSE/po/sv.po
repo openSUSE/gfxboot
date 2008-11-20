@@ -4,9 +4,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-08-11 10:19+0200\n"
-"Last-Translator: Mattias Newzella <newzella@linux.se>\n"
-"Language-Team:  <sv@li.org>\n"
+"PO-Revision-Date: 2008-11-05 23:52+0100\n"
+"Last-Translator: Jonas Björk <jonas@jonasbjork.net>\n"
+"Language-Team: svenska <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -329,7 +329,7 @@ msgstr "Textläge"
 #. menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr "Test av fast program"
+msgstr "Test av fast programvara"
 
 #. txt_dud_file_msg
 msgid ""
@@ -338,7 +338,7 @@ msgid ""
 "by commas ',') here:\n"
 msgstr ""
 "För att ladda drivrutinsuppdateringar direkt från cd-rom,\n"
-"ange drivrutinsuppdateringsfilnamn (åtskilda med komman\n"
+"ange drivrutinsuppdateringsfilnamn (åtskilda med kommatecken\n"
 "\",\") här:\n"
 
 #. install source menu title
@@ -364,7 +364,7 @@ msgstr "Drivrutinsuppdatering"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr "Ark"
+msgstr "Arkitektur"
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
@@ -398,17 +398,17 @@ msgstr "Ingen lokal ACPI"
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr "Reparea installerat system"
+msgstr "Reparera installerat system"
 
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr ""
+msgstr "Kontrollera installationsmedia"
 
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
 msgid "Keyboard"
-msgstr ""
+msgstr "Tangentbord"
 
 #. menu title
 #. txt_dud_download
@@ -419,4 +419,3 @@ msgstr ""
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
 msgstr ""
-

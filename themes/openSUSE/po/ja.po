@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2008-05-13 20:12+0900\n"
+"PO-Revision-Date: 2008-11-05 21:23+0900\n"
 "Last-Translator: Yasuhiko Kamata <belphegor@belbel.or.jp>\n"
 "Language-Team: Japanese <opensuse-ja@opensuse.org>\n"
 "MIME-Version: 1.0\n"
@@ -71,7 +71,7 @@ msgstr "起動オプション"
 #. window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
 msgid "Exiting..."
-msgstr "終了中..."
+msgstr "終了しています..."
 
 #. txt_exit_dialog
 msgid ""
@@ -88,7 +88,7 @@ msgstr "ヘルプ"
 #. window title for kernel loading (see txt_load_kernel)
 #. txt_load_kernel_title
 msgid "Starting..."
-msgstr "起動中..."
+msgstr "起動しています..."
 
 #. Keep the three newlines!
 #. txt_load_kernel
@@ -97,7 +97,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Linuxカーネルを読み込み中\n"
+"Linuxカーネルを読み込んでいます\n"
 "\n"
 "\n"
 
@@ -108,7 +108,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"memtest86 を読み込み中\n"
+"memtest86 を読み込んでいます\n"
 "\n"
 "\n"
 
@@ -404,7 +404,7 @@ msgstr "インストールメディアのチェック"
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
 msgid "Keyboard"
-msgstr ""
+msgstr "キーボード"
 
 #. menu title
 #. txt_dud_download
@@ -415,4 +415,3 @@ msgstr ""
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
 msgstr ""
-
