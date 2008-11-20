@@ -6,30 +6,8 @@
 <a name="network">Installasjonsvalg: nettverksvalg</a>
 </h3>
 
-<p>
-It is possible to configure the network interface right now. The
-hardware will be detected later by YaST2. The minimum set of options
-to configure your network card consists of host IP and netmask. For
-example:
-<ul>
-  <li>hostip=192.168.0.10 netmask=255.255.255.0</li>
-</ul>
-</p>
+<p>Du kan sette opp nettverksgrensesnittet allerede nå. Maskinvaren vil ble registrert senere av YaST2. Du må minst angi IP-adressen og nettverksmasken for å konfigurere et nettverkskort. For eksempel:<ul><li>hostip=192.168.0.10 netmask=255.255.255.0</li></ul></p>
 
-<p>
-or in a shorter form:
-<ul>
-  <li>hostip=192.168.0.10/24</li>
-</ul>
-</p>
+<p>eller i et kortere format: <ul><li>hostip=192.168.0.10/24</li></ul></p>
 
-<p>
-If you specified a <a href="#o_install">nettverksbasert installasjon</a> and do
-not specify both of these options, the installer tries to configure
-the network interface with <em>dhcp</em>. If you need a default
-gateway, specify this with the option <em>systemport</em>. For
-example:
-<ul>
-  <li>gateway=192.168.0.8</li>
-</ul>
-</p>
+<p>Hvis du spesifiserte en <a href="#o_install">nettverksbasert installasjon</a> uten å definere disse to valgene, vil installasjonsprogrammet forsøke å konfigurere nettverksgrensesnittet med <em>dhcp</em>. Hvis du trenger en standard systemport, angir du dette med valget <em>systemport</em>. For eksempel: <ul><li>gateway=192.168.0.8</li></ul></p>

@@ -6,30 +6,8 @@
 <a name="network">Telepítési beállítások: Hálózati beállítások</a>
 </h3>
 
-<p>
-It is possible to configure the network interface right now. The
-hardware will be detected later by YaST2. The minimum set of options
-to configure your network card consists of host IP and netmask. For
-example:
-<ul>
-  <li>hostip=192.168.0.10 netmask=255.255.255.0</li>
-</ul>
-</p>
+<p>Lehetőség van a hálózati csatoló beállítására. A YaST2 a hardvert később felismeri. A hálózat beállításához legalább a gép IP-címét és hálózati maszkját meg kell adni. Például: <ul><li>hostip=192.168.0.10 netmask=255.255.255.0</li></ul></p>
 
-<p>
-or in a shorter form:
-<ul>
-  <li>hostip=192.168.0.10/24</li>
-</ul>
-</p>
+<p>vagy rövidebb formában: <ul><li>hostip=192.168.0.10/24</li></ul></p>
 
-<p>
-If you specified a <a href="#o_install">telepítés hálózatról</a> and do
-not specify both of these options, the installer tries to configure
-the network interface with <em>dhcp</em>. If you need a default
-gateway, specify this with the option <em>gateway</em>. For
-example:
-<ul>
-  <li>gateway=192.168.0.8</li>
-</ul>
-</p>
+<p>Ha a <a href="#o_install">telepítés hálózatról</a> kiválasztásakor nem adja meg mindkét paramétert, akkor a telepítőprogram megpróbálja <em>dhcp</em>-n keresztül beállítani a hálózati csatolót. Amennyiben szükséges, az alapértelmezett átjáró a <em>gateway</em> paraméterrel adható meg. Például: <ul><li>gateway=192.168.0.8</li></ul></p>

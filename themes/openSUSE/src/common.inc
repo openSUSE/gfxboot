@@ -957,18 +957,11 @@
   dup "memtest" eq over "memtest86" eq or { pop txt_memtest return } if
   dup "firmware" eq { pop txt_firmware return } if
   syslinux {
-    config.livecd {
-      dup "linux"     eq { pop "openSUSE LiveCD (english)" return } if
-      dup "failsafe"  eq { pop "LiveCD - Safe Settings" return } if
-      dup "linux2"    eq { pop "openSUSE LiveCD (deutsch)" return } if
-      dup "failsaf2"  eq { pop "LiveCD - Sichere Einstellungen" return } if
-      dup "kde"       eq { pop "LiveCD - KDE" return } if
-      dup "gnome"     eq { pop "LiveCD - GNOME" return } if
-    } {
-      dup "linux"     eq { pop txt_install        return } if
-      dup "failsafe"  eq { pop txt_safe_install   return } if
-    } ifelse
     dup "live"      eq { pop "openSUSE LiveCD" return } if
+    dup "kde"       eq { pop "LiveCD - KDE" return } if
+    dup "gnome"     eq { pop "LiveCD - GNOME" return } if
+    dup "linux"     eq { pop txt_install        return } if
+    dup "failsafe"  eq { pop txt_safe_install   return } if
     dup "noacpi"    eq { pop txt_noacpi_install return } if
     dup "noapic"    eq { pop txt_noapic_install return } if
     dup "nolapic"   eq { pop txt_nolapic_install return } if

@@ -2,102 +2,34 @@
 <a name="main">Hjelp for oppstartslaster</a>
 </h3>
 
-<p>
-Welcome to <em>@@@product@@@</em>
-</p>
+<p>Velkommen til <em>@@@product@@@</em></p>
 
-<p>
-Use this menu to select the desired function. If you have
-problems navigating in this help system, press
-<em>@@@fkey_help@@@</em> to enter the <a href="#help">beskrivelse</a> of the help
-system. The main functions in this menu are:
-</p>
+<p>Bruk denne menyen for å velge ønsket funksjon. Hvis du har problemer med å finne frem i hjelpesystemet, trykk <em>@@@fkey_help@@@</em> for å vise <a href="#help">beskrivelse</a> for hjelpesystemet. Hovedfunksjonene i denne menyen er:</p>
 
-<p>
-<a href="#harddisk">Start fra harddisk</a>: This selection will not do
-anything to the system. It only starts a previously installed
-operating system.
-</p>
+<p><a href="#harddisk">Start fra harddisk</a>: Dette valget gjør ingenting med systemet. Det starter bare et tidligere installert operativsystem.</p>
 
-<p>
-<a href="#linux">Installasjon</a>: 
-This installation mode works on most machines. If you experience a
-system freeze during boot or problems with detection of your hardware
-components, such as disk controllers or network cards, try one of the
-following installation options.
-</p>
+<p><a href="#linux">Installasjon</a>: Denne installasjonsmodusen fungerer for de fleste datamaskiner. Hvis systemet fryser under oppstart eller hvis det oppstår problemer med registrering av maskinvarekomponenter, f.eks. diskkontrollere eller nettverkskort, kan du forsøke ett av følgende installasjonsvalg.</p>
 
-<p>
-<a href="#noacpi">Installasjon--ACPI deaktivert</a>: Many of the
-currently-sold computers have incomplete or faulty ACPI
-implementations. This selection disables ACPI support in the
-kernel, but still enables many performance features, like DMA for IDE
-hard disks.
-</p>
+<p><a href="#noacpi">Installasjon--ACPI deaktivert</a>: Mange datamaskiner har ufullstendige eller defekte ACPI-funksjoner. Dette valget deaktiverer ACPI-støtte i kjernen, men mange andre ytelsesfunksjoner vil fremdeles være aktivert, som DMA for IDE-harddisker.</p>
 
-<p>
-<a href="#nolapic">Installasjon--Lokal APIC deaktivert</a>:
-If the normal installation fails, this might be due to the
-system hardware not supporting local APIC.
-If this seems to be the case, use this option to
-install without local APIC support.
-</p>
+<p><a href="#nolapic">Installasjon--Lokal APIC deaktivert</a>: Hvis den vanlige installasjonen mislykkes, kan det skyldes at maskinvaren ikke støtter lokal APIC. Hvis dette ser ut til å være tilfellet, bruker du dette alternativet til å installere uten lokal APIC-støtte.</p>
 
-<p>
-<a href="#failsafe">Installasjon--sikker modus</a>: If you were not
-successful with <em>Installasjon</em>, this selection might
-solve the issue.
-</p>
+<p><a href="#failsafe">Installasjon--sikker modus</a>: Hvis <em>Installasjon</em> mislyktes, kan dette valget løse problemet.</p>
 
-<p>
-<a href="#rescue">Redningssystem</a>: This boot image starts a small
-Linux system in RAM. This is useful if the system does not start properly.
-After booting this system, log in as root.
-</p>
+<p><a href="#rescue">Redningssystem</a>: Dette oppstartsdiskbildet starter et lite Linux-system fra minnet. Dette er nyttig hvis systemet ikke starter som det skal. Logg inn som rot etter at systemet har startet opp.</p>
 
-<p>
-<a href="#firmware">Fastvarekontroll</a>: Runs a BIOS test tool that validates
-ACPI and other parts of your BIOS.
-</p>
+<p><a href="#firmware">Fastvarekontroll</a>: Kjører et BIOS-testverktøy som kontrollerer APCI og andre deler av BIOS.</p>
 
-<p>
-<a href="#memtest">Minnekontroll</a>: Memory testing is useful for more than
-checking installation of new memory modules. It is a stress test
-for a big part of your computer system and may indicate hardware
-problems.
-</p>
+<p><a href="#memtest">Minnekontroll</a>: Kontroll av minnet er nyttig i flere situasjoner enn testing av nye minnebrikker. Kontrollen er en belastningstest for store deler av systemet, og kan påvise forskjellige maskinvarefeil.</p>
 
-<p>
-<a href="#opt">Oppstartsalternativer</a>: The boot options may change the
-behavior of your system completely. They are settings for
-the kernel.
-</p>
+<p><a href="#opt">Oppstartsalternativer</a>: Oppstartsvalgene kan endre systemets funksjon helt. Det er innstillinger som påvirker kjernen.</p>
 
-<p>
-<a href="#help">@@@fkey_help@@@ Help</a>: This is context sensitive. It will
-show different screens depending on the active element of the
-boot screen. There is also a description of this help system
-available.
-</p>
+<p><a href="#help">@@@fkey_help@@@ Hjelp</a>: Hjelpen er kontekstsensitiv. Ulike skjermbilder vil vises, avhengig av det aktive elementet på oppstartsskjermen. Det finnes også en beskrivelse av dette Hjelp-systemet.</p>
 
-<p>
-<a href="#keytable">@@@fkey_lang@@@</a>: Set language and keyboard mapping
-used by the boot loader.
-</p>
+<p><a href="#keytable">@@@fkey_lang@@@</a>: Angi språk og tastaturoppsett for oppstartslasteren.</p>
 
-<p>
-<a href="#videomode">@@@fkey_video@@@ Video Mode</a>: Here, choose between
-different screen resolutions while installing. If you encounter
-problems with the graphical installation, the <em>tekstmodus</em> may
-be a work-around for you.
-</p>
+<p><a href="#videomode">@@@fkey_video@@@ Skjermmodus</a>: Her kan du velge mellom ulike skjermoppløsninger for installasjonen. Hvis det oppstår problemer med den grafiske installasjonen, kan <em>tekstmodus</em> være en løsning.</p>
 
-<p>
-<a href="#install_src">@@@fkey_inst@@@ Installation Source</a>: Choose the
-installation source.
-</p>
+<p><a href="#install_src">@@@fkey_inst@@@ Installasjonskilde</a>: Velg installasjonskilden.</p>
 
-<p>
-<a href="#driverupdate">@@@fkey_dud@@@ Driver Update</a>: For very new machines, a
-driver update may be needed to install the system.
-</p>
+<p><a href="#driverupdate">@@@fkey_dud@@@ Driveroppdatering</a>: På helt nye maskiner kan det hende at du trenger en driveroppdatering for å installere systemet.</p>

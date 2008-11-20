@@ -2,102 +2,34 @@
 <a name="main">Bootloader-help</a>
 </h3>
 
-<p>
-Welcome to <em>@@@product@@@</em>
-</p>
+<p>Welkom bij <em>@@@product@@@</em></p>
 
-<p>
-Use this menu to select the desired function. If you have
-problems navigating in this help system, press
-<em>@@@fkey_help@@@</em> to enter the <a href="#help">beschrijving</a> of the help
-system. The main functions in this menu are:
-</p>
+<p>Gebruik dit menu om de gewenste functie te selecteren. Als u problemen ondervindt bij het navigeren door dit helpsysteem, druk dan op <em>@@@fkey_help@@@</em> om <a href="#help">beschrijving</a> van het helpsysteem binnen te gaan. De hoofdfuncties van dit menu zijn:</p>
 
-<p>
-<a href="#harddisk">Van harde schijf opstarten</a>: This selection will not do
-anything to the system. It only starts a previously installed
-operating system.
-</p>
+<p><a href="#harddisk">Van harde schijf opstarten</a>: Deze selectie zal geen wijzigingen aan het systeem aanbrengen. Het start enkel een eerder geïnstalleerd besturingssysteem op.</p>
 
-<p>
-<a href="#linux">Installatie</a>: 
-This installation mode works on most machines. If you experience a
-system freeze during boot or problems with detection of your hardware
-components, such as disk controllers or network cards, try one of the
-following installation options.
-</p>
+<p><a href="#linux">Installatie</a> Deze installatiemodus werkt op de meeste computers. Als uw systeem bevriest tijdens het opstarten of problemen ondervindt bij het detecteren van uw hardwarecomponenten, zoals schijfcontrollers of netwerkkaarten, probeer dan een van de volgende installatieopties.</p>
 
-<p>
-<a href="#noacpi">Installatie - ACPI uitgeschakeld</a>: Many of the
-currently-sold computers have incomplete or faulty ACPI
-implementations. This selection disables ACPI support in the
-kernel, but still enables many performance features, like DMA for IDE
-hard disks.
-</p>
+<p><a href="#noacpi">Installatie - ACPI uitgeschakeld</a>: Veel van de computers die momenteel worden verkocht hebben een incomplete of verkeerde ACPI-implementatie. Deze selectie schakelt ACPI-ondersteuning in de kernel uit, maar laat veel prestatiefuncties, zoals DMA voor IDE-stations, geactiveerd.</p>
 
-<p>
-<a href="#nolapic">Installatie -- Local APIC uitgeschakeld</a>:
-If the normal installation fails, this might be due to the
-system hardware not supporting local APIC.
-If this seems to be the case, use this option to
-install without local APIC support.
-</p>
+<p><a href="#nolapic">Installatie -- Local APIC uitgeschakeld</a>: Als de normale installatie mislukt, dan kan dit worden veroorzaakt doordat uw hardware geen local APIC ondersteunt. Als dit het geval blijkt, gebruik dan deze optie om zonder ondersteuning voor APIC te installeren.</p>
 
-<p>
-<a href="#failsafe">Installatie - Veilige instellingen</a>: If you were not
-successful with <em>Installatie</em>, this selection might
-solve the issue.
-</p>
+<p><a href="#failsafe">Installatie - Veilige instellingen</a>: Als u niet succesvol was met <em>Installatie</em>, dan kan deze selectie het probleem mogelijk oplossen.</p>
 
-<p>
-<a href="#rescue">Reddingssysteem</a>: This boot image starts a small
-Linux system in RAM. This is useful if the system does not start properly.
-After booting this system, log in as root.
-</p>
+<p><a href="#rescue">Reddingssysteem</a>: Deze bootimage start een klein Linux-systeem in uw RAM-geheugen. U kunt het gebruiken als uw systeem niet goed opstart. Na het starten van dit systeem dient u als root in te loggen.</p>
 
-<p>
-<a href="#firmware">Firmware-test</a>: Runs a BIOS test tool that validates
-ACPI and other parts of your BIOS.
-</p>
+<p><a href="#firmware">Firmware-test</a>: Voert een BIOS-test uit die ACPI en andere delen van uw BIOS valideert.</p>
 
-<p>
-<a href="#memtest">Geheugentest</a>: Memory testing is useful for more than
-checking installation of new memory modules. It is a stress test
-for a big part of your computer system and may indicate hardware
-problems.
-</p>
+<p><a href="#memtest">Geheugentest</a>:Geheugen testen kunt u voor meer gebruiken dan alleen het installeren van nieuwe geheugenmodules controleren. Het doet een stesstest van een groot deel van uw computersysteem en kan hardwareproblemen ontdekken.</p>
 
-<p>
-<a href="#opt">Opstartopties</a>: The boot options may change the
-behavior of your system completely. They are settings for
-the kernel.
-</p>
+<p><a href="#opt">Opstartopties</a>: De opstartopties kunnen het gedrag van uw systeem compleet veranderen. Het zijn instellingen voor de kernel.</p>
 
-<p>
-<a href="#help">@@@fkey_help@@@ Help</a>: This is context sensitive. It will
-show different screens depending on the active element of the
-boot screen. There is also a description of this help system
-available.
-</p>
+<p><a href="#help">@@@fkey_help@@@ Help</a>:Dit is contextgevoelig. Het zal verschillende schermen tonen afhankelijk van het actieve element in het opstartscherm. Er is ook een beschrijving van dit helpsysteem beschikbaar.</p>
 
-<p>
-<a href="#keytable">@@@fkey_lang@@@</a>: Set language and keyboard mapping
-used by the boot loader.
-</p>
+<p><a href="#keytable">@@@fkey_lang@@@</a>Stel de taal en toetsenbordindeling in om te gebruiken in de bootloader.</p>
 
-<p>
-<a href="#videomode">@@@fkey_video@@@ Video Mode</a>: Here, choose between
-different screen resolutions while installing. If you encounter
-problems with the graphical installation, the <em>tekstmodus</em> may
-be a work-around for you.
-</p>
+<p><a href="#videomode">@@@fkey_video@@@ Video Mode</a>: Hier kunt u tijdens de installatie kiezen uit verschillende schermresoluties. Als u problemen ondervindt met het grafische installatieprogramma, dan kan <em>tekstmodus</em> misschien beter voor u werken.</p>
 
-<p>
-<a href="#install_src">@@@fkey_inst@@@ Installation Source</a>: Choose the
-installation source.
-</p>
+<p><a href="#install_src">@@@fkey_inst@@@ Installatiebron</a>: Kies de installatiebron.</p>
 
-<p>
-<a href="#driverupdate">@@@fkey_dud@@@ Driver Update</a>: For very new machines, a
-driver update may be needed to install the system.
-</p>
+<p><a href="#driverupdate">@@@fkey_dud@@@ Opwaardering voor apparaatstuurprogramma</a>: Voor zeer nieuwe computers kan een stuurprogramma-opwaardering nodig zijn om het systeem te installeren.</p>

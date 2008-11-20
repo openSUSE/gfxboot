@@ -2,102 +2,34 @@
 <a name="main">Ajutor bootloader</a>
 </h3>
 
-<p>
-Welcome to <em>@@@product@@@</em>
-</p>
+<p>Bine-aţi venit la <em>@@@product@@@</em></p>
 
-<p>
-Use this menu to select the desired function. If you have
-problems navigating in this help system, press
-<em>@@@fkey_help@@@</em> to enter the <a href="#help">descriere</a> of the help
-system. The main functions in this menu are:
-</p>
+<p>Utilizați acest meniu pentru a selecta funcția dorită. Dacă apar probleme la navigarea prin acest sistem de ajutor, apăsați <em>@@@fkey_help@@@</em> pentru a deschide <a href="#help">descriere</a> al sistemului de ajutor. Funcțiile principale ale acestui meniu sunt:</p>
 
-<p>
-<a href="#harddisk">Pornește de pe hard disc</a>: This selection will not do
-anything to the system. It only starts a previously installed
-operating system.
-</p>
+<p><a href="#harddisk">Pornește de pe hard disc</a>: Această opțiune nu are nici un efect asupra sistemului. Pornește doar un sistem de operare instalat anterior.</p>
 
-<p>
-<a href="#linux">Instalare</a>: 
-This installation mode works on most machines. If you experience a
-system freeze during boot or problems with detection of your hardware
-components, such as disk controllers or network cards, try one of the
-following installation options.
-</p>
+<p><a href="#linux">Instalare</a>: Acest mod de instalare funcționează pe majoritatea mașinilor. Dacă sistemul se blochează la bootare sau dacă apar probleme la detectarea componentelor hardware, ca de exemplu controllere de disc sau plăci de rețea, încercați cu una dintre următoarele opțiuni de instalare.</p>
 
-<p>
-<a href="#noacpi">Instalare -- ACPI deactivat</a>: Many of the
-currently-sold computers have incomplete or faulty ACPI
-implementations. This selection disables ACPI support in the
-kernel, but still enables many performance features, like DMA for IDE
-hard disks.
-</p>
+<p><a href="#noacpi">Instalare -- ACPI deactivat</a>: Multe dintre calculatoarele actuale au implementări APIC incomplete sau defectuoase. Această opțiune deactivează suportul APIC din kernel, însă păstrează activate anumite funcționalități pentru performanță, ca de exemplu DMA pentru hard disk-uri IDE.</p>
 
-<p>
-<a href="#nolapic">Instalare -- APIC local deactivat</a>:
-If the normal installation fails, this might be due to the
-system hardware not supporting local APIC.
-If this seems to be the case, use this option to
-install without local APIC support.
-</p>
+<p><a href="#nolapic">Instalare -- APIC local dezactivat</a>: Dacă instalarea normală eșuează, poate fi din cauza hardware-ului din sistem ce nu suportă APIC local. Dacă aceasta pare a fi cauza, utilizați această opțiune pentru a instala fără suport APIC local.</p>
 
-<p>
-<a href="#failsafe">Instalare -- Setări sigure</a>: If you were not
-successful with <em>Instalare</em>, this selection might
-solve the issue.
-</p>
+<p><a href="#failsafe">Instalare -- Setări sigure</a>: Dacă nu ați reușit cu <em>Instalare</em>, puteți încerca această variantă.</p>
 
-<p>
-<a href="#rescue">Sistem de salvare</a>: This boot image starts a small
-Linux system in RAM. This is useful if the system does not start properly.
-After booting this system, log in as root.
-</p>
+<p><a href="#rescue">Sistem de salvare</a>: Această imagine de boot pornește un mini-sistem Linux în RAM. Poate fi util dacă sistemul nu pornește corect. După bootare, autentificați-vă ca root.</p>
 
-<p>
-<a href="#firmware">Test firmware</a>: Runs a BIOS test tool that validates
-ACPI and other parts of your BIOS.
-</p>
+<p><a href="#firmware">Test firmware</a>: Rulează un utilitare de testare a BIOS-ului, ce validează ACPI și alte părți ale BIOS-ului dvs.</p>
 
-<p>
-<a href="#memtest">Test de memorie</a>: Memory testing is useful for more than
-checking installation of new memory modules. It is a stress test
-for a big part of your computer system and may indicate hardware
-problems.
-</p>
+<p><a href="#memtest">Test de memorie</a>: Testarea memoriei nu este utilă doar pentru verificarea instalării noilor module de memorie. Este de asemenea un test de rezistență pentru o mare parte a sistemului dvs. și poate descoperi eventualele probleme hardware existente.</p>
 
-<p>
-<a href="#opt">Opțiuni de boot</a>: The boot options may change the
-behavior of your system completely. They are settings for
-the kernel.
-</p>
+<p><a href="#opt">Opțiuni de boot</a>: Opțiunile de boot pot modifica complet comportamentul sistemului dvs. Sunt setări pentru kernel.</p>
 
-<p>
-<a href="#help">@@@fkey_help@@@ Help</a>: This is context sensitive. It will
-show different screens depending on the active element of the
-boot screen. There is also a description of this help system
-available.
-</p>
+<p><a href="#help">@@@fkey_help@@@ Ajutor</a>: Acesta este sensibil la context. Va afișa diverse ecrane în funcție de elementul activ din ecranul de boot. Există de asemenea o descriere a acestui sistem de ajutor.</p>
 
-<p>
-<a href="#keytable">@@@fkey_lang@@@</a>: Set language and keyboard mapping
-used by the boot loader.
-</p>
+<p><a href="#keytable">@@@fkey_lang@@@</a>: Setează limba și aranjamentul de tastatură utilizate de bootloader.</p>
 
-<p>
-<a href="#videomode">@@@fkey_video@@@ Video Mode</a>: Here, choose between
-different screen resolutions while installing. If you encounter
-problems with the graphical installation, the <em>mod text</em> may
-be a work-around for you.
-</p>
+<p><a href="#videomode">@@@fkey_video@@@ Modul Video</a>: Aici puteți alege rezoluția ecranului la instalare. Dacă apar probleme la instalarea grafică, o soluție de moment poate fi <em>mod text</em>.</p>
 
-<p>
-<a href="#install_src">@@@fkey_inst@@@ Installation Source</a>: Choose the
-installation source.
-</p>
+<p><a href="#install_src">@@@fkey_inst@@@ Sursa instalării</a>: Alegeți sursa de instalare.</p>
 
-<p>
-<a href="#driverupdate">@@@fkey_dud@@@ Driver Update</a>: For very new machines, a
-driver update may be needed to install the system.
-</p>
+<p><a href="#driverupdate">@@@fkey_dud@@@ Actualizări drivere</a>: În cazul computerelor foarte noi, pentru instalarea sistemului poate fi necesară o actualizare de drivere.</p>

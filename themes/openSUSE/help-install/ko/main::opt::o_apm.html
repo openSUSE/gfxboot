@@ -2,20 +2,6 @@
 <a name="o_apm">커널 옵션: apm</a>
 </h3>
 
-<p>
-APM is one of the two power management strategies used on current
-computers. It is mainly used with laptops for functions like suspend
-to disk, but it may also be responsible for switching off the
-computer after power down. APM relies on a correct working BIOS. If
-the BIOS is broken, APM may have only limited use or even prevent the
-computer from working. Therefore, it may be switched off with the
-parameter
-<ul>
-  <li><em>apm=off</em>  -- switch off APM completely</li>
-</ul>
-</p>
+<p>APM(Advanced Power Management)은 요즘 컴퓨터에서 사용되고 있는 두 종류의 전원관리기술 중 하나입니다. 주로 휴대용에서 사용되는 "디스크 일시 중지"같은 기능은 물론, 전원이 공급이 중단된 이후의 컴퓨터를 끄는데 이 기술이 사용됩니다. APM은 정상적으로 동작하는 바이오스에 의지합니다. 만일 바이오스에 문제가 발생한다면 APM을 사용하는데 제약이 따를 뿐만 아니라 심지어 컴퓨터 동작을 방해할 수도 있습니다. 그러므로 APM 관련 항목은 기본적으로 매개변수 <ul><li><em>apm=off</em> -- ACPI 를 완전히 끄기</li></ul> 와 함께 꺼져있을 수 있습니다.</p>
 
-<p>
-Some very new computers may take more advantage from the newer
-<a href="#o_acpi">ACPI</a>.
-</p>
+<p>최신 컴퓨터의 경우 새로운 <a href="#o_acpi">ACPI</a> 이 보다 더 유용할 것입니다.</p>

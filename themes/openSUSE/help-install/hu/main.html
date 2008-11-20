@@ -1,101 +1,35 @@
 <h3>
-<a name="main">Rendszerbetöltő-súgó</a>
+<a name="main">Rendszertöltő-súgó</a>
 </h3>
 
 <p>Üdvözli az <em>@@@product@@@</em> </p>
 
-<p>
-Use this menu to select the desired function. If you have
-problems navigating in this help system, press
-<em>@@@fkey_help@@@</em> to enter the <a href="#help">leírás</a> of the help
-system. The main functions in this menu are:
-</p>
+<p>Válassza ki a kívánt funkciót a menüből. Ha gondot okoz a súgórendszerben való navigáció, az <em>@@@fkey_help@@@</em> billentyű megnyomásával <a href="#help">leírás</a> elolvashatja a súgórendszer leírását. A menü legfontosabb funkciói:</p>
 
-<p>
-<a href="#harddisk">Rendszerindítás merevlemezről</a>: This selection will not do
-anything to the system. It only starts a previously installed
-operating system.
-</p>
+<p><a href="#harddisk">Rendszerindítás merevlemezről</a>: Elindítja a már korábban telepített rendszert a merevlemezről. Ebben az esetben semmilyen módosítás nem történik a rendszeren.</p>
 
-<p>
-<a href="#linux">Telepítés</a>: 
-This installation mode works on most machines. If you experience a
-system freeze during boot or problems with detection of your hardware
-components, such as disk controllers or network cards, try one of the
-following installation options.
-</p>
+<p><a href="#linux">Telepítés</a>: Ez a telepítési mód a legtöbb gépen működik. Ha rendszerindítás közben lefagyást észlel, vagy problémák jelentkeznek a hardverkomponensek (például lemezvezérlők vagy hálózati kártyák) felismerése során, akkor próbálkozzon meg az alábbi telepítési beállításokkal.</p>
 
-<p>
-<a href="#noacpi">Telepítés - ACPI-támogatás nélkül</a>: Many of the
-currently-sold computers have incomplete or faulty ACPI
-implementations. This selection disables ACPI support in the
-kernel, but still enables many performance features, like DMA for IDE
-hard disks.
-</p>
+<p><a href="#noacpi">Telepítés - ACPI-támogatás nélkül</a>: Nagyon sok mai számítógépen nem teljes vagy hibás az ACPI megvalósítása. Ez a menüpont letiltja a kernel ACPI-támogatását, ugyanakkor megtart számos további teljesítménynövelő funkciót, például az IDE-merevlemezek DMA-támogatását.</p>
 
-<p>
-<a href="#nolapic">Telepítés - Local APIC támogatás nélkül</a>:
-If the normal installation fails, this might be due to the
-system hardware not supporting local APIC.
-If this seems to be the case, use this option to
-install without local APIC support.
-</p>
+<p><a href="#nolapic">Telepítés - Local APIC támogatás nélkül</a>: Ha a telepítés sikertelen, annak egyik oka az lehet, hogy a hardver nem rendelkezik lokális APIC támogatással. Ebben az esetben telepítsen lokális APIC támogatás nélkül.</p>
 
-<p>
-<a href="#failsafe">Telepítés - Biztonságos beállításokkal</a>: If you were not
-successful with <em>Telepítés</em>, this selection might
-solve the issue.
-</p>
+<p><a href="#failsafe">Telepítés - Biztonságos beállításokkal</a>: Ha a <em>Telepítés</em>mód nem bizonyult megfelelőnek, ez a mód lehet, hogy megoldja a problémát.</p>
 
-<p>
-<a href="#rescue">Mentőrendszer</a>: This boot image starts a small
-Linux system in RAM. This is useful if the system does not start properly.
-After booting this system, log in as root.
-</p>
+<p><a href="#rescue">Mentőrendszer</a>: Ez a rendszerkép egy kisméretű rendszert indít el a memóriából. Akkor hasznos, ha a rendszer nem megfelelően indul. A rendszer betöltése után jelentkezzen be root felhasználóként.</p>
 
-<p>
-<a href="#firmware">Firmware-teszt</a>: Runs a BIOS test tool that validates
-ACPI and other parts of your BIOS.
-</p>
+<p><a href="#firmware">Firmware-teszt</a>: BIOS ellenőrző eszközt futtat, amely ellenőrzi az ACPI-t, és a BIOS egyes részeit.</p>
 
-<p>
-<a href="#memtest">Memóriateszt</a>: Memory testing is useful for more than
-checking installation of new memory modules. It is a stress test
-for a big part of your computer system and may indicate hardware
-problems.
-</p>
+<p><a href="#memtest">Memóriateszt</a>: A memóriatesztelés nemcsak az újonnan behelyezett memóriamodulok ellenőrzésére jó, hanem a rendszer nagy részét terheli és alkalmas lehet hardverproblémák kimutatására.</p>
 
-<p>
-<a href="#opt">Rendszerindítási paraméterek</a>: The boot options may change the
-behavior of your system completely. They are settings for
-the kernel.
-</p>
+<p><a href="#opt">Rendszerindítási paraméterek</a>: A rendszerindítási paraméterek teljesen megváltoztathatják a rendszer viselkedését. Ezek a kernel beállításai.</p>
 
-<p>
-<a href="#help">@@@fkey_help@@@ Help</a>: This is context sensitive. It will
-show different screens depending on the active element of the
-boot screen. There is also a description of this help system
-available.
-</p>
+<p><a href="#help">@@@fkey_help@@@ Súgó</a>: Környezetérzékeny súgó. A rendszerindítási képernyő aktív elemétől függően más és más képernyőket jelenít meg és magáról a súgórendszerről is található leírás.</p>
 
-<p>
-<a href="#keytable">@@@fkey_lang@@@</a>: Set language and keyboard mapping
-used by the boot loader.
-</p>
+<p><a href="#keytable">@@@fkey_lang@@@</a>: Itt választható ki a rendszertöltő által használt nyelvi és billentyűzetbeállítás.</p>
 
-<p>
-<a href="#videomode">@@@fkey_video@@@ Video Mode</a>: Here, choose between
-different screen resolutions while installing. If you encounter
-problems with the graphical installation, the <em>szöveges mód</em> may
-be a work-around for you.
-</p>
+<p><a href="#videomode">@@@fkey_video@@@ Videomód</a>: Itt választhatja ki a telepítés során használt képernyőfelbontást. Ha probléma van a grafikus telepítéssel, próbálja meg a <em>szöveges mód</em>-ot.</p>
 
-<p>
-<a href="#install_src">@@@fkey_inst@@@ Installation Source</a>: Choose the
-installation source.
-</p>
+<p><a href="#install_src">@@@fkey_inst@@@ Telepítési forrás</a>: Válasszon telepítési forrását.</p>
 
-<p>
-<a href="#driverupdate">@@@fkey_dud@@@ Driver Update</a>: For very new machines, a
-driver update may be needed to install the system.
-</p>
+<p><a href="#driverupdate">@@@fkey_dud@@@ Illesztőprogram-frissítés</a>: Nagyon új gépek esetében szükség lehet valamely illesztőprogram frissítésére a rendszer telepítéséhez.</p>

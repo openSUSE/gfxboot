@@ -2,22 +2,6 @@
 <a name="o_acpi">Kärnalternativ: acpi</a>
 </h3>
 
-<p>
-ACPI (Advanced Configuration and Power Interface) is a
-standard that defines power and configuration management interfaces
-between an operating system and the BIOS. By default, <em>acpi</em> is
-switched on when a BIOS is detected that is newer than from year
-2000. There are several commonly
-used parameters to control the behavior of ACPI:
-<ul>
-  <li><em>pci=noacpi</em> -- do not use ACPI to route PCI interrupts</li>
-  <li><em>acpi=oldboot</em> -- only the parts of ACPI that are relevant for booting remain activated</li>
-  <li><em>acpi=av</em> -- switch off ACPI completely</li>
-  <li><em>acpi=tvinga</em> -- switch on ACPI even if your BIOS is dated before 2000</li>
-</ul>
-</p>
+<p>ACPI (Advanced Configuration and Power Interface) är en standard som definierar gränssnitt för ström- och inställningshantering mellan operativsystemet och BIOS. Som standard aktiveras <em>acpi</em> när ett BIOS som är tillverkat efter år 2000 upptäcks. Det finns flera vanliga parametrar som styr ACPI:s beteende: <ul><li><em>pci=noacpi</em> -- använd inte ACPI för att hantera PCI-avbrottsförfrågningar</li><li><em>acpi=oldboot</em> -- bara delarna av ACPI som är relevanta för uppstart kommer vara aktiverade</li><li><em>acpi=av</em> -- stäng av ACPI helt</li><li><em>acpi=tvinga</em> -- sätt på ACPI även om ditt BIOS är tillverkat före 2000</li></ul></p>
 
-<p>
-Especially on new computers, it replaces the old
-<a href="#o_apm">apm</a> system.
-</p>
+<p>Speciellt på nyare datorer ersätter den det gamla <a href="#o_apm">apm</a>-systemet.</p>

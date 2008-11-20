@@ -2,23 +2,8 @@
 <a name="noacpi">Telepítés - ACPI-támogatás nélkül</a>
 </h3>
 
-<p>
-Current hardware usually requires ACPI (Advanced Configuration and Power Interface)
-to control the interrupt handling.
-ACPI completely replaces the old APM system.
-</p>
+<p>A nagyon friss hardvereszközök néha igénylik az ACPI meglétét a megszakítások kezeléséhez. Az ACPI teljesen felváltja a régi APM rendszert.</p>
 
-<p>
-Select <em>Telepítés - ACPI-támogatás nélkül</em> if you encounter
-problems during boot of the kernel. Known problems with machines that
-have problems with ACPI are:
-<ul>
-  <li>kernel freezes when booting</li>
-  <li>PCI Cards are not detected or initialized properly</li>
-</ul>
-</p>
+<p>Ha problémákba ütközik a kernel indítása során, válassza a <em>Telepítés - ACPI-támogatás nélkül</em> beállítást. Ismert problémák hibás ACPI-vel rendelkező gépek esetén: <ul><li>a kernel lefagy rendszerindítás közben</li><li>PCI-kártyák nem találhatók, vagy nem sikerül tökéletesen előkészíteni őket</li></ul></p>
 
-<p>
-You may also try the <a href="#firmware">Firmware-teszt</a> boot option
-and look at the test results of the ACPI validation.
-</p>
+<p>Érdemes kipróbálni a <a href="#firmware">Firmware-teszt</a> beállítást, megnézni az ACPI-ellenőrzés eredményét.</p>
