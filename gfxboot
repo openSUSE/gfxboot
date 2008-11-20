@@ -2521,15 +2521,17 @@ sub add_languages
 {
   local $_;
   my $dir = shift;
-  my ($theme, $theme_dir, $sl, %lang);
+  my ($theme, $theme_dir, $sl, %lang, @langs, $f);
 
   $theme = get_theme $dir;
   $theme_dir = "/etc/bootsplash/themes/$theme/bootloader";
   print "using theme \"$theme\"\n" if $opt_verbose;
 
-  for (`cat $dir/languages`) {
-    chomp;
-    $lang{$_} = 1;
+  @langs = `cat $dir/languages`;
+  chomp @langs;
+
+  for (@langs) {
+    $lang{$1} = 1 if /^(\S+)/;
   }
 
   for (@opt_addlanguages) {
@@ -2547,10 +2549,14 @@ sub add_languages
       system "cp $theme_dir/$sl.hlp $dir";
     }
     if(!$lang{$_}) {
-      system "echo '$_' >>$dir/languages";
+      push @langs, $_;
       $lang{$_} = 1;
     }
   }
+
+  open $f, ">$dir/languages";
+  print $f "$_\n" for (@langs);
+  close $f;
 }
 
 
