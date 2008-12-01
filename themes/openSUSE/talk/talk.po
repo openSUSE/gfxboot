@@ -36,6 +36,15 @@ msgstr ""
 msgid "Live-System-KDE"
 msgstr ""
 
+msgid "openSUSE Live (GNOME)"
+msgstr ""
+
+msgid "openSUSE Live (KDE)"
+msgstr ""
+
+msgid "Failsafe Settings"
+msgstr ""
+
 
 # panel texts
 
