@@ -1,5 +1,5 @@
-BINDIR   := $(shell [ -x ../../mkbootmsg ] && echo ../../ )
-MKBOOTMSG = $(BINDIR)mkbootmsg
+BINDIR   := $(shell [ -x ../../gfxboot-compile ] && echo ../../ )
+MKBOOTMSG = $(BINDIR)gfxboot-compile
 BFLAGS    = -O -v -L ../..
 
 ifneq ($(BINDIR),)
@@ -19,7 +19,7 @@ bootlogo: test.ps 16x16.fnt $(BM_TARGET)
 	echo -e "init\nsky.jpg\n16x16.fnt" | cpio -o >bootlogo
 
 16x16.fnt:
-	../../mkblfont -v -l 24 -f DejaVuSans:size=20 16x16.fnt >16x16.fnt.log
+	../../gfxboot-font -v -l 24 -f DejaVuSans:size=20 16x16.fnt >16x16.fnt.log
 
 clean:
 	rm -f *~ log init bootlogo 16x16.*
