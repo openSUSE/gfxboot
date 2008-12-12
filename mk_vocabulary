@@ -15,7 +15,7 @@
   add sub mul div mod neg abs min max and or xor not shl shr
   eq ne gt ge lt le
   trace dtrace
-  malloc free memsize dumpmem
+  malloc free realloc memsize dumpmem
   gettype settype
   screen.size image.colors vscreen.size monitorsize
   moveto currentpoint lineto setcolor currentcolor putpixel getpixel

@@ -2632,7 +2632,7 @@ _free_10:
 
 		add edx,[es:ebx + mhead.memsize]
 
-		mov [es:ecx],edx
+		mov [es:ecx + mhead.memsize],edx
 		mov ebx,ecx
 
 _free_30:
@@ -2653,10 +2653,112 @@ _free_30:
 
 _free_70:
 		mov ecx,ebx
-		add ebx,[es:ebx]
+		add ebx,[es:ebx + mhead.memsize]
 		cmp ebx,[malloc.end]
 		jb _free_10
 _free_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Adjust memory size.
+;
+;  eax          linear address
+;  ecx		new size (ecx = 0 -> free)
+;
+
+		bits 32
+
+realloc:
+		or ecx,ecx
+		jz free
+
+		xor bx,bx
+
+realloc10:
+		mov ebp,[malloc.area + bx]
+		mov edx,[malloc.area + 4 + bx]
+
+		cmp eax,ebp
+		jb realloc70
+		cmp eax,edx
+		jae realloc70
+
+		mov [malloc.start],ebp
+		mov [malloc.end],edx
+
+		jmp _realloc
+
+realloc70:
+		add bx,8
+		cmp bx,malloc.areas * 8
+		jb realloc10
+realloc_90:
+		ret
+
+
+_realloc:
+		or eax,eax
+		jz _realloc_90
+
+		mov ebp,ecx
+		add ebp,mhead.size			; new size
+		sub eax,mhead.size
+
+		mov ebx,[malloc.start]
+_realloc_10:
+		cmp eax,ebx
+		jnz _realloc_70
+
+		test byte [es:ebx + mhead.used],80h
+		jz _realloc_90
+
+		cmp ebp,[es:ebx + mhead.memsize]
+		ja _realloc_90				; we can only decrease
+
+		mov ecx,ebx
+		add ecx,[es:ebx + mhead.memsize]
+
+		cmp ecx,[malloc.end]
+		jae _realloc_30
+
+		test byte [es:ecx + mhead.used],80h
+		jnz _realloc_30
+
+		; free block follows, just resize
+		add ecx,[es:ecx + mhead.memsize]
+		
+		jmp _realloc_40
+
+_realloc_30:
+		; used block or end: split
+		mov eax,[es:ebx + mhead.memsize]
+		sub eax,ebp
+		cmp eax,mhead.size
+		ja _realloc_40
+		; adjust excess count
+		or al,80h
+		mov [es:ebx + mhead.rem],al
+		jmp _realloc_90
+
+_realloc_40:
+		; insert new free block
+
+		mov [es:ebx + mhead.memsize],ebp
+		mov byte [es:ebx + mhead.rem],80h
+
+		add ebx,ebp
+		sub ecx,ebx
+		mov [es:ebx + mhead.memsize],ecx
+		mov dword [es:ebx + mhead.ip],0
+		mov byte [es:ebx + mhead.rem],0
+		jmp _realloc_90
+
+_realloc_70:
+		add ebx,[es:ebx + mhead.memsize]
+		cmp ebx,[malloc.end]
+		jb _realloc_10
+_realloc_90:
 		ret
 
 
@@ -2758,6 +2860,37 @@ _dump_malloc_80:
 		call printf
 		pop ebp
 _dump_malloc_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; Get size of largest free block.
+;
+; return:
+;  eax		size of largest free block
+;
+
+maxmemsize:
+		xor eax,eax
+		xor edx,edx
+
+maxmemsize_10:
+		push eax
+		push edx
+		call memsize
+		pop edx
+		pop eax
+
+		cmp edi,edx
+		jb maxmemsize_20
+		mov edx,edi
+maxmemsize_20:
+		inc eax
+		cmp eax,4
+		jb maxmemsize_10
+
+		xchg eax,edx
+
 		ret
 
 
@@ -8343,6 +8476,47 @@ prim_free_50:
 		dec dword [pstack.ptr]
 		clc
 prim_free_90:
+		ret
+
+
+;; realloc - change allocated memory size
+;
+; group: mem
+;
+; ( obj1 int1 -- )
+;
+; obj1:		object to resize, either array, string or pointer
+; int1:		new size; memory is freed if zero
+;
+; Note: There is no garbage collector implemented. You have to keep track of
+; memory usage yourself. If obj1 does not refer to some dynamically
+; allocated object, @realloc does nothing.
+;
+; example
+;
+; 100 malloc		% allocate 100 bytes...
+; 10 realloc		% resize to 10 bytes
+;
+
+		bits 32
+
+prim_realloc:
+		mov dx,t_int + (t_ptr << 8)
+		call get_2args
+		jnc prim_realloc_10
+		cmp dx,t_int + (t_ptr << 8)
+		jz prim_realloc_10
+		cmp dx,t_int + (t_none << 8)
+		jz prim_realloc_50
+		cmp dx,t_int + (t_array << 8)
+		stc
+		jnz prim_realloc_90
+prim_realloc_10:
+		xchg eax,ecx
+		call realloc
+prim_realloc_50:
+		sub dword [pstack.ptr],2
+prim_realloc_90:
 		ret
 
 
@@ -14973,6 +15147,17 @@ find_file_ext:
 		jnz find_file_ext_80
 
 		mov eax,ecx
+
+		cmp eax,-1
+		jnz find_file_ext_10
+		push ecx
+		call maxmemsize
+		pop ecx
+		cmp eax,20000h			; not too low, just in case
+		jb find_file_ext_80
+		sub eax,10000h			; leave a bit
+find_file_ext_10:
+
 		push ecx
 		call calloc
 		pop ecx
@@ -15006,11 +15191,23 @@ find_file_ext_50:
 		pop eax
 		pop ecx
 
+		cmp ecx,-1
+		jnz find_file_ext_60
+		sub edi,eax
+		mov ecx,edi
+		; ecx: real size
+		push eax
+		call realloc
+		pop eax
+		jmp find_file_ext_90
+
+find_file_ext_60:
 		; did we get everything...?
 		sub edi,ecx
 		cmp eax,edi
 		jz find_file_ext_90
 
+find_file_ext_70:
 		; ... no -> read error
 		call free
 
@@ -15026,7 +15223,7 @@ find_file_ext_90:
 ;  eax		file name (lin)
 ;
 ; return:
-;  eax		file size (-1: not found)
+;  eax		file size (-1: not found; -2: exists, but unknown size)
 ;
 
 		bits 32
@@ -15065,6 +15262,9 @@ file_size_ext:
 		jnz file_size_ext_80
 
 		mov eax,ecx
+		cmp eax,-1
+		jnz file_size_ext_90
+		dec eax
 		jmp file_size_ext_90
 
 file_size_ext_80:
