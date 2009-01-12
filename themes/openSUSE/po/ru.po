@@ -8,16 +8,13 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bootloader.ru\n"
-"POT-Creation-Date: 2008-09-26 18:04+0200\n"
-"PO-Revision-Date: 2008-11-10 20:42+0300\n"
-"Last-Translator: Alexander Melentiev <alex239@gmail.com>\n"
-"Language-Team: Russian <opensuse-translation-ru@opensuse.org>\n"
+"Project-Id-Version: bootloader\n"
+"PO-Revision-Date: 2009-01-05 16:57\n"
+"Last-Translator: Novell Language <language@novell.com>\n"
+"Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 0.3\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #. ok button label
 #. txt_ok
@@ -49,15 +46,15 @@ msgstr "Ручная установка"
 
 #. txt_noacpi_install
 msgid "Installation--ACPI Disabled"
-msgstr "Установка -- ACPI выключен"
+msgstr "Установка - ACPI выключен"
 
 #. txt_safe_install
 msgid "Installation--Safe Settings"
-msgstr "Установка -- безопасные параметры"
+msgstr "Установка - безопасные параметры"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr "Linux -- безопасные параметры"
+msgstr "Linux - безопасные параметры"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
@@ -69,7 +66,7 @@ msgstr "Спасательная система"
 
 #. txt_memtest
 msgid "Memory Test"
-msgstr "Проверка памяти"
+msgstr "Тест памяти"
 
 #. txt_bootoptions
 msgid "Boot Options"
@@ -86,7 +83,7 @@ msgid ""
 "starting the text mode interface."
 msgstr ""
 "Вы вышли из графического меню загрузки и\n"
-"запустили интерфейс текстового режима."
+"запустили текстовый режим интерфейса."
 
 #. txt_help
 msgid "Help"
@@ -156,7 +153,7 @@ msgid ""
 "Insert boot disk %u."
 msgstr ""
 "Это не загрузочный диск <product>.\n"
-"Вставьте загрузочный диск %u."
+"Пожалуйста вставьте загрузочный диск %u."
 
 #. password dialog title
 #. txt_password_title
@@ -165,12 +162,12 @@ msgstr "Пароль"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr "Подготовьте дискету с драйверами."
+msgstr "Пожалуйста, приготовьте дискету драйверами."
 
 #. dvd warning title
 #. txt_dvd_warning_title
 msgid "DVD Error"
-msgstr "Ошибка диска DVD"
+msgstr "Ошибка DVD"
 
 #. txt_dvd_warning2
 msgid ""
@@ -178,9 +175,9 @@ msgid ""
 "\n"
 "Turn the DVD over then continue."
 msgstr ""
-"Это двухсторонний диск DVD. Вы загрузились со второй стороны.\n"
+"Это двусторонний DVD диск. Вы загрузились со второй стороны.\n"
 "\n"
-"Переверните диск DVD и продолжите."
+"Переверните DVD и продолжите."
 
 #. power off dialog title
 #. txt_power_off_title
@@ -203,7 +200,7 @@ msgstr "Установка с жёсткого диска"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Дисковое устройство (проверить все диски, если не указано)\n"
+msgstr "Дисковое устройство (Сканировать все диски, если не указано)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -225,7 +222,7 @@ msgstr "Пароль\n"
 #. label for ftp user input
 #. txt_user1
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "Пользователь (анонимный вход, если не указан)\n"
+msgstr "Пользователь (Анонимный вход, если не указан)\n"
 
 #. dialog title for nfs installation
 #. txt_nfs_title
@@ -235,12 +232,12 @@ msgstr "Установка по NFS"
 #. label for smb user input
 #. txt_user2
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "Пользователь (использовать \"guest\", если не указан)\n"
+msgstr "Пользователь (Использовать \"guest\", если не указан)\n"
 
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "Установка по SMB (из общей\tпапки Windows)"
+msgstr "Установка по SMB (Общий ресурс Windows)"
 
 #. dialog title for http installation
 #. txt_http_title
@@ -260,7 +257,7 @@ msgstr "Домен\n"
 #. button label for other/more options
 #. txt_other_options
 msgid "Other Options"
-msgstr "Другие варианты"
+msgstr "Другие параметры"
 
 #. label for language selection
 #. txt_language
@@ -269,15 +266,15 @@ msgstr "Язык"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr "Установка -- IOAPIC включен"
+msgstr "Установка - IOAPIC включен"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
-msgstr "Установка -- IOAPIC выключен"
+msgstr "Установка - IOAPIC выключен"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr "Установка -- локальный APIC выключен"
+msgstr "Установка - локальный APIC выключен"
 
 #. txt_yes
 msgid "Yes"
@@ -295,7 +292,7 @@ msgstr "Файл"
 #. input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr "Общая папка\n"
+msgstr "Общий ресурс\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
@@ -307,23 +304,23 @@ msgstr "Ручной режим"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr "Настройка параметров на разделе ZEN"
+msgstr "Настройка параметров на ZEN разделе"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr "Установить или обновить раздел ZEN"
+msgstr "Установить или Обновить ZEN раздел"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "Переустановить загрузчик раздела ZEN"
+msgstr "Переустановить загрузчик ZEN раздела"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr "Отключить раздел ZEN"
+msgstr "Отключить ZEN раздел"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
-msgstr "Включить раздел ZEN"
+msgstr "Включить ZEN раздел"
 
 #. video mode menu item
 #. txt_text_mode
@@ -333,17 +330,18 @@ msgstr "Текстовый режим"
 #. menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr "Проверка микропрограммного обеспечения"
+msgstr "Проверка программно-аппаратных средств"
 
 #. txt_dud_file_msg
+#, wrap
 msgid ""
 "To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
-"Чтобы напрямую загрузить обновления драйверов с компакт-диска,\n"
+"Чтобы напрямую загрузить обновления драйвера с CD-ROM,\n"
 "введите имена файлов обновления драйверов (разделенных\n"
-"запятыми ','):\n"
+"запятыми ',') :\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
@@ -402,12 +400,12 @@ msgstr "Без локального APIC"
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr "Восстановление установленной системы"
+msgstr "Исправление установленной системы"
 
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr "Проверка носителя установки"
+msgstr "Проверка носителя файлов установки"
 
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
@@ -417,9 +415,9 @@ msgstr "Клавиатура"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "Загрузить обновление драйвера"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr ""
+msgstr "Ввести URL-адрес для обновления драйвера\n"

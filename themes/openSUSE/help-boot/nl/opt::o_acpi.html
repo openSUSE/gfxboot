@@ -2,6 +2,22 @@
 <a name="o_acpi">Kernelopties: acpi</a>
 </h3>
 
-<p>ACPI (Advanced Configuration and Power Interface) is een standaard die interfaces voor energie- en configuratiebeheer tussen een besturingssysteem en de BIOS definieert. Standaard wordt <em>acpi</em>ingeschakeld als een BIOS is gevonden die nieuwer is dan uit het jaar 2000. Er zijn diverse veelgebruikte parameters die het gedrag van ACPI bepalen: <ul><li><em>pci=noacpi</em> -- gebruik geen ACPI voor het routeren van PCI-interrupts</li><li><em>acpi=oldboot</em> -- alleen de delen van ACPI die relevant zijn voor het opstarten blijven geactiveerd</li><li><em>acpi=off</em> -- schakel ACPI volledig uit</li><li><em>acpi=force</em> -- schakel ACPI in, ook als uw BIOS van voor 2000 is</li></ul></p>
+<p>
+ACPI (Advanced Configuration and Power Interface) is a
+standard that defines power and configuration management interfaces
+between an operating system and the BIOS. By default, <em>acpi</em> is
+switched on when a BIOS is detected that is newer than from year
+2000. There are several commonly
+used parameters to control the behavior of ACPI:
+<ul>
+  <li><em>pci=noacpi</em> -- do not use ACPI to route PCI interrupts</li>
+  <li><em>acpi=oldboot</em> -- only the parts of ACPI that are relevant for booting remain activated</li>
+  <li><em>acpi=off</em> -- switch off ACPI completely</li>
+  <li><em>acpi=force</em> -- switch on ACPI even if your BIOS is dated before 2000</li>
+</ul>
+</p>
 
-<p>Vooral bij nieuwe computers, het vervangt het oude <a href="#o_apm">apm</a>-systeem.</p>
+<p>
+Especially on new computers, it replaces the old
+<a href="#o_apm">apm</a> system.
+</p>

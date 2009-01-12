@@ -2,6 +2,22 @@
 <a name="o_acpi">Параметры ядра: acpi</a>
 </h3>
 
-<p>ACPI (Усовершенствованный интерфейс конфигурирования системы и управления энергопитанием) эвляется стандартом которые определяет интерфейс управления питанием и конфигурацией между операционной системой и BIOS. По умолчанию, <li><em>pci=noacpi</em> -- не использовать ACPI для управления PCI прерываниями</li> включен, если определяется, что версия BIOS датирована позднее чем 2000 г. Есть несколько общих параметров для управления поведением ACPI: <ul><li><em>pci=noacpi</em> -- не использовать ACPI для управления PCI прерываниями</li><li><em>acpi=oldboot</em> -- только часть ACPI которая относиться к загрузке, остается активной</li><li><em>acpi=off</em> -- выключает полностью ACPI</li><li><em>acpi=force</em> -- включает ACPI даже если ваш BIOS датирован ранее чем 2000</li></ul></p>
+<p>
+ACPI (Advanced Configuration and Power Interface) is a
+standard that defines power and configuration management interfaces
+between an operating system and the BIOS. By default, <em>acpi</em> is
+switched on when a BIOS is detected that is newer than from year
+2000. There are several commonly
+used parameters to control the behavior of ACPI:
+<ul>
+  <li><em>pci=noacpi</em> -- do not use ACPI to route PCI interrupts</li>
+  <li><em>acpi=oldboot</em> -- only the parts of ACPI that are relevant for booting remain activated</li>
+  <li><em>acpi=off</em> -- switch off ACPI completely</li>
+  <li><em>acpi=force</em> -- switch on ACPI even if your BIOS is dated before 2000</li>
+</ul>
+</p>
 
-<p>Особенно на новых компьютерах, заменяет старый <a href="#o_apm">apm</a> системы.</p>
+<p>
+Especially on new computers, it replaces the old
+<a href="#o_apm">apm</a> system.
+</p>

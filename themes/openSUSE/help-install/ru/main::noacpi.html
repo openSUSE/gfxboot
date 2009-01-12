@@ -2,8 +2,23 @@
 <a name="noacpi">Установка - ACPI выключено</a>
 </h3>
 
-<p>Современное оборудование, обычно использует APIC (Усовершенствованный интерфейс конфигурирования системы и управления энергопитанием) для управления прерываниями. ACPI полностью заменяет старую APM систему.</p>
+<p>
+Current hardware usually requires ACPI (Advanced Configuration and Power Interface)
+to control the interrupt handling.
+ACPI completely replaces the old APM system.
+</p>
 
-<p>Выберите <em>Установка - ACPI выключено</em> если есть проблемы с ядром во время загрузки. Известные проблемы с машинами, которые имеют проблемы с AC: <ul><li>ядро приостанавливается при загрузке</li><li>PCI платы не обнаружены или неверно инициализированы</li></ul></p>
+<p>
+Select <em>Установка - ACPI выключено</em> if you encounter
+problems during boot of the kernel. Known problems with machines that
+have problems with ACPI are:
+<ul>
+  <li>kernel freezes when booting</li>
+  <li>PCI Cards are not detected or initialized properly</li>
+</ul>
+</p>
 
-<p>Вы можете попробовать использовать <a href="#firmware">Проверка программно-аппаратных средств</a> параметр загрузки и посмотреть результат проверки ACPI.</p>
+<p>
+You may also try the <a href="#firmware">Тест микропрограмм</a> boot option
+and look at the test results of the ACPI validation.
+</p>

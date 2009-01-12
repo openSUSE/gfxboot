@@ -7,17 +7,13 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bootloader.es\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-11-17 00:56+0100\n"
-"Last-Translator: Carlos E. Robinson <carlos.e.r@opensuse.org>\n"
-"Language-Team: Spanish <opensuse-translation-es@opensuse.org>\n"
+"Project-Id-Version: bootloader\n"
+"PO-Revision-Date: 2009-01-06 09:41\n"
+"Last-Translator: Novell Language <language@novell.com>\n"
+"Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
-"X-Poedit-Language: Spanish\n"
-"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
 #. ok button label
 #. txt_ok
@@ -61,7 +57,7 @@ msgstr "Linux -- Ajustes seguros"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
-msgstr "Arrancar desde el disco duro"
+msgstr "Arrancar del disco duro"
 
 #. txt_rescue
 msgid "Rescue System"
@@ -86,7 +82,7 @@ msgid ""
 "starting the text mode interface."
 msgstr ""
 "Está saliendo del menú gráfico de arranque e\n"
-"iniciando la interfaz en modo texto."
+"iniciando la interfaz de modo texto."
 
 #. txt_help
 msgid "Help"
@@ -165,7 +161,7 @@ msgstr "Contraseña"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr "Tenga listo el disco de actualización del controlador."
+msgstr "Prepare el disquete de actualización del controlador."
 
 #. dvd warning title
 #. txt_dvd_warning_title
@@ -189,7 +185,7 @@ msgstr "Apagar"
 
 #. txt_power_off
 msgid "Halt the system now?"
-msgstr "¿Desea apagar el sistema ahora?"
+msgstr "¿Desea detener el sistema?"
 
 #. menu entry for hard disk installation
 #. txt_harddisk
@@ -199,7 +195,7 @@ msgstr "Disco duro"
 #. dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "Instalación disco duro"
+msgstr "Instalación del disco duro"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
@@ -225,7 +221,7 @@ msgstr "Contraseña\n"
 #. label for ftp user input
 #. txt_user1
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "Usuario (dejar vacío para anónimo)\n"
+msgstr "Usuario (login anónimo si está vacío)\n"
 
 #. dialog title for nfs installation
 #. txt_nfs_title
@@ -336,13 +332,14 @@ msgid "Firmware Test"
 msgstr "Prueba de firmware"
 
 #. txt_dud_file_msg
+#, wrap
 msgid ""
 "To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
 "Para cargar las actualizaciones de controlador directamente desde el CD-ROM,\n"
-"indique los nombres de archivo de las actualizaciones del controlador (separados\n"
+"indique los nombres de archivo de las actualizaciones de controlador (separados\n"
 "por comas \",\") aquí:\n"
 
 #. install source menu title
@@ -361,7 +358,7 @@ msgstr "Modo de vídeo"
 #. -> txt_dud_file_msg
 #. txt_driver_update2
 msgid "Driver Update"
-msgstr "Actualización de controlador"
+msgstr "Actualización de controladores"
 
 #. menu label for selecting (cpu) architecture
 #. like i386, x86-64, ppc
@@ -374,18 +371,18 @@ msgstr "Arquitectura"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_kernel
 msgid "Kernel"
-msgstr "Kernel"
+msgstr "Núcleo"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
 msgid "Default"
-msgstr "Predeterminado"
+msgstr "Por defecto"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> like in txt_safe_linux
 #. txt_kernel_safe
 msgid "Safe Settings"
-msgstr "Ajustes seguros"
+msgstr "Valores de configuración seguros"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_noacpi_install
@@ -407,7 +404,7 @@ msgstr "Reparar el sistema instalado"
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr "Verificar el medio de instalación"
+msgstr "Comprobar el medio de instalación"
 
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
@@ -417,9 +414,9 @@ msgstr "Teclado"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "Descargar actualización de controladores"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr ""
+msgstr "Escribir URL de actualización de controladores\n"

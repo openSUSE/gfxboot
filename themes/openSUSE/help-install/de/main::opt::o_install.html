@@ -2,8 +2,29 @@
 <a name="o_install">Installiereroptionen: install</a>
 </h3>
 
-<p>Standardmäßig werden die lokalen CD-ROMs nach der Installationsquelle durchsucht. Bei einer Netzwerkinstallation wählen Sie die Option <em>installieren</em>. Mögliche Installationsprotokolle sind <ul><li>FTP</li><li>NFS</li><li>HTTP</li></ul></p>
+<p>
+By default, the local CD-ROMs are searched for the installation source.
+For a network install, select the
+<em>Installieren</em> option. Possible installation protocols are
+<ul>
+  <li>FTP</li>
+  <li>NFS</li>
+  <li>HTTP</li>
+</ul>
+</p>
 
-<p>Die zu verwendende Syntax entspricht den Standard-URLs. Bsp.: Wenn Ihr Server bei 192.168.0.1 gefunden wird und Sie eine eine NFS-basierte Installation aus dem Verzeichnis /install durchführen wollen, legen Sie die Quelle wie folgt fest: <ul><li>install=nfs://192.168.0.1/install</li></ul></p>
+<p>
+The syntax to use is just like standard URLs. For example, 
+if your server is found at 192.168.0.1 and you want to do an NFS-based
+install from the directory /install on this server, specify
+the source as follows:
+<ul>
+  <li>install=nfs://192.168.0.1/install</li>
+</ul>
+</p>
 
-<p>Die Netzwerkkarte wird entweder mit <em>dhcp</em> konfiguriert oder Sie müssen die Parameter selbst festlegen, wie beschrieben in <a href="#network">Netzwerkoptionen</a>.</p>
+<p>
+The network card will either be configured with <em>DHCP</em> or you
+must specify the parameters yourself as described in the
+<a href="#network">Netzwerkoptionen</a>.
+</p>

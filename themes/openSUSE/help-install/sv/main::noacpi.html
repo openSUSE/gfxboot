@@ -2,8 +2,23 @@
 <a name="noacpi">Installation - ACPI inaktiverat</a>
 </h3>
 
-<p>För den aktuella maskinvaran krävs vanligtvis ACPI (Advanced  Configuration and Power Interface) för styrning av avbrottshanteringen. ACPI ersätter det tidigare APM-systemet fullt ut.</p>
+<p>
+Current hardware usually requires ACPI (Advanced Configuration and Power Interface)
+to control the interrupt handling.
+ACPI completely replaces the old APM system.
+</p>
 
-<p>Välj <em>Installation - ACPI inaktiverat</em> om du upplever problem under start av kärnan. Kända problem med datorer som har problem med ACPI är: <ul><li>kärnan hänger sig vid start</li><li>PCI-kort identifieras eller initieras inte ordentligt</li></ul></p>
+<p>
+Select <em>Installation - ACPI inaktiverat</em> if you encounter
+problems during boot of the kernel. Known problems with machines that
+have problems with ACPI are:
+<ul>
+  <li>kernel freezes when booting</li>
+  <li>PCI Cards are not detected or initialized properly</li>
+</ul>
+</p>
 
-<p>Du kan också prova startalternativet <a href="#firmware">Test av fast program</a> och se testresultaten av ACPI-kontrollen.</p>
+<p>
+You may also try the <a href="#firmware">Test av fast programvara</a> boot option
+and look at the test results of the ACPI validation.
+</p>

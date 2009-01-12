@@ -1,9 +1,24 @@
 <h3>
-<a name="noacpi">Instalação -- ACPI desabilitada</a>
+<a name="noacpi">Instalação -- ACPI Desabilitada</a>
 </h3>
 
-<p>O hardware mais novo geralmente requer que a ACPI (Advanced Configuration and Power Interface - Interface Avançada de Configuração e Energia) controle o gerenciamento de interrupções. O ACPI substitui completamente o antigo sistema APM.</p>
+<p>
+Current hardware usually requires ACPI (Advanced Configuration and Power Interface)
+to control the interrupt handling.
+ACPI completely replaces the old APM system.
+</p>
 
-<p>Selecione <em>Instalação -- ACPI desabilitada</em> se você encontrar problemas durante a inicialização do kernel. Os problemas conhecidos de máquinas que têm problemas com ACPI são: <ul><li>o kernel trava durante a inicialização</li><li>Placas PCI não são detectadas ou inicializadas corretamente</li></ul></p>
+<p>
+Select <em>Instalação -- ACPI Desabilitada</em> if you encounter
+problems during boot of the kernel. Known problems with machines that
+have problems with ACPI are:
+<ul>
+  <li>kernel freezes when booting</li>
+  <li>PCI Cards are not detected or initialized properly</li>
+</ul>
+</p>
 
-<p>Você também pode tentar a opção de inicialização <a href="#firmware">Teste de firmware</a> e ver os resultados do teste de validação do ACPI.</p>
+<p>
+You may also try the <a href="#firmware">Teste de Firmware</a> boot option
+and look at the test results of the ACPI validation.
+</p>

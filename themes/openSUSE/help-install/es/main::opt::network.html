@@ -6,8 +6,30 @@
 <a name="network">Opciones del instalador: opciones de red</a>
 </h3>
 
-<p>Es posible configurar la interfaz de red ahora. YaST2 detectará el hardware posteriormente. El conjunto de opciones mínimo para configurar la tarjeta de red incluye la IP del host y la máscara de red. Por ejemplo: <ul><li>hostip=192.168.0.10 netmask=255.255.255.0</li></ul></p>
+<p>
+It is possible to configure the network interface right now. The
+hardware will be detected later by YaST2. The minimum set of options
+to configure your network card consists of host IP and netmask. For
+example:
+<ul>
+  <li>hostip=192.168.0.10 netmask=255.255.255.0</li>
+</ul>
+</p>
 
-<p>en más corto: <ul><li>hostip=192.168.0.10/24</li></ul></p>
+<p>
+or in a shorter form:
+<ul>
+  <li>hostip=192.168.0.10/24</li>
+</ul>
+</p>
 
-<p>Si se indica un <a href="#o_install">instalación basada en red</a> pero no se especifican estas dos opciones, el instalador intentará configurar la interfaz de red con <em>DHCP</em>. Si se necesita una pasarela (gateway) por defecto, establezca la opción <em>pasarela</em>. Por ejemplo: <ul><li>gateway=192.168.0.8</li></ul></p>
+<p>
+If you specified a <a href="#o_install">Instalación basada en red</a> and do
+not specify both of these options, the installer tries to configure
+the network interface with <em>DHCP</em>. If you need a default
+gateway, specify this with the option <em>gateway</em>. For
+example:
+<ul>
+  <li>gateway=192.168.0.8</li>
+</ul>
+</p>

@@ -2,8 +2,23 @@
 <a name="noacpi">Installation -- ACPI désactivé</a>
 </h3>
 
-<p>Les matériels actuels nécessitent généralement l'ACPI (Advanced Configuration and Power Interface) pour gérer les interruptions. L'ACPI remplace totalement l'ancien système APM.</p>
+<p>
+Current hardware usually requires ACPI (Advanced Configuration and Power Interface)
+to control the interrupt handling.
+ACPI completely replaces the old APM system.
+</p>
 
-<p>Sélectionnez <em>Installation -- ACPI désactivé</em> si vous rencontrez des problèmes lors de l'amorçage du noyau. Les problèmes connus avec ACPI sont : <ul><li>gels du noyau lors de l'amorçage</li><li>Les cartes PCI ne sont pas détectées ou initialisées correctement</li></ul></p>
+<p>
+Select <em>Installation -- ACPI désactivé</em> if you encounter
+problems during boot of the kernel. Known problems with machines that
+have problems with ACPI are:
+<ul>
+  <li>kernel freezes when booting</li>
+  <li>PCI Cards are not detected or initialized properly</li>
+</ul>
+</p>
 
-<p>Vous pouvez aussi essayer l'option d'amorçage <a href="#firmware">Test de microprogramme</a> et regarder les résultats de la validation ACPI.</p>
+<p>
+You may also try the <a href="#firmware">Test de microprogramme</a> boot option
+and look at the test results of the ACPI validation.
+</p>

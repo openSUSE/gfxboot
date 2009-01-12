@@ -2,34 +2,102 @@
 <a name="main">ブートローダヘルプ</a>
 </h3>
 
-<p><em>@@@product@@@</em> へようこそ</p>
+<p>
+Welcome to <em>@@@product@@@</em>
+</p>
 
-<p>このメニューを使用して目的の機能を選択してください。 このヘルプシステムの操作がうまくいかない場合、 <em>@@@fkey_help@@@</em> キーを押してヘルプシステムの <a href="#help">説明</a> に入ってください。このメニューの主な機能は次の通りです:</p>
+<p>
+Use this menu to select the desired function. If you have
+problems navigating in this help system, press
+<em>@@@fkey_help@@@</em> to enter the <a href="#help">説明</a> of the help
+system. The main functions in this menu are:
+</p>
 
-<p><a href="#harddisk">ハードディスクから起動</a>: この選択ではシステムには何も変更を加えません。インストールされたオペレーティングシステムを起動するだけです。</p>
+<p>
+<a href="#harddisk">ハードディスクから起動</a>: This selection will not do
+anything to the system. It only starts a previously installed
+operating system.
+</p>
 
-<p><a href="#linux">インストール</a>: このインストールモードはほとんどのコンピュータで機能します。 起動中にシステムがフリーズする場合、またはディスクコントローラやネットワークカードなどのハードウエアコンポーネントの検出に問題がある場合、次のインストールオプションを試してください。</p>
+<p>
+<a href="#linux">インストール</a>: 
+This installation mode works on most machines. If you experience a
+system freeze during boot or problems with detection of your hardware
+components, such as disk controllers or network cards, try one of the
+following installation options.
+</p>
 
-<p><a href="#noacpi">インストール -- ACPI 無効</a>: 現在販売されている多くのコンピュータは ACPI を完全に実装していないか、実装に問題があります。この選択によりカーネルの ACPI サポートは無効になりますが、 IDE ハードディスク用の DMA のような多くのパフォーマンス機能は変わらず有効になります。</p>
+<p>
+<a href="#noacpi">インストール -- ACPI無効</a>: Many of the
+currently-sold computers have incomplete or faulty ACPI
+implementations. This selection disables ACPI support in the
+kernel, but still enables many performance features, like DMA for IDE
+hard disks.
+</p>
 
-<p><a href="#nolapic">インストール -- ローカル APIC 無効</a>: 標準インストールが失敗した場合、お使いのハードウエアがローカル APIC に対応していないためかもしれません。 これが原因と考えられる場合は、このオプションを使ってローカル APIC 対応なしでインストールを行なってください。</p>
+<p>
+<a href="#nolapic">インストール -- ローカルAPIC無効</a>:
+If the normal installation fails, this might be due to the
+system hardware not supporting local APIC.
+If this seems to be the case, use this option to
+install without local APIC support.
+</p>
 
-<p><a href="#failsafe">インストール -- 安全設定</a>: <em>インストール</em> がうまくいかなかった場合、このオプションを選択すると問題が解決されるかもしれません。</p>
+<p>
+<a href="#failsafe">インストール -- セーフ設定</a>: If you were not
+successful with <em>インストール</em>, this selection might
+solve the issue.
+</p>
 
-<p><a href="#rescue">レスキューシステム</a>: このブートイメージではメモリ内で動作する小さな Linux システムを起動します。この仕組みはシステムが正しく起動しない場合に役立ちます。起動後は root でログインしてください。</p>
+<p>
+<a href="#rescue">レスキューシステム</a>: This boot image starts a small
+Linux system in RAM. This is useful if the system does not start properly.
+After booting this system, log in as root.
+</p>
 
-<p><a href="#firmware">ファームウエアのテスト</a>: ACPI とその他の BIOS 項目の妥当性を検証するテストツールを起動します。</p>
+<p>
+<a href="#firmware">ファームウェアのテスト</a>: Runs a BIOS test tool that validates
+ACPI and other parts of your BIOS.
+</p>
 
-<p><a href="#memtest">メモリテスト</a>: メモリテストは新しくインストールしたメモリモジュールがきちんと動作しているか確認することができるだけではありません。これはコンピュータシステムの耐久テストであり、ハードウエアの問題が判明することもあります。</p>
+<p>
+<a href="#memtest">メモリテスト</a>: Memory testing is useful for more than
+checking installation of new memory modules. It is a stress test
+for a big part of your computer system and may indicate hardware
+problems.
+</p>
 
-<p><a href="#opt">起動オプション</a>: 起動オプションはシステムの動作を完全に変更してしまうかもしれません。 このオプションはカーネル用の設定です。</p>
+<p>
+<a href="#opt">起動オプション</a>: The boot options may change the
+behavior of your system completely. They are settings for
+the kernel.
+</p>
 
-<p><a href="#help">@@@fkey_help@@@ ヘルプ</a>: このヘルプは状況依存です。起動画面で現在選択中の項目に応じて異なる画面を表示します。このヘルプシステム自身の説明も記載されています。</p>
+<p>
+<a href="#help">@@@fkey_help@@@ Help</a>: This is context sensitive. It will
+show different screens depending on the active element of the
+boot screen. There is also a description of this help system
+available.
+</p>
 
-<p><a href="#keytable">@@@fkey_lang@@@</a>: ブートローダで使用する言語とキーボードマップを設定します。</p>
+<p>
+<a href="#keytable">@@@fkey_lang@@@</a>: Set language and keyboard mapping
+used by the boot loader.
+</p>
 
-<p><a href="#videomode">@@@fkey_video@@@ ビデオモード</a>: ここではインストール中に使用する画面解像度を選択します。 グラフィカルなインストールに際して問題が発生した場合、 <em>テキストモード</em> で回避できるかもしれません。</p>
+<p>
+<a href="#videomode">@@@fkey_video@@@ Video Mode</a>: Here, choose between
+different screen resolutions while installing. If you encounter
+problems with the graphical installation, the <em>テキストモード</em> may
+be a work-around for you.
+</p>
 
-<p><a href="#install_src">@@@fkey_inst@@@ インストール元</a>: インストール元を選択します。</p>
+<p>
+<a href="#install_src">@@@fkey_inst@@@ Installation Source</a>: Choose the
+installation source.
+</p>
 
-<p><a href="#driverupdate">@@@fkey_dud@@@ ドライバ更新</a>: とても新しいコンピュータにインストールする場合は、ドライバ更新が必要になるかもしれません。</p>
+<p>
+<a href="#driverupdate">@@@fkey_dud@@@ Driver Update</a>: For very new machines, a
+driver update may be needed to install the system.
+</p>

@@ -3,11 +3,33 @@
 <a name="o_gateway"/>
 
 <h3>
-<a name="network">Параметры установки: Параметры сети</a>
+<a name="network">Параметры установки: параметры сети</a>
 </h3>
 
-<p>Можно настроить сетевой интерфейс прямо сейчас. Оборудование будет определено позже YaST2. Минимальный набор параметров вашей сетевой карты состоит из IP адреса узла и сетвой маски. Для примера: <ul><li>hostip=192.168.0.10 netmask=255.255.255.0</li></ul></p>
+<p>
+It is possible to configure the network interface right now. The
+hardware will be detected later by YaST2. The minimum set of options
+to configure your network card consists of host IP and netmask. For
+example:
+<ul>
+  <li>hostip=192.168.0.10 netmask=255.255.255.0</li>
+</ul>
+</p>
 
-<p>или в коротком виде: <ul><li>hostip=192.168.0.10/24</li></ul></p>
+<p>
+or in a shorter form:
+<ul>
+  <li>hostip=192.168.0.10/24</li>
+</ul>
+</p>
 
-<p>Если вы указали <a href="#o_install">сетевая установка</a> и не указали оба эти параметра, установщик попытается настроить сетевой интерфейс с <em>dhcp</em>. Если вам необходим шлюз по умолчанию, укажите это с параметром <em>шлюз</em>. Например: <ul><li>gateway=192.168.0.8</li></ul></p>
+<p>
+If you specified a <a href="#o_install">сетевая установка</a> and do
+not specify both of these options, the installer tries to configure
+the network interface with <em>dhcp</em>. If you need a default
+gateway, specify this with the option <em>Шлюз</em>. For
+example:
+<ul>
+  <li>gateway=192.168.0.8</li>
+</ul>
+</p>

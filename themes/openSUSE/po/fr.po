@@ -10,11 +10,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: fr\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-05-27 22:18+0100\n"
-"Last-Translator: li-nox <chadup@caramail.com>\n"
-"Language-Team: French Team <opensuse-fr@opensuse.org>\n"
+"Project-Id-Version: bootloader\n"
+"PO-Revision-Date: 2009-01-07 15:47\n"
+"Last-Translator: Novell Language <language@novell.com>\n"
+"Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -86,7 +85,7 @@ msgid ""
 "starting the text mode interface."
 msgstr ""
 "Vous quittez le menu d'amorçage graphique et\n"
-"démarrez l'interface en mode texte."
+"démarrez l'interface en mode textuel."
 
 #. txt_help
 msgid "Help"
@@ -104,7 +103,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Chargement du noyau Linux\n"
+"Chargement du kernel Linux\n"
 "\n"
 "\n"
 
@@ -132,7 +131,7 @@ msgstr "Erreur E/S"
 #. boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr "Changer le disque d'amorçage"
+msgstr "Changer la disquette d'amorçage"
 
 #. txt_insert_disk
 #, c-format
@@ -155,8 +154,8 @@ msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"Il ne s'agit pas d'un disque d'amorçage pour <product>.\n"
-"Insérez le disque d'amorçage %u."
+"Il ne s'agit pas d'une disquette d'amorçage pour <product>.\n"
+"Insérez la disquette d'amorçage %u."
 
 #. password dialog title
 #. txt_password_title
@@ -199,7 +198,7 @@ msgstr "Disque dur"
 #. dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "Installation sur disque dur"
+msgstr "Installation du disque dur"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
@@ -333,15 +332,16 @@ msgstr "Mode texte"
 #. menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr "Test de programme"
+msgstr "Test de microprogramme"
 
 #. txt_dud_file_msg
+#, wrap
 msgid ""
 "To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
-"Pour charger les mises à jour de pilote directement depuis un CD-ROM,\n"
+"Pour charger les mises à jour de pilote directement depuis un CD,\n"
 "entrez les noms de fichier séparés\n"
 "par des virgules (,) :\n"
 
@@ -374,7 +374,7 @@ msgstr "Arch"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_kernel
 msgid "Kernel"
-msgstr "Noyau"
+msgstr "Kernel"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
@@ -407,7 +407,7 @@ msgstr "Réparer le système installé"
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr "Vérifier le média d'installation"
+msgstr "Vérifier le support d'installation"
 
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
@@ -417,9 +417,9 @@ msgstr "Clavier"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "Ajouter une mise à jour de pilote"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr ""
+msgstr "Entrer l'URL de mise à jour des pilotes\n"

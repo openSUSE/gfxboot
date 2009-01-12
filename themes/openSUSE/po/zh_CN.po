@@ -4,10 +4,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-06-02 02:05+0800\n"
-"Last-Translator: Thruth Wang <lihaow@opera.com>\n"
-"Language-Team: Simplified Chinese\n"
+"PO-Revision-Date: 2009-01-05 08:04\n"
+"Last-Translator: Novell Language <language@novell.com>\n"
+"Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -25,7 +24,7 @@ msgstr "取消"
 #. reboot button label
 #. txt_reboot
 msgid "Reboot"
-msgstr "重启"
+msgstr "重引导"
 
 #. continue button label
 #. txt_continue
@@ -78,8 +77,8 @@ msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"您将离开图形引导菜单\n"
-"并启动文本方式界面。"
+"您将离开图形引导菜单，启动\n"
+"文本方式界面。"
 
 #. txt_help
 msgid "Help"
@@ -329,6 +328,7 @@ msgid "Firmware Test"
 msgstr "固件测试"
 
 #. txt_dud_file_msg
+#, wrap
 msgid ""
 "To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
@@ -361,7 +361,7 @@ msgstr "驱动程序更新"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr "体系"
+msgstr "存档"
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
@@ -390,7 +390,7 @@ msgstr "无 ACPI"
 #. -> similar to txt_nolapic_install
 #. txt_kernel_nolapic
 msgid "No Local APIC"
-msgstr "无本地 ACPI"
+msgstr "无本地 APIC"
 
 #. main menu: start in system repair mode
 #. txt_repain_system
@@ -400,7 +400,7 @@ msgstr "修复已安装系统"
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr "检查安装介质"
+msgstr "检查安装媒体"
 
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
@@ -410,9 +410,9 @@ msgstr "键盘"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "下载驱动程序更新"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr ""
+msgstr "输入驱动程序更新 URL\n"

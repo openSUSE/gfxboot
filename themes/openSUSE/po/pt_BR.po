@@ -4,18 +4,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-09-23 21:18-0300\n"
-"Last-Translator: Luiz Fernando Ranghetti <elchevive68@gmail.com>\n"
-"Language-Team: Brazilian Portuguese <opensuse-pt@opensuse.org>\n"
+"PO-Revision-Date: 2009-01-05 15:10\n"
+"Last-Translator: Novell Language <language@novell.com>\n"
+"Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n>1;\n"
-"X-Poedit-Language: Portuguese\n"
-"X-Poedit-Country: BRAZIL\n"
-"X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: KBabel 1.11.4\n"
 
 #. ok button label
 #. txt_ok
@@ -43,35 +37,35 @@ msgstr "Instalação"
 
 #. txt_manual_install
 msgid "Manual Installation"
-msgstr "Instalação manual"
+msgstr "Instalação Manual"
 
 #. txt_noacpi_install
 msgid "Installation--ACPI Disabled"
-msgstr "Instalação--ACPI desabilitada"
+msgstr "Instalação--ACPI Desabilitada"
 
 #. txt_safe_install
 msgid "Installation--Safe Settings"
-msgstr "Instalação--configurações seguras"
+msgstr "Instalação--Configurações Seguras"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr "Linux--configurações seguras"
+msgstr "Linux--Configurações Seguras"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
-msgstr "Inicializar do disco rígido"
+msgstr "Inicializar do Disco Rígido"
 
 #. txt_rescue
 msgid "Rescue System"
-msgstr "Sistema de recuperação"
+msgstr "Sistema de Recuperação"
 
 #. txt_memtest
 msgid "Memory Test"
-msgstr "Teste de memória"
+msgstr "Teste de Memória"
 
 #. txt_bootoptions
 msgid "Boot Options"
-msgstr "Opções de inicialização"
+msgstr "Opções de Boot"
 
 #. window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
@@ -83,7 +77,7 @@ msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"Você está saindo do menu de inicialização gráfica\n"
+"Você está saindo do menu de boot gráfico\n"
 "e iniciando a interface em modo de texto."
 
 #. txt_help
@@ -102,7 +96,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Carregando o kernel do Linux\n"
+"Carregando Kernel do Linux\n"
 "\n"
 "\n"
 
@@ -113,29 +107,29 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Carregando o memtest86\n"
+"Carregando memtest86\n"
 "\n"
 "\n"
 
 #. info box title
 #. txt_info_title
 msgid "Boot Loader"
-msgstr "Carregador de inicialização"
+msgstr "Carregador de boot"
 
 #. error box title
 #. txt_error_title
 msgid "I/O Error"
-msgstr "Erro de E/S"
+msgstr "Erro de I/O"
 
 #. boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr "Alterar o disco de inicialização"
+msgstr "Mudar Disco de Boot"
 
 #. txt_insert_disk
 #, c-format
 msgid "Insert boot disk %u."
-msgstr "Inserir o disco de inicialização %u."
+msgstr "Inserir disco de boot %u."
 
 #. txt_insert_disk2
 #, c-format
@@ -143,8 +137,8 @@ msgid ""
 "This is boot disk %u.\n"
 "Insert boot disk %u."
 msgstr ""
-"Este é o disco de inicialização %u.\n"
-"Insira o disco de inicialização %u."
+"Este é o disco de boot %u.\n"
+"Insira o disco de boot %u."
 
 #. <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
@@ -153,8 +147,8 @@ msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"Este não é um disco de inicialização do <product>.\n"
-"Insira o disco de inicialização %u."
+"Este não é um disco de boot do <product>.\n"
+"Insira o disco de boot %u."
 
 #. password dialog title
 #. txt_password_title
@@ -163,12 +157,12 @@ msgstr "Senha"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr "Tenha o disquete de atualização de driver pronto."
+msgstr "Verifique se o disquete de atualização de driver está pronto."
 
 #. dvd warning title
 #. txt_dvd_warning_title
 msgid "DVD Error"
-msgstr "Erro no DVD"
+msgstr "Erro de DVD"
 
 #. txt_dvd_warning2
 msgid ""
@@ -176,7 +170,7 @@ msgid ""
 "\n"
 "Turn the DVD over then continue."
 msgstr ""
-"Este é um DVD de dois lados. Você fez a inicialização pelo segundo lado.\n"
+"Este é um DVD com dois lados. Você fez a inicialização pelo segundo lado.\n"
 "\n"
 "Vire o DVD e continue."
 
@@ -192,16 +186,16 @@ msgstr "Desligar o sistema agora?"
 #. menu entry for hard disk installation
 #. txt_harddisk
 msgid "Hard Disk"
-msgstr "Disco rígido"
+msgstr "Disco Rígido"
 
 #. dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "Instalação pelo disco rígido"
+msgstr "Instalação por Disco Rígido"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Dispositivo de disco (varre todos os discos se vazio)\n"
+msgstr "Dispositivo de Disco (Explora Todos os Discos, Se Vazio)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -223,7 +217,7 @@ msgstr "Senha\n"
 #. label for ftp user input
 #. txt_user1
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "Usuário (efetua login anônimo se vazio)\n"
+msgstr "Usuário (login anônimo, se estiver vazio)\n"
 
 #. dialog title for nfs installation
 #. txt_nfs_title
@@ -233,12 +227,12 @@ msgstr "Instalação por NFS"
 #. label for smb user input
 #. txt_user2
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "Usuário (utiliza \"guest\" se vazio)\n"
+msgstr "Usuário (Usa \"convidado\" Se Vazio)\n"
 
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "Instalação por SMB (compartilhamento Windows)"
+msgstr "Instalação por SMB (Compartilhamento Windows)"
 
 #. dialog title for http installation
 #. txt_http_title
@@ -258,7 +252,7 @@ msgstr "Domínio\n"
 #. button label for other/more options
 #. txt_other_options
 msgid "Other Options"
-msgstr "Outras opções"
+msgstr "Outras Opções"
 
 #. label for language selection
 #. txt_language
@@ -267,15 +261,15 @@ msgstr "Idioma"
 
 #. txt_apic
 msgid "Installation--IOAPIC Enabled"
-msgstr "Instalação--IOAPIC habilitada"
+msgstr "Instalação--IOAPIC Habilitada"
 
 #. txt_noapic_install
 msgid "Installation--IOAPIC Disabled"
-msgstr "Instalação--IOAPIC desabilitada"
+msgstr "Instalação--IOAPIC Desabilitada"
 
 #. txt_nolapic_install
 msgid "Installation--Local APIC Disabled"
-msgstr "Instalação--APIC local desabilitada"
+msgstr "Instalação--APIC Local Desabilitada"
 
 #. txt_yes
 msgid "Yes"
@@ -297,51 +291,52 @@ msgstr "Compartilhamento\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
-msgstr "Modo automático"
+msgstr "Modo Automático"
 
 #. txt_zenManual
 msgid "Manual Mode"
-msgstr "Modo manual"
+msgstr "Modo Manual"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr "Configurar os parâmetros na partição ZEN"
+msgstr "Configurar parâmetros na partição ZEN"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr "Instalar ou atualizar partição ZEN"
+msgstr "Instalar ou Atualizar Partição ZEN"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "Reinstalar o carregador de inicialização na partição ZEN"
+msgstr "Reinstalar o carregador de boot da partição ZEN"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr "Desabilitar a partição ZEN"
+msgstr "Desabilitar partição ZEN"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
-msgstr "Habilitar a partição ZEN"
+msgstr "Habilitar partição ZEN"
 
 #. video mode menu item
 #. txt_text_mode
 msgid "Text Mode"
-msgstr "Modo de texto"
+msgstr "Modo de Texto"
 
 #. menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr "Teste de firmware"
+msgstr "Teste de Firmware"
 
 #. txt_dud_file_msg
+#, wrap
 msgid ""
 "To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
 "Para carregar atualizações de driver diretamente do CD-ROM,\n"
-"digite aqui os nomes dos arquivos de atualização de driver\n"
-"(separados por vírgulas ','):\n"
+"digite aqui os nomes dos arquivos de atualização de driver (separados\n"
+"por vírgulas ','):\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
@@ -353,13 +348,13 @@ msgstr "Fonte"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_video_mode
 msgid "Video Mode"
-msgstr "Modo de vídeo"
+msgstr "Modo de Vídeo"
 
 #. driver update dialog title
 #. -> txt_dud_file_msg
 #. txt_driver_update2
 msgid "Driver Update"
-msgstr "Atualização de driver"
+msgstr "Atualização de Driver"
 
 #. menu label for selecting (cpu) architecture
 #. like i386, x86-64, ppc
@@ -383,7 +378,7 @@ msgstr "Padrão"
 #. -> like in txt_safe_linux
 #. txt_kernel_safe
 msgid "Safe Settings"
-msgstr "Configurações seguras"
+msgstr "Configurações Seguras"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_noacpi_install
@@ -395,17 +390,17 @@ msgstr "Sem ACPI"
 #. -> similar to txt_nolapic_install
 #. txt_kernel_nolapic
 msgid "No Local APIC"
-msgstr "Sem APIC local"
+msgstr "Sem APIC Local"
 
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr "Reparar o sistema instalado"
+msgstr "Reparar o Sistema Instalado"
 
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr "Verificar a mídia de instalação"
+msgstr "Verificar a Mídia de Instalação"
 
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
@@ -415,9 +410,9 @@ msgstr "Teclado"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "Fazer Download da Atualização de Driver"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr ""
+msgstr "Digitar URL da Atualização de Driver\n"

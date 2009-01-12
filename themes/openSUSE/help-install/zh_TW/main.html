@@ -1,35 +1,103 @@
 <h3>
-<a name="main">開機載入器說明</a>
+<a name="main">開機載入程式說明</a>
 </h3>
 
-<p>歡迎光臨 <em>@@@產品@@@</em></p>
+<p>
+Welcome to <em>@@@product@@@</em>
+</p>
 
-<p>使用此功能表來選取想要的功能。如果您在巡覽此系統時有問題，請按 <em>@@@fkey_help@@@</em> 以進入說明系統的 <a href="#help">描述</a>。此功能表的主要功能是：</p>
+<p>
+Use this menu to select the desired function. If you have
+problems navigating in this help system, press
+<em>@@@fkey_help@@@</em> to enter the <a href="#help">描述</a> of the help
+system. The main functions in this menu are:
+</p>
 
-<p><a href="#harddisk">從硬碟開機</a>：此選項不會對系統進行任何動作，它只會啟動之前已安裝的作業系統。</p>
+<p>
+<a href="#harddisk">從硬碟開機</a>: This selection will not do
+anything to the system. It only starts a previously installed
+operating system.
+</p>
 
-<p><a href="#linux">安裝</a>：此安裝模式適用於大部分的電腦上。如果系統在開機時凍結，或是在偵測硬體元件 (如磁碟控制卡或軟體卡) 上有問題，請嘗試以下其中一個安裝選項。</p>
+<p>
+<a href="#linux">安裝</a>: 
+This installation mode works on most machines. If you experience a
+system freeze during boot or problems with detection of your hardware
+components, such as disk controllers or network cards, try one of the
+following installation options.
+</p>
 
-<p><a href="#noacpi">安裝 -- 停用 ACPI</a>： 市面上許多電腦的 ACPI 執行方式不完整或錯誤。此選項可停用核心中的 ACPI 支援，但仍會啟用許多增強效能的功能，像 IDE 硬碟的 DMA。</p>
+<p>
+<a href="#noacpi">安裝 -- ACPI 已停用</a>: Many of the
+currently-sold computers have incomplete or faulty ACPI
+implementations. This selection disables ACPI support in the
+kernel, but still enables many performance features, like DMA for IDE
+hard disks.
+</p>
 
-<p><a href="#nolapic">安裝 -- 關閉 Local APIC</a>： 如果正常安裝失敗，可能是因為系統硬體不支援本地 APIC。 如果是這個原因，請使用本選項即可無須本地 APIC 支援即安裝。</p>
+<p>
+<a href="#nolapic">安裝 -- 本地 APIC 已停用</a>:
+If the normal installation fails, this might be due to the
+system hardware not supporting local APIC.
+If this seems to be the case, use this option to
+install without local APIC support.
+</p>
 
-<p><a href="#failsafe">安裝 -- 安全設定</a>：如果您無法成功使用 <em>安裝</em>，此選項可能可以解決此問題。</p>
+<p>
+<a href="#failsafe">安裝 -- 安全設定</a>: If you were not
+successful with <em>安裝</em>, this selection might
+solve the issue.
+</p>
 
-<p><a href="#rescue">救援系統</a>：此開機映像檔會啟動 RAM 中的迷你 Linux 系統。如果系統未能正確啟動，此功能非常的有用。此系統開機之後，請以 root 身份登入。</p>
+<p>
+<a href="#rescue">救援系統</a>: This boot image starts a small
+Linux system in RAM. This is useful if the system does not start properly.
+After booting this system, log in as root.
+</p>
 
-<p><a href="#firmware">韌體測試</a>：執行 BIOS 測試工具確認您的 BIOS 的 ACPI 和其他部份。</p>
+<p>
+<a href="#firmware">韌體測試</a>: Runs a BIOS test tool that validates
+ACPI and other parts of your BIOS.
+</p>
 
-<p><a href="#memtest">記憶體測試</a>： 記憶體測試不僅只是檢查新記憶體模組的安裝，它可對您電腦系統的絕大部分進行壓力測試，並可能指出硬體的問題。</p>
+<p>
+<a href="#memtest">記憶體測試</a>: Memory testing is useful for more than
+checking installation of new memory modules. It is a stress test
+for a big part of your computer system and may indicate hardware
+problems.
+</p>
 
-<p><a href="#opt">開機選項</a>： 開機選項會完全變更您系統的行為，這些選項是核心的設定。</p>
+<p>
+<a href="#opt">開機選項</a>: The boot options may change the
+behavior of your system completely. They are settings for
+the kernel.
+</p>
 
-<p><a href="#help">@@@fkey_help@@@ 說明</a>： 為智慧型關聯式，它會根據開機畫面中的作用中元素而顯示不同的畫面。在此也有此說明系統的可用說明。</p>
+<p>
+<a href="#help">@@@fkey_help@@@ Help</a>: This is context sensitive. It will
+show different screens depending on the active element of the
+boot screen. There is also a description of this help system
+available.
+</p>
 
-<p><a href="#keytable">@@@fkey_lang@@@</a>： 設定開機載入器使用的語言和鍵盤對應。</p>
+<p>
+<a href="#keytable">@@@fkey_lang@@@</a>: Set language and keyboard mapping
+used by the boot loader.
+</p>
 
-<p><a href="#videomode">@@@fkey_video@@@ 視訊模式</a>：安裝時在此選擇其他螢幕解析度。如果您碰到圖形安裝的問題，<em>文字模式</em> 會是因應措施。</p>
+<p>
+<a href="#videomode">@@@fkey_video@@@ Video Mode</a>: Here, choose between
+different screen resolutions while installing. If you encounter
+problems with the graphical installation, the <em>文字模式</em> may
+be a work-around for you.
+</p>
 
-<p><a href="#install_src">@@@fkey_inst@@@ 安裝來源</a>： 選擇安裝來源。</p>
+<p>
+<a href="#install_src">@@@fkey_inst@@@ Installation Source</a>: Choose the
+installation source.
+</p>
 
-<p><a href="#driverupdate">@@@fkey_dud@@@ 驅動程式更新</a>：對於非常新的電腦，安裝系統時可能需要驅動程式更新。</p>
+<p>
+<a href="#driverupdate">@@@fkey_dud@@@ Driver Update</a>: For very new machines, a
+driver update may be needed to install the system.
+</p>

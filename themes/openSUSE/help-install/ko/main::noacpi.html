@@ -2,8 +2,23 @@
 <a name="noacpi">설치 -- ACPI 비활성화</a>
 </h3>
 
-<p>현재 하드웨어는 ACPI (Advanced Configuration and Power Interface) 를 제어하는 인터럽트 처리를 요구합니다. 구형 APM 시스템을 ACPI 는 완벽하게 대체합니다.</p>
+<p>
+Current hardware usually requires ACPI (Advanced Configuration and Power Interface)
+to control the interrupt handling.
+ACPI completely replaces the old APM system.
+</p>
 
-<p><em>설치 -- ACPI 비활성화</em> 를 선택하여 커널의 부팅 도중 문제가 발생한 경우 머신이 가지고 있는 알려진 문제 ACPI가: <ul><li>부팅 도중 커널 뻗어버림</li><li>PCI 카드가 감지되지 않았거나 적당히 초기화됨</li></ul></p>
+<p>
+Select <em>설치 -- ACPI 비활성화</em> if you encounter
+problems during boot of the kernel. Known problems with machines that
+have problems with ACPI are:
+<ul>
+  <li>kernel freezes when booting</li>
+  <li>PCI Cards are not detected or initialized properly</li>
+</ul>
+</p>
 
-<p><a href="#firmware">펌웨어 검사</a> 을 사용해 부트 옵션 및 ACPI 유효성 검사 결과 볼 수 있습니다.</p>
+<p>
+You may also try the <a href="#firmware">펌웨어 테스트</a> boot option
+and look at the test results of the ACPI validation.
+</p>

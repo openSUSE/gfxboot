@@ -1,9 +1,30 @@
 <h3>
-<a name="o_install">インストーラオプション： インストール</a>
+<a name="o_install">インストーラオプション: インストール</a>
 </h3>
 
-<p>既定ではローカルの CD-ROM ドライブをインストール元として検索します。ネットワークインストールの場合、 <em>インストール</em> オプションを選択してください。使用可能なインストールプロトコルは下記の通りです。 <ul><li>FTP</li><li>NFS</li><li>HTTP</li></ul></p>
+<p>
+By default, the local CD-ROMs are searched for the installation source.
+For a network install, select the
+<em>インストール</em> option. Possible installation protocols are
+<ul>
+  <li>FTP</li>
+  <li>NFS</li>
+  <li>HTTP</li>
+</ul>
+</p>
 
-<p>使用する構文は一般的な URL に似ています。 例えばサーバが 192.168.0.1 で、そのサーバのディレクトリ /install から NFS ベースのインストールを行なう場合、以下のようにソースを指定してください: <ul><li>install=nfs://192.168.0.1/install</li></ul></p>
+<p>
+The syntax to use is just like standard URLs. For example, 
+if your server is found at 192.168.0.1 and you want to do an NFS-based
+install from the directory /install on this server, specify
+the source as follows:
+<ul>
+  <li>install=nfs://192.168.0.1/install</li>
+</ul>
+</p>
 
-<p>ネットワークカードは <em>DHCP</em> で設定するか、 <a href="#network">ネットワークオプション</a> で説明したように自分でパラメータを指定する必要があります。</p>
+<p>
+The network card will either be configured with <em>DHCP</em> or you
+must specify the parameters yourself as described in the
+<a href="#network">ネットワークオプション</a>.
+</p>

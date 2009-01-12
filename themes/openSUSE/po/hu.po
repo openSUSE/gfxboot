@@ -12,14 +12,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-11-18 09:05+0100\n"
+"PO-Revision-Date: 2009-01-04 00:40+0100\n"
 "Last-Translator: Kalman Kemenczy <kkemenczy@novell.com>\n"
-"Language-Team: Hungarian <hu@li.org>\n"
+"Language-Team:  <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. ok button label
 #. txt_ok
@@ -29,7 +29,7 @@ msgstr "OK"
 #. cancel button label
 #. txt_cancel
 msgid "Cancel"
-msgstr "Mégsem"
+msgstr "Mégse"
 
 #. reboot button label
 #. txt_reboot
@@ -404,7 +404,7 @@ msgstr "Helyi APIC nélkül"
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr "Telepített rendszer javítása"
+msgstr "A telepített rendszer javítása"
 
 #. menu item
 #. txt_mediacheck
@@ -419,9 +419,9 @@ msgstr "Billentyűzet"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "Illesztőprogram-frissítés letöltése"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr ""
+msgstr "Illesztőprogram-frissítés URL-je\n"

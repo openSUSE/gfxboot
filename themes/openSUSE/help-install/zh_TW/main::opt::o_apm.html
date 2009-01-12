@@ -1,7 +1,21 @@
 <h3>
-<a name="o_apm">核心選項：APM</a>
+<a name="o_apm">核心選項：apm</a>
 </h3>
 
-<p>在目前電腦上使用的電源管理策略有兩種，APM 是其中一種。它主要是用於筆記型電腦，以提供如休眠到磁碟等功能，但它也會在電源中斷後負責關閉電腦。APM 依賴正確運作的 BIOS。如果  BIOS 壞了，APM 只會限制使用電腦作業，甚或是阻止作業。因此，可使用參數 <ul><li><em>apm=off</em> -- 完全關閉 APM</li></ul> 關閉 APM。</p>
+<p>
+APM is one of the two power management strategies used on current
+computers. It is mainly used with laptops for functions like suspend
+to disk, but it may also be responsible for switching off the
+computer after power down. APM relies on a correct working BIOS. If
+the BIOS is broken, APM may have only limited use or even prevent the
+computer from working. Therefore, it may be switched off with the
+parameter
+<ul>
+  <li><em>apm=off</em>  -- switch off APM completely</li>
+</ul>
+</p>
 
-<p>有些非常新的電腦更從新的得到更好處 <a href="#o_acpi">ACPI</a>。</p>
+<p>
+Some very new computers may take more advantage from the newer
+<a href="#o_acpi">ACPI</a>.
+</p>

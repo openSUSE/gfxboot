@@ -2,6 +2,20 @@
 <a name="o_apm">カーネルオプション: apm</a>
 </h3>
 
-<p>APM は現在のコンピュータで使用される 2 種類の電源管理ストラテジのうちの 1 つです。この機能はディスクへのサスペンド (Suspend to disk) のような機能に対してノート PC で主に使用されますが、パワーダウンした後にコンピュータの電源をオフにするような機能もあります。 APM は BIOS が正しく動作することを前提に作られているため、 BIOS が壊れた場合は APM の使用が制限されたり、コンピュータが機能しないこともあります。そのため、下記のパラメータでオフにすることもできます <ul><li><em>apm=off</em> -- APM を完全に無効化する</li></ul></p>
+<p>
+APM is one of the two power management strategies used on current
+computers. It is mainly used with laptops for functions like suspend
+to disk, but it may also be responsible for switching off the
+computer after power down. APM relies on a correct working BIOS. If
+the BIOS is broken, APM may have only limited use or even prevent the
+computer from working. Therefore, it may be switched off with the
+parameter
+<ul>
+  <li><em>apm=off</em>  -- switch off APM completely</li>
+</ul>
+</p>
 
-<p>いくつかの最新コンピュータでは新しい <a href="#o_acpi">ACPI</a> を利用したほうが利点があるかもしれません。</p>
+<p>
+Some very new computers may take more advantage from the newer
+<a href="#o_acpi">ACPI</a>.
+</p>

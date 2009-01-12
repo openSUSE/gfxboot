@@ -3,11 +3,33 @@
 <a name="o_gateway"/>
 
 <h3>
-<a name="network">설치 옵션: Network Options</a>
+<a name="network">설치 프로그램 옵션: 네트워크 옵션</a>
 </h3>
 
-<p>지금 바로 네트워크 인터페이스를 구성할 수 있습니다. 하드웨어는 나중에 YaST2에서 감지할 것입니다. 최소 옵션으로 호스트 IP 와 넷마스크로 네트워크 카드를 설정하세요. 예를 들어:<ul><li>hostip=192.168.0.10 netmask=255.255.255.0</li></ul></p>
+<p>
+It is possible to configure the network interface right now. The
+hardware will be detected later by YaST2. The minimum set of options
+to configure your network card consists of host IP and netmask. For
+example:
+<ul>
+  <li>hostip=192.168.0.10 netmask=255.255.255.0</li>
+</ul>
+</p>
 
-<p>또는 짧은 양식에서: <ul><li>hostip=192.168.0.10/24</li></ul></p>
+<p>
+or in a shorter form:
+<ul>
+  <li>hostip=192.168.0.10/24</li>
+</ul>
+</p>
 
-<p><a href="#o_install">네트워크 설치</a> 을 지정하고 이러한 옵션을 둘 다 지정하지 않고, 설치프로그램에서 네트워크 인터페이스를 <em>dhcp</em> 와 함께 설정합니다. 만약 기본 게이트웨이가 필요하면, <em>gateway</em> 옵션을 지정합니다. 예를 들어:<ul><li>gateway=192.168.0.8</li></ul></p>
+<p>
+If you specified a <a href="#o_install">네트워크 기반 설치</a> and do
+not specify both of these options, the installer tries to configure
+the network interface with <em>dhcp</em>. If you need a default
+gateway, specify this with the option <em>게이트웨이</em>. For
+example:
+<ul>
+  <li>gateway=192.168.0.8</li>
+</ul>
+</p>

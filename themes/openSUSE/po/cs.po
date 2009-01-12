@@ -6,14 +6,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2008-05-21 12:23+0200\n"
-"Last-Translator: Klara Cihlarova <koty@seznam.cz>\n"
-"Language-Team: cs_CZ <cs@li.org>\n"
+"PO-Revision-Date: 2009-01-09 10:52\n"
+"Last-Translator: Novell Language <language@novell.com>\n"
+"Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
-"Plural-Forms:  nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #. ok button label
 #. txt_ok
@@ -69,7 +67,7 @@ msgstr "Test paměti"
 
 #. txt_bootoptions
 msgid "Boot Options"
-msgstr "Parametry startu"
+msgstr "Parametry spuštění"
 
 #. window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
@@ -128,12 +126,12 @@ msgstr "Chyba I/O"
 #. boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr "Změnit startovací disk"
+msgstr "Změnit spouštěcí disk"
 
 #. txt_insert_disk
 #, c-format
 msgid "Insert boot disk %u."
-msgstr "Vložte startovací disk %u."
+msgstr "Vložte spouštěcí disk %u."
 
 #. txt_insert_disk2
 #, c-format
@@ -141,7 +139,7 @@ msgid ""
 "This is boot disk %u.\n"
 "Insert boot disk %u."
 msgstr ""
-"Toto je startovací disk %u.\n"
+"Toto je spouštěcí disk %u.\n"
 "Vložte prosím disk %u."
 
 #. <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
@@ -151,8 +149,8 @@ msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"Toto není startovací disk systému <product>.\n"
-"Vložte startovací disk %u."
+"Toto není spouštěcí disk systému <product>.\n"
+"Vložte spouštěcí disk %u."
 
 #. password dialog title
 #. txt_password_title
@@ -332,6 +330,7 @@ msgid "Firmware Test"
 msgstr "Test firmwaru"
 
 #. txt_dud_file_msg
+#, wrap
 msgid ""
 "To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
@@ -364,7 +363,7 @@ msgstr "Aktualizace ovladače"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr "Arch"
+msgstr "Architektura"
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
@@ -413,9 +412,9 @@ msgstr "Klávesnice"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "Stáhnout aktualizaci ovladače"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr ""
+msgstr "Vložte URL pro aktualizaci ovladače\n"

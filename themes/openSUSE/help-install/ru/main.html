@@ -2,34 +2,102 @@
 <a name="main">Справка загрузчика</a>
 </h3>
 
-<p>Добро пожаловать <em>@@@product@@@</em></p>
+<p>
+Welcome to <em>@@@product@@@</em>
+</p>
 
-<p>Используйте это меню для выбора необходимой функции. Если у вас проблемы с управлением в данной системе помощи, нажмите<em>@@@fkey_help@@@</em> чтобы войти в <a href="#help">описание</a> системы помощи. Главные функции в этом меню:</p>
+<p>
+Use this menu to select the desired function. If you have
+problems navigating in this help system, press
+<em>@@@fkey_help@@@</em> to enter the <a href="#help">Описание</a> of the help
+system. The main functions in this menu are:
+</p>
 
-<p><a href="#harddisk">Загрузка с жёсткого диска</a>: Этот выбор ничего ничего не сделает с системой. Просто будет запущена ранне установленная система.</p>
+<p>
+<a href="#harddisk">Загрузка с жёсткого диска</a>: This selection will not do
+anything to the system. It only starts a previously installed
+operating system.
+</p>
 
-<p><a href="#linux">Установка</a>: Этот режим установки работает на большинстве компьютеров. Если у вас зависает система при загрузке или у вас проблемы с обнаружением аппаратных средств, таких как контроллеры диска или сетевые платы, попробуйте одну из следующих установочных параметров.</p>
+<p>
+<a href="#linux">Установка</a>: 
+This installation mode works on most machines. If you experience a
+system freeze during boot or problems with detection of your hardware
+components, such as disk controllers or network cards, try one of the
+following installation options.
+</p>
 
-<p><a href="#noacpi">Установка - ACPI выключено</a>: Многие проданные компьюетры имеют неполную или неверную реализацию ACPI. Этот выбор отключает поддержку ACPI в ядре, однако многие особенности влияющие на быстродействие все равно включены, напримерe DMA для IDE жестких дисков.</p>
+<p>
+<a href="#noacpi">Установка - ACPI выключено</a>: Many of the
+currently-sold computers have incomplete or faulty ACPI
+implementations. This selection disables ACPI support in the
+kernel, but still enables many performance features, like DMA for IDE
+hard disks.
+</p>
 
-<p><a href="#nolapic">Установка - локальный APIC выключен</a>: Если обычная установка не получается, возможно ваше оборудование не поддерживает APIC. Если это так, используйте этот параметр для установки без поддержки APIC.</p>
+<p>
+<a href="#nolapic">Установка - локальный APIC выключен</a>:
+If the normal installation fails, this might be due to the
+system hardware not supporting local APIC.
+If this seems to be the case, use this option to
+install without local APIC support.
+</p>
 
-<p><a href="#failsafe">Установка - безопасные параметры настройки</a>: Если у вас не получается с <em>Установка</em>, этот выбор может помочь вам.</p>
+<p>
+<a href="#failsafe">Установка - безопасные параметры</a>: If you were not
+successful with <em>Установка</em>, this selection might
+solve the issue.
+</p>
 
-<p><a href="#rescue">Спасательная система</a>: Этот загрузочный образ запускает маленькую Linux систмеу в RAM. Это полезно если ваша система запускает не правильно. После загрузки этой системы, войдите как root.</p>
+<p>
+<a href="#rescue">Система чрезвычайного доступа</a>: This boot image starts a small
+Linux system in RAM. This is useful if the system does not start properly.
+After booting this system, log in as root.
+</p>
 
-<p><a href="#firmware">Проверка программно-аппаратных средств</a>: Запускает инструмент проверки BIOS, который проверяет ACPI и другие части вашего BIOS.</p>
+<p>
+<a href="#firmware">Тест микропрограмм</a>: Runs a BIOS test tool that validates
+ACPI and other parts of your BIOS.
+</p>
 
-<p><a href="#memtest">Тест памяти</a>: Тест памяти более полезней, чем просто проверка новых модулей памяти. Это стрессовая проверка большей части вашей компьютерной системы и может выявить проблемы в оборудовании.</p>
+<p>
+<a href="#memtest">Тест памяти</a>: Memory testing is useful for more than
+checking installation of new memory modules. It is a stress test
+for a big part of your computer system and may indicate hardware
+problems.
+</p>
 
-<p><a href="#opt">Параметры загрузки</a>: Параметры загрузки могут полностью изменять поведение вашей системы. Это настройки ядра.</p>
+<p>
+<a href="#opt">Параметры загрузки</a>: The boot options may change the
+behavior of your system completely. They are settings for
+the kernel.
+</p>
 
-<p><a href="#help">@@@fkey_help@@@ Help</a>: Зависит от содержания. Будут показаны разные экраны в зависимости от активного элемента экрана загрузки. Также есть описание этой системы помощи.</p>
+<p>
+<a href="#help">@@@fkey_help@@@ Help</a>: This is context sensitive. It will
+show different screens depending on the active element of the
+boot screen. There is also a description of this help system
+available.
+</p>
 
-<p><a href="#keytable">@@@fkey_lang@@@</a>: Установить язык и раскладку клавиатуры используемые загрузчиком.</p>
+<p>
+<a href="#keytable">@@@fkey_lang@@@</a>: Set language and keyboard mapping
+used by the boot loader.
+</p>
 
-<p><a href="#videomode">@@@fkey_video@@@ Видео режим</a>: Выберите необходимое разрешение экрана, используемое при установке. Если у вас есть проблемы с графической установкой, <em>текстовый режим</em> может быть поможет вам.</p>
+<p>
+<a href="#videomode">@@@fkey_video@@@ Video Mode</a>: Here, choose between
+different screen resolutions while installing. If you encounter
+problems with the graphical installation, the <em>Текстовый режим</em> may
+be a work-around for you.
+</p>
 
-<p><a href="#install_src">@@@fkey_inst@@@ Источник установки</a>: Выберите источник установки.</p>
+<p>
+<a href="#install_src">@@@fkey_inst@@@ Installation Source</a>: Choose the
+installation source.
+</p>
 
-<p><a href="#driverupdate">@@@fkey_dud@@@ Драйвер обновления</a>: Для очень новых машин, системе может понадобиться Драйвер обновления.</p>
+<p>
+<a href="#driverupdate">@@@fkey_dud@@@ Driver Update</a>: For very new machines, a
+driver update may be needed to install the system.
+</p>

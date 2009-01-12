@@ -4,13 +4,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2008-05-13 22:16+0800\n"
-"Last-Translator: swyear <swyear@gmail.com>\n"
-"Language-Team: Chinese Traditional <zh@li.org>\n"
+"PO-Revision-Date: 2009-01-06 10:47\n"
+"Last-Translator: Novell Language <language@novell.com>\n"
+"Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
 
 #. ok button label
 #. txt_ok
@@ -50,7 +49,7 @@ msgstr "安裝 -- 安全設定"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr "Linux -- 安全設定"
+msgstr "Linux - 安全設定"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
@@ -125,12 +124,12 @@ msgstr "I/O 錯誤"
 #. boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr "變更開機磁碟"
+msgstr "變更開機磁片"
 
 #. txt_insert_disk
 #, c-format
 msgid "Insert boot disk %u."
-msgstr "插入開機磁碟 %u。"
+msgstr "插入開機磁片 %u。"
 
 #. txt_insert_disk2
 #, c-format
@@ -233,7 +232,7 @@ msgstr "使用者 (如果空白則使用 \"guest\")\n"
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "SMB (Windows 分享) 安裝"
+msgstr "SMB (Windows 共用) 安裝"
 
 #. dialog title for http installation
 #. txt_http_title
@@ -248,7 +247,7 @@ msgstr "驅動程式"
 #. as in Windows Authentication Domain
 #. txt_domain
 msgid "Domain\n"
-msgstr "領域\n"
+msgstr "網域\n"
 
 #. button label for other/more options
 #. txt_other_options
@@ -329,6 +328,7 @@ msgid "Firmware Test"
 msgstr "韌體測試"
 
 #. txt_dud_file_msg
+#, wrap
 msgid ""
 "To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
@@ -361,7 +361,7 @@ msgstr "驅動程式更新"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr "架構"
+msgstr "結構"
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
@@ -384,13 +384,13 @@ msgstr "安全設定"
 #. -> similar to txt_noacpi_install
 #. txt_kernel_noacpi
 msgid "No ACPI"
-msgstr "關閉 ACPI"
+msgstr "無 ACPI"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_nolapic_install
 #. txt_kernel_nolapic
 msgid "No Local APIC"
-msgstr "關閉本機 APIC"
+msgstr "無本地 APIC"
 
 #. main menu: start in system repair mode
 #. txt_repain_system
@@ -410,9 +410,9 @@ msgstr "鍵盤"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "下載驅動程式更新"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr ""
+msgstr "輸入驅動程式更新 URL\n"

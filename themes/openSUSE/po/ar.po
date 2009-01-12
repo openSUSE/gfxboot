@@ -4,9 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-18 10:26+0200\n"
-"PO-Revision-Date: 2006-10-26 14:38:25+CEST\n"
+"PO-Revision-Date: 2009-01-08 15:35\n"
 "Last-Translator: Novell Language <language@novell.com>\n"
 "Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
@@ -330,6 +328,7 @@ msgid "Firmware Test"
 msgstr "اختبار البرنامج الثابت"
 
 #. txt_dud_file_msg
+#, wrap
 msgid ""
 "To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
@@ -343,13 +342,13 @@ msgstr ""
 #. ** please keep it really short (comparable to the english text) **
 #. txt_install_source
 msgid "Source"
-msgstr ""
+msgstr "المصدر"
 
 #. video mode/display size menu title
 #. ** please keep it really short (comparable to the english text) **
 #. txt_video_mode
 msgid "Video Mode"
-msgstr ""
+msgstr "وضع الفيديو"
 
 #. driver update dialog title
 #. -> txt_dud_file_msg
@@ -368,40 +367,40 @@ msgstr "الهيكل"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_kernel
 msgid "Kernel"
-msgstr ""
+msgstr "Kernel"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
 msgid "Default"
-msgstr ""
+msgstr "افتراضي"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> like in txt_safe_linux
 #. txt_kernel_safe
 msgid "Safe Settings"
-msgstr ""
+msgstr "إعدادات آمنة"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_noacpi_install
 #. txt_kernel_noacpi
 msgid "No ACPI"
-msgstr ""
+msgstr "بلا ACPI"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_nolapic_install
 #. txt_kernel_nolapic
 msgid "No Local APIC"
-msgstr ""
+msgstr "بلا APIC محلي"
 
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr ""
+msgstr "إصلاح النظام المثبَّت"
 
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr ""
+msgstr "التحقق من وسائط التثبيت"
 
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
@@ -411,9 +410,9 @@ msgstr "لوحة المفاتيح"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "إنزال تحديث برنامج التشغيل"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr ""
+msgstr "إدخال عنوان URL لتحديث برنامج التشغيل\n"

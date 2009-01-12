@@ -3,17 +3,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-11-05 23:52+0100\n"
-"Last-Translator: Jonas Björk <jonas@jonasbjork.net>\n"
-"Language-Team: svenska <sv@li.org>\n"
+"PO-Revision-Date: 2009-01-08 11:46\n"
+"Last-Translator: Novell Language <language@novell.com>\n"
+"Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
-"X-Poedit-Language: Swedish\n"
-"X-Poedit-Country: SWEDEN\n"
-"X-Poedit-SourceCharset: utf-8\n"
 
 #. ok button label
 #. txt_ok
@@ -329,16 +324,17 @@ msgstr "Textläge"
 #. menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr "Test av fast programvara"
+msgstr "Test av fast program"
 
 #. txt_dud_file_msg
+#, wrap
 msgid ""
 "To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
 "För att ladda drivrutinsuppdateringar direkt från cd-rom,\n"
-"ange drivrutinsuppdateringsfilnamn (åtskilda med kommatecken\n"
+"ange drivrutinsuppdateringsfilnamn (åtskilda med komman\n"
 "\",\") här:\n"
 
 #. install source menu title
@@ -364,7 +360,7 @@ msgstr "Drivrutinsuppdatering"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr "Arkitektur"
+msgstr "Ark"
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
@@ -398,7 +394,7 @@ msgstr "Ingen lokal ACPI"
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr "Reparera installerat system"
+msgstr "Reparera det installerade systemet"
 
 #. menu item
 #. txt_mediacheck
@@ -413,9 +409,9 @@ msgstr "Tangentbord"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "Hämta drivrutinsuppdatering"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr ""
+msgstr "Ange URL:en för drivrutinsuppdateringen\n"

@@ -2,8 +2,29 @@
 <a name="o_install">Параметры установки: install</a>
 </h3>
 
-<p>По умолчанию, локальный CD-ROMы являются источником установки. Для сетевой установки, выберите параметр <em>установить</em>. Возможные сетевые протоколы <ul><li>FTP</li><li>NFS</li><li>HTTP</li></ul></p>
+<p>
+By default, the local CD-ROMs are searched for the installation source.
+For a network install, select the
+<em>Установить</em> option. Possible installation protocols are
+<ul>
+  <li>FTP</li>
+  <li>NFS</li>
+  <li>HTTP</li>
+</ul>
+</p>
 
-<p>Используемый синтакс это просто стандартынй URL. Дл примера, если ваш сервер находится по адресу 192.168.0.1 и вы хотите осуществить установку с NFS из каталога /install на этом сервере, укажите источник в следующем виде: <ul><li>install=nfs://192.168.0.1/install</li></ul></p>
+<p>
+The syntax to use is just like standard URLs. For example, 
+if your server is found at 192.168.0.1 and you want to do an NFS-based
+install from the directory /install on this server, specify
+the source as follows:
+<ul>
+  <li>install=nfs://192.168.0.1/install</li>
+</ul>
+</p>
 
-<p>Сетевая карта будет настроена с <em>dhcp</em> или вы сами должны указать параметры как описано в <a href="#network">параметры сети</a>.</p>
+<p>
+The network card will either be configured with <em>dhcp</em> or you
+must specify the parameters yourself as described in the
+<a href="#network">параметры сети</a>.
+</p>
