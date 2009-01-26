@@ -2,29 +2,8 @@
 <a name="o_install">Opciones del instalador: install</a>
 </h3>
 
-<p>
-By default, the local CD-ROMs are searched for the installation source.
-For a network install, select the
-<em>install</em> option. Possible installation protocols are
-<ul>
-  <li>FTP</li>
-  <li>NFS</li>
-  <li>HTTP</li>
-</ul>
-</p>
+<p>Por defecto, se busca el origen de la instalación en las unidades de CD-ROM locales. Para realizar una instalación desde la red, seleccione la opción <em>install</em>. Los protocolos de instalación posibles son <ul><li>FTP</li><li>NFS</li><li>HTTP</li></ul></p>
 
-<p>
-The syntax to use is just like standard URLs. For example, 
-if your server is found at 192.168.0.1 and you want to do an NFS-based
-install from the directory /install on this server, specify
-the source as follows:
-<ul>
-  <li>install=nfs://192.168.0.1/install</li>
-</ul>
-</p>
+<p>Se debe utilizar la misma sintaxis que con las direcciones URL normales. Por ejemplo, si el servidor se encuentra en 192.168.0.1 y desea efectuar una instalación basada en NFS desde el directorio /install de ese servidor, indique el origen de esta forma: <ul><li>install=nfs://192.168.0.1/install</li></ul></p>
 
-<p>
-The network card will either be configured with <em>DHCP</em> or you
-must specify the parameters yourself as described in the
-<a href="#network">Opciones de red</a>.
-</p>
+<p>La tarjeta de red se configurará con <em>DHCP</em> o se deberán indicar los parámetros manualmente como se describe en <a href="#network">Opciones de red</a>.</p>

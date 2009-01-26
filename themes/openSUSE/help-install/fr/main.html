@@ -2,102 +2,34 @@
 <a name="main">Aide sur le chargeur de démarrage</a>
 </h3>
 
-<p>
-Welcome to <em>@@@product@@@</em>
-</p>
+<p>Bienvenue dans <em>@@@product@@@</em>.</p>
 
-<p>
-Use this menu to select the desired function. If you have
-problems navigating in this help system, press
-<em>@@@fkey_help@@@</em> to enter the <a href="#help">description</a> of the help
-system. The main functions in this menu are:
-</p>
+<p>Utilisez ce menu pour sélectionner la fonction désirée. Si vous rencontrez des problèmes de navigation dans ce système d'aide, appuyez sur <em>@@@fkey_help@@@</em> pour entrer dans la <a href="#help">description</a> du système d'aide. Les fonctions principales du menu sont :</p>
 
-<p>
-<a href="#harddisk">Démarrer depuis le disque dur</a>: This selection will not do
-anything to the system. It only starts a previously installed
-operating system.
-</p>
+<p><a href="#harddisk">Démarrer depuis le disque dur</a> : cette sélection n'affecte pas le système. Elle permet seulement de démarrer un système d'exploitation installé précédemment.</p>
 
-<p>
-<a href="#linux">Installation</a>: 
-This installation mode works on most machines. If you experience a
-system freeze during boot or problems with detection of your hardware
-components, such as disk controllers or network cards, try one of the
-following installation options.
-</p>
+<p><a href="#linux">Installation</a> : ce mode d'installation fonctionne sur la plupart des machines. Si vous rencontrez un gel du système lors de l'amorçage ou des problèmes de reconnaissance des composants matériels tels que les contrôleurs de disque ou cartes réseau, essayez l'une des options d'installation suivantes.</p>
 
-<p>
-<a href="#noacpi">Installation -- ACPI désactivé</a>: Many of the
-currently-sold computers have incomplete or faulty ACPI
-implementations. This selection disables ACPI support in the
-kernel, but still enables many performance features, like DMA for IDE
-hard disks.
-</p>
+<p><a href="#noacpi">Installation -- ACPI désactivé</a> : en général, les ordinateurs vendus actuellement ont des implémentations ACPI incomplètes ou défectueuses. Pour désactiver la prise en charge ACPI dans le kernel, utilisez cette option. Elle laisse toutefois actives de nombreuses fonctions de performances, notamment DMA pour les disques durs IDE.</p>
 
-<p>
-<a href="#nolapic">Installation -- APIC local désactivé</a>:
-If the normal installation fails, this might be due to the
-system hardware not supporting local APIC.
-If this seems to be the case, use this option to
-install without local APIC support.
-</p>
+<p><a href="#nolapic">Installation -- APIC local désactivé</a> : si l'installation normale échoue, cela peut être dû au fait que le matériel ne prend pas en charge l'APIC locale. Dans ce cas, utilisez cette option pour procéder à l'installation sans prise en charge APIC locale.</p>
 
-<p>
-<a href="#failsafe">Installation -- Paramètres sécurisés</a>: If you were not
-successful with <em>Installation</em>, this selection might
-solve the issue.
-</p>
+<p><a href="#failsafe">Installation -- Paramètres sécurisés</a> : en cas d'échec avec <em>Installation</em>, cette option peut résoudre votre problème.</p>
 
-<p>
-<a href="#rescue">Système de secours</a>: This boot image starts a small
-Linux system in RAM. This is useful if the system does not start properly.
-After booting this system, log in as root.
-</p>
+<p><a href="#rescue">Système de secours</a> : cette image d'amorçage démarre un petit système Linux en RAM. Cela est utile si le système ne démarre pas correctement. Une fois ce système amorcé, connectez-vous en tant qu'utilisateur root.</p>
 
-<p>
-<a href="#firmware">Test de microprogramme</a>: Runs a BIOS test tool that validates
-ACPI and other parts of your BIOS.
-</p>
+<p><a href="#firmware">Test de microprogramme</a> : exécute un outil de test du BIOS qui valide ACPI et d'autres parties de votre BIOS.</p>
 
-<p>
-<a href="#memtest">Test de mémoire</a>: Memory testing is useful for more than
-checking installation of new memory modules. It is a stress test
-for a big part of your computer system and may indicate hardware
-problems.
-</p>
+<p><a href="#memtest">Test de mémoire</a> : le test de mémoire n'est pas uniquement utile à la vérification de l'installation des nouveaux modules de mémoire. Il s'agit d'un test pour une grande partie de votre système qui peut révéler des problèmes matériels.</p>
 
-<p>
-<a href="#opt">Options de démarrage</a>: The boot options may change the
-behavior of your system completely. They are settings for
-the kernel.
-</p>
+<p><a href="#opt">Options de démarrage</a> : les options d'amorçage peuvent complètement modifier le fonctionnement de votre système. Elles correspondent aux paramètres du kernel.</p>
 
-<p>
-<a href="#help">@@@fkey_help@@@ Help</a>: This is context sensitive. It will
-show different screens depending on the active element of the
-boot screen. There is also a description of this help system
-available.
-</p>
+<p><a href="#help">@@@fkey_help@@@ Aide</a> : cette aide est contextuelle. Elle affichera différents écrans selon l'élément actif de l'écran d'amorçage. Une description de ce système d'aide est également disponible.</p>
 
-<p>
-<a href="#keytable">@@@fkey_lang@@@</a>: Set language and keyboard mapping
-used by the boot loader.
-</p>
+<p><a href="#keytable">@@@fkey_lang@@@</a> : définir l'assignation de langue et de clavier utilisée par le chargeur d'amorçage.</p>
 
-<p>
-<a href="#videomode">@@@fkey_video@@@ Video Mode</a>: Here, choose between
-different screen resolutions while installing. If you encounter
-problems with the graphical installation, the <em>text mode</em> may
-be a work-around for you.
-</p>
+<p><a href="#videomode">@@@fkey_video@@@ Mode vidéo</a> : cette fonction permet de choisir entre différentes résolutions d'écran lors de l'installation. Si vous rencontrez des problèmes avec l'installation graphique, <em>text mode</em> peut vous permettre de contourner le problème.</p>
 
-<p>
-<a href="#install_src">@@@fkey_inst@@@ Installation Source</a>: Choose the
-installation source.
-</p>
+<p><a href="#install_src">@@@fkey_inst@@@ Source d'installation</a> : choisir la source d'installation.</p>
 
-<p>
-<a href="#driverupdate">@@@fkey_dud@@@ Driver Update</a>: For very new machines, a
-driver update may be needed to install the system.
-</p>
+<p><a href="#driverupdate">@@@fkey_dud@@@ Mise à jour de pilotes</a> : pour les machines très récentes, une mise à jour de pilotes peut être nécessaire pour installer le système.</p>

@@ -6,30 +6,8 @@
 <a name="network">Opcje instalatora: ustawienia sieciowe</a>
 </h3>
 
-<p>
-It is possible to configure the network interface right now. The
-hardware will be detected later by YaST2. The minimum set of options
-to configure your network card consists of host IP and netmask. For
-example:
-<ul>
-  <li>hostip:192.168.0.10 netmas=255.255.255.0</li>
-</ul>
-</p>
+<p>Można teraz skonfigurować interfejs sieciowy. Sprzęt zostanie później wykryty przez program YaST2. Minimalny zestaw opcji do skonfigurowania obecnej karty sieciowej zawiera adres IP hosta i maskę sieciową. Na przykład: <ul><li>hostip:192.168.0.10 netmas=255.255.255.0</li></ul></p>
 
-<p>
-or in a shorter form:
-<ul>
-  <li>hostip=192.168.0.10/24</li>
-</ul>
-</p>
+<p>lub w krótszej formie: <ul><li>hostip=192.168.0.10/24</li></ul></p>
 
-<p>
-If you specified a <a href="#o_install">instalacja sieciowa</a> and do
-not specify both of these options, the installer tries to configure
-the network interface with <em>dhcp</em>. If you need a default
-gateway, specify this with the option <em>brama sieciowa</em>. For
-example:
-<ul>
-  <li>gateway=192.168.0.8</li>
-</ul>
-</p>
+<p>Jeśli określono <a href="#o_install">instalacja sieciowa</a> a nie zostały określone obie te opcje, instalator spróbuje skonfigurować interfejs sieciowy z <em>dhcp</em>. Jeśli potrzebne jest użycie domyślnej bramy sieciowej, należy ustawić ją za pomocą opcji <palceholder-3/>. Na przykład:<ul><li>gateway=192.168.0.8</li></ul></p>

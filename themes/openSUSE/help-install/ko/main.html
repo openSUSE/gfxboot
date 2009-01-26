@@ -2,102 +2,34 @@
 <a name="main">부팅 로더 도움말</a>
 </h3>
 
-<p>
-Welcome to <em>@@@product@@@</em>
-</p>
+<p><em>@@@product@@@</em> 시작</p>
 
-<p>
-Use this menu to select the desired function. If you have
-problems navigating in this help system, press
-<em>@@@fkey_help@@@</em> to enter the <a href="#help">설명</a> of the help
-system. The main functions in this menu are:
-</p>
+<p>이 메뉴를 사용하여 원하는 기능을 선택합니다. 이 도움말 시스템을 탐색하는 데 문제가 발생하면 <em>@@@fkey_help@@@</em>을(를) 눌러 도움말 시스템의 <a href="#help">설명</a>을(를) 시작하십시오. 이 메뉴의 주요 기능은 다음과 같습니다.</p>
 
-<p>
-<a href="#harddisk">하드 디스크에서 부팅</a>: This selection will not do
-anything to the system. It only starts a previously installed
-operating system.
-</p>
+<p><a href="#harddisk">하드 디스크에서 부팅</a>: 이 선택사항은 이전에 설치한 운영 체제만 시작하며 시스템에는 아무런 영향을 주지 않습니다.</p>
 
-<p>
-<a href="#linux">설치</a>: 
-This installation mode works on most machines. If you experience a
-system freeze during boot or problems with detection of your hardware
-components, such as disk controllers or network cards, try one of the
-following installation options.
-</p>
+<p><a href="#linux">설치</a>: 이 설치 모드는 대부분의 컴퓨터에서 작동합니다. 부팅 도중 시스템이 멈추거나 하드웨어 구성요소(예: 디스크 컨트롤러, 네트워크 카드) 감지 문제가 발생하면 다음의 설치 옵션 중 하나를 사용해 보십시오.</p>
 
-<p>
-<a href="#noacpi">설치 -- ACPI 비활성화</a>: Many of the
-currently-sold computers have incomplete or faulty ACPI
-implementations. This selection disables ACPI support in the
-kernel, but still enables many performance features, like DMA for IDE
-hard disks.
-</p>
+<p><a href="#noacpi">설치 -- ACPI 비활성화</a>: 현재 판매되는 대부분의 컴퓨터에서 ACPI의 구현이 불완전하거나 결함이 있습니다. 이 항목을 선택하면 커널에서 ACPI 지원이 비활성화되지만 많은 성능 기능(예: IDE 하드 디스크용 DMA)은 활성화됩니다.</p>
 
-<p>
-<a href="#nolapic">설치 -- 로컬 APIC 비활성화</a>:
-If the normal installation fails, this might be due to the
-system hardware not supporting local APIC.
-If this seems to be the case, use this option to
-install without local APIC support.
-</p>
+<p><a href="#nolapic">설치 -- 로컬 APIC 비활성화</a>: 정상적인 설치에 실패한 경우 로컬 APIC를 지원하지 않는 시스템 하드웨어로 인한 것일 수 있습니다. 이 경우 로컬 APIC 지원 없이 설치하려면 이 옵션을 사용하십시오.</p>
 
-<p>
-<a href="#failsafe">설치 -- 안전 설정</a>: If you were not
-successful with <em>설치</em>, this selection might
-solve the issue.
-</p>
+<p><a href="#failsafe">설치 -- 안전 설정</a>: <em>설치</em>에 성공하지 못한 경우 이 항목을 선택하여 문제를 해결할 수도 있습니다.</p>
 
-<p>
-<a href="#rescue">시스템 복구</a>: This boot image starts a small
-Linux system in RAM. This is useful if the system does not start properly.
-After booting this system, log in as root.
-</p>
+<p><a href="#rescue">시스템 복구</a>: 이 부팅 이미지는 RAM에서 소규모의 Linux 시스템을 시작합니다. 이는 시스템이 올바르게 시작하지 않는 경우 유용합니다. 시스템을 부팅한 후에 루트로 로그인하십시오.</p>
 
-<p>
-<a href="#firmware">펌웨어 테스트</a>: Runs a BIOS test tool that validates
-ACPI and other parts of your BIOS.
-</p>
+<p><a href="#firmware">펌웨어 테스트</a>: BIOS의 ACPI와 다른 부분을 검증하는 BIOS 테스트 도구를 실행합니다.</p>
 
-<p>
-<a href="#memtest">메모리 테스트</a>: Memory testing is useful for more than
-checking installation of new memory modules. It is a stress test
-for a big part of your computer system and may indicate hardware
-problems.
-</p>
+<p><a href="#memtest">메모리 테스트</a>: 메모리 테스트는 새 메모리 모듈의 설치를 검사하는 것 외에도 유용한 점이 많습니다. 컴퓨터 시스템 대부분에 대한 스트레스 테스트로, 하드웨어 문제를 알려 주기도 합니다.</p>
 
-<p>
-<a href="#opt">부팅 옵션</a>: The boot options may change the
-behavior of your system completely. They are settings for
-the kernel.
-</p>
+<p><a href="#opt">부팅 옵션</a>: 부팅 옵션은 시스템 동작을 완전히 변경할 수 있습니다. 이는 커널에 대한 설정입니다.</p>
 
-<p>
-<a href="#help">@@@fkey_help@@@ Help</a>: This is context sensitive. It will
-show different screens depending on the active element of the
-boot screen. There is also a description of this help system
-available.
-</p>
+<p><a href="#help">@@@fkey_help@@@ 도움말</a>: 상황에 따라 달라집니다. 부팅 화면의 활성 요소에 따라 다른 화면이 표시될 뿐만 아니라 사용 가능한 도움말 시스템에 대한 설명도 제공됩니다.</p>
 
-<p>
-<a href="#keytable">@@@fkey_lang@@@</a>: Set language and keyboard mapping
-used by the boot loader.
-</p>
+<p><a href="#keytable">@@@fkey_lang@@@</a>: 부팅 로더에서 사용하는 언어와 키보드 매핑을 설정합니다.</p>
 
-<p>
-<a href="#videomode">@@@fkey_video@@@ Video Mode</a>: Here, choose between
-different screen resolutions while installing. If you encounter
-problems with the graphical installation, the <em>텍스트 모드</em> may
-be a work-around for you.
-</p>
+<p><a href="#videomode">@@@fkey_video@@@ 비디오 모드</a>: 설치하는 동안 여러 화면 해상도 중에서 선택합니다. 그래픽 설치 중에 문제가 발생한 경우 <em>텍스트 모드</em>이(가) 해결책이 될 수 있습니다.</p>
 
-<p>
-<a href="#install_src">@@@fkey_inst@@@ Installation Source</a>: Choose the
-installation source.
-</p>
+<p><a href="#install_src">@@@fkey_inst@@@ 설치 원본</a>: 설치 원본을 선택합니다.</p>
 
-<p>
-<a href="#driverupdate">@@@fkey_dud@@@ Driver Update</a>: For very new machines, a
-driver update may be needed to install the system.
-</p>
+<p><a href="#driverupdate">@@@fkey_dud@@@ 드라이버 업데이트</a>: 새 컴퓨터의 경우 시스템을 설치하려면 드라이버 업데이트가 필요할 수도 있습니다.</p>

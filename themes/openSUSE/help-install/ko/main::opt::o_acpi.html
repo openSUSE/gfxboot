@@ -2,22 +2,6 @@
 <a name="o_acpi">커널 옵션: acpi</a>
 </h3>
 
-<p>
-ACPI (Advanced Configuration and Power Interface) is a
-standard that defines power and configuration management interfaces
-between an operating system and the BIOS. By default, <em>ACPI</em> is
-switched on when a BIOS is detected that is newer than from year
-2000. There are several commonly
-used parameters to control the behavior of ACPI:
-<ul>
-  <li><em>pci=noacpi</em> -- do not use ACPI to route PCI interrupts</li>
-  <li><em>acpi=oldboot</em> -- only the parts of ACPI that are relevant for booting remain activated</li>
-  <li><em>acpi=off</em> -- switch off ACPI completely</li>
-  <li><em>acpi=force</em> -- switch on ACPI even if your BIOS is dated before 2000</li>
-</ul>
-</p>
+<p>ACPI(Advanced Configuration and Power Interface)는 운영 체제와 BIOS 간의 전원 및 구성 관리 인터페이스를 정의하는 표준입니다. 기본적으로 <em>ACPI</em>은(는) 2000년 이후에 제조된 BIOS가 감지될 때 켜집니다. 일반적으로 사용되는 몇 개의 파라미터는 ACPI 동작을 제어합니다.<ul><li><em>pci=noacpi</em> -- ACPI를 사용하지 않고 PCI 인터럽트를 라우트합니다.</li><li><em>acpi=oldboot</em> -- 부팅과 관련된 ACPI 부분만 활성 상태로 남아 있습니다.</li><li><em>acpi=off</em> -- ACPI를 완전히 끕니다.</li><li><em>acpi=force</em> -- BIOS 날짜가 2000년 이전인 경우에도 ACPI를 켭니다.</li></ul></p>
 
-<p>
-Especially on new computers, it replaces the old
-<a href="#o_apm">apm</a> system.
-</p>
+<p>특히 새 컴퓨터에서는 오래된 <a href="#o_apm">apm</a> 시스템을 대신합니다.</p>

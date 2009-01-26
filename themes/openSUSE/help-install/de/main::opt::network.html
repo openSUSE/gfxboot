@@ -6,30 +6,8 @@
 <a name="network">Installiereroptionen: Netzwerkoptionen</a>
 </h3>
 
-<p>
-It is possible to configure the network interface right now. The
-hardware will be detected later by YaST2. The minimum set of options
-to configure your network card consists of host IP and netmask. For
-example:
-<ul>
-  <li>hostip=192.168.0.10 netmask=255.255.255.0</li>
-</ul>
-</p>
+<p>Sie können die Netzwerkschnittstelle gleich jetzt konfigurieren. Die Hardware wird später durch YaST2 ermittelt. Zur Konfiguration Ihrer Netzwerkkarte müssen Sie zumindest die Host-IP und die Netzmaske angeben. Beispiel: <ul><li>hostip=192.168.0.10 netmask=255.255.255.0</li></ul></p>
 
-<p>
-or in a shorter form:
-<ul>
-  <li>hostip=192.168.0.10/24</li>
-</ul>
-</p>
+<p>oder kürzer: <ul><li>hostip=192.168.0.10/24</li></ul></p>
 
-<p>
-If you specified a <a href="#o_install">netzwerkbasierte Installation</a> and do
-not specify both of these options, the installer tries to configure
-the network interface with <em>DHCP</em>. If you need a default
-gateway, specify this with the option <em>Gateway</em>. For
-example:
-<ul>
-  <li>gateway=192.168.0.8</li>
-</ul>
-</p>
+<p>Wenn Sie <a href="#o_install">netzwerkbasierte Installation</a> festgelegt haben, aber diese beiden Optionen nicht angeben, versucht das Installationsprogramm die Netzwerkschnittstelle mit <em>DHCP</em> zu konfigurieren. Wenn Sie ein Standard-Gateway benötigen, geben Sie dies mit der Option <em>Gateway</em> an. Beispiel: <ul><li>gateway=192.168.0.8</li></ul></p>

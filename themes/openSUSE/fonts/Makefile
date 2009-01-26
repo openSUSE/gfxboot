@@ -20,7 +20,7 @@ fonts: 16x16.fnt
 	-t ../src/main.log \
 	-t ../data-install/languages \
 	-f NachlieliCLM-Bold:size=14:c=0x590-0x5ff \
-	-f KacstOne:size=14:c=0x600-0x6ff,0xfe70-0xfefc:dy=2 \
+	-f KacstOne:size=12:c=0x600-0x6ff,0xfe70-0xfefc:dy=2 \
 	-f MuktiNarrow:size=18:c=0x0981-0x09fa:bold=1 \
 	-f lohit_hi:size=18:c=0x0901-0x0970:bold=1 \
 	-f lohit_pa:size=19:c=0x0a01-0x0a74:bold=1:autohint=1 \

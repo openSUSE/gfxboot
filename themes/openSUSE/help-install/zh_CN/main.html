@@ -2,102 +2,34 @@
 <a name="main">引导加载程序帮助</a>
 </h3>
 
-<p>
-Welcome to <em>@@@product@@@</em>
-</p>
+<p>欢迎使用 <em>@@@product@@@</em></p>
 
-<p>
-Use this menu to select the desired function. If you have
-problems navigating in this help system, press
-<em>@@@fkey_help@@@</em> to enter the <a href="#help">说明</a> of the help
-system. The main functions in this menu are:
-</p>
+<p>使用此菜单来选择所需的功能。如果您对于浏览此帮助系统有问题，请按下 <em>@@@fkey_help@@@</em> 进入帮助系统的 <a href="#help">说明</a>。该菜单中的主要功能是：</p>
 
-<p>
-<a href="#harddisk">从硬盘引导</a>: This selection will not do
-anything to the system. It only starts a previously installed
-operating system.
-</p>
+<p><a href="#harddisk">从硬盘引导</a>：此选择不会对系统执行任何操作。它只是启动先前安装的操作系统。</p>
 
-<p>
-<a href="#linux">安装</a>: 
-This installation mode works on most machines. If you experience a
-system freeze during boot or problems with detection of your hardware
-components, such as disk controllers or network cards, try one of the
-following installation options.
-</p>
+<p><a href="#linux">安装</a>：此安装模式能在大多数计算机上工作。如果您在引导期间遇到系统冻结或在硬件组件（如磁盘控制器或网卡）检测时遇到问题，请尝试以下安装选项之一。</p>
 
-<p>
-<a href="#noacpi">安装 － 禁用 ACPI</a>: Many of the
-currently-sold computers have incomplete or faulty ACPI
-implementations. This selection disables ACPI support in the
-kernel, but still enables many performance features, like DMA for IDE
-hard disks.
-</p>
+<p><a href="#noacpi">安装 － 禁用 ACPI</a>：当前出售的很多计算机都有不完整或有故障的 ACPI 实施。该选择禁用了内核中的 ACPI 支持，但仍启用很多性能功能，如 IDE 硬盘的 DMA。</p>
 
-<p>
-<a href="#nolapic">安装 － 禁用本地 APIC</a>:
-If the normal installation fails, this might be due to the
-system hardware not supporting local APIC.
-If this seems to be the case, use this option to
-install without local APIC support.
-</p>
+<p><a href="#nolapic">安装 － 禁用本地 APIC</a>：如果正常安装失败，可能是由于系统硬件不支持本地 APIC。如果看似遇到此类情况，请使用此选项来安装（无需本地 APIC 支持）。</p>
 
-<p>
-<a href="#failsafe">安装 － 安全设置</a>: If you were not
-successful with <em>安装</em>, this selection might
-solve the issue.
-</p>
+<p><a href="#failsafe">安装 － 安全设置</a>：如果使用 <em>安装</em> 没有成功，该选择可能会解决此问题。</p>
 
-<p>
-<a href="#rescue">救援系统</a>: This boot image starts a small
-Linux system in RAM. This is useful if the system does not start properly.
-After booting this system, log in as root.
-</p>
+<p><a href="#rescue">救援系统</a>：该引导映像启动了 RAM 中的小型 Linux 系统。如果系统没有正确启动，此操作十分有用。引导该系统后，请作为 root 登录。</p>
 
-<p>
-<a href="#firmware">固件测试</a>: Runs a BIOS test tool that validates
-ACPI and other parts of your BIOS.
-</p>
+<p><a href="#firmware">固件测试</a>：运行用于验证 ACPI 和 BIOS 的其他部分的 BIOS 测试工具。</p>
 
-<p>
-<a href="#memtest">内存测试</a>: Memory testing is useful for more than
-checking installation of new memory modules. It is a stress test
-for a big part of your computer system and may indicate hardware
-problems.
-</p>
+<p><a href="#memtest">内存测试</a>：内存测试不仅用于检查新内存模块的安装。它还是对大部分计算机系统的压力测试，可以指出硬件问题。</p>
 
-<p>
-<a href="#opt">引导选项</a>: The boot options may change the
-behavior of your system completely. They are settings for
-the kernel.
-</p>
+<p><a href="#opt">引导选项</a>：引导选项可能会完全更改系统行为。它们是内核的设置。</p>
 
-<p>
-<a href="#help">@@@fkey_help@@@ Help</a>: This is context sensitive. It will
-show different screens depending on the active element of the
-boot screen. There is also a description of this help system
-available.
-</p>
+<p><a href="#help">@@@fkey_help@@@ 帮助</a>：这是内容相关的。它将根据引导屏幕的活动元素显示不同的屏幕。还提供了该帮助系统的描述。</p>
 
-<p>
-<a href="#keytable">@@@fkey_lang@@@</a>: Set language and keyboard mapping
-used by the boot loader.
-</p>
+<p><a href="#keytable">@@@fkey_lang@@@</a>：设置引导加载程序使用的语言和键盘映射。</p>
 
-<p>
-<a href="#videomode">@@@fkey_video@@@ Video Mode</a>: Here, choose between
-different screen resolutions while installing. If you encounter
-problems with the graphical installation, the <em>文本模式</em> may
-be a work-around for you.
-</p>
+<p><a href="#videomode">@@@fkey_video@@@ 视频模式</a>：在此选择安装时使用的屏幕分辨率。如果遇到图形安装问题，<em>文本模式</em> 可能是一个变通方法。</p>
 
-<p>
-<a href="#install_src">@@@fkey_inst@@@ Installation Source</a>: Choose the
-installation source.
-</p>
+<p><a href="#install_src">@@@fkey_inst@@@ 安装源</a>：选择安装源。</p>
 
-<p>
-<a href="#driverupdate">@@@fkey_dud@@@ Driver Update</a>: For very new machines, a
-driver update may be needed to install the system.
-</p>
+<p><a href="#driverupdate">@@@fkey_dud@@@ 驱动程序更新</a>：对于很新的计算机，可能需要驱动程序更新才能安装系统。</p>

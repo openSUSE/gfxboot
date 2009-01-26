@@ -2,102 +2,34 @@
 <a name="main">Hjälp om starthanterare</a>
 </h3>
 
-<p>
-Welcome to <em>@@@product@@@</em>
-</p>
+<p>Välkommen till <em>@@@product@@@</em></p>
 
-<p>
-Use this menu to select the desired function. If you have
-problems navigating in this help system, press
-<em>@@@fkey_help@@@</em> to enter the <a href="#help">Beskrivning</a> of the help
-system. The main functions in this menu are:
-</p>
+<p>Använd den här menyn när du vill välja funktioner. Om du inte kan navigera i hjälpsystemet klickar du på <em>@@@fkey_help@@@</em> så att <a href="#help">Beskrivning</a> för hjälpsystemet öppnas. Huvudfunktioner på menyn:</p>
 
-<p>
-<a href="#harddisk">Starta från hårddisk</a>: This selection will not do
-anything to the system. It only starts a previously installed
-operating system.
-</p>
+<p><a href="#harddisk">Starta från hårddisk</a>: Det här alternativet påverkar inte systemet. Alternativet startar bara ett tidigare installerat operativsystem.</p>
 
-<p>
-<a href="#linux">Installation</a>: 
-This installation mode works on most machines. If you experience a
-system freeze during boot or problems with detection of your hardware
-components, such as disk controllers or network cards, try one of the
-following installation options.
-</p>
+<p><a href="#linux">Installation</a>: Det här installationsläget fungerar på de flesta datorer. Om systemet låser sig vid start eller om maskinvarukomponenter, t ex diskstyrenheter och nätverkskort, inte identifieras kan du prova något av följande installationsalternativ.</p>
 
-<p>
-<a href="#noacpi">Installation - ACPI inaktiverat</a>: Many of the
-currently-sold computers have incomplete or faulty ACPI
-implementations. This selection disables ACPI support in the
-kernel, but still enables many performance features, like DMA for IDE
-hard disks.
-</p>
+<p><a href="#noacpi">Installation - ACPI inaktiverat</a>: Många nya datorer har ofullständiga eller felaktiga ACPI-implementeringar. Med det här alternativet inaktiverar du ACPI-stöd i kärnan men aktiverar många prestandafunktioner som DMA för IDE-hårddiskar.</p>
 
-<p>
-<a href="#nolapic">Installation - Lokal APIC inaktiverat</a>:
-If the normal installation fails, this might be due to the
-system hardware not supporting local APIC.
-If this seems to be the case, use this option to
-install without local APIC support.
-</p>
+<p><a href="#nolapic">Installation - Lokal APIC inaktiverat</a>: Om den normala installationen misslyckas kan det bero på att systemets maskinvara inte kan användas med lokalt APIC. Om det verkar vara så använder du det här alternativet för installation utan stöd för lokalt APIC.</p>
 
-<p>
-<a href="#failsafe">Installation - Säkra inställningar</a>: If you were not
-successful with <em>Installation</em>, this selection might
-solve the issue.
-</p>
+<p><a href="#failsafe">Installation - Säkra inställningar</a>: Om <em>Installation</em> inte fungerade kan problemet kanske lösas med det här alternativet.</p>
 
-<p>
-<a href="#rescue">Räddningssystem</a>: This boot image starts a small
-Linux system in RAM. This is useful if the system does not start properly.
-After booting this system, log in as root.
-</p>
+<p><a href="#rescue">Räddningssystem</a>: Med den här startavbildningen startas ett litet Linux-system i RAM-minnet. Det är användbart om systemet inte startar som det ska. Logga in som root när du har startat det här systemet.</p>
 
-<p>
-<a href="#firmware">Test av fast programvara</a>: Runs a BIOS test tool that validates
-ACPI and other parts of your BIOS.
-</p>
+<p><a href="#firmware">Test av fast programvara</a>: Kör ett BIOS-testverktyg som validerar ACPI och andra delar av ditt BIOS.</p>
 
-<p>
-<a href="#memtest">Minnestest</a>: Memory testing is useful for more than
-checking installation of new memory modules. It is a stress test
-for a big part of your computer system and may indicate hardware
-problems.
-</p>
+<p><a href="#memtest">Minnestest</a>: Ett minnestest kan användas till mer än att kontrollera installationen av nya minnesmoduler. Det är ett stresstest för en stor del av datorsystemet och kan identifiera maskinvaruproblem.</p>
 
-<p>
-<a href="#opt">Startalternativ</a>: The boot options may change the
-behavior of your system completely. They are settings for
-the kernel.
-</p>
+<p><a href="#opt">Startalternativ</a>: Startalternativen kan helt ändra systemets funktion. Alternativen är inställningar för kärnan.</p>
 
-<p>
-<a href="#help">@@@fkey_help@@@ Help</a>: This is context sensitive. It will
-show different screens depending on the active element of the
-boot screen. There is also a description of this help system
-available.
-</p>
+<p><a href="#help">@@@fkey_help@@@ Hjälp</a>: Det här alternativet är sammanhangsberoende. Olika skärmar visas beroende på vilket element som är aktivt på startskärmen. Det finns också en beskrivning av hjälpsystemet.</p>
 
-<p>
-<a href="#keytable">@@@fkey_lang@@@</a>: Set language and keyboard mapping
-used by the boot loader.
-</p>
+<p><a href="#keytable">@@@fkey_lang@@@</a>: Ange språk- och tangentbordsmappning som ska användas av starthanteraren.</p>
 
-<p>
-<a href="#videomode">@@@fkey_video@@@ Video Mode</a>: Here, choose between
-different screen resolutions while installing. If you encounter
-problems with the graphical installation, the <em>Textläge</em> may
-be a work-around for you.
-</p>
+<p><a href="#videomode">@@@fkey_video@@@ Grafikläge</a>: Här väljer du mellan olika skärmupplösningar när du installerar. Om du stöter på problem med den grafiska installationen kan du komma runt problemet med hjälp av <em>Textläge</em>.</p>
 
-<p>
-<a href="#install_src">@@@fkey_inst@@@ Installation Source</a>: Choose the
-installation source.
-</p>
+<p><a href="#install_src">@@@fkey_inst@@@ Installationskälla</a>: Ange installationskälla.</p>
 
-<p>
-<a href="#driverupdate">@@@fkey_dud@@@ Driver Update</a>: For very new machines, a
-driver update may be needed to install the system.
-</p>
+<p><a href="#driverupdate">@@@fkey_dud@@@ Drivrutinsuppdatering</a>: På en ny dator kanske du måste göra en drivrutinsuppdatering för att kunna installera systemet.</p>

@@ -2,22 +2,6 @@
 <a name="o_acpi">核心選項：acpi</a>
 </h3>
 
-<p>
-ACPI (Advanced Configuration and Power Interface) is a
-standard that defines power and configuration management interfaces
-between an operating system and the BIOS. By default, <em>acpi</em> is
-switched on when a BIOS is detected that is newer than from year
-2000. There are several commonly
-used parameters to control the behavior of ACPI:
-<ul>
-  <li><em>pci=noacpi</em> -- do not use ACPI to route PCI interrupts</li>
-  <li><em>acpi=oldboot</em> -- only the parts of ACPI that are relevant for booting remain activated</li>
-  <li><em>acpi=off</em> -- switch off ACPI completely</li>
-  <li><em>acpi=force</em> -- switch on ACPI even if your BIOS is dated before 2000</li>
-</ul>
-</p>
+<p>ACPI (進階組態與電源介面) 是一個標準，它定義作業系統與 BIOS 之間的電源和組態管理介面。若偵測到 BIOS 是 2000 年之後的版本，預設即會開啟 <em>acpi</em>。以下幾個常用參數用於控制 ACPI 的行為：<ul><li><em>pci=noacpi</em> -- 不使用 ACPI 來路由 PCI 中斷</li><li><em>acpi=oldboot</em> -- 僅將與開機相關的 ACPI 部分維持啟動</li><li><em>acpi=off</em> -- 完全關閉 ACPI</li><li><em>acpi=force</em> -- 即使 BIOS 的日期早於 2000 年，也開啟 ACPI</li></ul></p>
 
-<p>
-Especially on new computers, it replaces the old
-<a href="#o_apm">apm</a> system.
-</p>
+<p>特別是在新電腦上，它將取代舊 <a href="#o_apm">apm</a> 系統。</p>
