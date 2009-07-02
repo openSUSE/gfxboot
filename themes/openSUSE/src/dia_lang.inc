@@ -53,6 +53,7 @@
 % [ "km_KH" "en_US" false "\u1781\u17d2\u1798\u17c2\u179a" ]			% Khmer
   [ "km_KH" "en_US" false "Khmer" ]						% Khmer
   [ "ko_KR" "en_US" false "한글" ]						% Korean
+  [ "ky_KG" "en_US" false "Кыргызча" ]						% Kirghiz
   [ "lo_LA" "en_US" false "\u0e9e\u0eb2\u0eaa\u0eb2\u0ea5\u0eb2\u0ea7" ]	% Lao
   [ "lt_LT" "en_US" false "Lietuvių" ]						% Lithuanian
   [ "mk_MK" "en_US" false "Македонски" ]					% Macedonian

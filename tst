@@ -175,10 +175,11 @@ function tst_grub {
 
   if [ "$program" = vmware ] ; then
     # vmware
-    cp -a $vm_src $vm_tmp
-    perl -pi -e "s/^\s*#\s*(ide1:0.startConnected)/\$1/" $vm_tmp/gfxboot.vmx
-    perl -pi -e "s:<floppyimage>:`pwd`/$img:g" $vm_tmp/gfxboot.vmx
-    vmware -qx $vm_tmp/gfxboot.vmx
+    #cp -a $vm_src $vm_tmp
+    #perl -pi -e "s/^\s*#\s*(ide1:0.startConnected)/\$1/" $vm_tmp/gfxboot.vmx
+    #perl -pi -e "s:<floppyimage>:`pwd`/$img:g" $vm_tmp/gfxboot.vmx
+    #vmplayer $vm_tmp/gfxboot.vmx
+    vm --vm vmplayer --disk $img
   elif [ "$program" = qemu ] ; then
     # qemu
     $qemu -boot c -hda $img

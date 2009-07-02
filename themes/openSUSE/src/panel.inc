@@ -85,6 +85,11 @@
         [ keyF4 0 "F4" /panel.keymap /panel.keymap.width /panel.keymap.update /keymap.init ]
       } if
 
+      % no F11 entry unless 'restore' entry exists
+      config.restore.id .undef ne {
+        [ keyF11 0 "F11" /panel.restore /panel.restore.width /panel.restore.update .undef ]
+      } if
+
     } ifelse
 
   ] def

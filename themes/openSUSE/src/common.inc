@@ -188,6 +188,11 @@
     "" -1 1 return
   } if
 
+  window.action actRestore eq {
+    /window.action actNothing def
+    "" config.restore.id 2 return
+  } if
+
   window.action actCloseInfo eq {
     /window.action actNothing def
     % cd change dialog
@@ -311,6 +316,11 @@
   dup { free } forall free
 
   pop bc.cmd menu.entry
+
+  % increment menu idx to account for removed entry
+  config.restore.id .undef ne {
+    menu.entry config.restore.id ge { 1 add } if
+  } if
 
 } def
 
@@ -591,6 +601,18 @@
   } {
     /remove.mediachk false def
   } ifelse
+
+  config.restore.title {
+    /mi_name config.restore.title def
+    /remove.mediachk true def
+
+    0
+    menu.texts {
+      config.restore.title eq { /config.restore.id over def exit } if
+      1 add
+    } forall
+    pop
+  } if
 
   remove.mediachk menu.dentry mi_name ne and {
     /mi_tmp 0 def
@@ -1552,6 +1574,7 @@ ptheme {
 /config.background     "background"          "back.jpg" gfxconfig.set.str
 /config.font.normal    "font.normal"        "16x16.fnt" gfxconfig.set.str
 /config.font.large     "font.large"         "16x16.fnt" gfxconfig.set.str
+/config.restore.title  "restore.title"               "" gfxconfig.set.str
 /progress.bar.color    "progress.bar.color"       white gfxconfig.set.int
 /xmenu.normal.bg       "menu.normal.bg"           black gfxconfig.set.int
 /xmenu.normal.fg       "menu.normal.fg"           white gfxconfig.set.int

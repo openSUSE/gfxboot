@@ -113,6 +113,7 @@
 /actInstallOK         9 def
 /actInstallCancel    10 def
 /actReboot           11 def
+/actRestore          12 def
 /actNoClose       0x100 def
 
 

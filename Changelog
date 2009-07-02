@@ -1,6 +1,10 @@
+8/4/2009:	v4.1.21
+	- Ilyas Bakirov: added Kirghiz support
+
 3/12/2008:	v4.1.20
 	- implemented realloc function
 	- file read works with files of unknown size (-1)
+	- added basic 'restore' function (via F11)
 
 3/12/2008:	v4.1.19
 	- now really update speech samples
