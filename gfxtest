@@ -1,0 +1,306 @@
+#! /bin/bash
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+function switch_disk {
+  disk=$1
+
+  if [ -z "$disk" -o ! -f "$tmp_dir/syslinux.img_$disk" ] ; then
+    echo "no such disk: $disk"
+    exit 1
+  fi
+
+  dd if="$tmp_dir/syslinux.img_$disk" of="$tmp_dir/syslinux.img" conv=notrunc status=noxfer
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+function gfxtest_cdrom  {
+  set -f
+  ./gfxboot --test --preview --archive $opt_archive -b isolinux --cdrom $gfxboot_args $gfxboot_x_args
+  set +f
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+function gfxtest_grub  {
+  set -f
+  ./gfxboot --test --preview --archive $opt_archive -b grub $gfxboot_args $gfxboot_x_args
+  set +f
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+function gfxtest_lilo  {
+  set -f
+  ./gfxboot --test --preview --archive $opt_archive -b lilo $gfxboot_args $gfxboot_x_args
+  set +f
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+function tst_lilo {
+  bin="test/lilo.rpm"
+  src="test/$1"
+  dst="$tmp/$1"
+  img="$tmp/$1.img"
+  vm_src=test/vm
+  vm_tmp=tmp/$1.vm
+
+  rm -rf $dst $vm_tmp
+  rm -f $img
+
+  mkdir -p $dst/boot
+  cp -a $src/* $dst/boot
+  cp -a $logo $dst/boot/message
+
+  for i in /boot/vmlinuz /boot/initrd ; do
+    [ -f $i ] && cp --parents $i $dst
+  done
+
+  test/hdimg $img
+
+  sw 0 mount -oloop=/dev/loop7,offset=32256 $img /mnt
+  sw 0 cp -r $dst/* /mnt
+  sw 0 losetup /dev/loop6 $img
+  sw 0 $bin/sbin/lilo -w -C /mnt/boot/lilo.conf -m /mnt/boot/map
+  sw 0 losetup -d /dev/loop6
+  sw 0 umount /mnt
+
+  if [ "$program" = vmware ] ; then
+    # vmware
+    cp -a $vm_src $vm_tmp
+    perl -pi -e "s/^\s*#\s*(ide1:0.startConnected)/\$1/" $vm_tmp/gfxboot.vmx
+    perl -pi -e "s:<floppyimage>:`pwd`/$img:g" $vm_tmp/gfxboot.vmx
+    vmware -qx $vm_tmp/gfxboot.vmx
+  elif [ "$program" = qemu ] ; then
+    # qemu
+    $qemu -boot c -hda $img
+  elif [ "$program" = bd ] ; then
+    # bochs debug wrapper
+    bd $img
+  elif [ "$program" = bochs ] ; then
+    # bochs
+    bochs -q 'boot: a' "floppya: image=$img, status=inserted" 'log: /dev/null' 'ata0-master: type=disk, path=/dev/null' 'parport1: enabled=0'
+  else
+    echo -e "\n***  Error: $program not supported  ***\n"
+  fi
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+function tst_grub {
+  bin="test/grub.rpm"
+  src="test/$1"
+  dst="$tmp/$1"
+  img="$tmp/$1.img"
+  vm_src=test/vm
+  vm_tmp=tmp/$1.vm
+
+  rm -rf $dst $vm_tmp
+  rm -f $img
+
+  mkdir -p $dst/boot
+  cp -a $src/* $dst/boot
+  cp $bin/usr/lib/grub/{fat_stage1_5,stage1,stage2} $dst/boot/grub
+  cp -a $logo $dst/boot/message
+  for i in /boot/vmlinuz /boot/initrd ; do
+    [ -f $i ] && cp --parents $i $dst
+  done
+
+  sh -c "echo '(hd0) $img' >$dst/boot/grub/device.map"
+
+  test/hdimg $img
+
+  sw 0 mount -oloop,offset=32256 "$img" /mnt
+  sw 0 cp -r $dst/* /mnt
+  sw 0 umount /mnt
+
+  echo "setup --prefix=/boot/grub (hd0,0) (hd0,0)" | \
+  $bin/usr/sbin/grub --batch --config-file=$dst/boot/grub/menu.lst --device-map=$dst/boot/grub/device.map
+  echo
+
+  if [ "$program" = vmware ] ; then
+    # vmware
+    #cp -a $vm_src $vm_tmp
+    #perl -pi -e "s/^\s*#\s*(ide1:0.startConnected)/\$1/" $vm_tmp/gfxboot.vmx
+    #perl -pi -e "s:<floppyimage>:`pwd`/$img:g" $vm_tmp/gfxboot.vmx
+    #vmplayer $vm_tmp/gfxboot.vmx
+    vm --vm vmplayer --disk $img
+  elif [ "$program" = qemu ] ; then
+    # qemu
+    $qemu -boot c -hda $img
+  elif [ "$program" = bd ] ; then
+    # bochs debug wrapper
+    bd $img
+  elif [ "$program" = bochs ] ; then
+    # bochs
+    bochs -q 'boot: a' "floppya: image=$img, status=inserted" 'log: /dev/null' 'ata0-master: type=disk, path=/dev/null' 'parport1: enabled=0'
+  else
+    echo -e "\n***  Error: $program not supported  \n"
+  fi
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+function tst_syslinux {
+  bin="test/syslinux.rpm"
+  src="test/$1"
+  dst="$tmp/$1"
+  img="$tmp/$1.img"
+  vm_src=test/vm
+  vm_tmp=tmp/$1.vm
+  syslx=$bin/usr/bin/syslinux-nomtools
+
+  rm -rf $dst $vm_tmp
+  rm -f $img*
+
+  mkdir -p $dst
+  cp -a $src/* $dst
+  cp -a $logo $dst/bootlogo
+
+  rm -f $dst/*~
+  bin/unpack_bootlogo $dst
+
+  sw 0 test/mkbootdisk --syslinux=$syslx --out=${img}_ $dst
+
+  sw 0 chown --reference=tmp $img*
+
+  cp $dst.img_01 $img
+
+  if [ "$program" = vmware ] ; then
+    # vmware
+    cp -a $vm_src $vm_tmp
+    perl -pi -e "s/^\s*#\s*(ide1:0.startConnected)/\$1/" $vm_tmp/gfxboot.vmx
+    perl -pi -e "s:<floppyimage>:`pwd`/$img:g" $vm_tmp/gfxboot.vmx
+    vmware -qx $vm_tmp/gfxboot.vmx
+  elif [ "$program" = qemu ] ; then
+    # qemu
+    $qemu -boot a -fda $img
+  elif [ "$program" = bd ] ; then
+    # bochs debug wrapper
+    bd $img
+  elif [ "$program" = bochs ] ; then
+    # bochs
+    bochs -q 'boot: a' "floppya: image=$img, status=inserted" 'log: /dev/null' 'ata0-master: type=disk, path=/dev/null' 'parport1: enabled=0'
+  else
+    echo -e "\n***  Error: $program not supported  ***\n"
+  fi
+}
+
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+function usage {
+  cat <<EOF
+usage: gfxtest [OPTIONS] [TARGET] [-- GFXBOOT_OPTIONS]
+Build and test gfxboot themes.
+
+Options:
+  -h, --help            Write this help text.
+  --type TYPE           Bootlogo type. Either boot or install.
+  --disk N              Switch to disk N.
+  -l, --lang LANG       Set default language to LANG.
+  -t, --theme THEME     Use theme THEME.
+  --vm VM               Use VM as virtual machine (see 'gfxboot --help' for values).
+
+TARGET: cdrom, lilo, grub
+
+GFXBOOT_OPTIONS: extra set of options passed to the gfxboot script.
+Note that the leading '--' is required.
+EOF
+  exit $1
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+test_dir=test
+
+OPTS=`getopt -n gfxtest -o hl:t: --long help,disk:,lang:,vm:,type:,32,64,theme:,lilo:,grub:,syslinux:,isolinux: -- "$@"`
+if [ $? != 0 ] ; then
+  echo "See 'gfxtest --help' for usage instructions."
+  exit 1
+fi
+
+eval set -- "$OPTS"
+
+while true ; do
+  case "$1" in
+    -h|--help) usage 0 ;;
+    --type) opt_type="$2" ; shift 2 ;;
+    --disk) opt_disk="$2" ; shift 2 ;;
+    -l|--lang) gfxboot_args="$gfxboot_args --default-language $2" ; shift 2 ;;
+    -t|--theme) opt_theme="$2" ; shift 2 ;;
+    --vm) gfxboot_args="$gfxboot_args --vm $2" ; shift 2 ;;
+    --32) opt_32=1 ; shift ;;
+    --64) opt_64=1 ; shift ;;
+    --) shift ; break;;
+    *) echo "oops: $1" ; exit 1 ;;
+  esac
+done
+
+if [ -n "$opt_disk" ] ; then
+  switch_disk $disk
+  exit
+fi
+
+case "$1" in
+  ""|-*) what=cdrom ;;
+  *) what="$1" ; shift ;;
+esac
+
+gfxboot_x_args="$@"
+
+if [ ! -d "$test_dir/$what" ] ; then
+  echo "config directory missing: $what"
+  exit 1
+else
+  [ -f "$test_dir/$what/gfxtest.config" ] && . "$test_dir/$what/gfxtest.config"
+fi
+
+opt_theme=${opt_theme:-openSUSE}
+if [ ! -d "themes/$opt_theme" ] ; then
+  echo "no such theme: $opt_theme"
+  exit 1
+fi
+
+opt_archive="themes/$opt_theme/${archive:-bootlogo}"
+case "$opt_type" in
+  boot) opt_archive="themes/$opt_theme/message" ;;
+  install) opt_archive="themes/$opt_theme/bootlogo" ;;
+  "") ;;
+  *) echo "unsupported type: $opt_type" ; exit 1 ;;
+esac
+
+[ -x gfxboot-compile ] || {
+  echo "error: gfxboot-compile missing. Run 'make' first."
+  exit 2
+}
+
+make -C themes/$opt_theme || exit
+
+if [ ! -f "$opt_archive" ] ; then
+  echo "gfxboot archive missing: $opt_archive"
+  exit 1
+fi
+
+tmp_dir=tmp
+mkdir -p "$tmp_dir" || exit
+
+if [ -z "$setup" ] ; then
+  echo "setup function not defined"
+  exit 1
+fi
+
+if [ "`type -t gfxtest_$setup`" = function ] ; then
+  gfxtest_$setup
+else
+  echo "no such setup function: $setup"
+  exit 1
+fi
+

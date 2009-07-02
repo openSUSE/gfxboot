@@ -911,7 +911,7 @@ my $opt_verbose = 0;
 my $opt_preview = 0;
 my $opt_gfxarchive = "/boot/message";
 my $opt_bootloader;
-my $opt_vm = "qemu";
+my $opt_vm = "qemu-kvm";
 my $opt_savetemp = 0;
 my $opt_grub = "/";
 my $opt_lilo = "/";
@@ -957,6 +957,7 @@ my $preview_image;
 
 my %vm_list = (
   'qemu'        => { cmd => 'qemu', package => 'qemu' },
+  'qemu-kvm'    => { cmd => 'qemu-kvm', package => 'qemu' },
   'qemu-i386'   => { cmd => 'qemu-system-i386', package => 'qemu' },
   'qemu-x86_64' => { cmd => 'qemu-system-x86_64', package => 'qemu' },
   'vbox'        => { cmd => 'VBoxManage', package => 'virtualbox' },
@@ -967,7 +968,7 @@ my %vm_list = (
   'bochs'       => { cmd => 'bochs', package => 'bochs' },
 );
 
-my @vm_order = qw ( qemu vbox vboxsdl vmplayer vmware qemu-i386 qemu-x86_64 bochs );
+my @vm_order = qw ( qemu-kvm qemu vbox vboxsdl vmplayer vmware qemu-i386 qemu-x86_64 bochs );
 
 my %bl_list = (
   grub     => '/usr/sbin/grub',
@@ -1267,7 +1268,7 @@ Preview/test gfxboot setup:
   -t, --test                    Test only (don't actually change any files).
   -b, --bootloader BOOTLOADER   Use BOOTLOADER (grub, lilo, isolinux, syslinux) for
                                 preview.
-  -m, --vm VM                   Use virtual machine VM (bochs, qemu, qemu-i386, qemu-x86_64,
+  -m, --vm VM                   Use virtual machine VM (bochs, qemu, qemu-kvm, qemu-i386, qemu-x86_64,
                                 vbox, vboxsdl, vmplayer, vmware) for preview.
       --grub DIRECTORY|RPM      Use grub from DIRECTORY or RPM (default is /).
       --lilo DIRECTORY|RPM      Use lilo from DIRECTORY or RPM (default is /).
@@ -1374,7 +1375,7 @@ sub preview
     return;
   }
 
-  if($opt_vm =~ /^qemu(|-i386|-x86_64)$/) {
+  if($opt_vm =~ /^qemu(|-kvm|-i386|-x86_64)$/) {
     prepare_qemu $vm_env;
     run_qemu $vm_env;
   }

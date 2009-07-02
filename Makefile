@@ -48,7 +48,7 @@ install: all
 	  cp $$i/bootlogo $(DESTDIR)/etc/bootsplash/$$i/cdrom ; \
 	  bin/unpack_bootlogo $(DESTDIR)/etc/bootsplash/$$i/cdrom ; \
           install -m 644 $$i/{message,po/*.tr,help-boot/*.hlp} $(DESTDIR)/etc/bootsplash/$$i/bootloader ; \
-	  ./2hl --link --quiet $(DESTDIR)/etc/bootsplash/$$i/* ; \
+	  bin/2hl --link --quiet $(DESTDIR)/etc/bootsplash/$$i/* ; \
 	done
 
 installsrc:

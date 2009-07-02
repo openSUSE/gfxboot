@@ -1,3 +1,6 @@
+	- added new gfxtest script
+	- support qemu-kvm
+
 8/4/2009:	v4.1.21
 	- Ilyas Bakirov: added Kirghiz support
 
