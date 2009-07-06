@@ -130,6 +130,8 @@
 /KeyEvent {
   % timeout
 
+  menu.texts 0 eq { pop "" -1 1 return } if
+
   dup 0 eq { boot.ed.list buildcmdline 2 return } if
 
   debug 4 ge {
@@ -590,6 +592,8 @@
   /menu.dentry exch def
   /menu.args exch def
   /menu.texts exch def
+
+  menu.texts length 0 eq { return } if
 
   /mi_name "mediacheck" "" gfxconfig.set.str
 

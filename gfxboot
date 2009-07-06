@@ -1741,36 +1741,40 @@ sub prepare_isolinux
   system "cp /boot/vmlinuz $dst/${loader}linux" if -f "/boot/vmlinuz";
   system "cp /boot/initrd $dst/${loader}initrd" if -f "/boot/initrd";
 
-  open F, ">$dst/${loader}message";
-  print F "\x0cgfxboot didn't work? Try one of those:\n";
-  print F "  $_\n" for (@{$menu->{list}});
-  print F "\n";
-  close F;
-
-  open F, ">$dst/${loader}isolinux.cfg";
-  print F "default $menu->{list}[$menu->{default}]\n\n";
-
-  for (@{$menu->{list}}) {
-    print F "label $_\n";
-    if($_ eq 'harddisk') {
-      print F "  localboot 0x80\n\n";
-    }
-    elsif($_ eq 'memtest' && -f("$dst/${loader}memtest")) {
-      print F "  kernel memtest\n\n";
-    }
-    else {
-      print F "  kernel linux\n  append initrd=initrd  splash=silent showopts\n\n";
-    }
+  if(! -f "$dst/${loader}message") {
+    open F, ">$dst/${loader}message";
+    print F "\x0cgfxboot didn't work? Try one of those:\n";
+    print F "  $_\n" for (@{$menu->{list}});
+    print F "\n";
+    close F;
   }
 
-  print F
-    "implicit 1\n" .
-    "gfxboot bootlogo\n" .
-    "display message\n" .
-    "prompt 1\n" .
-    "timeout 600\n";
+  if(! -f "$dst/${loader}isolinux.cfg") {
+    open F, ">$dst/${loader}isolinux.cfg";
+    print F "default $menu->{list}[$menu->{default}]\n\n";
 
-  close F;
+    for (@{$menu->{list}}) {
+      print F "label $_\n";
+      if($_ eq 'harddisk') {
+        print F "  localboot 0x80\n\n";
+      }
+      elsif($_ eq 'memtest' && -f("$dst/${loader}memtest")) {
+        print F "  kernel memtest\n\n";
+      }
+      else {
+        print F "  kernel linux\n  append initrd=initrd  splash=silent showopts\n\n";
+      }
+    }
+
+    print F
+      "implicit 1\n" .
+      "gfxboot bootlogo\n" .
+      "display message\n" .
+      "prompt 1\n" .
+      "timeout 600\n";
+
+    close F;
+  }
 
   if($opt_biarch) {
     symlink "i386", "$dst/boot/x86_64" if -d "$dst/boot/i386";

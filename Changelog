@@ -1,3 +1,4 @@
+	- allow empty menus
 	- added new gfxtest script
 	- support qemu-kvm
 

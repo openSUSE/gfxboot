@@ -1224,7 +1224,7 @@ gfx_menu_init:
 		pop esi
 		or eax,eax
 		jz gfx_menu_init_90
-		cmp dword [tmp_var_1],0
+		cmp dword [tmp_var_2],0
 		jz gfx_menu_init_90
 
 		push ecx
@@ -1236,6 +1236,8 @@ gfx_menu_init:
 		movzx edi,word [es:esi+menu_ent_list+2]
 		shl edi,4
 		add edi,eax
+		or ecx,ecx
+		jz gfx_menu_init_45
 gfx_menu_init_40:
 		mov byte [es:ebx],t_string
 		mov [es:ebx+1],edi
@@ -1243,6 +1245,7 @@ gfx_menu_init_40:
 		movzx eax,word [es:esi+menu_ent_size]
 		add edi,eax
 		loop gfx_menu_init_40
+gfx_menu_init_45:
 
 		pop ecx
 
@@ -1254,6 +1257,8 @@ gfx_menu_init_40:
 		movzx edi,word [es:esi+menu_arg_list+2]
 		shl edi,4
 		add edi,eax
+		or ecx,ecx
+		jz gfx_menu_init_55
 gfx_menu_init_50:
 		mov byte [es:ebx],t_string
 		mov [es:ebx+1],edi
@@ -1261,6 +1266,7 @@ gfx_menu_init_50:
 		movzx eax,word [es:esi+menu_arg_size]
 		add edi,eax
 		loop gfx_menu_init_50
+gfx_menu_init_55:
 
 		movzx eax,word [es:esi+menu_default]
 		movzx edi,word [es:esi+menu_default+2]
