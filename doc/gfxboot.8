@@ -26,6 +26,9 @@ Increase verbosity.
 \fB--save-temp\fR
 Keep temporary files.
 .TP
+\fB--version\fR
+Show gfxboot version.
+.TP
 \fB--help\fR
 Print usage.
 .SS Switching themes
@@ -89,8 +92,14 @@ Use isolinux from DIRECTORY or RPM (default is /).
 \fB--password\fR \fIPASSWORD\fR
 Create test config with PASSWORD for preview.
 .TP
+\fB--32\fR
+Create 32 bit test image.
+.TP
+\fB--64\fR
+Create 64 bit test image.
+.TP
 \fB--biarch\fR
-Create biarch test image.
+Create biarch test image (same as using --32 and --64).
 .TP
 \fB--cdrom\fR, \fB--dvd\fR
 Create iso image for preview.
@@ -103,6 +112,12 @@ Create floppy image for preview.
 .TP
 \fB--save-image\fR \fIFILE\fR
 Copy preview image to FILE.
+.TP
+\fB--test-add-files\fR \fIFILE1\fR \fIFILE2\fR ...
+Add files to test directory.
+.TP
+\fB--test-rm-files\fR \fIFILE1\fR \fIFILE2\fR ...
+Delete files from test directory.
 .SS Adding/removing files from gfxboot archive
 .TP
 \fB--ls\fR, \fB--list-files\fR
@@ -110,6 +125,9 @@ List gfxboot archive files.
 .TP
 \fB--add-files\fR \fIFILE1\fR \fIFILE2\fR ...
 Add files to gfxboot archive.
+.TP
+\fB--rm-files\fR \fIFILE1\fR \fIFILE2\fR ...
+Delete files from gfxboot archive.
 .TP
 \fB--extract-files\fR \fIFILE1\fR \fIFILE2\fR ...
 Copy files from gfxboot archive to current working directory.

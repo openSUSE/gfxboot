@@ -1,6 +1,8 @@
 	- allow empty menus
 	- added new gfxtest script
 	- support qemu-kvm
+	- improved gfxtest script; removed old test script
+	- added --version option to gfxboot
 
 8/4/2009:	v4.1.21
 	- Ilyas Bakirov: added Kirghiz support

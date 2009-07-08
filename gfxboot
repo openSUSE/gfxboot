@@ -872,6 +872,7 @@ sub fake_menu;
 sub prepare_grub;
 sub prepare_lilo;
 sub prepare_isolinux;
+sub prepare_syslinux;
 sub prepare_qemu;
 sub run_qemu;
 sub prepare_vbox;
@@ -925,6 +926,8 @@ my $opt_test = 0;
 my $opt_ls = 0;
 my @opt_addfiles;
 my @opt_rmfiles;
+my @opt_test_addfiles;
+my @opt_test_rmfiles;
 my @opt_extractfiles;
 my $opt_showfile;
 my $opt_theme;
@@ -935,7 +938,8 @@ my $opt_defaultlanguage;
 my $opt_gfxboot_cfg;
 my $opt_expand_archive;
 my $opt_pack_archive;
-my $opt_biarch;
+my $opt_32;
+my $opt_64;
 my $opt_media;
 my $opt_save_image;
 my $opt_help_create;
@@ -983,6 +987,7 @@ usage 0 if !@ARGV;
 
 GetOptions(
   'help'                => sub { usage 0 },
+  'version'             => sub { print "<VERSION>\n" ; exit 0 },
   'archive|a=s'         => \$opt_gfxarchive,
   'config-file=s'       => \$opt_gfxboot_cfg,
   'verbose|v+'          => \$opt_verbose,
@@ -1003,6 +1008,8 @@ GetOptions(
   'list-files|ls'       => \$opt_ls,
   'add-files=s{1,}'     => \@opt_addfiles,
   'rm-files=s{1,}'      => \@opt_rmfiles,
+  'test-add-files=s{1,}' => \@opt_test_addfiles,
+  'test-rm-files=s{1,}'  => \@opt_test_rmfiles,
   'extract-files=s{1,}' => \@opt_extractfiles,
   'show-file=s'         => \$opt_showfile,
   'new-theme=s'         => sub { $opt_theme = $_[1]; $opt_theme_update = 0 },
@@ -1015,7 +1022,9 @@ GetOptions(
   'cdrom|dvd'           => sub { $opt_media = 'cdrom' },
   'disk'                => sub { $opt_media = 'disk' },
   'floppy'              => sub { $opt_media = 'floppy' },
-  'biarch'              => \$opt_biarch,
+  'biarch'              => sub { $opt_32 = $opt_64 = 1 },
+  '32'                  => \$opt_32,
+  '64'                  => \$opt_64,
   'save-image=s'        => \$opt_save_image,
   'help-create=s'       => \$opt_help_create,
   'help-show=s'         => \$opt_help_show,
@@ -1233,6 +1242,7 @@ General options:
                                 (see --expand-archive option below).
   -v, --verbose                 Increase verbosity.
       --save-temp               Keep temporary files.
+      --version                 Show gfxboot version.
       --help                    Write this help text.
 
 Switching themes:
@@ -1275,17 +1285,25 @@ Preview/test gfxboot setup:
       --syslinux DIRECTORY|RPM  Use syslinux from DIRECTORY or RPM (default is /).
       --isolinux DIRECTORY|RPM  Use isolinux from DIRECTORY or RPM (default is /).
       --password PASSWORD       Create test config with PASSWORD for preview.
-      --biarch                  Create biarch test image.
+      --32                      Create 32 bit test image.
+      --64                      Create 64 bit test image.
+      --biarch                  Create biarch test image (same as using --32 and --64).
       --cdrom, --dvd            Create iso image for preview.
       --disk                    Create harddisk image for preview.
       --floppy                  Create floppy image for preview.
       --save-image FILE         Copy preview image to FILE.
+      --test-add-files FILE1 FILE2 ...
+                                Add files to test directory.
+      --test-rm-files FILE1 FILE2 ...
+                                Delete files from test directory.
 
 Adding/removing files from gfxboot archive:
 
       --ls, --list-files        List gfxboot archive files.
       --add-files FILE1 FILE2 ...
                                 Add files to gfxboot archive.
+      --rm-files FILE1 FILE2 ...
+                                Delete files from gfxboot archive.
       --extract-files FILE1 FILE2 ...
                                 Copy files from gfxboot archive to current
                                 working directory.
@@ -1370,6 +1388,11 @@ sub preview
     $vm_env->{cd0} = prepare_isolinux $file;
     $vm_env->{boot} = 'cd';
     $preview_image = $vm_env->{cd0}{image_name};
+  }
+  elsif($bootloader eq 'syslinux') {
+    $vm_env->{hd0} = prepare_syslinux $file;
+    $vm_env->{boot} = 'hd';
+    $preview_image = $vm_env->{hd0}{image_name};
   }
   else {
     return;
@@ -1555,6 +1578,15 @@ sub prepare_grub
   }
   close F;
 
+  for (@opt_test_addfiles) {
+    system "cp $_ $dst/boot" and die "error copying file: $_\n";
+  }
+
+  for (@opt_test_rmfiles) {
+    s#^/+##;
+    system "cd $dst/boot ; rm -f $_" and die "error deleting file: $_\n";
+  }
+
   my $img_size = `du -s --apparent-size --block-size 1k $dst 2>/dev/null`;
   $img_size = $img_size =~ /^(\d+)/ ? $1 * 2 + 2 * 200 : 0;		# add 200k
 
@@ -1664,6 +1696,15 @@ sub prepare_lilo
   }
   close F;
 
+  for (@opt_test_addfiles) {
+    system "cp $_ $dst/boot" and die "error copying file: $_\n";
+  }
+
+  for (@opt_test_rmfiles) {
+    s#^/+##;
+    system "cd $dst/boot ; rm -f $_" and die "error deleting file: $_\n";
+  }
+
   my $msg_size = `du -s --apparent-size --block-size 1k $dst/boot/message 2>/dev/null`;
   $msg_size = $msg_size =~ /^(\d+)/ ? $1 * 2 : 0;
   my $img_size = `du -s --apparent-size --block-size 1k $dst 2>/dev/null`;
@@ -1700,12 +1741,16 @@ sub prepare_isolinux
   local $_;
   my $file = shift;
   my $cdimage;
+  my $arch_dir;
 
   die "Can't setup isolinux on $opt_media.\n" if $opt_media && $opt_media ne 'cdrom';
 
   $opt_syslinux = unpack_rpm $opt_syslinux if -f $opt_syslinux;
 
   die "error: isolinux not found\n" unless -f "$opt_syslinux/$bl_list{isolinux}";
+
+  $arch_dir = 'i386';
+  $arch_dir = 'x86_64' if $opt_64 && !$opt_32;
 
   my $menu = fake_menu 'install';
 
@@ -1719,16 +1764,16 @@ sub prepare_isolinux
 
   my $loader = "";
   if(-x "$opt_syslinux/usr/bin/isolinux-config") {
-    $loader = "boot/i386/loader/";
+    $loader = "boot/$arch_dir/loader/";
 
     mkdir "$dst/boot", 0755;
-    mkdir "$dst/boot/i386", 0755;
-    mkdir "$dst/boot/i386/loader", 0755;
+    mkdir "$dst/boot/$arch_dir", 0755;
+    mkdir "$dst/boot/$arch_dir/loader", 0755;
   }
 
   system "cp $opt_syslinux/usr/share/syslinux/isolinux.bin $dst/$loader" and die "error: no isolinux\n";
   if($loader ne "") {
-    system "isolinux-config --base=/boot/i386/loader $dst/${loader}isolinux.bin" .
+    system "isolinux-config --base=/boot/$arch_dir/loader $dst/${loader}isolinux.bin" .
     ($opt_verbose ? "" : " >/dev/null");
   }
 
@@ -1762,7 +1807,7 @@ sub prepare_isolinux
         print F "  kernel memtest\n\n";
       }
       else {
-        print F "  kernel linux\n  append initrd=initrd  splash=silent showopts\n\n";
+        print F "  kernel linux\n  append initrd=initrd splash=silent showopts\n\n";
       }
     }
 
@@ -1776,7 +1821,16 @@ sub prepare_isolinux
     close F;
   }
 
-  if($opt_biarch) {
+  for (@opt_test_addfiles) {
+    system "cp $_ $dst/${loader}" and die "error copying file: $_\n";
+  }
+
+  for (@opt_test_rmfiles) {
+    s#^/+##;
+    system "cd $dst/${loader} ; rm -f $_" and die "error deleting file: $_\n";
+  }
+
+  if($opt_32 && $opt_64) {
     symlink "i386", "$dst/boot/x86_64" if -d "$dst/boot/i386";
   }
 
@@ -1788,6 +1842,104 @@ sub prepare_isolinux
   $cdimage->{size} = (-s $img) >> 10;
 
   return $cdimage;
+}
+
+
+sub prepare_syslinux
+{
+  local $_;
+  my $file = shift;
+
+  die "Can't setup syslinux on $opt_media.\n" if $opt_media && $opt_media ne 'disk';
+
+  $opt_syslinux = unpack_rpm $opt_syslinux if -f $opt_syslinux;
+
+  die "error: isolinux not found\n" unless -f "$opt_syslinux/$bl_list{syslinux}";
+
+  my $menu = fake_menu 'install';
+
+  if($opt_verbose) {
+    print "menu items (default $menu->{default}):\n";
+    print "  $_\n" for (@{$menu->{list}});
+  }
+
+  my $dst = $gfxboot_tmp->dir('syslinux');
+  my $img = $gfxboot_tmp->file('syslinux.img');
+
+  my $bl_unpacked;
+  ( $bl_unpacked ) = unpack_archive $file;
+  my $bl_packed = pack_archive $bl_unpacked, 'bootlogo';
+
+  system "cp -a $bl_packed/* $dst";
+
+  system "cp /boot/vmlinuz $dst/linux" if -f "/boot/vmlinuz";
+  system "cp /boot/initrd $dst/initrd" if -f "/boot/initrd";
+
+  if(! -f "$dst/message") {
+    open F, ">$dst/message";
+    print F "\x0cgfxboot didn't work? Try one of those:\n";
+    print F "  $_\n" for (@{$menu->{list}});
+    print F "\n";
+    close F;
+  }
+
+  if(! -f "$dst/syslinux.cfg") {
+    open F, ">$dst/syslinux.cfg";
+    print F "default $menu->{list}[$menu->{default}]\n\n";
+
+    for (@{$menu->{list}}) {
+      print F "label $_\n";
+      if($_ eq 'harddisk') {
+        print F "  localboot 0x80\n\n";
+      }
+      elsif($_ eq 'memtest' && -f("$dst/memtest")) {
+        print F "  kernel memtest\n\n";
+      }
+      else {
+        print F "  kernel linux\n  append initrd=initrd splash=silent showopts\n\n";
+      }
+    }
+
+    print F
+      "implicit 1\n" .
+      "gfxboot bootlogo\n" .
+      "display message\n" .
+      "prompt 1\n" .
+      "timeout 600\n";
+
+    close F;
+  }
+
+  for (@opt_test_addfiles) {
+    system "cp $_ $dst" and die "error copying file: $_\n";
+  }
+
+  for (@opt_test_rmfiles) {
+    s#^/+##;
+    system "cd $dst ; rm -f $_" and die "error deleting file: $_\n";
+  }
+
+  my $img_size = `du -s --apparent-size --block-size 1k $dst 2>/dev/null`;
+  $img_size = $img_size =~ /^(\d+)/ ? $1 * 2 + 2 * 200 : 0;		# add 200k
+
+  my $hdimage = HDImage::new;
+  $hdimage->verbose($opt_verbose);
+  $hdimage->chs(0, 4, 16);
+  $hdimage->size($img_size);
+  $hdimage->type(1);
+  $hdimage->label('GFXBOOT');
+  $hdimage->fs('fat');
+  $hdimage->mbr('/usr/lib/boot/master-boot-code');
+  $hdimage->add_files(<$dst/*>);
+  $hdimage->write($img);
+
+  my $log = $gfxboot_tmp->file('syslinux.log');
+
+  system "$opt_syslinux/$bl_list{syslinux} -o " . $hdimage->partition_ofs * 512 . " $img >$log 2>&1";
+
+  print `cat $log`, "\n" if $opt_verbose >= 2;
+
+  return $hdimage;
 }
 
 

@@ -1,4 +1,5 @@
-ARCH    := $(shell uname -m)
+ARCH := $(shell uname -m)
+GFXBOOT_VERSION := $(shell cat VERSION)
 
 CC	 = gcc
 CFLAGS	 = -g -Wall -Wno-pointer-sign -O2 -fomit-frame-pointer
@@ -42,7 +43,9 @@ jpeg.o: jpeg.S
 
 install: all
 	install -d -m 755 $(DESTDIR)/usr/sbin
-	install -m 755 gfxboot gfxboot-compile gfxboot-font $(DESTDIR)/usr/sbin
+	perl -p -e 's/<VERSION>/$(GFXBOOT_VERSION)/' gfxboot >gfxboot~
+	install -m 755 gfxboot~ $(DESTDIR)/usr/sbin/gfxboot
+	install -m 755 gfxboot-compile gfxboot-font $(DESTDIR)/usr/sbin
 	@for i in $(THEMES) ; do \
 	  install -d -m 755 $(DESTDIR)/etc/bootsplash/$$i/{bootloader,cdrom} ; \
 	  cp $$i/bootlogo $(DESTDIR)/etc/bootsplash/$$i/cdrom ; \
