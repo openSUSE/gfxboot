@@ -45,9 +45,13 @@
 /bsplash.show {
   currentimage
 
+  % "/boot/i386/loader/xxx" chdir
+
   "welcome.jpg" findfile /splash.file over def setimage
 
   0 0 moveto 0 0 image.size image
+
+  % "/boot/i386/loader" chdir
 
   bsplash.init
 

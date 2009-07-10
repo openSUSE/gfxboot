@@ -9402,6 +9402,28 @@ prim_chdir_90:
 		ret
 
 
+;; mount - re-read filesystem meta data
+;
+; group: system
+;
+; ( -- int1 )
+;
+; int1: error
+;
+; example
+;   mount pop	% re-read iso fs after cdrom change
+;
+
+		bits 32
+
+prim_mount:
+		mov al,6
+		call gfx_cb			; (re)mount
+		mov dl,t_int
+		movzx eax,al
+		jmp pr_getobj
+
+
 ;; _readsector - read sector
 ;
 ; group: system

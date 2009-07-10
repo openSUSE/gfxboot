@@ -1579,7 +1579,7 @@ sub prepare_grub
   close F;
 
   for (@opt_test_addfiles) {
-    system "cp $_ $dst/boot" and die "error copying file: $_\n";
+    system "cp -r $_ $dst/boot" and die "error copying file: $_\n";
   }
 
   for (@opt_test_rmfiles) {
@@ -1697,7 +1697,7 @@ sub prepare_lilo
   close F;
 
   for (@opt_test_addfiles) {
-    system "cp $_ $dst/boot" and die "error copying file: $_\n";
+    system "cp -r $_ $dst/boot" and die "error copying file: $_\n";
   }
 
   for (@opt_test_rmfiles) {
@@ -1771,12 +1771,6 @@ sub prepare_isolinux
     mkdir "$dst/boot/$arch_dir/loader", 0755;
   }
 
-  system "cp $opt_syslinux/usr/share/syslinux/isolinux.bin $dst/$loader" and die "error: no isolinux\n";
-  if($loader ne "") {
-    system "isolinux-config --base=/boot/$arch_dir/loader $dst/${loader}isolinux.bin" .
-    ($opt_verbose ? "" : " >/dev/null");
-  }
-
   my $bl_unpacked;
   ( $bl_unpacked ) = unpack_archive $file;
   my $bl_packed = pack_archive $bl_unpacked, 'bootlogo';
@@ -1821,13 +1815,19 @@ sub prepare_isolinux
     close F;
   }
 
+  system "cp $opt_syslinux/usr/share/syslinux/isolinux.bin $dst/$loader" and die "error: no isolinux\n";
   for (@opt_test_addfiles) {
-    system "cp $_ $dst/${loader}" and die "error copying file: $_\n";
+    system "cp -r $_ $dst/${loader}" and die "error copying file: $_\n";
   }
 
   for (@opt_test_rmfiles) {
     s#^/+##;
     system "cd $dst/${loader} ; rm -f $_" and die "error deleting file: $_\n";
+  }
+
+  if($loader ne "") {
+    system "isolinux-config --base=/boot/$arch_dir/loader $dst/${loader}isolinux.bin" .
+    ($opt_verbose ? "" : " >/dev/null");
   }
 
   if($opt_32 && $opt_64) {
@@ -1911,7 +1911,7 @@ sub prepare_syslinux
   }
 
   for (@opt_test_addfiles) {
-    system "cp $_ $dst" and die "error copying file: $_\n";
+    system "cp -r $_ $dst" and die "error copying file: $_\n";
   }
 
   for (@opt_test_rmfiles) {

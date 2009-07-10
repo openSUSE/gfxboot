@@ -199,8 +199,8 @@
     /window.action actNothing def
     % cd change dialog
     info.type 5 eq info.type 6 eq or {
-      % 'chdir' triggers fs metadata re-read
-      getcwd dup .undef ne { chdir } { pop } ifelse
+      % 'mount' re-reads fs metadata
+      mount pop
     } if
 
     "" -1 3 return

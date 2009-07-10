@@ -58,7 +58,7 @@
 
   getbyte putbyte getword putword getdword putdword
   inbyte outbyte
-  findfile filesize getcwd chdir
+  findfile filesize getcwd chdir mount
 
   setmode currentmode videomodeinfo videomodes
   colorbits
