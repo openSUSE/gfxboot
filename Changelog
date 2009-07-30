@@ -3,6 +3,7 @@
 	- support qemu-kvm
 	- improved gfxtest script; removed old test script
 	- added --version option to gfxboot
+	- no fb after F9 for live cd (bnc #391313)
 
 8/4/2009:	v4.1.21
 	- Ilyas Bakirov: added Kirghiz support

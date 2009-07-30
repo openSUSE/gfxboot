@@ -1182,12 +1182,10 @@
       sound.getsamplerate { sound.getsamplerate sound.setsamplerate } if
     } ifelse
 
-    config.livecd not {
-      xmenu.video .xm_current 0 put
-      % redraw unless another menu is still open
-      window.current {
-        window.current .xmenu get .undef eq { video.update } if
-      } if
+    xmenu.video .xm_current config.livecd { 1 } { 0 } ifelse put	% 0 = text mode, 1 = VESA
+    % redraw unless another menu is still open
+    window.current {
+      window.current .xmenu get .undef eq { video.update } if
     } if
 
     .undef 0 idle
