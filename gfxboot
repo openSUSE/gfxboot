@@ -1742,6 +1742,7 @@ sub prepare_isolinux
   my $file = shift;
   my $cdimage;
   my $arch_dir;
+  my $comboot;
 
   die "Can't setup isolinux on $opt_media.\n" if $opt_media && $opt_media ne 'cdrom';
 
@@ -1751,6 +1752,8 @@ sub prepare_isolinux
 
   $arch_dir = 'i386';
   $arch_dir = 'x86_64' if $opt_64 && !$opt_32;
+
+  $comboot = 1 if -f "$opt_syslinux/usr/share/syslinux/gfxboot.com";
 
   my $menu = fake_menu 'install';
 
@@ -1805,10 +1808,10 @@ sub prepare_isolinux
       }
     }
 
+    print F $comboot ? "ui gfxboot bootlogo message\n" : "gfxboot bootlogo\ndisplay message\n";
+
     print F
       "implicit 1\n" .
-      "gfxboot bootlogo\n" .
-      "display message\n" .
       "prompt 1\n" .
       "timeout 600\n";
 
@@ -1816,6 +1819,8 @@ sub prepare_isolinux
   }
 
   system "cp $opt_syslinux/usr/share/syslinux/isolinux.bin $dst/$loader" and die "error: no isolinux\n";
+  system "cp $opt_syslinux/usr/share/syslinux/gfxboot.com $dst/$loader" if $comboot;
+
   for (@opt_test_addfiles) {
     system "cp -r $_ $dst/${loader}" and die "error copying file: $_\n";
   }
