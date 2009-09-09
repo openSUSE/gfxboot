@@ -284,7 +284,7 @@ chr.y_ofs		dw 0		; rel. to baseline
 chr.x_advance		dw 0
 chr.type		db 0		; 0 = bitmap, 1: gray scale
 
-chr.gray_values
+chr.gray_values:
 %assign i 0
 %rep cbm_max_gray + 1
 			db (i * 255)/cbm_max_gray
@@ -677,13 +677,13 @@ sizeof_fb_entry		equ 8
 
 
 %macro		gfx_enter 0
-		call gfx_enter
+		call _gfx_enter
 		bits 32
 %endmacro
 
 
 %macro		gfx_leave 0
-		call gfx_leave
+		call _gfx_leave
 		bits 16
 %endmacro
 
@@ -1738,7 +1738,7 @@ gfx_password_done_90:
 
 		bits 16
 
-gfx_enter:
+_gfx_enter:
 		pop word [cs:tmp_var_0]
 
 		push fs
@@ -1764,7 +1764,7 @@ gfx_enter:
 
 		bits 32
 
-gfx_leave:
+_gfx_leave:
 		pm_leave
 
 		call use_old_stack
@@ -3413,7 +3413,7 @@ set_mode_50:
 set_mode_80:
 		and word [gfx_mode],0
 		stc
-set_mode_90
+set_mode_90:
 		ret
 
 mode_init:
@@ -13354,7 +13354,7 @@ utf8_enc_30:
 		shld edx,eax,3
 		shl eax,3
 		jmp utf8_enc_60
-utf8_enc_40
+utf8_enc_40:
 		inc ecx
 		cmp eax,4000000h
 		jae utf8_enc_50
