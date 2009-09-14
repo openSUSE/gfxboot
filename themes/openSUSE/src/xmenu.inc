@@ -318,12 +318,19 @@
 
       setcolor
       moveto
-      show.rtl
-      config.rtl {
-        xmenu.pos.x 8 add xmenu.pos.y moveto "\u25c0" show
+
+      dup 0 get '\x09' eq {
+        1 add
+        show.rtl
+        config.rtl {
+          xmenu.pos.x 8 add xmenu.pos.y moveto 2 add "\u25c0" show
+        } {
+          xmenu.pos.x xmenu.width add 8 sub xmenu.pos.y 2 add moveto "\u25b6" showright1
+        } ifelse
       } {
-        xmenu.pos.x xmenu.width add 8 sub xmenu.pos.y moveto "\u25b6" showright1
+        show.rtl
       } ifelse
+
     } {
       show.rtl
     } ifelse

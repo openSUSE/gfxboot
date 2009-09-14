@@ -302,7 +302,7 @@
 
   dup keyEnter eq has_buttons and {
     window.buttons window.findselected
-    over over get 7 get /window.action exch def get
+    over over get 7 get /window.action exch exec def get
     dup button.press 100000 usleep
     window.action actNoClose and {
       window.action dialog.specialaction { button.show } if
@@ -370,7 +370,7 @@
   has_buttons {
     dup window.findkey dup 0 ge {
       window.buttons exch
-      over over get 7 get /window.action exch def get
+      over over get 7 get /window.action exch exec def get
       dup button.press 100000 usleep
       window.action actNoClose and {
         window.action dialog.specialaction { button.show } if

@@ -199,7 +199,7 @@
 
 /lang.submenu.keyboard.buf 64 string def
 /lang.submenu.keyboard {
-  /txt_keyboard exec "\x09%s" lang.submenu.keyboard.buf sprintf
+  /txt_keyboard exec "\x09\x09%s" lang.submenu.keyboard.buf sprintf
   lang.submenu.keyboard.buf
 } def
 

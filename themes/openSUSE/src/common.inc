@@ -462,6 +462,34 @@
     } if
   } if
 
+  xmenu.net {
+    xmenu.install {
+      net.config_type .undef ne {
+        xmenu.install .xm_current get dup .inst_cdrom eq exch .inst_hd eq or {
+          % TODO: add netsetup=XXX
+        } {
+          net.config_type .net_static eq {
+            input.net.static 0 get dup "" ne {
+              "hostip=%s " bc.cmd dup length add sprintf
+            } { pop } ifelse
+            input.net.static 1 get dup "" ne {
+              "netmask=%s " bc.cmd dup length add sprintf
+            } { pop } ifelse
+            input.net.static 2 get dup "" ne {
+              "gateway=%s " bc.cmd dup length add sprintf
+            } { pop } ifelse
+            input.net.static 3 get dup "" ne {
+              "nameserver=%s " bc.cmd dup length add sprintf
+            } { pop } ifelse
+            input.net.static 4 get dup "" ne {
+              "domain=%s " bc.cmd dup length add sprintf
+            } { pop } ifelse
+          } if
+        } ifelse
+      } if
+    } if
+  } if
+
   % add user-supplied options
 
   bc.cmd exch .inp_buf get strcat " " strcat pop

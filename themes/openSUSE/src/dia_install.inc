@@ -12,12 +12,13 @@
 
 % install types
 /.inst_cdrom	0 def
-/.inst_slp	1 def
-/.inst_ftp	2 def
-/.inst_http	3 def
-/.inst_nfs	4 def
-/.inst_smb	5 def
-/.inst_hd	6 def
+/.inst_hd	1 def
+/.inst_slp	2 def
+/.inst_ftp	3 def
+/.inst_http	4 def
+/.inst_nfs	5 def
+/.inst_smb	6 def
+/.inst_net_setup 7 def
 
 /install.last .inst_cdrom def
 
@@ -42,11 +43,16 @@
   xmenu .xm_current install.last put
 
   % see install types (.inst_*)
-  xmenu .xm_list [ is_dvd { "DVD" } { "CD-ROM" } ifelse "SLP" "FTP" "HTTP" "NFS" "SMB / CIFS" /txt_harddisk ] put
+  xmenu .xm_list [ is_dvd { "DVD" } { "CD-ROM" } ifelse /txt_harddisk "\x09SLP" "FTP" "HTTP" "NFS" "SMB / CIFS" "\x09\x09Network Setup    " ] put
 
   xmenu .xm_title /txt_install_source put
 
+  /install.submenu.idx xmenu .xm_list get length 1 sub def
+
   install.set.install.option
+
+  % needed in case menu is only attached to install menu
+  net.init
 } def
 
 
@@ -58,16 +64,20 @@
 /install.update {
   /xmenu xmenu.install def
 
-  xmenu .xm_current get dup .inst_cdrom eq exch .inst_slp eq or {
-    /install.last xmenu .xm_current get def
-
-    install.set.install.option
-
-    /window.action actRedrawPanel def
+  xmenu .xm_current get install.submenu.idx eq {
+    xmenu .xm_current over .xm_last get put
+    panel.net
   } {
-    install.dialog
-  }
-  ifelse
+    xmenu .xm_current get dup .inst_cdrom eq exch .inst_slp eq or {
+      /install.last xmenu .xm_current get def
+
+      install.set.install.option
+
+      /window.action actRedrawPanel def
+    } {
+      install.dialog
+    } ifelse
+  } ifelse
 
 } def
 
@@ -109,6 +119,8 @@
   /xmenu xmenu.install def
 
   pmenu.panel.update
+
+  xmenu.net .xm_panel_x xmenu.install .xm_panel_x get put
 } def
 
 
