@@ -9,6 +9,7 @@
 % Some global vars.
 %
 /install.option 255 string def
+/proxy.option 255 string def
 
 % install types
 /.inst_cdrom	0 def
@@ -19,8 +20,9 @@
 /.inst_nfs	5 def
 /.inst_smb	6 def
 /.inst_net_setup 7 def
+/.inst_net_proxy 8 def
 
-/install.last .inst_cdrom def
+/install.default .inst_cdrom def
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Build install mode list.
@@ -37,17 +39,26 @@
   /input.edit.nfs [ 63 string 127 string ] def
   /input.edit.smb [ 63 string 31 string 127 string 31 string 31 string 31 string ] def
   /input.edit.hd [ 63 string 127 string ] def
+  /input.edit.proxy [ 63 string 127 string 63 string 63 string ] def
 
   install.read.config
 
-  xmenu .xm_current install.last put
+  xmenu .xm_current install.default put
 
   % see install types (.inst_*)
-  xmenu .xm_list [ is_dvd { "DVD" } { "CD-ROM" } ifelse /txt_harddisk "\x09SLP" "FTP" "HTTP" "NFS" "SMB / CIFS" "\x09\x09Network Setup    " ] put
+  xmenu .xm_list [
+    is_dvd { "DVD" } { "CD-ROM" } ifelse
+    /txt_harddisk
+    "\x09SLP"
+    "FTP"
+    "HTTP"
+    "NFS"
+    "SMB / CIFS"
+    "\x09\x09Network Setup"
+    "HTTP Proxy"
+  ] put
 
   xmenu .xm_title /txt_install_source put
-
-  /install.submenu.idx xmenu .xm_list get length 1 sub def
 
   install.set.install.option
 
@@ -64,15 +75,12 @@
 /install.update {
   /xmenu xmenu.install def
 
-  xmenu .xm_current get install.submenu.idx eq {
+  xmenu .xm_current get .inst_net_setup eq {
     xmenu .xm_current over .xm_last get put
     panel.net
   } {
     xmenu .xm_current get dup .inst_cdrom eq exch .inst_slp eq or {
-      /install.last xmenu .xm_current get def
-
       install.set.install.option
-
       /window.action actRedrawPanel def
     } {
       install.dialog
@@ -192,6 +200,19 @@
 
   } if
 
+  dup .inst_net_proxy eq {
+    dia .title "HTTP Proxy" put
+
+    % Must all be of same size!
+    dia .ed.list 4 array put
+    dia .ed.buffer.list input.edit.proxy put
+    dia .ed.text.list [ txt_server "Port\n" "User\n" txt_password ] put
+
+    dia .ed.font font.normal put
+    dia .ed.pw_field 3 put
+
+  } if
+
   pop
 
   dia .ed.focus 0 put
@@ -215,21 +236,22 @@
 
   window.done
 
-  /install.last xmenu .xm_current get def
-
   /window.action actRedrawPanel def
 
   pmenu.update
 
   install.set.install.option
 
+  xmenu .xm_current get .inst_net_proxy eq {
+    xmenu .xm_current over .xm_last get put
+  } if
 } def
 
 
 /install.cancel {
   /xmenu xmenu.install def
 
-  xmenu .xm_current install.last put
+  xmenu .xm_current over .xm_last get put
 } def
 
 
@@ -241,8 +263,10 @@
 /install.set.install.option {
   xmenu .xm_current get
 
-  % default: .inst_cdrom
-  install.option "" strcpy pop
+  dup .inst_net_proxy ne {
+    % default: .inst_cdrom
+    install.option "" strcpy pop
+  } if
 
   dup .inst_slp eq {
     install.option "install=slp:/" strcpy pop
@@ -310,6 +334,26 @@
     "install=hd://%s/%s" install.option sprintf
   } if
 
+  dup .inst_net_proxy eq {
+    input.edit.proxy
+      dup 0 get "" ne {
+      "proxy=http://" proxy.option sprintf
+      % add user name & password
+      dup 2 get "" ne {
+        dup 2 get "%s" proxy.option dup length add sprintf
+        dup 3 get "" ne {
+          dup 3 get ":%s" proxy.option dup length add sprintf
+        } if
+        "@" proxy.option dup length add sprintf
+      } if
+
+      dup 1 get exch 0 get "%s:%s" proxy.option dup length add sprintf
+    } {
+      pop
+      proxy.option "" strcpy pop
+    } ifelse
+  } if
+
   pop
 } def
 
@@ -321,13 +365,13 @@
 %
 /install.read.config {
   install.default
-  dup "cdrom" eq { /install.last .inst_cdrom def } if
-  dup "slp"   eq { /install.last .inst_slp   def } if
-  dup "ftp"   eq { /install.last .inst_ftp   def } if
-  dup "http"  eq { /install.last .inst_http  def } if
-  dup "nfs"   eq { /install.last .inst_nfs   def } if
-  dup "smb"   eq { /install.last .inst_smb   def } if
-  dup "hd"    eq { /install.last .inst_hd    def } if
+  dup "cdrom" eq { /install.default .inst_cdrom def } if
+  dup "slp"   eq { /install.default .inst_slp   def } if
+  dup "ftp"   eq { /install.default .inst_ftp   def } if
+  dup "http"  eq { /install.default .inst_http  def } if
+  dup "nfs"   eq { /install.default .inst_nfs   def } if
+  dup "smb"   eq { /install.default .inst_smb   def } if
+  dup "hd"    eq { /install.default .inst_hd    def } if
   pop
 
   input.edit.http 0 get install.http.server strcpy pop

@@ -459,6 +459,9 @@
       install.option "" ne {
         install.option "%s " bc.cmd dup length add sprintf
       } if
+      proxy.option "" ne {
+        proxy.option "%s " bc.cmd dup length add sprintf
+      } if
     } if
   } if
 

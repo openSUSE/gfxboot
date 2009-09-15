@@ -161,7 +161,14 @@
   put
 
   xmenu .xm_width
-    0 xmenu .xm_list get { exec strsize pop max } forall xmenu.hspace 2 mul add
+    0 xmenu .xm_list get {
+      exec
+      0
+      over 0 get '\x09' eq {
+        over 1 get '\x09' eq { pop "xx\u25b6" strsize pop } if
+      } if
+      exch strsize pop add max
+    } forall xmenu.hspace 2 mul add
   put
 
   xmenu .xm_y panel.text.y 1 sub xmenu.height sub put
@@ -323,7 +330,7 @@
         1 add
         show.rtl
         config.rtl {
-          xmenu.pos.x 8 add xmenu.pos.y moveto 2 add "\u25c0" show
+          xmenu.pos.x 8 add xmenu.pos.y 2 add moveto "\u25c0" show
         } {
           xmenu.pos.x xmenu.width add 8 sub xmenu.pos.y 2 add moveto "\u25b6" showright1
         } ifelse
