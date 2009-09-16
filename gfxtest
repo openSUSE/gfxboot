@@ -63,6 +63,7 @@ Build and test gfxboot themes.
 
 Options:
   -h, --help            Write this help text.
+  -m, --make            Force rebuilding the theme.
   --type TYPE           Bootlogo type. Either boot or install.
   --disk N              Switch to disk N.
   -l, --lang LANG       Set default language to LANG.
@@ -82,7 +83,7 @@ EOF
 
 test_dir=test
 
-OPTS=`getopt -n gfxtest -o hl:t: --long help,disk:,lang:,vm:,type:,32,64,theme:,lilo:,grub:,syslinux:,isolinux: -- "$@"`
+OPTS=`getopt -n gfxtest -o mhl:t: --long make,help,disk:,lang:,vm:,type:,32,64,theme:,lilo:,grub:,syslinux:,isolinux: -- "$@"`
 if [ $? != 0 ] ; then
   echo "See 'gfxtest --help' for usage instructions."
   exit 1
@@ -97,6 +98,7 @@ while true ; do
     --disk) opt_disk="$2" ; shift 2 ;;
     -l|--lang) gfxboot_args="$gfxboot_args --default-language $2" ; shift 2 ;;
     -t|--theme) opt_theme="$2" ; shift 2 ;;
+    -m|--make) opt_make='-B' ; shift ;;
     --vm) gfxboot_args="$gfxboot_args --vm $2" ; shift 2 ;;
     --32) opt_32=1 ; shift ;;
     --64) opt_64=1 ; shift ;;
@@ -140,12 +142,14 @@ esac
 
 add_files=`echo $test_dir/$what/*`
 
+[ -x gfxboot-compile ] || make
+
 [ -x gfxboot-compile ] || {
   echo "error: gfxboot-compile missing. Run 'make' first."
   exit 2
 }
 
-make -C themes/$opt_theme || exit
+make $opt_make -C themes/$opt_theme || exit
 
 if [ ! -f "$opt_archive" ] ; then
   echo "gfxboot archive missing: $opt_archive"

@@ -178,7 +178,7 @@
 %
 /panel.extra {
   % move down one menu entry; but only once
-  % see keyDown in main::main.input
+  % see keyDown in menu::main.input
 
   % only for install CDs
   syslinux not { return } if

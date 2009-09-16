@@ -218,7 +218,7 @@
     /window.action actNothing def
     /load_error false def
 
-    syslinux {
+    config.memcheck {
       menu.texts menu.entry 0 max menu.texts length 1 sub min get
       dup "mem.min[%s]" mem.min sprintf
       "mem.msg[%s]" mem.msg sprintf
@@ -1601,6 +1601,7 @@ ptheme {
 /config.talk           "talk"                     false gfxconfig.set.bool
 /config.livecd         "livecd"                   false gfxconfig.set.bool
 /config._2space        "_2space"                  false gfxconfig.set.bool
+/config.memcheck       "memcheck"                 false gfxconfig.set.bool
 /transp                "menu.transparency"         0x20 gfxconfig.set.int
 /config.screen.width
 /config.screen.height  "screen.size"            800 600 gfxconfig.set.int2
