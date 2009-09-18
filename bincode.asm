@@ -15941,7 +15941,7 @@ jpg_unpack_10:
 
 		call dword jpeg_decode
 
-		add sp,28
+		add esp,28
 
 jpg_unpack_90:
 		pop fs
