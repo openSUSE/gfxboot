@@ -41,7 +41,7 @@ themes: all
 src/main.bin: src
 	make -C src
 
-bootlogo: src/main.bin help-install/.ready po/.ready fonts/.ready
+bootlogo: src/main.bin src/gfxboot.cfg help-install/.ready po/.ready fonts/.ready
 	@rm -rf bootlogo.dir
 	@mkdir bootlogo.dir
 	perl -p -e 's/^(layout=.*)/$$1,install/' src/gfxboot.cfg >bootlogo.dir/gfxboot.cfg
@@ -55,7 +55,7 @@ endif
 	@sh -c 'cd bootlogo.dir; chmod +t * ; chmod -t init languages'
 	@sh -c 'cd bootlogo.dir; echo * | sed -e "s/ /\n/g" | cpio --quiet -o >../bootlogo'
 
-message: src/main.bin help-boot/.ready po/.ready fonts/.ready
+message: src/main.bin src/gfxboot.cfg help-boot/.ready po/.ready fonts/.ready
 	@rm -rf message.dir
 	@mkdir message.dir
 	perl -p -e 's/^(layout=.*)/$$1,boot/' src/gfxboot.cfg >message.dir/gfxboot.cfg

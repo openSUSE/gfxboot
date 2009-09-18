@@ -10,7 +10,9 @@
 % ( ) => ( )
 %
 /panel.about {
-  panel 0 panel.entry.help put
+  panel 0
+  "help" panel.entry dup { [ keyF1 0 "F1" 5 -1 roll { } forall ] } if
+  put
   about.popup
 } def
 

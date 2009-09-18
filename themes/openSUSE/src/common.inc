@@ -246,9 +246,11 @@
       dia .ed.focus 0 put
       dia .ed.width 600 put
       dia .ed.font font.normal put
-      dia .buttons
-        [ button.ok button.default actStart button.setaction ]
-      put
+      dia .buttons [
+        button.ok button.default actStart button.setaction
+        button.cancel button.notdefault /xxx.cancel button.setaction
+        config.rtl { exch } if
+      ] put
       dia window.init
       dia window.show
 
@@ -287,6 +289,12 @@
   } if
 
   "" -1 0
+} def
+
+
+/xxx.cancel {
+  /xxx.cmdline .undef def
+  actNothing
 } def
 
 
@@ -354,18 +362,20 @@
     menu.texts menu.entry get "%s " bc.cmd sprintf
   } ifelse
 
-  syslinux {
-    /splash_file 32 string def
+  config.spl {
+    xmenu.video {
+      /splash_file 32 string def
 
-    video.modes.list xmenu.video .xm_current get get
-    dup .vm_mode get 0 ge {
-      dup .vm_height get exch .vm_width get
-      ",%04d%04d.spl" splash_file sprintf
-    } { pop } ifelse
+      video.modes.list xmenu.video .xm_current get get
+      dup .vm_mode get 0 ge {
+        dup .vm_height get exch .vm_width get
+        ",%04d%04d.spl" splash_file sprintf
+      } { pop } ifelse
 
-    % check whether splash file exists
-    splash_file 1 add filesize .undef eq {
-      splash_file 0 0 put	% empty string
+      % check whether splash file exists
+      splash_file 1 add filesize .undef eq {
+        splash_file 0 0 put	% empty string
+      } if
     } if
   } if
 
@@ -1590,6 +1600,12 @@ ptheme {
   /gfxconfig.layout [ "penguin" gfxconfig.layout { } forall ] gfxconfig.layout free def
 } if
 
+% for compatibility: prepend live section to layout section list if 'livecd' is set
+/config.livecd         "livecd"                   false gfxconfig.set.bool
+config.livecd {
+  /gfxconfig.layout [ "live" gfxconfig.layout { } forall ] gfxconfig.layout free def
+} if
+
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Then, read the other config variables (might depend on video mode).
@@ -1599,9 +1615,10 @@ ptheme {
 /config.beep           "beep"                     false gfxconfig.set.bool
 /config.volume         "volume"                      70 gfxconfig.set.int
 /config.talk           "talk"                     false gfxconfig.set.bool
-/config.livecd         "livecd"                   false gfxconfig.set.bool
 /config._2space        "_2space"                  false gfxconfig.set.bool
 /config.memcheck       "memcheck"                 false gfxconfig.set.bool
+/config.spl            "spl"                      false gfxconfig.set.bool
+/config.autodown       "autodown"                 false gfxconfig.set.bool
 /transp                "menu.transparency"         0x20 gfxconfig.set.int
 /config.screen.width
 /config.screen.height  "screen.size"            800 600 gfxconfig.set.int2
@@ -1639,7 +1656,6 @@ ptheme {
 /panel.title.fg        "panel.title.fg"           white gfxconfig.set.int
 /panel.f-key.fg        "panel.f-key.fg"           black gfxconfig.set.int
 /keymap.submenu        "keymap.submenu"           false gfxconfig.set.bool
-/keymap.mainmenu       "keymap.mainmenu"          false gfxconfig.set.bool
 /keymap.default        "keymap"                      "" gfxconfig.set.str
 
 /install.default       "install"                     "" gfxconfig.set.str
@@ -1668,6 +1684,18 @@ ptheme {
 /dud.file              "dud.file"                    "" gfxconfig.set.str
 /dud.url               "dud.url"                     "" gfxconfig.set.str
 /dud.url.name          "dud.url.name"                "" gfxconfig.set.str
+
+/config.key.F2         "key.F2"                      "" gfxconfig.set.str
+/config.key.F3         "key.F3"                      "" gfxconfig.set.str
+/config.key.F4         "key.F4"                      "" gfxconfig.set.str
+/config.key.F5         "key.F5"                      "" gfxconfig.set.str
+/config.key.F6         "key.F6"                      "" gfxconfig.set.str
+/config.key.F7         "key.F7"                      "" gfxconfig.set.str
+/config.key.F8         "key.F8"                      "" gfxconfig.set.str
+/config.key.F9         "key.F9"                      "" gfxconfig.set.str
+/config.key.F10        "key.F10"                     "" gfxconfig.set.str
+/config.key.F11        "key.F11"                     "" gfxconfig.set.str
+/config.key.F12        "key.F12"                     "" gfxconfig.set.str
 
 /serial.line0          "serial.line0"               [ ] gfxconfig.set.array_str
 /serial.line1          "serial.line1"               [ ] gfxconfig.set.array_str

@@ -25,79 +25,30 @@
 
   /panel.back 0 panel.y moveto panel.size savescreen def
 
-  /panel.entry.help [ keyF1 0 "F1" /panel.help /panel.help.width /panel.help.update .undef ] def
-  /panel.entry.about [ keyF1 0 "F1" /panel.about /panel.about.width /panel.about.update .undef ] def
+  /config.key.F1 about.msg { "about" } { "help" } ifelse def
 
   % define panel layout
-  /panel.full [
+  /panel [
 
     % [ key x label show_func width_func update_func init_func ]
 
-    about.msg {
-      panel.entry.about
-    } {
-      panel.entry.help
-    } ifelse
-
-    syslinux {
-
-      config.livecd {
-
-        [ keyF2 0 "F2" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
-        [ keyF3 0 "F3" /panel.video /panel.video.width /panel.video.update /video.init ]
-
-      } {
-
-        [ keyF2 0 "F2" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
-        [ keyF3 0 "F3" /panel.video /panel.video.width /panel.video.update /video.init ]
-        [ keyF4 0 "F4" /panel.install /panel.install.width /panel.install.update /install.init ]
-        [ keyF5 0 "F5" /panel.kernelopts /panel.kernelopts.width /panel.kernelopts.update /kernelopts.init ]
-        [ keyF6 0 "F6" /panel.dud /panel.dud.width /panel.dud.update /dud.init ]
-
-        32+64bit_source {
-          64bit {
-            32bit_boot_dir .undef ne
-            64bit_boot_dir .undef ne
-            32bit_boot_dir 64bit_boot_dir ne
-            and and {
-              [ keyF7 0 "F7" /panel.bits /panel.bits.width /panel.bits.update /bits.init ]
-            } if
-          } if
-        } if
-
-        keymap.mainmenu {
-          [ keyF8 0 "F8" /panel.keymap /panel.keymap.width /panel.keymap.update /keymap.init ]
-        } if
-
-      } ifelse
-
-      xmenu.bits .undef eq { bits.init } if
-
-    } {
-
-      [ keyF2 0 "F2" /panel.lang /panel.lang.width /panel.lang.update /lang.init ]
-      "profiles" findfile dup {
-        /profile.data exch def
-        [ keyF3 0 "F3" /panel.profile /panel.profile.width /panel.profile.update /profile.init ]
-      } { pop } ifelse
-
-      keymap.mainmenu {
-        [ keyF4 0 "F4" /panel.keymap /panel.keymap.width /panel.keymap.update /keymap.init ]
-      } if
-
-      % no F11 entry unless 'restore' entry exists
-      config.restore.id .undef ne {
-        [ keyF11 0 "F11" /panel.restore /panel.restore.width /panel.restore.update .undef ]
-      } if
-
-    } ifelse
+    config.key.F1  panel.entry dup { [ keyF1  0 "F1"  5 -1 roll { } forall ] } { pop } ifelse
+    config.key.F2  panel.entry dup { [ keyF2  0 "F2"  5 -1 roll { } forall ] } { pop } ifelse
+    config.key.F3  panel.entry dup { [ keyF3  0 "F3"  5 -1 roll { } forall ] } { pop } ifelse
+    config.key.F4  panel.entry dup { [ keyF4  0 "F4"  5 -1 roll { } forall ] } { pop } ifelse
+    config.key.F5  panel.entry dup { [ keyF5  0 "F5"  5 -1 roll { } forall ] } { pop } ifelse
+    config.key.F6  panel.entry dup { [ keyF6  0 "F6"  5 -1 roll { } forall ] } { pop } ifelse
+    config.key.F7  panel.entry dup { [ keyF7  0 "F7"  5 -1 roll { } forall ] } { pop } ifelse
+    config.key.F8  panel.entry dup { [ keyF8  0 "F8"  5 -1 roll { } forall ] } { pop } ifelse
+    config.key.F11 panel.entry dup { [ keyF11 0 "F11" 5 -1 roll { } forall ] } { pop } ifelse
+    config.key.F12 panel.entry dup { [ keyF12 0 "F12" 5 -1 roll { } forall ] } { pop } ifelse
 
   ] def
 
-  % initialize all
-  panel.full { 6 get dup .undef ne { exec } { pop } ifelse } forall
+  xmenu.bits .undef eq { bits.init } if
 
-  /panel panel.full def
+  % initialize all
+  panel { 6 get dup .undef ne { exec } { pop } ifelse } forall
 
   panel.show
 } def
@@ -181,10 +132,7 @@
   % see keyDown in menu::main.input
 
   % only for install CDs
-  syslinux not { return } if
-
-  % not for live cd
-  config.livecd { return } if
+  config.autodown not { return } if
 
   % not for F1
   dup keyF1 eq { return } if
@@ -201,6 +149,63 @@
     /menu.entry menu.entry 1 add def
     menu.entry true MenuSelect
   } if
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Get panel entry definition.
+%
+% ( label -- array )
+%
+/panel.entry {
+  % [ show_func width_func update_func init_func ]
+
+  dup "help"       eq { pop [ /panel.help /panel.help.width /panel.help.update .undef ] return } if
+  dup "about"      eq { pop [ /panel.about /panel.about.width /panel.about.update .undef ] return } if
+
+  dup "lang"       eq { pop [ /panel.lang /panel.lang.width /panel.lang.update /lang.init ] return } if
+  dup "video"      eq { pop [ /panel.video /panel.video.width /panel.video.update /video.init ] return } if
+  dup "install"    eq { pop [ /panel.install /panel.install.width /panel.install.update /install.init ] return } if
+  dup "kernelopts" eq { pop [ /panel.kernelopts /panel.kernelopts.width /panel.kernelopts.update /kernelopts.init ] return } if
+  dup "dud"        eq { pop [ /panel.dud /panel.dud.width /panel.dud.update /dud.init ] return } if
+  dup "keymap"     eq { pop [ /panel.keymap /panel.keymap.width /panel.keymap.update /keymap.init ] return } if
+
+  dup "bits"       eq { pop
+    .undef
+    32+64bit_source {
+      64bit {
+        32bit_boot_dir .undef ne
+        64bit_boot_dir .undef ne
+        32bit_boot_dir 64bit_boot_dir ne
+        and and {
+          pop [ /panel.bits /panel.bits.width /panel.bits.update /bits.init ]
+        } if
+      } if
+    } if
+
+    return
+  } if
+
+  dup "profile"    eq { pop
+    .undef
+    "profiles" findfile dup {
+      /profile.data exch def
+      pop [ /panel.profile /panel.profile.width /panel.profile.update /profile.init ]
+    } { pop } ifelse
+
+    return
+  } if
+
+  dup "restore"    eq { pop
+    .undef
+    config.restore.id .undef ne {
+      pop [ /panel.restore /panel.restore.width /panel.restore.update .undef ]
+    } if
+
+    return
+  } if
+
+  pop .undef
 } def
 
 
