@@ -279,9 +279,9 @@
 
     % add user name & password
     dup 2 get "" ne {
-      dup 2 get "%s" install.option dup length add sprintf
+      dup 2 get url_escape "%s" install.option dup length add sprintf
       dup 3 get "" ne {
-        dup 3 get ":%s" install.option dup length add sprintf
+        dup 3 get url_escape ":%s" install.option dup length add sprintf
       } if
       "@" install.option dup length add sprintf
     } if
@@ -315,9 +315,9 @@
 
     % add user name & password
     dup 4 get "" ne {
-      dup 4 get "%s" install.option dup length add sprintf
+      dup 4 get url_escape "%s" install.option dup length add sprintf
       dup 5 get "" ne {
-        dup 5 get ":%s" install.option dup length add sprintf
+        dup 5 get url_escape ":%s" install.option dup length add sprintf
       } if
       "@" install.option dup length add sprintf
     } if
@@ -340,9 +340,9 @@
       "proxy=http://" proxy.option sprintf
       % add user name & password
       dup 2 get "" ne {
-        dup 2 get "%s" proxy.option dup length add sprintf
+        dup 2 get url_escape "%s" proxy.option dup length add sprintf
         dup 3 get "" ne {
-          dup 3 get ":%s" proxy.option dup length add sprintf
+          dup 3 get url_escape ":%s" proxy.option dup length add sprintf
         } if
         "@" proxy.option dup length add sprintf
       } if
@@ -396,5 +396,36 @@
   input.edit.hd   1 get install.hd.path strcpy pop
 
 } def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Escape ("%XX") fishy chars.
+%
+% ( str1 -- str2 )
+%
+% Note: the returned string is a static buffer.
+%
+/url_escape {
+  /url_esc_idx 0 def
+
+  {
+    /url_esc_c exch def
+    url_esc_c '0' ge url_esc_c '9' le and
+    url_esc_c 'A' ge url_esc_c 'Z' le and or
+    url_esc_c 'a' ge url_esc_c 'z' le and or
+    url_esc_c '_' eq or
+    {
+      url_esc_buf url_esc_idx url_esc_c put
+      /url_esc_idx inc
+    } {
+      url_esc_c "%%%02x" url_esc_buf url_esc_idx add sprintf
+      /url_esc_idx url_esc_idx 3 add def
+    } ifelse
+  } forall
+
+  url_esc_buf dup url_esc_idx 0 put
+} def
+
+/url_esc_buf 256 string def
 
 

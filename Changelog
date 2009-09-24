@@ -1,3 +1,6 @@
+24/9/2009:	v4.1.26
+	- escape weird chars in URLs
+
 18/9/2009:	v4.1.25
 	- F-key assignments configurable via gfxboot.cfg
 
