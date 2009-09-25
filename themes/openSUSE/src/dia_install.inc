@@ -54,8 +54,8 @@
     "HTTP"
     "NFS"
     "SMB / CIFS"
-    "\x09\x09Network Setup"
-    "HTTP Proxy"
+    /install.submenu.net
+    /txt_http_proxy
   ] put
 
   xmenu .xm_title /txt_install_source put
@@ -64,6 +64,13 @@
 
   % needed in case menu is only attached to install menu
   net.init
+} def
+
+
+/install.submenu.net.buf 64 string def
+/install.submenu.net {
+  /txt_network_config exec "\x09\x09%s" install.submenu.net.buf sprintf
+  install.submenu.net.buf
 } def
 
 

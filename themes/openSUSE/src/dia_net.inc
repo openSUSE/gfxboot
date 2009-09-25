@@ -26,9 +26,9 @@
 
   /xmenu xmenu.net def
 
-  xmenu .xm_list [ "No Network" "DHCP" "Static" ] put
+  xmenu .xm_list [ /txt_no_network "DHCP" /txt_manual_network ] put
 
-  xmenu .xm_title "Network Setup" put
+  xmenu .xm_title /txt_network_config put
 
   xmenu .xm_current net.default put
 
@@ -103,14 +103,14 @@
 
   dia .text "" put
 
-  dia .title "Static Network Config" put
+  dia .title txt_manual_network_title put
 
   % ip, netmask, gateway, dns nameserver, domain
 
   % Must all be of same size!
   dia .ed.list 5 array put
   dia .ed.buffer.list input.net.static put
-  dia .ed.text.list [ "Host IP\n" "Netmask\n" "Gateway\n" "Nameserver\n" "Domain\n" ] put
+  dia .ed.text.list [ txt_host_ip txt_netmask txt_gateway_ip txt_nameservers txt_domain ] put
 
   dia .ed.focus 0 put
   dia .ed.width 300 put
@@ -131,4 +131,5 @@
   xmenu.net .xm_current over .xm_last get put
   actNothing
 } def
+
 

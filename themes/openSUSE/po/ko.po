@@ -421,3 +421,54 @@ msgstr ""
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
 msgstr ""
+
+#. menu item
+#. txt_http_proxy
+msgid "HTTP Proxy"
+msgstr ""
+
+#. menu item
+#. txt_network_config
+msgid "Network Config"
+msgstr ""
+
+#. menu item
+#. txt_no_network
+msgid "No Network"
+msgstr ""
+
+#. short menu item for manual network config (NOT some kind of manual)
+#. txt_manual_network
+msgid "Manual"
+msgstr ""
+
+#. dialog title for manual network config
+#. txt_manual_network_title
+msgid "Manual Network Config"
+msgstr ""
+
+#. label for ip address
+#. txt_host_ip
+msgid "Host IP\n"
+msgstr ""
+
+#. label for gateway ip
+#. txt_gateway_ip
+msgid "Gateway\n"
+msgstr ""
+
+#. label for dns domain name (like 'opensuse.org')
+#. txt_domain
+msgid "Domain\n"
+msgstr ""
+
+#. label for nameserver list
+#. txt_nameservers
+msgid "Nameservers (separated by ',')\n"
+msgstr ""
+
+#. label for netmask; 'Host IP' refers to label txt_host_ip above
+#. txt_netmask
+msgid "Netmask\n(or use '/N' notation with Host IP)\n"
+msgstr ""
+
