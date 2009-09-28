@@ -60,6 +60,7 @@
   [ "mr_IN" "en_US" false "\u092e\u0930\u093e\u0920\u0940" ]			% Marathi
   [ "nb_NO" "norwegian" false "Norsk" ]						% Norwegian
   [ "nl_NL" "en_US" false "Nederlands" ]					% Dutch
+  [ "nn_NO" "norwegian" false "Nynorsk" ]					% Nynorsk
   [ "pa_IN" "en_US" false "\u0a2a\u0a70\u0a1c\u0a3e\u0a2c\u0a40" ]		% Punjabi
   [ "pl_PL" "polish" false "Polski" ]						% Polish
   [ "pt_BR" "portugese-br" false "Português (Brasil)" ]				% Portuguese (Brazilian)
@@ -69,9 +70,10 @@
   [ "si_LK" "en_US" false "\u0dc3\u0dd2\u0d82\u0dc4\u0dbd" ]			% Sinhala
   [ "sk_SK" "slovak" false "Slovenčina" ]					% Slovak
   [ "sl_SI" "slovene" false "Slovenščina" ]					% Slovenian
-  [ "sr_CS" "en_US" false "Srpski" ]						% Serbian
+  [ "sr_RS" "en_US" false "Srpski" ]						% Serbian
   [ "sv_SE" "swedish" false "Svenska" ]						% Swedish
   [ "ta_IN" "en_US" false "\u0ba4\u0bae\u0bbf\u0bb4\u0bcd" ]			% Tamil
+  [ "tg_TJ" "en_US" false "тоҷикӣ" ]						% Tadjik
   [ "th_TH" "en_US" false "\u0e20\u0e32\u0e29\u0e32\u0e44\u0e17\u0e22" ] 	% Thai
   [ "tr_TR" "turkish" false "Türkçe" ]						% Turkish
   [ "uk_UA" "en_US" false "Українська" ]					% Ukrainian

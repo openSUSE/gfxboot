@@ -1,3 +1,7 @@
+28/9/2009:	v4.1.27
+	- updated language list
+	- fixed grub picture (bnc #542113)
+
 24/9/2009:	v4.1.26
 	- escape weird chars in URLs
 
