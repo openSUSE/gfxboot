@@ -371,7 +371,7 @@
 % ( -- )
 %
 /install.read.config {
-  install.default
+  install.install
   dup "cdrom" eq { /install.default .inst_cdrom def } if
   dup "slp"   eq { /install.default .inst_slp   def } if
   dup "ftp"   eq { /install.default .inst_ftp   def } if

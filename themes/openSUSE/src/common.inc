@@ -1658,7 +1658,7 @@ config.livecd {
 /keymap.submenu        "keymap.submenu"           false gfxconfig.set.bool
 /keymap.default        "keymap"                      "" gfxconfig.set.str
 
-/install.default       "install"                     "" gfxconfig.set.str
+/install.install       "install"                     "" gfxconfig.set.str
 /install.http.server   "install.http.server"         "" gfxconfig.set.str
 /install.http.path     "install.http.path"           "" gfxconfig.set.str
 
