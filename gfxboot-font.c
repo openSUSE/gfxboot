@@ -32,6 +32,7 @@ struct option options[] = {
   { "add-charset", 1, NULL, 'c' },
   { "font",        1, NULL, 'f' },
   { "line-height", 1, NULL, 'l' },
+  { "font-height", 1, NULL, 'H' },
   { "font-path",   1, NULL, 'p' },
   { "show",        0, NULL, 's' },
   { "add-text",    1, NULL, 't' },
@@ -78,17 +79,24 @@ typedef struct font_s {
   int prop;
   int space_width;
   int dy;
+  unsigned index;
+  int height;
+  int baseline;
   list_t chars;			/* n_set_t */
   unsigned used:1;		/* font is actually used */
   unsigned ok:1;
   unsigned bold:1;
   unsigned nobitmap:1;
   unsigned autohint:2;		/* 0: auto, 1: off, 2: on */
+  unsigned autosize:1;
+  unsigned autoshift:1;
 } font_t;
 
 typedef struct char_data_s {
   struct char_data_s* next;
   unsigned ok:1;		/* char exists */
+  unsigned top:1;
+  unsigned bottom:1;
   int c;			/* char (utf32) */
   font_t *font;			/* pointer to font */
   int x_advance;
@@ -104,6 +112,8 @@ typedef struct char_data_s {
 list_t font_list;	/* font_t */
 list_t char_list;	/* char_data_t */
 list_t chars_missing;	/* n_set_t */
+list_t chars_top;	/* n_set_t */
+list_t chars_bottom;	/* n_set_t */
 
 int font_height;
 int font_y_ofs;
@@ -112,6 +122,7 @@ struct {
   int verbose;
   int test;
   int line_height;
+  int max_font_height;
   char *font_path;
   list_t chars;		/* n_set_t */
   char *file;
@@ -143,6 +154,7 @@ int signed_bits(int num);
 int unsigned_bits(unsigned num);
 void encode_char(char_data_t *cd);
 int show_font(char *name);
+void get_font_height(font_t *font, int *height, int *y_ofs);
 
 
 int main(int argc, char **argv)
@@ -174,7 +186,7 @@ int main(int argc, char **argv)
 
   opterr = 0;
 
-  while((i = getopt_long(argc, argv, "a:c:f:l:p:st:v", options, NULL)) != -1) {
+  while((i = getopt_long(argc, argv, "Aa:c:f:H:l:p:st:v", options, NULL)) != -1) {
     switch(i) {
       case 'a':
         err = parse_int_list(&opt.chars, optarg);
@@ -243,6 +255,14 @@ int main(int argc, char **argv)
                 font->autohint = strtol(s, &s1, 0) + 1;
                 if(*s1) err = 1;
               }
+              else if(!strcmp(str, "autosize")) {
+                font->autosize = strtol(s, &s1, 0);
+                if(*s1) err = 1;
+              }
+              else if(!strcmp(str, "autoshift")) {
+                font->autoshift = strtol(s, &s1, 0);
+                if(*s1) err = 1;
+              }
               else if(!strcmp(str, "c")) {
                 err = parse_int_list(&font->chars, s);
               }
@@ -263,6 +283,16 @@ int main(int argc, char **argv)
         else {
           font->name = font_spec;
         }
+        break;
+
+      case 'H':
+        str = optarg;
+        i = strtol(str, &str1, 0);
+        if(*str1 || i < 0) {
+          fprintf(stderr, "%s: invalid font height\n", str);
+          return 1;
+        }
+        opt.max_font_height = i;
         break;
 
       case 'l':
@@ -379,7 +409,8 @@ int main(int argc, char **argv)
   }
 
   // open all fonts
-  for(font = font_list.start; font; font = font->next) {
+  for(i = 0, font = font_list.start; font; font = font->next) {
+    font->index = i++;
     font->file_name = search_font(opt.font_path, font->name);
     if(font->file_name) {
       err = FT_New_Face(ft_lib, font->file_name, 0, &font->face);
@@ -392,42 +423,11 @@ int main(int argc, char **argv)
         if(
           font->size &&
           !FT_Set_Pixel_Sizes(font->face, font->size, 0)
-        ) font->ok = 1;
-      }
-    }
-  }
-
-  // print some info
-  if(opt.verbose) {
-    printf("Font List\n");
-    for(font = font_list.start; font; font = font->next) {
-      printf("  %s (%s)\n", font->name, font->ok ? "ok" : "not used");
-      printf("    File %s\n", font->file_name);
-      printf("    Size %d", font->size);
-      if(font->dy) printf(", dY %d", font->dy);
-      if(font->prop) printf(", Prop %d", font->prop);
-      if(font->space_width) printf(", SpaceWidth %d", font->space_width);
-      printf("\n");
-      if(font->chars.start) {
-        for(n = font->chars.start; n; n = n->next) {
-          printf("    c 0x%04x", n->first);
-          if(n->last != n->first) printf("-0x%04x", n->last);
-          printf("\n");
+        ) {
+          font->ok = 1;
         }
       }
     }
-    printf("\n");
-  }
-
-  // print even more info
-  if(opt.verbose >= 2) {
-    printf("Requested Char List\n");
-    for(n = opt.chars.start; n; n = n->next) {
-      printf("  0x%04x", n->first);
-      if(n->last != n->first) printf("-0x%04x", n->last);
-      printf("\n");
-    }
-    printf("\n");
   }
 
   // build char list
@@ -452,29 +452,48 @@ int main(int argc, char **argv)
     render_char(cd);
   }
 
-  FT_Done_FreeType(ft_lib);
-
   // fix vertical glyph positions
   for(cd = char_list.start; cd; cd = cd->next) {
     if(cd->ok) cd->y_ofs += cd->font->dy;
   }
 
+  if(!opt.test) for(cd = char_list.start; cd; cd = cd->next) add_bbox(cd);
+
+// ##############
+
   // get font dimensions
-  font_height = font_y_ofs = 0;
-  for(cd = char_list.start; cd; cd = cd->next) {
-    if(cd->y_ofs < font_y_ofs) font_y_ofs = cd->y_ofs;
-    i = cd->bitmap_height + cd->y_ofs;
-    if(i > font_height) font_height = i;
+  get_font_height(NULL, &font_height, &font_y_ofs);
+
+  for(font = font_list.start; font; font = font->next) {
+    if(!font->ok) continue;
+    get_font_height(font, &i, &j);
+    font->height = i;
+    font->baseline = -j;
   }
 
-  font_height -= font_y_ofs;
+// ##############
 
-  if(!opt.test) for(cd = char_list.start; cd; cd = cd->next) add_bbox(cd);
+  FT_Done_FreeType(ft_lib);
+
+  // label largest chars
+  for(cd = char_list.start; cd; cd = cd->next) {
+    if(!cd->ok) continue;
+    if(cd->y_ofs - font_y_ofs + cd->bitmap_height >= font_height) cd->top = 1;
+    if(cd->y_ofs - font_y_ofs <= 0) cd->bottom = 1;
+  }
 
   for(cd = char_list.start; cd; cd = cd->next) make_prop(cd);
 
-  for(i = j = 0, cd = char_list.start; cd; cd = cd->next) {
+  for(cd = char_list.start; cd; cd = cd->next) {
     if(!cd->ok) insert_int_list(&chars_missing, cd->c, cd->c);
+  }
+
+  for(cd = char_list.start; cd; cd = cd->next) {
+    if(cd->ok && cd->top) insert_int_list(&chars_top, cd->c, cd->c);
+  }
+
+  for(cd = char_list.start; cd; cd = cd->next) {
+    if(cd->ok && cd->bottom) insert_int_list(&chars_bottom, cd->c, cd->c);
   }
 
   for(cd = char_list.start; cd; cd = cd->next) encode_char(cd);
@@ -488,10 +507,63 @@ int main(int argc, char **argv)
 
   for(cd = char_list.start; cd; cd = cd->next) if(cd->ok) fh.entries++;
 
+  // print font info
+  if(opt.verbose) {
+    printf("Font List\n");
+    for(font = font_list.start; font; font = font->next) {
+      printf("  #%d %s (%s)\n", font->index, font->name, font->ok ? "ok" : "not used");
+      printf("    File %s\n", font->file_name);
+      printf("    Size %d", font->size);
+      if(font->dy) printf(", dY %d", font->dy);
+      if(font->prop) printf(", Prop %d", font->prop);
+      if(font->space_width) printf(", SpaceWidth %d", font->space_width);
+      printf("\n");
+      printf("    Height %d, Baseline %d\n", font->height, font->baseline);
+      if(font->chars.start) {
+        for(n = font->chars.start; n; n = n->next) {
+          printf("    c 0x%04x", n->first);
+          if(n->last != n->first) printf("-0x%04x", n->last);
+          printf("\n");
+        }
+      }
+    }
+    printf("\n");
+  }
+
+  if(opt.verbose >= 2) {
+    printf("Requested Char List\n");
+    for(n = opt.chars.start; n; n = n->next) {
+      printf("  0x%04x", n->first);
+      if(n->last != n->first) printf("-0x%04x", n->last);
+      printf("\n");
+    }
+    printf("\n");
+  }
+
   if(opt.verbose) {
     if(chars_missing.start) {
       printf("Missing Chars\n");
       for(n = chars_missing.start; n; n = n->next) {
+        printf("  0x%04x", n->first);
+        if(n->last != n->first) printf("-0x%04x", n->last);
+        printf("\n");
+      }
+      printf("\n");
+    }
+
+    if(chars_top.start) {
+      printf("Top Chars\n");
+      for(n = chars_top.start; n; n = n->next) {
+        printf("  0x%04x", n->first);
+        if(n->last != n->first) printf("-0x%04x", n->last);
+        printf("\n");
+      }
+      printf("\n");
+    }
+
+    if(chars_bottom.start) {
+      printf("Bottom Chars\n");
+      for(n = chars_bottom.start; n; n = n->next) {
         printf("  0x%04x", n->first);
         if(n->last != n->first) printf("-0x%04x", n->last);
         printf("\n");
@@ -583,9 +655,12 @@ void dump_char(char_data_t *cd)
 
   if(!cd || !cd->ok) return;
 
-  printf("Char 0x%04x '%s'\n", cd->c, utf32_to_utf8(cd->c));
+  printf("Char 0x%04x '%s'", cd->c, utf32_to_utf8(cd->c));
+  if(cd->top) printf(" top");
+  if(cd->bottom) printf(" bottom");
+  printf("\n");
 
-  if(cd->font) printf("  Font: %s (%d)\n", cd->font->name, cd->font->size);
+  if(cd->font) printf("  Font: #%d %s (%d)\n", cd->font->index, cd->font->name, cd->font->size);
 
   printf(
     "  Bitmap: %d x %d\n  Advance: %d\n  Offset: %d x %d\n",
@@ -882,88 +957,107 @@ char *search_font(char *font_path, char *name)
 
 void render_char(char_data_t *cd)
 {
-  font_t *font;
   n_set_t *n;
   int err, glyph_index;
   FT_GlyphSlot glyph;
   int i, j;
   unsigned char uc;
 
-  for(font = font_list.start; font; font = font->next) {
-    if(!font->ok) continue;
-    if(font->chars.start) {
-      for(n = font->chars.start; n; n = n->next) {
-        if(cd->c >= n->first && cd->c <= n->last) break;
-      }
-      if(!n) continue;
-    }
-    glyph_index = FT_Get_Char_Index(font->face, cd->c);
-    if(!glyph_index) continue;
+  if(cd->ok) {
+    glyph_index = FT_Get_Char_Index(cd->font->face, cd->c);
+    if(!glyph_index) return;
 
     err = FT_Load_Char(
-      font->face,
+      cd->font->face,
       cd->c,
       FT_LOAD_RENDER |
-      (font->nobitmap ? FT_LOAD_NO_BITMAP : 0) |
-      (font->autohint ? font->autohint == 1 ? FT_LOAD_NO_AUTOHINT : FT_LOAD_FORCE_AUTOHINT : 0)
+      (cd->font->nobitmap ? FT_LOAD_NO_BITMAP : 0) |
+      (cd->font->autohint ? cd->font->autohint == 1 ? FT_LOAD_NO_AUTOHINT : FT_LOAD_FORCE_AUTOHINT : 0)
     );
-    if(err) continue;
+    if(err) return;
+  }
+  else {
+    font_t *font;
 
-    cd->ok = 1;
-
-    cd->font = font;
-
-    glyph = font->face->glyph;
-    if(cd->font->bold) FT_GlyphSlot_Embolden(glyph);
-
-    cd->bitmap_width = glyph->bitmap.width;
-    cd->bitmap_height = glyph->bitmap.rows;
-    cd->bitmap = new_mem(cd->bitmap_width * cd->bitmap_height);
-
-    cd->x_advance = glyph->advance.x / 64.;
-    cd->x_ofs = glyph->bitmap_left;
-    cd->y_ofs = glyph->bitmap_top - glyph->bitmap.rows;
-
-    for(j = 0; j < cd->bitmap_height; j++) {
-      for(i = 0; i < cd->bitmap_width; i++) {
-        switch(glyph->bitmap.pixel_mode) {
-          case FT_PIXEL_MODE_MONO:
-            uc = ((glyph->bitmap.buffer[i / 8 + j * glyph->bitmap.pitch] >> (7 - (i & 7))) & 1) * MAX_GRAY;
-            break;
-
-          case FT_PIXEL_MODE_GRAY:
-            uc = (glyph->bitmap.buffer[i + j * glyph->bitmap.pitch] * (MAX_GRAY + 1)) / (255 + 1);
-            break;
-
-          default:
-            uc = 0;
+    for(font = font_list.start; font; font = font->next) {
+      if(!font->ok) continue;
+      if(font->chars.start) {
+        for(n = font->chars.start; n; n = n->next) {
+          if(cd->c >= n->first && cd->c <= n->last) break;
         }
-        cd->bitmap[i + j * cd->bitmap_width] = uc;
+        if(!n) continue;
       }
+
+      glyph_index = FT_Get_Char_Index(font->face, cd->c);
+      if(!glyph_index) continue;
+
+      err = FT_Load_Char(
+        font->face,
+        cd->c,
+        FT_LOAD_RENDER |
+        (font->nobitmap ? FT_LOAD_NO_BITMAP : 0) |
+        (font->autohint ? font->autohint == 1 ? FT_LOAD_NO_AUTOHINT : FT_LOAD_FORCE_AUTOHINT : 0)
+      );
+      if(err) continue;
+
+      cd->ok = 1;
+      cd->font = font;
+
+      break;
     }
+  }
+
+  if(!cd->ok) return;
+
+  glyph = cd->font->face->glyph;
+  if(cd->font->bold) FT_GlyphSlot_Embolden(glyph);
+
+  cd->bitmap_width = glyph->bitmap.width;
+  cd->bitmap_height = glyph->bitmap.rows;
+  free(cd->bitmap);
+  cd->bitmap = new_mem(cd->bitmap_width * cd->bitmap_height);
+
+  cd->x_advance = glyph->advance.x / 64.;
+  cd->x_ofs = glyph->bitmap_left;
+  cd->y_ofs = glyph->bitmap_top - glyph->bitmap.rows;
+
+  for(j = 0; j < cd->bitmap_height; j++) {
+    for(i = 0; i < cd->bitmap_width; i++) {
+      switch(glyph->bitmap.pixel_mode) {
+        case FT_PIXEL_MODE_MONO:
+          uc = ((glyph->bitmap.buffer[i / 8 + j * glyph->bitmap.pitch] >> (7 - (i & 7))) & 1) * MAX_GRAY;
+          break;
+
+        case FT_PIXEL_MODE_GRAY:
+          uc = (glyph->bitmap.buffer[i + j * glyph->bitmap.pitch] * (MAX_GRAY + 1)) / (255 + 1);
+          break;
+
+        default:
+          uc = 0;
+      }
+      cd->bitmap[i + j * cd->bitmap_width] = uc;
+    }
+  }
 
 #if 0
-    printf(
-      "bitmap: mode %d, %d x %d, + %d x %d, advance %f x %f\n",
-      glyph->bitmap.pixel_mode,
-      glyph->bitmap.width,
-      glyph->bitmap.rows,
-      glyph->bitmap_left,
-      glyph->bitmap_top,
-      glyph->advance.x / 64.,
-      glyph->advance.y / 64.
-    );
+  printf(
+    "bitmap: mode %d, %d x %d, + %d x %d, advance %f x %f\n",
+    glyph->bitmap.pixel_mode,
+    glyph->bitmap.width,
+    glyph->bitmap.rows,
+    glyph->bitmap_left,
+    glyph->bitmap_top,
+    glyph->advance.x / 64.,
+    glyph->advance.y / 64.
+  );
 
-    printf(
-      "metrics:\n  size %f x %f\n  bearing %f x %f, advance %f\n",
-      glyph->metrics.width / 64., glyph->metrics.height / 64.,
-      glyph->metrics.horiBearingX / 64., glyph->metrics.horiBearingY / 64.,
-      glyph->metrics.horiAdvance / 64.
-    );
+  printf(
+    "metrics:\n  size %f x %f\n  bearing %f x %f, advance %f\n",
+    glyph->metrics.width / 64., glyph->metrics.height / 64.,
+    glyph->metrics.horiBearingX / 64., glyph->metrics.horiBearingY / 64.,
+    glyph->metrics.horiAdvance / 64.
+  );
 #endif
-
-    break;
-  }
 }
 
 
@@ -1027,6 +1121,10 @@ void add_bbox(char_data_t *cd)
 
     cd->bitmap_width = width;
     cd->bitmap_height = height;
+  }
+
+  if(!cd->bitmap_width || !cd->bitmap_height) {
+    cd->x_ofs = cd->y_ofs = 0;
   }
 }
 
@@ -1388,6 +1486,26 @@ int show_font(char *name)
   for(cd = char_list.start; cd; cd = cd->next) dump_char(cd);
 
   return 0;
+}
+
+
+void get_font_height(font_t *font, int *height, int *y_ofs)
+{
+  int h, dy, i;
+  char_data_t *cd;
+
+  // get font dimensions
+  h = dy = 0;
+  for(cd = char_list.start; cd; cd = cd->next) {
+    if(!cd->ok) continue;
+    if(font && cd->font != font) continue;
+    if(cd->y_ofs < dy) dy = cd->y_ofs;
+    i = cd->bitmap_height + cd->y_ofs;
+    if(i > h) h = i;
+  }
+
+  *height = h - dy;
+  *y_ofs = dy;
 }
 
 
