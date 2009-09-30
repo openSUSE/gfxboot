@@ -3,6 +3,7 @@
 	- enhanced gfxboot-font
 	- cleaned up po files
 	- more flexible translation support 
+	- livecd: add F4=kerneloptions
 
 29/9/2009:	v4.1.28
 	- set default install type correctly (bnc #542781)
