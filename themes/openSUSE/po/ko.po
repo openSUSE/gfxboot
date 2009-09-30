@@ -41,18 +41,6 @@ msgstr "계속"
 msgid "Installation"
 msgstr "오픈수세 설치"
 
-#. txt_manual_install
-msgid "Manual Installation"
-msgstr "수동 설치"
-
-#. txt_noacpi_install
-msgid "Installation--ACPI Disabled"
-msgstr "설치--ACPI 비활성"
-
-#. txt_safe_install
-msgid "Installation--Safe Settings"
-msgstr "설치--안전 설정"
-
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
 msgstr "리눅스--안전 설정"
@@ -165,21 +153,6 @@ msgstr "열쇠글"
 msgid "Get your driver update floppy ready."
 msgstr "플로피디스크에서 드라이버를 업데이트 준비"
 
-#. dvd warning title
-#. txt_dvd_warning_title
-msgid "DVD Error"
-msgstr "DVD 오류"
-
-#. txt_dvd_warning2
-msgid ""
-"This is a two-sided DVD. You have booted from the second side.\n"
-"\n"
-"Turn the DVD over then continue."
-msgstr ""
-"이것은 양면으로 된 DVD 입니다. 두번째 면으로 부팅 되었습니다.\n"
-"\n"
-"DVD를 뒤집어서 계속할 수 있습니다."
-
 #. power off dialog title
 #. txt_power_off_title
 msgid "Power Off"
@@ -264,18 +237,6 @@ msgstr "다른 옵션"
 #. txt_language
 msgid "Language"
 msgstr "언어"
-
-#. txt_apic
-msgid "Installation--IOAPIC Enabled"
-msgstr "설치--IOAPIC 활성"
-
-#. txt_noapic_install
-msgid "Installation--IOAPIC Disabled"
-msgstr "설치--IOAPIC 비활성"
-
-#. txt_nolapic_install
-msgid "Installation--Local APIC Disabled"
-msgstr "설치--내부 APIC 비활성"
 
 #. txt_yes
 msgid "Yes"
@@ -470,5 +431,15 @@ msgstr ""
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
 msgid "Netmask\n(or use '/N' notation with Host IP)\n"
+msgstr ""
+
+#. label for Live CD installation
+#. txt_live_kde
+msgid "openSUSE Live (KDE)"
+msgstr ""
+
+#. label for Live CD installation
+#. txt_live_gnome
+msgid "openSUSE Live (GNOME)"
 msgstr ""
 

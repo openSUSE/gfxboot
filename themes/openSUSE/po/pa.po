@@ -49,18 +49,6 @@ msgstr "ਜਾਰੀ ਰੱਖੋ"
 msgid "Installation"
 msgstr "ਇੰਸਟਾਲੇਸ਼ਨ"
 
-#. txt_manual_install
-msgid "Manual Installation"
-msgstr "ਖੁਦ ਇੰਸਟਾਲੇਸ਼ਨ"
-
-#. txt_noacpi_install
-msgid "Installation--ACPI Disabled"
-msgstr "ਇੰਸਟਾਲੇਸ਼ਨ--ACPI ਆਯੋਗ"
-
-#. txt_safe_install
-msgid "Installation--Safe Settings"
-msgstr "ਇੰਸਟਾਲੇਸ਼ਨ--ਸੁਰੱਖਿਅਤ ਸੈਟਿੰਗ"
-
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
 msgstr "ਲੀਨਕਸ--ਸੁਰੱਖਿਅਤ ਸੈਟਿੰਗ"
@@ -173,21 +161,6 @@ msgstr "ਪਾਸਵਰਡ"
 msgid "Get your driver update floppy ready."
 msgstr "ਆਪਣੀ ਡਰਾਇਵਰ ਅੱਪਡੇਟ ਫਲਾਪੀ ਤਿਆਰ ਰੱਖੋ।"
 
-#. dvd warning title
-#. txt_dvd_warning_title
-msgid "DVD Error"
-msgstr "DVD ਗਲਤੀ"
-
-#. txt_dvd_warning2
-msgid ""
-"This is a two-sided DVD. You have booted from the second side.\n"
-"\n"
-"Turn the DVD over then continue."
-msgstr ""
-"ਇਹ ਦੋਹਰੀ ਪਰਤ DVD ਹੈ। ਤੁਹਾਨੂੰ ਦੂਜੇ ਪਾਸੇ ਤੋਂ ਬੂਟ ਕਰਨਾ ਚਾਹੀਦਾ ਹੈ।\n"
-"\n"
-"ਜਾਰੀ ਰੱਖਣ ਲਈ DVD ਨੂੰ ਪਲਟੋ।"
-
 #. power off dialog title
 #. txt_power_off_title
 msgid "Power Off"
@@ -272,18 +245,6 @@ msgstr "ਹੋਰ ਚੋਣਾਂ"
 #. txt_language
 msgid "Language"
 msgstr "ਭਾਸ਼ਾ"
-
-#. txt_apic
-msgid "Installation--IOAPIC Enabled"
-msgstr "ਇੰਸਟਾਲੇਸ਼ਨ--IOAPIC ਯੋਗ ਹੈ"
-
-#. txt_noapic_install
-msgid "Installation--IOAPIC Disabled"
-msgstr "ਇੰਸਟਾਲੇਸ਼ਨ--IOAPIC ਆਯੋਗ ਹੈ"
-
-#. txt_nolapic_install
-msgid "Installation--Local APIC Disabled"
-msgstr "ਇੰਸਟਾਲੇਸ਼ਨ-ਲੋਕਲ APIC ਆਯੋਗ ਹੈ"
 
 #. txt_yes
 msgid "Yes"
@@ -478,5 +439,15 @@ msgstr ""
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
 msgid "Netmask\n(or use '/N' notation with Host IP)\n"
+msgstr ""
+
+#. label for Live CD installation
+#. txt_live_kde
+msgid "openSUSE Live (KDE)"
+msgstr ""
+
+#. label for Live CD installation
+#. txt_live_gnome
+msgid "openSUSE Live (GNOME)"
 msgstr ""
 

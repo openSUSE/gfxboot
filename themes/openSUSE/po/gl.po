@@ -38,18 +38,6 @@ msgstr "Continuar"
 msgid "Installation"
 msgstr "Instalación"
 
-#. txt_manual_install
-msgid "Manual Installation"
-msgstr "Instalación Manual"
-
-#. txt_noacpi_install
-msgid "Installation--ACPI Disabled"
-msgstr "Instalación--ACPI Deshabilitado"
-
-#. txt_safe_install
-msgid "Installation--Safe Settings"
-msgstr "Instalación--Opcións Seguras"
-
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
 msgstr "Linux--Opcións Seguras"
@@ -162,21 +150,6 @@ msgstr "Contrasinal"
 msgid "Get your driver update floppy ready."
 msgstr "Teña preparado o disquete de actualización de driver."
 
-#. dvd warning title
-#. txt_dvd_warning_title
-msgid "DVD Error"
-msgstr "Erro de DVD"
-
-#. txt_dvd_warning2
-msgid ""
-"This is a two-sided DVD. You have booted from the second side.\n"
-"\n"
-"Turn the DVD over then continue."
-msgstr ""
-"Este é un DVD de dúas caras. Arrincou dende a segunda cara.\n"
-"\n"
-"Déalle a volta ó DVD e continúe."
-
 #. power off dialog title
 #. txt_power_off_title
 msgid "Power Off"
@@ -261,18 +234,6 @@ msgstr "Outras Opcións"
 #. txt_language
 msgid "Language"
 msgstr "Lingua"
-
-#. txt_apic
-msgid "Installation--IOAPIC Enabled"
-msgstr "Instalación--IOAPIC Habilitado"
-
-#. txt_noapic_install
-msgid "Installation--IOAPIC Disabled"
-msgstr "Instalación--IOAPIC Deshabilitado"
-
-#. txt_nolapic_install
-msgid "Installation--Local APIC Disabled"
-msgstr "Instalación--APIC Local Deshabilitado"
 
 #. txt_yes
 msgid "Yes"
@@ -467,5 +428,15 @@ msgstr ""
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
 msgid "Netmask\n(or use '/N' notation with Host IP)\n"
+msgstr ""
+
+#. label for Live CD installation
+#. txt_live_kde
+msgid "openSUSE Live (KDE)"
+msgstr ""
+
+#. label for Live CD installation
+#. txt_live_gnome
+msgid "openSUSE Live (GNOME)"
 msgstr ""
 

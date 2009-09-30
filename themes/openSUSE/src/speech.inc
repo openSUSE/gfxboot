@@ -21,7 +21,7 @@
   /last.spoken over strdup def
 
   dup _speak { pop return } if
-  dup retranslate dup rot ne { _speak } if pop
+  dup __ dup rot ne { _speak } if pop
 } def
 
 
@@ -59,10 +59,6 @@
 
   talk_file getdword 0x692741e8 ne { return } if
 
-  locale.texts.en .undef eq {
-    /locale.texts.en "en_US" "%s.tr" loadtexts def
-  } if
-
   talk_array .undef ne {
     talk_array { free } forall
   } if
@@ -96,26 +92,6 @@
   config.volume sound.setvolume 
 
   window.done
-} def
-
-
-% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Get english text from translated text.
-%
-% ( str1 -- str2 )
-%
-% str1: text
-% str2: text in en_US
-%
-/retranslate {
-  0 locale.texts {
-    2 index eq {
-      locale.texts.en exch aget dup .undef eq { pop dup } if exch pop
-      return
-    } if
-    1 add
-  } forall
-  pop
 } def
 
 

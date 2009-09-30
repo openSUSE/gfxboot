@@ -39,18 +39,6 @@ msgstr "Lanjutkan"
 msgid "Installation"
 msgstr "Instalasi"
 
-#. txt_manual_install
-msgid "Manual Installation"
-msgstr "Instalasi manual."
-
-#. txt_noacpi_install
-msgid "Installation--ACPI Disabled"
-msgstr "Instalasi--ACPI ditiadakan"
-
-#. txt_safe_install
-msgid "Installation--Safe Settings"
-msgstr "Instalasi--Seting Aman"
-
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
 msgstr "Linux--Seting Aman"
@@ -163,21 +151,6 @@ msgstr "Password"
 msgid "Get your driver update floppy ready."
 msgstr "Siapkan floppy update driver anda."
 
-#. dvd warning title
-#. txt_dvd_warning_title
-msgid "DVD Error"
-msgstr "Kesalahan DVD"
-
-#. txt_dvd_warning2
-msgid ""
-"This is a two-sided DVD. You have booted from the second side.\n"
-"\n"
-"Turn the DVD over then continue."
-msgstr ""
-"Ini adalah DVD dua sisi. Anda harus boot dari sisi kedua.\n"
-"\n"
-"Balik DVD lalu lanjutkan."
-
 #. power off dialog title
 #. txt_power_off_title
 msgid "Power Off"
@@ -262,18 +235,6 @@ msgstr "Opsi Lain"
 #. txt_language
 msgid "Language"
 msgstr "Bahasa"
-
-#. txt_apic
-msgid "Installation--IOAPIC Enabled"
-msgstr "Instalasi--IOAPIC Diadakan"
-
-#. txt_noapic_install
-msgid "Installation--IOAPIC Disabled"
-msgstr "Instalasi--IOAPIC Ditiadakan"
-
-#. txt_nolapic_install
-msgid "Installation--Local APIC Disabled"
-msgstr "Instalasi--APIC Lokal ditiadakan"
 
 #. txt_yes
 msgid "Yes"
@@ -468,5 +429,15 @@ msgstr ""
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
 msgid "Netmask\n(or use '/N' notation with Host IP)\n"
+msgstr ""
+
+#. label for Live CD installation
+#. txt_live_kde
+msgid "openSUSE Live (KDE)"
+msgstr ""
+
+#. label for Live CD installation
+#. txt_live_gnome
+msgid "openSUSE Live (GNOME)"
 msgstr ""
 

@@ -27,6 +27,10 @@
 
   findtexts
 
+  locale.texts.en .undef eq {
+    /locale.texts.en "en_US" "%s.tr" loadtexts def
+  } if
+
   true
 } def
 
@@ -262,6 +266,46 @@
   exch seteotchar
 
   { 1 } { 0 } ifelse
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Translate english text.
+%
+% ( str1 -- str2 )
+%
+% str1: text in en_US
+% str2: text
+%
+/_ {
+  0 locale.texts.en {
+    2 index eq {
+      locale.texts exch aget dup .undef eq { pop dup } if exch pop
+      return
+    } if
+    1 add
+  } forall
+  pop
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Get english text from translated text.
+%
+% ( str1 -- str2 )
+%
+% str1: text
+% str2: text in en_US
+%
+/__ {
+  0 locale.texts {
+    2 index eq {
+      locale.texts.en exch aget dup .undef eq { pop dup } if exch pop
+      return
+    } if
+    1 add
+  } forall
+  pop
 } def
 
 

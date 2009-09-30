@@ -1023,28 +1023,20 @@
   } if
   dup "memtest" eq over "memtest86" eq or { pop txt_memtest return } if
   dup "firmware" eq { pop txt_firmware return } if
-  syslinux {
-    dup "live"      eq { pop "openSUSE LiveCD" return } if
-    dup "kde"       eq { pop "LiveCD - KDE" return } if
-    dup "gnome"     eq { pop "LiveCD - GNOME" return } if
-    dup "linux"     eq { pop txt_install        return } if
-    dup "failsafe"  eq { pop txt_safe_install   return } if
-    dup "noacpi"    eq { pop txt_noacpi_install return } if
-    dup "noapic"    eq { pop txt_noapic_install return } if
-    dup "nolapic"   eq { pop txt_nolapic_install return } if
-    dup "apic"      eq { pop txt_apic return } if
-    dup "manual"    eq { pop txt_manual_install return } if
-    dup "repair"    eq { pop txt_repain_system return } if
-    dup "rescue"    eq { pop txt_rescue         return } if
-    dup "hwcheck"   eq { pop "Hardware Check"   return } if
-    dup "harddisk"  eq { pop txt_boot_harddisk  return } if
-    dup "mediachk"  eq { pop txt_mediacheck return } if
-    dup "mediacheck" eq { pop txt_mediacheck return } if
+  mode.install {
+    dup "linux"      eq { pop txt_install        return } if
+    dup "repair"     eq { pop txt_repain_system  return } if
+    dup "rescue"     eq { pop txt_rescue         return } if
+    dup "harddisk"   eq { pop txt_boot_harddisk  return } if
+    dup "mediachk"   eq { pop txt_mediacheck     return } if
+    dup "mediacheck" eq { pop txt_mediacheck     return } if
   } {
-    dup "linux"     eq { pop "Linux"        return } if
-    dup "failsafe"  eq { pop txt_safe_linux return } if
-    dup "windows"   eq { pop "Windows"      return } if
+    dup "failsafe"   eq { pop txt_safe_linux     return } if
+    dup "linux"      eq { pop "Linux"            return } if
+    dup "windows"    eq { pop "Windows"          return } if
   } ifelse
+  % still no luck... - try to translate
+  _
 } def
 
 
@@ -1434,26 +1426,6 @@
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Show dvd popup.
-%
-% ( ) ==> ( )
-%
-/dvd_popup {
-  window.dialog
-
-  dup .title txt_dvd_warning_title put
-  dup .text txt_dvd_warning2 put
-  dup .buttons [
-%    button.eject    button.default    actEject actNoClose or button.setaction
-    button.continue button.default actNothing button.setaction
-  ] put
-  dup window.init
-      window.show
-
-} def
-
-
-% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Warn that we are about to install 32bit software on a 64bit system.
 %
 % ( ) ==> ( )
@@ -1722,6 +1694,8 @@ config.livecd {
   mem.msg gfxconfig.str dup .undef eq { pop "Not enough memory." } if
 } def
 
+/mode.install false def
+gfxconfig.layout { "install" eq { /mode.install true def exit } if } forall
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

@@ -38,18 +38,6 @@ msgstr "Улантуу"
 msgid "Installation"
 msgstr "Орнотуу"
 
-#. txt_manual_install
-msgid "Manual Installation"
-msgstr "Жеке кол менен орнотулушу"
-
-#. txt_noacpi_install
-msgid "Installation--ACPI Disabled"
-msgstr "ACPI'сиз орнотуу"
-
-#. txt_safe_install
-msgid "Installation--Safe Settings"
-msgstr "Орнотуу--Safe Settings"
-
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
 msgstr "Linux--Safe Settings"
@@ -162,21 +150,6 @@ msgstr "Сырсөз"
 msgid "Get your driver update floppy ready."
 msgstr "Драйвер жаңылоолор дискетасын даярдап коюңуз."
 
-#. dvd warning title
-#. txt_dvd_warning_title
-msgid "DVD Error"
-msgstr "DVD катасы"
-
-#. txt_dvd_warning2
-msgid ""
-"This is a two-sided DVD. You have booted from the second side.\n"
-"\n"
-"Turn the DVD over then continue."
-msgstr ""
-"Бул эки жактуу DVD-диски. Сиз экинчи жактан жүктөлдүңүз.\n"
-"\n"
-"DVD-дискти айландырып коюңуз."
-
 #. power off dialog title
 #. txt_power_off_title
 msgid "Power Off"
@@ -261,18 +234,6 @@ msgstr "Башка параметрлер"
 #. txt_language
 msgid "Language"
 msgstr "Тил"
-
-#. txt_apic
-msgid "Installation--IOAPIC Enabled"
-msgstr "IOAPIC менен орнотуу"
-
-#. txt_noapic_install
-msgid "Installation--IOAPIC Disabled"
-msgstr "IOAPIC'сиз орнотуу"
-
-#. txt_nolapic_install
-msgid "Installation--Local APIC Disabled"
-msgstr "Local APIC'сиз орнотуу"
 
 #. txt_yes
 msgid "Yes"
@@ -467,5 +428,15 @@ msgstr ""
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
 msgid "Netmask\n(or use '/N' notation with Host IP)\n"
+msgstr ""
+
+#. label for Live CD installation
+#. txt_live_kde
+msgid "openSUSE Live (KDE)"
+msgstr ""
+
+#. label for Live CD installation
+#. txt_live_gnome
+msgid "openSUSE Live (GNOME)"
 msgstr ""
 

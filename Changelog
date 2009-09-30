@@ -1,3 +1,9 @@
+30/9/2009:	v4.1.29
+	- build new font
+	- enhanced gfxboot-font
+	- cleaned up po files
+	- more flexible translation support 
+
 29/9/2009:	v4.1.28
 	- set default install type correctly (bnc #542781)
 

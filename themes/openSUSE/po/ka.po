@@ -38,18 +38,6 @@ msgstr "გაგრძელება"
 msgid "Installation"
 msgstr "ჩადგმა"
 
-#. txt_manual_install
-msgid "Manual Installation"
-msgstr "ხელით დაყენება"
-
-#. txt_noacpi_install
-msgid "Installation--ACPI Disabled"
-msgstr "ჩადგმა--ACPI-ის გათიშვით"
-
-#. txt_safe_install
-msgid "Installation--Safe Settings"
-msgstr "ჩადგმა--უსაფრთხო პარამეტრებით"
-
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
 msgstr "Linux--უსაფრთხო პარამეტრებით"
@@ -162,21 +150,6 @@ msgstr "პაროლი"
 msgid "Get your driver update floppy ready."
 msgstr ""
 
-#. dvd warning title
-#. txt_dvd_warning_title
-msgid "DVD Error"
-msgstr "DVD-ის შეცდომა"
-
-#. txt_dvd_warning2
-msgid ""
-"This is a two-sided DVD. You have booted from the second side.\n"
-"\n"
-"Turn the DVD over then continue."
-msgstr ""
-"ეს არის ორმხირივი DVD. თქვენ ჩაიტვირთეთ მეორე მხრიდან.\n"
-"\n"
-"გადააბრუნეთ DVD დისკი და შემდეგ გააგრძელეთ პროცესი."
-
 #. power off dialog title
 #. txt_power_off_title
 msgid "Power Off"
@@ -261,18 +234,6 @@ msgstr "სხვა პარამეტრები"
 #. txt_language
 msgid "Language"
 msgstr "ენა"
-
-#. txt_apic
-msgid "Installation--IOAPIC Enabled"
-msgstr "ჩადგმა--ჩართული IOAPIC-ით"
-
-#. txt_noapic_install
-msgid "Installation--IOAPIC Disabled"
-msgstr "ჩადგმა--გამორთული IOAPIC-ით"
-
-#. txt_nolapic_install
-msgid "Installation--Local APIC Disabled"
-msgstr "ჩადგმა--ადგილობრივი APIC-ის გარეშე"
 
 #. txt_yes
 msgid "Yes"
@@ -465,5 +426,15 @@ msgstr ""
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
 msgid "Netmask\n(or use '/N' notation with Host IP)\n"
+msgstr ""
+
+#. label for Live CD installation
+#. txt_live_kde
+msgid "openSUSE Live (KDE)"
+msgstr ""
+
+#. label for Live CD installation
+#. txt_live_gnome
+msgid "openSUSE Live (GNOME)"
 msgstr ""
 

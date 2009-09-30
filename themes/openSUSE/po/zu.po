@@ -35,18 +35,6 @@ msgstr "Qhubeka"
 msgid "Installation"
 msgstr "Ukufaka uhlelo"
 
-#. txt_manual_install
-msgid "Manual Installation"
-msgstr "Ukuzifakela Mathupha"
-
-#. txt_noacpi_install
-msgid "Installation--ACPI Disabled"
-msgstr "Ukufaka--I-ACPI Icishiwe"
-
-#. txt_safe_install
-msgid "Installation--Safe Settings"
-msgstr "Ukufaka Uhlelo--Amasethingi Aphephile"
-
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
 msgstr "I-Linux--Amasethingi Aphephile"
@@ -159,21 +147,6 @@ msgstr "Iphasiwedi"
 msgid "Get your driver update floppy ready."
 msgstr "Yenza ukuba iflophi yokuvuselela i-driver yakho ihlale ilungele."
 
-#. dvd warning title
-#. txt_dvd_warning_title
-msgid "DVD Error"
-msgstr "Iphutha le-DVD"
-
-#. txt_dvd_warning2
-msgid ""
-"This is a two-sided DVD. You have booted from the second side.\n"
-"\n"
-"Turn the DVD over then continue."
-msgstr ""
-"Lena yi-DVD enezinhlangothi ezimbili. Uqalise ohlangothini lwesibili.\n"
-"\n"
-" Phendula i-DVD ukuze uqhubeke."
-
 #. power off dialog title
 #. txt_power_off_title
 msgid "Power Off"
@@ -258,18 +231,6 @@ msgstr "Okunye Ongakhetha Kukho"
 #. txt_language
 msgid "Language"
 msgstr "Ulimi"
-
-#. txt_apic
-msgid "Installation--IOAPIC Enabled"
-msgstr "Ukufaka Uhlelo--IOAPIC Ivuliwe"
-
-#. txt_noapic_install
-msgid "Installation--IOAPIC Disabled"
-msgstr "Ukufaka Uhlelo--IOAPIC Icishiwe"
-
-#. txt_nolapic_install
-msgid "Installation--Local APIC Disabled"
-msgstr "Ukufaka Uhlelo--I-APIC Eseduze Icishiwe"
 
 #. txt_yes
 msgid "Yes"
@@ -464,5 +425,15 @@ msgstr ""
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
 msgid "Netmask\n(or use '/N' notation with Host IP)\n"
+msgstr ""
+
+#. label for Live CD installation
+#. txt_live_kde
+msgid "openSUSE Live (KDE)"
+msgstr ""
+
+#. label for Live CD installation
+#. txt_live_gnome
+msgid "openSUSE Live (GNOME)"
 msgstr ""
 
