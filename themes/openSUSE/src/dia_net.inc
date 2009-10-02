@@ -110,7 +110,7 @@
   % Must all be of same size!
   dia .ed.list 5 array put
   dia .ed.buffer.list input.net.static put
-  dia .ed.text.list [ txt_host_ip txt_netmask txt_gateway_ip txt_nameservers txt_domain ] put
+  dia .ed.text.list [ txt_host_ip txt_netmask txt_gateway_ip txt_nameservers txt_domain_name ] put
 
   dia .ed.focus 0 put
   dia .ed.width 300 put

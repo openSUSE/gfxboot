@@ -1958,6 +1958,8 @@ sub run_qemu
   my $vm_env = shift;
   my $q = $vm_list{$opt_vm}{cmd};
 
+  $q .= " -m 512";
+
   $q .= " -boot c" if $vm_env->{boot} eq 'hd';
   $q .= " -boot d" if $vm_env->{boot} eq 'cd';
   $q .= " -boot a" if $vm_env->{boot} eq 'fd';

@@ -414,8 +414,8 @@ msgid "Gateway\n"
 msgstr ""
 
 #. label for dns domain name (like 'opensuse.org')
-#. txt_domain
-msgid "Domain\n"
+#. txt_domain_name
+msgid "Domain Name\n"
 msgstr ""
 
 #. label for nameserver list
