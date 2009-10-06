@@ -1,0 +1,45 @@
+diff --git a/core/comboot.inc b/core/comboot.inc
+index 1a147c9..e5dc115 100644
+--- a/core/comboot.inc
++++ b/core/comboot.inc
+@@ -1043,12 +1043,14 @@ comapi_run2:
+ 		mov [comboot_sp_save],sp	; save stack pointer
+ 		mov word [comboot_hook],comboot_hook_entry
+ 		or byte [QuietBoot],2
++		mov byte [comboot_run2_active],1
+ 		jmp load_kernel		; Run a new kernel
+ 
+ comapi_run2_cont:
+ 		mov word [comboot_hook],comboot_hook_nop
+ 		mov sp,[comboot_sp_save]	; fix stack pointer
+ 		and byte [QuietBoot],~2
++		mov byte [comboot_run2_active],0
+ 		clc
+ 		ret
+ 
+@@ -1171,6 +1173,7 @@ int22_count	equ ($-int22_table)/2
+ comboot_sp_save	dw 0
+ comboot_hook	dw comboot_hook_nop
+ comboot_far	dd 0
++comboot_run2_active	db 0
+ 
+ APIKeyWait	db 0
+ APIKeyFlag	db 0
+diff --git a/core/ui.inc b/core/ui.inc
+index 2bc56a1..59b5724 100644
+--- a/core/ui.inc
++++ b/core/ui.inc
+@@ -379,9 +379,13 @@ vk_check:
+ 		push word real_mode_seg
+ 		pop es
+ 		mov di,cmd_line_here
++		; append line already included in this case
++		cmp byte [comboot_run2_active],0
++		jnz .no_append_copy
+ 		mov si,VKernelBuf+vk_append
+ 		mov cx,[VKernelBuf+vk_appendlen]
+ 		rep movsb
++.no_append_copy:
+ 		mov [CmdLinePtr],di		; Where to add rest of cmd
+ 		pop es
+ 		mov di,KernelName
