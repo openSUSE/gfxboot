@@ -425,18 +425,28 @@
       } if
     } ifelse
 
-    config.lang {
-      config.lang "en_US" ne {
-        config.lang "lang=%s " bc.cmd dup length add sprintf
-      } if
-    } if
-
     v_impaired 1 ge {
       "braille=1 " bc.cmd dup length add sprintf
     } if
 
     v_impaired 2 ge {
       "linemode=1 " bc.cmd dup length add sprintf
+    } if
+  } if
+
+  config.addopt.lang {
+    config.lang {
+      config.lang "en_US" ne {
+        config.lang "lang=%s " bc.cmd dup length add sprintf
+      } if
+    } if
+  } if
+
+  config.addopt.keytable {
+    config.keymap.id {
+      config.lang getkeymapfromlocale config.keymap.id ne {
+        config.keymap.id "keytable=%s " bc.cmd dup length add sprintf
+      } if
     } if
   } if
 
@@ -1355,7 +1365,7 @@
     pop 0
   } if
 
-  dup keyF12 eq debug 3 ge and {
+  dup keyF12 eq debug 6 ge and {
     % mouse support testing
 
     1 keepmode
@@ -1629,6 +1639,8 @@ config.livecd {
 /panel.f-key.fg        "panel.f-key.fg"           black gfxconfig.set.int
 /keymap.submenu        "keymap.submenu"           false gfxconfig.set.bool
 /keymap.default        "keymap"                      "" gfxconfig.set.str
+/config.addopt.lang    "addopt.lang"              false gfxconfig.set.bool
+/config.addopt.keytable "addopt.keytable"         false gfxconfig.set.bool
 
 /install.install       "install"                     "" gfxconfig.set.str
 /install.http.server   "install.http.server"         "" gfxconfig.set.str
