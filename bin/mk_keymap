@@ -1,0 +1,16 @@
+#! /bin/sh
+
+# create keymap files
+# usage: mk_keymap keymap
+
+m=$1
+enc=$2
+
+./bin/keytab --uni $m >keymap.$m.inc
+
+if [ -n "$enc" ] ; then
+  ./bin/keytab --enc=$enc $m >keymap.$m.inc_
+
+  cmp -s keymap.$m.inc_ keymap.$m.inc && rm keymap.$m.inc_
+fi
+

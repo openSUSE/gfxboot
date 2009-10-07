@@ -8,10 +8,12 @@ sub do_enc;
 
 $opt_all = 0;
 $opt_enc = undef;
+$opt_uni = 0;
 
 GetOptions(
   'all' => \$opt_all,
-  'enc=s' => \$opt_enc
+  'enc=s' => \$opt_enc,
+  'uni' => \$opt_uni,
 );
 
 $keytable = shift;
@@ -38,18 +40,29 @@ sub get_table
 
   $kt = shift;
 
-  open F, "loadkeys -m $kt |";
+  open F, "loadkeys" . ($opt_uni ? " -u" : "") . " -m $kt |";
   while(<F>) {
     $map_idx = 0 if /u_short/;
     if(/u_short\s+plain_map\[/) { $map_idx = 1; $key_idx = 0 }
     if(/u_short\s+shift_map\[/) { $map_idx = 2; $key_idx = 0 }
     if(/u_short\s+altgr_map\[/) { $map_idx = 3; $key_idx = 0 }
     if($map_idx) {
-      while(/(0xf\S{3}),/g) {
-        $x = $1;
-        $map[$key_idx][0] = $key_idx;
-        $map[$key_idx][$map_idx] = hex($x) & 0xff if $x =~ /0xf[0b]/;
-        $key_idx++;
+      if($opt_uni) {
+        while(/(0x[0-9a-f]{4}),/g) {
+          $x = $1;
+          $map[$key_idx][0] = $key_idx;
+          $map[$key_idx][$map_idx] = hex($x) if $x !~ /0xf/;
+          $map[$key_idx][$map_idx] = hex($x) & 0xff if $x =~ /0xf[0b]/;
+          $key_idx++;
+        }
+      }
+      else {
+        while(/(0xf\S{3}),/g) {
+          $x = $1;
+          $map[$key_idx][0] = $key_idx;
+          $map[$key_idx][$map_idx] = hex($x) & 0xff if $x =~ /0xf[0b]/;
+          $key_idx++;
+        }
       }
     }
   }
