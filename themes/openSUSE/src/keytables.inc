@@ -11,9 +11,8 @@
 %
 
 /.km.name   0 def
-/.km.locale 1 def
-/.km.id     2 def
-/.km.map    3 def
+/.km.id     1 def
+/.km.map    2 def
 
 %% include ../keymaps/keymap.cs_CZ.inc
 %% include ../keymaps/keymap.da_DK.inc
@@ -37,46 +36,46 @@
 
 % array must not be empty
 /keymaps [
-  [ "Arabic"                  "ar_EG" "arabic"               .undef       ]
-  [ "Belgian"                 "wa_BE" "be-latin1"            .undef       ]
-  [ "Canadian (Multilingual)" "fr_FR" "cn-latin1"            .undef       ]
-  [ "Croatian"                "hr_HR" "croat"                .undef       ]
-  [ "Czech"                   "cs_CZ" "cz-us-qwertz"         keymap.cs_CZ ]
-  [ "Czech (qwerty)"          "cs_CZ" "cz-lat2-us"           .undef       ]
-  [ "Danish"                  "da_DK" "dk"                   keymap.da_DK ]
-  [ "Dutch"                   "nl_NL" "nl"                   .undef       ]
-  [ "Dvorak"                  "*"     "dvorak"               .undef       ]
-  [ "English (UK)"            "en_GB" "uk"                   .undef       ]
-  [ "English (US)"            "en_US" "us"                   .undef       ]
-  [ "Estonian"                "et_EE" "et"                   keymap.et_EE ]
-  [ "Finnish"                 "fi_FI" "fi-latin1"            .undef       ]
-  [ "French"                  "fr_FR" "fr-latin1"            keymap.fr_FR ]
-  [ "French (Canada)"         "fr_FR" "cf"                   .undef       ]
-  [ "German"                  "de_DE" "de-latin1-nodeadkeys" keymap.de_DE ]
-  [ "German (Switzerland)"    "de_DE" "sg-latin1"            .undef       ]
-  [ "Greek"                   "el_GR" "gr"                   keymap.el_GR ]
-  [ "Hungarian"               "hu_HU" "hu"                   keymap.hu_HU ]
-  [ "Icelandic"               "*"     "is-latin1"            .undef       ]
-  [ "Italian"                 "it_IT" "it"                   keymap.it_IT ]
-  [ "Japanese"                "ja_JP" "jp106"                keymap.ja_JP ]
-  [ "Khmer"                   "km_KH" "khmer"               .undef        ]
-  [ "Korean"                  "ko_KR" "korean"              .undef        ]
-  [ "Lithuanian"              "lt_LT" "lt.baltic"           .undef        ]
-  [ "Norwegian"               "nb_NO" "no-latin1"            keymap.nb_NO ]
-  [ "Polish"                  "pl_PL" "Pl02"                 keymap.pl_PL ]
-  [ "Portuguese"              "pt_PT" "pt-latin1"            keymap.pt_PT ]
-  [ "Portuguese (Brazil)"     "pt_BR" "br-abnt2"             keymap.pt_BR ]
-  [ "Russian"                 "ru_RU" "ruwin_alt-UTF-8"      keymap.ru_RU ]
-  [ "Serbian"                 "sr_RS" "sr-cy"                .undef       ]
-  [ "Slovak"                  "sk_SK" "sk-qwertz"            keymap.sk_SK ]
-  [ "Slovak (qwerty)"         "sk_SK" "sk-qwerty"            .undef       ]
-  [ "Slovene"                 "sl_SI" "slovene"              keymap.sl_SI ]
-  [ "Spanish"                 "es_ES" "es"                   keymap.es_ES ]
-  [ "Spanish (Latin America)" "es_ES" "la-latin1"            .undef       ]
-  [ "Swedish"                 "sv_SE" "sv-latin1"            keymap.sv_SE ]
-  [ "Tajik"                   "tg_TJ" "tj"                   .undef       ]
-  [ "Turkish"                 "tr_TR" "trq"                  keymap.tr_TR ]
-  [ "Ukrainian"               "uk_UA" "ua"                   .undef       ]
+  [ "Arabic"                  "arabic"               .undef       ]
+  [ "Belgian"                 "be-latin1"            .undef       ]
+  [ "Canadian (Multilingual)" "cn-latin1"            .undef       ]
+  [ "Croatian"                "croat"                .undef       ]
+  [ "Czech"                   "cz-us-qwertz"         keymap.cs_CZ ]
+  [ "Czech (qwerty)"          "cz-lat2-us"           .undef       ]
+  [ "Danish"                  "dk"                   keymap.da_DK ]
+  [ "Dutch"                   "nl"                   .undef       ]
+  [ "Dvorak"                  "dvorak"               .undef       ]
+  [ "English (UK)"            "uk"                   .undef       ]
+  [ "English (US)"            "us"                   .undef       ]
+  [ "Estonian"                "et"                   keymap.et_EE ]
+  [ "Finnish"                 "fi-latin1"            .undef       ]
+  [ "French"                  "fr-latin1"            keymap.fr_FR ]
+  [ "French (Canada)"         "cf"                   .undef       ]
+  [ "German"                  "de-latin1-nodeadkeys" keymap.de_DE ]
+  [ "German (Switzerland)"    "sg-latin1"            .undef       ]
+  [ "Greek"                   "gr"                   keymap.el_GR ]
+  [ "Hungarian"               "hu"                   keymap.hu_HU ]
+  [ "Icelandic"               "is-latin1"            .undef       ]
+  [ "Italian"                 "it"                   keymap.it_IT ]
+  [ "Japanese"                "jp106"                keymap.ja_JP ]
+  [ "Khmer"                   "khmer"               .undef        ]
+  [ "Korean"                  "korean"              .undef        ]
+  [ "Lithuanian"              "lt.baltic"           .undef        ]
+  [ "Norwegian"               "no-latin1"            keymap.nb_NO ]
+  [ "Polish"                  "Pl02"                 keymap.pl_PL ]
+  [ "Portuguese"              "pt-latin1"            keymap.pt_PT ]
+  [ "Portuguese (Brazil)"     "br-abnt2"             keymap.pt_BR ]
+  [ "Russian"                 "ruwin_alt-UTF-8"      keymap.ru_RU ]
+  [ "Serbian"                 "sr-cy"                .undef       ]
+  [ "Slovak"                  "sk-qwertz"            keymap.sk_SK ]
+  [ "Slovak (qwerty)"         "sk-qwerty"            .undef       ]
+  [ "Slovene"                 "slovene"              keymap.sl_SI ]
+  [ "Spanish"                 "es"                   keymap.es_ES ]
+  [ "Spanish (Latin America)" "la-latin1"            .undef       ]
+  [ "Swedish"                 "sv-latin1"            keymap.sv_SE ]
+  [ "Tajik"                   "tj"                   .undef       ]
+  [ "Turkish"                 "trq"                  keymap.tr_TR ]
+  [ "Ukrainian"               "ua"                   .undef       ]
 ] def
 
 

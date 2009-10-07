@@ -39,45 +39,44 @@
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Set keyboard map.
 %
-% ( locale|keymap ) ==> ( )
+% ( keymap|locale ) ==> ( )
+%
+% keymap may be .undef.
 %
 /setkeymap {
-  config.keymap.name over eq { pop return } if
-  /config.keymap.name exch def
+  /keymap.tmp exch def
 
-  config.keymap.id config.keymap.name eq { return } if
+  config.keymap.id keymap.tmp eq { return } if
 
   /config.keymap .undef def
   /config.keymap.id .undef def
 
-  keymaps {
-    dup .km.id get config.keymap.name eq
-    over .km.locale get config.keymap.name eq or {
-      dup .km.map get /config.keymap exch def
-      .km.id get /config.keymap.id exch def
-    } { pop } ifelse
-  } forall
+  2 {
+    keymap.tmp .undef eq { exit } if
 
-  config.keymap.id .undef eq {
     keymaps {
-      dup .km.locale get config.keymap.name locale.cmp {
+      dup .km.id get keymap.tmp eq {
         dup .km.map get /config.keymap exch def
         .km.id get /config.keymap.id exch def
       } { pop } ifelse
     } forall
-  } if
 
-  config.keymap.id .undef eq {
-    /config.keymap.id "en_US" def
-  } if
+    config.keymap.id .undef ne { exit } if
 
+    % 2nd run: try to look it up in language list
+    /keymap.tmp keymap.tmp getkeymapfromlocale def
+  } repeat
+
+  config.keymap.id .undef eq { /config.keymap.id "us" def } if
 } def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Look up keymap in languale locale list.
 %
-% ( locale ) ==> ( keymap|locale )
+% ( locale ) ==> ( keymap )
+%
+% Returns .undef if locale was not found.
 %
 /getkeymapfromlocale {
   /kbd.tmp exch def
@@ -93,9 +92,7 @@
     } forall
   } if
 
-  kbd.tmp.locale .undef ne { /kbd.tmp kbd.tmp.locale def } if
-
-  kbd.tmp
+  kbd.tmp.locale
 } def
 
 
