@@ -29,6 +29,7 @@
 %% include ../keymaps/keymap.et.inc
 %% include ../keymaps/keymap.fi-latin1.inc
 %% include ../keymaps/keymap.fr-latin1.inc
+%% include ../keymaps/keymap.fr_CH-latin1.inc
 %% include ../keymaps/keymap.gr.inc
 %% include ../keymaps/keymap.hu.inc
 %% include ../keymaps/keymap.is-latin1.inc
@@ -68,6 +69,7 @@
   [ "Finnish"                 "fi-latin1"            keymap.fi-latin1            ]
   [ "French"                  "fr-latin1"            keymap.fr-latin1            ]
   [ "French (Canada)"         "cf"                   keymap.cf                   ]
+  [ "French (Switzerland)"    "fr_CH-latin1"         keymap.fr_CH-latin1         ]
   [ "German"                  "de-latin1-nodeadkeys" keymap.de-latin1-nodeadkeys ]
   [ "German (Switzerland)"    "sg-latin1"            keymap.sg-latin1            ]
   [ "Greek"                   "gr"                   keymap.gr                   ]
