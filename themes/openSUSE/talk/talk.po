@@ -21,19 +21,13 @@ msgstr ""
 msgid "Memory Test"
 msgstr ""
 
-msgid "openSUSE-11.1"
+msgid "openSUSE 11.2"
 msgstr ""
 
-msgid "Failsafe-openSUSE-11.1"
+msgid "openSUSE 11.2 - Desktop"
 msgstr ""
 
 msgid "Hard-Disk"
-msgstr ""
-
-msgid "Live-System-GNOME"
-msgstr ""
-
-msgid "Live-System-KDE"
 msgstr ""
 
 msgid "openSUSE Live (GNOME)"
@@ -168,6 +162,9 @@ msgstr "Khmer"
 msgid "한글"
 msgstr "Korean"
 
+msgid "Кыргызча"
+msgstr "Kirghiz"
+
 msgid "\xe0\xba\x9e\xe0\xba\xb2\xe0\xba\xaa\xe0\xba\xb2\xe0\xba\xa5\xe0\xba\xb2\xe0\xba\xa7"
 msgstr "Lao"
 
@@ -185,6 +182,9 @@ msgstr "Norwegian"
 
 msgid "Nederlands"
 msgstr "Dutch"
+
+msgid "Nynorsk"
+msgstr "Nynorsk"
 
 msgid "\xe0\xa8\xaa\xe0\xa9\xb0\xe0\xa8\x9c\xe0\xa8\xbe\xe0\xa8\xac\xe0\xa9\x80"
 msgstr "Punjabi"
@@ -222,6 +222,9 @@ msgstr "Swedish"
 msgid "\xe0\xae\xa4\xe0\xae\xae\xe0\xae\xbf\xe0\xae\xb4\xe0\xaf\x8d"
 msgstr "Tamil"
 
+msgid "тоҷикӣ"
+msgstr "Tadjik"
+
 msgid "\xe0\xb8\xa0\xe0\xb8\xb2\xe0\xb8\xa9\xe0\xb8\xb2\xe0\xb9\x84\xe0\xb8\x97\xe0\xb8\xa2"
 msgstr "Thai"
 
@@ -249,33 +252,70 @@ msgstr "Traditional Chinese"
 msgid "isiZulu"
 msgstr "Zulu"
 
+
 # keymap menu
 
+msgid "Arabic"
+msgstr ""
+
+msgid "Belgian"
+msgstr ""
+
+msgid "Canadian (Multilingual)"
+msgstr ""
+
+msgid "Croatian"
+msgstr ""
+
 msgid "Czech"
+msgstr ""
+
+msgid "Czech (qwerty)"
 msgstr ""
 
 msgid "Danish"
 msgstr ""
 
-msgid "German"
+msgid "Dutch"
+msgstr ""
+
+msgid "Dvorak"
+msgstr ""
+
+msgid "English (UK)"
+msgstr ""
+
+msgid "English (US)"
 msgstr ""
 
 msgid "Estonian"
 msgstr ""
 
-msgid "English-US"
-msgstr ""
-
-msgid "Greek"
-msgstr ""
-
-msgid "Spanish"
+msgid "Finnish"
 msgstr ""
 
 msgid "French"
 msgstr ""
 
+msgid "French (Canada)"
+msgstr ""
+
+msgid "French (Switzerland)"
+msgstr ""
+
+msgid "German"
+msgstr ""
+
+msgid "German (Switzerland)"
+msgstr ""
+
+msgid "Greek"
+msgstr ""
+
 msgid "Hungarian"
+msgstr ""
+
+msgid "Icelandic"
 msgstr ""
 
 msgid "Italian"
@@ -284,31 +324,58 @@ msgstr ""
 msgid "Japanese"
 msgstr ""
 
+msgid "Khmer"
+msgstr ""
+
+msgid "Korean"
+msgstr ""
+
+msgid "Lithuanian"
+msgstr ""
+
 msgid "Norwegian"
 msgstr ""
 
 msgid "Polish"
 msgstr ""
 
-msgid "Portuguese-BR"
+msgid "Portuguese"
 msgstr ""
 
-msgid "Portuguese"
+msgid "Portuguese (Brazil)"
 msgstr ""
 
 msgid "Russian"
 msgstr ""
 
+msgid "Serbian"
+msgstr ""
+
 msgid "Slovak"
+msgstr ""
+
+msgid "Slovak (qwerty)"
 msgstr ""
 
 msgid "Slovene"
 msgstr ""
 
+msgid "Spanish"
+msgstr ""
+
+msgid "Spanish (Latin America)"
+msgstr ""
+
 msgid "Swedish"
 msgstr ""
 
+msgid "Tajik"
+msgstr ""
+
 msgid "Turkish"
+msgstr ""
+
+msgid "Ukrainian"
 msgstr ""
 
 
@@ -344,6 +411,9 @@ msgstr ""
 msgid "DVD"
 msgstr ""
 
+msgid "Hard Disk"
+msgstr ""
+
 msgid "SLP"
 msgstr ""
 
@@ -353,16 +423,16 @@ msgstr ""
 msgid "HTTP"
 msgstr ""
 
-
 msgid "NFS"
 msgstr ""
-
 
 msgid "SMB / CIFS"
 msgstr ""
 
+msgid "Network Config"
+msgstr ""
 
-msgid "Hard Disk"
+msgid "HTTP Proxy"
 msgstr ""
 
 
@@ -474,6 +544,55 @@ msgstr ""
 
 msgid "Halt the system now?"
 msgstr ""
+
+
+# proxy settings
+
+msgid "Server\n"
+msgstr ""
+
+msgid "Port\n"
+msgstr ""
+
+msgid "User\n"
+msgstr ""
+
+msgid "Password\n"
+msgstr ""
+
+
+# network config
+
+msgid "No Network"
+msgstr ""
+
+msgid "DHCP"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+
+# manual net config
+
+msgid "Manual Network Config"
+msgstr ""
+
+msgid "Host IP\n"
+msgstr ""
+
+msgid "Netmask\n(or use '/N' notation with Host IP)\n"
+msgstr "Netmask"
+
+msgid "Gateway\n"
+msgstr ""
+
+msgid "Nameservers (separated by ',')\n"
+msgstr "Nameservers"
+
+msgid "Domain Name\n"
+msgstr ""
+
 
 
 # ascii
