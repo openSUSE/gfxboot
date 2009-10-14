@@ -35,6 +35,16 @@ function gfxtest_syslinux  {
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+function gfxtest_pxelinux  {
+  set -f
+  ./gfxboot -b pxelinux --net \
+     --test --preview --archive $opt_archive $gfxboot_args \
+     --test-add-files $add_files --test-rm-files gfxtest.config $rm_files $gfxboot_x_args
+  set +f
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 function gfxtest_grub  {
   set -f
   ./gfxboot -b grub \
@@ -83,7 +93,7 @@ EOF
 
 test_dir=test
 
-OPTS=`getopt -n gfxtest -o mhl:t: --long make,help,disk:,lang:,vm:,type:,32,64,theme:,lilo:,grub:,syslinux:,isolinux: -- "$@"`
+OPTS=`getopt -n gfxtest -o mhl:t: --long make,help,disk:,lang:,vm:,type:,32,64,theme:,lilo:,grub:,syslinux:,isolinux:,pxelinux: -- "$@"`
 if [ $? != 0 ] ; then
   echo "See 'gfxtest --help' for usage instructions."
   exit 1
