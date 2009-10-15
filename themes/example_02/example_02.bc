@@ -1,0 +1,83 @@
+% example_02.bc
+%
+% Very minimalistic demo. Writes a short message in graphics mode and lets you
+% boot linux or start from local disk.
+%
+% Notes:
+%  - the only difference to example_01 is that we use graphics mode
+%
+% Test with (from top level dir [/usr/share/gfxboot]) 'gfxtest -t example_02'.
+%
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Some constants we probably need.
+%
+/true 0 0 eq def
+/false 0 0 ne def
+
+% pointer type
+/t_ptr 12 def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Convert integer to pointer.
+%
+% ( int1 -- ptr1 )
+%
+/cvp { t_ptr settype } def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Input event handling.
+%
+% ( key -- input_buffer menu_entry action )
+%
+% key
+%  bit 0-7      ascii
+%  bit 8-15     scan code
+%  bit 16-32    status bits (ctrl, shift...)
+%
+% action
+%    0:         ok, stay in input loop
+%    1:         switch to text mode (that is, continue with the non-gfxboot bootloader interface)
+%  >=2:         boot
+%
+% Notes:
+%  - key = 0 indicates the bootloader timeout is up.
+%  - input_buffer is the command line that you would have normally entered in the bootloader.
+%  - menu_entry is only relevant for grub and is the 'title' section you want to boot. input_buffer
+%    is appended to the kernel options in this case.
+%
+/KeyEvent {
+  /key exch def
+
+  % 'linux' & 'harddisk' are labels in our test bootloader config (created by 'gfxtest')
+  key 0xff and 'l' eq { "linux"    0 2 return } if
+  key 0xff and 'd' eq {
+    % return to text mode first so you can see the error message
+    3 setmode pop
+    "harddisk" 0 2 return
+  } if
+
+ "" 0 0
+} def
+
+
+% set graphics mode
+% 0x114 = 800x600, 16 bit
+0x114 setmode pop
+
+% load and set font
+"font.fnt" findfile setfont
+
+% set default color, e.g. yellow
+0xe8e800 setcolor
+
+% write some message
+70 280 moveto
+"Press 'l' to start linux or 'd' to boot from disk." show
+
+% say we're fine ('false' tells bootloader not to use gfxboot)
+true
+

@@ -17,7 +17,7 @@ function switch_disk {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 function gfxtest_isolinux  {
   set -f
-  ./gfxboot -b isolinux --cdrom \
+  $gfxboot -b isolinux --cdrom \
      --test --preview --archive $opt_archive $gfxboot_args \
      --test-add-files $add_files --test-rm-files gfxtest.config $rm_files $gfxboot_x_args
   set +f
@@ -27,7 +27,7 @@ function gfxtest_isolinux  {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 function gfxtest_syslinux  {
   set -f
-  ./gfxboot -b syslinux \
+  $gfxboot -b syslinux \
      --test --preview --archive $opt_archive $gfxboot_args \
      --test-add-files $add_files --test-rm-files gfxtest.config $rm_files $gfxboot_x_args
   set +f
@@ -37,7 +37,7 @@ function gfxtest_syslinux  {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 function gfxtest_pxelinux  {
   set -f
-  ./gfxboot -b pxelinux --net \
+  $gfxboot -b pxelinux --net \
      --test --preview --archive $opt_archive $gfxboot_args \
      --test-add-files $add_files --test-rm-files gfxtest.config $rm_files $gfxboot_x_args
   set +f
@@ -47,7 +47,7 @@ function gfxtest_pxelinux  {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 function gfxtest_grub  {
   set -f
-  ./gfxboot -b grub \
+  $gfxboot -b grub \
      --test --preview --archive $opt_archive $gfxboot_args \
      --test-add-files $add_files --test-rm-files gfxtest.config $rm_files $gfxboot_x_args
   set +f
@@ -57,7 +57,7 @@ function gfxtest_grub  {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 function gfxtest_lilo  {
   set -f
-  ./gfxboot -b lilo \
+  $gfxboot -b lilo \
      --test --preview --archive $opt_archive $gfxboot_args \
      --test-add-files $add_files --test-rm-files gfxtest.config $rm_files $gfxboot_x_args
   set +f
@@ -80,7 +80,7 @@ Options:
   -t, --theme THEME     Use theme THEME.
   --vm VM               Use VM as virtual machine (see 'gfxboot --help' for values).
 
-TARGET: cdrom, lilo, grub
+TARGET: cdrom, lilo, grub, syslinux, pxe (every subdir in 'test')
 
 GFXBOOT_OPTIONS: extra set of options passed to the gfxboot script.
 Note that the leading '--' is required.
@@ -92,6 +92,8 @@ EOF
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 test_dir=test
+gfxboot=gfxboot
+[ -x gfxboot ] && gfxboot=./gfxboot
 
 OPTS=`getopt -n gfxtest -o mhl:t: --long make,help,disk:,lang:,vm:,type:,32,64,theme:,lilo:,grub:,syslinux:,isolinux:,pxelinux: -- "$@"`
 if [ $? != 0 ] ; then
@@ -127,6 +129,11 @@ case "$1" in
   *) what="$1" ; shift ;;
 esac
 
+if [ ! -d test -o ! -d themes ] ; then
+  echo "error: gfxtest must be run from /usr/share/gfxboot"
+  exit 3
+fi
+
 if [ ! -d "$test_dir/$what" ] ; then
   echo "config directory missing: $what"
   exit 1
@@ -152,12 +159,14 @@ esac
 
 add_files=`echo $test_dir/$what/*`
 
-[ -x gfxboot-compile ] || make
+if [ -f gfxboot-compile.c -a ! -x gfxboot-compile ] ; then
+  make
 
-[ -x gfxboot-compile ] || {
-  echo "error: gfxboot-compile missing. Run 'make' first."
-  exit 2
-}
+  [ -x gfxboot-compile ] || {
+    echo "error: gfxboot-compile missing. Run 'make' first."
+    exit 2
+  }
+fi
 
 make $opt_make -C themes/$opt_theme || exit
 

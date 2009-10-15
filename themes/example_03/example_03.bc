@@ -1,0 +1,133 @@
+% example_03.bc
+%
+% Very minimalistic demo. Writes a short message in graphics mode and lets you
+% boot linux or start from local disk.
+%
+% Notes:
+%  - the video mode number is no longer hardcoded and we exit if the video mode
+%    could not be set
+%
+%  - we use a background picture
+%
+% Test with (from top level dir [/usr/share/gfxboot]) 'gfxtest -t example_03'.
+%
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Some constants we probably need.
+%
+/true 0 0 eq def
+/false 0 0 ne def
+
+% type values
+/t_none  0 def
+/t_end  11 def
+/t_ptr  12 def
+
+% undefined (nil) value
+/.undef 0 t_none settype def
+
+% end token, stops execution
+/.end 0 t_end settype def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Convert integer to pointer.
+%
+% ( int1 -- ptr1 )
+%
+/cvp { t_ptr settype } def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+%% findmode - find video mode number
+%
+% ( int1 int2 int3 -- int4 )   
+%
+% int1, int2: width, height
+% int3: color bits
+% int4: mode number (or .undef)
+%
+% example
+%   1024 768 16 findmode setmode        % 1024x768, 16-bit color mode
+%
+/findmode {
+  0 1 videomodes {
+    videomodeinfo dup .undef eq {
+      pop pop pop pop
+    } {
+      % compare width, height, colors
+      6 index 4 index eq 6 index 4 index eq and 5 index 3 index eq and {
+        7 1 roll 6 { pop } repeat 0xbfff and return
+      } {
+        pop pop pop pop
+      } ifelse
+    } ifelse
+  } for
+
+  pop pop pop .undef
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Input event handling.
+%
+% ( key -- input_buffer menu_entry action )
+%
+% key
+%  bit 0-7      ascii
+%  bit 8-15     scan code
+%  bit 16-32    status bits (ctrl, shift...)
+%
+% action
+%    0:         ok, stay in input loop
+%    1:         switch to text mode (that is, continue with the non-gfxboot bootloader interface)
+%  >=2:         boot
+%
+% Notes:
+%  - key = 0 indicates the bootloader timeout is up.
+%  - input_buffer is the command line that you would have normally entered in the bootloader.
+%  - menu_entry is only relevant for grub and is the 'title' section you want to boot. input_buffer
+%    is appended to the kernel options in this case.
+%
+/KeyEvent {
+  /key exch def
+
+  % 'linux' & 'harddisk' are labels in our test bootloader config (created by 'gfxtest')
+  key 0xff and 'l' eq { "linux"    0 2 return } if
+  key 0xff and 'd' eq {
+    % return to text mode first so you can see the error message
+    3 setmode pop
+    "harddisk" 0 2 return
+  } if
+
+ "" 0 0
+} def
+
+
+% set 800x600 graphics mode
+% try 32 bit first; if no mode can be found, exit and continue without gfxboot
+800 600 32 findmode setmode not {
+  800 600 16 findmode setmode not {
+    false .end
+  } if
+} if
+
+% load and set font
+"font.fnt" findfile setfont
+
+% load and set background image
+"clouds.jpg" findfile setimage
+0 0 moveto
+0 0 image.size image
+
+% set default color, e.g. yellow
+0xe8e800 setcolor
+
+% write some message
+70 280 moveto
+"Press 'l' to start linux or 'd' to boot from disk." show
+
+% say we're fine ('false' tells bootloader not to use gfxboot)
+true
+

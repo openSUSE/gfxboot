@@ -45,6 +45,7 @@ install: all
 	install -d -m 755 $(DESTDIR)/usr/sbin
 	perl -p -e 's/<VERSION>/$(GFXBOOT_VERSION)/' gfxboot >gfxboot~
 	install -m 755 gfxboot~ $(DESTDIR)/usr/sbin/gfxboot
+	install -m 755 gfxtest $(DESTDIR)/usr/sbin
 	install -m 755 gfxboot-compile gfxboot-font $(DESTDIR)/usr/sbin
 	@for i in $(THEMES) ; do \
 	  install -d -m 755 $(DESTDIR)/etc/bootsplash/$$i/{bootloader,cdrom} ; \
@@ -59,7 +60,7 @@ installsrc:
 	@for i in $(THEMES) ; do \
 	  cp -a $$i $(DESTDIR)/usr/share/gfxboot/themes ; \
 	done
-	cp -a bin $(DESTDIR)/usr/share/gfxboot
+	cp -a bin test $(DESTDIR)/usr/share/gfxboot
 
 clean: themes doc
 	@rm -f gfxboot-compile bincode gfxboot-font addblack bincode.h bin2c *.lst *.map vocabulary.inc vocabulary.h *.o *~

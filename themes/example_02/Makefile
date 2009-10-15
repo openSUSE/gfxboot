@@ -1,23 +1,25 @@
 BINDIR := $(shell [ -x ../../gfxboot-compile ] && echo ../../ )
 GFXBOOT_COMPILE = $(BINDIR)gfxboot-compile
+GFXBOOT_FONT = $(BINDIR)gfxboot-font
 GFXBOOT = $(BINDIR)gfxboot
 BFLAGS = -O -v -L ../..
 
 .PHONY: all themes clean distclean
 
-all: example1
+all: bootlogo
 
-example1: example1.gb
+bootlogo: example_*.bc font
 	@rm -rf $@.dir
 	@mkdir $@.dir
 	$(GFXBOOT_COMPILE) $(BFLAGS) -l $@.log -c $< $@.dir/init
+	@cp font.fnt $@.dir
 	$(GFXBOOT) --archive $@.dir --pack-archive $@
 
-test: example1
-	$(GFXBOOT) --archive $< --bootloader isolinux --test --preview
+font:
+	$(GFXBOOT_FONT) -v -f DejaVuSans:size=20 font.fnt >font.log
 
 clean:
-	rm -rf *~ *.log *.dir example1
+	rm -rf *~ *.log *.dir bootlogo *.fnt
 
 distclean: clean
 
