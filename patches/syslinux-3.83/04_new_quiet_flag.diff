@@ -1,0 +1,43 @@
+diff --git a/core/runkernel.inc b/core/runkernel.inc
+index f458fc7..f6ed644 100644
+--- a/core/runkernel.inc
++++ b/core/runkernel.inc
+@@ -165,7 +165,7 @@ opt_mem:
+ 		ret
+ 
+ opt_quiet:
+-		mov byte [QuietBoot],1
++		or byte [QuietBoot],1
+ 		ret
+ 
+ %if IS_PXELINUX
+@@ -634,7 +634,7 @@ loadinitrd:
+ ;		assumes CS == DS
+ ;
+ writestr_qchk:
+-		test byte [QuietBoot],01h
++		test byte [QuietBoot],03h
+ 		jz writestr
+ 		ret
+ 
+@@ -689,4 +689,6 @@ KernelVersion	resw 1			; Kernel protocol version
+ ;
+ InitRDPtr	resw 1			; Pointer to initrd= option in command line
+ LoadFlags	resb 1			; Loadflags from kernel
+-QuietBoot	resb 1			; Set if a quiet boot is requested
++
++		section .data
++QuietBoot	db 0			; Set if a quiet boot is requested
+diff --git a/core/ui.inc b/core/ui.inc
+index be4f385..2bc56a1 100644
+--- a/core/ui.inc
++++ b/core/ui.inc
+@@ -596,7 +596,7 @@ kernel_good:
+ 		;
+ 		xor ax,ax
+ 		mov [InitRDPtr],ax
+-		mov [QuietBoot],al
++		and byte [QuietBoot],~1
+ %if IS_PXELINUX
+ 		mov [KeepPXE],al
+ %endif
