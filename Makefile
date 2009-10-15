@@ -60,6 +60,7 @@ installsrc:
 	@for i in $(THEMES) ; do \
 	  cp -a $$i $(DESTDIR)/usr/share/gfxboot/themes ; \
 	done
+	cp -a themes/example* $(DESTDIR)/usr/share/gfxboot/themes
 	cp -a bin test $(DESTDIR)/usr/share/gfxboot
 
 clean: themes doc
