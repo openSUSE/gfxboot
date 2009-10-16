@@ -1,0 +1,226 @@
+% example_04.bc
+%
+% Draws simple menu and lets you select an entry.
+%
+% Notes:
+%  - 'MenuInit' is, like 'KeyEvent' a callback function; it must be defined
+%    if you want the menu data
+%
+%  - also, we process the keycode a bit to get the ASCII value
+%
+% Test with (from top level dir [/usr/share/gfxboot]) 'gfxtest -t example_04'.
+%
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Some constants we probably need.
+%
+/true 0 0 eq def
+/false 0 0 ne def
+
+% some key codes
+/keyEsc       0x0000001b def
+/keyEnter     0x0000000d def
+/keyUp        0x48000000 def
+/keyLeft      0x4b000000 def
+/keyRight     0x4d000000 def
+/keyDown      0x50000000 def
+
+% type values
+/t_none  0 def
+/t_end  11 def
+/t_ptr  12 def
+
+% undefined (nil) value
+/.undef 0 t_none settype def
+
+% end token, stops execution
+/.end 0 t_end settype def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Convert integer to pointer.
+%
+% ( int1 -- ptr1 )
+%
+/cvp { t_ptr settype } def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% findmode - find video mode number
+%
+% ( int1 int2 int3 -- int4 )   
+%
+% int1, int2: width, height
+% int3: color bits
+% int4: mode number (or .undef)
+%
+% example
+%   1024 768 16 findmode setmode        % 1024x768, 16-bit color mode
+%
+/findmode {
+  0 1 videomodes {
+    videomodeinfo dup .undef eq {
+      pop pop pop pop
+    } {
+      % compare width, height, colors
+      6 index 4 index eq 6 index 4 index eq and 5 index 3 index eq and {
+        7 1 roll 6 { pop } repeat 0xbfff and return
+      } {
+        pop pop pop pop
+      } ifelse
+    } ifelse
+  } for
+
+  pop pop pop .undef
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Input event handling.
+%
+% ( key -- input_buffer menu_entry action )
+%
+% key
+%  bit 0-7      ascii
+%  bit 8-15     scan code
+%  bit 16-32    status bits (ctrl, shift...)
+%
+% action
+%    0:         ok, stay in input loop
+%    1:         switch to text mode (that is, continue with the non-gfxboot bootloader interface)
+%  >=2:         boot
+%
+% Notes:
+%  - key = 0 indicates the bootloader timeout is up.
+%  - input_buffer is the command line that you would have normally entered in the bootloader.
+%  - menu_entry is only relevant for grub and is the 'title' section you want to boot. input_buffer
+%    is appended to the kernel options in this case.
+%
+/KeyEvent {
+  % pre-process keycode a bit
+  dup 0xff00 and 16 shl exch 0xff and dup 0xe0 eq { pop 0 } if add
+  dup 0xff and { 0xff and } if
+  /key exch def
+
+  % 'key' now holds the ASCII code for 'normal' keys and the scan code in the
+  % upper 8 bits if there is no ASCII code (e.g. F-keys, cursor keys)
+
+  % process key events...
+  key keyDown eq {
+    menu.entry menu.texts length 1 sub lt {
+      menu.entry menu.deselect
+      /menu.entry menu.entry 1 add def
+      menu.entry menu.select
+    } if
+  } if
+
+  key keyUp eq {
+    menu.entry 0 gt {
+      menu.entry menu.deselect
+      /menu.entry menu.entry 1 sub def
+      menu.entry menu.select
+    } if
+  } if
+
+  key keyEnter eq {
+    menu.texts menu.entry get menu.entry 2 return
+  } if
+
+ "" 0 0
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Setup boot menu.
+%
+% ( menu_entries_array cmdline_args_array defaultentry -- )
+%
+% This function is called before the first key event and gets passed the
+% bootloader config data.
+%
+/MenuInit {
+  % this is a string
+  /menu.default_entry exch def
+
+  % both are arrays
+  /menu.args exch def
+  /menu.texts exch def
+
+  % find index of the default entry
+  /menu.entry 0 def
+  0 1 menu.texts length 1 sub {
+    menu.texts over get
+    menu.default_entry eq { /menu.entry exch def exit } if
+    pop
+  } for
+
+  % menu position
+  /menu.x 300 def
+  /menu.y 150 def
+
+  % 1.5 * font size
+  /menu.dy fontheight dup 2 div add def
+
+  % yellow
+  0xe0e000 setcolor
+
+  % draw menu
+  menu.x menu.y moveto
+  menu.texts {
+    show
+    currentpoint exch pop menu.dy add menu.x exch moveto
+  } forall
+
+  % mark default entry
+  menu.entry menu.select
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Show selected item.
+%
+% ( index -- )
+%
+/menu.select {
+  menu.dy mul menu.y add
+  menu.x exch moveto
+  ">" dup strsize pop neg 10 sub 0 rmoveto
+  0xffffff setcolor
+  show
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Show deselected item.
+%
+% ( index -- )
+%
+/menu.deselect {
+  menu.dy mul menu.y add
+  menu.x exch moveto
+  ">" dup strsize pop neg 10 sub 0 rmoveto
+  currentpoint rot strsize image
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% set 800x600 graphics mode
+% try 32 bit first; if no mode can be found, exit and continue without gfxboot
+800 600 32 findmode setmode not {
+  800 600 16 findmode setmode not {
+    false .end
+  } if
+} if
+
+% load and set font
+"font.fnt" findfile setfont
+
+% load and set background image
+"clouds.jpg" findfile setimage
+0 0 moveto
+0 0 image.size image
+
+% say we're fine ('false' tells bootloader not to use gfxboot)
+true
+

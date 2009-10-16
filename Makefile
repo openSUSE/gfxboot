@@ -68,6 +68,7 @@ clean: themes doc
 	@rm -rf tmp
 
 distclean: clean
+	@for i in themes/example* ; do make -C $$i clean || break ; done
 
 themes:
 	@for i in $(THEMES) ; do make -C $$i $(MAKECMDGOALS) || break ; done
