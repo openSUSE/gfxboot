@@ -595,6 +595,7 @@
         % skip leading '+' or '-'
         dup 0 get dup '+' eq exch '-' eq or { 1 add } if
         filesize dup .undef ne {
+          dup -2 eq { /progress_nosize true def } if
           sectorsize 1 sub add
           sectorsize div /progress_extra exch progress_extra add def
         } { pop } ifelse
@@ -892,7 +893,7 @@
   dia .text.x get dia .text.y get 28 add rmoveto
 
   /progress.bar.height 19 def
-  /progress.bar.width dia .width get 75 sub def
+  /progress.bar.width dia .width get progress_nosize { 25 } { 75 } ifelse sub def
 
   /progress.sym.width 10 def
   /progress.bar.width
@@ -911,14 +912,13 @@
 
   /progress.sym.current 0 def
 
-  0 progress.percent
+  progress_nosize not { 0 progress.percent } if
 
   serial.line.status {
     "\n" serial.show
     dia .text get serial.show
     "  0%" serial.show
   } if
-
 } def
 
 
@@ -943,6 +943,21 @@
 % Note: max is just kernel size (in sectors).
 %
 /ProgressUpdate {
+  progress_nosize {
+    exch pop
+    sectorsize mul 10 shr
+    progress.bar.x progress.bar.y moveto
+    window.color.bg setcolor
+    progress.bar.width progress.bar.height fillrect
+    progress.bar.width 10 sub 0 rmoveto
+    window.color.fg setcolor
+    64 string exch
+    "%d kB" 2 index sprintf
+    dup showright free
+
+    return
+  } if
+
   exch progress_extra add exch
 
   over over 100 mul exch 1 max div progress.percent
@@ -962,6 +977,9 @@
 
 % initrd size (in sectors)
 /progress_extra 0 def
+
+% for pxe we don't get file sizes
+/progress_nosize false def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
