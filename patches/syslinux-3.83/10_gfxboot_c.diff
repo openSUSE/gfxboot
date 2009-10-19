@@ -54,7 +54,7 @@ index 0000000..a98f9aa
 +}
 diff --git a/modules/gfxboot.c b/modules/gfxboot.c
 new file mode 100644
-index 0000000..b4a794c
+index 0000000..cad1b1d
 --- /dev/null
 +++ b/modules/gfxboot.c
 @@ -0,0 +1,1036 @@
@@ -964,7 +964,7 @@ index 0000000..b4a794c
 +
 +  r.edi = comboot + (uint32_t) cmdline;
 +  r.ecx = sizeof cmdline;
-+  r.eax = timeout;
++  r.eax = timeout * 182 / 100;
 +  timeout = 0;		// use timeout only first time
 +  farcall(gfx.jmp_table[GFX_BC_INPUT], &r);
 +  if((r.eflags & X86_CF)) r.eax = 1;
