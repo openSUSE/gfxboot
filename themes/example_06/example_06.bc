@@ -1,26 +1,33 @@
-% example_05.bc
+% example_06.bc
 %
 % Draws simple menu and lets you select an entry and an boot option edit line.
 %
 % To use this example to boot from a real CD-ROM, do:
 %
-%   # make -C themes/example_05
+%   # make -C themes/example_06
 %   # mkdir /tmp/foo
-%   # gfxboot -a themes/example_05/bootlogo --expand-archive /tmp/foo
+%   # gfxboot -a themes/example_06/bootlogo --expand-archive /tmp/foo
 %   # cp /tmp/foo/* to_the_dir_on_your_ISO_where_isolinux.bin_is
 %
 %   and add a line 'ui gfxboot bootlogo' to isolinux.cfg.
 %
+% To use this example with grub, do:
+%   # make -C themes/example_06
+%   # cp themes/example_06/message /boot/message
+%
+%   and add a line like 'gfxmenu (hdX,Y)/boot/message' to menu.lst (replace
+%   X and Y with real values).
+%
 % Notes:
-%  - 'edit.init' must be called first before using 'edit.input'
+%  - use 'Timeout' callback to display timeout countdown
 %
-%  - 'edit.input' uses current color & font settings
+%  - boot when the timeout is up
 %
-%  - the final command line buffer that gets passed back to the bootloader
-%    depends a bit on the bootloader type: syslinux & co expect
-%    '<label> <args>', grub expects only '<args>'
+%  - pass kernel args correctly to grub
 %
-% Test with (from top level dir [/usr/share/gfxboot]) 'gfxtest -t example_05'.
+% Test with (from top level dir [/usr/share/gfxboot]) with
+% 'gfxtest -t example_06' (isolinux) or
+% 'gfxtest -t example_06 grub' (grub).
 %
 
 
@@ -85,6 +92,20 @@
 /sprintf {
   dup cvp length exch snprintf
 } def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% bootloader - boot loader type
+%
+% ( -- int1 )
+%
+% int1: boot loader type (0: lilo, 1:syslinux/isolinux, 2: grub)
+%
+/bootloader sysconfig getbyte def
+
+/lilo     bootloader 0 eq def
+/syslinux bootloader 1 eq def
+/grub     bootloader 2 eq def
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -167,13 +188,21 @@
     } if
   } if
 
-  key keyEnter eq {
-    % construct command line:
-    % syslinux expects '<label> <args>', so put the two strings together...
-    cmdline
-    menu.args menu.entry get
-    menu.texts menu.entry get
-    "%s %s %s" cmdtmp sprintf
+  % enter or timeout
+  key keyEnter eq key 0 eq or {
+    % construct command line: [label] + append_args + user_args
+    grub {
+      % grub expects just '<args>'
+      cmdline
+      menu.args menu.entry get
+      "%s %s" cmdtmp sprintf
+    } {
+      % syslinux expects '<label> <args>'
+      cmdline
+      menu.args menu.entry get
+      menu.texts menu.entry get
+      "%s %s %s" cmdtmp sprintf
+    } ifelse
     cmdtmp menu.entry 2 return
   } if
 
@@ -284,6 +313,34 @@
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Boot timeout counter.
+%
+% ( timeout time -- )
+%
+% timeout: total time in 18.2Hz steps, time: current value.
+%
+% Note: if the user hits a key to stop the timeout this function is called
+% with time = 0.
+%
+/Timeout {
+  /timeout.s.last timeout.s def
+  /timeout.s exch 10 mul 150 add 182 div def
+
+  pop	% we don't need it
+
+  timeout.s timeout.s.last ne {
+    % clear old value
+    720 20 moveto currentpoint fontheight 5 mul fontheight image
+    timeout.s 0 ne {
+      timeout.s "%us" time_str sprintf
+      timeout_color setcolor
+      time_str shadow_show
+    } if
+  } if
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % set 800x600 graphics mode
 % try 32 bit first; if no mode can be found, exit and continue without gfxboot
 %
@@ -307,6 +364,9 @@
 % used in KeyEvent
 /cmdtmp 1024 string def
 
+% to display timeout
+/time_str 10 string def
+
 % our input line
 /edit_obj [
   110			% x
@@ -318,10 +378,11 @@
 ] def
 
 % our colors
-/input_color 0x000000 def
-/menu_color  0xe0e000 def
-/arrow_color 0xffffff def
-/label_color 0x00a000 def
+/input_color   0x000000 def
+/menu_color    0xe0e000 def
+/arrow_color   0xffffff def
+/label_color   0x00a000 def
+/timeout_color 0xf0f0f0 def
 
 % say we're fine ('false' tells bootloader not to use gfxboot)
 true
