@@ -1,8 +1,8 @@
 diff --git a/core/comboot.inc b/core/comboot.inc
-index e5dc115..60506ce 100644
+index f39bfb1..0874526 100644
 --- a/core/comboot.inc
 +++ b/core/comboot.inc
-@@ -1087,6 +1087,7 @@ comboot_hook_entry:
+@@ -1088,6 +1088,7 @@ comboot_hook_entry:
  		push fs
  		push es
  		push ds
@@ -11,10 +11,10 @@ index e5dc115..60506ce 100644
  		pop ds
  		pop es
 diff --git a/core/ui.inc b/core/ui.inc
-index 59b5724..d56c148 100644
+index e37f2a7..6137dc9 100644
 --- a/core/ui.inc
 +++ b/core/ui.inc
-@@ -612,7 +612,11 @@ kernel_good:
+@@ -616,7 +616,11 @@ kernel_good:
  		mov [KernelCNameLen],di
  
  		; Default memory limit, can be overridden by image loaders
@@ -26,7 +26,7 @@ index 59b5724..d56c148 100644
  		mov [MyHighMemSize],eax
  
  		popad
-@@ -633,6 +637,7 @@ kernel_good:
+@@ -637,6 +641,7 @@ kernel_good:
  ; At this point, EAX contains the size of the kernel, SI contains
  ; the file handle/cluster pointer, and ECX contains the extension (if any.)
  ;

@@ -77,10 +77,24 @@ index 8bfc8b8..f458fc7 100644
                  call writestr
                  mov si,InitRDCName
 diff --git a/core/ui.inc b/core/ui.inc
-index 1b40717..be4f385 100644
+index 1b40717..9413f16 100644
 --- a/core/ui.inc
 +++ b/core/ui.inc
-@@ -468,6 +468,8 @@ bad_kernel:
+@@ -402,8 +402,12 @@ vk_check:
+ %if HAS_LOCALBOOT
+ 		; Is this a "localboot" pseudo-kernel?
+ 		cmp al,VK_LOCALBOOT		; al == KernelType
++		jne .no_local_boot
++		mov al,7
++		call [comboot_hook]
+ 		mov ax,[VKernelBuf+vk_rname]	; Possible localboot type
+-		je local_boot
++		jmp local_boot
++.no_local_boot:
+ %endif
+ 		jmp get_kernel
+ 
+@@ -468,6 +472,8 @@ bad_kernel:
  .really:
  		mov si,KernelName
                  mov di,KernelCName
@@ -89,7 +103,7 @@ index 1b40717..be4f385 100644
  		push di
                  call unmangle_name              ; Get human form
  		mov si,err_notfound		; Complain about missing kernel
-@@ -510,7 +512,10 @@ on_error:
+@@ -510,7 +516,10 @@ on_error:
  ;
  ; kernel_corrupt: Called if the kernel file does not seem healthy
  ;

@@ -1,5 +1,5 @@
 diff --git a/core/comboot.inc b/core/comboot.inc
-index 1a147c9..e5dc115 100644
+index 1923308..f39bfb1 100644
 --- a/core/comboot.inc
 +++ b/core/comboot.inc
 @@ -1043,12 +1043,14 @@ comapi_run2:
@@ -17,7 +17,7 @@ index 1a147c9..e5dc115 100644
  		clc
  		ret
  
-@@ -1171,6 +1173,7 @@ int22_count	equ ($-int22_table)/2
+@@ -1172,6 +1174,7 @@ int22_count	equ ($-int22_table)/2
  comboot_sp_save	dw 0
  comboot_hook	dw comboot_hook_nop
  comboot_far	dd 0
@@ -26,7 +26,7 @@ index 1a147c9..e5dc115 100644
  APIKeyWait	db 0
  APIKeyFlag	db 0
 diff --git a/core/ui.inc b/core/ui.inc
-index 2bc56a1..59b5724 100644
+index 353d59a..e37f2a7 100644
 --- a/core/ui.inc
 +++ b/core/ui.inc
 @@ -379,9 +379,13 @@ vk_check:

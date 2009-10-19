@@ -54,10 +54,10 @@ index 0000000..a98f9aa
 +}
 diff --git a/modules/gfxboot.c b/modules/gfxboot.c
 new file mode 100644
-index 0000000..cad1b1d
+index 0000000..6d31bce
 --- /dev/null
 +++ b/modules/gfxboot.c
-@@ -0,0 +1,1036 @@
+@@ -0,0 +1,1040 @@
 +/*
 + *
 + * gfxboot.c
@@ -1074,6 +1074,10 @@ index 0000000..cad1b1d
 +
 +    case 6:		// progress end: kernel loaded, stop gfxboot
 +      farcall(gfx.jmp_table[GFX_BC_PROGRESS_DONE], r);
++      gfx_done();
++      break;
++
++    case 7:		// stop gfxboot
 +      gfx_done();
 +      break;
 +  }

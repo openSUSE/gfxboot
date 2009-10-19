@@ -29,10 +29,10 @@ index f458fc7..f6ed644 100644
 +		section .data
 +QuietBoot	db 0			; Set if a quiet boot is requested
 diff --git a/core/ui.inc b/core/ui.inc
-index be4f385..2bc56a1 100644
+index 9413f16..353d59a 100644
 --- a/core/ui.inc
 +++ b/core/ui.inc
-@@ -596,7 +596,7 @@ kernel_good:
+@@ -600,7 +600,7 @@ kernel_good:
  		;
  		xor ax,ax
  		mov [InitRDPtr],ax

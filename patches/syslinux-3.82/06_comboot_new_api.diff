@@ -1,5 +1,5 @@
 diff --git a/core/comboot.inc b/core/comboot.inc
-index 1a1dbfe..1a147c9 100644
+index 1a1dbfe..1923308 100644
 --- a/core/comboot.inc
 +++ b/core/comboot.inc
 @@ -962,6 +962,45 @@ comapi_shufraw:
@@ -48,7 +48,7 @@ index 1a1dbfe..1a147c9 100644
  		section .data
  
  %macro		int21 2
-@@ -969,6 +1008,108 @@ comapi_shufraw:
+@@ -969,6 +1008,109 @@ comapi_shufraw:
  		dw %2
  %endmacro
  
@@ -122,6 +122,7 @@ index 1a1dbfe..1a147c9 100644
 +;    4: progress start
 +;    5: progress increment
 +;    6: progress end: kernel loaded, stop gfxboot
++;    7: stop gfxboot
 +;
 +comboot_hook_entry:
 +		pushad
@@ -157,7 +158,7 @@ index 1a1dbfe..1a147c9 100644
  int21_table:
  		int21	00h, comboot_return
  		int21	01h, comboot_getkey
-@@ -1021,8 +1162,16 @@ int22_table:
+@@ -1021,8 +1163,16 @@ int22_table:
  		dw comapi_closedir	; 0022 close directory
  		dw comapi_shufsize	; 0023 query shuffler size
  		dw comapi_shufraw	; 0024 cleanup, shuffle and boot raw
@@ -174,7 +175,7 @@ index 1a1dbfe..1a147c9 100644
  APIKeyWait	db 0
  APIKeyFlag	db 0
  
-@@ -1041,8 +1190,10 @@ feature_flags_len equ ($-feature_flags)
+@@ -1041,8 +1191,10 @@ feature_flags_len equ ($-feature_flags)
  err_notdos	db ': attempted DOS system call INT ',0
  err_comlarge	db 'COMBOOT image too large.', CR, LF, 0
  
