@@ -1877,12 +1877,15 @@ sub prepare_syslinux
 {
   local $_;
   my $file = shift;
+  my $comboot;
 
   die "Can't setup syslinux on $opt_media.\n" if $opt_media && $opt_media ne 'disk';
 
   $opt_syslinux = unpack_rpm $opt_syslinux if -f $opt_syslinux;
 
-  die "error: isolinux not found\n" unless -f "$opt_syslinux/$bl_list{syslinux}";
+  die "error: syslinux not found\n" unless -f "$opt_syslinux/$bl_list{syslinux}";
+
+  $comboot = 1 if -f "$opt_syslinux/usr/share/syslinux/gfxboot.com";
 
   my $menu = fake_menu 'install';
 
@@ -1937,6 +1940,8 @@ sub prepare_syslinux
 
     close F;
   }
+
+  system "cp $opt_syslinux/usr/share/syslinux/gfxboot.com $dst" if $comboot;
 
   for (@opt_test_addfiles) {
     system "cp -r $_ $dst" and die "error copying file: $_\n";
