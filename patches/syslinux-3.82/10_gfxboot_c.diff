@@ -54,10 +54,10 @@ index 0000000..a98f9aa
 +}
 diff --git a/modules/gfxboot.c b/modules/gfxboot.c
 new file mode 100644
-index 0000000..6d31bce
+index 0000000..01c6c84
 --- /dev/null
 +++ b/modules/gfxboot.c
-@@ -0,0 +1,1040 @@
+@@ -0,0 +1,1039 @@
 +/*
 + *
 + * gfxboot.c
@@ -1061,7 +1061,6 @@ index 0000000..6d31bce
 +
 +    case 4:		// progress start
 +      r->eax = r->ecx >> gfx_config.sector_shift;	// kernel size in sectors
-+      r->eax = 0;
 +      r->esi = comboot + (uint32_t) current_label;
 +      farcall(gfx.jmp_table[GFX_BC_PROGRESS_INIT], r);
 +      break;
