@@ -1236,6 +1236,10 @@ gfx_menu_init:
 		movzx edi,word [es:esi+menu_ent_list+2]
 		shl edi,4
 		add edi,eax
+		cmp esi,1 << 20
+		jb .low_mem
+		mov edi,[es:esi+menu_ent_list]
+.low_mem:
 		or ecx,ecx
 		jz gfx_menu_init_45
 gfx_menu_init_40:
@@ -1257,6 +1261,10 @@ gfx_menu_init_45:
 		movzx edi,word [es:esi+menu_arg_list+2]
 		shl edi,4
 		add edi,eax
+		cmp esi,1 << 20
+		jb .low_mem
+		mov edi,[es:esi+menu_arg_list]
+.low_mem:
 		or ecx,ecx
 		jz gfx_menu_init_55
 gfx_menu_init_50:
@@ -1272,6 +1280,10 @@ gfx_menu_init_55:
 		movzx edi,word [es:esi+menu_default+2]
 		shl edi,4
 		add eax,edi
+		cmp esi,1 << 20
+		jb .low_mem
+		mov eax,[es:esi+menu_default]
+.low_mem:
 		mov [tmp_var_3],eax
 
 		mov ecx,cb_MenuInit
