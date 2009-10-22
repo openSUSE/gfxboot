@@ -948,6 +948,7 @@ my $opt_help_show;
 my $opt_help_navi;
 my @opt_help_used;
 my %opt_help_entity;
+my $opt_no_unpack = 0;
 
 my $sudo;
 my %config;
@@ -1038,6 +1039,7 @@ GetOptions(
   'used-pages=s{1,}'    => \@opt_help_used,
   'navi=s'              => \$opt_help_navi,
   'define=s%{1,}'       => \%opt_help_entity,
+  'no-unpack'           => \$opt_no_unpack,
 ) || usage 1;
 
 $ENV{PATH} = "/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin";
@@ -1797,11 +1799,15 @@ sub prepare_isolinux
     mkdir "$dst/boot/$arch_dir/loader", 0755;
   }
 
-  my $bl_unpacked;
-  ( $bl_unpacked ) = unpack_archive $file;
-  my $bl_packed = pack_archive $bl_unpacked, 'bootlogo';
-
-  system "cp -a $bl_packed/* $dst/${loader}";
+  if($opt_no_unpack) {
+    system "cp -a $file $dst/${loader}/bootlogo";
+  }
+  else {
+    my $bl_unpacked;
+    ( $bl_unpacked ) = unpack_archive $file;
+    my $bl_packed = pack_archive $bl_unpacked, 'bootlogo';
+    system "cp -a $bl_packed/* $dst/${loader}";
+  }
 
   system "cp /boot/vmlinuz $dst/${loader}linux" if -f "/boot/vmlinuz";
   system "cp /boot/initrd $dst/${loader}initrd" if -f "/boot/initrd";
@@ -1897,11 +1903,15 @@ sub prepare_syslinux
   my $dst = $gfxboot_tmp->dir('syslinux');
   my $img = $gfxboot_tmp->file('syslinux.img');
 
-  my $bl_unpacked;
-  ( $bl_unpacked ) = unpack_archive $file;
-  my $bl_packed = pack_archive $bl_unpacked, 'bootlogo';
-
-  system "cp -a $bl_packed/* $dst";
+  if($opt_no_unpack) {
+    system "cp -a $file $dst/bootlogo";
+  }
+  else {
+    my $bl_unpacked;
+    ( $bl_unpacked ) = unpack_archive $file;
+    my $bl_packed = pack_archive $bl_unpacked, 'bootlogo';
+    system "cp -a $bl_packed/* $dst";
+  }
 
   system "cp /boot/vmlinuz $dst/linux" if -f "/boot/vmlinuz";
   system "cp /boot/initrd $dst/initrd" if -f "/boot/initrd";
@@ -2013,11 +2023,15 @@ sub prepare_pxelinux
     mkdir "$dst/boot/$arch_dir/loader", 0755;
   }
 
-  my $bl_unpacked;
-  ( $bl_unpacked ) = unpack_archive $file;
-  my $bl_packed = pack_archive $bl_unpacked, 'bootlogo';
-
-  system "cp -a $bl_packed/* $dst/${loader}";
+  if($opt_no_unpack) {
+    system "cp -a $file $dst/${loader}/bootlogo";
+  }
+  else {
+    my $bl_unpacked;
+    ( $bl_unpacked ) = unpack_archive $file;
+    my $bl_packed = pack_archive $bl_unpacked, 'bootlogo';
+    system "cp -a $bl_packed/* $dst/${loader}";
+  }
 
   system "cp /boot/vmlinuz $dst/${loader}linux" if -f "/boot/vmlinuz";
   system "cp /boot/initrd $dst/${loader}initrd" if -f "/boot/initrd";
