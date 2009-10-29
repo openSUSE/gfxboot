@@ -68,7 +68,7 @@ li.size			equ 12		; search for 'li.size'!
 link_entries		equ 64
 
 
-; sysconfig data
+; sysconfig data (64 bytes [sc.size])
 sc.bootloader		equ 0
 sc.sector_shift		equ 1
 sc.media_type		equ 2
@@ -90,6 +90,11 @@ sc.archive_start	equ 36
 sc.archive_end		equ 40
 sc.mem0_start		equ 44
 sc.mem0_end		equ 48
+sc.xmem_start		equ 52
+sc.xmem_end		equ 56
+sc.features		equ 60
+sc.reserved_1		equ 62
+sc.size			equ 64
 
 
 ; enum_type_t
@@ -822,6 +827,22 @@ gfx_init_20:
 		pop dword [malloc.area+4]
 
 		mov ebx,[boot.sysconfig]
+		cmp byte [es:ebx+sc.sysconfig_size],sc.size
+		jb gfx_init_28
+		; pass back feature flags
+		mov word [es:ebx+sc.features],3
+		; only one xmem area
+		mov eax,[es:ebx+sc.xmem_start]
+		mov edx,[es:ebx+sc.xmem_end]
+		cmp edx,eax
+		jbe gfx_init_28
+		; ok, use only this one
+		mov [malloc.area+8],eax
+		mov [malloc.area+8+4],edx
+		jmp gfx_init_40
+
+gfx_init_28:
+		; old way to specify extended mem areas
 		mov esi,malloc.area+8
 		mov ecx,malloc.areas-1			; extended mem areas
 gfx_init_30:
