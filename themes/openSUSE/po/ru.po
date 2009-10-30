@@ -10,13 +10,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bootloader.ru\n"
 "POT-Creation-Date: 2008-09-26 18:04+0200\n"
-"PO-Revision-Date: 2008-11-10 20:42+0300\n"
+"PO-Revision-Date: 2009-10-05 19:35+0400\n"
 "Last-Translator: Alexander Melentiev <alex239@gmail.com>\n"
 "Language-Team: Russian <opensuse-translation-ru@opensuse.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 0.3\n"
+"X-Generator: Lokalize 1.0\n"
 "Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #. ok button label
@@ -32,7 +32,7 @@ msgstr "Отмена"
 #. reboot button label
 #. txt_reboot
 msgid "Reboot"
-msgstr "Перезагрузить"
+msgstr "Перезагрузка"
 
 #. continue button label
 #. txt_continue
@@ -53,7 +53,7 @@ msgstr "Загрузка с жёсткого диска"
 
 #. txt_rescue
 msgid "Rescue System"
-msgstr "Спасательная система"
+msgstr "Восстановление системы"
 
 #. txt_memtest
 msgid "Memory Test"
@@ -213,7 +213,7 @@ msgstr "Пользователь (использовать \"guest\", если �
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "Установка по SMB (из общей\tпапки Windows)"
+msgstr "Установка по SMB (из общей папки Windows)"
 
 #. dialog title for http installation
 #. txt_http_title
@@ -233,7 +233,7 @@ msgstr "Домен\n"
 #. button label for other/more options
 #. txt_other_options
 msgid "Other Options"
-msgstr "Другие варианты"
+msgstr "Другие параметры"
 
 #. label for language selection
 #. txt_language
@@ -294,7 +294,7 @@ msgstr "Текстовый режим"
 #. menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr "Проверка микропрограммного обеспечения"
+msgstr "Проверка прошивок"
 
 #. txt_dud_file_msg
 msgid ""
@@ -303,7 +303,7 @@ msgid ""
 "by commas ',') here:\n"
 msgstr ""
 "Чтобы напрямую загрузить обновления драйверов с компакт-диска,\n"
-"введите имена файлов обновления драйверов (разделенных\n"
+"введите имена файлов обновлений драйверов (разделенные\n"
 "запятыми ','):\n"
 
 #. install source menu title
@@ -316,7 +316,7 @@ msgstr "Источник"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_video_mode
 msgid "Video Mode"
-msgstr "Видеорежим"
+msgstr "Разрешение"
 
 #. driver update dialog title
 #. -> txt_dud_file_msg
@@ -329,7 +329,7 @@ msgstr "Обновление драйверов"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr "Арх."
+msgstr "Архитектура"
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
@@ -368,7 +368,7 @@ msgstr "Восстановление установленной системы"
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr "Проверка носителя установки"
+msgstr "Проверка установочного носителя"
 
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
@@ -378,70 +378,71 @@ msgstr "Клавиатура"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "Загрузить обновление драйверов"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr ""
+msgstr "Введите URL обновления драйверов\n"
 
 #. menu item
 #. txt_http_proxy
 msgid "HTTP Proxy"
-msgstr ""
+msgstr "HTTP-прокси"
 
 #. menu item
 #. txt_network_config
 msgid "Network Config"
-msgstr ""
+msgstr "Настройка сети"
 
 #. menu item
 #. txt_no_network
 msgid "No Network"
-msgstr ""
+msgstr "Нет сети"
 
 #. short menu item for manual network config (NOT some kind of manual)
 #. txt_manual_network
 msgid "Manual"
-msgstr ""
+msgstr "Вручную"
 
 #. dialog title for manual network config
 #. txt_manual_network_title
 msgid "Manual Network Config"
-msgstr ""
+msgstr "Ручная настройка сети"
 
 #. label for ip address
 #. txt_host_ip
 msgid "Host IP\n"
-msgstr ""
+msgstr "IP-адрес узла\n"
 
 #. label for gateway ip
 #. txt_gateway_ip
 msgid "Gateway\n"
-msgstr ""
+msgstr "Шлюз\n"
 
 #. label for dns domain name (like 'opensuse.org')
 #. txt_domain_name
 msgid "Domain Name\n"
-msgstr ""
+msgstr "Имя домена\n"
 
 #. label for nameserver list
 #. txt_nameservers
 msgid "Nameservers (separated by ',')\n"
-msgstr ""
+msgstr "Серверы имён (разделённые ',')\n"
 
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
 msgid "Netmask\n(or use '/N' notation with Host IP)\n"
 msgstr ""
+"Маска сети\n"
+"(или используйте нотацию '/N' в поле IP-адреса)\n"
 
 #. label for Live CD installation
 #. txt_live_kde
 msgid "openSUSE Live (KDE)"
-msgstr ""
+msgstr "openSUSE Live (KDE)"
 
 #. label for Live CD installation
 #. txt_live_gnome
 msgid "openSUSE Live (GNOME)"
-msgstr ""
-
+msgstr "openSUSE Live (GNOME)"

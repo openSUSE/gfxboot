@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-09-23 21:18-0300\n"
-"Last-Translator: Luiz Fernando Ranghetti <elchevive68@gmail.com>\n"
+"PO-Revision-Date: 2009-10-05 10:45-0300\n"
+"Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <opensuse-pt@opensuse.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Poedit-Language: Portuguese\n"
 "X-Poedit-Country: BRAZIL\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 1.0\n"
 
 #. ok button label
 #. txt_ok
@@ -376,70 +376,71 @@ msgstr "Teclado"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "Baixar a atualização de driver"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr ""
+msgstr "Digite a URL da atualização de driver\n"
 
 #. menu item
 #. txt_http_proxy
 msgid "HTTP Proxy"
-msgstr ""
+msgstr "Proxy HTTP"
 
 #. menu item
 #. txt_network_config
 msgid "Network Config"
-msgstr ""
+msgstr "Configuração de rede"
 
 #. menu item
 #. txt_no_network
 msgid "No Network"
-msgstr ""
+msgstr "Nenhuma rede"
 
 #. short menu item for manual network config (NOT some kind of manual)
 #. txt_manual_network
 msgid "Manual"
-msgstr ""
+msgstr "Manual"
 
 #. dialog title for manual network config
 #. txt_manual_network_title
 msgid "Manual Network Config"
-msgstr ""
+msgstr "Configuração de rede manual"
 
 #. label for ip address
 #. txt_host_ip
 msgid "Host IP\n"
-msgstr ""
+msgstr "IP da máquina\n"
 
 #. label for gateway ip
 #. txt_gateway_ip
 msgid "Gateway\n"
-msgstr ""
+msgstr "Gateway\n"
 
 #. label for dns domain name (like 'opensuse.org')
 #. txt_domain_name
 msgid "Domain Name\n"
-msgstr ""
+msgstr "Nome do domínio\n"
 
 #. label for nameserver list
 #. txt_nameservers
 msgid "Nameservers (separated by ',')\n"
-msgstr ""
+msgstr "Servidores de nome (separados por ',')\n"
 
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
 msgid "Netmask\n(or use '/N' notation with Host IP)\n"
 msgstr ""
+"Máscara de rede\n"
+"(ou use a notação '/N' com o IP da máquina)\n"
 
 #. label for Live CD installation
 #. txt_live_kde
 msgid "openSUSE Live (KDE)"
-msgstr ""
+msgstr "openSUSE Live (KDE)"
 
 #. label for Live CD installation
 #. txt_live_gnome
 msgid "openSUSE Live (GNOME)"
-msgstr ""
-
+msgstr "openSUSE Live (GNOME)"

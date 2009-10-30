@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: YaST (@memory@)\n"
 "Report-Msgid-Bugs-To: i18n@suse.de\n"
 "POT-Creation-Date: 2008-01-03 17:06+0100\n"
-"PO-Revision-Date: 2008-11-02 11:05+0700\n"
+"PO-Revision-Date: 2008-11-27 22:48+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -38,18 +38,6 @@ msgstr "ทำต่อไป"
 #. txt_install
 msgid "Installation"
 msgstr "ทำการติดตั้ง"
-
-#. txt_manual_install
-msgid "Manual Installation"
-msgstr "ทำการติดตั้งด้วยตนเอง"
-
-#. txt_noacpi_install
-msgid "Installation--ACPI Disabled"
-msgstr "ทำการติดตั้ง--ปิดการใช้งาน ACPI"
-
-#. txt_safe_install
-msgid "Installation--Safe Settings"
-msgstr "ทำการติดตั้ง--ตั้งค่าแบบปลอดภัย"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
@@ -163,21 +151,6 @@ msgstr "รหัสผ่าน"
 msgid "Get your driver update floppy ready."
 msgstr "พร้อมรับแผ่นฟลอปปีไดรเวอร์รุ่นใหม่"
 
-#. dvd warning title
-#. txt_dvd_warning_title
-msgid "DVD Error"
-msgstr "ดีวีดีผิดพลาด"
-
-#. txt_dvd_warning2
-msgid ""
-"This is a two-sided DVD. You have booted from the second side.\n"
-"\n"
-"Turn the DVD over then continue."
-msgstr ""
-"นี่เป็นแผ่นดีวีดีแบบสองด้าน และคุณได้บูตจากด้านที่สอง\n"
-" \n"
-" โปรดพลิกด้านแล้วทำต่อไป"
-
 #. power off dialog title
 #. txt_power_off_title
 msgid "Power Off"
@@ -262,18 +235,6 @@ msgstr "ตัวเลือกอื่น"
 #. txt_language
 msgid "Language"
 msgstr "ภาษา"
-
-#. txt_apic
-msgid "Installation--IOAPIC Enabled"
-msgstr "ทำการติดตั้ง--เปิดใช้งาน IOAPIC"
-
-#. txt_noapic_install
-msgid "Installation--IOAPIC Disabled"
-msgstr "ทำการติดตั้ง--ปิดการใช้งาน IOAPIC"
-
-#. txt_nolapic_install
-msgid "Installation--Local APIC Disabled"
-msgstr "ทำการติดตั้ง--ปิดการใช้งาน APIC ภายใน"
 
 #. txt_yes
 msgid "Yes"
@@ -413,9 +374,69 @@ msgstr "แป้นพิมพ์"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "ดาวน์โหลดไดรเวอร์รุ่นใหม่"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
+msgstr "ป้อนที่อยู่ URL ของไดรเวอร์รุ่นใหม่\n"
+
+#. menu item
+#. txt_http_proxy
+msgid "HTTP Proxy"
+msgstr ""
+
+#. menu item
+#. txt_network_config
+msgid "Network Config"
+msgstr ""
+
+#. menu item
+#. txt_no_network
+msgid "No Network"
+msgstr ""
+
+#. short menu item for manual network config (NOT some kind of manual)
+#. txt_manual_network
+msgid "Manual"
+msgstr ""
+
+#. dialog title for manual network config
+#. txt_manual_network_title
+msgid "Manual Network Config"
+msgstr ""
+
+#. label for ip address
+#. txt_host_ip
+msgid "Host IP\n"
+msgstr ""
+
+#. label for gateway ip
+#. txt_gateway_ip
+msgid "Gateway\n"
+msgstr ""
+
+#. label for dns domain name (like 'opensuse.org')
+#. txt_domain_name
+msgid "Domain Name\n"
+msgstr ""
+
+#. label for nameserver list
+#. txt_nameservers
+msgid "Nameservers (separated by ',')\n"
+msgstr ""
+
+#. label for netmask; 'Host IP' refers to label txt_host_ip above
+#. txt_netmask
+msgid "Netmask\n(or use '/N' notation with Host IP)\n"
+msgstr ""
+
+#. label for Live CD installation
+#. txt_live_kde
+msgid "openSUSE Live (KDE)"
+msgstr ""
+
+#. label for Live CD installation
+#. txt_live_gnome
+msgid "openSUSE Live (GNOME)"
 msgstr ""

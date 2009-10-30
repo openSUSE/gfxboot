@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bootloader.pa\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-11-11 08:07+0530\n"
+"PO-Revision-Date: 2008-11-23 07:47+0530\n"
 "Last-Translator: KDB <brar.kd@gmail.com>\n"
 "Language-Team: Panjabi <punjabi-l10n@list.sf.net>\n"
 "MIME-Version: 1.0\n"
@@ -384,12 +384,12 @@ msgstr "ਕੀਬੋਰਡ"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "ਡਰਾਇਵਰ ਅੱਪਡੇਟ ਡਾਊਨਲੋਡ ਕਰੋ"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr ""
+msgstr "ਡਰਾਇਵਰ ਅੱਪਡੇਟ URL ਦਿਓ\n"
 
 #. menu item
 #. txt_http_proxy
@@ -450,4 +450,3 @@ msgstr ""
 #. txt_live_gnome
 msgid "openSUSE Live (GNOME)"
 msgstr ""
-

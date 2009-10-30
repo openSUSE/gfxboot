@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-06-02 02:05+0800\n"
-"Last-Translator: Thruth Wang <lihaow@opera.com>\n"
+"PO-Revision-Date: 2008-11-24 18:08+0800\n"
+"Last-Translator: Thruth Wang <wanglihao@gmail.com>\n"
 "Language-Team: Simplified Chinese\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -371,12 +371,12 @@ msgstr "键盘"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "下载驱动程序更新"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr ""
+msgstr "输入驱动程序更新 URL\n"
 
 #. menu item
 #. txt_http_proxy
@@ -437,4 +437,3 @@ msgstr ""
 #. txt_live_gnome
 msgid "openSUSE Live (GNOME)"
 msgstr ""
-

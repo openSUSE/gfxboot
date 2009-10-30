@@ -10,9 +10,9 @@
 # Kéménczy Kálmán <kkemenczy@novell.com>, 2006.
 msgid ""
 msgstr ""
-"Project-Id-Version: bootloader\n"
+"Project-Id-Version: bootloader.hu\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-11-18 09:05+0100\n"
+"PO-Revision-Date: 2009-10-05 18:26+0200\n"
 "Last-Translator: Kalman Kemenczy <kkemenczy@novell.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +29,7 @@ msgstr "OK"
 #. cancel button label
 #. txt_cancel
 msgid "Cancel"
-msgstr "Mégsem"
+msgstr "Mégse"
 
 #. reboot button label
 #. txt_reboot
@@ -75,12 +75,12 @@ msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"Kilép a grafikus rendszerindító menüből.\n"
-"El fog indulni a szöveges módú felület."
+"Kilép a grafikus rendszerindító menüből és\n"
+"elindul a karakteres mód."
 
 #. txt_help
 msgid "Help"
-msgstr "Segítség"
+msgstr "Súgó"
 
 #. window title for kernel loading (see txt_load_kernel)
 #. txt_load_kernel_title
@@ -360,12 +360,12 @@ msgstr "ACPI nélkül"
 #. -> similar to txt_nolapic_install
 #. txt_kernel_nolapic
 msgid "No Local APIC"
-msgstr "Helyi APIC nélkül"
+msgstr "Helyi APIC-támogatás nélkül"
 
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr "Telepített rendszer javítása"
+msgstr "A telepített rendszer javítása"
 
 #. menu item
 #. txt_mediacheck
@@ -380,70 +380,71 @@ msgstr "Billentyűzet"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "Illesztőprogram-frissítés letöltése"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr ""
+msgstr "Illesztőprogram-frissítés URL-je\n"
 
 #. menu item
 #. txt_http_proxy
 msgid "HTTP Proxy"
-msgstr ""
+msgstr "HTTP proxy"
 
 #. menu item
 #. txt_network_config
 msgid "Network Config"
-msgstr ""
+msgstr "Hálózati beállítás"
 
 #. menu item
 #. txt_no_network
 msgid "No Network"
-msgstr ""
+msgstr "Nincs hálózat"
 
 #. short menu item for manual network config (NOT some kind of manual)
 #. txt_manual_network
 msgid "Manual"
-msgstr ""
+msgstr "Kézi"
 
 #. dialog title for manual network config
 #. txt_manual_network_title
 msgid "Manual Network Config"
-msgstr ""
+msgstr "Kézi hálózatbeállítás"
 
 #. label for ip address
 #. txt_host_ip
 msgid "Host IP\n"
-msgstr ""
+msgstr "Gép IP\n"
 
 #. label for gateway ip
 #. txt_gateway_ip
 msgid "Gateway\n"
-msgstr ""
+msgstr "Átjáró\n"
 
 #. label for dns domain name (like 'opensuse.org')
 #. txt_domain_name
 msgid "Domain Name\n"
-msgstr ""
+msgstr "Tartománynév\n"
 
 #. label for nameserver list
 #. txt_nameservers
 msgid "Nameservers (separated by ',')\n"
-msgstr ""
+msgstr "Névkiszolgáló (vesszővel elválasztva)\n"
 
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
 msgid "Netmask\n(or use '/N' notation with Host IP)\n"
 msgstr ""
+"Hálózati maszk\n"
+"(vagy /N használata a gép IP-vel)\n"
 
 #. label for Live CD installation
 #. txt_live_kde
 msgid "openSUSE Live (KDE)"
-msgstr ""
+msgstr "openSUSE Live (KDE)"
 
 #. label for Live CD installation
 #. txt_live_gnome
 msgid "openSUSE Live (GNOME)"
-msgstr ""
-
+msgstr "openSUSE Live (GNOME)"

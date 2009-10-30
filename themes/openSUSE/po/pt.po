@@ -442,4 +442,3 @@ msgstr ""
 #. txt_live_gnome
 msgid "openSUSE Live (GNOME)"
 msgstr ""
-

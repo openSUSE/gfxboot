@@ -5,19 +5,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bootloader.wa\n"
 "POT-Creation-Date: 2006-10-01 19:37+0200\n"
-"PO-Revision-Date: 2008-11-11 18:08+0100\n"
-"Last-Translator: \n"
-"Language-Team: American English <kde-i18n-doc@lists.kde.org>\n"
+"PO-Revision-Date: 2009-10-14 18:42+0200\n"
+"Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
+"Language-Team: American English <linux-wa@walon.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: LoKalize 0.2\n"
+"X-Generator: Lokalize 0.3\n"
 
 #. ok button label
 #. txt_ok
 msgid "OK"
-msgstr "'l est Bon"
+msgstr "I va"
 
 #. cancel button label
 #. txt_cancel
@@ -373,70 +373,71 @@ msgstr "Taprece"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "Aberweter metaedje a djoû do mineu"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr ""
+msgstr "Sititchî l' URL do metaedje a djoû do mineu\n"
 
 #. menu item
 #. txt_http_proxy
 msgid "HTTP Proxy"
-msgstr ""
+msgstr "Procsi HTTP"
 
 #. menu item
 #. txt_network_config
 msgid "Network Config"
-msgstr ""
+msgstr "Apontiaedje del rantoele"
 
 #. menu item
 #. txt_no_network
 msgid "No Network"
-msgstr ""
+msgstr "Nole rantoele"
 
 #. short menu item for manual network config (NOT some kind of manual)
 #. txt_manual_network
 msgid "Manual"
-msgstr ""
+msgstr "Al mwin"
 
 #. dialog title for manual network config
 #. txt_manual_network_title
 msgid "Manual Network Config"
-msgstr ""
+msgstr "Apontiaedje al mwin del rantoele"
 
 #. label for ip address
 #. txt_host_ip
 msgid "Host IP\n"
-msgstr ""
+msgstr "IP do lodjoe\n"
 
 #. label for gateway ip
 #. txt_gateway_ip
 msgid "Gateway\n"
-msgstr ""
+msgstr "Pontea\n"
 
 #. label for dns domain name (like 'opensuse.org')
 #. txt_domain_name
 msgid "Domain Name\n"
-msgstr ""
+msgstr "No do dominne\n"
 
 #. label for nameserver list
 #. txt_nameservers
 msgid "Nameservers (separated by ',')\n"
-msgstr ""
+msgstr "Sierveus di nos (dispårtis pa des « , »)\n"
 
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
 msgid "Netmask\n(or use '/N' notation with Host IP)\n"
 msgstr ""
+"Masse di rantoele\n"
+"(oudonbén siervoz do scrijhaedje « /N » avou l' IP do lodjoe)\n"
 
 #. label for Live CD installation
 #. txt_live_kde
 msgid "openSUSE Live (KDE)"
-msgstr ""
+msgstr "Vicante plake d' openSUSE (KDE)"
 
 #. label for Live CD installation
 #. txt_live_gnome
 msgid "openSUSE Live (GNOME)"
-msgstr ""
-
+msgstr "Vicante plake d' openSUSE (GNOME)"

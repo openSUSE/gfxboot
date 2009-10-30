@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: bootloader.ko\n"
 "Report-Msgid-Bugs-To: translation@suse.de\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-06-14 18:12+0900\n"
-"Last-Translator: YunSeok Choi <xein@naver.com>\n"
+"PO-Revision-Date: 2009-10-23 02:24+0900\n"
+"Last-Translator: Yunseok Choi <xein@naver.com>\n"
 "Language-Team: Korean <xein@naver.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,7 +30,7 @@ msgstr "취소"
 #. reboot button label
 #. txt_reboot
 msgid "Reboot"
-msgstr "재부팅"
+msgstr "시스템 다시 시작"
 
 #. continue button label
 #. txt_continue
@@ -156,7 +156,7 @@ msgstr "플로피디스크에서 드라이버를 업데이트 준비"
 #. power off dialog title
 #. txt_power_off_title
 msgid "Power Off"
-msgstr "전원 OFF"
+msgstr "전원 끄기"
 
 #. txt_power_off
 msgid "Halt the system now?"
@@ -178,7 +178,7 @@ msgstr "디스크 장치 (비어있을 경우 모든 디스크 검색)\n"
 
 #. txt_directory
 msgid "Directory\n"
-msgstr "디렉토리\n"
+msgstr "디렉터리\n"
 
 #. dialog title for ftp installation
 #. txt_ftp_title
@@ -376,70 +376,71 @@ msgstr "키보드"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "드라이버 업데이트 다운로드"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr ""
+msgstr "드라이버 업데이트 URL 입력\n"
 
 #. menu item
 #. txt_http_proxy
 msgid "HTTP Proxy"
-msgstr ""
+msgstr "HTTP 프록시"
 
 #. menu item
 #. txt_network_config
 msgid "Network Config"
-msgstr ""
+msgstr "네트워크 설정"
 
 #. menu item
 #. txt_no_network
 msgid "No Network"
-msgstr ""
+msgstr "네트워크 없음"
 
 #. short menu item for manual network config (NOT some kind of manual)
 #. txt_manual_network
 msgid "Manual"
-msgstr ""
+msgstr "수동"
 
 #. dialog title for manual network config
 #. txt_manual_network_title
 msgid "Manual Network Config"
-msgstr ""
+msgstr "수동 네트워크 설정"
 
 #. label for ip address
 #. txt_host_ip
 msgid "Host IP\n"
-msgstr ""
+msgstr "호스트 IP\n"
 
 #. label for gateway ip
 #. txt_gateway_ip
 msgid "Gateway\n"
-msgstr ""
+msgstr "게이트웨이\n"
 
 #. label for dns domain name (like 'opensuse.org')
 #. txt_domain_name
 msgid "Domain Name\n"
-msgstr ""
+msgstr "도메인 네임\n"
 
 #. label for nameserver list
 #. txt_nameservers
 msgid "Nameservers (separated by ',')\n"
-msgstr ""
+msgstr "네임서버 (콤마','로 구분)\n"
 
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
 msgid "Netmask\n(or use '/N' notation with Host IP)\n"
 msgstr ""
+"넷마스크\n"
+"(또는 '/N'으로 호스트 IP와 함께 사용)\n"
 
 #. label for Live CD installation
 #. txt_live_kde
 msgid "openSUSE Live (KDE)"
-msgstr ""
+msgstr "오픈수세 라이브 (KDE)"
 
 #. label for Live CD installation
 #. txt_live_gnome
 msgid "openSUSE Live (GNOME)"
-msgstr ""
-
+msgstr "오픈수세 라이브 (그놈)"
