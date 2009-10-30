@@ -2,22 +2,6 @@
 <a name="o_acpi">Izbori kernela: acpi</a>
 </h3>
 
-<p>
-ACPI (Advanced Configuration and Power Interface) is a
-standard that defines power and configuration management interfaces
-between an operating system and the BIOS. By default, <em>acpi</em> is
-switched on when a BIOS is detected that is newer than from year
-2000. There are several commonly
-used parameters to control the behavior of ACPI:
-<ul>
-  <li><em>pci=noacpi</em> -- do not use ACPI to route PCI interrupts</li>
-  <li><em>acpi=oldboot</em> -- only the parts of ACPI that are relevant for booting remain activated</li>
-  <li><em>acpi=off</em> -- switch off ACPI completely</li>
-  <li><em>acpi=force</em> -- switch on ACPI even if your BIOS is dated before 2000</li>
-</ul>
-</p>
+<p>ACPI (Advanced Configuration and Power Interface) je standard koji definira sučelja upravljanja energijom i postavkama između operacijskog sustava i BIOS-a. Po pretpostavci, <em>acpi</em> je uključen kada BIOS detektira da je mlađi od 2000. godine. Postoji nekoliko uobičajenih parametara za kontrolu ponašanja ACPI-a: <ul><li><em>pci=noacpi</em> -- nemoj koristiti ACPI za usmjeravanje PCI prekida</li><li><em>acpi=oldboot</em> -- samo dijelovi ACPI-a koji su nužni za podizanje sustava ostaju aktivni</li><li><em>acpi=off</em> -- isključi ACPI u potpunosti</li><li><em>acpi=force</em> -- uključi ACPI čak ako je BIOS napravljen prije 2000. godine</li></ul></p>
 
-<p>
-Especially on new computers, it replaces the old
-<a href="#o_apm">apm</a> system.
-</p>
+<p>Osobitno na novim računalima, zamjenjuje stari <a href="#o_apm">apm</a> sustav.</p>
