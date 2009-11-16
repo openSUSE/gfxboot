@@ -54,10 +54,10 @@ index 0000000..a98f9aa
 +}
 diff --git a/modules/gfxboot.c b/modules/gfxboot.c
 new file mode 100644
-index 0000000..01c6c84
+index 0000000..a59da40
 --- /dev/null
 +++ b/modules/gfxboot.c
-@@ -0,0 +1,1039 @@
+@@ -0,0 +1,1040 @@
 +/*
 + *
 + * gfxboot.c
@@ -724,6 +724,7 @@ index 0000000..01c6c84
 +      r->ebx = (uint32_t) gfx.fname_buf;
 +      r->eax = 0x25;		// Get current working directory
 +      x86int(0x22, r);
++      r->eax = (r->eflags & X86_CF) ? 1 : 0;
 +      break;
 +
 +    case 5:	// cb_readsector
