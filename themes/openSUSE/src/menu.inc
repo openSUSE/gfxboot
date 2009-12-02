@@ -213,7 +213,8 @@
 
   /menu.bar.width
     menu.bar.min.width
-    menu.texts { menuitemmap strsize pop menu.text.xofs 2 mul add 2 add max } forall
+    % also leave space for timeout indicator (+24)
+    menu.texts { menuitemmap strsize pop menu.text.xofs 2 mul add 2 add 24 add max } forall
   def
 
   0 1 menu.visible.entries 1 sub {
