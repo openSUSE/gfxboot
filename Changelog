@@ -1,3 +1,7 @@
+10/12/2009:	v4.1.23
+	- leave more room for timeout indicator (bnc #551718)
+	- center main menu (bnc #562089)
+
 6/2/2009:	v4.1.22
 	- updated translations
 
