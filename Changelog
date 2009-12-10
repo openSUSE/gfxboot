@@ -1,4 +1,6 @@
+10/12/2009:	v4.1.41
 	- leave more room for timeout indicator (bnc #551718)
+	- center main menu (bnc #562089)
 
 16/11/2009:	v4.1.40
 	- syslinux patch: fix chdir() return value

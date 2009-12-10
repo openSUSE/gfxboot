@@ -206,9 +206,6 @@
 /main.drawmenu {
   menu.text.normal setcolor
 
-  /x menu.start.x def
-  /y menu.start.y def
-
   /menu.bar.width.old menu.bar.width def
 
   /menu.bar.width
@@ -216,6 +213,14 @@
     % also leave space for timeout indicator (+24)
     menu.texts { menuitemmap strsize pop menu.text.xofs 2 mul add 2 add 24 add max } forall
   def
+
+  % center menu
+  menu.start.x -1 eq {
+    /menu.start.x clip.size pop menu.bar.width sub 2 div 0 max def
+  } if
+
+  /x menu.start.x def
+  /y menu.start.y def
 
   0 1 menu.visible.entries 1 sub {
    x y moveto currentpoint menu.bar.width.old menu.bar.height image
