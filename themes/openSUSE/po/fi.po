@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader.fi\n"
-"PO-Revision-Date: 2008-05-13 10:48+0300\n"
+"PO-Revision-Date: 2008-11-22 21:00+0200\n"
 "Last-Translator: Jyri Palokangas <jyri.palokangas@opensuse.org>\n"
 "Language-Team: suomi <fi@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -416,9 +416,9 @@ msgstr "Näppäimistö"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "Lataa ohjainpäivitys"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr ""
+msgstr "Anna ohjainpäivityksen verkko-osoite\n"

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2009-01-21 10:05\n"
+"PO-Revision-Date: 2010-02-15 11:11\n"
 "Last-Translator: Novell Language <language@novell.com>\n"
 "Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "キャンセル"
 #. reboot button label
 #. txt_reboot
 msgid "Reboot"
-msgstr "再起動"
+msgstr "リブート"
 
 #. continue button label
 #. txt_continue

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2009-01-21 13:40\n"
+"PO-Revision-Date: 2010-03-24 15:28\n"
 "Last-Translator: Novell Language <language@novell.com>\n"
 "Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
@@ -114,7 +114,7 @@ msgstr ""
 #. info box title
 #. txt_info_title
 msgid "Boot Loader"
-msgstr "開機載入器"
+msgstr "開機載入程式"
 
 #. error box title
 #. txt_error_title
@@ -307,7 +307,7 @@ msgstr "安裝或更新 ZEN 分割區"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "重新安裝 ZEN 分割區開機載入器"
+msgstr "重新安裝 ZEN 分割區開機載入程式"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
