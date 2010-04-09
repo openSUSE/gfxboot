@@ -1,0 +1,117 @@
+diff --git a/core/abort.inc b/core/abort.inc
+index 5b16b9d..cc59fa7 100644
+--- a/core/abort.inc
++++ b/core/abort.inc
+@@ -24,6 +24,10 @@
+ ;            assumes CS == DS
+ ;
+ dot_pause:
++		push ax
++		mov al,5
++		call [comboot_hook]
++		pop ax
+ 		push si
+ 		mov si,dot_msg
+ 		call writestr_qchk
+@@ -63,6 +67,8 @@ abort_check:
+ abort_load:
+ 		mov bx,error_or_command
+ abort_load_chain:
++		mov al,80h
++		call [comboot_hook]		; may not return
+ 		RESET_STACK_AND_SEGS AX
+                 call writestr                  ; Expects SI -> error msg
+ 
+diff --git a/core/loadhigh.inc b/core/loadhigh.inc
+index 8ff9da1..91061fc 100644
+--- a/core/loadhigh.inc
++++ b/core/loadhigh.inc
+@@ -101,6 +101,8 @@ load_high:
+ 		ret
+ 
+ .overflow:	mov si,err_nohighmem
++		mov al,83h
++		call [comboot_hook]		; may not return
+ 		jmp abort_load
+ 
+ 		section .data
+diff --git a/core/runkernel.inc b/core/runkernel.inc
+index e738706..5da5bc9 100644
+--- a/core/runkernel.inc
++++ b/core/runkernel.inc
+@@ -233,6 +233,8 @@ new_kernel:
+ 		mov [LoadFlags],al
+ 
+ any_kernel:
++		mov al,4
++		call [comboot_hook]
+ 		mov si,loading_msg
+                 call writestr_qchk
+                 mov si,KernelCName		; Print kernel name part of
+@@ -324,6 +326,9 @@ load_initrd:
+ ;
+                 call abort_check		; Last chance!!
+ 
++		mov al,6
++		call [comboot_hook]
++
+ 		mov si,ready_msg
+ 		call writestr_qchk
+ 
+@@ -497,6 +502,8 @@ old_kernel:
+ 		xor ax,ax
+ 		cmp word [InitRDPtr],ax		; Old kernel can't have initrd
+                 je .load
++		mov al,82h
++		call [comboot_hook]		; may not return
+                 mov si,err_oldkernel
+                 jmp abort_load
+ .load:
+@@ -621,6 +628,8 @@ loadinitrd:
+ 		ret
+ 
+ .notthere:
++		mov al,81h
++		call [comboot_hook]		; may not return
+                 mov si,err_noinitrd
+                 call writestr
+                 mov si,InitRDCName
+diff --git a/core/ui.inc b/core/ui.inc
+index ed96ccd..0d896fc 100644
+--- a/core/ui.inc
++++ b/core/ui.inc
+@@ -417,8 +417,12 @@ vk_check:
+ %if HAS_LOCALBOOT
+ 		; Is this a "localboot" pseudo-kernel?
+ 		cmp al,VK_LOCALBOOT		; al == KernelType
++		jne .no_local_boot
++		mov al,7
++		call [comboot_hook]
+ 		mov ax,[VKernelBuf+vk_rname]	; Possible localboot type
+-		je local_boot
++		jmp local_boot
++.no_local_boot:
+ %endif
+ 		jmp get_kernel
+ 
+@@ -483,6 +487,8 @@ bad_kernel:
+ .really:
+ 		mov si,KernelName
+                 mov di,KernelCName
++		mov al,81h
++		call [comboot_hook]		; may not return
+ 		push di
+                 call unmangle_name              ; Get human form
+ 		mov si,err_notfound		; Complain about missing kernel
+@@ -525,7 +531,10 @@ on_error:
+ ;
+ ; kernel_corrupt: Called if the kernel file does not seem healthy
+ ;
+-kernel_corrupt: mov si,err_notkernel
++kernel_corrupt:
++		mov al,82h
++		call [comboot_hook]		; may not return
++		mov si,err_notkernel
+                 jmp abort_load
+ 
+ ;

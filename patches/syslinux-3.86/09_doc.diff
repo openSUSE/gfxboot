@@ -1,0 +1,43 @@
+diff --git a/doc/comboot.txt b/doc/comboot.txt
+index eb43708..2b1349d 100644
+--- a/doc/comboot.txt
++++ b/doc/comboot.txt
+@@ -949,3 +949,38 @@ AX=0024h [3.80] Cleanup, shuffle and boot, raw version
+ 	with read/write data segments, matching the respective code
+ 	segment.  For mode 0, B=0 and the limits will be 64K, for mode
+ 	1, B=1 and the limits will be 4 GB.
++
++
++AX=0025h [3.84]	Set current working directory
++	Input:	AX	00025h
++		ES:BX	null-terminated directory name string
++	Output:	None
++
++	Sets the current working directory.  For SYSLINUX, ISOLINUX,
++	and PXELINUX, this will be an absolute path.
++
++
++AX=0026h [3.84]	Read file system metadata [ISOLINUX]
++	Input:	AX	00026h
++	Output:	None
++
++	Reads filesystem data (e.g. after a CDROM change).
++
++
++AX=0027h [3.84] Run command
++	Input:	AX	0027h
++		ES:BX	null-terminated command string
++		SI	comboot callback function (called via far call)
++		EDI	kernel load address
++		EDX	if != 0: initrd load address (that is: memory end)
++	Output:	Does not return if the kernel loads correctly.
++
++	Executes the command line as if it had been entered by the user.
++	Note that this function does return (with CF = 0) if there are
++	problems or the user aborted the load. Else it terminates the
++	COMBOOT program and starts the kernel.
++
++AX=0028h [3.84] Get memory size
++	Input:	AX	0028h
++	Output:	EAX	high memory size (in bytes)
++

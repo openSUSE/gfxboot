@@ -1778,7 +1778,9 @@ sub prepare_isolinux
   $arch_dir = 'i386';
   $arch_dir = 'x86_64' if $opt_64 && !$opt_32;
 
-  $comboot = 1 if -f "$opt_syslinux/usr/share/syslinux/gfxboot.com";
+  $comboot = "$opt_syslinux/usr/share/syslinux/gfxboot.c32";
+  $comboot = "$opt_syslinux/usr/share/syslinux/gfxboot.com" unless -f $comboot;
+  $comboot = 0 unless -f $comboot;
 
   my $menu = fake_menu 'install';
 
@@ -1848,7 +1850,7 @@ sub prepare_isolinux
   }
 
   system "cp $opt_syslinux/usr/share/syslinux/isolinux.bin $dst/$loader" and die "error: no isolinux\n";
-  system "cp $opt_syslinux/usr/share/syslinux/gfxboot.com $dst/$loader" if $comboot;
+  system "cp $comboot $dst/$loader" if $comboot;
 
   for (@opt_test_addfiles) {
     system "cp -r $_ $dst/${loader}" and die "error copying file: $_\n";
@@ -1891,7 +1893,9 @@ sub prepare_syslinux
 
   die "error: syslinux not found\n" unless -f "$opt_syslinux/$bl_list{syslinux}";
 
-  $comboot = 1 if -f "$opt_syslinux/usr/share/syslinux/gfxboot.com";
+  $comboot = "$opt_syslinux/usr/share/syslinux/gfxboot.c32";
+  $comboot = "$opt_syslinux/usr/share/syslinux/gfxboot.com" unless -f $comboot;
+  $comboot = 0 unless -f $comboot;
 
   my $menu = fake_menu 'install';
 
@@ -1951,7 +1955,7 @@ sub prepare_syslinux
     close F;
   }
 
-  system "cp $opt_syslinux/usr/share/syslinux/gfxboot.com $dst" if $comboot;
+  system "cp $comboot $dst" if $comboot;
 
   for (@opt_test_addfiles) {
     system "cp -r $_ $dst" and die "error copying file: $_\n";
@@ -2003,7 +2007,9 @@ sub prepare_pxelinux
   $arch_dir = 'i386';
   $arch_dir = 'x86_64' if $opt_64 && !$opt_32;
 
-  $comboot = 1 if -f "$opt_syslinux/usr/share/syslinux/gfxboot.com";
+  $comboot = "$opt_syslinux/usr/share/syslinux/gfxboot.c32";
+  $comboot = "$opt_syslinux/usr/share/syslinux/gfxboot.com" unless -f $comboot;
+  $comboot = 0 unless -f $comboot;
 
   my $menu = fake_menu 'install';
 
@@ -2073,7 +2079,7 @@ sub prepare_pxelinux
   }
 
   system "cp $opt_syslinux/usr/share/syslinux/pxelinux.0 $dst/$loader" and die "error: no pxelinux\n";
-  system "cp $opt_syslinux/usr/share/syslinux/gfxboot.com $dst/$loader" if $comboot;
+  system "cp $comboot $dst/$loader" if $comboot;
 
   for (@opt_test_addfiles) {
     system "cp -r $_ $dst/${loader}" and die "error copying file: $_\n";

@@ -1,0 +1,44 @@
+diff --git a/core/comboot.inc b/core/comboot.inc
+index f8a7853..f6abe1b 100644
+--- a/core/comboot.inc
++++ b/core/comboot.inc
+@@ -96,24 +96,23 @@ is_comboot_image:
+ 		shl ax,6		; Kilobytes -> paragraphs
+ 		mov word [es:02h],ax
+ 
+-%ifndef DEPEND
+-%if real_mode_seg != comboot_seg
+-%error "This code assumes real_mode_seg == comboot_seg"
+-%endif
+-%endif
+ 		; Copy the command line from high memory
++		push word real_mode_seg
++		pop ds
+ 		mov si,cmd_line_here
+ 		mov cx,125		; Max cmdline len (minus space and CR)
+ 		mov di,081h		; Offset in PSP for command line
+ 		mov al,' '		; DOS command lines begin with a space
+ 		stosb
+ 
+-.loop:		es lodsb
++.loop:		lodsb
+ 		and al,al
+ 		jz .done
+ 		stosb
+ 		loop .loop
+ .done:
++		push cs
++		pop ds
+ 
+ 		mov al,0Dh		; CR after last character
+ 		stosb
+diff --git a/core/layout.inc b/core/layout.inc
+index 19b5057..15dc8ff 100644
+--- a/core/layout.inc
++++ b/core/layout.inc
+@@ -141,4 +141,4 @@ real_mode_seg	equ cache_seg + 1000h
+ pktbuf_seg	equ cache_seg		; PXELINUX packet buffers
+ %endif
+ 
+-comboot_seg	equ real_mode_seg	; COMBOOT image loading zone
++comboot_seg	equ real_mode_seg + 1000h	; COMBOOT image loading zone

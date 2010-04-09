@@ -1,3 +1,7 @@
+9/4/2010:	v4.1.42
+	- add patches for syslinux 3.86
+	- prefer gfxboot.c32 over gfxboot.com
+
 10/12/2009:	v4.1.41
 	- leave more room for timeout indicator (bnc #551718)
 	- center main menu (bnc #562089)
