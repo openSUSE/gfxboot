@@ -581,6 +581,7 @@
 
   syslinux {
     % find out initrd sizes for kernel loading progress bar
+    /progress_extra 0 def
     bc.cmd "initrd" bootopt.find dup .undef ne {
       "initrd=" length add
       dup dup skipnonspaces
