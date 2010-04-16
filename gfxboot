@@ -565,7 +565,11 @@
       $x =~ s/foobar/$up/;
       $x =~ s/FOOBAR/$self->{label}{$up}/;
 
-      $self->{out_buf} .= $x if $self->{label}{$up};
+      if($self->{label}{$up}) {
+        # convert page break into line break
+        substr($x, 0, 1) = "$markup{vspace}\n" if substr($x, 0, 1) eq $markup{page};
+        $self->{out_buf} .= $x;
+      }
     }
   }
 
