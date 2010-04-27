@@ -1,0 +1,70 @@
+diff --git a/core/comboot.inc b/core/comboot.inc
+index f8a7853..37bd0f2 100644
+--- a/core/comboot.inc
++++ b/core/comboot.inc
+@@ -970,6 +970,45 @@ comapi_shufraw:
+ 		mov ecx,P_ECX
+ 		jmp shuffle_and_boot_raw
+ 
++
++;
++; INT 22h AX=0025h	Set current working directory
++;
++%if IS_ISOLINUX
++comapi_setcwd:
++		mov si,P_BX
++		mov di,TmpDirName
++		mov cx,FILENAME_MAX
++		mov ds,P_ES
++.copy:
++		lodsb
++		stosb
++		or al,al
++		loopnz .copy
++		push cs
++		pop ds
++		stc
++		jnz .err
++		mov di,TmpDirName
++		call setcwd
++.err:
++		ret
++%else
++comapi_setcwd	equ comapi_err
++%endif
++
++
++;
++; INT 22h AX=0026h	Read filesystem meta data
++;
++%if IS_ISOLINUX
++comapi_mount:
++;		call iso_mount
++		ret
++%else
++comapi_mount	equ comapi_err
++%endif
++
+ 		section .data
+ 
+ %macro		int21 2
+@@ -1029,6 +1068,8 @@ int22_table:
+ 		dw comapi_closedir	; 0022 close directory
+ 		dw comapi_shufsize	; 0023 query shuffler size
+ 		dw comapi_shufraw	; 0024 cleanup, shuffle and boot raw
++		dw comapi_setcwd	; 0025 set current working directory
++		dw comapi_mount		; 0026 read fs structures (aka mount)
+ int22_count	equ ($-int22_table)/2
+ 
+ APIKeyWait	db 0
+@@ -1049,8 +1090,9 @@ feature_flags_len equ ($-feature_flags)
+ err_notdos	db ': attempted DOS system call INT ',0
+ err_comlarge	db 'COMBOOT image too large.', CR, LF, 0
+ 
+-		section .bss1
++		section .bss2
+ 		alignb 4
+ DOSErrTramp	resd	33		; Error trampolines
++TmpDirName	resb	FILENAME_MAX
+ ConfigName	resb	FILENAME_MAX
+ CurrentDirName	resb	FILENAME_MAX

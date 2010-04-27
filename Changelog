@@ -1,3 +1,6 @@
+27/4/2010:	v4.1.45
+	- strip gfxboot.com related parts from syslinux-3.86 patchset
+
 16/4/2010:	v4.1.44
 	- fix help text formatting
 
