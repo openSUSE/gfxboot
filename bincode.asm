@@ -535,6 +535,7 @@ gdt			dd 0, 0			; null descriptor
 
 .screen_r16		dd 00000000h, 00009300h ; 64k screen, data, use16
 .screen_w16		dd 00000000h, 00009300h ; 64k screen, data, use16
+.tss			dd 00000067h, 00008900h ; 104 byte minimal tss
 gdt_size		equ $-gdt
 
 ; gdt for pm switch
@@ -546,6 +547,7 @@ pm_seg.prog_c16		equ 28h			; default cs, use16
 pm_seg.data_d16		equ 30h			; free to use
 pm_seg.screen_r16	equ 38h			; graphics window, for reading
 pm_seg.screen_w16	equ 40h			; graphics window, for writing
+pm_seg.tss		equ 48h			; tss
 
 %if debug
 ; debug texts
@@ -16499,6 +16501,11 @@ gdt_init:
 		mov si,pm_seg.prog_c16
 		call set_gdt_base
 
+		; temporary location, will be moved in pm_init
+		mov eax,580h
+		mov si,pm_seg.tss
+		call set_gdt_base
+
 		mov eax,0ffffh
 
 		mov si,pm_seg.prog_c32
@@ -16531,6 +16538,13 @@ gdt_init:
 		bits 32
 
 pm_init:
+		mov eax,104	; minimal tss size
+		call xcalloc
+		cmp eax,1
+		jc pm_init_90
+		mov si,pm_seg.tss
+		call set_gdt_base_pm
+
 		mov eax,(8+8)*100h
 		call xcalloc
 		cmp eax,1
@@ -16688,6 +16702,13 @@ switch_to_pm_20:
 		mov es,ax
 		mov fs,ax
 		mov gs,ax
+
+		xor eax,eax
+		lldt ax
+
+		mov byte [gdt.tss + 5],89h	; mark task inactive
+		mov ax,pm_seg.tss
+		ltr ax
 
 		cmp byte [need_sound_update],0
 		jz switch_to_pm_80
