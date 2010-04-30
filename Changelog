@@ -1,5 +1,7 @@
+30/4/2010:	v4.1.46
 	- added Asturian (bnc #562202)
 	- fixed examples to work with latest gfxboot.c32
+	- set valid tss for pm calls
 
 27/4/2010:	v4.1.45
 	- strip gfxboot.com related parts from syslinux-3.86 patchset
