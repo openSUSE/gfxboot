@@ -87,14 +87,14 @@
 % Notes:
 %  - key = 0 indicates the bootloader timeout is up.
 %  - input_buffer is the command line that you would have normally entered in the bootloader.
-%  - menu_entry is only relevant for grub and is the 'title' section you want to boot. input_buffer
-%    is appended to the kernel options in this case.
+%    note that for syslinux it must start with the menu label string but not for grub
+%  - menu_entry is the number of the menu entry you want to boot
 %
 /KeyEvent {
   /key exch def
 
   % 'linux' & 'harddisk' are labels in our test bootloader config (created by 'gfxtest')
-  key 0xff and 'l' eq { "linux"    0 2 return } if
+  key 0xff and 'l' eq { "linux"    1 2 return } if
   key 0xff and 'd' eq {
     % return to text mode first so you can see the error message
     3 setmode pop

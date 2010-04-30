@@ -156,11 +156,9 @@
 %
 % Notes:
 %  - key = 0 indicates the bootloader timeout is up.
-%  - input_buffer is the command line that you would have normally entered
-%    in the bootloader.
-%  - menu_entry is only relevant for grub and is the 'title' section you
-%    want to boot. input_buffer is appended to the kernel options in this
-%    case.
+%  - input_buffer is the command line that you would have normally entered in the bootloader.
+%    note that for syslinux it must start with the menu label string but not for grub
+%  - menu_entry is the number of the menu entry you want to boot
 %
 /KeyEvent {
   % pre-process keycode a bit
