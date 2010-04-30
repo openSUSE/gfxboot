@@ -22,6 +22,7 @@
   [ "af_ZA" "us"                   false "Afrikaans" ]						% Afrikaans
 % [ "ar_EG" "arabic"               true  "\u064a\u0628\u0631\u0639" ]				% Arabic
   [ "ar_EG" "arabic"               true  "\ufef2\ufe91\ufeae\ufecb" ]				% Arabic
+  [ "ast_ES" "es"                  false "Asturianu" ]						% Asturian
   [ "bg_BG" "us"                   false "Български" ]						% Bulgarian
   [ "bn_BD" "us"                   false "\u09ac\u09be\u0982\u09b2\u09be" ]			% Bengali
   [ "bs_BA" "us"                   false "Bosanski" ]						% Bosnian
