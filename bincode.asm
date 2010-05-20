@@ -553,10 +553,11 @@ pm_seg.tss		equ 48h			; tss
 ; debug texts
 dmsg_01			db 10, 'Press a key to continue...', 0
 dmsg_02			db '     mem area %d: 0x%08x - 0x%08x', 10, 0
-dmsg_03			db '%3u: addr 0x%06x, size 0x%06x+%u, ip 0x%04x, %s', 10, 0
-dmsg_04			db 'oops: block at 0x%06x: size 0x%06x is too small', 10, 0
-dmsg_04a		db 'oops: 0x%06x > 0x%06x', 10, 0
-dmsg_06			db 'addr 0x%06x', 10, 0
+dmsg_03			db '%4u: addr 0x%08x, size 0x%08x+%u, ip 0x%04x, %s', 10, 0
+dmsg_03a		db '                                                         ', 10, 0
+dmsg_04			db 'oops: block at 0x%08x: size 0x%08x is too small', 10, 0
+dmsg_04a		db 'oops: 0x%08x > 0x%08x', 10, 0
+dmsg_06			db 'addr 0x%08x', 10, 0
 dmsg_07			db 'free', 0
 dmsg_08			db 'used', 0
 dmsg_09			db 'current dictionary', 10, 0
@@ -1784,6 +1785,9 @@ _gfx_enter:
 		pop ds
 		cld
 
+		; better explicitly turn on ints
+		sti
+
 		call use_local_stack
 
 		pm_enter
@@ -2837,6 +2841,8 @@ dump_malloc_70:
 		cmp ebx,malloc.areas * 8
 		jb dump_malloc_10
 dump_malloc_90:
+		mov esi,dmsg_03a
+		call printf
 
 		popad
 		ret
@@ -2895,7 +2901,6 @@ _dump_malloc_60:
 _dump_malloc_70:
 		pf_arg_uint 0,ebx
 		pf_arg_uint 1,ecx
-_dump_malloc_80:
 
 		push ebp
 		call printf
@@ -7772,15 +7777,18 @@ prim_getpixel:
 ; group: font
 ;
 ; ( ptr1 -- )
+; ( int1 -- )
 ;
 ; ptr1: font data (e.g. font file).
+; int1: same value as ptr1, but font is in password mode - it prints only '*'s.
 ;
-; Note: If bit 31 in ptr1 is set, font is in 'password-mode' - it prints only '*'s.
+; Note: password mode used to be passed as bit 31 in ptr1. gfxboot will try
+; to guess if you are doing that, but please don't.
 ;
 ; example
 ;   "16x16.fnt" findfile setfont	% set 16x16 font
 ;
-;  /pwmode { 1 settype 0x80000000 or 12 settype } def
+;  /pwmode { 1 settype } def
 ;  currentfont pwmode setfont		% now in password mode
 ;  "abc" show				% print "***"
 ;
@@ -7788,8 +7796,24 @@ prim_getpixel:
 		bits 32
 
 prim_setfont:
-		call pr_setptr_or_none
+		mov dl,t_none
+		call get_1arg
+		jc prim_setfont_90
+		mov bp,pserr_wrong_arg_types
+		mov cl,0
+		cmp dl,t_none
+		jz prim_setfont_50
+		cmp dl,t_ptr
+		jz prim_setfont_50
+		cmp dl,t_int
+		stc
+		jnz prim_setfont_90
+		mov cl,1
+prim_setfont_50:
 		call font_init
+		dec dword [pstack.ptr]
+		clc
+prim_setfont_90:
 		ret
 
 
@@ -7798,8 +7822,10 @@ prim_setfont:
 ; group: font
 ;
 ; ( -- ptr1 )
+; ( -- int1 )
 ;
 ; ptr1: current font
+; int1: current font, in password mode
 ;
 ; example
 ;   currentfont				% save font
@@ -7812,10 +7838,12 @@ prim_setfont:
 
 prim_currentfont:
 		mov eax,[font]
-		movzx ecx,byte [font.properties]
-		shl ecx,31
-		or eax,ecx
-		jmp pr_getptr_or_none
+		test byte [font.properties],1
+		mov dl,t_ptr
+		jz prim_currentfont_90
+		mov dl,t_int
+prim_currentfont_90:
+		jmp pr_getobj
 
 
 ;; fontheight - font height
@@ -12747,17 +12775,22 @@ cfont_init:
 ; Initialize font.
 ;
 ; eax		ptr to font header
+;  cl		font properties
 ;
 
 		bits 32
 
 font_init:
 		mov ebx,eax
-		shr eax,31
-		mov [font.properties],al
-		and ebx,~(1 << 31)
 		cmp dword [es:ebx+foh.magic],0d2828e06h		; magic
-		jnz font_init_90
+		jz font_init_20
+		; legacy: maybe font properties were passed via bit 31
+		xor ebx,1 << 31
+		xor cl,1
+		cmp dword [es:ebx+foh.magic],0d2828e06h		; magic
+		jz font_init_90
+font_init_20:
+		mov [font.properties],cl
 		mov eax,[es:ebx+foh.entries]
 		mov dl,[es:ebx+foh.height]
 		mov dh,[es:ebx+foh.line_height]

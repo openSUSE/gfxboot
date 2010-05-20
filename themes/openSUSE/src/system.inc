@@ -448,9 +448,9 @@ def
 % ( font ) ==> ( font )
 %
 /pwmode {
-   dup gettype t_ptr eq {
-     .value 0x80000000 or t_ptr settype
-   } if
+  dup gettype t_ptr eq over gettype t_int eq or {
+    t_int settype
+  } if
 } def
 
 
@@ -460,11 +460,7 @@ def
 % ( font -- true|false )
 %
 /is.pwmode {
-   dup gettype t_ptr eq {
-     .value 0x80000000 and 0 ne
-   } {
-     false
-   } ifelse
+  gettype t_int eq
 } def
 
 

@@ -1,3 +1,8 @@
+20/5/2010:	v4.2.0
+	- turn on ints explicitly
+	- better memory dump
+	- don't abuse bit 31 in font pointer (bnc #599478)
+
 19/5/2010:	v4.1.47
 	- openSUSE 11.3 theme
 
