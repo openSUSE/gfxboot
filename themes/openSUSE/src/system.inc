@@ -448,9 +448,7 @@ def
 % ( font ) ==> ( font )
 %
 /pwmode {
-  dup gettype t_ptr eq over gettype t_int eq or {
-    t_int settype
-  } if
+  dup gettype t_ptr eq { t_int settype } if
 } def
 
 

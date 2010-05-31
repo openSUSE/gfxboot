@@ -12782,6 +12782,12 @@ cfont_init:
 
 font_init:
 		mov ebx,eax
+		or eax,eax
+		jnz font_init_10
+		; just set font properties if font ptr is 0
+		mov [font.properties],cl
+		jmp font_init_90
+font_init_10:
 		cmp dword [es:ebx+foh.magic],0d2828e06h		; magic
 		jz font_init_20
 		; legacy: maybe font properties were passed via bit 31
