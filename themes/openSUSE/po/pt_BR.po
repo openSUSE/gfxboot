@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2009-10-05 10:45-0300\n"
+"PO-Revision-Date: 2010-05-18 16:38-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <opensuse-pt@opensuse.org>\n"
 "MIME-Version: 1.0\n"
@@ -47,7 +47,7 @@ msgstr "Linux--configurações seguras"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
-msgstr "Inicializar do disco rígido"
+msgstr "Inicializar a partir do disco rígido"
 
 #. txt_rescue
 msgid "Rescue System"
@@ -170,11 +170,11 @@ msgstr "Disco rígido"
 #. dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "Instalação pelo disco rígido"
+msgstr "Instalação no disco rígido"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Dispositivo de disco (varre todos os discos se vazio)\n"
+msgstr "Dispositivo de disco (pesquisa em todos os discos se vazio)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -381,7 +381,7 @@ msgstr "Baixar a atualização de driver"
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr "Digite a URL da atualização de driver\n"
+msgstr "Digite o URL da atualização de driver\n"
 
 #. menu item
 #. txt_http_proxy

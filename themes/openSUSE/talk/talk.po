@@ -21,10 +21,10 @@ msgstr ""
 msgid "Memory Test"
 msgstr ""
 
-msgid "openSUSE 11.2"
+msgid "openSUSE 11.3"
 msgstr ""
 
-msgid "openSUSE 11.2 - Desktop"
+msgid "openSUSE 11.3 - Desktop"
 msgstr ""
 
 msgid "Hard-Disk"

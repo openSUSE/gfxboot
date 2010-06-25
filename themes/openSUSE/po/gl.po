@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: bootloader\n"
 "Report-Msgid-Bugs-To: translation@suse.de\n"
 "POT-Creation-Date: 2006-05-15 15:07+0200\n"
-"PO-Revision-Date: 2009-10-12 10:32+0100\n"
-"Last-Translator: Manuel A. Vázquez <xixirei@yahoo.es>\n"
+"PO-Revision-Date: 2009-11-29 09:53+0100\n"
+"Last-Translator: Manuel A. Vazquez <xixirei@yahoo.es>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Lokalize 0.2\n"
+"X-Generator: Lokalize 1.0\n"
 
 #. ok button label
 #. txt_ok
@@ -45,19 +45,19 @@ msgstr "Linux--Opcións Seguras"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
-msgstr "Arrincar dende o Disco Duro"
+msgstr "Arrincar desde o disco duro"
 
 #. txt_rescue
 msgid "Rescue System"
-msgstr "Rescatar Sistema"
+msgstr "Rescatar sistema"
 
 #. txt_memtest
 msgid "Memory Test"
-msgstr "Proba de Memoria"
+msgstr "Proba de memoria"
 
 #. txt_bootoptions
 msgid "Boot Options"
-msgstr "Opcións de Arrinque"
+msgstr "Opcións de arrinque"
 
 #. window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
@@ -69,7 +69,7 @@ msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"Está saíndo do menú de arrinque gráfico e\n"
+"Está saíndo do menú gráfico de arrinque e\n"
 "está iniciando a interface en modo texto."
 
 #. txt_help
@@ -106,7 +106,7 @@ msgstr ""
 #. info box title
 #. txt_info_title
 msgid "Boot Loader"
-msgstr "Cargador de Arrinque"
+msgstr "Cargador de arrinque"
 
 #. error box title
 #. txt_error_title
@@ -116,7 +116,7 @@ msgstr "Erro de E/S"
 #. boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr "Cambiar o Disco de Arrinque"
+msgstr "Cambiar o disco de arrinque"
 
 #. txt_insert_disk
 #, c-format
@@ -149,7 +149,7 @@ msgstr "Contrasinal"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr "Teña preparado o disquete de actualización de driver."
+msgstr "Teña preparado o disquete de actualización do controlador."
 
 #. power off dialog title
 #. txt_power_off_title
@@ -163,16 +163,16 @@ msgstr "Apagar o sistema agora?"
 #. menu entry for hard disk installation
 #. txt_harddisk
 msgid "Hard Disk"
-msgstr "Disco Duro"
+msgstr "Disco duro"
 
 #. dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "Instalación no Disco Duro"
+msgstr "Instalación no disco duro"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Dispositivo de Disco (examina tódolos discos se está baleiro)\n"
+msgstr "Dispositivo de disco (examina todos os discos se está baleiro)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -209,7 +209,7 @@ msgstr "Usuario (hase usar \"guest\" se está baleiro)\n"
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "Instalación SMB (Recurso Windows)"
+msgstr "Instalación SMB (compartir con Windows)"
 
 #. dialog title for http installation
 #. txt_http_title
@@ -219,7 +219,7 @@ msgstr "Instalación por HTTP"
 #. 'driver' as in '(hardware) driver update'
 #. txt_driver_update
 msgid "Driver"
-msgstr "Driver"
+msgstr "Controlador"
 
 #. as in Windows Authentication Domain
 #. txt_domain
@@ -229,12 +229,12 @@ msgstr "Dominio\n"
 #. button label for other/more options
 #. txt_other_options
 msgid "Other Options"
-msgstr "Outras Opcións"
+msgstr "Outras opcións"
 
 #. label for language selection
 #. txt_language
 msgid "Language"
-msgstr "Lingua"
+msgstr "Idioma"
 
 #. txt_yes
 msgid "Yes"
@@ -252,45 +252,45 @@ msgstr "Ficheiro"
 #. input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr "Recurso\n"
+msgstr "Recurso compartido\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
-msgstr "Modo Automatico"
+msgstr "Modo automático"
 
 #. txt_zenManual
 msgid "Manual Mode"
-msgstr "Modo Manual"
+msgstr "Modo manual"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr "Configurar os Parámetros da Partición ZEN"
+msgstr "Configurar os parámetros da partición ZEN"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr "Instalar ou Actualizar Partición ZEN"
+msgstr "Instalar ou actualizar partición ZEN"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "Reinstalaro Cargador de Arrinque da Partición ZEN"
+msgstr "Reinstalar o cargador de arrinque da partición ZEN"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr "Deshabilitar Partición ZEN"
+msgstr "Desactivar partición ZEN"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
-msgstr "Activar Partición ZEN"
+msgstr "Activar partición ZEN"
 
 #. video mode menu item
 #. txt_text_mode
 msgid "Text Mode"
-msgstr "Modo Texto"
+msgstr "Modo texto"
 
 #. menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr "Proba de Firmware"
+msgstr "Proba de firmware"
 
 #. txt_dud_file_msg
 msgid ""
@@ -298,9 +298,9 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
-"Para cargar as actualizacións de drivers directamente\n"
-" dende CDROM, introduza os nomes de ficheiros de\n"
-" actualización de drivers (separados por comas ',') aquí:\n"
+"Para cargar as actualizacións de controladores directamente\n"
+" desde CDROM, introduza os nomes de ficheiros de\n"
+" actualización de controladores (separados por comas ',') aquí:\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
@@ -312,13 +312,13 @@ msgstr "Fonte"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_video_mode
 msgid "Video Mode"
-msgstr "Modo de Vídeo"
+msgstr "Modo de vídeo"
 
 #. driver update dialog title
 #. -> txt_dud_file_msg
 #. txt_driver_update2
 msgid "Driver Update"
-msgstr "Actualización de Drivers"
+msgstr "Actualización de controladores"
 
 #. menu label for selecting (cpu) architecture
 #. like i386, x86-64, ppc
@@ -342,7 +342,7 @@ msgstr "Predeterminado"
 #. -> like in txt_safe_linux
 #. txt_kernel_safe
 msgid "Safe Settings"
-msgstr "Opcións Seguras"
+msgstr "Opcións seguras"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_noacpi_install
@@ -359,12 +359,12 @@ msgstr "Sen APIC Local"
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr "Reparar Sistema Instalado"
+msgstr "Reparar o sistema instalado"
 
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr "Comprobar o Soporte de Instalación"
+msgstr "Comprobar o soporte de instalación"
 
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
@@ -379,7 +379,7 @@ msgstr "Baixar actualización de controlador"
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr "Escribir URL de actualización de controlador\n"
+msgstr "Introducir URL de actualización de controlador\n"
 
 #. menu item
 #. txt_http_proxy
@@ -389,7 +389,7 @@ msgstr "HTTP proxy"
 #. menu item
 #. txt_network_config
 msgid "Network Config"
-msgstr "Configuraci´on da rede"
+msgstr "Configuración da rede"
 
 #. menu item
 #. txt_no_network
@@ -424,7 +424,7 @@ msgstr "Nome de dominio\n"
 #. label for nameserver list
 #. txt_nameservers
 msgid "Nameservers (separated by ',')\n"
-msgstr "Servidores de nome (separador por ',')\n"
+msgstr "Servidores de nomes (separados por ',')\n"
 
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask

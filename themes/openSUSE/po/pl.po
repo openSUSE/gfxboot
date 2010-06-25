@@ -7,14 +7,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2009-10-05 20:47+0100\n"
-"Last-Translator: Paulina Budzoń <paulina.budzon@gmail.com>\n"
-"Language-Team:  <pl@li.org>\n"
+"PO-Revision-Date: 2010-03-09 15:19\n"
+"Last-Translator: Novell Language <language@novell.com>\n"
+"Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
 
 #. ok button label
 #. txt_ok
@@ -122,7 +120,7 @@ msgstr "Zmiana dysku rozruchowego"
 #. txt_insert_disk
 #, c-format
 msgid "Insert boot disk %u."
-msgstr "Proszę umieścić dysk startowy %u w napędzie."
+msgstr "Proszę umieścić w napędzie dysk startowy %u."
 
 #. txt_insert_disk2
 #, c-format
@@ -140,7 +138,7 @@ msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"To nie jest dysk startowy systemu <product>.\n"
+"To nie jest dysk startowy <product>.\n"
 "Proszę włożyć dysk startowy %u."
 
 #. password dialog title
@@ -150,7 +148,7 @@ msgstr "Hasło"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr "Proszę przygotować dyskietkę z uaktualnieniami sterowników."
+msgstr "Proszę przygotować dyskietkę z aktualizacjami sterowników."
 
 #. power off dialog title
 #. txt_power_off_title
@@ -173,7 +171,7 @@ msgstr "Instalacja na dysku twardym"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Dysk (skanuje wszystkie dyski, jeśli puste)\n"
+msgstr "Dysk do skanowania (skanuje wszystkie dyski, jeśli puste)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -195,7 +193,7 @@ msgstr "Hasło\n"
 #. label for ftp user input
 #. txt_user1
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "Użytkownik (używa \"anonymous\" jeśli puste)\n"
+msgstr "Użytkownik (używa \"anonymous\", jeśli puste)\n"
 
 #. dialog title for nfs installation
 #. txt_nfs_title
@@ -273,7 +271,7 @@ msgstr "Instaluj lub aktualizuj partycję ZEN"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "Zainstaluj ponownie program rozruchowy z partycji ZEN"
+msgstr "Przeinstaluj program rozruchowy z partycji ZEN"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
@@ -291,7 +289,7 @@ msgstr "Tryb tekstowy"
 #. menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr "Test oprogramowania sprzętu"
+msgstr "Test oprogramowania sprzętowego"
 
 #. txt_dud_file_msg
 msgid ""
@@ -299,9 +297,9 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
-"Aby załadować aktualizacje sterowników \n"
-"bezpośrednio z CD, proszę podać nazwy plików\n"
-"z aktualizacjami (oddzielone przecinkami ','):\n"
+"Aby wczytać aktualizacje programów obsługi \n"
+"bezpośrednio z płyty CD, proszę podać nazwy plików\n"
+"z aktualizacjami (oddzielone przecinkami \",\"):\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
@@ -319,14 +317,14 @@ msgstr "Tryb graficzny"
 #. -> txt_dud_file_msg
 #. txt_driver_update2
 msgid "Driver Update"
-msgstr "Aktualizacja sterowników"
+msgstr "Aktualizacja programów obsługi"
 
 #. menu label for selecting (cpu) architecture
 #. like i386, x86-64, ppc
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr "Arch"
+msgstr "Arch."
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
@@ -337,7 +335,7 @@ msgstr "Jądro"
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
 msgid "Default"
-msgstr "Domyślne"
+msgstr "Domyślny"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> like in txt_safe_linux

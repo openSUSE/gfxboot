@@ -2,30 +2,13 @@
 <a name="main">Įkrovos tvarkyklės pagalba</a>
 </h3>
 
-<p>
-Welcome to <em>@@@product@@@</em>
-</p>
+<p>Jus sveikina <em>@@@product@@@</em></p>
 
-<p>
-Use this menu to select the desired function. If you have
-problems navigating in this help system, press
-<em>@@@fkey_help@@@</em> to enter the <a href="#help">aprašymas</a> of the help
-system. The main functions in this menu are:
-</p>
+<p>Šį meniu naudokite norimos funkcijos pasirinkimui. Jei kyla problemų naršant šią pagalbos sistemą, spauskite <em>@@@fkey_help@@@</em> ir įeisite į pagalbos sistemos <a href="#help">aprašymas</a>. Pagrindinės šio meniu funkcijos yra:</p>
 
-<p>
-<a href="#harddisk">Įkrauti iš standžiojo disko</a>: This selection will not do
-anything to the system. It only starts a previously installed
-operating system.
-</p>
+<p><a href="#harddisk">Įkrauti iš standžiojo disko</a>: Šis pasirinkimas sistemai nieko nedaro. Jis tik paleidžia anksčiau įdiegtą operacinę sistemą.</p>
 
-<p>
-<a href="#linux">Diegimas</a>: 
-This installation mode works on most machines. If you experience a
-system freeze during boot or problems with detection of your hardware
-components, such as disk controllers or network cards, try one of the
-following installation options.
-</p>
+<p><a href="#linux">Diegimas</a>: Ši diegimo veiksena veikia daugumoje kompiuterių. Jei sistemą nulūždavo įkrovos metu ar būdavo problemų su jūsų aparatinės įrangos aptikimu, pvz., diskų valdikliais ar tinklo plokštėmis, mėginkite vieną iš sekančių diegimo paramatrų.</p>
 
 <p>
 <a href="#noacpi">Diegimas -- ACPI uždraustas</a>: Many of the
@@ -36,68 +19,34 @@ hard disks.
 </p>
 
 <p>
-<a href="#nolapic">Diegimas --Vietinis APIC uždraustas</a>:
+<a href="#nolapic">Diegimas -- Vietinis APIC uždraustas</a>:
 If the normal installation fails, this might be due to the
 system hardware not supporting local APIC.
 If this seems to be the case, use this option to
 install without local APIC support.
 </p>
 
-<p>
-<a href="#failsafe">Diegimas -- Saugūs nustatymai</a>: If you were not
-successful with <em>Diegimas</em>, this selection might
-solve the issue.
-</p>
+<p><a href="#failsafe">Diegimas -- Saugios nuostatos</a>: Jei jums nepasisekė su <em>Diegimas</em>, šis pasirinkimas gal išspręsti problemą.</p>
+
+<p><a href="#rescue">Avarinė sistema</a>: Šis įkrovos atvaizdas paleidžia mažą Linux sistemą operatyvioje atmintyje. Tai naudinga tuomet, kai sistema tinkamai nepasileidžia. Įkrovę šią sistemą, prisijunkite kaip „root“.</p>
+
+<p><a href="#firmware">Programinės aparatinės įrangos patikrinimas</a>: Paleidžia BIOS testavimo įrankį, kuris patikrina ACPI ir kitas BIOS dalis.</p>
+
+<p><a href="#memtest">Atminties testas</a>: Atminties testas naudingas ne tik tikrinant naujus atminties modulius. Tai svarbus testas didžiajai jūsų kompiuterio sistemos daliai.Jis gali nurodyti aparatinės įrangos problemas.</p>
+
+<p><a href="#opt">Įkrovos parametrai</a>: Įkrovos parametrai gali pakeisti visiškai pakeisti Jūsų sistemos elgseną. Tai branduolio nuostatos.</p>
 
 <p>
-<a href="#rescue">Avarinė sistema</a>: This boot image starts a small
-Linux system in RAM. This is useful if the system does not start properly.
-After booting this system, log in as root.
-</p>
-
-<p>
-<a href="#firmware">Firmware Test</a>: Runs a BIOS test tool that validates
-ACPI and other parts of your BIOS.
-</p>
-
-<p>
-<a href="#memtest">Atminties testas</a>: Memory testing is useful for more than
-checking installation of new memory modules. It is a stress test
-for a big part of your computer system and may indicate hardware
-problems.
-</p>
-
-<p>
-<a href="#opt">Įkrovos parametrai</a>: The boot options may change the
-behavior of your system completely. They are settings for
-the kernel.
-</p>
-
-<p>
-<a href="#help">@@@fkey_help@@@ Help</a>: This is context sensitive. It will
+<a href="#help">@@@fkey_help@@@ Pagalba</a>: This is context sensitive. It will
 show different screens depending on the active element of the
 boot screen. There is also a description of this help system
 available.
 </p>
 
-<p>
-<a href="#keytable">@@@fkey_lang@@@</a>: Set language and keyboard mapping
-used by the boot loader.
-</p>
+<p><a href="#keytable">@@@fkey_lang@@@</a>: Pasirinkite kalbą ir klaviatūros išdėstymą, kuriuos naudos įkrovos tvarkyklė.</p>
 
-<p>
-<a href="#videomode">@@@fkey_video@@@ Video Mode</a>: Here, choose between
-different screen resolutions while installing. If you encounter
-problems with the graphical installation, the <em>tekstinis režimas</em> may
-be a work-around for you.
-</p>
+<p><a href="#videomode">@@@fkey_video@@@ Vaizdo režimas</a>: Čia pasirinkite diegimo metu naudosimą ekrano skiriamąją gebą. Jei grafinio diegimo metu kyla nesklandumų, jų išvengti gali padėti <em>tekstinis režimas</em>.</p>
 
-<p>
-<a href="#install_src">@@@fkey_inst@@@ Installation Source</a>: Choose the
-installation source.
-</p>
+<p><a href="#install_src">@@@fkey_inst@@@ Diegimo šaltinis</a>: Pasirinkite diegimo šaltinį.</p>
 
-<p>
-<a href="#driverupdate">@@@fkey_dud@@@ Driver Update</a>: For very new machines, a
-driver update may be needed to install the system.
-</p>
+<p><a href="#driverupdate">@@@fkey_dud@@@ Tvarkyklės atnaujinimas</a>: Naujuose kompiuteriuose atnaujinti tvarkykles gali būti būtina norint įdiegti sistemą.</p>
