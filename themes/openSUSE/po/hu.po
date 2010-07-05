@@ -30,7 +30,7 @@ msgstr "OK"
 #. cancel button label
 #. txt_cancel
 msgid "Cancel"
-msgstr "Mégse"
+msgstr "Mégsem"
 
 #. reboot button label
 #. txt_reboot
@@ -332,7 +332,7 @@ msgstr "Illesztőprogram-frissítés"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr "Architektúra"
+msgstr "Arch"
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
