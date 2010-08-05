@@ -31,6 +31,8 @@
     /locale.texts.en "en_US" "%s.tr" loadtexts def
   } if
 
+  /config.lang.changed true def
+
   true
 } def
 

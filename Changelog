@@ -1,3 +1,8 @@
+5/8/2010:	v4.3.0
+	- add 'lang' option if language has been changed
+	  [used to be: if != en_US] (bnc #619983)
+	- keyboard label was not translatable (bnc #610638)
+
 5/7/2010:	v4.2.3
 	- updated translations (bnc #619513)
 

@@ -38,7 +38,7 @@
     keymaps { .km.name get } forall
   ] put
 
-  xmenu .xm_title "Keyboard" put
+  xmenu .xm_title /txt_keyboard put
 
   keymap.setdefault
 

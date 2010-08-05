@@ -436,7 +436,7 @@
 
   config.addopt.lang {
     config.lang {
-      config.lang "en_US" ne {
+      config.lang.changed {
         config.lang "lang=%s " bc.cmd dup length add sprintf
       } if
     } if
@@ -1187,6 +1187,8 @@
   } {
     pop
     "en_US" dup setlang pop getkeymapfromlocale setkeymap
+    % reset, it's just the fallback lang
+    /config.lang.changed false def
   } ifelse
 
   keymap.default "" ne { keymap.default setkeymap } if
