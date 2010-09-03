@@ -1,3 +1,6 @@
+3/9/2010:	v4.3.1
+	- show real product name on serial console (bnc #634299)
+
 5/8/2010:	v4.3.0
 	- add 'lang' option if language has been changed
 	  [used to be: if != en_US] (bnc #619983)
