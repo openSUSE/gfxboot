@@ -146,7 +146,7 @@ sub read_texts
       $txt_miss{$_} = 1 unless exists $txt_list{$_};
     }
 
-    if(defined(%txt_miss) || defined(%txt_unknown) || defined(%txt_multi)) {
+    if(%txt_miss || %txt_unknown || %txt_multi) {
       print STDERR "$lang:\n";
       for (sort keys %txt_miss) {
         print STDERR "  missing: $_\n"

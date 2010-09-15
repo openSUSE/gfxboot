@@ -1,0 +1,192 @@
+#! /bin/bash
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+function switch_disk {
+  disk=$1
+
+  if [ -z "$disk" -o ! -f "$tmp_dir/syslinux.img_$disk" ] ; then
+    echo "no such disk: $disk"
+    exit 1
+  fi
+
+  dd if="$tmp_dir/syslinux.img_$disk" of="$tmp_dir/syslinux.img" conv=notrunc status=noxfer
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+function gfxtest_isolinux  {
+  set -f
+  $gfxboot -b isolinux --cdrom \
+     --test --preview --archive $opt_archive $gfxboot_args \
+     --test-add-files $add_files --test-rm-files gfxtest.config $rm_files $gfxboot_x_args
+  set +f
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+function gfxtest_syslinux  {
+  set -f
+  $gfxboot -b syslinux \
+     --test --preview --archive $opt_archive $gfxboot_args \
+     --test-add-files $add_files --test-rm-files gfxtest.config $rm_files $gfxboot_x_args
+  set +f
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+function gfxtest_pxelinux  {
+  set -f
+  $gfxboot -b pxelinux --net \
+     --test --preview --archive $opt_archive $gfxboot_args \
+     --test-add-files $add_files --test-rm-files gfxtest.config $rm_files $gfxboot_x_args
+  set +f
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+function gfxtest_grub  {
+  set -f
+  $gfxboot -b grub \
+     --test --preview --archive $opt_archive $gfxboot_args \
+     --test-add-files $add_files --test-rm-files gfxtest.config $rm_files $gfxboot_x_args
+  set +f
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+function gfxtest_lilo  {
+  set -f
+  $gfxboot -b lilo \
+     --test --preview --archive $opt_archive $gfxboot_args \
+     --test-add-files $add_files --test-rm-files gfxtest.config $rm_files $gfxboot_x_args
+  set +f
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+function usage {
+  cat <<EOF
+usage: gfxtest [OPTIONS] [TARGET] [-- GFXBOOT_OPTIONS]
+Build and test gfxboot themes.
+
+Options:
+  -h, --help            Write this help text.
+  -m, --make            Force rebuilding the theme.
+  --type TYPE           Bootlogo type. Either boot or install.
+  --disk N              Switch to disk N.
+  -l, --lang LANG       Set default language to LANG.
+  -t, --theme THEME     Use theme THEME.
+  --vm VM               Use VM as virtual machine (see 'gfxboot --help' for values).
+
+TARGET: cdrom, lilo, grub, syslinux, pxe (every subdir in 'test')
+
+GFXBOOT_OPTIONS: extra set of options passed to the gfxboot script.
+Note that the leading '--' is required.
+EOF
+  exit $1
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+test_dir=test
+gfxboot=gfxboot
+[ -x gfxboot ] && gfxboot=./gfxboot
+
+OPTS=`getopt -n gfxtest -o mhl:t: --long make,help,disk:,lang:,vm:,type:,32,64,theme:,lilo:,grub:,syslinux:,isolinux:,pxelinux: -- "$@"`
+if [ $? != 0 ] ; then
+  echo "See 'gfxtest --help' for usage instructions."
+  exit 1
+fi
+
+eval set -- "$OPTS"
+
+while true ; do
+  case "$1" in
+    -h|--help) usage 0 ;;
+    --type) opt_type="$2" ; shift 2 ;;
+    --disk) opt_disk="$2" ; shift 2 ;;
+    -l|--lang) gfxboot_args="$gfxboot_args --default-language $2" ; shift 2 ;;
+    -t|--theme) opt_theme="$2" ; shift 2 ;;
+    -m|--make) opt_make='-B' ; shift ;;
+    --vm) gfxboot_args="$gfxboot_args --vm $2" ; shift 2 ;;
+    --32) opt_32=1 ; shift ;;
+    --64) opt_64=1 ; shift ;;
+    --) shift ; break;;
+    *) echo "oops: $1" ; exit 1 ;;
+  esac
+done
+
+if [ -n "$opt_disk" ] ; then
+  switch_disk $disk
+  exit
+fi
+
+case "$1" in
+  ""|-*) what=cdrom ;;
+  *) what="$1" ; shift ;;
+esac
+
+if [ ! -d test -o ! -d themes ] ; then
+  echo "error: gfxtest must be run from /usr/share/gfxboot"
+  exit 3
+fi
+
+if [ ! -d "$test_dir/$what" ] ; then
+  echo "config directory missing: $what"
+  exit 1
+else
+  [ -f "$test_dir/$what/gfxtest.config" ] && . "$test_dir/$what/gfxtest.config"
+fi
+
+gfxboot_x_args="$args $@"
+
+opt_theme=${opt_theme:-openSUSE}
+if [ ! -d "themes/$opt_theme" ] ; then
+  echo "no such theme: $opt_theme"
+  exit 1
+fi
+
+opt_archive="themes/$opt_theme/${archive:-bootlogo}"
+case "$opt_type" in
+  boot) opt_archive="themes/$opt_theme/message" ;;
+  install) opt_archive="themes/$opt_theme/bootlogo" ;;
+  "") ;;
+  *) echo "unsupported type: $opt_type" ; exit 1 ;;
+esac
+
+add_files=`echo $test_dir/$what/*`
+
+if [ -f gfxboot-compile.c -a ! -x gfxboot-compile ] ; then
+  make
+
+  [ -x gfxboot-compile ] || {
+    echo "error: gfxboot-compile missing. Run 'make' first."
+    exit 2
+  }
+fi
+
+make $opt_make -C themes/$opt_theme || exit
+
+if [ ! -f "$opt_archive" ] ; then
+  echo "gfxboot archive missing: $opt_archive"
+  exit 1
+fi
+
+tmp_dir=tmp
+mkdir -p "$tmp_dir" || exit
+
+if [ -z "$setup" ] ; then
+  echo "setup function not defined"
+  exit 1
+fi
+
+if [ "`type -t gfxtest_$setup`" = function ] ; then
+  gfxtest_$setup
+else
+  echo "no such setup function: $setup"
+  exit 1
+fi
+

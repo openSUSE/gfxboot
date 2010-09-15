@@ -565,7 +565,11 @@
       $x =~ s/foobar/$up/;
       $x =~ s/FOOBAR/$self->{label}{$up}/;
 
-      $self->{out_buf} .= $x if $self->{label}{$up};
+      if($self->{label}{$up}) {
+        # convert page break into line break
+        substr($x, 0, 1) = "$markup{vspace}\n" if substr($x, 0, 1) eq $markup{page};
+        $self->{out_buf} .= $x;
+      }
     }
   }
 
@@ -872,6 +876,8 @@ sub fake_menu;
 sub prepare_grub;
 sub prepare_lilo;
 sub prepare_isolinux;
+sub prepare_syslinux;
+sub prepare_pxelinux;
 sub prepare_qemu;
 sub run_qemu;
 sub prepare_vbox;
@@ -911,7 +917,7 @@ my $opt_verbose = 0;
 my $opt_preview = 0;
 my $opt_gfxarchive = "/boot/message";
 my $opt_bootloader;
-my $opt_vm = "qemu";
+my $opt_vm = "qemu64";
 my $opt_savetemp = 0;
 my $opt_grub = "/";
 my $opt_lilo = "/";
@@ -925,6 +931,8 @@ my $opt_test = 0;
 my $opt_ls = 0;
 my @opt_addfiles;
 my @opt_rmfiles;
+my @opt_test_addfiles;
+my @opt_test_rmfiles;
 my @opt_extractfiles;
 my $opt_showfile;
 my $opt_theme;
@@ -935,7 +943,8 @@ my $opt_defaultlanguage;
 my $opt_gfxboot_cfg;
 my $opt_expand_archive;
 my $opt_pack_archive;
-my $opt_biarch;
+my $opt_32;
+my $opt_64;
 my $opt_media;
 my $opt_save_image;
 my $opt_help_create;
@@ -943,6 +952,7 @@ my $opt_help_show;
 my $opt_help_navi;
 my @opt_help_used;
 my %opt_help_entity;
+my $opt_no_unpack = 0;
 
 my $sudo;
 my %config;
@@ -957,9 +967,13 @@ my $preview_image;
 
 my %vm_list = (
   'qemu'        => { cmd => 'qemu', package => 'qemu' },
+  'qemu-kvm'    => { cmd => 'qemu-kvm', package => 'qemu' },
   'qemu-i386'   => { cmd => 'qemu-system-i386', package => 'qemu' },
   'qemu-x86_64' => { cmd => 'qemu-system-x86_64', package => 'qemu' },
+  'qemu32'      => { cmd => 'qemu-system-i386', package => 'qemu' },
+  'qemu64'      => { cmd => 'qemu-system-x86_64', package => 'qemu' },
   'vbox'        => { cmd => 'VBoxManage', package => 'virtualbox' },
+  'vbox64'      => { cmd => 'VBoxManage', package => 'virtualbox' },
   'vboxsdl'     => { cmd => 'VBoxSDL', package => 'virtualbox' },
   'vmplayer'    => { cmd => 'vmplayer', package => 'vmware-player' },
   'vmware'      => { cmd => 'vmware', package => 'VMwareWorkstation' },
@@ -967,13 +981,14 @@ my %vm_list = (
   'bochs'       => { cmd => 'bochs', package => 'bochs' },
 );
 
-my @vm_order = qw ( qemu vbox vboxsdl vmplayer vmware qemu-i386 qemu-x86_64 bochs );
+my @vm_order = qw ( qemu64 qemu32 qemu vbox vbox64 vboxsdl vmplayer vmware bochs );
 
 my %bl_list = (
   grub     => '/usr/sbin/grub',
   lilo     => '/sbin/lilo',
   isolinux => '/usr/share/syslinux/isolinux.bin',
   syslinux => '/usr/bin/syslinux',
+  pxelinux => '/usr/share/syslinux/pxelinux.0',
   bd       => '/usr/bin/bd',
   bochs    => '/usr/bin/bochs',
 );
@@ -982,6 +997,7 @@ usage 0 if !@ARGV;
 
 GetOptions(
   'help'                => sub { usage 0 },
+  'version'             => sub { print "<VERSION>\n" ; exit 0 },
   'archive|a=s'         => \$opt_gfxarchive,
   'config-file=s'       => \$opt_gfxboot_cfg,
   'verbose|v+'          => \$opt_verbose,
@@ -994,6 +1010,7 @@ GetOptions(
   'lilo=s'              => \$opt_lilo,
   'isolinux=s'          => \$opt_syslinux,
   'syslinux=s'          => \$opt_syslinux,
+  'pxelinux=s'          => \$opt_syslinux,
   'password=s'          => \$opt_password,
   'show-config'         => \$opt_showconfig,
   'change-config=s{1,}' => \@opt_changeconfig,
@@ -1002,6 +1019,8 @@ GetOptions(
   'list-files|ls'       => \$opt_ls,
   'add-files=s{1,}'     => \@opt_addfiles,
   'rm-files=s{1,}'      => \@opt_rmfiles,
+  'test-add-files=s{1,}' => \@opt_test_addfiles,
+  'test-rm-files=s{1,}'  => \@opt_test_rmfiles,
   'extract-files=s{1,}' => \@opt_extractfiles,
   'show-file=s'         => \$opt_showfile,
   'new-theme=s'         => sub { $opt_theme = $_[1]; $opt_theme_update = 0 },
@@ -1014,13 +1033,17 @@ GetOptions(
   'cdrom|dvd'           => sub { $opt_media = 'cdrom' },
   'disk'                => sub { $opt_media = 'disk' },
   'floppy'              => sub { $opt_media = 'floppy' },
-  'biarch'              => \$opt_biarch,
+  'net'                 => sub { $opt_media = 'net' },
+  'biarch'              => sub { $opt_32 = $opt_64 = 1 },
+  '32'                  => \$opt_32,
+  '64'                  => \$opt_64,
   'save-image=s'        => \$opt_save_image,
   'help-create=s'       => \$opt_help_create,
   'help-show=s'         => \$opt_help_show,
   'used-pages=s{1,}'    => \@opt_help_used,
   'navi=s'              => \$opt_help_navi,
   'define=s%{1,}'       => \%opt_help_entity,
+  'no-unpack'           => \$opt_no_unpack,
 ) || usage 1;
 
 $ENV{PATH} = "/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin";
@@ -1207,7 +1230,12 @@ if($new_archive && !$opt_test) {
 }
 
 if($opt_save_image && $preview_image) {
-  system "cp $preview_image $opt_save_image";
+  if(-f $preview_image) {
+    system "cp $preview_image $opt_save_image";
+  }
+  else {
+    system "cp -a $preview_image $opt_save_image";
+  }
 }
 
 
@@ -1232,6 +1260,7 @@ General options:
                                 (see --expand-archive option below).
   -v, --verbose                 Increase verbosity.
       --save-temp               Keep temporary files.
+      --version                 Show gfxboot version.
       --help                    Write this help text.
 
 Switching themes:
@@ -1265,26 +1294,36 @@ Preview/test gfxboot setup:
 
   -p, --preview                 Try current config (needs some virtual machine).
   -t, --test                    Test only (don't actually change any files).
-  -b, --bootloader BOOTLOADER   Use BOOTLOADER (grub, lilo, isolinux, syslinux) for
+  -b, --bootloader BOOTLOADER   Use BOOTLOADER (grub, lilo, isolinux, syslinux, pxelinux) for
                                 preview.
-  -m, --vm VM                   Use virtual machine VM (bochs, qemu, qemu-i386, qemu-x86_64,
-                                vbox, vboxsdl, vmplayer, vmware) for preview.
+  -m, --vm VM                   Use virtual machine VM (bochs, qemu, qemu32, qemu64,
+                                vbox, vbox64, vmplayer, vmware) for preview.
       --grub DIRECTORY|RPM      Use grub from DIRECTORY or RPM (default is /).
       --lilo DIRECTORY|RPM      Use lilo from DIRECTORY or RPM (default is /).
       --syslinux DIRECTORY|RPM  Use syslinux from DIRECTORY or RPM (default is /).
       --isolinux DIRECTORY|RPM  Use isolinux from DIRECTORY or RPM (default is /).
+      --pxelinux DIRECTORY|RPM  Use pxelinux from DIRECTORY or RPM (default is /).
       --password PASSWORD       Create test config with PASSWORD for preview.
-      --biarch                  Create biarch test image.
+      --32                      Create 32 bit test image.
+      --64                      Create 64 bit test image.
+      --biarch                  Create biarch test image (same as using --32 and --64).
       --cdrom, --dvd            Create iso image for preview.
       --disk                    Create harddisk image for preview.
       --floppy                  Create floppy image for preview.
+      --net                     Create tftp directory for preview.
       --save-image FILE         Copy preview image to FILE.
+      --test-add-files FILE1 FILE2 ...
+                                Add files to test directory.
+      --test-rm-files FILE1 FILE2 ...
+                                Delete files from test directory.
 
 Adding/removing files from gfxboot archive:
 
       --ls, --list-files        List gfxboot archive files.
       --add-files FILE1 FILE2 ...
                                 Add files to gfxboot archive.
+      --rm-files FILE1 FILE2 ...
+                                Delete files from gfxboot archive.
       --extract-files FILE1 FILE2 ...
                                 Copy files from gfxboot archive to current
                                 working directory.
@@ -1293,7 +1332,7 @@ Adding/removing files from gfxboot archive:
                                 Create expanded gfxboot archive version in DIRECTORY.
                                 That is, only files that cannot be read directly from
                                 file system are kept in a cpio archive. All others are
-                                unpacked. Use only for isolinux and syslinux.
+                                unpacked. Use only for isolinux, syslinux, or pxelinux.
       --pack-archive FILE       Pack all gfxboot files into cpio archive FILE.
 
 Modifying help files:
@@ -1370,16 +1409,30 @@ sub preview
     $vm_env->{boot} = 'cd';
     $preview_image = $vm_env->{cd0}{image_name};
   }
+  elsif($bootloader eq 'syslinux') {
+    $vm_env->{hd0} = prepare_syslinux $file;
+    $vm_env->{boot} = 'hd';
+    $preview_image = $vm_env->{hd0}{image_name};
+  }
+  elsif($bootloader eq 'pxelinux') {
+    $vm_env->{tftp} = prepare_pxelinux $file;
+    $vm_env->{boot} = 'net';
+    $preview_image = $vm_env->{tftp}{image_name};
+  }
   else {
     return;
   }
 
-  if($opt_vm =~ /^qemu(|-i386|-x86_64)$/) {
+  if($opt_vm =~ /^qemu(|32|64|-kvm|-i386|-x86_64)$/) {
     prepare_qemu $vm_env;
     run_qemu $vm_env;
   }
   elsif($opt_vm eq 'vbox') {
     prepare_vbox $vm_env;
+    run_vbox $vm_env;
+  }
+  elsif($opt_vm eq 'vbox64') {
+    prepare_vbox $vm_env, 1;
     run_vbox $vm_env;
   }
   elsif($opt_vm eq 'vboxsdl') {
@@ -1554,6 +1607,15 @@ sub prepare_grub
   }
   close F;
 
+  for (@opt_test_addfiles) {
+    system "cp -r $_ $dst/boot" and die "error copying file: $_\n";
+  }
+
+  for (@opt_test_rmfiles) {
+    s#^/+##;
+    system "cd $dst/boot ; rm -f $_" and die "error deleting file: $_\n";
+  }
+
   my $img_size = `du -s --apparent-size --block-size 1k $dst 2>/dev/null`;
   $img_size = $img_size =~ /^(\d+)/ ? $1 * 2 + 2 * 200 : 0;		# add 200k
 
@@ -1663,6 +1725,15 @@ sub prepare_lilo
   }
   close F;
 
+  for (@opt_test_addfiles) {
+    system "cp -r $_ $dst/boot" and die "error copying file: $_\n";
+  }
+
+  for (@opt_test_rmfiles) {
+    s#^/+##;
+    system "cd $dst/boot ; rm -f $_" and die "error deleting file: $_\n";
+  }
+
   my $msg_size = `du -s --apparent-size --block-size 1k $dst/boot/message 2>/dev/null`;
   $msg_size = $msg_size =~ /^(\d+)/ ? $1 * 2 : 0;
   my $img_size = `du -s --apparent-size --block-size 1k $dst 2>/dev/null`;
@@ -1699,12 +1770,21 @@ sub prepare_isolinux
   local $_;
   my $file = shift;
   my $cdimage;
+  my $arch_dir;
+  my $comboot;
 
   die "Can't setup isolinux on $opt_media.\n" if $opt_media && $opt_media ne 'cdrom';
 
   $opt_syslinux = unpack_rpm $opt_syslinux if -f $opt_syslinux;
 
   die "error: isolinux not found\n" unless -f "$opt_syslinux/$bl_list{isolinux}";
+
+  $arch_dir = 'i386';
+  $arch_dir = 'x86_64' if $opt_64 && !$opt_32;
+
+  $comboot = "$opt_syslinux/usr/share/syslinux/gfxboot.c32";
+  $comboot = "$opt_syslinux/usr/share/syslinux/gfxboot.com" unless -f $comboot;
+  $comboot = 0 unless -f $comboot;
 
   my $menu = fake_menu 'install';
 
@@ -1718,60 +1798,79 @@ sub prepare_isolinux
 
   my $loader = "";
   if(-x "$opt_syslinux/usr/bin/isolinux-config") {
-    $loader = "boot/i386/loader/";
+    $loader = "boot/$arch_dir/loader/";
 
     mkdir "$dst/boot", 0755;
-    mkdir "$dst/boot/i386", 0755;
-    mkdir "$dst/boot/i386/loader", 0755;
+    mkdir "$dst/boot/$arch_dir", 0755;
+    mkdir "$dst/boot/$arch_dir/loader", 0755;
   }
 
-  system "cp $opt_syslinux/usr/share/syslinux/isolinux.bin $dst/$loader" and die "error: no isolinux\n";
-  if($loader ne "") {
-    system "isolinux-config --base=/boot/i386/loader $dst/${loader}isolinux.bin" .
-    ($opt_verbose ? "" : " >/dev/null");
+  if($opt_no_unpack) {
+    system "cp -a $file $dst/${loader}/bootlogo";
   }
-
-  my $bl_unpacked;
-  ( $bl_unpacked ) = unpack_archive $file;
-  my $bl_packed = pack_archive $bl_unpacked, 'bootlogo';
-
-  system "cp -a $bl_packed/* $dst/${loader}";
+  else {
+    my $bl_unpacked;
+    ( $bl_unpacked ) = unpack_archive $file;
+    my $bl_packed = pack_archive $bl_unpacked, 'bootlogo';
+    system "cp -a $bl_packed/* $dst/${loader}";
+  }
 
   system "cp /boot/vmlinuz $dst/${loader}linux" if -f "/boot/vmlinuz";
   system "cp /boot/initrd $dst/${loader}initrd" if -f "/boot/initrd";
 
-  open F, ">$dst/${loader}message";
-  print F "\x0cgfxboot didn't work? Try one of those:\n";
-  print F "  $_\n" for (@{$menu->{list}});
-  print F "\n";
-  close F;
-
-  open F, ">$dst/${loader}isolinux.cfg";
-  print F "default $menu->{list}[$menu->{default}]\n\n";
-
-  for (@{$menu->{list}}) {
-    print F "label $_\n";
-    if($_ eq 'harddisk') {
-      print F "  localboot 0x80\n\n";
-    }
-    elsif($_ eq 'memtest' && -f("$dst/${loader}memtest")) {
-      print F "  kernel memtest\n\n";
-    }
-    else {
-      print F "  kernel linux\n  append initrd=initrd  splash=silent showopts\n\n";
-    }
+  if(! -f "$dst/${loader}message") {
+    open F, ">$dst/${loader}message";
+    print F "\x0cgfxboot didn't work? Try one of those:\n";
+    print F "  $_\n" for (@{$menu->{list}});
+    print F "\n";
+    close F;
   }
 
-  print F
-    "implicit 1\n" .
-    "gfxboot bootlogo\n" .
-    "display message\n" .
-    "prompt 1\n" .
-    "timeout 600\n";
+  if(! -f "$dst/${loader}isolinux.cfg") {
+    open F, ">$dst/${loader}isolinux.cfg";
+    print F "default $menu->{list}[$menu->{default}]\n\n";
 
-  close F;
+    for (@{$menu->{list}}) {
+      print F "label $_\n";
+      if($_ eq 'harddisk') {
+        print F "  localboot 0x80\n\n";
+      }
+      elsif($_ eq 'memtest' && -f("$dst/${loader}memtest")) {
+        print F "  kernel memtest\n\n";
+      }
+      else {
+        print F "  kernel linux\n  append initrd=initrd splash=silent showopts\n\n";
+      }
+    }
 
-  if($opt_biarch) {
+    print F $comboot ? "ui gfxboot bootlogo message\n" : "gfxboot bootlogo\ndisplay message\n";
+
+    print F
+      "implicit 1\n" .
+      "prompt 1\n" .
+      "timeout 600\n";
+
+    close F;
+  }
+
+  system "cp $opt_syslinux/usr/share/syslinux/isolinux.bin $dst/$loader" and die "error: no isolinux\n";
+  system "cp $comboot $dst/$loader" if $comboot;
+
+  for (@opt_test_addfiles) {
+    system "cp -r $_ $dst/${loader}" and die "error copying file: $_\n";
+  }
+
+  for (@opt_test_rmfiles) {
+    s#^/+##;
+    system "cd $dst/${loader} ; rm -f $_" and die "error deleting file: $_\n";
+  }
+
+  if($loader ne "") {
+    system "isolinux-config --base=/boot/$arch_dir/loader $dst/${loader}isolinux.bin" .
+    ($opt_verbose ? "" : " >/dev/null");
+  }
+
+  if($opt_32 && $opt_64) {
     symlink "i386", "$dst/boot/x86_64" if -d "$dst/boot/i386";
   }
 
@@ -1786,6 +1885,226 @@ sub prepare_isolinux
 }
 
 
+sub prepare_syslinux
+{
+  local $_;
+  my $file = shift;
+  my $comboot;
+
+  die "Can't setup syslinux on $opt_media.\n" if $opt_media && $opt_media ne 'disk';
+
+  $opt_syslinux = unpack_rpm $opt_syslinux if -f $opt_syslinux;
+
+  die "error: syslinux not found\n" unless -f "$opt_syslinux/$bl_list{syslinux}";
+
+  $comboot = "$opt_syslinux/usr/share/syslinux/gfxboot.c32";
+  $comboot = "$opt_syslinux/usr/share/syslinux/gfxboot.com" unless -f $comboot;
+  $comboot = 0 unless -f $comboot;
+
+  my $menu = fake_menu 'install';
+
+  if($opt_verbose) {
+    print "menu items (default $menu->{default}):\n";
+    print "  $_\n" for (@{$menu->{list}});
+  }
+
+  my $dst = $gfxboot_tmp->dir('syslinux');
+  my $img = $gfxboot_tmp->file('syslinux.img');
+
+  if($opt_no_unpack) {
+    system "cp -a $file $dst/bootlogo";
+  }
+  else {
+    my $bl_unpacked;
+    ( $bl_unpacked ) = unpack_archive $file;
+    my $bl_packed = pack_archive $bl_unpacked, 'bootlogo';
+    system "cp -a $bl_packed/* $dst";
+  }
+
+  system "cp /boot/vmlinuz $dst/linux" if -f "/boot/vmlinuz";
+  system "cp /boot/initrd $dst/initrd" if -f "/boot/initrd";
+
+  if(! -f "$dst/message") {
+    open F, ">$dst/message";
+    print F "\x0cgfxboot didn't work? Try one of those:\n";
+    print F "  $_\n" for (@{$menu->{list}});
+    print F "\n";
+    close F;
+  }
+
+  if(! -f "$dst/syslinux.cfg") {
+    open F, ">$dst/syslinux.cfg";
+    print F "default $menu->{list}[$menu->{default}]\n\n";
+
+    for (@{$menu->{list}}) {
+      print F "label $_\n";
+      if($_ eq 'harddisk') {
+        print F "  localboot 0x80\n\n";
+      }
+      elsif($_ eq 'memtest' && -f("$dst/memtest")) {
+        print F "  kernel memtest\n\n";
+      }
+      else {
+        print F "  kernel linux\n  append initrd=initrd splash=silent showopts\n\n";
+      }
+    }
+
+    print F
+      "implicit 1\n" .
+      "gfxboot bootlogo\n" .
+      "display message\n" .
+      "prompt 1\n" .
+      "timeout 600\n";
+
+    close F;
+  }
+
+  system "cp $comboot $dst" if $comboot;
+
+  for (@opt_test_addfiles) {
+    system "cp -r $_ $dst" and die "error copying file: $_\n";
+  }
+
+  for (@opt_test_rmfiles) {
+    s#^/+##;
+    system "cd $dst ; rm -f $_" and die "error deleting file: $_\n";
+  }
+
+  my $img_size = `du -s --apparent-size --block-size 1k $dst 2>/dev/null`;
+  $img_size = $img_size =~ /^(\d+)/ ? $1 * 2 + 2 * 200 : 0;		# add 200k
+
+  my $hdimage = HDImage::new;
+  $hdimage->verbose($opt_verbose);
+  $hdimage->chs(0, 4, 16);
+  $hdimage->size($img_size);
+  $hdimage->type(1);
+  $hdimage->label('GFXBOOT');
+  $hdimage->fs('fat');
+  $hdimage->mbr('/usr/lib/boot/master-boot-code');
+  $hdimage->add_files(<$dst/*>);
+  $hdimage->write($img);
+
+  my $log = $gfxboot_tmp->file('syslinux.log');
+
+  system "$opt_syslinux/$bl_list{syslinux} -o " . $hdimage->partition_ofs * 512 . " $img >$log 2>&1";
+
+  print `cat $log`, "\n" if $opt_verbose >= 2;
+
+  return $hdimage;
+}
+
+
+sub prepare_pxelinux
+{
+  local $_;
+  my $file = shift;
+  my $pxeimage;
+  my $arch_dir;
+  my $comboot;
+
+  die "Can't setup pxelinux on $opt_media.\n" if $opt_media && $opt_media ne 'net';
+
+  $opt_syslinux = unpack_rpm $opt_syslinux if -f $opt_syslinux;
+
+  die "error: pxelinux not found\n" unless -f "$opt_syslinux/$bl_list{pxelinux}";
+
+  $arch_dir = 'i386';
+  $arch_dir = 'x86_64' if $opt_64 && !$opt_32;
+
+  $comboot = "$opt_syslinux/usr/share/syslinux/gfxboot.c32";
+  $comboot = "$opt_syslinux/usr/share/syslinux/gfxboot.com" unless -f $comboot;
+  $comboot = 0 unless -f $comboot;
+
+  my $menu = fake_menu 'install';
+
+  if($opt_verbose) {
+    print "menu items (default $menu->{default}):\n";
+    print "  $_\n" for (@{$menu->{list}});
+  }
+
+  my $dst = $gfxboot_tmp->dir('pxelinux');
+
+  my $loader = "";
+  if(-x "$opt_syslinux/usr/bin/isolinux-config") {
+    $loader = "boot/$arch_dir/loader/";
+
+    mkdir "$dst/boot", 0755;
+    mkdir "$dst/boot/$arch_dir", 0755;
+    mkdir "$dst/boot/$arch_dir/loader", 0755;
+  }
+
+  if($opt_no_unpack) {
+    system "cp -a $file $dst/${loader}/bootlogo";
+  }
+  else {
+    my $bl_unpacked;
+    ( $bl_unpacked ) = unpack_archive $file;
+    my $bl_packed = pack_archive $bl_unpacked, 'bootlogo';
+    system "cp -a $bl_packed/* $dst/${loader}";
+  }
+
+  system "cp /boot/vmlinuz $dst/${loader}linux" if -f "/boot/vmlinuz";
+  system "cp /boot/initrd $dst/${loader}initrd" if -f "/boot/initrd";
+
+  if(! -f "$dst/${loader}message") {
+    open F, ">$dst/${loader}message";
+    print F "\x0cgfxboot didn't work? Try one of those:\n";
+    print F "  $_\n" for (@{$menu->{list}});
+    print F "\n";
+    close F;
+  }
+
+  if(! -f "$dst/${loader}pxelinux.cfg/default") {
+    mkdir "$dst/${loader}pxelinux.cfg", 0755;
+    open F, ">$dst/${loader}pxelinux.cfg/default";
+    print F "default $menu->{list}[$menu->{default}]\n\n";
+
+    for (@{$menu->{list}}) {
+      print F "label $_\n";
+      if($_ eq 'harddisk') {
+        print F "  localboot 0x80\n\n";
+      }
+      elsif($_ eq 'memtest' && -f("$dst/${loader}memtest")) {
+        print F "  kernel memtest\n\n";
+      }
+      else {
+        print F "  kernel linux\n  append initrd=initrd splash=silent showopts\n\n";
+      }
+    }
+
+    print F $comboot ? "ui gfxboot bootlogo message\n" : "gfxboot bootlogo\ndisplay message\n";
+
+    print F
+      "implicit 1\n" .
+      "prompt 1\n" .
+      "timeout 600\n";
+
+    close F;
+  }
+
+  system "cp $opt_syslinux/usr/share/syslinux/pxelinux.0 $dst/$loader" and die "error: no pxelinux\n";
+  system "cp $comboot $dst/$loader" if $comboot;
+
+  for (@opt_test_addfiles) {
+    system "cp -r $_ $dst/${loader}" and die "error copying file: $_\n";
+  }
+
+  for (@opt_test_rmfiles) {
+    s#^/+##;
+    system "cd $dst/${loader} ; rm -f $_" and die "error deleting file: $_\n";
+  }
+
+  if($opt_32 && $opt_64) {
+    symlink "i386", "$dst/boot/x86_64" if -d "$dst/boot/i386";
+  }
+
+  $pxeimage->{image_name} = $dst;
+  $pxeimage->{loader} = "/${loader}pxelinux.0";
+
+  return $pxeimage;
+}
+
+
 sub prepare_qemu
 {
 }
@@ -1796,14 +2115,23 @@ sub run_qemu
   my $vm_env = shift;
   my $q = $vm_list{$opt_vm}{cmd};
 
+  $q = "MALLOC_CHECK_=0 $q -enable-kvm" if -d "/sys/devices/system/kvm";
+
+  $q .= " -m 512";
+
   $q .= " -boot c" if $vm_env->{boot} eq 'hd';
   $q .= " -boot d" if $vm_env->{boot} eq 'cd';
   $q .= " -boot a" if $vm_env->{boot} eq 'fd';
+  $q .= " -boot n" if $vm_env->{boot} eq 'net';
 
   $q .= " -hda $vm_env->{hd0}{image_name}" if $vm_env->{hd0};
   $q .= " -hdb $vm_env->{hd1}{image_name}" if $vm_env->{hd1};
   $q .= " -fda $vm_env->{fd0}{image_name}" if $vm_env->{fd0};
   $q .= " -cdrom $vm_env->{cd0}{image_name}" if $vm_env->{cd0};
+
+  if($vm_env->{tftp}) {
+    $q .= " -net user,hostname=vm,tftp=$vm_env->{tftp}{image_name},bootfile=$vm_env->{tftp}{loader} -net nic,model=pcnet";
+  }
 
   my $log = $gfxboot_tmp->file('qemu.log');
 
@@ -1816,6 +2144,7 @@ sub run_qemu
 sub prepare_vbox
 {
   my $vm_env = shift;
+  my $vm_64 = shift;
 
   $vm_env->{vmname} = sprintf "gfxboot.%04u", int(rand 10000);
 
@@ -1830,8 +2159,9 @@ sub prepare_vbox
 
   system "VBoxManage createvm -name $vm_env->{vmname} -register >$log 2>&1";
   system "VBoxManage setextradata global 'GUI/RegistrationData' 'triesLeft=0' >$log 2>&1";
-  system "VBoxManage setextradata global 'GUI/SuppressMessages' 'remindAboutAutoCapture,remindAboutInputCapture' >$log 2>&1";
-  system "VBoxManage modifyvm $vm_env->{vmname} -biosbootmenu disabled -bioslogofadein off -bioslogofadeout off >$log 2>&1";
+  system "VBoxManage setextradata global 'GUI/SuppressMessages' 'remindAboutAutoCapture,remindAboutInputCapture,remindAboutMouseIntegrationOn,remindAboutMouseIntegrationOff,remindAboutWrongColorDepth' >$log 2>&1";
+  system "VBoxManage modifyvm $vm_env->{vmname} -memory 512 -biosbootmenu disabled -bioslogofadein off -bioslogofadeout off >$log 2>&1";
+  system "VBoxManage modifyvm $vm_env->{vmname} -hwvirtex on >$log 2>&1" if $vm_64;
 
   if($vm_env->{hd0}) {
     system "VBoxManage convertdd $vm_env->{hd0}{image_name} $vm_env->{base}/VDI/hd0.vdi >$log 2>&1";

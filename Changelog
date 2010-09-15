@@ -1,3 +1,7 @@
+15/10/2010:	v4.1.26
+	- update gfxboot script to HEAD (support latest syslinux & VirtualBox)
+	- replace test scripts with HEAD version
+
 5/7/2010:	v4.1.25
 	- added VMware theme
 
