@@ -1,3 +1,7 @@
+15/10/2010:	v4.1.27
+	- show real product name on serial console (bnc #634299)
+	- use common gfxboot.cfg template for all themes
+
 15/10/2010:	v4.1.26
 	- update gfxboot script to HEAD (support latest syslinux & VirtualBox)
 	- replace test scripts with HEAD version

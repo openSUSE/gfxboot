@@ -178,7 +178,9 @@
   % go for text mode (or use 0?)
   xmenu.video .xm_current 1 put
 
-  "\nopenSUSE 11.1 installation\n\n" serial.show
+  "\n  ***  " serial.show
+  config.product serial.show
+  "  ***\n\n" serial.show
 
   /serial.setup /serial.nop def
 
