@@ -5,14 +5,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2010-06-16 20:28+0300\n"
+"PO-Revision-Date: 2010-08-26 19:20+0300\n"
 "Last-Translator: Mindaugas Baranauskas <embar@users.berlios.de>\n"
-"Language-Team: Lithuanian <kde-i18n-doc@kde.org>\n"
+"Language-Team: Lithuanian <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 1.0\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 ? 0 : n%10==1 && n%100!=11 ? 1 : n%10>=2 && (n%100<10 || n%100>=20) ? 2 : 3);\n"
 
 #. ok button label
 #. txt_ok
@@ -27,7 +27,7 @@ msgstr "Atšaukti"
 #. reboot button label
 #. txt_reboot
 msgid "Reboot"
-msgstr "Perkrauti"
+msgstr "Paleisti iš naujo"
 
 #. continue button label
 #. txt_continue
@@ -44,7 +44,7 @@ msgstr "Linux--saugios nuostatos"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
-msgstr "Įkrauti iš standžiojo disko"
+msgstr "Paleisti iš standžiojo disko"
 
 #. txt_rescue
 msgid "Rescue System"
@@ -56,7 +56,7 @@ msgstr "Atminties testas"
 
 #. txt_bootoptions
 msgid "Boot Options"
-msgstr "Įkrovos parametrai"
+msgstr "Paleidimo parametrai"
 
 #. window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
@@ -68,7 +68,7 @@ msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"Jūs paliekate grafinį įkrovos meniu ir\n"
+"Paliekate grafinį paleidimo meniu ir\n"
 "paleidžiate tekstinę sąsają."
 
 #. txt_help
@@ -105,7 +105,7 @@ msgstr ""
 #. info box title
 #. txt_info_title
 msgid "Boot Loader"
-msgstr "Įkrovos tvarkyklė"
+msgstr "Paleidyklė"
 
 #. error box title
 #. txt_error_title
@@ -115,12 +115,12 @@ msgstr "I/O klaida"
 #. boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr "Keisti įkrovos diską"
+msgstr "Keisti paleidimo diską"
 
 #. txt_insert_disk
 #, c-format
 msgid "Insert boot disk %u."
-msgstr "Įdėkite įkrovos diską %u."
+msgstr "Įdėkite paleidimo diską %u."
 
 #. txt_insert_disk2
 #, c-format
@@ -128,8 +128,8 @@ msgid ""
 "This is boot disk %u.\n"
 "Insert boot disk %u."
 msgstr ""
-"Tai įkrovos diskas %u.\n"
-"Įdėkite įkrovos diską %u."
+"Tai paleidimo diskas %u.\n"
+"Įdėkite paleidimo diską %u."
 
 #. <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
@@ -138,8 +138,8 @@ msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"Tai ne <product> įkrovos diskas.\n"
-"Prašome įdėti įkrovos diską %u."
+"Tai ne <product> paleidimo diskas.\n"
+"Įdėkite paleidimo diską %u."
 
 #. password dialog title
 #. txt_password_title
@@ -175,7 +175,7 @@ msgstr "Diskų įrenginys (jei nėra, skenuos visus diskus)\n"
 
 #. txt_directory
 msgid "Directory\n"
-msgstr "Aplankas\n"
+msgstr "Katalogas\n"
 
 #. dialog title for ftp installation
 #. txt_ftp_title
@@ -208,7 +208,7 @@ msgstr "Naudotojas (naudojama „guest“, jei tuščia)\n"
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "Diegimas per SMB (Windows Share)"
+msgstr "Diegimas per SMB (Windows bendrasis išteklius)"
 
 #. dialog title for http installation
 #. txt_http_title
@@ -223,7 +223,7 @@ msgstr "Tvarkyklė"
 #. as in Windows Authentication Domain
 #. txt_domain
 msgid "Domain\n"
-msgstr "Domenas\n"
+msgstr "Sritis\n"
 
 #. button label for other/more options
 #. txt_other_options
@@ -251,15 +251,15 @@ msgstr "Rinkmena"
 #. input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr "Resursas\n"
+msgstr "Bendrasis išteklius\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
-msgstr "Automatinis režimas"
+msgstr "Automatinė veiksena"
 
 #. txt_zenManual
 msgid "Manual Mode"
-msgstr "Rankinis režimas"
+msgstr "Rankinė veiksena"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
@@ -267,11 +267,11 @@ msgstr "Konfigūruoti ZEN skaidinio parametrus"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr "Įdiegtiarba atnaujinti ZEN skaidinį"
+msgstr "Įdiegti arba atnaujinti ZEN skaidinį"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "Iš naujo įdiegti ZEN skaidinio įkrovos tvarkyklę"
+msgstr "Iš naujo įdiegti ZEN skaidinio paleidyklę"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
@@ -284,7 +284,7 @@ msgstr "Įgalinti ZEN skaidinį"
 #. video mode menu item
 #. txt_text_mode
 msgid "Text Mode"
-msgstr "Tekstinis režimas"
+msgstr "Tekstinė veiksena"
 
 #. menu item, like 'memory test'
 #. txt_firmware
@@ -311,7 +311,7 @@ msgstr "Šaltinis"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_video_mode
 msgid "Video Mode"
-msgstr "Vaizdo režimas"
+msgstr "Vaizdo veiksena"
 
 #. driver update dialog title
 #. -> txt_dud_file_msg
@@ -341,7 +341,7 @@ msgstr "Numatytasis"
 #. -> like in txt_safe_linux
 #. txt_kernel_safe
 msgid "Safe Settings"
-msgstr "Saugūs nustatymai"
+msgstr "Saugios nuostatos"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_noacpi_install
@@ -413,12 +413,12 @@ msgstr "Kompiuterio IP\n"
 #. label for gateway ip
 #. txt_gateway_ip
 msgid "Gateway\n"
-msgstr "Tinklo vartai\n"
+msgstr "Tinklų sietuvas\n"
 
 #. label for dns domain name (like 'opensuse.org')
 #. txt_domain_name
 msgid "Domain Name\n"
-msgstr "Srities pavadinimas\n"
+msgstr "Srities vardas\n"
 
 #. label for nameserver list
 #. txt_nameservers
@@ -430,7 +430,7 @@ msgstr "Vardų serveriai (atskirti kableliais)\n"
 msgid "Netmask\n(or use '/N' notation with Host IP)\n"
 msgstr ""
 "Tinklo kaukė\n"
-"(naudokite „/N“ pastabą su kompiuterio IP)\n"
+"(naudokite „/N“ užrašą su kompiuterio IP)\n"
 
 #. label for Live CD installation
 #. txt_live_kde
