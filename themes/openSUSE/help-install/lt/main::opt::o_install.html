@@ -2,29 +2,8 @@
 <a name="o_install">Diegimo parametrai: install</a>
 </h3>
 
-<p>
-By default, the local CD-ROMs are searched for the installation source.
-For a network install, select the
-<em>įdiegti</em> option. Possible installation protocols are
-<ul>
-  <li>FTP</li>
-  <li>NFS</li>
-  <li>HTTP</li>
-</ul>
-</p>
+<p>Numatytuoju atveju bandoma CD diegimo šaltinį. Jei norite diegti per tinklą, rinkitės parametrą <em>įdiegti</em>. Palaikomi diegimo protokolai: <ul><li>FTP</li><li>NFS</li><li>HTTP</li></ul></p>
 
-<p>
-The syntax to use is just like standard URLs. For example, 
-if your server is found at 192.168.0.1 and you want to do an NFS-based
-install from the directory /install on this server, specify
-the source as follows:
-<ul>
-  <li>install=nfs://192.168.0.1/install</li>
-</ul>
-</p>
+<p>Naudojama sintaksė – standartinis URL. Pavyzdžiui, jei Jūsų serveris randamas adresu 192.168.0.1, o diegti norite NFS pagrindu iš šio serverio katalogo „/diegimas“, šaltinį nurodykite taip: <ul><li>install=nfs://192.168.0.1/diegimas</li></ul></p>
 
-<p>
-The network card will either be configured with <em>dhcp</em> or you
-must specify the parameters yourself as described in the
-<a href="#network">tinklo parametrai</a>.
-</p>
+<p>Tinklo plokštę galima sukonfigūruoti per <em>dhcp</em>, arba galite parametrus nurodyti patys, remdamiesi pagalbos skyreliu <a href="#network">tinklo parametrai</a>.</p>

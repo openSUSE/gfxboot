@@ -1,5 +1,5 @@
 <h3>
-<a name="main">Käynnistyslataimen ohje</a>
+<a name="main">Käynnistyslataajan ohje</a>
 </h3>
 
 <p><em>@@@product@@@</em>: Tervetuloa</p>
@@ -10,15 +10,15 @@
 
 <p><a href="#linux">Asennus</a>: Tämä asennustila toimii useimmissa koneissa. Jos järjestelmä pysähtyy käynnistyksen aikana tai laitteiston tunnistamisessa on ongelmia (levyohjaimet ja verkkokortit), kokeile jotakin seuraavista asennusvalinnoista.</p>
 
-<p><a href="#noacpi">Asennus -- ACPI poissa käytöstä</a>: Useissa myynnissä olevissa tietokoneissa on keskeneräinen tai virheellinen ACPI toteutus. Tämä valinta poistaa ACPI -tuen ytimestä, mutta käyttää silti useita suorituskykyä parantavia ominaisuuksia, kuten DMA:ta IDE -kiintolevyille.</p>
+<p><a href="#noacpi">Asennus -- ACPI poissa käytöstä</a>: Useissa myynnissä olevissa tietokoneissa on keskeneräinen tai virheellinen ACPI-toteutus. Tämä valinta poistaa ACPI-tuen ytimestä, mutta käyttää silti useita suorituskykyä parantavia ominaisuuksia, kuten DMA-siirtotapaa IDE -kiintolevyille.</p>
 
-<p><a href="#nolapic">Asennus -- Paikallinen APIC pois käytöstä</a>: Jos normaali asennus epäonnistuu, tämä voi johtua paikallisen APICin puutteellisesta tuesta järjestelmän laitteille. Jos näin on, käytä tätä valintaa suorittaaksesi asennuksen ilman paikallista APIC tukea.</p>
+<p><a href="#nolapic">Asennus -- Paikallinen APIC pois käytöstä</a>: Jos järjestelmän normaali asennus epäonnistuu, tämä voi johtua paikallisen APIC-tuen riittämättömyydestä. Jos näin on, käytä tätä valintaa suorittaaksesi asennus ilman paikallista APIC-tukea.</p>
 
 <p><a href="#failsafe">Asennus -- Turvalliset asetukset</a>: Jos et onnistunut <em>Asennus</em> kanssa, tämä valinta saattaa ratkaista asian.</p>
 
-<p><a href="#rescue">Korjausjärjestelmä</a>: Tämä käynnistyslevykuva käynnistää pienen Linux -järjestelmän RAM -muistiin. Se on käytännöllinen, jos järjestelmä ei käynnisty kunnolla. Järjestelmän käynnistyttyä kirjaudu sisään root-käyttäjänä.</p>
+<p><a href="#rescue">Korjausjärjestelmä</a>: Tämä käynnistyslevykuva käynnistää pienen Linux-järjestelmän RAM-muistiin. Se on käytännöllinen, jos järjestelmä ei käynnisty kunnolla. Järjestelmän käynnistyttyä kirjaudu sisään pääkäyttäjänä (root).</p>
 
-<p><a href="#firmware">Laiteohjelmiston testi</a>: Suorittaa BIOS tarkistustyökalun joka vahvistaa ACPIn ja muita BIOSin osia.</p>
+<p><a href="#firmware">Laiteohjelmiston testi</a>: Suorittaa BIOS-tarkistuksen, joka vahvistaa  ACPI-BIOS -ominaisuuksia.</p>
 
 <p><a href="#memtest">Muistitesti</a>: Muistitesti on käytännöllinen muutenkin kuin vain uusien muistimoduulien tarkistamisessa. Se on kestotesti suurelle osalle tietokonettasi ja voi osoittaa mahdolliset laiteongelmat.</p>
 
@@ -26,7 +26,7 @@
 
 <p><a href="#help">@@@fkey_help@@@ Ohje</a>: Tämä on kontekstiriippuvainen. Se näyttää eri asioita riippuen valitusta käynnistysnäytön kohdasta. Myös ohjejärjestelmän kuvaus on saatavilla.</p>
 
-<p><a href="#keytable">@@@fkey_lang@@@</a>: Aseta käynnistyslataimen käyttämä kieli ja näppäimistökartta.</p>
+<p><a href="#keytable">@@@fkey_lang@@@</a>: Aseta käynnistyslataajan käyttämä kieli ja näppäimistökartta.</p>
 
 <p><a href="#videomode">@@@fkey_video@@@ Videotila</a>: Tässä valitset asennuksen aikana käytettävän näytönkoon. Jos kohtaat ongelmia graafisessa asennuksessa, <em>tekstitila</em> voi olla toimiva vaihtoehto.</p>
 

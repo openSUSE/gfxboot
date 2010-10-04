@@ -1,52 +1,35 @@
 <h3>
-<a name="main">Įkrovos tvarkyklės pagalba</a>
+<a name="main">Paleidyklės pagalba</a>
 </h3>
 
 <p>Jus sveikina <em>@@@product@@@</em></p>
 
-<p>Šį meniu naudokite norimos funkcijos pasirinkimui. Jei kyla problemų naršant šią pagalbos sistemą, spauskite <em>@@@fkey_help@@@</em> ir įeisite į pagalbos sistemos <a href="#help">aprašymas</a>. Pagrindinės šio meniu funkcijos yra:</p>
+<p>Šį meniu naudokite norimos funkcijos pasirinkimui. Jei kyla problemų naršant šią pagalbos sistemą, nuspauskite <em>@@@fkey_help@@@</em> ir pasirodys pagalbos sistemos <a href="#help">aprašas</a>. Pagrindinės šio meniu funkcijos yra:</p>
 
-<p><a href="#harddisk">Įkrauti iš standžiojo disko</a>: Šis pasirinkimas sistemai nieko nedaro. Jis tik paleidžia anksčiau įdiegtą operacinę sistemą.</p>
+<p><a href="#harddisk">Paleisti iš standžiojo disko</a>: Šis pasirinkimas sistemai nieko nedaro. Jis tik paleidžia anksčiau įdiegtą operacinę sistemą.</p>
 
-<p><a href="#linux">Diegimas</a>: Ši diegimo veiksena veikia daugumoje kompiuterių. Jei sistemą nulūždavo įkrovos metu ar būdavo problemų su jūsų aparatinės įrangos aptikimu, pvz., diskų valdikliais ar tinklo plokštėmis, mėginkite vieną iš sekančių diegimo paramatrų.</p>
+<p><a href="#linux">Diegimas</a>: Ši diegimo veiksena veikia daugumoje kompiuterių. Jei sistema nulūždavo paleidimo metu ar kildavo problemų su aparatinės įrangos aptikimu, pvz., diskų valdikliais ar tinklo plokštėmis, mėginkite vieną iš sekančių diegimo parametrų.</p>
 
-<p>
-<a href="#noacpi">Diegimas -- ACPI uždraustas</a>: Many of the
-currently-sold computers have incomplete or faulty ACPI
-implementations. This selection disables ACPI support in the
-kernel, but still enables many performance features, like DMA for IDE
-hard disks.
-</p>
+<p><a href="#noacpi">Diegimas -- ACPI uždraustas</a>: Daug šiuo metu parduodamų kompiuterių turi nepilną arba ydingą ACPI. Šis pasirinkimas uždraudžia ACPI palaikymą branduolio lygyje, bet vis tiek įgalina daugybę veikimo savybių, pvz., IDE standžiųjų diskų DMA.</p>
 
-<p>
-<a href="#nolapic">Diegimas -- Vietinis APIC uždraustas</a>:
-If the normal installation fails, this might be due to the
-system hardware not supporting local APIC.
-If this seems to be the case, use this option to
-install without local APIC support.
-</p>
+<p><a href="#nolapic">Diegimas -- Vietinis APIC uždraustas</a>: Jei įprastai įdiegti nepavyksta, galbūt taip atsitinka dėl to, kad sistemos aparatinė įranga nepalaiko vietinio APIC. Jei taip ir yra, diegimui be vietinio APIC palaikymo rinkitės šią parinktį.</p>
 
-<p><a href="#failsafe">Diegimas -- Saugios nuostatos</a>: Jei jums nepasisekė su <em>Diegimas</em>, šis pasirinkimas gal išspręsti problemą.</p>
+<p><a href="#failsafe">Diegimas -- Saugios nuostatos</a>: Jei <em>Diegimas</em> nebuvo sėkmingas, mėginkite dar kartą naudodami šią parinktį.</p>
 
-<p><a href="#rescue">Avarinė sistema</a>: Šis įkrovos atvaizdas paleidžia mažą Linux sistemą operatyvioje atmintyje. Tai naudinga tuomet, kai sistema tinkamai nepasileidžia. Įkrovę šią sistemą, prisijunkite kaip „root“.</p>
+<p><a href="#rescue">Avarinė sistema</a>: Šis paleidimo atvaizdis paleidžia mažą Linux sistemą operatyvioje atmintyje. Naudinga tuomet, kai sistema nepasileidžia tinkamai. Paleidę šią sistemą, prisijunkite kaip naudotojas „root“.</p>
 
 <p><a href="#firmware">Programinės aparatinės įrangos patikrinimas</a>: Paleidžia BIOS testavimo įrankį, kuris patikrina ACPI ir kitas BIOS dalis.</p>
 
-<p><a href="#memtest">Atminties testas</a>: Atminties testas naudingas ne tik tikrinant naujus atminties modulius. Tai svarbus testas didžiajai jūsų kompiuterio sistemos daliai.Jis gali nurodyti aparatinės įrangos problemas.</p>
+<p><a href="#memtest">Atminties testas</a>: Atminties testas naudingas ne tik tikrinant naujus atminties modulius. Tai svarbus testas didžiajai jūsų kompiuterio sistemos daliai. Taip galima aptikti aparatinės įrangos problemas.</p>
 
-<p><a href="#opt">Įkrovos parametrai</a>: Įkrovos parametrai gali pakeisti visiškai pakeisti Jūsų sistemos elgseną. Tai branduolio nuostatos.</p>
+<p><a href="#opt">Paleidimo parametrai</a>: Paleidimo parametrai gali visiškai pakeisti sistemos elgseną. Tai branduolio nuostatos.</p>
 
-<p>
-<a href="#help">@@@fkey_help@@@ Pagalba</a>: This is context sensitive. It will
-show different screens depending on the active element of the
-boot screen. There is also a description of this help system
-available.
-</p>
+<p><a href="#help">@@@fkey_help@@@ Pagalba</a>: Ypač priklauso nuo konteksto. Priklausomai nuo aktyvaus paleidimo lango elemento, bus rodomas atitinkamas langas. Kartu tai ir šios pagalbos sistemos pagalbos aprašas.</p>
 
-<p><a href="#keytable">@@@fkey_lang@@@</a>: Pasirinkite kalbą ir klaviatūros išdėstymą, kuriuos naudos įkrovos tvarkyklė.</p>
+<p><a href="#keytable">@@@fkey_lang@@@</a>: Pasirinkite kalbą ir klaviatūros išdėstymą, kuriuos naudos paleidyklė.</p>
 
-<p><a href="#videomode">@@@fkey_video@@@ Vaizdo režimas</a>: Čia pasirinkite diegimo metu naudosimą ekrano skiriamąją gebą. Jei grafinio diegimo metu kyla nesklandumų, jų išvengti gali padėti <em>tekstinis režimas</em>.</p>
+<p><a href="#videomode">@@@fkey_video@@@ Vaizdo veiksena</a>: Čia pasirinkite diegimo metu naudosimą ekrano skiriamąją gebą. Jei grafinio diegimo metu kyla nesklandumų, jų išvengti gali padėti <em>tekstinė veiksena</em>.</p>
 
 <p><a href="#install_src">@@@fkey_inst@@@ Diegimo šaltinis</a>: Pasirinkite diegimo šaltinį.</p>
 
-<p><a href="#driverupdate">@@@fkey_dud@@@ Tvarkyklės atnaujinimas</a>: Naujuose kompiuteriuose atnaujinti tvarkykles gali būti būtina norint įdiegti sistemą.</p>
+<p><a href="#driverupdate">@@@fkey_dud@@@ Tvarkyklės atnaujinimas</a>: Norint įdiegti sistemą naujuose kompiuteriuose, gali reikti atnaujinti tvarkykles.</p>

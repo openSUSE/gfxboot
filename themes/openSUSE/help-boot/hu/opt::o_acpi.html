@@ -2,6 +2,6 @@
 <a name="o_acpi">Kernelparamétere: acpi</a>
 </h3>
 
-<p>Az ACPI (Advanced Configuration and Power Interface) szabvány meghatározza, hogy az operációs rendszer és a BIOS között hogyan működjenek az energiakezelési funkciók. Alapértelmezett esetben akkor van bekapcsolva az <em>acpi</em> opció, ha a 2000. év után készült BIOS-verziót talál. Az ACPI viselkedését az alábbi opciókkal lehet pontosan meghatározni: <ul><li><em>pci=noacpi</em> -- ne használja az ACPI-t PCI-megszakításokhoz</li><li><em>acpi=oldboot</em> -- a rendszerindításkor szükséges ACPI-részek bekapcsolása</li><li><em>acpi=off</em> -- az ACPI teljes kikapcsolása</li><li><em>acpi=force</em> -- az ACPI bekapcsolása annak ellenére, hogy a BIOS a 2000. év előtt készült</li></ul></p>
+<p>Az ACPI (Advanced Configuration and Power Interface) szabvány meghatározza, hogy az operációs rendszer és a BIOS között hogyan működjenek az energiakezelési funkciók. Alapértelmezett esetben akkor van bekapcsolva az <em>acpi</em> opció, ha az egy 2000. év után készült BIOS-verziót talál. Az ACPI viselkedését az alábbi opciókkal lehet pontosan beállítani: <ul><li><em>pci=noacpi</em> -- ne használja az ACPI-t PCI-megszakításokhoz</li><li><em>acpi=oldboot</em> -- a rendszerindításkor szükséges ACPI-részek bekapcsolása</li><li><em>acpi=off</em> -- az ACPI teljes kikapcsolása</li><li><em>acpi=force</em> -- az ACPI bekapcsolása annak ellenére, hogy a BIOS a 2000. év előtt készült</li></ul></p>
 
 <p>Új számítógépeken az ACPI teljes mértékben helyettesíti a régi <a href="#o_apm">apm</a> rendszert.</p>
