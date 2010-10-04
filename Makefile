@@ -1,14 +1,20 @@
-ARCH := $(shell uname -m)
-GFXBOOT_VERSION := $(shell cat VERSION)
-
 CC	 = gcc
 CFLAGS	 = -g -Wall -Wno-pointer-sign -O2 -fomit-frame-pointer
+
+GIT2LOG := $(shell if [ -x ./git2log ] ; then echo ./git2log --update ; else echo true ; fi)
+GITDEPS := $(shell [ -d .git ] && echo .git/HEAD .git/refs/heads .git/refs/tags)
+
+VERSION := $(shell $(GIT2LOG) --version VERSION ; cat VERSION)
+
 # THEMES	 = $(wildcard themes/*)
 THEMES	 = themes/upstream themes/openSUSE themes/SLES themes/SLED
 
 .PHONY: all clean distclean doc install installsrc themes
 
-all:	bin2c gfxboot-compile bincode gfxboot-font addblack
+all:	changelog bin2c gfxboot-compile bincode gfxboot-font addblack
+
+changelog: $(GITDEPS)
+	$(GIT2LOG) --changelog changelog
 
 gfxboot-font: gfxboot-font.c
 	$(CC) $(CFLAGS) -I /usr/include/freetype2 -lfreetype $< -o $@
@@ -43,7 +49,7 @@ jpeg.o: jpeg.S
 
 install: all
 	install -d -m 755 $(DESTDIR)/usr/sbin
-	perl -p -e 's/<VERSION>/$(GFXBOOT_VERSION)/' gfxboot >gfxboot~
+	perl -p -e 's/<VERSION>/$(VERSION)/' gfxboot >gfxboot~
 	install -m 755 gfxboot~ $(DESTDIR)/usr/sbin/gfxboot
 	install -m 755 gfxtest $(DESTDIR)/usr/sbin
 	install -m 755 gfxboot-compile gfxboot-font $(DESTDIR)/usr/sbin
