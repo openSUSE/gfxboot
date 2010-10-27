@@ -527,6 +527,9 @@
     dialog.width max /dialog.width exch def
   } if } if
 
+  % fit to screen size
+  /dialog.width screen.size pop 10 sub dialog.width min def
+
   % adjust to window size
   dialog.tmp .ed.width get .undef ne {
     dialog.tmp .ed.width over over get dialog.width 30 sub max put
