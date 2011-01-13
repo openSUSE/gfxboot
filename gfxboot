@@ -967,7 +967,7 @@ my $preview_image;
 
 my %vm_list = (
   'qemu'        => { cmd => 'qemu', package => 'qemu' },
-  'qemu-kvm'    => { cmd => 'qemu-kvm', package => 'qemu' },
+  'qemu-kvm'    => { cmd => 'qemu-kvm', package => 'kvm' },
   'qemu-i386'   => { cmd => 'qemu-system-i386', package => 'qemu' },
   'qemu-x86_64' => { cmd => 'qemu-system-x86_64', package => 'qemu' },
   'qemu32'      => { cmd => 'qemu-system-i386', package => 'qemu' },
@@ -981,7 +981,7 @@ my %vm_list = (
   'bochs'       => { cmd => 'bochs', package => 'bochs' },
 );
 
-my @vm_order = qw ( qemu64 qemu32 qemu vbox vbox64 vboxsdl vmplayer vmware bochs );
+my @vm_order = qw ( qemu64 qemu32 qemu qemu-kvm vbox vbox64 vboxsdl vmplayer vmware bochs );
 
 my %bl_list = (
   grub     => '/usr/sbin/grub',
@@ -1472,7 +1472,7 @@ sub check_vm
   return if has_command $vm_list{$opt_vm}{cmd};
 
   for (@vm_order) {
-    if(has_command $_->{cmd}) {
+    if(has_command $vm_list{$_}{cmd}) {
       $opt_vm = $_;
       return;
     }
