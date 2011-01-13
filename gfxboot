@@ -912,6 +912,7 @@ sub rm_languages;
 sub default_language;
 sub get_theme;
 sub unpack_rpm;
+sub create_vmdk;
 
 my $opt_verbose = 0;
 my $opt_preview = 0;
@@ -953,6 +954,8 @@ my $opt_help_navi;
 my @opt_help_used;
 my %opt_help_entity;
 my $opt_no_unpack = 0;
+my $opt_mem = 512;
+my $opt_efi;
 
 my $sudo;
 my %config;
@@ -1044,6 +1047,10 @@ GetOptions(
   'navi=s'              => \$opt_help_navi,
   'define=s%{1,}'       => \%opt_help_entity,
   'no-unpack'           => \$opt_no_unpack,
+  'mem=i'               => \$opt_mem,
+  'efi'                 => sub { $opt_efi = 64 },
+  'efi64'               => sub { $opt_efi = 64 },
+  'efi32'               => sub { $opt_efi = 32 },
 ) || usage 1;
 
 $ENV{PATH} = "/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin";
@@ -1396,21 +1403,25 @@ sub preview
 
   if($bootloader eq 'grub') {
     $vm_env->{hd0} = prepare_grub $file;
+    $vm_env->{hds} = 1;
     $vm_env->{boot} = 'hd';
     $preview_image = $vm_env->{hd0}{image_name};
   }
   elsif($bootloader eq 'lilo') {
     $vm_env->{hd0} = prepare_lilo $file;
+    $vm_env->{hds} = 1;
     $vm_env->{boot} = 'hd';
     $preview_image = $vm_env->{hd0}{image_name};
   }
   elsif($bootloader eq 'isolinux') {
     $vm_env->{cd0} = prepare_isolinux $file;
+    $vm_env->{cds} = 1;
     $vm_env->{boot} = 'cd';
     $preview_image = $vm_env->{cd0}{image_name};
   }
   elsif($bootloader eq 'syslinux') {
     $vm_env->{hd0} = prepare_syslinux $file;
+    $vm_env->{hds} = 1;
     $vm_env->{boot} = 'hd';
     $preview_image = $vm_env->{hd0}{image_name};
   }
@@ -2145,47 +2156,74 @@ sub prepare_vbox
 {
   my $vm_env = shift;
   my $vm_64 = shift;
+  my $idx;
 
   $vm_env->{vmname} = sprintf "gfxboot.%04u", int(rand 10000);
 
   $vm_env->{base} = $gfxboot_tmp->dir('vbox');
 
   $ENV{VBOX_USER_HOME} = $vm_env->{base};
-  mkdir "$vm_env->{base}/VDI", 0755;
+  mkdir "$vm_env->{base}/HardDisks", 0755;
 
   # print "*** $vm_env->{base}\n";
 
   my $log = $gfxboot_tmp->file('vbox.log');
 
-  system "VBoxManage createvm -name $vm_env->{vmname} -register >$log 2>&1";
+  system "VBoxManage createvm --name $vm_env->{vmname} --register >$log 2>&1";
+
+  system "VBoxManage setextradata global 'GUI/UpdateDate' 'never' >$log 2>&1";
   system "VBoxManage setextradata global 'GUI/RegistrationData' 'triesLeft=0' >$log 2>&1";
-  system "VBoxManage setextradata global 'GUI/SuppressMessages' 'remindAboutAutoCapture,remindAboutInputCapture,remindAboutMouseIntegrationOn,remindAboutMouseIntegrationOff,remindAboutWrongColorDepth' >$log 2>&1";
-  system "VBoxManage modifyvm $vm_env->{vmname} -memory 512 -biosbootmenu disabled -bioslogofadein off -bioslogofadeout off >$log 2>&1";
-  system "VBoxManage modifyvm $vm_env->{vmname} -hwvirtex on >$log 2>&1" if $vm_64;
+  system "VBoxManage setextradata global 'GUI/LicenseAgreed' '7,8' >$log 2>&1";
+  system "VBoxManage setextradata global 'GUI/SuppressMessages' 'remindAboutAutoCapture,remindAboutInputCapture,remindAboutMouseIntegrationOn,remindAboutMouseIntegrationOff,remindAboutWrongColorDepth,confirmInputCapture' >$log 2>&1";
 
-  if($vm_env->{hd0}) {
-    system "VBoxManage convertdd $vm_env->{hd0}{image_name} $vm_env->{base}/VDI/hd0.vdi >$log 2>&1";
-    system "VBoxManage modifyvm $vm_env->{vmname} -hda hd0.vdi >$log 2>&1";
+  system "VBoxManage modifyvm $vm_env->{vmname} --ostype OpenSUSE_64 >$log 2>&1";
+  system "VBoxManage modifyvm $vm_env->{vmname} --memory $opt_mem --biosbootmenu disabled --bioslogofadein off --bioslogofadeout off >$log 2>&1";
+  system "VBoxManage modifyvm $vm_env->{vmname} --hwvirtex on >$log 2>&1" if $vm_64;
+  system "VBoxManage modifyvm $vm_env->{vmname} --ioapic on >$log 2>&1";
+#  system "VBoxManage modifyvm $vm_env->{vmname} --hwvirtexexcl off >$log 2>&1";
+  system "VBoxManage modifyvm $vm_env->{vmname} --firmware efi64 >$log 2>&1" if $opt_efi == 64;
+  system "VBoxManage modifyvm $vm_env->{vmname} --firmware efi32 >$log 2>&1" if $opt_efi == 32;
+
+  if($vm_env->{hds} > 0) {
+    system "VBoxManage storagectl $vm_env->{vmname} --name sata1 --add sata >$log 2>&1";
+  }
+  if($vm_env->{cds} > 0) {
+    system "VBoxManage storagectl $vm_env->{vmname} --name ide1 --add ide >$log 2>&1";
+  }
+  if($vm_env->{fds} > 0) {
+    system "VBoxManage storagectl $vm_env->{vmname} --name floppy1 --add floppy >$log 2>&1";
   }
 
-  if($vm_env->{hd1}) {
-    system "VBoxManage convertdd $vm_env->{hd1}{image_name} $vm_env->{base}/VDI/hd1.vdi >$log 2>&1";
-    system "VBoxManage modifyvm $vm_env->{vmname} -hdb hd1.vdi >$log 2>&1";
+  for($idx = 0; $idx < $vm_env->{hds}; $idx++) {
+    if($vm_env->{"hd$idx"}) {
+      create_vmdk $vm_env->{"hd$idx"}, "$vm_env->{base}/HardDisks/hd${idx}.vmdk";
+      my $opt = "hd" . chr($idx + ord("a"));
+      system "VBoxManage storageattach $vm_env->{vmname} --storagectl sata1 --port $idx --device 0 --type hdd --medium hd${idx}.vmdk >$log 2>&1";
+    }
   }
 
-  if($vm_env->{cd0}) {
-    system "cp $vm_env->{cd0}{image_name} $vm_env->{base}/VDI/cd0.iso >$log 2>&1";
-    system "VBoxManage modifyvm $vm_env->{vmname} -dvd VDI/cd0.iso >$log 2>&1";
+  for($idx = 0; $idx < $vm_env->{cds}; $idx++) {
+    if($vm_env->{"cd$idx"}) {
+      system "ln -s $vm_env->{\"cd$idx\"}{image_name} $vm_env->{base}/HardDisks/\"cd$idx\".iso >$log 2>&1";
+      system "VBoxManage storageattach $vm_env->{vmname} --storagectl ide1 --port $idx --device 0 --type dvddrive --medium \"cd$idx\".iso >$log 2>&1";
+    }
   }
 
-  if($vm_env->{fd0}) {
-    system "cp $vm_env->{fd0}{image_name} $vm_env->{base}/VDI/fd0.img >$log 2>&1";
-    system "VBoxManage modifyvm $vm_env->{vmname} -floppy VDI/fd0.img >$log 2>&1";
+  for($idx = 0; $idx < $vm_env->{fds}; $idx++) {
+    if($vm_env->{"fd$idx"}) {
+      system "ln -s $vm_env->{\"fd$idx\"}{image_name} $vm_env->{base}/HardDisks/\"fd$idx\".img >$log 2>&1";
+      system "VBoxManage storageattach $vm_env->{vmname} --storagectl floppy1 --port $idx --device 0 --type floppy --medium \"fd$idx\".img >$log 2>&1";
+    }
   }
 
-  system "VBoxManage modifyvm $vm_env->{vmname} -boot1 disk >$log 2>&1" if $vm_env->{boot} eq 'hd';
-  system "VBoxManage modifyvm $vm_env->{vmname} -boot1 dvd >$log 2>&1" if $vm_env->{boot} eq 'cd';
-  system "VBoxManage modifyvm $vm_env->{vmname} -boot1 floppy >$log 2>&1" if $vm_env->{boot} eq 'fd';
+  system "VBoxManage modifyvm $vm_env->{vmname} --boot1 none >$log 2>&1";
+  system "VBoxManage modifyvm $vm_env->{vmname} --boot2 none >$log 2>&1";
+  system "VBoxManage modifyvm $vm_env->{vmname} --boot3 none >$log 2>&1";
+  system "VBoxManage modifyvm $vm_env->{vmname} --boot4 none >$log 2>&1";
+
+  system "VBoxManage modifyvm $vm_env->{vmname} --boot1 disk >$log 2>&1" if $vm_env->{boot} eq 'hd';
+  system "VBoxManage modifyvm $vm_env->{vmname} --boot1 dvd >$log 2>&1" if $vm_env->{boot} eq 'cd';
+  system "VBoxManage modifyvm $vm_env->{vmname} --boot1 floppy >$log 2>&1" if $vm_env->{boot} eq 'fd';
 
   print `cat $log`, "\n" if $opt_verbose >= 2;
 }
@@ -2988,4 +3026,31 @@ sub unpack_rpm
   return $dir;
 }
 
+
+sub create_vmdk
+{
+  my $hd = shift;
+  my $file = shift;
+
+  if($hd) {
+    open F, ">$file";
+    print F <<"    vmdk";
+# Disk DescriptorFile
+version=1
+CID=ec316048
+parentCID=ffffffff
+createType="fullDevice"
+RW $hd->{size} FLAT \"$hd->{image_name}\" 0
+ddb.virtualHWVersion = \"4\"
+ddb.adapterType=\"ide\"
+ddb.geometry.cylinders = \"$hd->{c}\"
+ddb.geometry.heads = \"$hd->{h}\"
+ddb.geometry.sectors = \"$hd->{s}\"
+ddb.geometry.biosCylinders = \"$hd->{c}\"
+ddb.geometry.biosHeads = \"$hd->{h}\"
+ddb.geometry.biosSectors = \"$hd->{s}\"
+    vmdk
+    close F;
+  }
+}
 
