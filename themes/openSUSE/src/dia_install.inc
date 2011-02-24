@@ -24,6 +24,11 @@
 
 /install.default .inst_cdrom def
 
+% isohybrid image booted as disk
+sectorsize 0x800 eq bootdrive 0x80 eq and {
+  /install.default .inst_hd def
+} if
+
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Build install mode list.
 %
