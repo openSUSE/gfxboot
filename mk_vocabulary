@@ -77,6 +77,8 @@
 
   getkey serial.init serial.putc serial.setconfig serial.getbaud
 
+  realpath systempath
+
   xxx test1 test2 test3 test4 test5 test6
 
 );

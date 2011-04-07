@@ -375,6 +375,13 @@ idle.run		db 0		; run idle loop
 idle.invalid		db 0		; idle loop has been left
 
 			align 4, db 0
+fname.tmp		dd 0		; (lin) tmp buffer for fname processing
+fname.abs		dd 0		; (lin) tmp buffer for abs fname processing
+fname.cwd		dd 0		; (lin) current working dir
+fname.sys_cwd		dd 0		; (lin) real cwd (bootloader's view)
+fname.size		equ 512		; buffer size of fname.*
+
+			align 4, db 0
 row_text		times max_text_rows dd 0
 ind_text		times max_text_rows dw 0
 
@@ -723,6 +730,15 @@ sizeof_fb_entry		equ 8
                 popf
 %endmacro
 
+
+%macro		is_dotdot 1
+		cmp dword [%1],'/../'
+		jz %%idd_90
+		cmp dword [%1],'/..'
+%%idd_90:
+%endmacro
+
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ; Interface functions.
@@ -1025,11 +1041,32 @@ gfx_init_58:
 		jc gfx_init_90
 		mov [vbe_mode_list],eax
 
+		mov eax,fname.size * 4
+		call calloc
+		cmp eax,1
+		jc gfx_init_90
+		mov [fname.tmp],eax
+		add eax,fname.size
+		mov [fname.abs],eax
+		add eax,fname.size
+		mov [fname.cwd],eax
+		add eax,fname.size
+		mov [fname.sys_cwd],eax
+
 		; fill list
 		call get_vbe_modes
 
 		; get console font
 		call cfont_init
+
+		; get cwd
+		call get_sys_cwd
+		call chdir
+		; copy canonical path back to sys_cwd
+		mov esi,[fname.cwd]
+		mov edi,[fname.sys_cwd]
+		mov ecx,fname.size
+		es rep movsb
 
 		; ok, we've done it, now continue the setup
 
@@ -9386,17 +9423,8 @@ prim_filesize_90:
 		bits 32
 
 prim_getcwd:
-		mov al,3
-		call gfx_cb			; cwd (lin)
-		or al,al
-		jnz prim_getcwd_70
-		mov eax,edx
+		mov eax,[fname.cwd]
 		mov dl,t_string
-		jmp prim_getcwd_90
-prim_getcwd_70:
-		mov dl,t_none
-		xor eax,eax
-prim_getcwd_90:
 		jmp pr_getobj
 
 
@@ -9418,41 +9446,9 @@ prim_chdir:
 		mov dl,t_string
 		call get_1arg
 		jc prim_chdir_90
-		push eax
-		call get_length
-		xchg eax,ecx
-		pop eax
+
+		call chdir
 		jc prim_chdir_60
-
-		or ecx,ecx
-		jz prim_chdir_60
-		cmp ecx,64
-		jae prim_chdir_60
-
-		push ecx
-
-		push eax
-		mov al,0
-		call gfx_cb			; get file name buffer address (edx)
-		pop esi
-
-		pop ecx
-
-		or al,al
-		jnz prim_chdir_60
-
-		mov edi,edx
-
-		es rep movsb
-		mov al,0
-		stosb
-
-		mov al,4
-		call gfx_cb
-		or al,al
-
-		mov bp,pserr_invalid_function
-		jnz prim_chdir_70
 
 		dec dword [pstack.ptr]
 		jmp prim_chdir_90
@@ -15203,6 +15199,353 @@ prim_xxx_90:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; systempath - convert path to path relative to system working directory
+;
+; group: system
+;
+; ( str1 -- str2 )
+;
+; str1: path
+; str2: system path
+;
+; Note: str2 points to a static buffer.
+;
+; example
+;  "foo/bar" systempath
+;
+
+		bits 32
+
+prim_systempath:
+		mov dl,t_string
+		call get_1arg
+		jc prim_systempath_90
+		mov esi,eax
+		call realpath
+		call systempath
+		mov eax,esi
+		xor ecx,ecx
+		mov dl,t_string
+		call set_pstack_tos
+prim_systempath_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;; realpath - convert path to canonical absolute path
+;
+; group: system
+;
+; ( str1 -- str2 )
+;
+; str1: path
+; str2: real path
+;
+; Note: str2 points to a static buffer.
+;
+; example
+;  "foo/bar" realpath
+;
+
+		bits 32
+
+prim_realpath:
+		mov dl,t_string
+		call get_1arg
+		jc prim_realpath_90
+		mov esi,eax
+		call realpath
+		mov eax,esi
+		xor ecx,ecx
+		mov dl,t_string
+		call set_pstack_tos
+prim_realpath_90:
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; Convert absolute path to system path (relative to system's working directory).
+;
+;  esi		absolute path
+;
+; return:
+;  esi		system path
+;
+
+		bits 32
+
+systempath:
+		mov edi,[fname.sys_cwd]
+		xor edx,edx
+		xor ecx,ecx
+systempath_10:
+		mov al,[es:edi + edx]
+		mov ah,[es:esi + edx]
+		cmp al,ah
+		jnz systempath_20
+		cmp al,0
+		jz systempath_80
+		inc edx
+		cmp al,'/'
+		jnz systempath_10
+		mov ecx,edx
+		jmp systempath_10
+systempath_20:
+		; ecx: points past last common path element
+
+		cmp al,0
+		jnz systempath_22
+		; sys_cwd subset of path
+		add edi,edx
+		lea esi,[esi+edx+1]
+		jmp systempath_28
+systempath_22:
+		cmp ah,0
+		jnz systempath_24
+		; path subset of sys_cwd
+		add esi,edx
+		lea edi,[edi+edx+1]
+		jmp systempath_28
+systempath_24:
+		; path & sys_cwd differ
+		add edi,ecx
+		add esi,ecx
+
+systempath_28:
+		mov ebx,[fname.tmp]
+		lea ebp,[ebx + fname.size - 1]
+
+systempath_30:
+		mov al,[es:edi]
+		inc edi
+		or al,al
+		jz systempath_50
+		mov dword [es:ebx],'../'
+		add ebx,3
+systempath_40:
+		cmp al,'/'
+		jz systempath_30
+		mov al,[es:edi]
+		inc edi
+		or al,al
+		jnz systempath_40
+systempath_50:
+		mov edi,ebx
+systempath_60:
+		es lodsb
+		stosb
+		or al,al
+		jnz systempath_60
+		mov esi,[fname.tmp]
+		; remove trailing '/', if any
+		dec edi
+		dec edi
+		cmp edi,esi
+		jbe systempath_90
+		cmp byte [es:edi],'/'
+		jnz systempath_90
+		mov byte [es:edi],0
+		jmp systempath_90
+
+systempath_80:
+		mov esi,[fname.tmp]
+		mov byte [es:esi],0
+
+systempath_90:
+		; esi: path relative to sys_cwd
+
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; Read current working dir and store result in [fname.sys_cwd].
+;
+; return:
+;  eax		current working dir
+;
+		bits 32
+
+get_sys_cwd:
+		mov al,3
+		call gfx_cb			; cwd (lin)
+		mov ebx,[fname.sys_cwd]
+		or al,al
+		jnz get_sys_cwd_80
+		mov esi,edx
+		mov edi,ebx
+		mov ecx,fname.size - 1
+get_sys_cwd_20:
+		es lodsb
+		stosb
+		or al,al
+		jz get_sys_cwd_90
+		loop get_sys_cwd_20
+get_sys_cwd_80:
+		mov byte [ebx],0
+get_sys_cwd_90:
+		mov eax,ebx
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; Convert any path to real absolute path.
+;
+; Path should not end with '/'. Also, avoid '//' and such.
+;
+;  esi		path
+;
+; return:
+;  esi		real path, stored in fname.abs
+;
+
+		bits 32
+
+realpath:
+		mov esi,eax
+
+		cmp byte [es:esi],'/'
+		jz realpath_80
+
+		cmp byte [es:esi],0
+		jnz realpath_10
+
+		mov esi,[fname.cwd]
+		jmp realpath_80
+
+realpath_10:
+		; note: maps / + .. to / because: / + .. -> //.. -> /
+
+		mov ebx,esi
+		mov esi,[fname.cwd]
+		mov edi,[fname.tmp]
+		mov ebp,edi
+realpath_12:
+		es lodsb
+		stosb
+		or al,al
+		jnz realpath_12
+		dec edi
+		cmp edi,ebp
+		jz realpath_20
+		mov al,'/'
+		stosb
+realpath_20:		
+		mov esi,ebx
+		add ebp,fname.size - 1
+realpath_25:
+		cmp edi,ebp
+		jae realpath_28
+		es lodsb
+		stosb
+		or al,al
+		jz realpath_30
+		jmp realpath_25
+realpath_28:
+		mov al,0
+		stosb
+		dec edi
+realpath_30:
+		mov esi,[fname.tmp]
+		xor edi,edi
+realpath_33:
+		cmp byte [es:esi],0
+		jz realpath_40
+		is_dotdot es:esi
+		jz realpath_35
+		cmp byte [es:esi],'/'
+		jnz realpath_34
+		mov edi,esi
+realpath_34:
+		inc esi
+		jmp realpath_33
+realpath_35:
+		or edi,edi
+		jz realpath_34
+		add esi,3
+realpath_36:
+		es lodsb
+		stosb
+		or al,al
+		jnz realpath_36
+		jmp realpath_30
+realpath_40:
+		mov edi,[fname.tmp]
+		mov esi,edi
+		cmp byte [es:edi],0
+		jnz realpath_80
+		mov ax,'/'
+		stosw
+realpath_80:
+		; convert to canonical version
+
+		; esi must be either absolute path or empty
+		; '//'s and trailing '/'s are removed
+
+		mov edi,[fname.abs]
+		lea ebx,[edi + fname.size - 1]
+		mov al,'/'
+		stosb
+realpath_82:
+		cmp edi,ebx
+		jae realpath_86
+		mov ah,al
+		es lodsb
+		or al,al
+		jz realpath_86
+		cmp al,'/'
+		jnz realpath_84
+		cmp al,ah
+		jnz realpath_84
+		dec edi
+realpath_84:		
+		stosb
+		jmp realpath_82
+realpath_86:
+		mov esi,[fname.abs]
+
+		; trailing '/'s
+realpath_88:
+		mov byte [es:edi],0
+		dec edi
+		cmp edi,esi
+		jbe realpath_90
+		cmp byte [es:edi],'/'
+		jz realpath_88
+
+realpath_90:
+		; esi points to real path in fname.abs
+
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+;
+; Set working directory.
+;
+;  eax		dir name
+;
+; return:
+;  fname.cwd	working dir (absolute path)
+;
+
+		bits 32
+
+chdir:
+		mov esi,eax
+		call realpath
+		mov edi,[fname.cwd]
+chdir_10:
+		es lodsb
+		stosb
+		or al,al
+		jnz chdir_10
+		ret
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ;
 ; Find (and read) file from file system.
 ;
@@ -15216,6 +15559,11 @@ prim_xxx_90:
 		bits 32
 
 find_file_ext:
+		mov esi,eax
+		call realpath
+		call systempath
+		mov eax,esi
+
 		mov dl,t_string
 		push eax
 		call get_length
