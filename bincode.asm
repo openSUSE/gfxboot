@@ -381,7 +381,6 @@ idle.invalid		db 0		; idle loop has been left
 fname.tmp		dd 0		; tmp buffer for fname processing
 fname.abs		dd 0		; tmp buffer for abs fname processing
 fname.cwd		dd 0		; current working dir
-fname.cwd_rel		dd 0		; current working dir, relative to sys_cwd
 fname.sys_cwd		dd 0		; real cwd (bootloader's view)
 fname.size		equ 256		; buffer size of fname.*
 
@@ -1045,7 +1044,7 @@ gfx_init_58:
 		jc gfx_init_90
 		mov [vbe_mode_list],eax
 
-		mov eax,fname.size * 5
+		mov eax,fname.size * 4
 		call calloc
 		cmp eax,1
 		jc gfx_init_90
@@ -1054,8 +1053,6 @@ gfx_init_58:
 		mov [fname.abs],eax
 		add eax,fname.size
 		mov [fname.cwd],eax
-		add eax,fname.size
-		mov [fname.cwd_rel],eax
 		add eax,fname.size
 		mov [fname.sys_cwd],eax
 
@@ -1074,12 +1071,12 @@ gfx_init_58:
 		mov ecx,fname.size
 		es rep movsb
 
-		; store pointer to fname.cwd_rel in config area
+		; store pointer to fname.cwd in config area
 
 		mov eax,[boot.sysconfig]
 		cmp byte [es:eax+sc.sysconfig_size],sc.size_68
 		jb gfx_init_585
-		mov edx,[fname.cwd_rel]
+		mov edx,[fname.cwd]
 		mov [es:eax+sc.cwd],edx
 gfx_init_585:
 
@@ -15557,7 +15554,6 @@ realpath_90:
 ;
 ; return:
 ;  fname.cwd		working dir (absolute path)
-;  fname.cwd_rel	working dir (relative path)
 ;
 
 		bits 32
@@ -15565,21 +15561,12 @@ realpath_90:
 chdir:
 		mov esi,eax
 		call realpath
-		mov ebx,esi
 		mov edi,[fname.cwd]
 chdir_10:
 		es lodsb
 		stosb
 		or al,al
 		jnz chdir_10
-		mov esi,ebx
-		call systempath
-		mov edi,[fname.cwd_rel]
-chdir_20:
-		es lodsb
-		stosb
-		or al,al
-		jnz chdir_20
 		ret
 
 
