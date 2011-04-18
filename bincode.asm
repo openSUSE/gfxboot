@@ -94,7 +94,10 @@ sc.xmem_start		equ 52
 sc.xmem_end		equ 56
 sc.features		equ 60
 sc.reserved_1		equ 62
-sc.size			equ 64
+sc.cwd			equ 64
+sc.size			equ 68
+sc.size_64		equ 64		; supports xmem_* & feature flags
+sc.size_68		equ 68		; supports cwd
 
 
 ; enum_type_t
@@ -375,11 +378,12 @@ idle.run		db 0		; run idle loop
 idle.invalid		db 0		; idle loop has been left
 
 			align 4, db 0
-fname.tmp		dd 0		; (lin) tmp buffer for fname processing
-fname.abs		dd 0		; (lin) tmp buffer for abs fname processing
-fname.cwd		dd 0		; (lin) current working dir
-fname.sys_cwd		dd 0		; (lin) real cwd (bootloader's view)
-fname.size		equ 512		; buffer size of fname.*
+fname.tmp		dd 0		; tmp buffer for fname processing
+fname.abs		dd 0		; tmp buffer for abs fname processing
+fname.cwd		dd 0		; current working dir
+fname.cwd_rel		dd 0		; current working dir, relative to sys_cwd
+fname.sys_cwd		dd 0		; real cwd (bootloader's view)
+fname.size		equ 256		; buffer size of fname.*
 
 			align 4, db 0
 row_text		times max_text_rows dd 0
@@ -846,7 +850,7 @@ gfx_init_20:
 		pop dword [malloc.area+4]
 
 		mov ebx,[boot.sysconfig]
-		cmp byte [es:ebx+sc.sysconfig_size],sc.size
+		cmp byte [es:ebx+sc.sysconfig_size],sc.size_64
 		jb gfx_init_28
 		; pass back feature flags
 		mov word [es:ebx+sc.features],3
@@ -1041,7 +1045,7 @@ gfx_init_58:
 		jc gfx_init_90
 		mov [vbe_mode_list],eax
 
-		mov eax,fname.size * 4
+		mov eax,fname.size * 5
 		call calloc
 		cmp eax,1
 		jc gfx_init_90
@@ -1050,6 +1054,8 @@ gfx_init_58:
 		mov [fname.abs],eax
 		add eax,fname.size
 		mov [fname.cwd],eax
+		add eax,fname.size
+		mov [fname.cwd_rel],eax
 		add eax,fname.size
 		mov [fname.sys_cwd],eax
 
@@ -1067,6 +1073,15 @@ gfx_init_58:
 		mov edi,[fname.sys_cwd]
 		mov ecx,fname.size
 		es rep movsb
+
+		; store pointer to fname.cwd_rel in config area
+
+		mov eax,[boot.sysconfig]
+		cmp byte [es:eax+sc.sysconfig_size],sc.size_68
+		jb gfx_init_585
+		mov edx,[fname.cwd_rel]
+		mov [es:eax+sc.cwd],edx
+gfx_init_585:
 
 		; ok, we've done it, now continue the setup
 
@@ -15368,20 +15383,33 @@ systempath_90:
 		bits 32
 
 get_sys_cwd:
+		mov ebx,[boot.sysconfig]
+		cmp byte [es:ebx+sc.sysconfig_size],sc.size_68
+		jb get_sys_cwd_10
+		; modern way: cwd was passed in info struct
+
+		xor eax,eax
+		mov edx,[es:ebx+sc.cwd]
+		or edx,edx
+		jnz get_sys_cwd_30
+get_sys_cwd_10:
+		; classical: ask comboot
+
 		mov al,3
 		call gfx_cb			; cwd (lin)
+get_sys_cwd_30:
 		mov ebx,[fname.sys_cwd]
 		or al,al
 		jnz get_sys_cwd_80
 		mov esi,edx
 		mov edi,ebx
 		mov ecx,fname.size - 1
-get_sys_cwd_20:
+get_sys_cwd_50:
 		es lodsb
 		stosb
 		or al,al
 		jz get_sys_cwd_90
-		loop get_sys_cwd_20
+		loop get_sys_cwd_50
 get_sys_cwd_80:
 		mov byte [ebx],0
 get_sys_cwd_90:
@@ -15528,7 +15556,8 @@ realpath_90:
 ;  eax		dir name
 ;
 ; return:
-;  fname.cwd	working dir (absolute path)
+;  fname.cwd		working dir (absolute path)
+;  fname.cwd_rel	working dir (relative path)
 ;
 
 		bits 32
@@ -15536,12 +15565,21 @@ realpath_90:
 chdir:
 		mov esi,eax
 		call realpath
+		mov ebx,esi
 		mov edi,[fname.cwd]
 chdir_10:
 		es lodsb
 		stosb
 		or al,al
 		jnz chdir_10
+		mov esi,ebx
+		call systempath
+		mov edi,[fname.cwd_rel]
+chdir_20:
+		es lodsb
+		stosb
+		or al,al
+		jnz chdir_20
 		ret
 
 
@@ -15679,6 +15717,11 @@ find_file_ext_90:
 		bits 32
 
 file_size_ext:
+		mov esi,eax
+		call realpath
+		call systempath
+		mov eax,esi
+
 		mov dl,t_string
 		push eax
 		call get_length
