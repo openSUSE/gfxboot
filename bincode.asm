@@ -15586,7 +15586,11 @@ chdir_10:
 find_file_ext:
 		mov esi,eax
 		call realpath
+		mov eax,[boot.sysconfig]
+		cmp byte [es:eax+sc.sysconfig_size],sc.size_68
+		jb find_file_ext_05
 		call systempath
+find_file_ext_05:
 		mov eax,esi
 
 		mov dl,t_string
@@ -15706,7 +15710,11 @@ find_file_ext_90:
 file_size_ext:
 		mov esi,eax
 		call realpath
+		mov eax,[boot.sysconfig]
+		cmp byte [es:eax+sc.sysconfig_size],sc.size_68
+		jb file_size_ext_20
 		call systempath
+file_size_ext_20:
 		mov eax,esi
 
 		mov dl,t_string
