@@ -15408,7 +15408,7 @@ get_sys_cwd_50:
 		jz get_sys_cwd_90
 		loop get_sys_cwd_50
 get_sys_cwd_80:
-		mov byte [ebx],0
+		mov byte [es:ebx],0
 get_sys_cwd_90:
 		mov eax,ebx
 		ret
