@@ -39,6 +39,8 @@ for (`git branch`) {
   }
 }
 
+$branch = "master" if $branch eq '(no';
+
 die "no branch?\n" unless $branch;
 
 # print STDERR "writing log for branch $branch\n";
