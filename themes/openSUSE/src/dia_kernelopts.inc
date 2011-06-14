@@ -15,6 +15,7 @@
   "apm=off acpi=off mce=off barrier=off ide=nodma idewait=50 i8042.nomux psmouse.proto=bare irqpoll pci=nommconf"
   "acpi=off"
   "nolapic"
+  "libata.ignore_hpa=0"
 ] def
 
 
@@ -34,6 +35,7 @@
     /txt_kernel_safe
     /txt_kernel_noacpi
     /txt_kernel_nolapic
+    /txt_kernel_hpa
   ] put
   xmenu .xm_title /txt_kernel put
 

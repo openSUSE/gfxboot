@@ -420,3 +420,9 @@ msgstr "Download driveropdatering"
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
 msgstr "Angiv URL til driveropdatering\n"
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. txt_kernel_hpa
+msgid "Preserve HPA"
+msgstr ""
+

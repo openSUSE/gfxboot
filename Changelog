@@ -1,3 +1,7 @@
+14/6/2011:	v4.1.28
+	- added 'preserve hpa' kernel entry (fate #311699)
+	- updated VMware theme
+
 15/10/2010:	v4.1.27
 	- show real product name on serial console (bnc #634299)
 	- use common gfxboot.cfg template for all themes

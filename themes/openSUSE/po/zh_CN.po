@@ -416,3 +416,9 @@ msgstr "下载驱动程序更新"
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
 msgstr "输入驱动程序更新 URL\n"
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. txt_kernel_hpa
+msgid "Preserve HPA"
+msgstr ""
+

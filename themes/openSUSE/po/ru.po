@@ -421,3 +421,9 @@ msgstr "Загрузить обновление драйвера"
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
 msgstr "Ввести URL-адрес для обновления драйвера\n"
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. txt_kernel_hpa
+msgid "Preserve HPA"
+msgstr ""
+
