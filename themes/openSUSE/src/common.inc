@@ -385,6 +385,12 @@
     } { pop } ifelse
   } if
 
+  xmenu.otheropts {
+    otheropts.options xmenu.otheropts .xm_current get get dup "" ne {
+      "%s " bc.cmd dup length add sprintf
+    } { pop } ifelse
+  } if
+
   /cmdline.hidden over dup length .inp_hidden ge { .inp_hidden get } { pop .undef } ifelse def
 
   cmdline.hidden {

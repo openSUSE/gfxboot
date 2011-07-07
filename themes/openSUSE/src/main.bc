@@ -23,6 +23,7 @@
 %% include dia_keymap.inc
 %% include dia_restore.inc
 %% include dia_net.inc
+%% include dia_otheropts.inc
 %% include panel.inc
 %% include keytables.inc
 %% include locale.inc
