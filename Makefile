@@ -7,7 +7,7 @@ GITDEPS := $(shell [ -d .git ] && echo .git/HEAD .git/refs/heads .git/refs/tags)
 VERSION := $(shell $(GIT2LOG) --version VERSION ; cat VERSION)
 
 # THEMES	 = $(wildcard themes/*)
-THEMES	 = themes/upstream themes/openSUSE themes/SLES themes/SLED
+THEMES	 = themes/upstream themes/openSUSE themes/SLES themes/SLED themes/KDE
 
 .PHONY: all clean distclean doc install installsrc themes
 
