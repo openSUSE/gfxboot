@@ -15,6 +15,8 @@ BFLAGS       = -O -v -L ../..
 
 SUBDIRS      = fonts help-boot help-install po src
 
+THEME        = $(shell basename `pwd`)
+
 DEFAULT_LANG =
 
 .PHONY: all clean distclean themes $(SUBDIRS)
@@ -41,13 +43,13 @@ themes: all
 src/main.bin: src
 	make -C src
 
-bootlogo: src/main.bin help-install/.ready po/.ready fonts/.ready
+bootlogo: src/main.bin src/gfxboot.cfg help-install/.ready po/.ready fonts/.ready
 	@rm -rf bootlogo.dir
 	@mkdir bootlogo.dir
-	cp -rL data-install/* fonts/*.fnt po/*.tr bootlogo.dir
 	perl -p -e 's/^(layout=.*)/$$1,install/' src/gfxboot.cfg >bootlogo.dir/gfxboot.cfg
 	perl -pi -e 's/^(theme=).*/$$1$(THEME)/' bootlogo.dir/gfxboot.cfg
 	perl -pi -e 's/^(product=).*/$$1$(PRODUCT)/' bootlogo.dir/gfxboot.cfg
+	cp -rL data-install/* fonts/*.fnt po/*.tr bootlogo.dir
 	cp -rL help-install/*.hlp bootlogo.dir
 	cp src/main.bin bootlogo.dir/init
 ifdef DEFAULT_LANG
@@ -56,9 +58,11 @@ endif
 	@sh -c 'cd bootlogo.dir; chmod +t * ; chmod -t init languages'
 	@sh -c 'cd bootlogo.dir; echo * | sed -e "s/ /\n/g" | cpio --quiet -o >../bootlogo'
 
-message: src/main.bin help-boot/.ready po/.ready fonts/.ready
+message: src/main.bin src/gfxboot.cfg help-boot/.ready po/.ready fonts/.ready
 	@rm -rf message.dir
 	@mkdir message.dir
+	perl -p -e 's/^(layout=.*)/$$1,boot/' src/gfxboot.cfg >message.dir/gfxboot.cfg
+	perl -pi -e 's/^(theme=).*/$$1$(THEME)/' message.dir/gfxboot.cfg
 	cp -rL data-boot/* fonts/*.fnt message.dir
 	cp -rL po/en.tr help-boot/en.hlp message.dir
 	cp src/main.bin message.dir/init
