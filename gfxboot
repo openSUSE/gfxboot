@@ -1877,7 +1877,7 @@ sub prepare_isolinux
   }
 
   if($loader ne "") {
-    system "isolinux-config --base=/boot/$arch_dir/loader $dst/${loader}isolinux.bin" .
+    system "$opt_syslinux/usr/bin/isolinux-config --base=/boot/$arch_dir/loader $dst/${loader}isolinux.bin" .
     ($opt_verbose ? "" : " >/dev/null");
   }
 
