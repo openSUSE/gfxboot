@@ -1710,6 +1710,8 @@ config.livecd {
 
 /config.product        "product"             "openSUSE" gfxconfig.set.str
 
+/config.init           "init"                        "" gfxconfig.set.str
+
 /serial.line0          "serial.line0"               [ ] gfxconfig.set.array_str
 /serial.line1          "serial.line1"               [ ] gfxconfig.set.array_str
 /serial.line2          "serial.line2"               [ ] gfxconfig.set.array_str
