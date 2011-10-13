@@ -12,17 +12,20 @@
 
 config.init "/sbin/init" eq { /config.init "" def } if
 config.init "/bin/systemd" eq { /otheropts.default 1 def } if
-config.init "/bin/sh" eq { /otheropts.default 2 def } if
+config.init "/sbin/sysvinit" eq { /otheropts.default 2 def } if
+config.init "/bin/sh" eq { /otheropts.default 3 def } if
 
 /otheropts.xtra
   config.init "" ne
   config.init "/bin/systemd" ne and
+  config.init "/sbin/sysvinit" ne and
   config.init "/bin/sh" ne and
 def
 
 /otheropts.options [
   ""
   "init=/bin/systemd"
+  "init=/sbin/sysvinit"
   "init=/bin/sh"
   otheropts.xtra {
     100 string dup config.init "init=%s" rot sprintf
@@ -43,8 +46,9 @@ def
 
   xmenu .xm_current otheropts.default put
   xmenu .xm_list [
-    "System V"
+    "Default"
     "Systemd"
+    "System V"
     "Shell"
     otheropts.xtra { config.init } if
   ] put
