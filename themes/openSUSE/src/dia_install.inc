@@ -25,7 +25,7 @@
 /install.default .inst_cdrom def
 
 % isohybrid image booted as disk
-sectorsize 0x800 eq bootdrive 0x80 eq and {
+sectorsize 0x200 eq bootdrive 0x80 eq or {
   /install.default .inst_hd def
 } if
 
