@@ -425,4 +425,3 @@ msgstr "Angiv URL til driveropdatering\n"
 #. txt_kernel_hpa
 msgid "Preserve HPA"
 msgstr ""
-

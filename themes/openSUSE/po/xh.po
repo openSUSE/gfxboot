@@ -420,4 +420,3 @@ msgstr ""
 #. txt_kernel_hpa
 msgid "Preserve HPA"
 msgstr ""
-

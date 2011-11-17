@@ -427,4 +427,3 @@ msgstr "Angi nettadresse for driveroppgradering\n"
 #. txt_kernel_hpa
 msgid "Preserve HPA"
 msgstr ""
-

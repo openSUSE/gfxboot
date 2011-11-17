@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2010-02-16 11:14\n"
+"PO-Revision-Date: 2011-11-03 08:55\n"
 "Last-Translator: Novell Language <language@novell.com>\n"
 "Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
@@ -331,7 +331,6 @@ msgid "Firmware Test"
 msgstr "Firmware-Test"
 
 #. txt_dud_file_msg
-#, wrap
 msgid ""
 "To load driver updates directly from CD-ROM,\n"
 "enter the driver update file names (separated\n"
@@ -424,4 +423,3 @@ msgstr "URL für Treiber-Update eingeben\n"
 #. txt_kernel_hpa
 msgid "Preserve HPA"
 msgstr ""
-

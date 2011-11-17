@@ -18,8 +18,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
 #. ok button label
 #. txt_ok
@@ -283,11 +283,11 @@ msgstr "Telepítés - Local APIC támogatás nélkül"
 
 #. txt_yes
 msgid "Yes"
-msgstr "Igen"
+msgstr "Van"
 
 #. txt_no
 msgid "No"
-msgstr "Nem"
+msgstr "Nincs"
 
 #. menu item for selecting a file
 #. txt_file
@@ -430,4 +430,3 @@ msgstr "Illesztőprogram-frissítés URL-je\n"
 #. txt_kernel_hpa
 msgid "Preserve HPA"
 msgstr ""
-
