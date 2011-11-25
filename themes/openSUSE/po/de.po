@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2011-11-03 08:55\n"
+"PO-Revision-Date: 2011-11-24 09:59\n"
 "Last-Translator: Novell Language <language@novell.com>\n"
 "Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
@@ -422,4 +422,4 @@ msgstr "URL für Treiber-Update eingeben\n"
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_hpa
 msgid "Preserve HPA"
-msgstr ""
+msgstr "HPA beibehalten"

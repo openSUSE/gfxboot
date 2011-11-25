@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2011-11-02 07:51\n"
+"PO-Revision-Date: 2011-11-24 09:33\n"
 "Last-Translator: Novell Language <language@novell.com>\n"
 "Language-Team: Novell Language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
@@ -421,4 +421,4 @@ msgstr "Vložte URL pro aktualizaci ovladače\n"
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_hpa
 msgid "Preserve HPA"
-msgstr ""
+msgstr "Zachovat oblast HPA"

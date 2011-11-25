@@ -12,14 +12,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2009-08-30 19:14+0200\n"
-"Last-Translator: Kalman Kemenczy <kkemenczy@novell.com>\n"
+"PO-Revision-Date: 2011-11-25 11:20+0100\n"
+"Last-Translator: Kalman Kemenczy <kkemenczy@opensuse.org>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 1.2\n"
+"Language: hu\n"
 
 #. ok button label
 #. txt_ok
@@ -429,4 +430,4 @@ msgstr "Illesztőprogram-frissítés URL-je\n"
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_hpa
 msgid "Preserve HPA"
-msgstr ""
+msgstr "Megőrzött HPA"
