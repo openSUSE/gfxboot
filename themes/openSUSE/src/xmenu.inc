@@ -256,6 +256,8 @@
 % ( entry ) ==> ( )
 %
 /xmenu.viewentry {
+  dup xmenu .xm_current get eq { true } { false } ifelse /xmenu.is_selected exch def
+
   xmenu.font setfont
 
   dup xmenu.maxlines mod xmenu.lheight mul xmenu.y add /xmenu.pos.y exch def
@@ -265,14 +267,14 @@
 
   xmenu.pos.x xmenu.pos.y moveto
 
-  dup xmenu .xm_current get eq { xmenu.saved.selected } { xmenu.saved.normal } ifelse
+  xmenu.is_selected { xmenu.saved.selected } { xmenu.saved.normal } ifelse
 
   dup {
     transp { pop } { restorescreen } ifelse
   } {
     pop
 
-    dup xmenu .xm_current get eq { xmenu.selected.bg } { xmenu.normal.bg } ifelse
+    xmenu.is_selected { xmenu.selected.bg } { xmenu.normal.bg } ifelse
     setcolor xmenu.width xmenu.lheight fillrect
 
     dup xmenu .xm_current get eq {
@@ -280,7 +282,7 @@
       xmenu.dark xmenu.light xmenu.width xmenu.lheight drawborder
     } if
 
-    dup xmenu .xm_current get eq { /xmenu.saved.selected } { /xmenu.saved.normal } ifelse
+    xmenu.is_selected { /xmenu.saved.selected } { /xmenu.saved.normal } ifelse
       xmenu.pos.x xmenu.pos.y moveto
       xmenu.width xmenu.lheight
       savescreen
@@ -290,7 +292,7 @@
 
   transp {
     % copy entry to avoid reading the screen again
-    dup xmenu .xm_current get eq { xmenu.saved.selected } { xmenu.saved.normal } ifelse
+    xmenu.is_selected { xmenu.saved.selected } { xmenu.saved.normal } ifelse
     xmenu.tmpbuf .undef eq {
       dup length malloc /xmenu.tmpbuf exch def
     } if
@@ -302,7 +304,7 @@
     xmenu.pos.x xmenu.pos.y moveto xmenu.tmpbuf restorescreen
   } if
 
-  dup xmenu .xm_current get eq { xmenu.selected.fg } { xmenu.normal.fg } ifelse setcolor
+  xmenu.is_selected { xmenu.selected.fg } { xmenu.normal.fg } ifelse setcolor
 
   config.rtl {
     xmenu.pos.x xmenu.width add xmenu.hspace sub xmenu.pos.y xmenu.vspace add moveto
@@ -326,6 +328,8 @@
       setcolor
       moveto
 
+      dup 0 get '\x01' eq xmenu.is_selected not and { 1 add xmenu.normal.alt.fg setcolor } if
+
       dup 0 get '\x09' eq {
         1 add
         show.rtl
@@ -339,6 +343,8 @@
       } ifelse
 
     } {
+      dup 0 get '\x01' eq xmenu.is_selected not and { 1 add xmenu.normal.alt.fg setcolor } if
+
       show.rtl
     } ifelse
 

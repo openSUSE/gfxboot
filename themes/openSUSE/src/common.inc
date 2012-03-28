@@ -368,9 +368,9 @@
 
       video.modes.list xmenu.video .xm_current get get
       dup .vm_mode get 0 ge {
-        dup .vm_height get exch .vm_width get
-        ",%04d%04d.spl" splash_file sprintf
-      } { pop } ifelse
+        ",19201200.spl" splash_file sprintf
+      } if
+      pop
 
       % check whether splash file exists
       splash_file 1 add filesize .undef eq {
@@ -421,15 +421,8 @@
   /splash_file xfree
 
   syslinux {
-    video.modes.list xmenu.video .xm_current get get .vm_mode get
-
-    dup 0 ge {
-      0x200 add "vga=0x%x " bc.cmd dup length add sprintf
-    } {
-      -1 eq {
-        "textmode=1 " bc.cmd dup length add sprintf
-      } if
-    } ifelse
+    video.modes.list xmenu.video .xm_current get get .vm_options get
+    "%s " bc.cmd dup length add sprintf
 
     v_impaired 1 ge {
       "braille=1 " bc.cmd dup length add sprintf
@@ -1638,6 +1631,7 @@ config.livecd {
 /progress.bar.color    "progress.bar.color"       white gfxconfig.set.int
 /xmenu.normal.bg       "menu.normal.bg"           black gfxconfig.set.int
 /xmenu.normal.fg       "menu.normal.fg"           white gfxconfig.set.int
+/xmenu.normal.alt.fg   "menu.normal.alt.fg"    0x606060 gfxconfig.set.int
 /xmenu.selected.bg     "menu.selected.bg"         white gfxconfig.set.int
 /xmenu.selected.fg     "menu.selected.fg"         black gfxconfig.set.int
 /window.color.bg       "window.bg"                white gfxconfig.set.int

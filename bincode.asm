@@ -501,17 +501,10 @@ tmp_var_1		dd 0
 tmp_var_2		dd 0
 tmp_var_3		dd 0
 
-ddc_timings		dw 0		; standard ddc timing info
-ddc_xtimings		dd 0		; converted standard timing/final timing value
-ddc_xtimings1		dd 0, 0, 0, 0	; must follow ddc_xtimings
-ddc_xtimings2		dd 0, 0, 0, 0	; must follow ddc_xtimings1
-ddc_mult		dd 0, 1		; needed for ddc timing calculation
-			dd 3, 4
-			dd 4, 5
-			dd 9, 16
-
-fsc_bits		dw 0, 0x0004, 0x4000, 0x0200, 0x0100, 0x0200, 0, 0x4000
-			dw 0x0200, 0, 0, 0, 0, 0, 0, 0
+			; display size list
+display_res.cnt		dw 0   
+display_res		times 16 dw 0, 0
+display_res_pref	dw 0, 0
 
 			align 2
 pm_idt			dw 7ffh			; idt for pm
@@ -7495,22 +7488,69 @@ prim_monitorsize:
 		jb prim_monitorsize_90
 		mov [pstack.ptr],eax
 
-		cmp word [ddc_xtimings],0
+		cmp word [display_res_pref],0
 		jnz prim_monitorsize_50
 
-		call get_monitor_res
+		call read_ddc
 
 prim_monitorsize_50:
 
 		mov dl,t_int
-		movzx eax,word [ddc_xtimings]
+		movzx eax,word [display_res_pref]
 		mov ecx,1
 		call set_pstack_tos
 		mov dl,t_int
-		movzx eax,word [ddc_xtimings + 2]
+		movzx eax,word [display_res_pref + 2]
 		xor ecx,ecx
 		call set_pstack_tos
 prim_monitorsize_90:
+		ret
+
+
+;; displaysizes - supported display sizes
+;
+; group: gfx.screen
+;
+; ( -- int1 int2 )
+;
+; int1, int2: width and height
+;
+
+		bits 32
+
+prim_displaysizes:
+		cmp word [display_res_pref],0
+		jnz prim_displaysizes_20
+		call read_ddc
+prim_displaysizes_20:
+		xor ebx,ebx
+prim_displaysizes_40:
+		inc ebx
+		cmp bx,[display_res.cnt]
+		ja prim_displaysizes_90
+
+		mov eax,[pstack.ptr]
+		inc eax
+		inc eax
+		cmp [pstack.size],eax
+		mov bp,pserr_pstack_overflow
+		jb prim_displaysizes_90
+		mov [pstack.ptr],eax
+
+		mov dl,t_int
+		movzx eax,word [display_res - 4 + 4*ebx]
+		mov ecx,1
+		push ebx
+		call set_pstack_tos
+		pop ebx
+		mov dl,t_int
+		movzx eax,word [display_res + 2 - 4 + 4*ebx]
+		xor ecx,ecx
+		push ebx
+		call set_pstack_tos
+		pop ebx
+		jmp prim_displaysizes_40
+prim_displaysizes_90:
 		ret
 
 
@@ -16448,62 +16488,151 @@ mouse_handler:
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; Get monitor capabilities.
+; parse edid record
 ;
+; es:ecx	edid
 ;
 
 		bits 32
 
-get_monitor_res:
-		call read_ddc
-		call read_fsc
+parse_edid:
+		mov word [display_res.cnt],0
+		mov dword [display_res_pref],0
 
-		; convert timing bitmask to resolution
-		; if the card has enough memory assume larger resolutions
+		cmp dword [es:ecx+8],0
+		jz parse_edid_90
 
-		mov ax,[ddc_timings]
-		mov dword [ddc_xtimings],640 + (480 << 16)
-		test ax,0ef03h
-		jnz get_mon_res_20
-		cmp word [screen_mem],0x3e		; at least 4MB-128k
-		jb get_mon_res_21
-get_mon_res_20:
-		mov dword [ddc_xtimings],800 + (600 << 16)
-get_mon_res_21:
-		test ax,0f00h
-		jnz get_mon_res_22
-		cmp word [screen_mem],0x200		; at least 32MB
-		jb get_mon_res_23
-get_mon_res_22:
-		mov dword [ddc_xtimings],1024 + (768 << 16)
-get_mon_res_23:
-		test ax,0100h
-		jz get_mon_res_24
-		mov dword [ddc_xtimings],1280 + (1024 << 16)
-get_mon_res_24:
+		cmp word [es:ecx+18],0
+		jz parse_edid_90
 
-		; find max. resolution
+		movzx	eax, byte [es:ecx+35]
+		test	al, 60
+		je	.L5
+		mov	word [display_res], 640
+		mov	word [display_res+2], 480
+		mov	word [display_res.cnt], 1
+.L5:
+		test	al, 3
+		je	.L6
+		mov	ax, [display_res.cnt]
+		movzx	edx, ax
+		inc	eax
+		mov	word [display_res+edx*4], 800
+		mov	word [display_res+2+edx*4], 600
+		mov	[display_res.cnt], ax
+.L6:
+		movzx	eax, byte [es:ecx+36]
+		test	al, -64
+		je	.L7
+		mov	dx, [display_res.cnt]
+		movzx	ebx, dx
+		inc	edx
+		mov	word [display_res+ebx*4], 800
+		mov	word [display_res+2+ebx*4], 600
+		mov	[display_res.cnt], dx
+.L7:
+		test	al, 14
+		je	.L8
+		mov	dx, [display_res.cnt]
+		movzx	ebx, dx
+		inc	edx
+		mov	word [display_res+ebx*4], 1024
+		mov	word [display_res+2+ebx*4], 768
+		mov	[display_res.cnt], dx
+.L8:
+		test	al, 1
+		je	.L9
+		mov	ax, [display_res.cnt]
+		movzx	edx, ax
+		inc	eax
+		mov	word [display_res+edx*4], 1280
+		mov	word [display_res+2+edx*4], 1024
+		mov	[display_res.cnt], ax
+.L9:
+		xor	ebx, ebx
+		mov	edi, 5
+.L15:
+		movzx	edx, byte [es:ecx+39+ebx*2]
+		movzx	eax, byte [es:ecx+38+ebx*2]
+		shr	edx, 6
+		add	eax, 31
+		cmp	edx, 2
+		lea	esi, [eax*8]
+		je	.L12
+		cmp	edx, 3
+		je	.L13
+		dec	edx
+		jne	.L10
+		lea	eax, [esi+esi*2]
+		shr	eax, 2
+		jmp	.L14
+.L12:
+		sal	eax, 5
+		xor	edx, edx
+		div	edi
+		jmp	.L14
+.L13:
+		lea	eax, [esi+esi*8]
+		shr	eax, 4
+		jmp	.L14
+.L10:
+		inc	ebx
+		cmp	ebx, 4
+		jne	.L15
+		mov	eax, 54
+.L17:
+		movzx	ebx, byte [es:ecx+2+eax]
+		movzx	edi, byte [es:ecx+eax]
+		movzx	esi, byte [es:ecx+1+eax]
+		mov	edx, ebx
+		sal	edi, 24
+		sal	esi, 16
+		sal	edx, 8
+		add	esi, edi
+		add	esi, edx
+		movzx	edx, byte [es:ecx+3+eax]
+		add	esi, edx
+		cmp	esi, 255
+		jbe	.L16
+		movzx	edx, byte [es:ecx+4+eax]
+		movzx	esi, byte [es:ecx+5+eax]
+		and	edx, 240
+		sal	edx, 4
+		add	ebx, edx
+		movzx	edx, byte [es:ecx+7+eax]
+		and	edx, 240
+		sal	edx, 4
+		add	edx, esi
+		je	parse_edid_90
+		test	ebx, ebx
+		je	parse_edid_90
+		cmp	edx, 4095
+		je	parse_edid_90
+		cmp	ebx, 4095
+		je	parse_edid_90
+		mov	si, [display_res.cnt]
+		movzx	edi, si
+		inc	esi
+		mov	[display_res+edi*4], bx
+		mov	[display_res+2+edi*4], dx
+		mov	[display_res_pref], bx
+		mov	[display_res_pref+2], dx
+		mov	[display_res.cnt], si
+.L16:
+		add	eax, 18
+		cmp	eax, 126
+		jne	.L17
+		jmp	parse_edid_90
+.L14:
+		movzx	edx, word [display_res.cnt]
+		mov	[display_res+2+edx*4], ax
+		mov	ax, [word display_res.cnt]
+		mov	[display_res+edx*4], si
+		inc	eax
+		mov	[display_res.cnt], ax
+		jmp	.L10
 
-		mov ecx,9
-		mov esi,ddc_xtimings
-
-get_mon_res_30:
-		mov ax,[esi]
-		mov dx,[esi+2]
-
-		cmp ax,[ddc_xtimings]
-		jb get_mon_res_60
-
-		cmp dx,[ddc_xtimings+2]
-		jb get_mon_res_60
-
-		mov [ddc_xtimings],ax
-		mov [ddc_xtimings+2],dx
-
-get_mon_res_60:
-		add esi,4
-		loop get_mon_res_30
-
+parse_edid_90:
 		ret
 
 
@@ -16560,124 +16689,30 @@ read_ddc_25:
 		jmp read_ddc_90
 
 read_ddc_30:
+		mov ecx,[vbe_buffer]
+		call parse_edid
 
-		mov edi,[vbe_buffer]
+		cmp dword [display_res_pref],0
+		jnz read_ddc_90
 
-		mov ax,[es:edi+23h]
-		mov [ddc_timings],ax
+		; pick the largest res
 
-		mov ecx,4
-		lea esi,[edi+26h]
-		mov edi,ddc_xtimings1
-read_ddc_40:
-		es lodsb
-		cmp al,1
-		jbe read_ddc_50
-		
-		movzx ebp,al
-		add ebp,31
-		shl ebp,3
-
-		mov al,[es:esi]
-		shr al,6
-		jz read_ddc_50
-		movzx ebx,al
-		shl ebx,3
-
-		mov eax,ebp
-		mul dword [ebx+ddc_mult]
-		div dword [ebx+ddc_mult+4]
-		
-		jz read_ddc_50
-
-		shl eax,16
-		add eax,ebp
-		mov [edi],eax
-
+		movzx ecx,word [display_res.cnt]
+		mov esi,display_res
+		or ecx,ecx
+		jz read_ddc_90
+		mov ebx,[esi]
 read_ddc_50:
-		inc esi
-		add edi,4
-		loop read_ddc_40
-
-		mov ecx,4
-		mov esi,[vbe_buffer]
-		add esi,36h
-		mov edi,ddc_xtimings2
+		lodsd
+		cmp eax,ebx
+		jbe read_ddc_60
+		mov ebx,eax
 read_ddc_60:
-		mov eax,[es:esi]
-		bswap eax
-		cmp eax,100h
-		jb read_ddc_80
-		cmp eax,1010101h
-		jz read_ddc_80
-		movzx edx,byte [es:esi+4]
-		and dl,0f0h
-		shl edx,4
-		mov dl,[es:esi+2]
-		movzx ebx,byte [es:esi+7]
-		and bl,0f0h
-		shl ebx,4
-		mov bl,[es:esi+5]
-		or edx,edx
-		jz read_ddc_80
-		or ebx,ebx
-		jz read_ddc_80
-		cmp edx,0fffh
-		jz read_ddc_80
-		cmp ebx,0fffh
-		jz read_ddc_80
-		shl ebx,16
-		add edx,ebx
-		mov [edi],edx
-		add edi,4
-read_ddc_80:
-		add esi,12h
-		loop read_ddc_60
+		loop read_ddc_50
+
+		mov [display_res_pref],ebx
 
 read_ddc_90:
-		ret
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-; Look for a fsc notebook lcd panel and set ddc_timings.
-;
-
-		bits 32
-
-read_fsc:
-		cmp word [ddc_timings],0
-		jnz read_fsc_90
-
-		mov edi,0f0000h
-read_fsc_10:
-		cmp dword [es:edi],0x696a7546
-		jnz read_fsc_30
-		cmp dword [es:edi+4],0x20757374
-		jnz read_fsc_30
-		mov ecx,0x20
-		xor ebx,ebx
-		mov esi,edi
-read_fsc_20:
-		es lodsb
-		add bl,al
-		dec ecx
-		jnz read_fsc_20
-		or bl,bl
-		jnz read_fsc_30
-		mov al,[es:edi+23]
-		and al,0xf0
-		jnz read_fsc_90
-		mov bl,[es:edi+21]
-		and bl,0xf0
-		shr bl,3
-		mov ax,[fsc_bits+ebx]
-		mov [ddc_timings],ax
-		jmp read_fsc_90
-read_fsc_30:
-		add edi,0x10
-		cmp edi,100000h
-		jbe read_fsc_10
-read_fsc_90:
 		ret
 
 

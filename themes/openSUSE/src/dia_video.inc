@@ -9,9 +9,18 @@
 % Some global vars.
 %
 % video mode array fields
-/.vm_mode   0 def
-/.vm_width  1 def
-/.vm_height 2 def
+/.vm_mode    0 def
+/.vm_flags   1 def
+/.vm_options 2 def
+/.vm_label   3 def
+/.vm_width   4 def
+/.vm_height  5 def
+
+% .vm_flags:
+% 
+% bit 0: is vbe mode
+%     1: supported display res
+%
 
 % We have kernel splash images for at least these sizes.
 /video.splashsizes [
@@ -78,6 +87,26 @@
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Check if display supports that resolution.
+%
+% ( video_mode_list_entry ) ==> ( true|false )
+%
+/video.resok {
+  false exch
+
+  0 2 video.res length 1 sub {
+    over over over
+    .vm_height get rot .vm_width get rot video.res exch get eq
+    rot 1 add video.res exch get rot eq and
+    { exch pop true exch exit } if
+  } for
+
+  pop
+
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Build video mode list.
 %
 % ( ) ==> ( )
@@ -87,10 +116,14 @@
 
   /xmenu xmenu.video def
 
+  "ddc" findfile test1
+  /video.res [ displaysizes ] def
+
   % build list of video modes
   /video.modes.list [
-    [ -1 0 0 ]	% special: text mode
-    [ -2 1 0 ]	% special: VESA mode (width = 1 to make it sort)
+    [ -1 0 "textmode=1" /txt_text_mode 0 0 ]	% special: text mode
+    [ -2 0 "nomodeset"  "No KMS"       1 0 ]	% special: no KMS (width = 1 to make it sort)
+    [ -3 0 ""           "Default"      2 0 ]	% special: no video options (width = 2 to make it sort)
 
     % first, try 16 bit
     /vm_color_bits 16 def
@@ -106,7 +139,7 @@
             exch vm_color_bits eq and	% color bits
             over 600 ge and		% height >= 600
             2 index 800 ge and		% width >= 800
-          { ] } { pop pop pop pop } ifelse
+          { 1 "" "" 5 -2 roll ] } { pop pop pop pop } ifelse
         } ifelse
       } for
 
@@ -117,6 +150,17 @@
         exit
       } ifelse
     } loop
+
+    % add display sizes
+
+    video.res length {
+      0 2 video.res length 1 sub {
+        [
+          exch 0 2 "" "" 5 -1 roll
+          video.res over get exch video.res exch 1 add get
+        ]
+      } for
+    } if
 
   ] def
 
@@ -140,9 +184,11 @@
   /video.modes.list
     [
       video.modes.list {
-        dup .vm_mode get 0 gt {		% ensure it's not the first entry
+        dup .vm_mode get 0 ge {		% ensure it's not the first entry
           over .vm_width get over .vm_width get eq
           2 index .vm_height get 2 index .vm_height get eq and {
+            over .vm_mode get over .vm_mode get max 2 index .vm_mode rot put
+            over .vm_flags get over .vm_flags get or 2 index .vm_flags rot put
             free
           } if
         } if
@@ -151,21 +197,45 @@
     video.modes.list free
   def
 
-  % create mode strings
+  % create mode strings & menu labels
+
+  true
+
+  video.modes.list {
+    dup .vm_flags get 3 and {
+      dup .vm_options 64 string put
+      dup .vm_label 32 string put
+
+      % add separating line before first entry
+      over {
+        dup .vm_label get "\x09" exch sprintf
+        exch pop false exch
+      } if
+
+      dup .vm_flags get 1 and {
+        dup .vm_mode get 0x200 add over .vm_options get "vga=0x%x " exch sprintf
+      } if
+
+      dup .vm_flags get 2 and {
+        dup .vm_height get over .vm_width get 2 index .vm_options get "video=%dx%d " exch dup length add sprintf
+      } if
+
+      dup .vm_flags get 2 and 0 eq {
+        dup .vm_label get "\x01" exch dup length add sprintf
+      } if
+
+      dup .vm_height get over .vm_width get 2 index .vm_label get "%d x %d" exch dup length add sprintf
+    } if
+
+    pop
+  } forall
+
+  pop
+
+  % create menu
 
   /video.modes.text [
-    video.modes.list {
-      dup .vm_width get
-      dup 0 eq {
-        pop pop /txt_text_mode
-      } {
-        dup 1 eq {
-          pop pop "VESA"
-        } {
-          exch .vm_height get exch "%d x %d" 32 string dup 5 1 roll sprintf
-        } ifelse
-      } ifelse
-    } forall
+    video.modes.list { .vm_label get } forall
   ] def
 
   % add to menu
@@ -176,7 +246,7 @@
   % select largest mode the monitor supports
 
   boot_failsafe 4 and { 0 0 } { monitorsize } ifelse
-  exch 800 max exch 600 max		% at least 800x600
+  exch 1024 max exch 768 max		% at least 1024x768
 
   % ATI quirk: avoid 1280x1024, older chips (<= 8MB, max res 1280x1024) use
   % interlaced there
@@ -190,15 +260,15 @@
     } if
   } if 
 
-  xmenu .xm_current -1 put
+  % 'default' entry
+  xmenu .xm_current 2 put
 
   -1
   video.modes.list {
     exch 1 add exch
 
     dup .vm_width get 4 index le
-    over .vm_height get 4 index le and
-    exch video.havesplash and {
+    exch .vm_height get 3 index le and {
       xmenu .xm_current 2 index put
     } if
 
