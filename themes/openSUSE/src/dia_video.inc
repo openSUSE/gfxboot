@@ -275,6 +275,9 @@
   } forall
   pop
 
+  % FIXME: force 'default' entry
+  xmenu .xm_current 2 put
+
   pop pop
 } def
 
