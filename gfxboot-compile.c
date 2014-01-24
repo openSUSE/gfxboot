@@ -1272,16 +1272,14 @@ int optimize_code(FILE *lf)
     }
   }
 
-  changed = 1;
-
-  optimize_code1(lf) ||
-  optimize_code2(lf) ||
-  optimize_code3(lf) ||
-  optimize_code4(lf) ||
-  optimize_code5(lf) ||
-  optimize_code6(lf) ||
-  optimize_code7(lf) ||
-  (changed = 0);
+  changed =
+    optimize_code1(lf) ||
+    optimize_code2(lf) ||
+    optimize_code3(lf) ||
+    optimize_code4(lf) ||
+    optimize_code5(lf) ||
+    optimize_code6(lf) ||
+    optimize_code7(lf) ? 1 : 0;
 
   return changed;
 }
