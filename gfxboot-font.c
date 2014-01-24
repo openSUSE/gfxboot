@@ -13,7 +13,7 @@
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
-#include <freetype/ftsynth.h>
+#include FT_SYNTHESIS_H
 
 
 #define MAGIC 0xd2828e06
