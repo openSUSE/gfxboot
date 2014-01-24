@@ -137,8 +137,8 @@
             over 0xbfff and 6 2 roll
             0x4000 and			% fb support
             exch vm_color_bits eq and	% color bits
-            over 600 ge and		% height >= 600
-            2 index 800 ge and		% width >= 800
+            over 576 ge and		% height >= 576
+            2 index 1024 ge and		% width >= 1024
           { 1 "" "" 5 -2 roll ] } { pop pop pop pop } ifelse
         } ifelse
       } for
