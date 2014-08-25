@@ -454,3 +454,13 @@ msgstr ""
 msgid "IP address with network prefix\n(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 msgstr ""
 
+#. menu item for default video mode (keep short)
+#. txt_video_default
+msgid "Default"
+msgstr ""
+
+#. menu item to signify no KMS (KMS = kernel mode setting - keep the english acronym)
+#. txt_video_no_kms
+msgid "No KMS"
+msgstr ""
+
