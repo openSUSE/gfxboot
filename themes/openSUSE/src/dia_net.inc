@@ -32,7 +32,7 @@
 
   xmenu .xm_current net.default put
 
-  /input.net.static [ 5 { 127 string } repeat ] def
+  /input.net.static [ 4 { 127 string } repeat ] def
 
   % just once (see install.init)
   /net.init { } def
@@ -108,9 +108,9 @@
   % ip, netmask, gateway, dns nameserver, domain
 
   % Must all be of same size!
-  dia .ed.list 5 array put
+  dia .ed.list 4 array put
   dia .ed.buffer.list input.net.static put
-  dia .ed.text.list [ txt_host_ip txt_netmask txt_gateway_ip txt_nameservers txt_domain_name ] put
+  dia .ed.text.list [ txt_host_ip txt_gateway_ip txt_nameservers txt_domain_name ] put
 
   dia .ed.focus 0 put
   dia .ed.width 300 put

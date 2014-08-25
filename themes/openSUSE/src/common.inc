@@ -487,27 +487,20 @@
   xmenu.net {
     xmenu.install {
       net.config_type .undef ne {
-        xmenu.install .xm_current get dup .inst_cdrom eq exch .inst_hd eq or {
-          % TODO: add netsetup=XXX
-        } {
-          net.config_type .net_static eq {
-            input.net.static 0 get dup "" ne {
-              "hostip=%s " bc.cmd dup length add sprintf
-            } { pop } ifelse
-            input.net.static 1 get dup "" ne {
-              "netmask=%s " bc.cmd dup length add sprintf
-            } { pop } ifelse
-            input.net.static 2 get dup "" ne {
-              "gateway=%s " bc.cmd dup length add sprintf
-            } { pop } ifelse
-            input.net.static 3 get dup "" ne {
-              "nameserver=%s " bc.cmd dup length add sprintf
-            } { pop } ifelse
-            input.net.static 4 get dup "" ne {
-              "domain=%s " bc.cmd dup length add sprintf
-            } { pop } ifelse
-          } if
-        } ifelse
+        net.config_type .net_static eq {
+          input.net.static 0 get dup "" ne {
+            "hostip=\"%s\" " bc.cmd dup length add sprintf
+          } { pop } ifelse
+          input.net.static 1 get dup "" ne {
+            "gateway=\"%s\" " bc.cmd dup length add sprintf
+          } { pop } ifelse
+          input.net.static 2 get dup "" ne {
+            "nameserver=\"%s\" " bc.cmd dup length add sprintf
+          } { pop } ifelse
+          input.net.static 3 get dup "" ne {
+            "domain=\"%s\" " bc.cmd dup length add sprintf
+          } { pop } ifelse
+        } if
       } if
     } if
   } if
@@ -1053,6 +1046,7 @@
   dup "firmware" eq { pop txt_firmware return } if
   mode.install {
     dup "linux"      eq { pop txt_install        return } if
+    dup "upgrade"    eq { pop txt_upgrade        return } if
     dup "repair"     eq { pop txt_repain_system  return } if
     dup "rescue"     eq { pop txt_rescue         return } if
     dup "harddisk"   eq { pop txt_boot_harddisk  return } if

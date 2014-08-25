@@ -408,11 +408,6 @@ msgstr "수동"
 msgid "Manual Network Config"
 msgstr "수동 네트워크 설정"
 
-#. label for ip address
-#. txt_host_ip
-msgid "Host IP\n"
-msgstr "호스트 IP\n"
-
 #. label for gateway ip
 #. txt_gateway_ip
 msgid "Gateway\n"
@@ -422,11 +417,6 @@ msgstr "게이트웨이\n"
 #. txt_domain_name
 msgid "Domain Name\n"
 msgstr "도메인 네임\n"
-
-#. label for nameserver list
-#. txt_nameservers
-msgid "Nameservers (separated by ',')\n"
-msgstr "네임서버 (콤마','로 구분)\n"
 
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
@@ -444,3 +434,19 @@ msgstr "오픈수세 라이브 (KDE)"
 #. txt_live_gnome
 msgid "openSUSE Live (GNOME)"
 msgstr "오픈수세 라이브 (그놈)"
+
+#. menu label for an update (as opposed to a new installation)
+#. txt_upgrade
+msgid "Upgrade"
+msgstr ""
+
+#. label for name server (network setup)
+#. txt_nameservers
+msgid "Name servers, separated by spaces\n"
+msgstr ""
+
+#. label for ip address (network setup)
+#. txt_host_ip
+msgid "IP address with network prefix\n(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
+msgstr ""
+

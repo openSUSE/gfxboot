@@ -1562,7 +1562,7 @@ sub fake_menu
   my $menu;
 
   if($type eq 'install') {
-    $menu->{list} = [ 'harddisk', 'linux', 'repair', 'rescue', 'mediachk', 'firmware', 'memtest' ];
+    $menu->{list} = [ 'harddisk', 'linux', 'upgrade', 'repair', 'rescue', 'mediachk', 'firmware', 'memtest' ];
     $menu->{default} = 0;
   }
   else {
