@@ -123,7 +123,7 @@
   /video.modes.list [
     [ -1 0 "textmode=1" /txt_text_mode     0 0 ]	% special: text mode
     [ -2 0 "nomodeset"  /txt_video_no_kms  1 0 ]	% special: no KMS (width = 1 to make it sort)
-    [ -3 0 ""           /txt_video_default 2 0 ]	% special: no video options (width = 2 to make it sort)
+    [ -3 0 ""           /txt_kernel_default 2 0 ]	% special: no video options (width = 2 to make it sort)
 
     % first, try 16 bit
     /vm_color_bits 16 def
