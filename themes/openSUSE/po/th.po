@@ -418,7 +418,9 @@ msgstr "ชื่อโดเมน\n"
 
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
-msgid "Netmask\n(or use '/N' notation with Host IP)\n"
+msgid ""
+"Netmask\n"
+"(or use '/N' notation with Host IP)\n"
 msgstr ""
 "มาสก์เครือข่าย\n"
 "(หรือใช้ค่าบิทเครือข่าย '/N' ร่วมกับค่าไอพีของเครื่อง)\n"
@@ -445,11 +447,12 @@ msgstr ""
 
 #. label for ip address (network setup)
 #. txt_host_ip
-msgid "IP address with network prefix\n(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
+msgid ""
+"IP address with network prefix\n"
+"(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 msgstr ""
 
 #. menu item to signify no KMS (KMS = kernel mode setting - keep the english acronym)
 #. txt_video_no_kms
 msgid "No KMS"
 msgstr ""
-

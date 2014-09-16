@@ -10,17 +10,13 @@
 # Kéménczy Kálmán <kkemenczy@novell.com>, 2006.
 msgid ""
 msgstr ""
-"Project-Id-Version: bootloader.hu\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2010-04-09 23:20+0200\n"
-"Last-Translator: kalman <kkemenczy@gmail.com>\n"
-"Language-Team: Hungarian <hu@li.org>\n"
+"Project-Id-Version: bootloader\n"
+"PO-Revision-Date: 2014-09-03 10:42\n"
+"Last-Translator: Novell language <language@novell.com>\n"
+"Language-Team: Novell language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: hu\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.0.2\n"
 
 #. ok button label
 #. txt_ok
@@ -30,7 +26,7 @@ msgstr "OK"
 #. cancel button label
 #. txt_cancel
 msgid "Cancel"
-msgstr "Mégsem"
+msgstr "Mégse"
 
 #. reboot button label
 #. txt_reboot
@@ -48,7 +44,7 @@ msgstr "Telepítés"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr "Linux - Biztonságos beállításokkal"
+msgstr "Linux--Biztonságos beállítások"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
@@ -56,7 +52,7 @@ msgstr "Rendszerindítás merevlemezről"
 
 #. txt_rescue
 msgid "Rescue System"
-msgstr "Mentőrendszer"
+msgstr "Mentési rendszer"
 
 #. txt_memtest
 msgid "Memory Test"
@@ -64,20 +60,20 @@ msgstr "Memóriateszt"
 
 #. txt_bootoptions
 msgid "Boot Options"
-msgstr "Rendszerindítási paraméterek"
+msgstr "Rendszerindítási beállítások"
 
 #. window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
 msgid "Exiting..."
-msgstr "Kilépés…"
+msgstr "Kilépés..."
 
 #. txt_exit_dialog
 msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"Kilép a grafikus rendszerindító menüből és\n"
-"elindul a karakteres mód."
+"Ezzel kilép a grafikus rendszerindítási menüből,\n"
+"és elindítja a szöveges módú kezelőfelületet."
 
 #. txt_help
 msgid "Help"
@@ -86,7 +82,7 @@ msgstr "Súgó"
 #. window title for kernel loading (see txt_load_kernel)
 #. txt_load_kernel_title
 msgid "Starting..."
-msgstr "Indítás…"
+msgstr "Indítás..."
 
 #. Keep the three newlines!
 #. txt_load_kernel
@@ -95,7 +91,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"A Linux kernel betöltése\n"
+"A Linux-kernel betöltése\n"
 "\n"
 "\n"
 
@@ -106,7 +102,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"A memtest86 program betöltése\n"
+"A memtest86 betöltése\n"
 "\n"
 "\n"
 
@@ -118,17 +114,17 @@ msgstr "Rendszertöltő"
 #. error box title
 #. txt_error_title
 msgid "I/O Error"
-msgstr "I/O hiba"
+msgstr "I/O-hiba"
 
 #. boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr "Cserélje az indítólemezt"
+msgstr "Rendszerindító lemez megváltoztatása"
 
 #. txt_insert_disk
 #, c-format
 msgid "Insert boot disk %u."
-msgstr "Helyezze be a(z) %u. indítólemezt."
+msgstr "Helyezze be a(z) %u rendszerindító lemezt."
 
 #. txt_insert_disk2
 #, c-format
@@ -136,8 +132,8 @@ msgid ""
 "This is boot disk %u.\n"
 "Insert boot disk %u."
 msgstr ""
-"Ez a(z) %u. indítólemez.\n"
-"Helyezze be a(z) %u. indítólemezt."
+"Ez a(z) %u rendszerindító lemez.\n"
+"Helyezze be a(z) %u rendszerindító lemezt."
 
 #. <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
@@ -146,8 +142,8 @@ msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"Ez nem egy <product> indítólemez.\n"
-"Helyezze be a(z) %u. indítólemezt."
+"Ez nem <product> rendszerindító lemez.\n"
+"Helyezze be a(z) %u rendszerindító lemezt."
 
 #. password dialog title
 #. txt_password_title
@@ -156,7 +152,7 @@ msgstr "Jelszó"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr "Készítse elő a frissítéseket tartalmazó meghajtólemezt."
+msgstr "Készítse elő az illesztőprogram frissítését tartalmazó hajlékonylemezt."
 
 #. power off dialog title
 #. txt_power_off_title
@@ -165,7 +161,7 @@ msgstr "Gép kikapcsolása"
 
 #. txt_power_off
 msgid "Halt the system now?"
-msgstr "Ki akarja most kapcsolni a számítógépet?"
+msgstr "Leállítja a rendszert most?"
 
 #. menu entry for hard disk installation
 #. txt_harddisk
@@ -175,11 +171,11 @@ msgstr "Merevlemez"
 #. dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "Telepítés merevlemezről"
+msgstr "Merevlemez telepítése"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Merevlemez-eszköz (ha üres, akkor az összes merevlemez ellenőrzése)\n"
+msgstr "Lemezeszköz (ha üres, keresés az összes lemezen)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -188,7 +184,7 @@ msgstr "Könyvtár\n"
 #. dialog title for ftp installation
 #. txt_ftp_title
 msgid "FTP Installation"
-msgstr "FTP telepítés"
+msgstr "FTP-telepítés"
 
 #. txt_server
 msgid "Server\n"
@@ -201,27 +197,27 @@ msgstr "Jelszó\n"
 #. label for ftp user input
 #. txt_user1
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "Felhasználó (ha üres, akkor anonymous)\n"
+msgstr "Felhasználó (névtelen bejelentkezés, ha üres)\n"
 
 #. dialog title for nfs installation
 #. txt_nfs_title
 msgid "NFS Installation"
-msgstr "NFS telepítés"
+msgstr "NFS-telepítés"
 
 #. label for smb user input
 #. txt_user2
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "Felhasználó (ha üres, akkor \"guest\")\n"
+msgstr "Felhasználó (a \"guest\" használata, ha üres)\n"
 
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "SMB telepítés (Windows megosztásról)"
+msgstr "SMB-telepítés (Windows alapú megosztás használata)"
 
 #. dialog title for http installation
 #. txt_http_title
 msgid "HTTP Installation"
-msgstr "HTTP telepítés"
+msgstr "HTTP-telepítés"
 
 #. 'driver' as in '(hardware) driver update'
 #. txt_driver_update
@@ -263,27 +259,27 @@ msgstr "Megosztás\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
-msgstr "Automatikus"
+msgstr "Automatikus mód"
 
 #. txt_zenManual
 msgid "Manual Mode"
-msgstr "Kézi"
+msgstr "Manuális mód"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr "ZEN partíció paramétereinek beállítása"
+msgstr "A ZEN partíció paramétereinek beállítása"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr "ZEN partíció telepítése/frissítése"
+msgstr "ZEN partíció telepítése vagy frissítése"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "ZEN partíció betöltőjének újratelepítése"
+msgstr "ZEN partíció rendszertöltőjének újratelepítése"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr "ZEN partíció tiltása"
+msgstr "ZEN partíció letiltása"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
@@ -297,7 +293,7 @@ msgstr "Karakteres mód"
 #. menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr "Firmware-teszt"
+msgstr "Firmware tesztje"
 
 #. txt_dud_file_msg
 msgid ""
@@ -305,9 +301,9 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
-"Amennyiben az illesztőprogram-frissítéseket közvetlenül\n"
-"CD-ről tölti be, adja meg az illesztőprogramok nevét\n"
-"(vesszővel elválasztva ','):\n"
+"Ha az illesztőprogram frissítéseit közvetlenül CD-ROM-lemezről\n"
+"szeretné betölteni, adja meg a\n"
+"frissítési fájlok nevét (vesszővel elválasztva) itt:\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
@@ -319,7 +315,7 @@ msgstr "Forrás"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_video_mode
 msgid "Video Mode"
-msgstr "Videomód"
+msgstr "Videó mód"
 
 #. driver update dialog title
 #. -> txt_dud_file_msg
@@ -332,7 +328,7 @@ msgstr "Illesztőprogram-frissítés"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr "Arch"
+msgstr "Architektúra"
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
@@ -355,13 +351,13 @@ msgstr "Biztonságos beállítások"
 #. -> similar to txt_noacpi_install
 #. txt_kernel_noacpi
 msgid "No ACPI"
-msgstr "ACPI nélkül"
+msgstr "Nincs ACPI"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_nolapic_install
 #. txt_kernel_nolapic
 msgid "No Local APIC"
-msgstr "Helyi APIC-támogatás nélkül"
+msgstr "Nincs helyi APIC"
 
 #. main menu: start in system repair mode
 #. txt_repain_system
@@ -371,7 +367,7 @@ msgstr "A telepített rendszer javítása"
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr "Telepítőkészlet ellenőrzése"
+msgstr "A telepítési adathordozó ellenőrzése"
 
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
@@ -386,7 +382,7 @@ msgstr "Illesztőprogram-frissítés letöltése"
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr "Illesztőprogram-frissítés URL-je\n"
+msgstr "Illesztőprogram-frissítések URL-címének megadása\n"
 
 #. menu item
 #. txt_http_proxy
@@ -396,7 +392,7 @@ msgstr "HTTP-proxy"
 #. menu item
 #. txt_network_config
 msgid "Network Config"
-msgstr "Hálózati beállítás"
+msgstr "Hálózati beállítások"
 
 #. menu item
 #. txt_no_network
@@ -406,12 +402,12 @@ msgstr "Nincs hálózat"
 #. short menu item for manual network config (NOT some kind of manual)
 #. txt_manual_network
 msgid "Manual"
-msgstr "Kézi"
+msgstr "Egyéni"
 
 #. dialog title for manual network config
 #. txt_manual_network_title
 msgid "Manual Network Config"
-msgstr "Kézi hálózatbeállítás"
+msgstr "Egyéni hálózati beállítások"
 
 #. label for gateway ip
 #. txt_gateway_ip
@@ -425,10 +421,12 @@ msgstr "Tartománynév\n"
 
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
-msgid "Netmask\n(or use '/N' notation with Host IP)\n"
+msgid ""
+"Netmask\n"
+"(or use '/N' notation with Host IP)\n"
 msgstr ""
 "Hálózati maszk\n"
-"(vagy /N használata a gép IP-vel)\n"
+"(másik lehetőség: a '/N' jelölés használata az állomás IP-címével)\n"
 
 #. label for Live CD installation
 #. txt_live_kde
@@ -443,20 +441,23 @@ msgstr "openSUSE Live (GNOME)"
 #. menu label for an update (as opposed to a new installation)
 #. txt_upgrade
 msgid "Upgrade"
-msgstr ""
+msgstr "Frissítés"
 
 #. label for name server (network setup)
 #. txt_nameservers
 msgid "Name servers, separated by spaces\n"
-msgstr ""
+msgstr "Névkiszolgálók, egymástól szóközzel elválasztva\n"
 
 #. label for ip address (network setup)
 #. txt_host_ip
-msgid "IP address with network prefix\n(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
+msgid ""
+"IP address with network prefix\n"
+"(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 msgstr ""
+"IP-cím hálózati előtaggal\n"
+"(Példák: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 
 #. menu item to signify no KMS (KMS = kernel mode setting - keep the english acronym)
 #. txt_video_no_kms
 msgid "No KMS"
-msgstr ""
-
+msgstr "Nincs KMS"

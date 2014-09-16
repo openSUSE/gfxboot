@@ -7,17 +7,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-21 09:35+0200\n"
-"PO-Revision-Date: 2010-03-31 18:35+0100\n"
-"Last-Translator: Andrea Florio <andrea@opensuse.org>\n"
-"Language-Team: italiano <translations@opensuse.org>\n"
+"PO-Revision-Date: 2014-09-03 10:37\n"
+"Last-Translator: Novell language <language@novell.com>\n"
+"Language-Team: Novell language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: KBabel 1.11.4\n"
-"X-Poedit-SourceCharset: utf-8\n"
 
 #. ok button label
 #. txt_ok
@@ -27,12 +22,12 @@ msgstr "Ok"
 #. cancel button label
 #. txt_cancel
 msgid "Cancel"
-msgstr "Cancella"
+msgstr "Annulla"
 
 #. reboot button label
 #. txt_reboot
 msgid "Reboot"
-msgstr "Riavvia"
+msgstr "Riavvio"
 
 #. continue button label
 #. txt_continue
@@ -45,11 +40,11 @@ msgstr "Installazione"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr "Linux--Safe Settings"
+msgstr "Linux--Impostazioni di sicurezza"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
-msgstr "Avvio dal disco rigido"
+msgstr "Avvia da disco rigido"
 
 #. txt_rescue
 msgid "Rescue System"
@@ -57,11 +52,11 @@ msgstr "Sistema di salvataggio"
 
 #. txt_memtest
 msgid "Memory Test"
-msgstr "Verifica della memoria "
+msgstr "Verifica della memoria"
 
 #. txt_bootoptions
 msgid "Boot Options"
-msgstr "Opzioni di boot"
+msgstr "Opzioni di avvio"
 
 #. window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
@@ -73,8 +68,8 @@ msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"State per uscire dal menu di avvio grafico e\n"
-"per avviare l'interfaccia nel modo testo."
+"Uscita dal menu di avvio grafico e\n"
+"avvio dell'interfaccia di modalità testo."
 
 #. txt_help
 msgid "Help"
@@ -92,7 +87,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Caricamento del kernel Linux in corso\n"
+"Caricamento del kernel Linux\n"
 "\n"
 "\n"
 
@@ -103,7 +98,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Caricamento di memtest86 in corso\n"
+"Caricamento di memtest86\n"
 "\n"
 "\n"
 
@@ -120,12 +115,12 @@ msgstr "Errore di I/O"
 #. boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr "Cambia dischetto di boot"
+msgstr "Cambiare il disco di avvio"
 
 #. txt_insert_disk
 #, c-format
 msgid "Insert boot disk %u."
-msgstr "Inserire il disco di avvio di %u."
+msgstr "Inserire il disco di avvio %u."
 
 #. txt_insert_disk2
 #, c-format
@@ -133,8 +128,8 @@ msgid ""
 "This is boot disk %u.\n"
 "Insert boot disk %u."
 msgstr ""
-"Questo è il disco di avvio di %u.\n"
-"Inserire il disco di avvio di %u."
+"Questo è il disco di avvio %u.\n"
+"Inserire il disco di avvio %u."
 
 #. <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
@@ -143,7 +138,7 @@ msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"Questo non è un disco di avvio di <prodotto>.\n"
+"Questo non è un disco di avvio <product>.\n"
 "Inserire il disco di avvio %u."
 
 #. password dialog title
@@ -153,7 +148,7 @@ msgstr "Password"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr "Preparare il disco floppy con l'aggiornamento dei driver."
+msgstr "Tenere pronto il floppy con l'aggiornamento del driver."
 
 #. power off dialog title
 #. txt_power_off_title
@@ -162,7 +157,7 @@ msgstr "Spegnimento"
 
 #. txt_power_off
 msgid "Halt the system now?"
-msgstr "Arrestare il sistema?"
+msgstr "Arrestare adesso il sistema?"
 
 #. menu entry for hard disk installation
 #. txt_harddisk
@@ -172,11 +167,11 @@ msgstr "Disco rigido"
 #. dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "Installazione disco rigido"
+msgstr "Installazione del disco rigido"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Dispositivo disco (se vuoto analizza tutti i dischi)\n"
+msgstr "Dispositivo disco (se lasciato vuoto, vengono analizzati tutti i dischi)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -198,7 +193,7 @@ msgstr "Password\n"
 #. label for ftp user input
 #. txt_user1
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "Utente (login anonimo se vuoto)\n"
+msgstr "Utente (se lasciato vuoto, l'utente rimane anonimo)\n"
 
 #. dialog title for nfs installation
 #. txt_nfs_title
@@ -208,12 +203,12 @@ msgstr "Installazione NFS"
 #. label for smb user input
 #. txt_user2
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "Utente (se vuoto viene utilizzato \"guest\")\n"
+msgstr "Utente (se lasciato vuoto, viene usato \"guest\")\n"
 
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "Installazione SMB (share Windows)"
+msgstr "Installazione SMB (Condivisione Windows)"
 
 #. dialog title for http installation
 #. txt_http_title
@@ -228,7 +223,7 @@ msgstr "Driver"
 #. as in Windows Authentication Domain
 #. txt_domain
 msgid "Domain\n"
-msgstr "Domino\n"
+msgstr "Dominio\n"
 
 #. button label for other/more options
 #. txt_other_options
@@ -268,7 +263,7 @@ msgstr "Modalità manuale"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr "Configura parametri nella partizione ZEN"
+msgstr "Configura parametri sulla partizione ZEN"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
@@ -276,15 +271,15 @@ msgstr "Installa o aggiorna partizione ZEN"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "Reinstalla caricatore di avvio partizione ZEN"
+msgstr "Reinstalla il boot loader della partizione ZEN"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr "Disabilita partizione ZEN"
+msgstr "Disattiva partizione ZEN"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
-msgstr "Abilita partizione ZEN"
+msgstr "Attiva partizione ZEN"
 
 #. video mode menu item
 #. txt_text_mode
@@ -302,9 +297,9 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
-"Per caricare gli aggiornamenti del driver direttamente dal CD ROM,\n"
-"immettere qui i nomi dei file di aggiornamento del driver (separati\n"
-"da virgole','):\n"
+"Per caricare gli aggiornamenti del driver direttamente da un CD-ROM,\n"
+"immettere i nomi dei file di aggiornamento driver (separati\n"
+"da virgole ',') in questa posizione:\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
@@ -340,19 +335,19 @@ msgstr "Kernel"
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
 msgid "Default"
-msgstr "Predefinito"
+msgstr "Default"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> like in txt_safe_linux
 #. txt_kernel_safe
 msgid "Safe Settings"
-msgstr "Impostazioni sicure"
+msgstr "Impostazioni di sicurezza"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_noacpi_install
 #. txt_kernel_noacpi
 msgid "No ACPI"
-msgstr "No ACPI"
+msgstr "Nessuna ACPI"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_nolapic_install
@@ -368,7 +363,7 @@ msgstr "Ripara sistema installato"
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr "Verifica del supporto di installazione"
+msgstr "Verifica supporto di installazione"
 
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
@@ -378,12 +373,12 @@ msgstr "Tastiera"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr "Download dell'aggiornamento del driver"
+msgstr "Scarica aggiornamento driver"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr "Inserisci l'URL dell'aggiornamento del driver\n"
+msgstr "Immettere l'URL di aggiornamento del driver\n"
 
 #. menu item
 #. txt_http_proxy
@@ -393,12 +388,12 @@ msgstr "Proxy HTTP"
 #. menu item
 #. txt_network_config
 msgid "Network Config"
-msgstr "Configurazione Rete"
+msgstr "Configurazione di rete"
 
 #. menu item
 #. txt_no_network
 msgid "No Network"
-msgstr "Nessuna Rete"
+msgstr "Nessuna rete"
 
 #. short menu item for manual network config (NOT some kind of manual)
 #. txt_manual_network
@@ -408,7 +403,7 @@ msgstr "Manuale"
 #. dialog title for manual network config
 #. txt_manual_network_title
 msgid "Manual Network Config"
-msgstr "Configurazione manuale della rete"
+msgstr "Configurazione manuale rete"
 
 #. label for gateway ip
 #. txt_gateway_ip
@@ -418,14 +413,16 @@ msgstr "Gateway\n"
 #. label for dns domain name (like 'opensuse.org')
 #. txt_domain_name
 msgid "Domain Name\n"
-msgstr "Nome Domino\n"
+msgstr "Nome del dominio\n"
 
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
-msgid "Netmask\n(or use '/N' notation with Host IP)\n"
-msgstr ""
+msgid ""
 "Netmask\n"
-"(or utilizza la notazione '/N' con l'IP dell'host)\n"
+"(or use '/N' notation with Host IP)\n"
+msgstr ""
+"Maschera di rete\n"
+"(o usare la notazione '/N' con IP host)\n"
 
 #. label for Live CD installation
 #. txt_live_kde
@@ -440,20 +437,23 @@ msgstr "openSUSE Live (GNOME)"
 #. menu label for an update (as opposed to a new installation)
 #. txt_upgrade
 msgid "Upgrade"
-msgstr ""
+msgstr "Esegui l'upgrade"
 
 #. label for name server (network setup)
 #. txt_nameservers
 msgid "Name servers, separated by spaces\n"
-msgstr ""
+msgstr "Immettere i nomi dei server separati da spazi\n"
 
 #. label for ip address (network setup)
 #. txt_host_ip
-msgid "IP address with network prefix\n(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
+msgid ""
+"IP address with network prefix\n"
+"(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 msgstr ""
+"Indirizzo IP con prefisso di rete\n"
+"(Esempi: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 
 #. menu item to signify no KMS (KMS = kernel mode setting - keep the english acronym)
 #. txt_video_no_kms
 msgid "No KMS"
-msgstr ""
-
+msgstr "Nessun KMS"

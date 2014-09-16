@@ -8,16 +8,13 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: bootloader.ru\n"
-"POT-Creation-Date: 2008-09-26 18:04+0200\n"
-"PO-Revision-Date: 2010-04-10 20:32+0300\n"
-"Last-Translator: Alexander Melentiev <alex239@gmail.com>\n"
-"Language-Team: Russian <opensuse-translation-ru@opensuse.org>\n"
+"Project-Id-Version: bootloader\n"
+"PO-Revision-Date: 2014-09-03 10:44\n"
+"Last-Translator: Novell language <language@novell.com>\n"
+"Language-Team: Novell language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.0\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #. ok button label
 #. txt_ok
@@ -45,11 +42,11 @@ msgstr "Установка"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr "Linux -- безопасные параметры"
+msgstr "Linux--Безопасные параметры"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
-msgstr "Загрузка с жёсткого диска"
+msgstr "Загрузка с жесткого диска"
 
 #. txt_rescue
 msgid "Rescue System"
@@ -61,20 +58,20 @@ msgstr "Проверка памяти"
 
 #. txt_bootoptions
 msgid "Boot Options"
-msgstr "Параметры загрузки"
+msgstr "Варианты загрузки"
 
 #. window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
 msgid "Exiting..."
-msgstr "Выход..."
+msgstr "Выполняется выход..."
 
 #. txt_exit_dialog
 msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"Вы вышли из графического меню загрузки и\n"
-"запустили интерфейс текстового режима."
+"Вы покидаете графическое меню загрузки и\n"
+"запускаете интерфейс текстового режима."
 
 #. txt_help
 msgid "Help"
@@ -83,7 +80,7 @@ msgstr "Справка"
 #. window title for kernel loading (see txt_load_kernel)
 #. txt_load_kernel_title
 msgid "Starting..."
-msgstr "Запуск..."
+msgstr "Идет запуск..."
 
 #. Keep the three newlines!
 #. txt_load_kernel
@@ -120,7 +117,7 @@ msgstr "Ошибка ввода/вывода"
 #. boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr "Сменить загрузочный диск"
+msgstr "Смена загрузочного диска"
 
 #. txt_insert_disk
 #, c-format
@@ -143,17 +140,17 @@ msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"Это не загрузочный диск <product>.\n"
+"Данный диск не является загрузочным диском <product>.\n"
 "Вставьте загрузочный диск %u."
 
 #. password dialog title
 #. txt_password_title
 msgid "Password"
-msgstr "Пароль"
+msgstr "ПАРОЛЬ"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr "Подготовьте дискету с драйверами."
+msgstr "Приготовьте дискету для обновления драйверов."
 
 #. power off dialog title
 #. txt_power_off_title
@@ -162,7 +159,7 @@ msgstr "Выключить питание"
 
 #. txt_power_off
 msgid "Halt the system now?"
-msgstr "Остановить систему?"
+msgstr "Выполнить остановку системы сейчас?"
 
 #. menu entry for hard disk installation
 #. txt_harddisk
@@ -172,11 +169,11 @@ msgstr "Жёсткий диск"
 #. dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "Установка с жёсткого диска"
+msgstr "Установка на жесткий диск"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Дисковое устройство (проверить все диски, если не указано)\n"
+msgstr "Дисковый накопитель (если пусто, сканируются все диски)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -185,7 +182,7 @@ msgstr "Каталог\n"
 #. dialog title for ftp installation
 #. txt_ftp_title
 msgid "FTP Installation"
-msgstr "Установка по FTP"
+msgstr "Настройка FTP"
 
 #. txt_server
 msgid "Server\n"
@@ -198,27 +195,27 @@ msgstr "Пароль\n"
 #. label for ftp user input
 #. txt_user1
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "Пользователь (анонимный вход, если не указан)\n"
+msgstr "Пользователь (анонимный вход, если пусто)\n"
 
 #. dialog title for nfs installation
 #. txt_nfs_title
 msgid "NFS Installation"
-msgstr "Установка по NFS"
+msgstr "Настройка NFS"
 
 #. label for smb user input
 #. txt_user2
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "Пользователь (использовать \"guest\", если не указан)\n"
+msgstr "Пользователь (используется \"guest\", если пусто)\n"
 
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "Установка по SMB (из общей папки Windows)"
+msgstr "Настройка SMB (Windows Share)"
 
 #. dialog title for http installation
 #. txt_http_title
 msgid "HTTP Installation"
-msgstr "Установка по HTTP"
+msgstr "Настройка HTTP"
 
 #. 'driver' as in '(hardware) driver update'
 #. txt_driver_update
@@ -233,7 +230,7 @@ msgstr "Домен\n"
 #. button label for other/more options
 #. txt_other_options
 msgid "Other Options"
-msgstr "Другие параметры"
+msgstr "Другии Опции"
 
 #. label for language selection
 #. txt_language
@@ -256,7 +253,7 @@ msgstr "Файл"
 #. input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr "Общая папка\n"
+msgstr "Совместное использование\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
@@ -268,23 +265,23 @@ msgstr "Ручной режим"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr "Настройка параметров на разделе ZEN"
+msgstr "Конфигурация параметров на разделе ZEN Partition"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr "Установить или обновить раздел ZEN"
+msgstr "Настройка или обновление раздела ZEN Partition"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "Переустановить загрузчик раздела ZEN"
+msgstr "Повторная установка загрузчика раздела ZEN Partition"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr "Отключить раздел ZEN"
+msgstr "Отключение раздела ZEN Partition"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
-msgstr "Включить раздел ZEN"
+msgstr "Включение раздела ZEN Partition"
 
 #. video mode menu item
 #. txt_text_mode
@@ -294,7 +291,7 @@ msgstr "Текстовый режим"
 #. menu item, like 'memory test'
 #. txt_firmware
 msgid "Firmware Test"
-msgstr "Проверка прошивок"
+msgstr "Проверка микропрограммы"
 
 #. txt_dud_file_msg
 msgid ""
@@ -302,9 +299,9 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
-"Чтобы напрямую загрузить обновления драйверов с компакт-диска,\n"
-"введите имена файлов обновлений драйверов (разделенные\n"
-"запятыми ','):\n"
+"Для загрузки обновлений драйверов напрямую с CD-ROM,\n"
+"введите наименования файлов обновлений драйверов (отделяя их\n"
+"запятыми ',') здесь:\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
@@ -316,7 +313,7 @@ msgstr "Источник"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_video_mode
 msgid "Video Mode"
-msgstr "Разрешение"
+msgstr "Видеорежим"
 
 #. driver update dialog title
 #. -> txt_dud_file_msg
@@ -329,7 +326,7 @@ msgstr "Обновление драйверов"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr "Архитектура"
+msgstr "Арх."
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
@@ -363,12 +360,12 @@ msgstr "Без локального APIC"
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr "Восстановление установленной системы"
+msgstr "Восстановление работоспособности установленной системы"
 
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr "Проверка установочного носителя"
+msgstr "Проверка носителей дистрибутива"
 
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
@@ -378,27 +375,27 @@ msgstr "Клавиатура"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr "Загрузить обновление драйверов"
+msgstr "Загрузка обновленных драйверов"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr "Введите URL обновления драйверов\n"
+msgstr "Введите URL-адрес обновления для драйверов\n"
 
 #. menu item
 #. txt_http_proxy
 msgid "HTTP Proxy"
-msgstr "HTTP-прокси"
+msgstr "Прокси-сервер HTTP"
 
 #. menu item
 #. txt_network_config
 msgid "Network Config"
-msgstr "Настройка сети"
+msgstr "Конфигурация сети"
 
 #. menu item
 #. txt_no_network
 msgid "No Network"
-msgstr "Нет сети"
+msgstr "Без сети"
 
 #. short menu item for manual network config (NOT some kind of manual)
 #. txt_manual_network
@@ -408,7 +405,7 @@ msgstr "Вручную"
 #. dialog title for manual network config
 #. txt_manual_network_title
 msgid "Manual Network Config"
-msgstr "Ручная настройка сети"
+msgstr "Ручная конфигурация сети"
 
 #. label for gateway ip
 #. txt_gateway_ip
@@ -418,14 +415,16 @@ msgstr "Шлюз\n"
 #. label for dns domain name (like 'opensuse.org')
 #. txt_domain_name
 msgid "Domain Name\n"
-msgstr "Имя домена\n"
+msgstr "Доменное имя\n"
 
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
-msgid "Netmask\n(or use '/N' notation with Host IP)\n"
+msgid ""
+"Netmask\n"
+"(or use '/N' notation with Host IP)\n"
 msgstr ""
 "Маска сети\n"
-"(или используйте нотацию '/N' в поле IP-адреса)\n"
+"(или используйте запись '/N' для IP-адреса хоста)\n"
 
 #. label for Live CD installation
 #. txt_live_kde
@@ -440,20 +439,23 @@ msgstr "openSUSE Live (GNOME)"
 #. menu label for an update (as opposed to a new installation)
 #. txt_upgrade
 msgid "Upgrade"
-msgstr ""
+msgstr "Обновление"
 
 #. label for name server (network setup)
 #. txt_nameservers
 msgid "Name servers, separated by spaces\n"
-msgstr ""
+msgstr "Укажите сервера, отделяя их пробелами\n"
 
 #. label for ip address (network setup)
 #. txt_host_ip
-msgid "IP address with network prefix\n(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
+msgid ""
+"IP address with network prefix\n"
+"(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 msgstr ""
+"IP-адреса с сетевым префиксом\n"
+"(Примеры: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 
 #. menu item to signify no KMS (KMS = kernel mode setting - keep the english acronym)
 #. txt_video_no_kms
 msgid "No KMS"
-msgstr ""
-
+msgstr "Без KMS"

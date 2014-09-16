@@ -4,11 +4,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-18 10:26+0200\n"
-"PO-Revision-Date: 2006-10-26 14:38:25+CEST\n"
-"Last-Translator: Novell Language <language@novell.com>\n"
-"Language-Team: Novell Language <language@novell.com>\n"
+"PO-Revision-Date: 2014-09-03 10:42\n"
+"Last-Translator: Novell language <language@novell.com>\n"
+"Language-Team: Novell language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -43,7 +41,7 @@ msgstr "Linux--إعدادات آمنة"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
-msgstr "تشغيل من القرص الصلب"
+msgstr "تشغيل من القرص الثابت"
 
 #. txt_rescue
 msgid "Rescue System"
@@ -60,15 +58,15 @@ msgstr "خيارات التشغيل"
 #. window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
 msgid "Exiting..."
-msgstr "خروج..."
+msgstr "الحالي..."
 
 #. txt_exit_dialog
 msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"تتم الآن مغادرة قائمة التشغيل الرسومية و\n"
-"بدء تشغيل واجهة وضع النص."
+"أنت تخرج من قائمة التشغيل الرسومية و\n"
+"تبدأ تشغيل واجهة استخدام النمط النصي."
 
 #. txt_help
 msgid "Help"
@@ -77,7 +75,7 @@ msgstr "تعليمات"
 #. window title for kernel loading (see txt_load_kernel)
 #. txt_load_kernel_title
 msgid "Starting..."
-msgstr "بدء..."
+msgstr "جار بدء..."
 
 #. Keep the three newlines!
 #. txt_load_kernel
@@ -86,9 +84,9 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"تحميل Linux Kernel\n"
+"جارٍ تحميل Linux Kernel\n"
 "\n"
-" \n"
+"\n"
 
 #. Keep the three newlines!
 #. txt_load_memtest
@@ -97,9 +95,9 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"تحميل memtest86\n"
+"جارٍ تحميل memtest86\n"
 "\n"
-" \n"
+"\n"
 
 #. info box title
 #. txt_info_title
@@ -119,7 +117,7 @@ msgstr "تغيير قرص التشغيل"
 #. txt_insert_disk
 #, c-format
 msgid "Insert boot disk %u."
-msgstr "أدخل قرص التشغيل %u."
+msgstr "إدراج قرص التشغيل %u."
 
 #. txt_insert_disk2
 #, c-format
@@ -128,7 +126,7 @@ msgid ""
 "Insert boot disk %u."
 msgstr ""
 "هذا هو قرص التشغيل %u.\n"
-"أدخل قرص التشغيل %u."
+"قم بإدراج قرص التشغيل %u."
 
 #. <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
@@ -137,8 +135,8 @@ msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"هذا ليس <product>قرص تشغيل.\n"
-"أدخل قرص التشغيل %u."
+"ليس هذا هو قرص تشغيل <المنتج>.\n"
+"قم بإدراج قرص التشغيل %u."
 
 #. password dialog title
 #. txt_password_title
@@ -147,7 +145,7 @@ msgstr "كلمة السر"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr "قم بتحضير القرص المرن لتحديث برنامج التشغيل بحيث يكون جاهزًا للاستخدام."
+msgstr "قم بتجهيز القرص المرن الخاص بتحديث برنامج التشغيل."
 
 #. power off dialog title
 #. txt_power_off_title
@@ -161,7 +159,7 @@ msgstr "هل تريد إيقاف النظام الآن؟"
 #. menu entry for hard disk installation
 #. txt_harddisk
 msgid "Hard Disk"
-msgstr "القرص الصلب"
+msgstr "قرص صلب"
 
 #. dialog title for hard disk installation
 #. txt_harddisk_title
@@ -170,11 +168,11 @@ msgstr "تثبيت القرص الصلب"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "جهاز القرص (مسح كافة الأقراص إذا كان فارغًا)\n"
+msgstr "جهاز القرص (بحث عن جميع الأقراص إذا كان خاليًا)\n"
 
 #. txt_directory
 msgid "Directory\n"
-msgstr "الدليل\n"
+msgstr "دليل\n"
 
 #. dialog title for ftp installation
 #. txt_ftp_title
@@ -183,7 +181,7 @@ msgstr "تثبيت FTP"
 
 #. txt_server
 msgid "Server\n"
-msgstr "الخادم\n"
+msgstr "خادم\n"
 
 #. txt_password
 msgid "Password\n"
@@ -192,7 +190,7 @@ msgstr "كلمة السر\n"
 #. label for ftp user input
 #. txt_user1
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "المستخدم (تسجيل دخول مجهول إذا كان الحقل فارغًا)\n"
+msgstr "المستخدم (تسجيل الدخول بمستخدم مجهول إذا كان خاليًا)\n"
 
 #. dialog title for nfs installation
 #. txt_nfs_title
@@ -202,12 +200,12 @@ msgstr "تثبيت NFS"
 #. label for smb user input
 #. txt_user2
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "المستخدم (يتم استخدام \"ضيف\" إذا كان الحقل فارغًا)\n"
+msgstr "المستخدم (يستخدم \"guest\" إذا كان خاليًا)\n"
 
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "تثبيت SMB‏ (مشاركة Windows)"
+msgstr "تثبيت SMB ‏(مشاركة Windows)"
 
 #. dialog title for http installation
 #. txt_http_title
@@ -222,7 +220,7 @@ msgstr "برنامج التشغيل"
 #. as in Windows Authentication Domain
 #. txt_domain
 msgid "Domain\n"
-msgstr "المجال\n"
+msgstr "نطاق\n"
 
 #. button label for other/more options
 #. txt_other_options
@@ -254,19 +252,19 @@ msgstr "مشاركة\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
-msgstr "وضع تلقائي"
+msgstr "الوضع التلقائي"
 
 #. txt_zenManual
 msgid "Manual Mode"
-msgstr "وضع يدوي"
+msgstr "الوضع اليدوي"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr "تكوين معلمات في قسم ZEN"
+msgstr "تكوين المعلمات على قسم ZEN"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr "تثبيت قسم ZEN أو تحديثه"
+msgstr "تثبيت أو تحديث قسم ZEN"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
@@ -296,21 +294,21 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
-"لتحميل تحديثات برنامج التشغيل مباشرةً من القرص المضغوط،\n"
-"أدخل أسماء ملفات تحديثات برنامج التشغيل (مفصولة\n"
-" بفواصل ',') هنا:\n"
+"لتحميل عمليات تحديث برامج التشغيل مباشرة من القرص المضغوط،\n"
+"قم بإدخال أسماء ملفات تحديث برامج التشغيل (مفصولة باستخدام\n"
+" فواصل ',') هنا:\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
 #. txt_install_source
 msgid "Source"
-msgstr ""
+msgstr "المصدر"
 
 #. video mode/display size menu title
 #. ** please keep it really short (comparable to the english text) **
 #. txt_video_mode
 msgid "Video Mode"
-msgstr ""
+msgstr "نمط فيديو"
 
 #. driver update dialog title
 #. -> txt_dud_file_msg
@@ -329,40 +327,40 @@ msgstr "الهيكل"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_kernel
 msgid "Kernel"
-msgstr ""
+msgstr "Kernel"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
 msgid "Default"
-msgstr ""
+msgstr "افتراضي"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> like in txt_safe_linux
 #. txt_kernel_safe
 msgid "Safe Settings"
-msgstr ""
+msgstr "إعدادات آمنة"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_noacpi_install
 #. txt_kernel_noacpi
 msgid "No ACPI"
-msgstr ""
+msgstr "لا يتوفر ACPI"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_nolapic_install
 #. txt_kernel_nolapic
 msgid "No Local APIC"
-msgstr ""
+msgstr "لا يتوفر APIC محلي"
 
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr ""
+msgstr "إصلاح النظام المثبت"
 
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr ""
+msgstr "فحص وسائط التثبيت"
 
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
@@ -372,80 +370,87 @@ msgstr "لوحة المفاتيح"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "تحميل تحديث برنامج التشغيل"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr ""
+msgstr "إدخال عنوان URL الخاص بتحديث برنامج التشغيل\n"
 
 #. menu item
 #. txt_http_proxy
 msgid "HTTP Proxy"
-msgstr ""
+msgstr "وكيل HTTP"
 
 #. menu item
 #. txt_network_config
 msgid "Network Config"
-msgstr ""
+msgstr "تكوين الشبكة"
 
 #. menu item
 #. txt_no_network
 msgid "No Network"
-msgstr ""
+msgstr "لا تتوفر شبكة"
 
 #. short menu item for manual network config (NOT some kind of manual)
 #. txt_manual_network
 msgid "Manual"
-msgstr ""
+msgstr "يدوي"
 
 #. dialog title for manual network config
 #. txt_manual_network_title
 msgid "Manual Network Config"
-msgstr ""
+msgstr "تكوين يدوي للشبكة"
 
 #. label for gateway ip
 #. txt_gateway_ip
 msgid "Gateway\n"
-msgstr ""
+msgstr "بوابة\n"
 
 #. label for dns domain name (like 'opensuse.org')
 #. txt_domain_name
 msgid "Domain Name\n"
-msgstr ""
+msgstr "اسم النطاق\n"
 
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
-msgid "Netmask\n(or use '/N' notation with Host IP)\n"
+msgid ""
+"Netmask\n"
+"(or use '/N' notation with Host IP)\n"
 msgstr ""
+"قناع شبكة‏\n"
+"(أو استخدم ترقيم '/N' مع عنوان IP للمضيف)‏\n"
 
 #. label for Live CD installation
 #. txt_live_kde
 msgid "openSUSE Live (KDE)"
-msgstr ""
+msgstr "openSUSE Live (KDE)"
 
 #. label for Live CD installation
 #. txt_live_gnome
 msgid "openSUSE Live (GNOME)"
-msgstr ""
+msgstr "openSUSE Live (GNOME)"
 
 #. menu label for an update (as opposed to a new installation)
 #. txt_upgrade
 msgid "Upgrade"
-msgstr ""
+msgstr "ترقية"
 
 #. label for name server (network setup)
 #. txt_nameservers
 msgid "Name servers, separated by spaces\n"
-msgstr ""
+msgstr "خوادم الأسماء، مفصولة بمسافات\n"
 
 #. label for ip address (network setup)
 #. txt_host_ip
-msgid "IP address with network prefix\n(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
+msgid ""
+"IP address with network prefix\n"
+"(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 msgstr ""
+"عنوان IP مع بادئة الشبكة\n"
+"(أمثلة:(192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 
 #. menu item to signify no KMS (KMS = kernel mode setting - keep the english acronym)
 #. txt_video_no_kms
 msgid "No KMS"
-msgstr ""
-
+msgstr "بلا KMS"

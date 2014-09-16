@@ -8,17 +8,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2010-02-08 16:40+0100\n"
-"Last-Translator: Javier Llorente <javier@opensuse.org>\n"
-"Language-Team: Spanish <opensuse-translation-es@opensuse.org>\n"
+"PO-Revision-Date: 2014-09-03 10:37\n"
+"Last-Translator: Novell language <language@novell.com>\n"
+"Language-Team: Novell language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.0\n"
-"X-Poedit-Language: Spanish\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. ok button label
 #. txt_ok
@@ -33,7 +28,7 @@ msgstr "Cancelar"
 #. reboot button label
 #. txt_reboot
 msgid "Reboot"
-msgstr "Reiniciar"
+msgstr "Rearrancar"
 
 #. continue button label
 #. txt_continue
@@ -46,15 +41,15 @@ msgstr "Instalación"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr "Linux -- Ajustes seguros"
+msgstr "Linux: configuración segura"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
-msgstr "Arrancar desde el disco duro"
+msgstr "Arrancar desde disco duro"
 
 #. txt_rescue
 msgid "Rescue System"
-msgstr "Sistema de rescate"
+msgstr "Equipo de rescate"
 
 #. txt_memtest
 msgid "Memory Test"
@@ -67,14 +62,14 @@ msgstr "Opciones de arranque"
 #. window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
 msgid "Exiting..."
-msgstr "Saliendo..."
+msgstr "Saliendo"
 
 #. txt_exit_dialog
 msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"Está saliendo del menú gráfico de arranque e\n"
+"Está saliendo del menú de arranque gráfico e\n"
 "iniciando la interfaz en modo texto."
 
 #. txt_help
@@ -93,7 +88,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Cargando el kernel Linux\n"
+"Cargando Linux Kernel\n"
 "\n"
 "\n"
 
@@ -121,7 +116,7 @@ msgstr "Error de E/S"
 #. boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr "Cambiar el disco de arranque"
+msgstr "Cambiar disco de arranque"
 
 #. txt_insert_disk
 #, c-format
@@ -144,8 +139,8 @@ msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"Este no es un disco de arranque de <product>.\n"
-"Introduzca el disco de arranque %u."
+"Este no es un disco de arranque de <producto>.\n"
+"Inserte el disco de arranque %u."
 
 #. password dialog title
 #. txt_password_title
@@ -154,7 +149,7 @@ msgstr "Contraseña"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr "Tenga listo el disco de actualización del controlador."
+msgstr "Prepare el disquete de actualización del controlador."
 
 #. power off dialog title
 #. txt_power_off_title
@@ -163,7 +158,7 @@ msgstr "Apagar"
 
 #. txt_power_off
 msgid "Halt the system now?"
-msgstr "¿Desea apagar el sistema ahora?"
+msgstr "¿Detener el sistema ahora?"
 
 #. menu entry for hard disk installation
 #. txt_harddisk
@@ -173,11 +168,11 @@ msgstr "Disco duro"
 #. dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "Instalación disco duro"
+msgstr "Instalación del disco duro"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Dispositivo de disco (analiza todos los discos si se deja vacío)\n"
+msgstr "Dispositivo de disco (explora todos los discos si está vacío)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -186,7 +181,7 @@ msgstr "Directorio\n"
 #. dialog title for ftp installation
 #. txt_ftp_title
 msgid "FTP Installation"
-msgstr "Instalación FTP"
+msgstr "Instalación de FTP"
 
 #. txt_server
 msgid "Server\n"
@@ -199,27 +194,27 @@ msgstr "Contraseña\n"
 #. label for ftp user input
 #. txt_user1
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "Usuario (dejar vacío para anónimo)\n"
+msgstr "Usuario (inicio de sesión anónimo si está vacío)\n"
 
 #. dialog title for nfs installation
 #. txt_nfs_title
 msgid "NFS Installation"
-msgstr "Instalación NFS"
+msgstr "Instalación de NFS"
 
 #. label for smb user input
 #. txt_user2
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "Usuario (se utiliza \"guest\" si se deja vacío)\n"
+msgstr "Usuario (se utilizará \"guest\" si está vacío)\n"
 
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "Instalación SMB (recurso compartido Windows)"
+msgstr "Instalación de SMB (recurso compartido de Windows)"
 
 #. dialog title for http installation
 #. txt_http_title
 msgid "HTTP Installation"
-msgstr "Instalación HTTP"
+msgstr "Instalación de HTTP"
 
 #. 'driver' as in '(hardware) driver update'
 #. txt_driver_update
@@ -269,7 +264,7 @@ msgstr "Modo manual"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr "Configurar parámetros en la partición ZEN"
+msgstr "Configurar los parámetros en partición ZEN"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
@@ -277,11 +272,11 @@ msgstr "Instalar o actualizar la partición ZEN"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "Volver a instalar el cargador de arranque de partición ZEN"
+msgstr "Reinstalar el cargador de arranque de la partición ZEN"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr "Deshabilitar partición ZEN"
+msgstr "Inhabilitar partición ZEN"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
@@ -290,7 +285,7 @@ msgstr "Habilitar partición ZEN"
 #. video mode menu item
 #. txt_text_mode
 msgid "Text Mode"
-msgstr "Modo texto"
+msgstr "Modo de texto"
 
 #. menu item, like 'memory test'
 #. txt_firmware
@@ -303,9 +298,9 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
-"Para cargar las actualizaciones de controlador directamente desde el CD-ROM,\n"
-"indique los nombres de archivo de las actualizaciones del controlador (separados\n"
-"por comas \",\") aquí:\n"
+"Para cargar las actualizaciones del cargador directamente desde un CD-ROM, \n"
+"introduzca los nombres de los archivos de actualización del controlador (separados\n"
+"por comas ',') aquí:\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
@@ -323,7 +318,7 @@ msgstr "Modo de vídeo"
 #. -> txt_dud_file_msg
 #. txt_driver_update2
 msgid "Driver Update"
-msgstr "Actualización de controlador"
+msgstr "Actualización del controlador"
 
 #. menu label for selecting (cpu) architecture
 #. like i386, x86-64, ppc
@@ -341,35 +336,35 @@ msgstr "Kernel"
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
 msgid "Default"
-msgstr "Predeterminado"
+msgstr "Por defecto"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> like in txt_safe_linux
 #. txt_kernel_safe
 msgid "Safe Settings"
-msgstr "Ajustes seguros"
+msgstr "Configuración segura"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_noacpi_install
 #. txt_kernel_noacpi
 msgid "No ACPI"
-msgstr "Sin ACPI"
+msgstr "No hay ACPI"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_nolapic_install
 #. txt_kernel_nolapic
 msgid "No Local APIC"
-msgstr "Sin APIC local"
+msgstr "No hay APIC local"
 
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr "Reparar el sistema instalado"
+msgstr "Reparar sistema instalado"
 
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr "Verificar el medio de instalación"
+msgstr "Comprobar medios de instalación"
 
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
@@ -379,12 +374,12 @@ msgstr "Teclado"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr "Bajar actualización de controlador"
+msgstr "Descargar actualización del controlador"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr "Escribir URL de actualización de controlador\n"
+msgstr "Introducir actualización del controlador\n"
 
 #. menu item
 #. txt_http_proxy
@@ -409,12 +404,12 @@ msgstr "Manual"
 #. dialog title for manual network config
 #. txt_manual_network_title
 msgid "Manual Network Config"
-msgstr "Configuración manual de la red"
+msgstr "Configuración de red manual"
 
 #. label for gateway ip
 #. txt_gateway_ip
 msgid "Gateway\n"
-msgstr "Puerta de enlace\n"
+msgstr "Gateway\n"
 
 #. label for dns domain name (like 'opensuse.org')
 #. txt_domain_name
@@ -423,10 +418,12 @@ msgstr "Nombre de dominio\n"
 
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
-msgid "Netmask\n(or use '/N' notation with Host IP)\n"
+msgid ""
+"Netmask\n"
+"(or use '/N' notation with Host IP)\n"
 msgstr ""
-"Mascara de red\n"
-"(o use la notación '/N' con la IP del host)\n"
+"Máscara de red\n"
+"(o usar la notación '/N' con la dirección IP del host)\n"
 
 #. label for Live CD installation
 #. txt_live_kde
@@ -441,20 +438,23 @@ msgstr "openSUSE Live (GNOME)"
 #. menu label for an update (as opposed to a new installation)
 #. txt_upgrade
 msgid "Upgrade"
-msgstr ""
+msgstr "Actualizar"
 
 #. label for name server (network setup)
 #. txt_nameservers
 msgid "Name servers, separated by spaces\n"
-msgstr ""
+msgstr "Introduzca los nombres de los servidores, separados por espacios\n"
 
 #. label for ip address (network setup)
 #. txt_host_ip
-msgid "IP address with network prefix\n(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
+msgid ""
+"IP address with network prefix\n"
+"(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 msgstr ""
+"Direcciones IP con prefijo de red\n"
+"(Ejemplos: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 
 #. menu item to signify no KMS (KMS = kernel mode setting - keep the english acronym)
 #. txt_video_no_kms
 msgid "No KMS"
-msgstr ""
-
+msgstr "No hay KMS"

@@ -3,17 +3,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-11-05 23:52+0100\n"
-"Last-Translator: Jonas Björk <jonas@jonasbjork.net>\n"
-"Language-Team: svenska <sv@li.org>\n"
+"PO-Revision-Date: 2014-09-03 10:44\n"
+"Last-Translator: Novell language <language@novell.com>\n"
+"Language-Team: Novell language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
-"X-Poedit-Language: Swedish\n"
-"X-Poedit-Country: SWEDEN\n"
-"X-Poedit-SourceCharset: utf-8\n"
 
 #. ok button label
 #. txt_ok
@@ -41,7 +36,7 @@ msgstr "Installation"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr "Linux - Säkra inställningar"
+msgstr "Linux--Säkra inställningar"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
@@ -49,7 +44,7 @@ msgstr "Starta från hårddisk"
 
 #. txt_rescue
 msgid "Rescue System"
-msgstr "Räddningssystem"
+msgstr "Nödsystem"
 
 #. txt_memtest
 msgid "Memory Test"
@@ -69,8 +64,8 @@ msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"Du är på väg att lämna den grafiska startmenyn och\n"
-"starta textlägesgränssnittet."
+"Du lämnar den grafiska startmenyn och\n"
+"startar textlägesgränssnittet."
 
 #. txt_help
 msgid "Help"
@@ -88,7 +83,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Laddar Linuxkärnan\n"
+"Läser in Linuxkärnan\n"
 "\n"
 "\n"
 
@@ -99,7 +94,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Laddar memtest86\n"
+"Läser in memtest86\n"
 "\n"
 "\n"
 
@@ -139,7 +134,7 @@ msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"Det här är inte en <product>-startdisk.\n"
+"Det här är inte en startdisk för <product>.\n"
 "Sätt i startdisk %u."
 
 #. password dialog title
@@ -149,7 +144,7 @@ msgstr "Lösenord"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr "Ha disketten för drivrutinsuppdatering redo."
+msgstr "Förbered disketten med drivrutinsuppdateringen."
 
 #. power off dialog title
 #. txt_power_off_title
@@ -158,7 +153,7 @@ msgstr "Stäng av"
 
 #. txt_power_off
 msgid "Halt the system now?"
-msgstr "Vill du stänga av systemet nu?"
+msgstr "Stoppa systemet nu?"
 
 #. menu entry for hard disk installation
 #. txt_harddisk
@@ -172,7 +167,7 @@ msgstr "Hårddiskinstallation"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Diskenhet (söker av alla diskar om tom)\n"
+msgstr "Diskenhet (genomsöker alla diskar om tomt)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -204,12 +199,12 @@ msgstr "NFS-installation"
 #. label for smb user input
 #. txt_user2
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "Användare (använder \"guest\" om tomt)\n"
+msgstr "Användare (använder \"guest\" om tomt')\n"
 
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "SMB (Windows-utdelning) installation"
+msgstr "SMB-installation (utdelad Windows-katalog)"
 
 #. dialog title for http installation
 #. txt_http_title
@@ -229,7 +224,7 @@ msgstr "Domän\n"
 #. button label for other/more options
 #. txt_other_options
 msgid "Other Options"
-msgstr "Fler alternativ"
+msgstr "Andra alternativ"
 
 #. label for language selection
 #. txt_language
@@ -252,7 +247,7 @@ msgstr "Fil"
 #. input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr "Utdelning\n"
+msgstr "Delning\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
@@ -264,7 +259,7 @@ msgstr "Manuellt läge"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr "Ställ in parametrar på ZEN-partition"
+msgstr "Konfigurera parametrar på ZEN-partition"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
@@ -272,7 +267,7 @@ msgstr "Installera eller uppdatera ZEN-partition"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "Ominstallera starthanterare för ZEN-partition"
+msgstr "Installera om starthanterare för ZEN-partition"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
@@ -298,9 +293,9 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
-"För att ladda drivrutinsuppdateringar direkt från cd-rom,\n"
-"ange drivrutinsuppdateringsfilnamn (åtskilda med kommatecken\n"
-"\",\") här:\n"
+"Om du vill läsa in drivrutinsuppdateringar direkt från CD-ROM\n"
+"anger du filnamnen för drivrutinsuppdateringarna\n"
+"(avgränsade med komman \",\") här:\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
@@ -325,7 +320,7 @@ msgstr "Drivrutinsuppdatering"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr "Arkitektur"
+msgstr "Ark"
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
@@ -354,17 +349,17 @@ msgstr "Ingen ACPI"
 #. -> similar to txt_nolapic_install
 #. txt_kernel_nolapic
 msgid "No Local APIC"
-msgstr "Ingen lokal ACPI"
+msgstr "Ingen lokal APIC"
 
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr "Reparera installerat system"
+msgstr "Reparera det installerade systemet"
 
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr "Kontrollera installationsmedia"
+msgstr "Kontrollera installationsmedier"
 
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
@@ -374,80 +369,87 @@ msgstr "Tangentbord"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "Hämta drivrutinsuppdatering"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr ""
+msgstr "Ange URL för drivrutinsuppdatering\n"
 
 #. menu item
 #. txt_http_proxy
 msgid "HTTP Proxy"
-msgstr ""
+msgstr "HTTP-proxy"
 
 #. menu item
 #. txt_network_config
 msgid "Network Config"
-msgstr ""
+msgstr "Nätverkskonfiguration"
 
 #. menu item
 #. txt_no_network
 msgid "No Network"
-msgstr ""
+msgstr "Inget nätverk"
 
 #. short menu item for manual network config (NOT some kind of manual)
 #. txt_manual_network
 msgid "Manual"
-msgstr ""
+msgstr "Manuellt"
 
 #. dialog title for manual network config
 #. txt_manual_network_title
 msgid "Manual Network Config"
-msgstr ""
+msgstr "Manuell nätverkskonfiguration"
 
 #. label for gateway ip
 #. txt_gateway_ip
 msgid "Gateway\n"
-msgstr ""
+msgstr "Gateway\n"
 
 #. label for dns domain name (like 'opensuse.org')
 #. txt_domain_name
 msgid "Domain Name\n"
-msgstr ""
+msgstr "Domännamn\n"
 
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
-msgid "Netmask\n(or use '/N' notation with Host IP)\n"
+msgid ""
+"Netmask\n"
+"(or use '/N' notation with Host IP)\n"
 msgstr ""
+"Nätmask\n"
+"(eller använd \"/N\"-notation med värd-IP)\n"
 
 #. label for Live CD installation
 #. txt_live_kde
 msgid "openSUSE Live (KDE)"
-msgstr ""
+msgstr "openSUSE Live (KDE)"
 
 #. label for Live CD installation
 #. txt_live_gnome
 msgid "openSUSE Live (GNOME)"
-msgstr ""
+msgstr "openSUSE Live (GNOME)"
 
 #. menu label for an update (as opposed to a new installation)
 #. txt_upgrade
 msgid "Upgrade"
-msgstr ""
+msgstr "Uppgradera"
 
 #. label for name server (network setup)
 #. txt_nameservers
 msgid "Name servers, separated by spaces\n"
-msgstr ""
+msgstr "Namnservrar avgränsade med komman\n"
 
 #. label for ip address (network setup)
 #. txt_host_ip
-msgid "IP address with network prefix\n(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
+msgid ""
+"IP address with network prefix\n"
+"(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 msgstr ""
+"IP-adress med nätverksprefix\n"
+"(Exempel: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 
 #. menu item to signify no KMS (KMS = kernel mode setting - keep the english acronym)
 #. txt_video_no_kms
 msgid "No KMS"
-msgstr ""
-
+msgstr "Ingen KMS"

@@ -4,14 +4,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2010-07-01 00:38+0800\n"
-"Last-Translator: \n"
-"Language-Team: Chinese Traditional <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2014-09-03 10:39\n"
+"Last-Translator: Novell language <language@novell.com>\n"
+"Language-Team: Novell language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.0\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. ok button label
 #. txt_ok
@@ -39,7 +37,7 @@ msgstr "安裝"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr "Linux -- 安全設定"
+msgstr "Linux--安全設定"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
@@ -67,7 +65,7 @@ msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"您將離開圖形開機功能表並\n"
+"您即將離開圖形化開機功能表並\n"
 "啟動文字模式介面。"
 
 #. txt_help
@@ -104,7 +102,7 @@ msgstr ""
 #. info box title
 #. txt_info_title
 msgid "Boot Loader"
-msgstr "開機載入器"
+msgstr "開機載入程式"
 
 #. error box title
 #. txt_error_title
@@ -127,8 +125,8 @@ msgid ""
 "This is boot disk %u.\n"
 "Insert boot disk %u."
 msgstr ""
-"這是開機磁片 %u。\n"
-"插入開機磁片 %u。"
+"這是開機磁碟 %u。\n"
+"請插入開機磁碟 %u。"
 
 #. <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
@@ -137,8 +135,8 @@ msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"這不是 <product> 開機磁片。\n"
-"插入開機磁片 %u。"
+"這不是一個 <產品> 開機磁碟。\n"
+"請插入開機磁碟 %u。"
 
 #. password dialog title
 #. txt_password_title
@@ -147,7 +145,7 @@ msgstr "密碼"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr "備妥您的驅動程式更新磁片。"
+msgstr "請將您的驅動程式更新磁片準備就緒。"
 
 #. power off dialog title
 #. txt_power_off_title
@@ -156,7 +154,7 @@ msgstr "關閉電源"
 
 #. txt_power_off
 msgid "Halt the system now?"
-msgstr "要立即終止系統嗎？"
+msgstr "立即暫停該系統嗎？"
 
 #. menu entry for hard disk installation
 #. txt_harddisk
@@ -170,7 +168,7 @@ msgstr "硬碟安裝"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "磁碟裝置 (如果為空白則掃描所有磁碟)\n"
+msgstr "磁碟裝置 (如果空白，則掃描所有磁碟)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -192,7 +190,7 @@ msgstr "密碼\n"
 #. label for ftp user input
 #. txt_user1
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "使用者 (如果是空的，將匿名登入)\n"
+msgstr "使用者 (如果空白，則匿名登入)\n"
 
 #. dialog title for nfs installation
 #. txt_nfs_title
@@ -202,12 +200,12 @@ msgstr "NFS 安裝"
 #. label for smb user input
 #. txt_user2
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "使用者 (如果空白則使用 \"guest\")\n"
+msgstr "使用者 (如果空白，則使用「Guest」)\n"
 
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "SMB (Windows 分享) 安裝"
+msgstr "SMB (Windows 共用) 安裝"
 
 #. dialog title for http installation
 #. txt_http_title
@@ -222,7 +220,7 @@ msgstr "驅動程式"
 #. as in Windows Authentication Domain
 #. txt_domain
 msgid "Domain\n"
-msgstr "領域\n"
+msgstr "網域\n"
 
 #. button label for other/more options
 #. txt_other_options
@@ -250,7 +248,7 @@ msgstr "檔案"
 #. input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr "共享\n"
+msgstr "共用\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
@@ -262,7 +260,7 @@ msgstr "手動模式"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr "設定 ZEN 分割區參數"
+msgstr "在 ZEN 分割區上設定參數"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
@@ -270,7 +268,7 @@ msgstr "安裝或更新 ZEN 分割區"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "重新安裝 ZEN 分割區開機載入器"
+msgstr "重新安裝 ZEN 分割區開機載入程式"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
@@ -296,9 +294,9 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
-"若要從 CD-ROM 直接載入驅動程式更新，\n"
-"請在此輸入驅動程式更新檔案名稱 \n"
-"(由逗號 ',' 分隔)：\n"
+"若要直接從 CD-ROM 載入驅動程式更新，\n"
+"請在此處輸入驅動程式更新檔案名稱 (以逗號「,」\n"
+"分隔)︰\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
@@ -323,7 +321,7 @@ msgstr "驅動程式更新"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr "架構"
+msgstr "結構"
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
@@ -346,13 +344,13 @@ msgstr "安全設定"
 #. -> similar to txt_noacpi_install
 #. txt_kernel_noacpi
 msgid "No ACPI"
-msgstr "關閉 ACPI"
+msgstr "無 ACPI"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_nolapic_install
 #. txt_kernel_nolapic
 msgid "No Local APIC"
-msgstr "關閉本機 APIC"
+msgstr "無本地 APIC"
 
 #. main menu: start in system repair mode
 #. txt_repain_system
@@ -377,12 +375,12 @@ msgstr "下載驅動程式更新"
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr "輸入驅動程式更新位址\n"
+msgstr "輸入驅動程式更新 URL\n"
 
 #. menu item
 #. txt_http_proxy
 msgid "HTTP Proxy"
-msgstr "HTTP代理伺服器"
+msgstr "HTTP 代理"
 
 #. menu item
 #. txt_network_config
@@ -397,7 +395,7 @@ msgstr "無網路"
 #. short menu item for manual network config (NOT some kind of manual)
 #. txt_manual_network
 msgid "Manual"
-msgstr "手動模式"
+msgstr "手動"
 
 #. dialog title for manual network config
 #. txt_manual_network_title
@@ -416,10 +414,12 @@ msgstr "網域名稱\n"
 
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
-msgid "Netmask\n(or use '/N' notation with Host IP)\n"
+msgid ""
+"Netmask\n"
+"(or use '/N' notation with Host IP)\n"
 msgstr ""
-"子遮罩\n"
-"(或以主機ip加上 /N 表示)\n"
+"網路遮罩\n"
+"(或使用「/N」表示法以及主機 IP)\n"
 
 #. label for Live CD installation
 #. txt_live_kde
@@ -434,20 +434,23 @@ msgstr "openSUSE Live (GNOME)"
 #. menu label for an update (as opposed to a new installation)
 #. txt_upgrade
 msgid "Upgrade"
-msgstr ""
+msgstr "升級"
 
 #. label for name server (network setup)
 #. txt_nameservers
 msgid "Name servers, separated by spaces\n"
-msgstr ""
+msgstr "名稱伺服器，以空格分隔\n"
 
 #. label for ip address (network setup)
 #. txt_host_ip
-msgid "IP address with network prefix\n(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
+msgid ""
+"IP address with network prefix\n"
+"(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 msgstr ""
+"包含網路字首的 IP 位址\n"
+"(範例︰192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 
 #. menu item to signify no KMS (KMS = kernel mode setting - keep the english acronym)
 #. txt_video_no_kms
 msgid "No KMS"
-msgstr ""
-
+msgstr "無 KMS"

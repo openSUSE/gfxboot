@@ -4,10 +4,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-11-24 18:08+0800\n"
-"Last-Translator: Thruth Wang <wanglihao@gmail.com>\n"
-"Language-Team: Simplified Chinese\n"
+"PO-Revision-Date: 2014-09-03 10:38\n"
+"Last-Translator: Novell language <language@novell.com>\n"
+"Language-Team: Novell language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -25,7 +24,7 @@ msgstr "取消"
 #. reboot button label
 #. txt_reboot
 msgid "Reboot"
-msgstr "重启"
+msgstr "重引导"
 
 #. continue button label
 #. txt_continue
@@ -66,8 +65,8 @@ msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"您将离开图形引导菜单\n"
-"并启动文本方式界面。"
+"您将离开图形引导菜单并\n"
+"启动文本方式界面。"
 
 #. txt_help
 msgid "Help"
@@ -103,7 +102,7 @@ msgstr ""
 #. info box title
 #. txt_info_title
 msgid "Boot Loader"
-msgstr "引导装载程序"
+msgstr "引导加载程序"
 
 #. error box title
 #. txt_error_title
@@ -136,8 +135,8 @@ msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"这不是 <product> 引导磁盘。\n"
-"请插入引导磁盘 %u。"
+"这不是 <product> 引导盘。\n"
+"请插入引导盘 %u。"
 
 #. password dialog title
 #. txt_password_title
@@ -226,7 +225,7 @@ msgstr "域\n"
 #. button label for other/more options
 #. txt_other_options
 msgid "Other Options"
-msgstr "其他选项"
+msgstr "其它选项"
 
 #. label for language selection
 #. txt_language
@@ -253,11 +252,11 @@ msgstr "共享\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
-msgstr "自动方式"
+msgstr "自动模式"
 
 #. txt_zenManual
 msgid "Manual Mode"
-msgstr "手动方式"
+msgstr "手动模式"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
@@ -269,7 +268,7 @@ msgstr "安装或更新 ZEN 分区"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "重新安装 ZEN 分区引导装载程序"
+msgstr "重新安装 ZEN 分区引导加载程序"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
@@ -282,7 +281,7 @@ msgstr "启用 ZEN 分区"
 #. video mode menu item
 #. txt_text_mode
 msgid "Text Mode"
-msgstr "文本方式"
+msgstr "文本模式"
 
 #. menu item, like 'memory test'
 #. txt_firmware
@@ -322,7 +321,7 @@ msgstr "驱动程序更新"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr "体系"
+msgstr "存档"
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
@@ -351,7 +350,7 @@ msgstr "无 ACPI"
 #. -> similar to txt_nolapic_install
 #. txt_kernel_nolapic
 msgid "No Local APIC"
-msgstr "无本地 ACPI"
+msgstr "无本地 APIC"
 
 #. main menu: start in system repair mode
 #. txt_repain_system
@@ -361,7 +360,7 @@ msgstr "修复已安装系统"
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr "检查安装介质"
+msgstr "检查安装媒体"
 
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
@@ -381,70 +380,77 @@ msgstr "输入驱动程序更新 URL\n"
 #. menu item
 #. txt_http_proxy
 msgid "HTTP Proxy"
-msgstr ""
+msgstr "HTTP 代理"
 
 #. menu item
 #. txt_network_config
 msgid "Network Config"
-msgstr ""
+msgstr "网络配置"
 
 #. menu item
 #. txt_no_network
 msgid "No Network"
-msgstr ""
+msgstr "无网络"
 
 #. short menu item for manual network config (NOT some kind of manual)
 #. txt_manual_network
 msgid "Manual"
-msgstr ""
+msgstr "手动"
 
 #. dialog title for manual network config
 #. txt_manual_network_title
 msgid "Manual Network Config"
-msgstr ""
+msgstr "手动网络配置"
 
 #. label for gateway ip
 #. txt_gateway_ip
 msgid "Gateway\n"
-msgstr ""
+msgstr "网关\n"
 
 #. label for dns domain name (like 'opensuse.org')
 #. txt_domain_name
 msgid "Domain Name\n"
-msgstr ""
+msgstr "域名\n"
 
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
-msgid "Netmask\n(or use '/N' notation with Host IP)\n"
+msgid ""
+"Netmask\n"
+"(or use '/N' notation with Host IP)\n"
 msgstr ""
+"网络掩码\n"
+"（或者结合使用“/N”表示法和主机IP）\n"
 
 #. label for Live CD installation
 #. txt_live_kde
 msgid "openSUSE Live (KDE)"
-msgstr ""
+msgstr "openSUSE Live (KDE)"
 
 #. label for Live CD installation
 #. txt_live_gnome
 msgid "openSUSE Live (GNOME)"
-msgstr ""
+msgstr "openSUSE Live (GNOME)"
 
 #. menu label for an update (as opposed to a new installation)
 #. txt_upgrade
 msgid "Upgrade"
-msgstr ""
+msgstr "升级"
 
 #. label for name server (network setup)
 #. txt_nameservers
 msgid "Name servers, separated by spaces\n"
-msgstr ""
+msgstr "名称服务器，以空格分隔\n"
 
 #. label for ip address (network setup)
 #. txt_host_ip
-msgid "IP address with network prefix\n(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
+msgid ""
+"IP address with network prefix\n"
+"(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 msgstr ""
+"包含网络前缀的 IP 地址\n"
+"（示例：192.168.5.77/24 2001:db8:75:fff::3/64）\n"
 
 #. menu item to signify no KMS (KMS = kernel mode setting - keep the english acronym)
 #. txt_video_no_kms
 msgid "No KMS"
-msgstr ""
-
+msgstr "无 KMS"
