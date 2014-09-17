@@ -162,7 +162,8 @@ int main(int argc, char **argv)
   int i, j, k, err, ofs;
   char *str, *str1, *t, *s, *s1, *font_spec;
   iconv_t ic = (iconv_t) -1, ic2;
-  char obuf[4], ibuf[6];
+  unsigned char obuf[4];
+  char ibuf[6];
   char obuf2[4*0x100], ibuf2[0x100];
   char *obuf_ptr, *ibuf_ptr;
   size_t obuf_left, ibuf_left;
@@ -337,7 +338,7 @@ int main(int argc, char **argv)
               if(k >= 0 || (k == -1 && !obuf_left)) {
                 ok = 1;
                 if(!obuf_left) {
-                  i = *(int *) obuf;
+                  i = obuf[0] + (obuf[1] << 8) + (obuf[2] << 16) + (obuf[3] << 24);
                   if(i >= 0x20) {
                     insert_int_list(&opt.chars, i, i);
                   }
