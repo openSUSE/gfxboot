@@ -2,6 +2,6 @@
 <a name="o_acpi">カーネルオプション: acpi</a>
 </h3>
 
-<p>ACPI (Advanced Configuration and Power Interface) は、オペレーティングシステムと BIOS の間で決められた電源と設定管理インタフェースの標準です。既定では <em>acpi</em> は BIOS が 2000 年より新しいものであると有効になります。 ACPI の動作をコントロールするために、いくつかのパラメータが用意されています: <ul><li><em>pci=noacpi</em> -- PCI の割り込み制御に ACPI を使わないようにする</li><li><em>acpi=oldboot</em> -- ACPI のうち起動に関連する部分だけを有効にする</li><li><em>acpi=off</em> -- ACPI を完全に無効化する</li><li><em>acpi=force</em> -- BIOS が 2000 年以前の日付の場合でも ACPI を有効にする</li></ul></p>
+<p>ACPI(Advanced Configuration and Power Interface)は、オペレーティングシステムとBIOSの間で決められた電源と設定管理インタフェースの標準です。既定では <em>acpi</em> はBIOSが2000年より新しいものであると有効になります。ACPIの動作をコントロールするために、いくつかのよく使用されるパラメータが用意されています: <ul><li><em>pci=noacpi</em> -- PCIの割り込み制御にACPIを使用しません</li><li><em>acpi=oldboot</em> -- ACPIのうち起動に関連する部分だけを有効にします</li><li><em>acpi=off</em> -- ACPIを完全にオフにします</li><li><em>acpi=force</em> -- BIOSの日付が2000以前の場合でも、ACPIをオンに切り替えます</li></ul></p>
 
-<p>特に新しいコンピュータでは、古い <a href="#o_apm">apm</a> システムに取って代わっています。</p>
+<p>特に新しいコンピュータでは、古い <a href="#o_apm">apm</a> システムを置き換えます。</p>

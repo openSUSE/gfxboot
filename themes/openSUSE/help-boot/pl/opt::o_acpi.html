@@ -2,22 +2,6 @@
 <a name="o_acpi">Opcje jądra: acpi</a>
 </h3>
 
-<p>
-ACPI (Advanced Configuration and Power Interface) is a
-standard that defines power and configuration management interfaces
-between an operating system and the BIOS. By default, <em>acpi</em> is
-switched on when a BIOS is detected that is newer than from year
-2000. There are several commonly
-used parameters to control the behavior of ACPI:
-<ul>
-  <li><em>pci=noacpi</em> -- do not use ACPI to route PCI interrupts</li>
-  <li><em>acpi=oldboot</em> -- only the parts of ACPI that are relevant for booting remain activated</li>
-  <li><em>acpi=wyłączone</em> -- switch off ACPI completely</li>
-  <li><em>acpi=force</em> -- switch on ACPI even if your BIOS is dated before 2000</li>
-</ul>
-</p>
+<p>ACPI (Zaawansowane Zarządzanie Energią) jest standardem definiującym interfejsy zarządzania energią pomiędzy systemem operacyjnym a BIOS. Domyślnie <em>acpi</em> jest włączony, jeśli BIOS pochodzi z roku 2000 lub jest nowszy. Istnieje kilka standardowo używanych parametrów do kontroli działania ACPI: <ul><li><em>pci=noacpi</em> -- bez użycia ACPI do przekierowania przerwań PCI</li><li><em>acpi=oldboot</em> - pozostaną aktywne jedynie elementy ACPI niezbędne przy uruchamianiu systemu</li><li><em>acpi=wyłączone</em> -- całkowicie wyłącza ACPI</li><li><em>acpi=force</em> -- włącza ACPI, nawet jeśli BIOS użytkownika pochodzi sprzed 2000 roku</li></ul></p>
 
-<p>
-Especially on new computers, it replaces the old
-<a href="#o_apm">apm</a> system.
-</p>
+<p>Szczególnie na nowych komputerach - zastępuje stary system <a href="#o_apm">apm</a></p>

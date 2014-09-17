@@ -2,22 +2,6 @@
 <a name="o_acpi">خيارات Kernel: acpi</a>
 </h3>
 
-<p>
-ACPI (Advanced Configuration and Power Interface) is a
-standard that defines power and configuration management interfaces
-between an operating system and the BIOS. By default, <em>acpi</em> is
-switched on when a BIOS is detected that is newer than from year
-2000. There are several commonly
-used parameters to control the behavior of ACPI:
-<ul>
-  <li><em>pci=noacpi</em> -- do not use ACPI to route PCI interrupts</li>
-  <li><em>acpi=oldboot</em> -- only the parts of ACPI that are relevant for booting remain activated</li>
-  <li><em>acpi=off</em> -- switch off ACPI completely</li>
-  <li><em>acpi=force</em> -- switch on ACPI even if your BIOS is dated before 2000</li>
-</ul>
-</p>
+<p>تُعد ACPI (واجهة الطاقة والتكوين المتقدم) نظامًا قياسيًا يُعرِّف واجهات إدارة التكوين والطاقة بين أحد أنظمة التشغيل وBIOS (نظام المدخلات/المخرجات الأساسي). افتراضيًا، يتم تشغيل <li><em>pci=noacpi</em> -- عدم استخدام ACPI لتوجيه مقاطعات PCI</li> عندما يتم اكتشاف أن BIOS بتاريخ أحدث من عام 2000. وتوجد معلمات شائعة الاستخدام عديدة للتحكم بسلوك ACPI: <ul><li><em>pci=noacpi</em> -- عدم استخدام ACPI لتوجيه مقاطعات PCI</li><li><em>acpi=oldboot</em> -- استمرار تنشيط أجزاء ACPI ذات الصلة بالتشغيل فقط</li><li><em>acpi=off</em> -- إيقاف تشغيل ACPI تمامًا</li><li><em>acpi=force</em> -- تشغيل ACPI حتى إذا كان BIOS بتاريخ أقدم من 2000</li></ul></p>
 
-<p>
-Especially on new computers, it replaces the old
-<a href="#o_apm">apm</a> system.
-</p>
+<p>يستخدم هذا الخيار في استبدال نظام <a href="#o_apm">apm</a> القديم، خاصةً على أجهزة الكمبيوتر الجديدة.</p>

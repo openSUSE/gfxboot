@@ -1,7 +1,7 @@
 <h3>
-<a name="o_acpi">Parametry jádra: acpi</a>
+<a name="o_acpi">Možnosti jádra: acpi</a>
 </h3>
 
-<p>ACPI (Advanced Configuration and Power Interface) je standard definující nastavení napájení a správu zařízení mezi operačním systémem a BIOSem. Ve výchozím nastavení je <em>acpi</em> zapnuto v případě, že jde o BIOS vydaný po roce 2000. Je zde několik parametrů kontrolujících chování ACPI: <ul><li><em>pci=noacpi</em> -- nepoužívat ACPI pro předávání PCI přerušení</li><li><em>acpi=oldboot</em> -- aktivní zůstane pouze ta část ACPI, která je potřebná pro start systému</li><li><em>acpi=off</em> -- zcela vypnout ACPI</li><li><em>acpi=force</em> -- zapnout ACPI i pro BIOS vydaný před rokem  2000</li></ul></p>
+<p>Rozhraní ACPI (Advanced Configuration and Power Interface) představuje standard, který definuje rozhraní nastavení správy napájení a konfigurace mezi operačním systémem a systémem BIOS. Ve výchozím nastavení je rozhraní <em>acpi</em> zapnuto, pokud je zjištěna verze systému BIOS vydaná po roce 2000. Chování rozhraní ACPI je obvykle řízeno několika parametry: <ul><li><em>pci=noacpi</em> -- nepoužívat ACPI k předávání přerušení PCI</li><li><em>acpi=oldboot</em> – ponechat aktivované pouze části rozhraní ACPI potřebné ke spuštění</li><li><em>acpi=off</em> -- úplně vypnout ACPI</li><li><em>acpi=force</em> -- zapnout ACPI i pro systém BIOS vydaný před rokem 2000</li></ul></p>
 
-<p>Zvláště na nových počítačích nahrazuje starší systém <a href="#o_apm">apm</a> systém.</p>
+<p>Zejména v nových počítačích nahrazuje dřívější systém <a href="#o_apm">apm</a>.</p>

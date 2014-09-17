@@ -2,29 +2,8 @@
 <a name="o_install">安装程序选项：install</a>
 </h3>
 
-<p>
-By default, the local CD-ROMs are searched for the installation source.
-For a network install, select the
-<em>安装</em> option. Possible installation protocols are
-<ul>
-  <li>FTP</li>
-  <li>NFS</li>
-  <li>HTTP</li>
-</ul>
-</p>
+<p>默认情况下，搜索本地 CD-ROM 来查找安装源。对于网络安装，请选择 <em>安装</em> 选项。可能的安装协议为 <ul><li>FTP</li><li>NFS</li><li>HTTP</li></ul></p>
 
-<p>
-The syntax to use is just like standard URLs. For example, 
-if your server is found at 192.168.0.1 and you want to do an NFS-based
-install from the directory /install on this server, specify
-the source as follows:
-<ul>
-  <li>install=nfs://192.168.0.1/install</li>
-</ul>
-</p>
+<p>要使用的语法就如标准 URL 一样。例如，如果在 192.168.0.1 上找到您的服务器，您希望从目录中执行基于 NFS 的安装/在该服务器上安装，请指定源，如下所示：<ul><li>install=nfs://192.168.0.1/install</li></ul></p>
 
-<p>
-The network card will either be configured with <em>dhcp</em> or you
-must specify the parameters yourself as described in the
-<a href="#network">网络选项</a>.
-</p>
+<p>可使用 <em>dhcp</em> 配置网卡，或必须按 <a href="#network">网络选项</a> 中所述自己指定参数。</p>

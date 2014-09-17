@@ -2,6 +2,6 @@
 <a name="o_acpi">커널 옵션: acpi</a>
 </h3>
 
-<p>ACPI 는 (Advanced Configuration and Power Interface) 운영체제와 바이오스간의 전원관리 인터페이스를 정의하는 표준입니다. 기본적으로 <em>acpi</em> 는 2000년 이후에 제조된 바이오스가 감지될 때 켜집니다. 다음은 ACPI 동작을 제어하기위해 일반적으로 사용되는 항목 : <ul><li><em>pci=noacpi</em> -- ACPI 를 PCI 인터럽트 라우트에 사용하지 않음</li><li><em>acpi=oldboot</em> -- 부팅 활성화에서 ACPI 부분 적절한 것 만</li><li><em>acpi=off</em> -- ACPI 를 완전히 끄기</li><li><em>acpi=force</em> -- 2000년 이전에 제조된 바이오스일지라도 ACPI 옵션 켜기</li></ul></p>
+<p>ACPI(Advanced Configuration and Power Interface)는 운영 체제와 BIOS 간의 전원 및 구성 관리 인터페이스를 정의하는 표준입니다. 기본적으로 <em>acpi</em>은(는) 2000년 이후에 제조된 BIOS가 감지될 때 켜집니다. 일반적으로 사용되는 몇 개의 파라미터는 ACPI 동작을 제어합니다.<ul><li><em>pci=noacpi</em> -- ACPI를 사용하지 않고 PCI 인터럽트를 라우트합니다.</li><li><em>acpi=oldboot</em> -- 부팅과 관련된 ACPI 부분만 활성 상태로 남아 있습니다.</li><li><em>acpi=off</em> -- ACPI를 완전히 끕니다.</li><li><em>acpi=force</em> -- BIOS 날짜가 2000년 이전인 경우에도 ACPI를 켭니다.</li></ul></p>
 
-<p>특히 최신 컴퓨터에서, 예전의 <a href="#o_apm">apm</a> 시스템을 대체합니다.</p>
+<p>특히 새 컴퓨터에서는 오래된 <a href="#o_apm">apm</a> 시스템을 대신합니다.</p>

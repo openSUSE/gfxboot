@@ -4,32 +4,32 @@
 
 <p>Välkommen till <em>@@@product@@@</em></p>
 
-<p>Välj önskad funktion på menyn. Om du har problem med att navigera i hjälpsystemet trycker du på <em>@@@fkey_help@@@</em> och går till  <a href="#help">beskrivning</a> i hjälpsystemet. Menyns huvudfunktioner är: </p>
+<p>Använd den här menyn när du vill välja funktioner. Om du inte kan navigera i hjälpsystemet klickar du på <em>@@@fkey_help@@@</em> så att <a href="#help">Beskrivning</a> för hjälpsystemet öppnas. Huvudfunktioner på menyn:</p>
 
-<p><a href="#harddisk">Starta från hårddisk</a>: Det här valet kommer inte att göra något med systemet. Det startar endast ett tidigare installerat operativsystem.</p>
+<p><a href="#harddisk">Starta från hårddisk</a>: Det här alternativet påverkar inte systemet. Alternativet startar bara ett tidigare installerat operativsystem.</p>
 
-<p><a href="#linux">Installation</a>: Det här installationsläget fungerar på de flesta datorer. Om du upplever att systemet låser sig under start eller problem med identifiering av hårdvarukomponenter, som t ex diskstyrenheter eller nätverkskort, försök med något av följande installationsalternativ.</p>
+<p><a href="#linux">Installation</a>: Det här installationsläget fungerar på de flesta datorer. Om systemet låser sig vid start eller om maskinvarukomponenter, t ex diskstyrenheter och nätverkskort, inte identifieras kan du prova något av följande installationsalternativ.</p>
 
-<p><a href="#noacpi">Installation - ACPI inaktiverat</a>: Många av de datorer som säljs för tillfället har en ofullständig eller felaktig implementering av ACPI. Det här valet inaktiverar ACPI-stöd i kärnan, men aktiverar många prestandafunktioner, t ex DMA för IDE-hårddiskar.</p>
+<p><a href="#noacpi">Installation - ACPI inaktiverat</a>: Många nya datorer har ofullständiga eller felaktiga ACPI-implementeringar. Med det här alternativet inaktiverar du ACPI-stöd i kärnan men aktiverar många prestandafunktioner som DMA för IDE-hårddiskar.</p>
 
-<p><a href="#nolapic">Installation - Lokal APIC inaktiverat</a>: Om den vanliga installationen misslyckas kan det bero på att systemmaskinvaran inte har stöd för lokal APIC. Om detta verkar vara fallet använder du det här alternativet och installerar utan stöd för lokal APIC.</p>
+<p><a href="#nolapic">Installation - Lokal APIC inaktiverat</a>: Om den normala installationen misslyckas kan det bero på att systemets maskinvara inte kan användas med lokalt APIC. Om det verkar vara så använder du det här alternativet för installation utan stöd för lokalt APIC.</p>
 
-<p><a href="#failsafe">Installation - Säkra inställningar</a>: Om du inte lyckades med <em>Installation</em>, kan det här valet kanske lösa problemet.</p>
+<p><a href="#failsafe">Installation - Säkra inställningar</a>: Om <em>Installation</em> inte fungerade kan problemet kanske lösas med det här alternativet.</p>
 
-<p><a href="#rescue">Räddningssystem</a>: Den här startavbilden startar ett litet Linux-system i RAM. Det här är användbart om systemet inte startar ordentligt. Logga in som root när du har startat det här systemet.</p>
+<p><a href="#rescue">Räddningssystem</a>: Med den här startavbildningen startas ett litet Linux-system i RAM-minnet. Det är användbart om systemet inte startar som det ska. Logga in som root när du har startat det här systemet.</p>
 
-<p><a href="#firmware">Test av fast program</a>: Kör en BIOS-test som kontrollerar ACPI och andra funktioner i ditt BIOS.</p>
+<p><a href="#firmware">Test av fast programvara</a>: Kör ett BIOS-testverktyg som validerar ACPI och andra delar av ditt BIOS.</p>
 
-<p><a href="#memtest">Minnestest</a>: Minnestestning kan användas till mer än att kontrollera installationen av nya minnesmoduler. Det är ett stresstest för en stor del av datorsystemet och kan ge indikationer på eventuella maskinvaruproblem.</p>
+<p><a href="#memtest">Minnestest</a>: Ett minnestest kan användas till mer än att kontrollera installationen av nya minnesmoduler. Det är ett stresstest för en stor del av datorsystemet och kan identifiera maskinvaruproblem.</p>
 
-<p><a href="#opt">Startalternativ</a>: Startalternativen kan förändra datorns beteende. De är inställningar för kärnan.</p>
+<p><a href="#opt">Startalternativ</a>: Startalternativen kan helt ändra systemets funktion. Alternativen är inställningar för kärnan.</p>
 
-<p><a href="#help">@@@fkey_help@@@ Hjälp</a>: Detta är skiftlägeskänsligt. Olika fönster visas beroende på vilket element som är aktivt på startskärmen. En beskrivning av hjälpsystemet finns tillgänglig.</p>
+<p><a href="#help">@@@fkey_help@@@ Hjälp</a>: Det här alternativet är sammanhangsberoende. Olika skärmar visas beroende på vilket element som är aktivt på startskärmen. Det finns också en beskrivning av hjälpsystemet.</p>
 
-<p><a href="#keytable">@@@fkey_lang@@@</a>: Ange det språk och den tangentbordsmappning som ska användas av starthanteraren.</p>
+<p><a href="#keytable">@@@fkey_lang@@@</a>: Ange språk- och tangentbordsmappning som ska användas av starthanteraren.</p>
 
-<p><a href="#videomode">@@@fkey_video@@@ Skärmläge</a>: Här väljer du skärmupplösning under installationen. Om du stöter på problem med den grafiska installationen kanske <em>textläge</em> fungerar bättre.</p>
+<p><a href="#videomode">@@@fkey_video@@@ Grafikläge</a>: Här väljer du mellan olika skärmupplösningar när du installerar. Om du stöter på problem med den grafiska installationen kan du komma runt problemet med hjälp av <em>Textläge</em>.</p>
 
-<p><a href="#install_src">@@@fkey_inst@@@ Installationskälla</a>: Välj installationskälla.</p>
+<p><a href="#install_src">@@@fkey_inst@@@ Installationskälla</a>: Ange installationskälla.</p>
 
-<p><a href="#driverupdate">@@@fkey_dud@@@ Drivrutinsuppdatering</a>: För väldigt nya datorer kan en drivrutinsuppdatering behövas för att installera systemet.</p>
+<p><a href="#driverupdate">@@@fkey_dud@@@ Drivrutinsuppdatering</a>: På en ny dator kanske du måste göra en drivrutinsuppdatering för att kunna installera systemet.</p>

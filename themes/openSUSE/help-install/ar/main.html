@@ -2,102 +2,34 @@
 <a name="main">تعليمات أداة تحميل التشغيل</a>
 </h3>
 
-<p>
-Welcome to <em>@@@product@@@</em>
-</p>
+<p>مرحبًا بك في <em>@@@product@@@</em>.</p>
 
-<p>
-Use this menu to select the desired function. If you have
-problems navigating in this help system, press
-<em>@@@fkey_help@@@</em> to enter the <a href="#help">الوصف</a> of the help
-system. The main functions in this menu are:
-</p>
+<p>استخدم هذه القائمة لتحديد الوظيفة المطلوبة. إذا واجهتك مشكلات أثناء التنقل في نظام التعليمات هذا، اضغط <em>@@@fkey_help@@@</em> لإدخال <a href="#help">الوصف</a> الخاص بنظام التعليمات. وفيما يلي الوظائف الرئيسية في هذه القائمة:</p>
 
-<p>
-<a href="#harddisk">تشغيل من القرص الصلب</a>: This selection will not do
-anything to the system. It only starts a previously installed
-operating system.
-</p>
+<p><a href="#harddisk">تشغيل من القرص الصلب</a>: لن يُحدِث هذا التحديد أي تغيير على النظام. بل يقوم فقط ببدء تشغيل نظام تشغيل مثبَّت مسبقًا.</p>
 
-<p>
-<a href="#linux">التثبيت</a>: 
-This installation mode works on most machines. If you experience a
-system freeze during boot or problems with detection of your hardware
-components, such as disk controllers or network cards, try one of the
-following installation options.
-</p>
+<p><a href="#linux">التثبيت</a>: يعمل وضع التثبيت هذا على أغلب الأجهزة. إذا توقف النظام عن الاستجابة أثناء التشغيل أو إذا حدثت مشكلات فيما يتعلق باكتشاف مكونات الأجهزة، مثل أجهزة التحكم بالأقراص أو بطاقات الشبكة، جرِّب أحد خيارات التثبيت التالية.</p>
 
-<p>
-<a href="#noacpi">تثبيت--ACPI معطلة</a>: Many of the
-currently-sold computers have incomplete or faulty ACPI
-implementations. This selection disables ACPI support in the
-kernel, but still enables many performance features, like DMA for IDE
-hard disks.
-</p>
+<p><a href="#noacpi">تثبيت--ACPI معطلة</a>: أساليب تنفيذ ACPI المستخدمة في العديد من أجهزة الكمبيوتر الموجودة في الأسواق حاليًا إما غير مكتملة أو معيبة. يُستخدم هذا الخيار في تعطيل دعم ACPI في kernel، ولكنه لا يزال يمكِّن العديد من ميزات الأداء، مثل DMA لأقراص IDE الصلبة.</p>
 
-<p>
-<a href="#nolapic">تثبيت--APIC المحلي معطَّل</a>:
-If the normal installation fails, this might be due to the
-system hardware not supporting local APIC.
-If this seems to be the case, use this option to
-install without local APIC support.
-</p>
+<p><a href="#nolapic">تثبيت--APIC المحلي معطَّل</a>: إذا فشل التثبيت العادي، قد يكون ذلك نتيجة لعدم دعم أجهزة النظام لديك لجهاز APIC المحلي. إذا كان ما حدث لديك يشبه هذه الحالة، استخدم هذا الخيار لإجراء التثبيت بدون دعم APIC المحلي.</p>
 
-<p>
-<a href="#failsafe">تثبيت--إعدادات آمنة</a>: If you were not
-successful with <em>التثبيت</em>, this selection might
-solve the issue.
-</p>
+<p><a href="#failsafe">تثبيت--إعدادات آمنة</a>: إذا لم تنجح في إجراء <em>التثبيت</em>، قد يحل هذا التحديد المشكلة.</p>
 
-<p>
-<a href="#rescue">نظام الإنقاذ</a>: This boot image starts a small
-Linux system in RAM. This is useful if the system does not start properly.
-After booting this system, log in as root.
-</p>
+<p><a href="#rescue">نظام الإنقاذ</a>: تبدأ نسخة محتويات التشغيل هذه تشغيل نظام Linux صغير في RAM. يفيد ذلك في حالات عدم بدء تشغيل النظام بطريقة صحيحة. بعد تشغيل هذا النظام، قم بتسجيل الدخول كمسؤول.</p>
 
-<p>
-<a href="#firmware">اختبار البرنامج الثابت</a>: Runs a BIOS test tool that validates
-ACPI and other parts of your BIOS.
-</p>
+<p><a href="#firmware">اختبار البرامج الثابتة</a>: يُستخدم لتشغيل أداة اختبار BIOS التي تقوم بالتأكد من صحة أجزاء ACPI الأخرى في نظام BIOS.</p>
 
-<p>
-<a href="#memtest">اختبار الذاكرة</a>: Memory testing is useful for more than
-checking installation of new memory modules. It is a stress test
-for a big part of your computer system and may indicate hardware
-problems.
-</p>
+<p><a href="#memtest">اختبار الذاكرة</a>: تفوق فائدة اختبار الذاكرة مجرد التحقق من تثبيت وحدات نمطية جديدة بالذاكرة. فهو عبارة عن اختبار تحمّل لجزء كبير من نظام جهاز الكمبيوتر وقد يشير إلى وجود مشكلات بالأجهزة.</p>
 
-<p>
-<a href="#opt">خيارات التشغيل</a>: The boot options may change the
-behavior of your system completely. They are settings for
-the kernel.
-</p>
+<p><a href="#opt">خيارات التشغيل</a>: قد تغير خيارات التشغيل سلوك النظام الخاص بك تمامًا. وهي عبارة عن إعدادات خاصة بنظام kernel.</p>
 
-<p>
-<a href="#help">@@@fkey_help@@@ Help</a>: This is context sensitive. It will
-show different screens depending on the active element of the
-boot screen. There is also a description of this help system
-available.
-</p>
+<p><a href="#help">@@@fkey_help@@@ تعليمات</a>: تعتبر تعليمات تتبع السياق. سوف تعرض شاشات مختلفة حسب العنصر النشط في شاشة التشغيل. كما يتوفر وصف لنظام التعليمات هذا.</p>
 
-<p>
-<a href="#keytable">@@@fkey_lang@@@</a>: Set language and keyboard mapping
-used by the boot loader.
-</p>
+<p><a href="#keytable">@@@fkey_lang@@@</a>: تعيين اللغة وتخطيط لوحة المفاتيح المستخدمين بواسطة أداة تحميل التشغيل.</p>
 
-<p>
-<a href="#videomode">@@@fkey_video@@@ Video Mode</a>: Here, choose between
-different screen resolutions while installing. If you encounter
-problems with the graphical installation, the <em>وضع النص</em> may
-be a work-around for you.
-</p>
+<p><a href="#videomode">@@@fkey_video@@@ وضع الفيديو</a>: يمكنك هنا الاختيار من بين قيم مختلفة لدقة الشاشة أثناء التثبيت. إذا واجهتك مشكلات أثناء التثبيت الرسومي، قد يُعد <em>وضع النص</em> حلاً بديلاً لمشكلاتك.</p>
 
-<p>
-<a href="#install_src">@@@fkey_inst@@@ Installation Source</a>: Choose the
-installation source.
-</p>
+<p><a href="#install_src">@@@fkey_inst@@@ مصدر التثبيت</a>: اختيار مصدر التثبيت.</p>
 
-<p>
-<a href="#driverupdate">@@@fkey_dud@@@ Driver Update</a>: For very new machines, a
-driver update may be needed to install the system.
-</p>
+<p><a href="#driverupdate">@@@fkey_dud@@@ تحديث برنامج التشغيل</a>: قد يتطلب تثبيت النظام تحديث برنامج تشغيل، وذلك للأجهزة الحديثة جدًا.</p>

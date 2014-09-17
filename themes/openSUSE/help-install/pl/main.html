@@ -2,102 +2,34 @@
 <a name="main">Pomoc programu rozruchowego</a>
 </h3>
 
-<p>
-Welcome to <em>@@@product@@@</em>
-</p>
+<p>Witamy w <em>@@@product@@@</em></p>
 
-<p>
-Use this menu to select the desired function. If you have
-problems navigating in this help system, press
-<em>@@@fkey_help@@@</em> to enter the <a href="#help">Opis</a> of the help
-system. The main functions in this menu are:
-</p>
+<p>Należy użyć tego menu w celu wybrania odpowiedniej funkcji. W przypadku występowania problemów z nawigacją w tym systemie pomocy, proszę nacisnąć klawisz <em>@@@fkey_help@@@</em>, aby wejść do <a href="#help">opis</a> systemu pomocy. Główne funkcje w tym menu to:</p>
 
-<p>
-<a href="#harddisk">Uruchomienie z dysku twardego</a>: This selection will not do
-anything to the system. It only starts a previously installed
-operating system.
-</p>
+<p><a href="#harddisk">Uruchomienie z dysku twardego</a>: Ta opcja nie wpływa na system. Uruchamia jedynie poprzednio zainstalowany system operacyjny.</p>
 
-<p>
-<a href="#linux">Instalacja</a>: 
-This installation mode works on most machines. If you experience a
-system freeze during boot or problems with detection of your hardware
-components, such as disk controllers or network cards, try one of the
-following installation options.
-</p>
+<p><a href="#linux">Instalacja</a>: Ten tryb instalacji działa w większości komputerów. W przypadku zawieszeń przy uruchamianiu komputera albo problemów z wykrywaniem komponentów sprzętowych, jak np. kontrolery dysku lub karty sieciowe, należy spróbować jednej z następujących opcji instalacyjnych.</p>
 
-<p>
-<a href="#noacpi">Instalacja (bez ACPI)</a>: Many of the
-currently-sold computers have incomplete or faulty ACPI
-implementations. This selection disables ACPI support in the
-kernel, but still enables many performance features, like DMA for IDE
-hard disks.
-</p>
+<p><a href="#noacpi">Instalacja (bez ACPI)</a>: Wiele obecnie sprzedawanych komputerów ma niekompletne lub wadliwe implementacje ACPI. Opcja ta wyłącza obsługę ACPI w jądrze, ale wykorzystuje niektóre opcje wydajności, jak DMA dla dysków IDE.</p>
 
-<p>
-<a href="#nolapic">Instalacja (bez lokalnego APIC)</a>:
-If the normal installation fails, this might be due to the
-system hardware not supporting local APIC.
-If this seems to be the case, use this option to
-install without local APIC support.
-</p>
+<p><a href="#nolapic">Instalacja (bez lokalnego APIC)</a>: Powodem niepowodzenia normalnej instalacji może być sprzęt nieobsługujący lokalnego APIC. W takim przypadku należy użyć tej opcji, aby zainstalować system bez obsługi lokalnego APIC.</p>
 
-<p>
-<a href="#failsafe">Instalacja (bezpieczne ustawienia)</a>: If you were not
-successful with <em>Instalacja</em>, this selection might
-solve the issue.
-</p>
+<p><a href="#failsafe">Instalacja (bezpieczne ustawienia)</a>: W przypadku niepowodzenia z <em>Instalacja</em>, ta opcja może rozwiązać problem.</p>
 
-<p>
-<a href="#rescue">System ratunkowy</a>: This boot image starts a small
-Linux system in RAM. This is useful if the system does not start properly.
-After booting this system, log in as root.
-</p>
+<p><a href="#rescue">System ratunkowy</a>: Ten obraz startowy uruchamia niewielki system Linux w pamięci RAM. Jest to przydatne, gdy system nie uruchamia się prawidłowo. Po uruchomieniu tego systemu należy zalogować się jako użytkownik root.</p>
 
-<p>
-<a href="#firmware">Test oprogramowania sprzętowego</a>: Runs a BIOS test tool that validates
-ACPI and other parts of your BIOS.
-</p>
+<p><a href="#firmware">Test oprogramowania wbudowanego</a>: Uruchamia narzędzie sprawdzające BIOS pod kątem poprawności ACPI i innych częsci BIOS.</p>
 
-<p>
-<a href="#memtest">Test pamięci</a>: Memory testing is useful for more than
-checking installation of new memory modules. It is a stress test
-for a big part of your computer system and may indicate hardware
-problems.
-</p>
+<p><a href="#memtest">Test pamięci</a>: Test pamięci może być użyty nie tylko do sprawdzania nowych modułów pamięci. Jest to test obciążeniowy dla dużej części podzespołów komputera, mogący wskazać problemy sprzętowe.</p>
 
-<p>
-<a href="#opt">Opcje uruchamiania</a>: The boot options may change the
-behavior of your system completely. They are settings for
-the kernel.
-</p>
+<p><a href="#opt">Opcje uruchamiania</a>: Opcje uruchamiania mogą całościowo wpłynąć na zachowanie systemu. Są to ustawienia jądra.</p>
 
-<p>
-<a href="#help">@@@fkey_help@@@ Help</a>: This is context sensitive. It will
-show different screens depending on the active element of the
-boot screen. There is also a description of this help system
-available.
-</p>
+<p><a href="#help">@@@fkey_help@@@ Pomoc</a>: Pomoc ta jest zależna od kontekstu. Podaje różne informacje zależnie od aktywnych elementów ekranu uruchamiania. Dostępny jest również opis dla tego systemu pomocy.</p>
 
-<p>
-<a href="#keytable">@@@fkey_lang@@@</a>: Set language and keyboard mapping
-used by the boot loader.
-</p>
+<p><a href="#keytable">@@@fkey_lang@@@</a>: Ustawia język i mapowanie klawiatury używane przez program rozruchowy.</p>
 
-<p>
-<a href="#videomode">@@@fkey_video@@@ Video Mode</a>: Here, choose between
-different screen resolutions while installing. If you encounter
-problems with the graphical installation, the <em>Tryb tekstowy</em> may
-be a work-around for you.
-</p>
+<p><a href="#videomode">@@@fkey_video@@@ Tryb wideo</a>: Wybór rozdzielczości ekranu dla instalacji. W przypadku występowania problemów z instalacją w trybie graficznym rozwiązaniem może być użycie <em>Tryb tekstowy</em>.</p>
 
-<p>
-<a href="#install_src">@@@fkey_inst@@@ Installation Source</a>: Choose the
-installation source.
-</p>
+<p><a href="#install_src">@@@fkey_inst@@@ Źródło instalacji</a>: Wybór źródła instalacji.</p>
 
-<p>
-<a href="#driverupdate">@@@fkey_dud@@@ Driver Update</a>: For very new machines, a
-driver update may be needed to install the system.
-</p>
+<p><a href="#driverupdate">@@@fkey_dud@@@ Aktualizacja sterownika</a>: W przypadku najnowszego sprzętu może być konieczna aktualizacja sterowników w celu instalacji systemu.</p>
