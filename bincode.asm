@@ -5430,7 +5430,15 @@ prim_aend_10:
 		jnz prim_aend_10
 
 		dec ecx
-		lea eax,[ecx+4*ecx+2]
+
+		; we need 5 * array_size + 2 bytes (for head) for our array
+		; BUT...
+		; +8: allocate a bit more memory than strictly necessary
+		; else memory allocation gets corrupted on hyper-v (bnc #876640)
+		; (part of the next block gets overwritten)
+		; it's unclear, why
+		; even with identical memory layout it doesn't break in other vms
+		lea eax,[ecx+4*ecx+2 + 8]
 
 		push ecx
 		call calloc
