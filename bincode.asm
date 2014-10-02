@@ -2645,7 +2645,11 @@ _malloc_60:
 		mov [es:esi + mhead.memsize],eax
 		add ebx,eax
 		mov esi,ebx
+
 		mov [es:esi + mhead.memsize],edx
+		cmp edx,[es:esi + mhead.memsize]
+		jnz $
+
 		xor edx,edx
 		mov byte [es:esi + mhead.used],dl
 		mov [es:esi + mhead.ip],edx
@@ -5438,7 +5442,7 @@ prim_aend_10:
 		; (part of the next block gets overwritten)
 		; it's unclear, why
 		; even with identical memory layout it doesn't break in other vms
-		lea eax,[ecx+4*ecx+2 + 8]
+		lea eax,[ecx+4*ecx+2 + 0]
 
 		push ecx
 		call calloc
