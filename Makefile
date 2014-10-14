@@ -3,8 +3,9 @@ CFLAGS	 = -g -Wall -Wno-pointer-sign -O2 -fomit-frame-pointer
 
 GIT2LOG := $(shell if [ -x ./git2log ] ; then echo ./git2log --update ; else echo true ; fi)
 GITDEPS := $(shell [ -d .git ] && echo .git/HEAD .git/refs/heads .git/refs/tags)
-
 VERSION := $(shell $(GIT2LOG) --version VERSION ; cat VERSION)
+BRANCH  := $(shell git branch | perl -ne 'print $$_ if s/^\*\s*//')
+PREFIX  := gfxboot-$(VERSION)
 
 # THEMES	 = $(wildcard themes/*)
 THEMES	 = themes/upstream themes/openSUSE themes/SLES themes/SLED themes/KDE
@@ -69,9 +70,19 @@ installsrc:
 	cp -a themes/example* $(DESTDIR)/usr/share/gfxboot/themes
 	cp -a bin test $(DESTDIR)/usr/share/gfxboot
 
+archive: changelog
+	mkdir -p package
+	git archive --prefix=$(PREFIX)/ $(BRANCH) | tar --no-wildcards-match-slash --wildcards --delete 'gfxboot-*/themes' > package/$(PREFIX).tar
+	tar -r -f package/$(PREFIX).tar --mode=0664 --owner=root --group=root --mtime="`git show -s --format=%ci`" --transform='s:^:$(PREFIX)/:' VERSION changelog
+	xz -f package/$(PREFIX).tar
+	for i in $(THEMES) ; do \
+	  git archive $(BRANCH) $$i | xz > package/$${i#*/}.tar.xz || break ; \
+	done
+	git archive $(BRANCH) themes/example* | xz > package/examples.tar.xz
+
 clean: themes doc
 	@rm -f gfxboot-compile bincode gfxboot-font addblack bincode.h bin2c *.lst *.map vocabulary.inc vocabulary.h *.o *~
-	@rm -rf tmp
+	@rm -rf tmp package
 
 distclean: clean
 	@for i in themes/example* ; do make -C $$i clean || break ; done
