@@ -2,6 +2,12 @@
 %
 % Boot loader splash code.
 %
+% config.welcome: type of welcome animation
+%   0: no splash
+%   1: 'welcome' texts fade-in
+%   2: rolling cd
+%   3: light bulb fade-in
+%
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
@@ -12,6 +18,8 @@
 /.b_done	 1 def
 /.b_run		 2 def
 
+/burn time 16 shl 1193180 div 60 div 60 mod { false } { true } ifelse def
+
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Init splash.
 %
@@ -19,8 +27,14 @@
 %
 /bsplash.init {
   /bsplash.list [
-    config.welcome 2 eq { [ /b1.init /b1.done /b1.run ] } if
-    [ /b2.init /b2.done /b2.run ]
+    config.welcome 2 le {
+      config.welcome 2 eq { [ /b1.init /b1.done /b1.run ] } if
+      [ /b2.init /b2.done /b2.run ]
+    } if
+    config.welcome 3 eq {
+      [ /b3.init /b3.done /b3.run ]
+      burn { [ /b4.init /b4.done /b4.run ] } if
+    } if
   ] def
 
   bsplash.list { dup .b_init get exec } forall
@@ -47,7 +61,7 @@
 
   % "/boot/i386/loader/xxx" chdir
 
-  "welcome.jpg" findfile /splash.file over def setimage
+  config.welcome 3 eq { "off.jpg" } { "welcome.jpg" } ifelse findfile /splash.file over def setimage
 
   0 0 moveto 0 0 image.size image
 
@@ -92,7 +106,7 @@
 %
 /bsplash.done {
   bsplash.skip not {
-    1500000 usleep
+    config.welcome 2 le { 1500000 usleep } if
   } if
 } def
 
@@ -287,6 +301,168 @@
   0xffffff b2_text_tmp b2_buf blend
 
   560 120 moveto b2_buf restorescreen
+
+  false
+
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Init.
+%
+% ( array ) ==> ( )
+%
+/b3.init {
+  pop
+
+  /b3_ok false def
+
+  /b3_on "on.jpg"
+    findfile dup .undef ne {
+      dup setimage 200 0 400 600 unpackimage exch free
+    } if
+  def
+
+  /b3_off "off.jpg"
+    findfile dup .undef ne {
+      dup setimage 200 0 400 600 unpackimage exch free
+    } if
+  def
+
+  b3_on .undef eq { return } if
+  b3_off .undef eq { return } if
+
+  /b3_tmp b3_on imgsize 0 0 moveto savescreen def
+
+  /b3_idx 0 def
+  /b3_start 0 def
+  /b3_steps 30 def
+
+  /b3_ok true def
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Cleanup.
+%
+% ( array ) ==> ( )
+%
+/b3.done {
+  pop
+
+  b3_ok not { return } if
+
+  /b3_on xfree
+  /b3_off xfree
+  /b3_tmp xfree
+
+  /b3_ok false def
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Run animation.
+%
+% Return true when finished.
+%
+% ( array ) ==> ( true|false )
+%
+/b3.run {
+  pop
+
+  b3_ok not { true return } if
+
+  /b3_idx inc
+
+  b3_idx b3_start b3_steps add gt { true return } if
+
+  b3_idx b3_start lt { false return } if
+
+  b3_tmp b3_off over length memcpy
+  0 0 moveto
+  b3_on b3_idx b3_start sub 15 mul 255 min b3_tmp blend
+
+  200 0 moveto b3_tmp restorescreen
+
+  false
+
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Init.
+%
+% ( array ) ==> ( )
+%
+/b4.init {
+  pop
+
+  /b4_ok false def
+
+  /b4_glow "glow.jpg"
+    findfile dup .undef ne {
+      dup setimage 200 0 400 600 unpackimage exch free
+    } if
+  def
+
+  b4_glow .undef eq { return } if
+
+  /b4_tmp b4_glow imgsize 0 0 moveto savescreen def
+
+  /b4_idx 0 def
+  /b4_start 40 def
+  /b4_steps 30 def
+
+  /b4_ok true def
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Cleanup.
+%
+% ( array ) ==> ( )
+%
+/b4.done {
+  pop
+
+  b4_ok not { return } if
+
+  /b4_glow xfree
+  /b4_tmp xfree
+
+  /b4_ok false def
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Run animation.
+%
+% Return true when finished.
+%
+% ( array ) ==> ( true|false )
+%
+/b4.run {
+  pop
+
+  b4_ok not { true return } if
+
+  /b4_idx inc
+
+  b4_idx b4_start b4_steps add gt { true return } if
+
+  b4_idx b4_start lt { false return } if
+
+  /b4_val b4_idx b4_start sub 20 mul 255 min def
+
+  b4_val 255 lt {
+    b4_tmp b3_on over length memcpy
+    0 0 moveto
+    b4_glow b4_val b4_tmp blend
+  } {
+    b4_tmp b3_off over length memcpy
+  } ifelse
+
+  200 0 moveto b4_tmp restorescreen
 
   false
 
