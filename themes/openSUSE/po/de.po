@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2014-09-03 10:36\n"
+"PO-Revision-Date: 2015-10-13 10:20\n"
 "Last-Translator: Novell language <language@novell.com>\n"
 "Language-Team: Novell language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
@@ -437,7 +437,7 @@ msgstr "openSUSE Live (GNOME)"
 #. menu label for an update (as opposed to a new installation)
 #. txt_upgrade
 msgid "Upgrade"
-msgstr "Aufrüsten"
+msgstr "Upgrade"
 
 #. label for name server (network setup)
 #. txt_nameservers
