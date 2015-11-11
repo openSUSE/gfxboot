@@ -11,6 +11,7 @@
 %% include help.inc
 %% include menu.inc
 %% include xmenu.inc
+%% include submenu.inc
 %% include dia_video.inc
 %% include dia_lang.inc
 %% include dia_dud.inc

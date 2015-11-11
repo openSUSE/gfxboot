@@ -126,7 +126,10 @@
 
   free
 
-  config.nobootoptions menu.texts menu.entry get iselement {
+  config.nobootoptions menu.texts menu.entry get iselement
+  menu.args menu.entry get submenu.tag strstr 1 eq
+  or
+  {
     boot.ed.list 0 get .inp_show false put
   } if
 
@@ -223,14 +226,24 @@
   /y menu.start.y def
 
   0 1 menu.visible.entries 1 sub {
-   x y moveto currentpoint menu.bar.width.old menu.bar.height image
-   x config.rtl { menu.bar.width menu.text.xofs sub } { menu.text.xofs } ifelse add
-   y menu.text.yofs add moveto
-   menu.texts exch menu.shift add get menuitemmap
-   currentfont exch font.large setfont show.rtl setfont
-   /y y menu.item.height add def
+    /idx_tmp1 over def
+    x y moveto currentpoint menu.bar.width.old menu.bar.height image
+    x config.rtl { menu.bar.width menu.text.xofs sub } { menu.text.xofs } ifelse add
+    y menu.text.yofs add moveto
+    menu.texts exch menu.shift add get menuitemmap
+    currentfont exch font.large setfont show.rtl setfont
+
+    x y moveto idx_tmp1 show.submenu.tag
+
+    /y y menu.item.height add def
   } for
 
+  menu.visible.entries menu.max.entries lt {
+    menu.visible.entries 1 menu.max.entries 1 sub {
+     x y moveto currentpoint menu.bar.width.old menu.bar.height image
+     /y y menu.item.height add def
+    } for
+  } if
 } def
 
 
@@ -271,6 +284,7 @@
   } ifelse
   moveto
 
+  currentpoint
   config.rtl { menu.bar.width menu.text.xofs sub } { menu.text.xofs } ifelse
   menu.text.yofs rmoveto
   menu.status {
@@ -282,6 +296,9 @@
   menu.texts menu.idx get menuitemmap
   menu.status { config.talk { dup speak } if } if
   currentfont exch font.large setfont show.rtl setfont
+  moveto
+
+  menu.idx show.submenu.tag
 
   menu.status {
     % init boot options
@@ -317,6 +334,23 @@
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Show little arrow symbol indicating a submenu entry.
+%
+% ( menu_idx ) ==> ( )
+/show.submenu.tag {
+  config.rtl {
+    pop
+  } {
+    menu.args exch get submenu.tag strstr 1 eq {
+      menu.bar.width menu.text.xofs sub "\u25b6" strsize pop sub
+      menu.text.yofs rmoveto
+      "\u25b6" show
+    } if
+  } ifelse
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Draw main window.
 %
 % ( window ) ==> ( )
@@ -324,18 +358,13 @@
 /main.show {
   window.push
 
-  /menu.shift 0 def
-  /menu.visible.entries menu.texts length menu.max.entries min def
+  main.recalc
 
   % get index of default entry
   /menu.entry 0 def
   0 1 menu.texts length 1 sub {
     dup menu.texts exch get menu.dentry eq { /menu.entry exch def exit } { pop } ifelse
   } for
-
-  menu.entry menu.visible.entries sub 0 ge {
-    /menu.shift menu.entry menu.texts length menu.visible.entries sub min def
-  } if
 
   boot.text.options setcolor
 
@@ -390,6 +419,21 @@
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Re-calculate basic menu layout data.
+%
+% ( ) ==> ( )
+/main.recalc {
+  /menu.entry 0 def
+  /menu.shift 0 def
+
+  /menu.visible.entries menu.texts length menu.max.entries min def
+
+  menu.entry menu.visible.entries sub 0 ge {
+    /menu.shift menu.entry menu.texts length menu.visible.entries sub min def
+  } if
+} def
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Split command line into hidden and normal part.
 %
 % ( edit_object ) == > ( )
@@ -428,7 +472,14 @@
     pop 0
   } if
 
-  dup keyEsc eq { exit_popup pop 0 } if
+  dup keyEsc eq {
+    submenu.current {
+      /window.action actExit def
+    } {
+      exit_popup
+    } ifelse
+    pop 0
+  } if
 
   dup keyEnter eq {
     /window.action actStart def
