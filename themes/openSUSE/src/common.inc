@@ -187,6 +187,30 @@
 
   window.action actExit eq {
     /window.action actNothing def
+
+    % select link to submenu we just left
+    submenu.leave dup {
+      submenu.build
+      % kill trailing space
+      dup dup length 1 sub 0 max 0 put
+      menu.args length {
+        0 1 menu.args length 1 sub {
+          menu.args over get
+          2 index eq
+          {
+            /menu.entry exch def
+          } {
+            pop
+          } ifelse
+        } for
+      } if
+      pop
+
+      main.recalc
+      main.redraw
+
+      "" -1 0 return
+    } if
     "" -1 1 return
   } if
 
@@ -229,6 +253,21 @@
       } if
     } if
 
+    % activate submenu
+    menu.args menu.entry get submenu.tag strstr 1 eq {
+      menu.args menu.entry get submenu.enter
+      submenu.build
+      menu.args length {
+        /menu.entry 0 def
+        main.recalc
+        main.redraw
+      } {
+        submenu.leave submenu.build
+      } ifelse
+
+      "" -1 0 return
+    } if
+
     % some tricks to make it possible to review the complete command line
     debug 3 ge xxx.cmdline .undef eq and {
       /window.action actNothing def
@@ -264,7 +303,7 @@
       } {
         boot.ed.list buildcmdline
       } ifelse
-      2 return
+      submenu.menuidx 2 return
     } ifelse
   } if
 
@@ -687,6 +726,11 @@
     } if
   } if
 
+  /orig.menu.texts menu.texts def
+  /orig.menu.args menu.args def
+
+  submenu.build
+
   window.main
   dup window.init
       window.show
@@ -1032,6 +1076,11 @@
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % ( text ) == > ( new_text )
 /menuitemmap {
+  % drop submenu prefix, if any
+  dup submenu.tag strstr 1 eq {
+    2 add skipnonspaces skipspaces
+  } if
+
   translate
   config._2space {
     /mmm.tmp xfree
