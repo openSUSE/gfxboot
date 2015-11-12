@@ -187,8 +187,25 @@
 
   window.action actExit eq {
     /window.action actNothing def
-    submenu.leave {
+
+    % select link to submenu we just left
+    submenu.leave dup {
       submenu.build
+      % kill trailing space
+      dup dup length 1 sub 0 max 0 put
+      menu.args length {
+        0 1 menu.args length 1 sub {
+          menu.args over get
+          2 index eq
+          {
+            /menu.entry exch def
+          } {
+            pop
+          } ifelse
+        } for
+      } if
+      pop
+
       main.recalc
       main.redraw
 
@@ -241,6 +258,7 @@
       menu.args menu.entry get submenu.enter
       submenu.build
       menu.args length {
+        /menu.entry 0 def
         main.recalc
         main.redraw
       } {

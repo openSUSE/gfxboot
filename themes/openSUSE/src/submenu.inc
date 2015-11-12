@@ -15,8 +15,8 @@
 % submenu entries must start with this string, followed by an arbitrary identifier
 /submenu.tag "->" def
 
-% submenues are stacked here
-/submenu.list 8 array def
+% submenus are stacked here
+/submenu.list 16 array def
 /submenu.list.index 0 def
 
 % the current submenu

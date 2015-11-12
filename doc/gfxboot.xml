@@ -90,6 +90,63 @@
 
   </sect1>
 
+  <sect1 id="submenus">
+    <title>syslinux Submenus</title>
+
+    <para>
+      gfxboot allows you to have submenus with syslinux (without the menu module) by extending the
+      syslinux config file syntax a bit.
+    </para>
+
+    <para>
+      Submenu entries have a label stating with <command>'->FOO '</command> (note
+      the space) where <command>FOO</command> is an arbitrary string identifying the submenu.
+    </para>
+
+    <para>
+      Menu (or submenu) entries that have an <command>append</command> entry <command>'->BAR'</command>
+      link to submenu <command>BAR</command>. The maximum submenu nesting depth is 16.
+    </para>
+
+    <para>
+       As there are spaces in labels required to make this work, use the <command>menu label</command>
+       statement in syslinux.
+    </para>
+
+    <para>
+      Note that this way you can still use the <command>label</command> statement to reach any
+      menu item (even if it's in a submenu) directly, which keeps the config file also usable
+      in text mode.
+    </para>
+
+    <example><title/><para><programlisting>
+
+  # normal entry
+  label linux
+    kernel linux
+    append initrd=initrd
+
+  # link to submenu
+  label submenu
+    menu label My Submenu
+    append ->1
+
+  # 1st submenu entry
+  label item1
+    menu label ->1 Submenu Item #1
+    kernel linux
+    append initrd=initrd sub=1
+
+  # 2nd submenu entry
+  label item2
+    menu label ->1 Submenu Item #2
+    kernel linux
+    append initrd=initrd sub=2
+
+    </programlisting></para></example>
+
+  </sect1>
+
   <sect1 id="reference">
     <title>Reference</title>
 

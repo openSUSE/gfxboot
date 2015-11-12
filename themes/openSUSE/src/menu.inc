@@ -233,7 +233,7 @@
     menu.texts exch menu.shift add get menuitemmap
     currentfont exch font.large setfont show.rtl setfont
 
-    x y moveto idx_tmp1 show.submenu.tag
+    x y moveto idx_tmp1 menu.shift add show.submenu.tag
 
     /y y menu.item.height add def
   } for
@@ -338,15 +338,17 @@
 %
 % ( menu_idx ) ==> ( )
 /show.submenu.tag {
-  config.rtl {
-    pop
-  } {
-    menu.args exch get submenu.tag strstr 1 eq {
+  menu.args exch get submenu.tag strstr 1 eq {
+    config.rtl {
+      menu.text.xofs menu.text.yofs rmoveto
+      "\u25c0"
+    } {
       menu.bar.width menu.text.xofs sub "\u25b6" strsize pop sub
       menu.text.yofs rmoveto
-      "\u25b6" show
-    } if
-  } ifelse
+      "\u25b6"
+    } ifelse
+    show
+  } if
 } def
 
 
@@ -423,7 +425,6 @@
 %
 % ( ) ==> ( )
 /main.recalc {
-  /menu.entry 0 def
   /menu.shift 0 def
 
   /menu.visible.entries menu.texts length menu.max.entries min def
