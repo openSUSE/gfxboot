@@ -11,6 +11,8 @@
 /boot.splitchar 1 def
 /boot.splitstr 1 string dup 0 boot.splitchar put def
 
+/boot.update_options true def
+
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Create new main window.
 %
@@ -40,16 +42,19 @@
 % Redraw main window.
 % (E.g. after selecting a new language.)
 %
-% ( window ) ==> ( )
+% ( redraw_boot_options ) ==> ( )
+%
+% redraw_boot_options: true|false
+% redraw boot option line if true
 %
 /main.redraw {
 
   % boot.drawlabels
 
   main.drawmenu
-  /keepbootoptions 1 def
+  /boot.update_options exch def
   menu.entry true MenuSelect
-  /keepbootoptions .undef def
+  /boot.update_options true def
 
   panel.show
 } def
@@ -126,7 +131,7 @@
 
   free
 
-  config.nobootoptions menu.texts menu.entry get iselement
+  config.nobootoptions menu.texts menu.entry get submenu.skip_prefix iselement
   menu.args menu.entry get submenu.tag strstr 1 eq
   or
   {
@@ -302,7 +307,7 @@
 
   menu.status {
     % init boot options
-    keepbootoptions .undef eq {
+    boot.update_options {
 
       boot.input.preinit
 
