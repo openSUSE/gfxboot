@@ -120,3 +120,15 @@
   } if
 } def
 
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Skip submenu prefix, if any.
+%
+% ( string ) ==> ( string )
+%
+/submenu.skip_prefix {
+  dup submenu.tag strstr 1 eq {
+    2 add skipnonspaces skipspaces
+  } if
+} def
+

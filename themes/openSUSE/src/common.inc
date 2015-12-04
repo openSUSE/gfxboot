@@ -207,7 +207,7 @@
       pop
 
       main.recalc
-      main.redraw
+      true main.redraw
 
       "" -1 0 return
     } if
@@ -260,7 +260,7 @@
       menu.args length {
         /menu.entry 0 def
         main.recalc
-        main.redraw
+        true main.redraw
       } {
         submenu.leave submenu.build
       } ifelse
@@ -309,7 +309,7 @@
 
   window.action actRedraw eq {
     /window.action actNothing def
-    main.redraw
+    false main.redraw
   } if
 
   window.action actRedrawPanel eq {
@@ -1076,10 +1076,7 @@
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % ( text ) == > ( new_text )
 /menuitemmap {
-  % drop submenu prefix, if any
-  dup submenu.tag strstr 1 eq {
-    2 add skipnonspaces skipspaces
-  } if
+  submenu.skip_prefix
 
   translate
   config._2space {
