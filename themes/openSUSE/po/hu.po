@@ -461,3 +461,14 @@ msgstr ""
 #. txt_video_no_kms
 msgid "No KMS"
 msgstr "Nincs KMS"
+
+#. menu item for booting an installed Linux system
+#. txt_systemboot
+msgid "Boot Linux System"
+msgstr ""
+
+#. menu item selecting a submenu with more entries
+#. txt_expert
+msgid "More ..."
+msgstr ""
+
