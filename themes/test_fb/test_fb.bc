@@ -1,0 +1,360 @@
+% test_fb.bc
+%
+% Test framebuffer mode setting and drawing.
+%
+% To use this test to boot from a real CD-ROM, do:
+%
+%   # make -C themes/test_fb
+%   # mkdir /tmp/foo
+%   # gfxboot -a themes/test_fb/bootlogo --expand-archive /tmp/foo
+%   # cp /tmp/foo/* to_the_dir_on_your_ISO_where_isolinux.bin_is
+%
+%   and add a line 'ui gfxboot bootlogo' to isolinux.cfg.
+%
+% Notes:
+%  - this is based on example_05, see also there
+%
+% Test with (from top level dir [/usr/share/gfxboot]) 'gfxtest -t test_fb'.
+%
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Some constants we probably need.
+%
+/true 0 0 eq def
+/false 0 0 ne def
+
+% some key codes
+/keyEsc       0x0000001b def
+/keyEnter     0x0000000d def
+/keyUp        0x48000000 def
+/keyLeft      0x4b000000 def
+/keyRight     0x4d000000 def
+/keyDown      0x50000000 def
+
+% type values
+/t_none    0 def
+/t_string  4 def
+/t_end    11 def
+/t_ptr    12 def
+
+% undefined (nil) value
+/.undef 0 t_none settype def
+
+% end token, stops execution
+/.end 0 t_end settype def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Convert integer to pointer.
+%
+% ( int1 -- ptr1 )
+%
+/cvp { t_ptr settype } def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Convert object to string.
+%
+% ( obj ) ==> ( string )
+%
+/cvs { t_string settype } def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Allocate new string.
+%
+% ( size -- string )
+%
+/string {
+  1 add malloc cvs
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Arguments like snprintf.
+%
+% ( obj_1 ... obj_n string_1 string_2 -- )
+%
+/sprintf {
+  dup cvp length exch snprintf
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% findmode - find video mode number
+%
+% ( int1 int2 int3 -- int4 )   
+%
+% int1, int2: width, height
+% int3: color bits
+% int4: mode number (or .undef)
+%
+% example
+%   1024 768 16 findmode setmode        % 1024x768, 16-bit color mode
+%
+/findmode {
+  0 1 videomodes {
+    videomodeinfo dup .undef eq {
+      pop pop pop pop
+    } {
+      % compare width, height, colors
+      6 index 4 index eq 6 index 4 index eq and 5 index 3 index eq and {
+        7 1 roll 6 { pop } repeat 0xbfff and return
+      } {
+        pop pop pop pop
+      } ifelse
+    } ifelse
+  } for
+
+  pop pop pop .undef
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Input event handling.
+%
+% ( key -- input_buffer menu_entry action )
+%
+% key
+%  bit 0-7      ascii
+%  bit 8-15     scan code
+%  bit 16-32    status bits (ctrl, shift...)
+%
+% action
+%    0:         ok, stay in input loop
+%    1:         switch to text mode (that is, continue with the non-gfxboot
+%               bootloader interface)
+%  >=2:         boot
+%
+% Notes:
+%  - key = 0 indicates the bootloader timeout is up.
+%  - input_buffer is the command line that you would have normally entered in the bootloader.
+%    note that for syslinux it must start with the menu label string but not for grub
+%  - menu_entry is the number of the menu entry you want to boot
+%
+/KeyEvent {
+  % pre-process keycode a bit
+  dup 0xff00 and 16 shl exch 0xff and dup 0xe0 eq { pop 0 } if add
+  dup 0xff and { 0xff and } if
+  /key exch def
+
+  % 'key' now holds the ASCII code for 'normal' keys and the scan code in
+  % the upper 8 bits if there is no ASCII code (e.g. F-keys, cursor keys)
+
+  % process key events...
+  key keyDown eq {
+    menu.entry menu.texts length 1 sub lt {
+      menu.entry menu.deselect
+      /menu.entry menu.entry 1 add def
+      menu.entry menu.select
+    } if
+  } if
+
+  key keyUp eq {
+    menu.entry 0 gt {
+      menu.entry menu.deselect
+      /menu.entry menu.entry 1 sub def
+      menu.entry menu.select
+    } if
+  } if
+
+  key keyEnter eq {
+    % construct command line:
+    % syslinux expects '<label> <args>', so put the two strings together...
+    cmdline
+    menu.args menu.entry get
+    menu.texts menu.entry get
+    "%s %s %s" cmdtmp sprintf
+    cmdtmp menu.entry 2 return
+  } if
+
+  % maybe it's a printable char...
+  % remember to set the correct color (and font if necessary)
+  input_color setcolor
+  edit_obj key edit.input
+
+ "" 0 0
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Setup boot menu.
+%
+% ( menu_entries_array cmdline_args_array defaultentry -- )
+%
+% This function is called before the first key event and gets passed the
+% bootloader config data.
+%
+/MenuInit {
+  % this is a string
+  /menu.default_entry exch def
+
+  % both are arrays
+  /menu.args exch def
+  /menu.texts exch def
+
+  % find index of the default entry
+  /menu.entry 0 def
+  0 1 menu.texts length 1 sub {
+    menu.texts over get
+    menu.default_entry eq { /menu.entry exch def exit } if
+    pop
+  } for
+
+  % menu position
+  /menu.x 300 def
+  /menu.y 100 def
+
+  % 1.5 * font size
+  /menu.dy fontheight dup 2 div add def
+
+  menu_color setcolor
+
+  % draw menu
+  menu.x menu.y moveto
+  menu.texts {
+    % add black shadow
+    shadow_show
+    currentpoint exch pop menu.dy add menu.x exch moveto
+  } forall
+
+  % mark default entry
+  menu.entry menu.select
+
+  % draw boot option field
+  label_color setcolor
+  10 500 moveto "Boot:" shadow_show
+
+  input_color setcolor
+
+  % intialize edit object; you can set the edit buffer to some initial value
+  edit_obj "vga=0x317" edit.init
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Like 'show', but with black shadow.
+%
+% ( string -- )
+%
+/shadow_show {
+  currentcolor currentpoint
+  1 1 rmoveto
+  0 setcolor
+  3 index show
+  moveto setcolor
+  show
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Show selected item.
+%
+% ( index -- )
+%
+/menu.select {
+  menu.dy mul menu.y add
+  menu.x exch moveto
+  ">" dup strsize pop neg 10 sub 0 rmoveto
+  arrow_color setcolor
+  show
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Show deselected item.
+%
+% ( index -- )
+%
+/menu.deselect {
+  menu.dy mul menu.y add
+  menu.x exch moveto
+  ">" dup strsize pop neg 10 sub 0 rmoveto
+  currentpoint rot strsize image
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% set 800x600 graphics mode
+% try 32 bit first; if no mode can be found, exit and continue without gfxboot
+%
+%currentmode 0x100 ge {
+%  currentmode setmode
+%} {
+%  800 600 32 findmode setmode not {
+%    800 600 16 findmode setmode not {
+%      false .end
+%    } if
+%  } if
+%} ifelse
+
+% chromebook native mode: 0x140
+0x4140 setmode pop screen.size pop 320 eq {
+ 1024 768 32 findmode 0x4000 or setmode pop
+} if
+
+% verify that we got the correct framebuffer pointer: just write something
+screen.framebuffer {
+  0 19 8000000 {
+    screen.framebuffer exch dup put
+  } for
+} if
+
+% draw rectangle at the middle of the screen
+0xffff00 setcolor
+screen.size exch 60 sub 2 div exch 40 sub 2 div moveto
+60 40 fillrect
+
+% draw some crossing lines
+0x00ffff setcolor
+0 0 moveto screen.size lineto
+screen.size pop 0 moveto
+0 screen.size exch pop lineto
+
+dtrace
+
+% load and set font
+"font.fnt" findfile setfont
+
+% show some text
+0xff8040 setcolor
+260 0 moveto "Test" show
+
+dtrace
+
+% load and set background image
+"clouds.jpg" findfile setimage
+0 0 moveto
+0 0 image.size image
+
+/s 256 string def
+screen.size exch "%d x %d" s sprintf
+0xe04000 setcolor
+0 0 moveto s shadow_show
+
+% input command line
+/cmdline 1024 string def
+
+% used in KeyEvent
+/cmdtmp 1024 string def
+
+% our input line
+/edit_obj [
+  110			% x
+  500			% y
+  moveto currentpoint 600 fontheight savescreen		% background image, defines input field size
+  cmdline		% input buffer
+  dup cvp length 1 sub	% buffer size
+  .undef		% for internal use
+] def
+
+% our colors
+/input_color 0x000000 def
+/menu_color  0xe0e000 def
+/arrow_color 0xffffff def
+/label_color 0x00a000 def
+
+% say we're fine ('false' tells bootloader not to use gfxboot)
+true
+
