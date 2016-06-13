@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2015-10-13 11:26\n"
+"PO-Revision-Date: 2016-06-01 11:30\n"
 "Last-Translator: Novell language <language@novell.com>\n"
 "Language-Team: Novell language <language@novell.com>\n"
 "MIME-Version: 1.0\n"
@@ -463,10 +463,9 @@ msgstr "Geen KMS"
 #. menu item for booting an installed Linux system
 #. txt_systemboot
 msgid "Boot Linux System"
-msgstr ""
+msgstr "Linux-systeem opstarten"
 
 #. menu item selecting a submenu with more entries
 #. txt_expert
 msgid "More ..."
-msgstr ""
-
+msgstr "Meer ..."
