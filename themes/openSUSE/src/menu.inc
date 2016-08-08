@@ -245,6 +245,7 @@
 
   menu.visible.entries menu.max.entries lt {
     menu.visible.entries 1 menu.max.entries 1 sub {
+     pop
      x y moveto currentpoint menu.bar.width.old menu.bar.height image
      /y y menu.item.height add def
     } for
