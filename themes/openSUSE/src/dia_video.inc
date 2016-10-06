@@ -292,7 +292,7 @@
 
   pop pop
 
-  % needed in case menu is only attached to install menu
+  % needed because menu is only attached to video menu - it must be initialized somewhere
   smode.init
 } def
 
