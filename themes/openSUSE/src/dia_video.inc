@@ -37,6 +37,16 @@
   1920 1200
 ] def
 
+% position of smode menu
+/.video_smode_menu 3 def
+
+% buffer for translated menu string
+/video.submenu.smode.buf 64 string def
+/video.submenu.smode {
+  xmenu.smode .xm_title get exec "\x09\x09%s" video.submenu.smode.buf sprintf
+  video.submenu.smode.buf
+} def
+
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Create sort key for video modes.
@@ -124,6 +134,8 @@
     [ -1 0 "textmode=1" /txt_text_mode     0 0 ]	% special: text mode
     [ -2 0 "nomodeset"  /txt_video_no_kms  1 0 ]	% special: no KMS (width = 1 to make it sort)
     [ -3 0 ""           /txt_kernel_default 2 0 ]	% special: no video options (width = 2 to make it sort)
+    % position must agree to .video_smode_menu!
+    [ -4 0 ""           /video.submenu.smode 3 0 ]	% special: smode menu
 
     % first, try 16 bit
     /vm_color_bits 16 def
@@ -279,6 +291,9 @@
   xmenu .xm_current 2 put
 
   pop pop
+
+  % needed because menu is only attached to video menu - it must be initialized somewhere
+  smode.init
 } def
 
 
@@ -290,7 +305,12 @@
 /video.update {
   /xmenu xmenu.video def
 
-  /window.action actRedrawPanel def
+  xmenu .xm_current get .video_smode_menu eq {
+    xmenu .xm_current over .xm_last get put
+    panel.smode
+  } {
+    /window.action actRedrawPanel def
+  } ifelse
 } def
 
 
@@ -331,6 +351,9 @@
   /xmenu xmenu.video def
 
   pmenu.panel.update
+
+  % set location of smode menu
+  xmenu.smode .xm_panel_x xmenu.video .xm_panel_x get put
 } def
 
 

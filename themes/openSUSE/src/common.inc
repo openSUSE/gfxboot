@@ -488,6 +488,10 @@
     } if
   } if
 
+  smode.config_type .undef ne {
+    [ "default" "high" ] smode.config_type get "screenmode=%s " bc.cmd dup length add sprintf
+  } if
+
   xmenu.dud {
     xmenu.dud .xm_current get .dud_url eq {
       input.edit.dud_url 0 get dup "" ne {
