@@ -305,7 +305,7 @@
 /video.update {
   /xmenu xmenu.video def
 
- xmenu .xm_current get .video_smode_menu eq {
+  xmenu .xm_current get .video_smode_menu eq {
     xmenu .xm_current over .xm_last get put
     panel.smode
   } {
