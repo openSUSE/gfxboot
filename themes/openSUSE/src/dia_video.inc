@@ -214,7 +214,7 @@
   % create menu
 
   /xmenu.video.hc .xm_size array def
-  xmenu.video.hc .xm_list [ "Default" "White on Black" "Cyan on Black" "Yellow on Black" ] put
+  xmenu.video.hc .xm_list [ "Default" "High Contrast" "Cyan on Black" ] put
   xmenu.video.hc .xm_title "Color Mode" put
   xmenu.video.hc .xm_current 0 put
 
@@ -374,7 +374,7 @@
 /video.hc.current {
   xmenu.video.hc .xm_current get
   dup 0 gt {
-    [ "" "white-on-black" "cyan-on-black" "yellow-on-black" ] exch get "Y2COLORMODE=%s" video.hc.current.buf sprintf
+    [ "" "highcontrast" "cyan-black" ] exch get "Y2COLORMODE=%s" video.hc.current.buf sprintf
     video.hc.current.buf
   } {
     pop .undef
