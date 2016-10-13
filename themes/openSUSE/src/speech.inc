@@ -15,7 +15,7 @@
 %
 /speak {
   % skip leading TABs
-  { dup 0 get '\x09' eq { 1 add } { exit } ifelse } loop
+  { dup 0 get '\x09' le { 1 add } { exit } ifelse } loop
 
   /last.spoken xfree
   /last.spoken over strdup def
@@ -92,6 +92,9 @@
   config.volume sound.setvolume 
 
   window.done
+
+  % do it only once
+  /load_talk_dialog { } def
 } def
 
 
