@@ -420,6 +420,9 @@ msgstr ""
 msgid "Yellow on Black"
 msgstr ""
 
+msgid "High Contrast"
+msgstr ""
+
 msgid "800 x 600"
 msgstr "800 times 600"
 
