@@ -188,7 +188,7 @@
     } forall
 
     keymap.submenu {
-      /lang.submenu.keyboard
+      /txt_keyboard
     } if
 
   ] def
@@ -197,13 +197,6 @@
 
   0 seteotchar
 
-} def
-
-
-/lang.submenu.keyboard.buf 64 string def
-/lang.submenu.keyboard {
-  /txt_keyboard exec "\x09\x09%s" lang.submenu.keyboard.buf sprintf
-  lang.submenu.keyboard.buf
 } def
 
 
@@ -220,6 +213,9 @@
 
   xmenu .xm_current lang.default put
   xmenu .xm_list lang.names put
+
+  xmenu .xm_submenus lang.names length array put
+  xmenu .xm_attr lang.names length array put
 
   xmenu .xm_title /txt_language put
 
@@ -244,6 +240,13 @@
 
   % needed in case menu is only attached to lang menu
   keymap.init
+
+  % attach keyboard menu
+  keymap.submenu {
+    xmenu.lang .xm_submenus get lang.submenu.idx xmenu.keymap put
+    % line before keyboard entry
+    xmenu.lang .xm_attr get lang.submenu.idx 1 put
+  } if
 } def
 
 

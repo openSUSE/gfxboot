@@ -22,22 +22,6 @@
 %     1: supported display res
 %
 
-% We have kernel splash images for at least these sizes.
-/video.splashsizes [
-     0    0	% special: for text mode
-     1    0	% special: for VESA mode
-   800  600
-  1024  600
-  1024  768
-  1280  800
-  1280 1024
-  1400 1050
-  1600 1200
-  1680 1050
-  1920 1200
-] def
-
-
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Create sort key for video modes.
 %
@@ -67,46 +51,6 @@
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Check if we have a splash in that resolution.
-%
-% ( video_mode_list_entry ) ==> ( true|false )
-%
-/video.havesplash {
-  false exch
-
-  0 2 video.splashsizes length 1 sub {
-    over over over
-    .vm_height get rot .vm_width get rot video.splashsizes exch get eq
-    rot 1 add video.splashsizes exch get rot eq and
-    { exch pop true exch exit } if
-  } for
-
-  pop
-
-} def
-
-
-% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Check if display supports that resolution.
-%
-% ( video_mode_list_entry ) ==> ( true|false )
-%
-/video.resok {
-  false exch
-
-  0 2 video.res length 1 sub {
-    over over over
-    .vm_height get rot .vm_width get rot video.res exch get eq
-    rot 1 add video.res exch get rot eq and
-    { exch pop true exch exit } if
-  } for
-
-  pop
-
-} def
-
-
-% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Build video mode list.
 %
 % ( ) ==> ( )
@@ -117,13 +61,19 @@
   /xmenu xmenu.video def
 
   "ddc" findfile test1
-  /video.res [ displaysizes ] def
+  /video.res [
+    displaysizes
 
-  % build list of video modes
+    % add anything that crosses your mind
+    1024 768
+    1680 1050
+    1920 1080
+    1920 1200
+  ] def
+
   /video.modes.list [
-    [ -1 0 "textmode=1" /txt_text_mode     0 0 ]	% special: text mode
-    [ -2 0 "nomodeset"  /txt_video_no_kms  1 0 ]	% special: no KMS (width = 1 to make it sort)
-    [ -3 0 ""           /txt_kernel_default 2 0 ]	% special: no video options (width = 2 to make it sort)
+
+    % add VBE modes >= 1024 x 576
 
     % first, try 16 bit
     /vm_color_bits 16 def
@@ -144,14 +94,14 @@
       } for
 
       % no modes added? -> try 8 bit
-      dup .vm_mode get -2 eq vm_color_bits 8 ne and {
+      dup [ eq vm_color_bits 8 ne and {
         /vm_color_bits 8 def
       } {
         exit
       } ifelse
     } loop
 
-    % add display sizes
+    % add detected monitor size(s)
 
     video.res length {
       0 2 video.res length 1 sub {
@@ -164,7 +114,7 @@
 
   ] def
 
-  % sort video.modes.list
+  % sort video mode list
 
   video.modes.list length 3 gt {
     0 1 video.modes.list length 2 sub {
@@ -179,106 +129,138 @@
   } if
 
   % remove duplicates
-  % (assumes text or vesa entry to be first)
 
   /video.modes.list
     [
+      /tmp_is_first true def
       video.modes.list {
-        dup .vm_mode get 0 ge {		% ensure it's not the first entry
+        % if it's the 1st entry, just keep it
+        % else, add a new entry only if different
+        tmp_is_first {
+          /tmp_is_first false def
+        } {
           over .vm_width get over .vm_width get eq
           2 index .vm_height get 2 index .vm_height get eq and {
             over .vm_mode get over .vm_mode get max 2 index .vm_mode rot put
             over .vm_flags get over .vm_flags get or 2 index .vm_flags rot put
             free
           } if
-        } if
+        } ifelse
       } forall
     ]
     video.modes.list free
   def
 
-  % create mode strings & menu labels
-
-  true
+  % create menu labels
 
   video.modes.list {
-    dup .vm_flags get 3 and {
-      dup .vm_options 64 string put
-      dup .vm_label 32 string put
-
-      % add separating line before first entry
-      over {
-        dup .vm_label get "\x09" exch sprintf
-        exch pop false exch
-      } if
-
-      dup .vm_flags get 1 and {
-        dup .vm_mode get 0x200 add over .vm_options get "vga=0x%x " exch sprintf
-      } if
-
-      dup .vm_flags get 2 and {
-        dup .vm_height get over .vm_width get 2 index .vm_options get "video=%dx%d " exch dup length add sprintf
-      } if
-
-      dup .vm_flags get 2 and 0 eq {
-        dup .vm_label get "\x01" exch dup length add sprintf
-      } if
-
-      dup .vm_height get over .vm_width get 2 index .vm_label get "%d x %d" exch dup length add sprintf
-    } if
+    dup .vm_label 32 string put
+    dup .vm_height get over .vm_width get 2 index .vm_label get "%d x %d" exch dup length add sprintf
 
     pop
   } forall
 
-  pop
+  % build submenus
 
-  % create menu
+  /video.modes.installer [
+    [ -1 0 ""           /txt_kernel_default 0 0 ]
 
-  /video.modes.text [
-    video.modes.list { .vm_label get } forall
+    video.modes.list { } forall
   ] def
+
+  /video.modes.console [
+    [ -1 0 ""           /txt_kernel_default 0 0 ]
+    [ -2 0 "nomodeset"  /txt_video_no_kms   0 0 ]
+
+    video.modes.list { } forall
+  ] def
+
+  /video.modes.bios [
+    [ -1 0 ""           /txt_kernel_default 0 0 ]
+
+    video.modes.list {
+      % keep only modes with VBE mode number
+      dup .vm_mode get 0 eq { pop } if
+    } forall
+  ] def
+
+  /xmenu.video.installer .xm_size array def
+  /xmenu.video.console .xm_size array def
+  /xmenu.video.bios .xm_size array def
 
   % add to menu
 
-  xmenu .xm_list video.modes.text put
+  xmenu.video.installer .xm_list [ video.modes.installer { .vm_label get } forall ] put
+  xmenu.video.installer .xm_attr xmenu.video.installer .xm_list get length array put
+  % line above 2nd entry
+  xmenu.video.installer .xm_attr get 1 1 put
+  xmenu.video.installer .xm_title "Installer Size" put
+  xmenu.video.installer .xm_current 0 put
+
+  xmenu.video.console .xm_list [ video.modes.console { .vm_label get } forall ] put
+  xmenu.video.console .xm_attr xmenu.video.console .xm_list get length array put
+  % line above 3rd entry
+  xmenu.video.console .xm_attr get 2 1 put
+  xmenu.video.console .xm_title "Text Console Size" put
+  xmenu.video.console .xm_current 0 put
+
+  xmenu.video.bios .xm_list [ video.modes.bios { .vm_label get } forall ] put
+  xmenu.video.bios .xm_attr xmenu.video.bios .xm_list get length array put
+  % line above 2nd entry
+  xmenu.video.bios .xm_attr get 1 1 put
+  xmenu.video.bios .xm_title "Video BIOS Size" put
+  xmenu.video.bios .xm_current 0 put
+
+  % create menu
+
+  /xmenu.video.hc .xm_size array def
+  xmenu.video.hc .xm_list [ "Default" "High Contrast" "Cyan on Black" ] put
+  xmenu.video.hc .xm_title "Color Mode" put
+  xmenu.video.hc .xm_current 0 put
+
+  % add to menu
+
+  /video.submenu.list [
+    xmenu.video.installer
+    xmenu.video.console
+    xmenu.video.bios
+    .undef
+    xmenu.video.hc
+    .undef
+  ] def
+
+  xmenu .xm_list [
+    "Installer Size"
+    "Text Console Size"
+    "Video BIOS Size"
+    /txt_text_mode
+    "Color Mode"
+    "Screen Reader"
+  ] put
+
+  % empty array
+  /video.checkmarks xmenu .xm_list get length array def
+
+  /vm.text_mode.idx 3 def
+  /vm.screen_reader.idx 5 def
+
+  video.checkmarks vm.text_mode.idx false put
+  video.checkmarks vm.screen_reader.idx false put
+
+  xmenu .xm_checkmarks video.checkmarks put
+
+  xmenu .xm_submenus video.submenu.list put
+
+  xmenu .xm_attr xmenu .xm_list get length array put
+  % line before 3rd entry
+  xmenu .xm_attr get 3 1 put
+  xmenu .xm_attr get 5 0x100 put
+
   xmenu .xm_title /txt_video_mode put
 
-  % select largest mode the monitor supports
-
-  boot_failsafe 4 and { 0 0 } { monitorsize } ifelse
-  exch 1024 max exch 768 max		% at least 1024x768
-
-  % ATI quirk: avoid 1280x1024, older chips (<= 8MB, max res 1280x1024) use
-  % interlaced there
-
-  video.modes.list dup length 1 sub get
-  dup .vm_width get 1280 eq exch .vm_height get 1024 eq and {
-    video.memory 0x2000 le {
-      video.oem "ATI " strstr 1 eq {
-        exch 1024 min exch 768 min	% down to 1024x768
-      } if
-    } if
-  } if 
-
   % 'default' entry
-  xmenu .xm_current 2 put
+  xmenu .xm_current 0 put
 
-  -1
-  video.modes.list {
-    exch 1 add exch
-
-    dup .vm_width get 4 index le
-    exch .vm_height get 3 index le and {
-      xmenu .xm_current 2 index put
-    } if
-
-  } forall
-  pop
-
-  % FIXME: force 'default' entry
-  xmenu .xm_current 2 put
-
-  pop pop
 } def
 
 
@@ -290,7 +272,12 @@
 /video.update {
   /xmenu xmenu.video def
 
-  /window.action actRedrawPanel def
+  video.submenu.list xmenu .xm_current get get dup {
+    video.submenu
+    /window.action actRedrawPanel def
+  } {
+    pop
+  } ifelse
 } def
 
 
@@ -316,9 +303,16 @@
 % ( ) => ( width )
 %
 /panel.video.width {
-  /xmenu xmenu.video def
+  /tmp_title xmenu.video.installer .xm_title get def
+  xmenu.video.installer .xm_title xmenu.video .xm_title get put
+
+  /xmenu xmenu.video.installer def
 
   pmenu.width
+
+  xmenu.video .xm_panel_x xmenu.video.installer .xm_panel_x get put
+
+  /xmenu xmenu.video def
 } def
 
 
@@ -328,9 +322,147 @@
 % ( panel ) => ( )
 %
 /panel.video.update {
-  /xmenu xmenu.video def
+  /tmp_title xmenu.video.installer .xm_title get def
+  xmenu.video.installer .xm_title xmenu.video .xm_title get put
+
+  /xmenu xmenu.video.installer def
 
   pmenu.panel.update
+
+  xmenu.video .xm_panel_x xmenu.video.installer .xm_panel_x get put
+
+  xmenu.video.installer .xm_title tmp_title put
+
+  /xmenu xmenu.video def
 } def
 
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Switch to submenu.
+%
+% ( submenu ) => ( )
+%
+/video.submenu {
+  % set location of submenu
+  dup .xm_panel_x xmenu.video .xm_panel_x get put
+
+  "videomode" help.setcontext
+
+  window.xmenu
+  dup .xmenu 4 -1 roll put
+  dup .xmenu.update /video.submenu.update put
+  dup window.init
+      window.show
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% What to do when submenu is closed.
+%
+% ( ) => ( )
+%
+/video.submenu.update {
+  /window.action actRedrawPanel def
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Get current high contrast setting.
+%
+% ( ) => ( string )
+%
+/video.hc.current {
+  xmenu.video.hc .xm_current get
+  dup 0 gt {
+    [ "" "highcontrast" "cyan-black" ] exch get "screenmode=%s" video.hc.current.buf sprintf
+    video.hc.current.buf
+  } {
+    pop .undef
+  } ifelse
+} def
+/video.hc.current.buf 64 string def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Get current text mode setting.
+%
+% ( ) => ( string )
+%
+/video.textmode.current {
+  video.checkmarks vm.text_mode.idx get {
+    "textmode=1"
+  } {
+    .undef
+  } ifelse
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Get current kms setting.
+%
+% ( ) => ( string )
+%
+/video.kms.current {
+  xmenu.video.console .xm_current get
+  dup 0 eq {
+    pop .undef
+  } {
+    video.modes.console exch get
+    dup .vm_options get "" ne {
+      .vm_options get
+    } {
+      dup .vm_width get exch .vm_height get "video=%dx%d" video.kms.current.buf sprintf
+      video.kms.current.buf
+    } ifelse
+  } ifelse
+} def
+/video.kms.current.buf 64 string def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Get current installer size setting.
+%
+% ( ) => ( string )
+%
+/video.installer_size.current {
+  xmenu.video.installer .xm_current get
+  dup 0 eq {
+    pop .undef
+  } {
+    video.modes.installer exch get
+    dup .vm_width get exch .vm_height get "xvideo=%dx%d" video.installer_size.current.buf sprintf
+    video.installer_size.current.buf
+  } ifelse
+} def
+/video.installer_size.current.buf 64 string def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Get current vbe setting.
+%
+% ( ) => ( string )
+%
+/video.vbe.current {
+  xmenu.video.bios .xm_current get
+  dup 0 eq {
+    pop .undef
+  } {
+    video.modes.bios exch get
+    .vm_mode get 0x200 add "vga=0x%x" video.vbe.current.buf sprintf
+    video.vbe.current.buf
+  } ifelse
+} def
+/video.vbe.current.buf 64 string def
+
+
+/video.speak {
+  video.checkmarks vm.screen_reader.idx get {
+    /v_impaired 1 def
+    /config.talk true def
+    load_talk_dialog
+  } {
+    /v_impaired 0 def
+    /config.talk false def
+  } ifelse
+} def
 
