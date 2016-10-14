@@ -54,14 +54,27 @@ sectorsize 0x200 eq bootdrive 0x80 eq or {
   xmenu .xm_list [
     is_dvd { "DVD" } { "CD-ROM" } ifelse
     /txt_harddisk
-    "\x09SLP"
+    "SLP"
     "FTP"
     "HTTP"
     "NFS"
     "SMB / CIFS"
-    /install.submenu.net
+    /txt_network_config
     /txt_http_proxy
   ] put
+
+  % As we have submenus and separation lines, attach empty arrays to menu
+  % structure to be filled later.
+  %
+  % Arrays must have as many entries as there are menu items.
+  xmenu .xm_submenus xmenu .xm_list get length array put
+  xmenu .xm_attr xmenu .xm_list get length array put
+
+  % separation line above 3rd (slp) and 8th (net setup) entry (0-based count)
+  xmenu .xm_attr get dup .inst_slp 1 put .inst_net_setup 1 put
+
+  % attach network config menu to 8th (net setup) entry (0-based count)
+  xmenu .xm_submenus get .inst_net_setup xmenu.net put
 
   xmenu .xm_title /txt_install_source put
 
@@ -69,13 +82,6 @@ sectorsize 0x200 eq bootdrive 0x80 eq or {
 
   % needed in case menu is only attached to install menu
   net.init
-} def
-
-
-/install.submenu.net.buf 64 string def
-/install.submenu.net {
-  /txt_network_config exec "\x09\x09%s" install.submenu.net.buf sprintf
-  install.submenu.net.buf
 } def
 
 
