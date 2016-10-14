@@ -460,9 +460,6 @@
   /splash_file xfree
 
   syslinux {
-    video.modes.list xmenu.video .xm_current get get .vm_options get
-    "%s " bc.cmd dup length add sprintf
-
     v_impaired 1 ge {
       "braille=1 " bc.cmd dup length add sprintf
     } if
@@ -486,6 +483,38 @@
         config.keymap.id "keytable=%s " bc.cmd dup length add sprintf
       } if
     } if
+  } if
+
+  xmenu.video {
+    video.textmode.current dup {
+      "%s " bc.cmd dup length add sprintf
+    } {
+      pop
+    } ifelse
+
+    video.kms.current dup {
+      "%s " bc.cmd dup length add sprintf
+    } {
+      pop
+    } ifelse
+
+    video.installer_size.current dup {
+      "%s " bc.cmd dup length add sprintf
+    } {
+      pop
+    } ifelse
+
+    video.vbe.current dup {
+      "%s " bc.cmd dup length add sprintf
+    } {
+      pop
+    } ifelse
+
+    video.hc.current dup {
+      "%s " bc.cmd dup length add sprintf
+    } {
+      pop
+    } ifelse
   } if
 
   xmenu.dud {
@@ -1286,12 +1315,6 @@
     } {
       sound.getsamplerate { sound.getsamplerate sound.setsamplerate } if
     } ifelse
-
-    xmenu.video .xm_current config.livecd { 1 } { 0 } ifelse put	% 0 = text mode, 1 = VESA
-    % redraw unless another menu is still open
-    window.current {
-      window.current .xmenu get .undef eq { video.update } if
-    } if
 
     .undef 0 idle
     kroete.file free /kroete.file .undef def
