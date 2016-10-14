@@ -374,7 +374,7 @@
 /video.hc.current {
   xmenu.video.hc .xm_current get
   dup 0 gt {
-    [ "" "highcontrast" "cyan-black" ] exch get "Y2COLORMODE=%s" video.hc.current.buf sprintf
+    [ "" "highcontrast" "cyan-black" ] exch get "screenmode=%s" video.hc.current.buf sprintf
     video.hc.current.buf
   } {
     pop .undef
