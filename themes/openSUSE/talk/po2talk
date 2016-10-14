@@ -50,7 +50,7 @@ for $msg (@{$po}) {
     $punc = length($id) == 1 ? "--punc" : "";
 
     system "$espeak $punc -f $tmp_txt -w $tmp_wav";
-    system "sox $tmp_wav -b 8 -u -c 1 -r 16000 -t .wav $tmp_snd";
+    system "sox $tmp_wav -b 8 -e unsigned-integer -c 1 -r 16000 -t .wav $tmp_snd";
     if($opt_compress) {
       system "./sc $tmp_snd $tmp_snd";
     }
