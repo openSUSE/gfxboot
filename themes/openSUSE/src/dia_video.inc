@@ -463,7 +463,7 @@
     dup .vm_options get "" ne {
       .vm_options get
     } {
-      dup .vm_width get exch .vm_height get "video=%dx%d" video.kms.current.buf sprintf
+      dup .vm_height get exch .vm_width get "video=%dx%d" video.kms.current.buf sprintf
       video.kms.current.buf
     } ifelse
   } ifelse
@@ -487,7 +487,7 @@
     pop .undef
   } {
     video.modes.installer exch get
-    dup .vm_width get exch .vm_height get "xvideo=%dx%d" video.installer_size.current.buf sprintf
+    dup .vm_height get exch .vm_width get "xvideo=%dx%d" video.installer_size.current.buf sprintf
     video.installer_size.current.buf
   } ifelse
 } def
