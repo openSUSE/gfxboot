@@ -167,7 +167,7 @@ msgstr "Disc dur"
 #. dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "Instal·lació de disc dur"
+msgstr "Instal·lació des d'un disc dur"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
@@ -208,7 +208,7 @@ msgstr "Usuari (usa \"guest\" si es deixa buit)\n"
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "Instal·lació de SMB (recurs compartit de Windows)"
+msgstr "Instal·lació per SMB (recurs compartit de Windows)"
 
 #. dialog title for http installation
 #. txt_http_title
@@ -299,7 +299,7 @@ msgid ""
 msgstr ""
 "Per carregar les actualitzacions dels controladors directament des del CD-ROM,\n"
 "escriviu els noms dels fitxers d'actualització dels controladors (separats\n"
-"per comes ",") aquí:\n"
+"per comes, ",") aquí:\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
