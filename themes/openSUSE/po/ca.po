@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: translation@suse.de\n"
 "POT-Creation-Date: 2006-05-15 15:07+0200\n"
 "PO-Revision-Date: 2007-02-19 15:09+0100\n"
-"Last-Translator: Olga López\n"
+"Last-Translator: David Medina, opensusecatala@gmail.com\n"
 "Language-Team: Catalan\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -36,11 +36,11 @@ msgstr "Continua"
 
 #. txt_install
 msgid "Installation"
-msgstr "Instal·lació"
+msgstr "Instal·la"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr "Linux -- Configuració segura"
+msgstr "Linux. Configuració segura"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
@@ -48,7 +48,7 @@ msgstr "Arrenca des del disc dur"
 
 #. txt_rescue
 msgid "Rescue System"
-msgstr "Sistema de recuperació"
+msgstr "Recuperació del sistema"
 
 #. txt_memtest
 msgid "Memory Test"
@@ -69,7 +69,7 @@ msgid ""
 "starting the text mode interface."
 msgstr ""
 "Esteu sortint del menú d'arrencada gràfic i\n"
-"iniciant la interfície del mode de text."
+"iniciant la interfície en mode de text."
 
 #. txt_help
 msgid "Help"
@@ -78,7 +78,7 @@ msgstr "Ajuda"
 #. window title for kernel loading (see txt_load_kernel)
 #. txt_load_kernel_title
 msgid "Starting..."
-msgstr "Inicialització..."
+msgstr "Inicianat..."
 
 #. Keep the three newlines!
 #. txt_load_kernel
@@ -87,7 +87,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Càrrega del nucli de Linux\n"
+"Carregant el nucli de Linux\n"
 "\n"
 "\n"
 
@@ -98,14 +98,14 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Càrrega del memtest86\n"
+"Carregant el memtest86\n"
 "\n"
 "\n"
 
 #. info box title
 #. txt_info_title
 msgid "Boot Loader"
-msgstr "Carregador de l'arrencada"
+msgstr "Carregador d'arrencada"
 
 #. error box title
 #. txt_error_title
@@ -115,7 +115,7 @@ msgstr "Error d'E/S"
 #. boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr "Canvieu el disc d'arrencada"
+msgstr "Canvia el disc d'arrencada"
 
 #. txt_insert_disk
 #, c-format
@@ -148,12 +148,12 @@ msgstr "Contrasenya"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr "Prepareu el disquet d'actualització de controladors."
+msgstr "Poseu a punt el disquet d'actualització de controladors."
 
 #. power off dialog title
 #. txt_power_off_title
 msgid "Power Off"
-msgstr "Apaga"
+msgstr "Atura"
 
 #. txt_power_off
 msgid "Halt the system now?"
@@ -167,11 +167,11 @@ msgstr "Disc dur"
 #. dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "Instal·lació del disc dur"
+msgstr "Instal·lació de disc dur"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
-msgstr "Dispositiu de disc (escaneja tots els discs si es deixa buit)\n"
+msgstr "Dispositiu de disc (explora tots els discs si es deixa buit)\n"
 
 #. txt_directory
 msgid "Directory\n"
@@ -203,12 +203,12 @@ msgstr "Instal·lació per NFS"
 #. label for smb user input
 #. txt_user2
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "Usuari (utilitza \"guest\" si es deixa buit)\n"
+msgstr "Usuari (usa \"guest\" si es deixa buit)\n"
 
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "Instal·lació de SMB (recurs compartit del Windows)"
+msgstr "Instal·lació de SMB (recurs compartit de Windows)"
 
 #. dialog title for http installation
 #. txt_http_title
@@ -233,7 +233,7 @@ msgstr "Altres opcions"
 #. label for language selection
 #. txt_language
 msgid "Language"
-msgstr "Idioma"
+msgstr "Llengua"
 
 #. txt_yes
 msgid "Yes"
@@ -271,7 +271,7 @@ msgstr "Instal·la o actualitza la partició de ZEN"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "Torna a instal·lar el carregador de l'arrencada de la partició de ZEN"
+msgstr "Torna a instal·lar el carregador d'arrencada de la partició de ZEN"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
@@ -297,9 +297,9 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
-"Per a carregar les actualitzacions dels controladors directament des del CD-ROM,\n"
-"introduïu els noms dels fitxers d'actualització de controladors (separats\n"
-"per comes ',') aquí:\n"
+"Per carregar les actualitzacions dels controladors directament des del CD-ROM,\n"
+"escriviu els noms dels fitxers d'actualització dels controladors (separats\n"
+"per comes ",") aquí:\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
@@ -311,7 +311,7 @@ msgstr "Font"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_video_mode
 msgid "Video Mode"
-msgstr ""
+msgstr "Mode de vídeo"
 
 #. driver update dialog title
 #. -> txt_dud_file_msg
@@ -324,13 +324,13 @@ msgstr "Actualització de controladors"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr "Arquit."
+msgstr "Arq."
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
 #. txt_kernel
 msgid "Kernel"
-msgstr ""
+msgstr "Nucli"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
@@ -341,29 +341,29 @@ msgstr "Per defecte"
 #. -> like in txt_safe_linux
 #. txt_kernel_safe
 msgid "Safe Settings"
-msgstr ""
+msgstr "Configuració segura"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_noacpi_install
 #. txt_kernel_noacpi
 msgid "No ACPI"
-msgstr ""
+msgstr "Sense ACPI"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_nolapic_install
 #. txt_kernel_nolapic
 msgid "No Local APIC"
-msgstr ""
+msgstr "Sense APIC local"
 
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr ""
+msgstr "Rapara el sistema instal·lat"
 
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr ""
+msgstr "Comprova el mitjà d'instal·lació"
 
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
@@ -373,93 +373,95 @@ msgstr "Teclat"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "Baixa les actualitzacions dels controladors"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr ""
+msgstr "Escriviu l'URL de l'actualització dels controladors"
 
 #. menu item
 #. txt_http_proxy
 msgid "HTTP Proxy"
-msgstr ""
+msgstr "Servidor intermediari HTTP"
 
 #. menu item
 #. txt_network_config
 msgid "Network Config"
-msgstr ""
+msgstr "Configuració de la xarxa"
 
 #. menu item
 #. txt_no_network
 msgid "No Network"
-msgstr ""
+msgstr "Sense xarxa"
 
 #. short menu item for manual network config (NOT some kind of manual)
 #. txt_manual_network
 msgid "Manual"
-msgstr ""
+msgstr "Manual"
 
 #. dialog title for manual network config
 #. txt_manual_network_title
 msgid "Manual Network Config"
-msgstr ""
+msgstr "Configuració manual de la xarxa"
 
 #. label for gateway ip
 #. txt_gateway_ip
 msgid "Gateway\n"
-msgstr ""
+msgstr "Passarel·la"
 
 #. label for dns domain name (like 'opensuse.org')
 #. txt_domain_name
 msgid "Domain Name\n"
-msgstr ""
+msgstr "Nom del domini"
 
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
 msgid ""
 "Netmask\n"
 "(or use '/N' notation with Host IP)\n"
-msgstr ""
+msgstr "Màscara de xarxa"
 
 #. label for Live CD installation
 #. txt_live_kde
 msgid "openSUSE Live (KDE)"
-msgstr ""
+msgstr "openSUSE viu (KDE)"
 
 #. label for Live CD installation
 #. txt_live_gnome
 msgid "openSUSE Live (GNOME)"
-msgstr ""
+msgstr "openSUSE viu (GNOME)"
 
 #. menu label for an update (as opposed to a new installation)
 #. txt_upgrade
 msgid "Upgrade"
-msgstr ""
+msgstr "Actualitza"
 
 #. label for name server (network setup)
 #. txt_nameservers
 msgid "Name servers, separated by spaces\n"
-msgstr ""
+msgstr "Servidors de noms, separats per espais"
 
 #. label for ip address (network setup)
 #. txt_host_ip
 msgid ""
-"IP address with network prefix\n"
+""IP address with network prefix\n""
 "(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 msgstr ""
+""Adreça IP amb prefix de xarxa\n""
+"(Exemples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 
 #. menu item to signify no KMS (KMS = kernel mode setting - keep the english acronym)
 #. txt_video_no_kms
 msgid "No KMS"
-msgstr ""
+msgstr "Sense KMS"
 
 #. menu item for booting an installed Linux system
 #. txt_systemboot
 msgid "Boot Linux System"
-msgstr ""
+msgstr "Arrenca el sistema Linux"
 
 #. menu item selecting a submenu with more entries
 #. txt_expert
 msgid "More ..."
-msgstr ""
+msgstr "Més..."
