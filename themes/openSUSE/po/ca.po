@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: translation@suse.de\n"
 "POT-Creation-Date: 2006-05-15 15:07+0200\n"
 "PO-Revision-Date: 2007-02-19 15:09+0100\n"
-"Last-Translator: David Medina\n"
+"Last-Translator: David Medina, opensusecatala@gmail.com\n"
 "Language-Team: Catalan\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,7 +22,7 @@ msgstr "D'acord"
 #. cancel button label
 #. txt_cancel
 msgid "Cancel"
-msgstr "Anul·la"
+msgstr "Cancel·la"
 
 #. reboot button label
 #. txt_reboot
@@ -78,7 +78,7 @@ msgstr "Ajuda"
 #. window title for kernel loading (see txt_load_kernel)
 #. txt_load_kernel_title
 msgid "Starting..."
-msgstr "Inici..."
+msgstr "Iniciant..."
 
 #. Keep the three newlines!
 #. txt_load_kernel
@@ -167,7 +167,7 @@ msgstr "Disc dur"
 #. dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "Instal·lació de disc dur"
+msgstr "Instal·lació des d'un disc dur"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
@@ -208,7 +208,7 @@ msgstr "Usuari (usa \"guest\" si es deixa buit)\n"
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "Instal·lació de SMB (recurs compartit de Windows)"
+msgstr "Instal·lació per SMB (recurs compartit de Windows)"
 
 #. dialog title for http installation
 #. txt_http_title
@@ -299,7 +299,7 @@ msgid ""
 msgstr ""
 "Per carregar les actualitzacions dels controladors directament des del CD-ROM,\n"
 "escriviu els noms dels fitxers d'actualització de controladors (separats\n"
-"per comes ",") aquí:\n"
+"per comes, ",") aquí:\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
@@ -447,7 +447,9 @@ msgstr "Servidors de noms, separats per espais"
 msgid ""
 "IP address with network prefix\n"
 "(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
-msgstr "(Exemples: 192.168.5.77/24 2001:db8:75:fff::3/64)"
+msgstr ""
+"Adreça IP amb prefix de xarxa\n"
+"(Exemples: 192.168.5.77/24 2001:db8:75:fff::3/64)"
 
 #. menu item to signify no KMS (KMS = kernel mode setting - keep the english acronym)
 #. txt_video_no_kms
