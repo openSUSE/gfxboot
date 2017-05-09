@@ -63,7 +63,7 @@
   [ "Danish"                  "dk"                   keymap.dk                   ]
   [ "Dutch"                   "nl"                   keymap.nl                   ]
   [ "Dvorak"                  "us-dvorak"            keymap.dvorak               ]
-  [ "English (UK)"            "gb"                   keymap.uk                   ]
+  [ "English (UK)"            "uk"                   keymap.uk                   ]
   [ "English (US)"            "us"                   .undef                      ]
   [ "Estonian"                "ee"                   keymap.et                   ]
   [ "Finnish"                 "fi"                   keymap.fi-latin1            ]
