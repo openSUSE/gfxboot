@@ -3446,6 +3446,11 @@ set_mode_45:
 		mov [pixel_bytes],ah
 		mov [color_bits],dh
 
+		; VBE linear framebuffer doesn't use win A / win B segments
+		; skip the test and proceed
+		cmp byte [fb_active],0
+		jnz set_mode_60
+
 		; we check if win A is readable _and_ writable; if not, we want
 		; at least a writable win A and a readable win B
 		; other, even more silly variations are not supported
@@ -3491,6 +3496,7 @@ set_mode_50:
 		jz set_mode_80
 		mov [window_inc],al
 		mov byte [mapped_window],0ffh
+set_mode_60:
 		mov ax,4f02h
 		mov bx,[gfx_mode]
 		int 10h
