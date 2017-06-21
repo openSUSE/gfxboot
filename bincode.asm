@@ -312,8 +312,8 @@ pals			dw 0
 gfx_mode		dw 3
 ; != 0 if we're using a vbe mode (hi byte of gfx_mode)
 vbe_active		equ gfx_mode + 1
-pixel_bits		db 0		; pixel size (8 or 16)
-color_bits		db 0		; color bits (8, 15 or 16)
+pixel_bits		db 0		; pixel size (8, 16, or 32)
+color_bits		db 0		; color bits (8, 15, 16, or 24)
 pixel_bytes		dd 0		; pixel size in bytes
 
 ; framebuffer start
@@ -3425,6 +3425,14 @@ set_mode_25:
 		mov dh,[es:edi+1fh]		; red
 		add dh,[es:edi+21h]		; green
 		add dh,[es:edi+23h]		; blue
+		mov dl,dh
+		add dl,[es:edi+25h]		; reserved
+
+		; workaround for broken VBE info
+		; assume pixel size (ah) to be at least r+g+b+reserved bits (dl)
+		cmp dl,ah
+		jbe set_mode_40
+		mov ah,dl
 		jmp set_mode_40
 set_mode_30:
 		cmp al,4			; PL 8
