@@ -312,10 +312,12 @@ pals			dw 0
 gfx_mode		dw 3
 ; != 0 if we're using a vbe mode (hi byte of gfx_mode)
 vbe_active		equ gfx_mode + 1
-pixel_bits		db 0		; pixel size (8 or 16)
-color_bits		db 0		; color bits (8, 15 or 16)
+pixel_bits		db 0		; pixel size (8, 16, or 32)
+color_bits		db 0		; color bits (8, 15, 16, or 24)
 pixel_bytes		dd 0		; pixel size in bytes
 
+; framebuffer start
+framebuffer		dd 0		; (lin)
 ; segment address of writeable window
 window_seg_w		dw 0
 ; segment address of readable window (= gfx_window_seg_w if 0)
@@ -324,6 +326,8 @@ window_seg_r		dw 0
 window_inc		db 0
 ; currently mapped window
 mapped_window		db 0
+; do we use the framebuffer for drawing?
+fb_active		db 0
 
 ; cursor position
 gfx_cur			equ $		; both x & y
@@ -3394,6 +3398,14 @@ set_mode_20:
 		pop word [screen_width]
 		push word [es:edi+14h]
 		pop word [screen_height]
+		xor eax,eax
+		test word [gfx_mode],0x4000
+		jz set_mode_23
+		mov eax,[es:edi+28h]
+set_mode_23:
+		mov [framebuffer],eax
+		or eax,eax
+		setnz byte [fb_active]
 
 		movzx eax,byte [es:edi+1dh]
 		inc eax
@@ -3413,6 +3425,14 @@ set_mode_25:
 		mov dh,[es:edi+1fh]		; red
 		add dh,[es:edi+21h]		; green
 		add dh,[es:edi+23h]		; blue
+		mov dl,dh
+		add dl,[es:edi+25h]		; reserved
+
+		; workaround for broken VBE info
+		; assume pixel size (ah) to be at least r+g+b+reserved bits (dl)
+		cmp dl,ah
+		jbe set_mode_40
+		mov ah,dl
 		jmp set_mode_40
 set_mode_30:
 		cmp al,4			; PL 8
@@ -3433,6 +3453,11 @@ set_mode_45:
 		shr ah,3
 		mov [pixel_bytes],ah
 		mov [color_bits],dh
+
+		; VBE linear framebuffer doesn't use win A / win B segments
+		; skip the test and proceed
+		cmp byte [fb_active],0
+		jnz set_mode_60
 
 		; we check if win A is readable _and_ writable; if not, we want
 		; at least a writable win A and a readable win B
@@ -3479,6 +3504,7 @@ set_mode_50:
 		jz set_mode_80
 		mov [window_inc],al
 		mov byte [mapped_window],0ffh
+set_mode_60:
 		mov ax,4f02h
 		mov bx,[gfx_mode]
 		int 10h
@@ -3501,6 +3527,17 @@ set_mode_90:
 mode_init:
 		; graphics window selectors
 
+		cmp byte [fb_active],0
+		jz mode_init_20
+
+		mov eax,[framebuffer]
+		mov si,pm_seg.screen_w16
+		call set_gdt_base_pm
+		mov si,pm_seg.screen_r16
+		call set_gdt_base_pm
+		jmp mode_init_40
+
+mode_init_20:
 		movzx eax,word [window_seg_w]
 		shl eax,4
 		mov si,pm_seg.screen_w16
@@ -3508,12 +3545,13 @@ mode_init:
 
 		movzx ecx,word [window_seg_r]
 		shl ecx,4
-		jz mode_init_05
+		jz mode_init_30
 		mov eax,ecx
-mode_init_05:
+mode_init_30:
 		mov si,pm_seg.screen_r16
 		call set_gdt_base_pm
 
+mode_init_40:
 		; pixel get/set functions
 
 		mov dword [setpixel],setpixel_8
@@ -7405,6 +7443,25 @@ prim_settype_90:
 		ret
 
 
+;; screen.framebuffer - ptr to framebuffer
+;
+; group: draw
+;
+; ( -- ptr1 )
+;
+; ptr1: ptr to framebuffer or undef if no fb mode is active
+;
+; example
+;   screen.framebuffer
+;
+
+		bits 32
+
+prim_screenframebuffer:
+		mov eax,[framebuffer]
+		jmp pr_getptr_or_none
+
+
 ;; screen.size - screen size in pixel
 ;
 ; group: gfx.screen
@@ -9608,10 +9665,23 @@ prim_setmode:
 		jmp prim_setmode_80
 prim_setmode_30:
 		xchg [gfx_mode],ax
+
+		; try fb mode first
+		or byte [gfx_mode + 1],40h
 		push eax
 		call set_mode
 		pop eax
 		jnc prim_setmode_60
+
+prim_setmode_40:
+		; fall back to windowed mode
+		and byte [gfx_mode + 1],~40h
+		push eax
+		call set_mode
+		pop eax
+		jnc prim_setmode_60
+
+                ; restore last mode
 		xchg [gfx_mode],ax
 		call set_mode
 		stc
@@ -12400,6 +12470,32 @@ set_win:
 		jz set_win_90
 		cmp [mapped_window],al
 		jz set_win_90
+		cmp byte [fb_active],0
+		jz set_win_40
+		pusha
+		mov [mapped_window],al
+		mov ah,0
+		shl eax,10h
+		add eax,[framebuffer]
+		mov si,pm_seg.screen_w16
+		call set_gdt_base_pm
+		mov si,pm_seg.screen_r16
+		call set_gdt_base_pm
+
+		mov ax,fs
+		cmp ax,pm_seg.screen_r16
+		jnz set_win_10
+		mov fs,ax
+set_win_10:
+		mov ax,gs
+		cmp ax,pm_seg.screen_w16
+		jnz set_win_20
+		mov gs,ax
+set_win_20:
+
+		popa
+		jmp set_win_90
+set_win_40:
 		pusha
 		mov [mapped_window],al
 		mov ah,[window_inc]
@@ -12821,6 +12917,23 @@ cfont_init:
 		movzx eax,word [rm_seg.es]
 		shl eax,4
 		add eax,ebp
+
+		push eax
+		mov eax,100h*16
+		call calloc
+		xchg eax,edi
+		pop eax
+
+		or edi,edi
+		jz cfont_init_90
+
+		; copy font for faster access
+		mov esi,eax
+		mov eax,edi
+		mov ecx,100h*16
+		es rep movsb
+
+cfont_init_90:
 		mov [cfont.lin],eax
 
 		mov dword [cfont_height],16

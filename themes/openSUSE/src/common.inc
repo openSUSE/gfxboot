@@ -1599,6 +1599,47 @@
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Set video mode.
+%
+% Prefer 32 bit mode with fallback to 16 bit.
+%
+% ( width height -- true|false )
+%
+/set_videomode {
+  over over
+  32 findmode setmode {
+    pop pop true
+  } {
+    16 findmode setmode
+  } ifelse
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Find fallback video mode.
+%
+% Pick first mode that is at least 640x480.
+%
+% Return 0 0 if no mode found.
+%
+% ( -- width height )
+%
+/fallback_videomode {
+  0 1 videomodes {
+    videomodeinfo .undef eq {
+     pop
+    } {
+      pop
+      over 640 ge over 480 ge and { return } if
+    } ifelse
+    pop pop
+  } for
+
+  0 0
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Set global config variables.
 %
@@ -1618,20 +1659,17 @@
 
 /screen.fallback false def
 
-config.screen.width config.screen.height 32 findmode setmode not {
-  config.screen.width config.screen.height 16 findmode setmode not {
-    /screen.fallback true def
-    640 480 16 findmode setmode not {
-      640 480 32 findmode setmode not {
-        false .end
-      } if
-    } if
-  } if
+config.screen.width config.screen.height set_videomode not {
+  fallback_videomode dup 0 eq { pop pop false .end } if
+  set_videomode not { false .end } if
+  /screen.fallback true def
 } if
 
 % prepend fallback section to layout section list
 screen.fallback {
-  /gfxconfig.layout [ "640x480" gfxconfig.layout { } forall ] gfxconfig.layout free def
+  /fb_tmp_buf 64 string def
+  screen.size exch "%dx%d" fb_tmp_buf sprintf
+  /gfxconfig.layout [ fb_tmp_buf gfxconfig.layout { } forall ] gfxconfig.layout free def
 } if
 
 

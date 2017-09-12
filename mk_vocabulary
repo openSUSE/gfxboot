@@ -17,7 +17,7 @@
   trace dtrace
   malloc free realloc memsize dumpmem
   gettype settype
-  screen.size image.colors vscreen.size monitorsize displaysizes
+  screen.size image.colors vscreen.size monitorsize displaysizes screen.framebuffer
   moveto currentpoint lineto setcolor currentcolor putpixel getpixel
   setfont currentfont fontheight strsize show settextmodecolor
   image loadpalette setpalette getpalette
