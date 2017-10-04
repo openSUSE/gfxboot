@@ -309,6 +309,8 @@ gfx_pal_tmp		dd 0		; (lin)
 pals			dw 0
 
 ; the current gfx mode
+; note: for vbe modes, bit 14 (framebuffer mode) is always 0
+; fb_active is used to indicate whether to use fb drawing functions
 gfx_mode		dw 3
 ; != 0 if we're using a vbe mode (hi byte of gfx_mode)
 vbe_active		equ gfx_mode + 1
@@ -3398,11 +3400,7 @@ set_mode_20:
 		pop word [screen_width]
 		push word [es:edi+14h]
 		pop word [screen_height]
-		xor eax,eax
-		test word [gfx_mode],0x4000
-		jz set_mode_23
 		mov eax,[es:edi+28h]
-set_mode_23:
 		mov [framebuffer],eax
 		or eax,eax
 		setnz byte [fb_active]
@@ -3505,8 +3503,12 @@ set_mode_50:
 		mov [window_inc],al
 		mov byte [mapped_window],0ffh
 set_mode_60:
-		mov ax,4f02h
 		mov bx,[gfx_mode]
+		cmp byte [fb_active],0
+		jz set_mode_70
+		or bh,40h
+set_mode_70:
+		mov ax,4f02h
 		int 10h
 		cmp ax,4fh
 		jnz set_mode_80
@@ -7458,7 +7460,11 @@ prim_settype_90:
 		bits 32
 
 prim_screenframebuffer:
+		xor eax,eax
+		cmp byte [fb_active],0
+		jz prim_screenframebuffer_90
 		mov eax,[framebuffer]
+prim_screenframebuffer_90:
 		jmp pr_getptr_or_none
 
 
@@ -9664,18 +9670,10 @@ prim_setmode:
 		mov ecx,eax
 		jmp prim_setmode_80
 prim_setmode_30:
+		; clear fb mode bit
+		and ah,~40h
 		xchg [gfx_mode],ax
 
-		; try fb mode first
-		or byte [gfx_mode + 1],40h
-		push eax
-		call set_mode
-		pop eax
-		jnc prim_setmode_60
-
-prim_setmode_40:
-		; fall back to windowed mode
-		and byte [gfx_mode + 1],~40h
 		push eax
 		call set_mode
 		pop eax
