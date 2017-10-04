@@ -138,7 +138,7 @@
     % print keycode somewhere
     -1 settransparentcolor
     white setcolor
-    500 0 moveto dup print "  " print
+    456 0 moveto "key code: " print dup print "  " print
   } if
 
   dup 0xff00 and 16 shl over 0xff and dup 0xe0 eq { pop 0 } if add /key exch def
@@ -156,7 +156,13 @@
     % print mapped key somewhere
     -1 settransparentcolor
     white setcolor
-    500 20 moveto dup print "  " print
+    500 20 moveto "key: " print dup print "  " print
+
+    % print current gfx mode & framebuffer address
+    -1 settransparentcolor
+    white setcolor
+    454 40 moveto "gfx mode: " print currentmode print
+    443 60 moveto "fb address: " print screen.framebuffer cvn print
   } if
 
   ptheme {
