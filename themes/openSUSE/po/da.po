@@ -58,7 +58,7 @@ msgstr "Hukommelsestest"
 
 #. txt_bootoptions
 msgid "Boot Options"
-msgstr "Boot-valgmuligheder"
+msgstr "Boot-tilvalg"
 
 #. window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
@@ -230,7 +230,7 @@ msgstr "Domæne\n"
 #. button label for other/more options
 #. txt_other_options
 msgid "Other Options"
-msgstr "Andre valgmuligheder"
+msgstr "Andre tilvalg"
 
 #. label for language selection
 #. txt_language
