@@ -212,6 +212,19 @@
 % ( ) == > ( )
 %
 /main.drawmenu {
+  % center menu title if x == -1
+  /menu.title.pos.x_aligned
+    menu.title.pos.x -1 eq {
+      clip.size pop menu.title strsize pop sub 2 div 0 max
+    } {
+      menu.title.pos.x
+    } ifelse
+  def
+
+  menu.title.pos.x_aligned menu.title.pos.y moveto
+  menu.title.color setcolor
+  menu.title show
+
   menu.text.normal setcolor
 
   /menu.bar.width.old menu.bar.width def

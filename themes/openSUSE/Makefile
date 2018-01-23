@@ -49,6 +49,7 @@ bootlogo: src/main.bin src/gfxboot.cfg help-install/.ready po/.ready fonts/.read
 	perl -p -e 's/^(layout=.*)/$$1,install/' src/gfxboot.cfg >bootlogo.dir/gfxboot.cfg
 	perl -pi -e 's/^(theme=).*/$$1$(THEME)/' bootlogo.dir/gfxboot.cfg
 	perl -pi -e 's/^(product=).*/$$1$(PRODUCT)/' bootlogo.dir/gfxboot.cfg
+	perl -pi -e 's/^(mainmenu.title=).*/$$1$(PRODUCT)/' bootlogo.dir/gfxboot.cfg
 	cp -rL data-install/* fonts/*.fnt po/*.tr bootlogo.dir
 	cp -rL help-install/*.hlp bootlogo.dir
 	cp src/main.bin bootlogo.dir/init
