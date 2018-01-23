@@ -202,7 +202,8 @@
     smenu.main .xm_current menu.entry put
     smenu.main .xm_title "Main Menu" put
     smenu.main .xm_text "Select a boot entry." put
-    smenu.main .xm_list [ menu.texts { menuitemmap } forall ] put
+    % careful: menuitemmap returns a static buffer
+    smenu.main .xm_list [ menu.texts { menuitemmap strdup } forall ] put
   } if
 
   /smenu smenu.main def
