@@ -1762,6 +1762,10 @@ config.livecd {
 /menu.start.x
 /menu.start.y          "mainmenu.pos"           253 170 gfxconfig.set.int2
 /menu.max.entries      "mainmenu.entries"             8 gfxconfig.set.int
+/menu.title            "mainmenu.title"              "" gfxconfig.set.str
+/menu.title.color      "mainmenu.title.color"     white gfxconfig.set.int
+/menu.title.pos.x
+/menu.title.pos.y      "mainmenu.title.pos"       -1 40 gfxconfig.set.int2
 /boot.pos.x
 /boot.pos.y            "bootopt.pos"            263 480 gfxconfig.set.int2
 /panel.normal.fg       "panel.normal.fg"          white gfxconfig.set.int
