@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2018-01-28 19:06+0000\n"
+"PO-Revision-Date: 2018-02-01 02:02+0000\n"
 "Last-Translator: scootergrisen <scootergrisen@gmail.com>\n"
 "Language-Team: Danish <https://l10n.opensuse.org/projects/gfxboot/master/da/>"
 "\n"
@@ -60,7 +60,7 @@ msgstr "Hukommelsestest"
 
 #. txt_bootoptions
 msgid "Boot Options"
-msgstr "Boot-valgmuligheder"
+msgstr "Boot-tilvalg"
 
 #. window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
