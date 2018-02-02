@@ -1,19 +1,21 @@
 # LANGUAGE translations for boot loader
 # Copyright (C) 2005 SUSE Linux GmbH
-#
+# Arif Budiman <arifpedia@gmail.com>, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
 "Report-Msgid-Bugs-To: translation@suse.de\n"
 "POT-Creation-Date: 2006-05-15 15:07+0200\n"
-"PO-Revision-Date: 2006-10-13 00:07+0700\n"
-"Last-Translator: Tedi Heriyanto <tedi.heriyanto@gmail.com>\n"
-"Language-Team: Indonesian <i18n@suse.de>\n"
+"PO-Revision-Date: 2018-02-02 03:02+0000\n"
+"Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
+"Language-Team: Indonesian "
+"<https://l10n.opensuse.org/projects/gfxboot/master/id/>\n"
+"Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: KBabel 1.11.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 2.18\n"
 
 #. ok button label
 #. txt_ok
@@ -28,7 +30,7 @@ msgstr "Batal"
 #. reboot button label
 #. txt_reboot
 msgid "Reboot"
-msgstr "Reboot"
+msgstr "Boot Ulang"
 
 #. continue button label
 #. txt_continue
@@ -41,7 +43,7 @@ msgstr "Instalasi"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr "Linux--Seting Aman"
+msgstr "Linux--Pengaturan Aman"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
@@ -70,7 +72,7 @@ msgid ""
 "starting the text mode interface."
 msgstr ""
 "Anda meninggalkan menu boot grafis dan\n"
-"memulai interface mode teks."
+"memulai antarmuka mode teks."
 
 #. txt_help
 msgid "Help"
@@ -194,7 +196,7 @@ msgstr "Password\n"
 #. label for ftp user input
 #. txt_user1
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "User (Login Anonim bila Kosong)\n"
+msgstr "Pengguna (Login Anonim bila Kosong)\n"
 
 #. dialog title for nfs installation
 #. txt_nfs_title
@@ -204,7 +206,7 @@ msgstr "Instalasi NFS"
 #. label for smb user input
 #. txt_user2
 msgid "User (Uses \"guest\" If Empty)\n"
-msgstr "User (Gunakan \"guest\" jika Kosong)\n"
+msgstr "Pengguna (Gunakan \"guest\" jika Kosong)\n"
 
 #. dialog title for smb installation
 #. txt_smb_title
@@ -247,7 +249,7 @@ msgstr "Tidak"
 #. menu item for selecting a file
 #. txt_file
 msgid "File"
-msgstr "File"
+msgstr "Berkas"
 
 #. input label: share as in "Windows share" (SMB)
 #. txt_share
@@ -299,122 +301,122 @@ msgid ""
 "by commas ',') here:\n"
 msgstr ""
 "Untuk memuatkan update driver secara langsung dari CDROM,\n"
-"masukkan nama file update driver (dipisahkan\n"
-"oleh koma ',') di sini:\n"
+"masukkan nama berkas pembaruan driver (dipisahkan\n"
+"oleh koma ',') disini:\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
 #. txt_install_source
 msgid "Source"
-msgstr ""
+msgstr "Sumber"
 
 #. video mode/display size menu title
 #. ** please keep it really short (comparable to the english text) **
 #. txt_video_mode
 msgid "Video Mode"
-msgstr ""
+msgstr "Mode video"
 
 #. driver update dialog title
 #. -> txt_dud_file_msg
 #. txt_driver_update2
 msgid "Driver Update"
-msgstr ""
+msgstr "Pembaruan Driver"
 
 #. menu label for selecting (cpu) architecture
 #. like i386, x86-64, ppc
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr ""
+msgstr "Arch"
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
 #. txt_kernel
 msgid "Kernel"
-msgstr ""
+msgstr "Kernel"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
 msgid "Default"
-msgstr ""
+msgstr "Baku"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> like in txt_safe_linux
 #. txt_kernel_safe
 msgid "Safe Settings"
-msgstr ""
+msgstr "Pengaturan Aman"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_noacpi_install
 #. txt_kernel_noacpi
 msgid "No ACPI"
-msgstr ""
+msgstr "Tanpa ACPI"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_nolapic_install
 #. txt_kernel_nolapic
 msgid "No Local APIC"
-msgstr ""
+msgstr "Tanpa APIC Lokal"
 
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr ""
+msgstr "Perbaikan Sistem Terinstal"
 
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr ""
+msgstr "Cek Media Instalasi"
 
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
 msgid "Keyboard"
-msgstr ""
+msgstr "Papan Ketik"
 
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "Unduh Pembaruan Driver"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr ""
+msgstr "Masukkan URL Pembaruan Driver\n"
 
 #. menu item
 #. txt_http_proxy
 msgid "HTTP Proxy"
-msgstr ""
+msgstr "Proxy HTTP"
 
 #. menu item
 #. txt_network_config
 msgid "Network Config"
-msgstr ""
+msgstr "Konfig Jaringan"
 
 #. menu item
 #. txt_no_network
 msgid "No Network"
-msgstr ""
+msgstr "Tanpa Jaringan"
 
 #. short menu item for manual network config (NOT some kind of manual)
 #. txt_manual_network
 msgid "Manual"
-msgstr ""
+msgstr "Manual"
 
 #. dialog title for manual network config
 #. txt_manual_network_title
 msgid "Manual Network Config"
-msgstr ""
+msgstr "Konfig Jaringan Secara Manual"
 
 #. label for gateway ip
 #. txt_gateway_ip
 msgid "Gateway\n"
-msgstr ""
+msgstr "Gateway\n"
 
 #. label for dns domain name (like 'opensuse.org')
 #. txt_domain_name
 msgid "Domain Name\n"
-msgstr ""
+msgstr "Nama Domain\n"
 
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
@@ -422,26 +424,28 @@ msgid ""
 "Netmask\n"
 "(or use '/N' notation with Host IP)\n"
 msgstr ""
+"Netmask\n"
+"(atau gunakan notasi '/N' dengan IP Host)\n"
 
 #. label for Live CD installation
 #. txt_live_kde
 msgid "openSUSE Live (KDE)"
-msgstr ""
+msgstr "openSUSE Live (KDE)"
 
 #. label for Live CD installation
 #. txt_live_gnome
 msgid "openSUSE Live (GNOME)"
-msgstr ""
+msgstr "openSUSE Live (GNOME)"
 
 #. menu label for an update (as opposed to a new installation)
 #. txt_upgrade
 msgid "Upgrade"
-msgstr ""
+msgstr "Tingkatkan"
 
 #. label for name server (network setup)
 #. txt_nameservers
 msgid "Name servers, separated by spaces\n"
-msgstr ""
+msgstr "Nama server, pisahkan dengan spasi\n"
 
 #. label for ip address (network setup)
 #. txt_host_ip
@@ -449,18 +453,20 @@ msgid ""
 "IP address with network prefix\n"
 "(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 msgstr ""
+"Alamat IP dengan awalan jaringan\n"
+"(Contoh: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 
 #. menu item to signify no KMS (KMS = kernel mode setting - keep the english acronym)
 #. txt_video_no_kms
 msgid "No KMS"
-msgstr ""
+msgstr "Tanpa KMS"
 
 #. menu item for booting an installed Linux system
 #. txt_systemboot
 msgid "Boot Linux System"
-msgstr ""
+msgstr "Boot Sistem Linux"
 
 #. menu item selecting a submenu with more entries
 #. txt_expert
 msgid "More ..."
-msgstr ""
+msgstr "Lainnya ..."
