@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader.fi\n"
-"PO-Revision-Date: 2018-02-20 15:30+0000\n"
+"PO-Revision-Date: 2018-02-20 18:02+0000\n"
 "Last-Translator: Tommi Nieminen <software@legisign.org>\n"
 "Language-Team: Finnish "
 "<https://l10n.opensuse.org/projects/gfxboot/master/fi/>\n"
@@ -214,7 +214,7 @@ msgstr "Käyttäjä (tunnuksella \"guest\", jos tyhjä)\n"
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "SMB-asennus (Windows-jako) "
+msgstr "SMB-asennus (Windows-jako)"
 
 #. dialog title for http installation
 #. txt_http_title
