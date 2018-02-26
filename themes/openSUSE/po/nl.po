@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2018-02-22 01:01+0000\n"
-"Last-Translator: Freek de Kruijf <freek@opensuse.org>\n"
+"PO-Revision-Date: 2018-02-26 17:01+0000\n"
+"Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: Dutch <https://l10n.opensuse.org/projects/gfxboot/master/nl/>"
 "\n"
 "Language: nl\n"
@@ -23,7 +23,7 @@ msgstr ""
 #. ok button label
 #. txt_ok
 msgid "OK"
-msgstr "Ok"
+msgstr "Oké"
 
 #. cancel button label
 #. txt_cancel
