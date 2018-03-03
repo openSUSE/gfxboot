@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2018-02-01 02:02+0000\n"
+"PO-Revision-Date: 2018-03-03 16:01+0000\n"
 "Last-Translator: scootergrisen <scootergrisen@gmail.com>\n"
 "Language-Team: Danish <https://l10n.opensuse.org/projects/gfxboot/master/da/>"
 "\n"
@@ -26,7 +26,7 @@ msgstr "OK"
 #. cancel button label
 #. txt_cancel
 msgid "Cancel"
-msgstr "Annullér"
+msgstr "Annuller"
 
 #. reboot button label
 #. txt_reboot
@@ -44,7 +44,7 @@ msgstr "Installation"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
-msgstr "Linux--fejlsikret"
+msgstr "Linux--fejlsikrede indstillinger"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
@@ -102,7 +102,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"Indlæser 'memtest86'\n"
+"Indlæser memtest86\n"
 "\n"
 "\n"
 
@@ -142,7 +142,7 @@ msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"Dette er ikke en <product> bootdisk.\n"
+"Dette er ikke en bootdisk til <product>.\n"
 "Indsæt bootdisk %u."
 
 #. password dialog title
@@ -152,7 +152,7 @@ msgstr "Adgangskode"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
-msgstr "Gør din driver-opdateringsdiskette klar."
+msgstr "Gør din driveropdateringsdiskette klar."
 
 #. power off dialog title
 #. txt_power_off_title
@@ -212,7 +212,7 @@ msgstr "Bruger (anvender \"guest\" hvis tom)\n"
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "SMB-installation (Windows fildeling)"
+msgstr "SMB-installation (Windows-share)"
 
 #. dialog title for http installation
 #. txt_http_title
@@ -232,7 +232,7 @@ msgstr "Domæne\n"
 #. button label for other/more options
 #. txt_other_options
 msgid "Other Options"
-msgstr "Andre valgmuligheder"
+msgstr "Andre tilvalg"
 
 #. label for language selection
 #. txt_language
@@ -255,7 +255,7 @@ msgstr "Fil"
 #. input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr "Delt ressource\n"
+msgstr "Share\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
@@ -267,15 +267,15 @@ msgstr "Manuel tilstand"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr "Konfigurér parametre på ZEN-partition"
+msgstr "Konfigurer parametre på ZEN-partition"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
-msgstr "Installér eller opdatér ZEN-partition"
+msgstr "Installer eller opdater ZEN-partition"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "Geninstallér ZEN-partitionens bootloader"
+msgstr "Geninstaller ZEN-partitionens bootloader"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
@@ -315,7 +315,7 @@ msgstr "Kilde"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_video_mode
 msgid "Video Mode"
-msgstr "Grafisk tilstand"
+msgstr "Skærmtilstand"
 
 #. driver update dialog title
 #. -> txt_dud_file_msg
@@ -362,7 +362,7 @@ msgstr "Ingen lokal APIC"
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr "Reparér installeret system"
+msgstr "Reparer installeret system"
 
 #. menu item
 #. txt_mediacheck
@@ -441,7 +441,7 @@ msgstr "openSUSE Live (GNOME)"
 #. menu label for an update (as opposed to a new installation)
 #. txt_upgrade
 msgid "Upgrade"
-msgstr "Opgradér"
+msgstr "Opgrader"
 
 #. label for name server (network setup)
 #. txt_nameservers
