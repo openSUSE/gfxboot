@@ -6,14 +6,16 @@ msgstr ""
 "Project-Id-Version: bootloader\n"
 "Report-Msgid-Bugs-To: translation@suse.de\n"
 "POT-Creation-Date: 2006-05-15 15:07+0200\n"
-"PO-Revision-Date: 2009-11-29 09:53+0100\n"
-"Last-Translator: Manuel A. Vazquez <xixirei@yahoo.es>\n"
-"Language-Team: Galician <proxecto@trasno.net>\n"
+"PO-Revision-Date: 2018-03-08 17:25+0000\n"
+"Last-Translator: Manuel Vazquez <xixirei@yahoo.es>\n"
+"Language-Team: Galician "
+"<https://l10n.opensuse.org/projects/gfxboot/master/gl/>\n"
+"Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.18\n"
 
 #. ok button label
 #. txt_ok
@@ -438,12 +440,12 @@ msgstr "openSUSE Live (GNOME)"
 #. menu label for an update (as opposed to a new installation)
 #. txt_upgrade
 msgid "Upgrade"
-msgstr ""
+msgstr "Anovar"
 
 #. label for name server (network setup)
 #. txt_nameservers
 msgid "Name servers, separated by spaces\n"
-msgstr ""
+msgstr "Nome dos servidores, separados por espazos\n"
 
 #. label for ip address (network setup)
 #. txt_host_ip
@@ -451,18 +453,20 @@ msgid ""
 "IP address with network prefix\n"
 "(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 msgstr ""
+"Enderezos IP con prefixo de rede\n"
+"(Exemplos: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 
 #. menu item to signify no KMS (KMS = kernel mode setting - keep the english acronym)
 #. txt_video_no_kms
 msgid "No KMS"
-msgstr ""
+msgstr "Sen KMS"
 
 #. menu item for booting an installed Linux system
 #. txt_systemboot
 msgid "Boot Linux System"
-msgstr ""
+msgstr "Arrancar o sistema Linux"
 
 #. menu item selecting a submenu with more entries
 #. txt_expert
 msgid "More ..."
-msgstr ""
+msgstr "Máis..."
