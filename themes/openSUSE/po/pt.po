@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bootloader.pt\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-22 03:04+0000\n"
+"PO-Revision-Date: 2018-03-22 16:05+0000\n"
 "Last-Translator: Pedro Farinha <pedro@yaroze.org>\n"
 "Language-Team: Portuguese "
 "<https://l10n.opensuse.org/projects/gfxboot/master/pt/>\n"
@@ -223,7 +223,7 @@ msgstr "Instalação por HTTP"
 #. 'driver' as in '(hardware) driver update'
 #. txt_driver_update
 msgid "Driver"
-msgstr "Driver"
+msgstr "Controlador"
 
 #. as in Windows Authentication Domain
 #. txt_domain
@@ -329,7 +329,7 @@ msgstr "Atualização do Driver"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr "Arch"
+msgstr "Arq."
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
@@ -432,12 +432,12 @@ msgstr ""
 #. label for Live CD installation
 #. txt_live_kde
 msgid "openSUSE Live (KDE)"
-msgstr ""
+msgstr "openSUSE Live (KDE)"
 
 #. label for Live CD installation
 #. txt_live_gnome
 msgid "openSUSE Live (GNOME)"
-msgstr ""
+msgstr "openSUSE Live (GNOME)"
 
 #. menu label for an update (as opposed to a new installation)
 #. txt_upgrade
