@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: YaST (@memory@)\n"
 "Report-Msgid-Bugs-To: translation@suse.de\n"
 "POT-Creation-Date: 2006-05-15 15:07+0200\n"
-"PO-Revision-Date: 2018-01-31 21:01+0000\n"
+"PO-Revision-Date: 2018-04-09 21:01+0000\n"
 "Last-Translator: David Medina <medipas@gmail.com>\n"
 "Language-Team: Catalan "
 "<https://l10n.opensuse.org/projects/gfxboot/master/ca/>\n"
@@ -211,7 +211,7 @@ msgstr "Usuari (usa \"guest\" si es deixa buit)\n"
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "Instal·lació per SMB (recurs compartit de Windows)"
+msgstr "Instal·lació per SMB (compartició de Windows)"
 
 #. dialog title for http installation
 #. txt_http_title
@@ -254,7 +254,7 @@ msgstr "Fitxer"
 #. input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr "Recurs compartit\n"
+msgstr "Compartició\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
