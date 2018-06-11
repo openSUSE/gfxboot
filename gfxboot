@@ -1885,7 +1885,7 @@ sub prepare_isolinux
     symlink "i386", "$dst/boot/x86_64" if -d "$dst/boot/i386";
   }
 
-  system "genisoimage" . ($opt_verbose ? "" : " --quiet") .
+  system "mkisofs" . ($opt_verbose ? "" : " --quiet") .
     " -o $img -f -r -no-emul-boot -boot-load-size 4 -boot-info-table" .
     " -b ${loader}isolinux.bin -hide boot.catalog $dst";
 
