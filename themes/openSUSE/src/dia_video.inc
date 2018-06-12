@@ -226,7 +226,8 @@
   xmenu.video.bios .xm_list [ video.modes.bios { .vm_label get } forall ] put
   xmenu.video.bios .xm_attr xmenu.video.bios .xm_list get length array put
   % line above 2nd entry
-  xmenu.video.bios .xm_attr get 1 1 put
+  % note: .xm_attr list might only have length 1
+  xmenu.video.bios .xm_attr get dup length 1 gt { 1 1 put } { pop } ifelse
   xmenu.video.bios .xm_title "Video BIOS Size" put
   xmenu.video.bios .xm_current 0 put
 
