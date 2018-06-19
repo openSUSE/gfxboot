@@ -2128,8 +2128,6 @@ sub run_qemu
 
   $q = "MALLOC_CHECK_=0 $q -enable-kvm" if -d "/sys/devices/system/kvm";
 
-  $q .= " -display sdl -m 512";
-
   $q .= " -boot c" if $vm_env->{boot} eq 'hd';
   $q .= " -boot d" if $vm_env->{boot} eq 'cd';
   $q .= " -boot a" if $vm_env->{boot} eq 'fd';

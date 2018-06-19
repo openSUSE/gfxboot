@@ -15,6 +15,7 @@
 /.vm_label   3 def
 /.vm_width   4 def
 /.vm_height  5 def
+/.vm_bits    6 def
 
 % .vm_flags:
 % 
@@ -23,15 +24,34 @@
 %
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-% Create sort key for video modes.
+% Compare two video modes.
 %
-% ( vm_index -- sort_index )
+% ( vm_index_1 vm_index_2 -- bool )
 %
-/vmsortindex {
-  video.modes.list exch get
-  dup
-  .vm_width get 16 shl
-  exch .vm_height get add
+% Returns true if vm_index_1 refers to a 'bigger' mode - that is: larger
+% width, larger height, *less* color bits.
+%
+% Note that for color bits the sorting order is reversed (it's needed that
+% way because we later keep only the first mode with a given resolution).
+%
+/vmcmp {
+  % first look up video mode arrays (see .vm_mode etc.)
+  video.modes.list exch get exch
+  video.modes.list exch get exch
+
+  % compare elements
+  over .vm_width get over .vm_width get ne {
+    over .vm_width get over .vm_width get gt
+  } {
+    over .vm_height get over .vm_height get ne {
+      over .vm_height get over .vm_height get gt
+    } {
+      over .vm_bits get over .vm_bits get lt
+    } ifelse
+  } ifelse
+
+  % clean up stack
+  exch pop exch pop
 } def
 
 
@@ -47,6 +67,67 @@
   video.modes.list
   5 -1 roll rot put
   video.modes.list 3 1 roll put
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% for dump_modes_* below
+/tmp_mode 64 string def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% debug code (will be optimized out when unused)
+%
+% Print video mode list as we get it from Video BIOS.
+%
+% ( string -- )
+%
+/dump_modes_initial {
+  0 0 moveto
+  0xf0f0f0 setcolor
+  800 600 fillrect
+  0xf00000 setcolor
+  "===  Press ESC to continue  ===\n" show
+  0x0000f0 setcolor
+  show
+  black setcolor
+  0 1 videomodes {
+    videomodeinfo dup .undef eq {
+      pop pop pop pop
+    } {
+      4 1 roll rot rot exch 4 -1 roll "0x%x: %d x %d @%d\n" tmp_mode sprintf
+      tmp_mode show
+      currentpoint exch pop 582 gt { currentpoint pop 270 add 36 moveto } if
+    } ifelse
+  } for
+  trace
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% debug code (will be optimized out when unused)
+%
+% ( string -- )
+%
+% Print internal video mode list ('video.modes.list' variable).
+%
+/dump_modes {
+  0 0 moveto
+  0xf0f0f0 setcolor
+  800 600 fillrect
+  0xf00000 setcolor
+  "===  Press ESC to continue  ===\n" show
+  0x0000f0 setcolor
+  show
+  black setcolor
+  video.modes.list {
+    dup .vm_bits get over .vm_height get 2 index .vm_width get 3 index .vm_mode get
+      "0x%x: %d x %d @%d\n" tmp_mode sprintf
+    pop
+    tmp_mode show
+    currentpoint exch pop 582 gt { currentpoint pop 270 add 36 moveto } if
+  } forall
+  trace
 } def
 
 
@@ -80,6 +161,8 @@
     1920 1200
   ] def
 
+  % "-- initial --\n" dump_modes_initial
+
   % Build list of VESA BIOS modes.
   %
   % Each mode is an array with .vm_* entries (see top of file).
@@ -98,10 +181,10 @@
           [
             over 0xbfff and 6 2 roll
             0x4000 and			% fb support
-            exch vm_color_bits eq and	% color bits
-            over 576 ge and		% height >= 576
-            2 index 1024 ge and		% width >= 1024
-          { 1 "" "" 5 -2 roll ] } { pop pop pop pop } ifelse
+            over vm_color_bits ge and	% color bits
+            2 index 576 ge and		% height >= 576
+            3 index 1024 ge and		% width >= 1024
+          { 1 "" "" 6 -3 roll ] } { pop pop pop pop pop } ifelse
         } ifelse
       } for
 
@@ -120,18 +203,20 @@
         [
           exch 0 2 "" "" 5 -1 roll
           video.res over get exch video.res exch 1 add get
+          0
         ]
       } for
     } if
-
   ] def
+
+  % "-- raw --\n" dump_modes
 
   % sort video mode list (by display width, then height)
 
   video.modes.list length 3 gt {
     0 1 video.modes.list length 2 sub {
       dup 1 add 1 video.modes.list length 1 sub {
-        over vmsortindex over vmsortindex gt {
+        over over vmcmp {
           over over vmsortexch
         } if
         pop
@@ -139,6 +224,8 @@
       pop
     } for
   } if
+
+  % "-- sorted --\n" dump_modes
 
   % remove duplicates
 
@@ -153,8 +240,7 @@
         } {
           over .vm_width get over .vm_width get eq
           2 index .vm_height get 2 index .vm_height get eq and {
-            over .vm_mode get over .vm_mode get max 2 index .vm_mode rot put
-            over .vm_flags get over .vm_flags get or 2 index .vm_flags rot put
+            % same display resolution - remove from list
             free
           } if
         } ifelse
@@ -162,6 +248,8 @@
     ]
     video.modes.list free
   def
+
+  % "-- dups removed --\n" dump_modes
 
   % create menu labels ("width x height")
 
@@ -176,15 +264,15 @@
 
   % installer resolutions (set via 'xmode' option)
   /video.modes.installer [
-    [ -1 0 ""           /txt_kernel_default 0 0 ]
+    [ -1 0 ""           /txt_kernel_default 0 0 0 ]
 
     video.modes.list { } forall
   ] def
 
   % kms text console resolutions (set via 'video' option)
   /video.modes.console [
-    [ -1 0 ""           /txt_kernel_default 0 0 ]
-    [ -2 0 "nomodeset"  /txt_video_no_kms   0 0 ]
+    [ -1 0 ""           /txt_kernel_default 0 0 0 ]
+    [ -2 0 "nomodeset"  /txt_video_no_kms   0 0 0 ]
 
     video.modes.list { } forall
   ] def
@@ -193,7 +281,7 @@
   %
   % Not every mode is a VESA BIOS mode - see video.res comment above.
   /video.modes.bios [
-    [ -1 0 ""           /txt_kernel_default 0 0 ]
+    [ -1 0 ""           /txt_kernel_default 0 0 0 ]
 
     video.modes.list {
       % keep only modes with VBE mode number
