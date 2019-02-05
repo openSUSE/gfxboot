@@ -21,7 +21,7 @@ sub unpack_bootlogo
 
   @files = `cpio --quiet -t <$dir/bootlogo`;
 
-  system "cd $tmp; cpio --quiet -i <../bootlogo";
+  system "cd $tmp; cpio --quiet --preserve-modification-time -i <../bootlogo";
 
   for (@files) {
     chomp;
@@ -48,7 +48,7 @@ sub unpack_bootlogo
     }
   }
 
-  open P, "| cd $tmp; cpio --quiet -o >../bootlogo";
+  open P, "| cd $tmp; cpio --quiet --reproducible --owner=+0:+0 -o >../bootlogo";
   print P "$_\n" for grep $_, @files;
   if($xdir) { print P "$_\n" for @ext }
   close P;
