@@ -56,8 +56,8 @@ bootlogo: src/main.bin src/gfxboot.cfg help-install/.ready po/.ready fonts/.read
 ifdef DEFAULT_LANG
 	@echo $(DEFAULT_LANG) >bootlogo.dir/lang
 endif
-	@sh -c 'cd bootlogo.dir; chmod +t * ; chmod -t init languages'
-	@sh -c 'cd bootlogo.dir; echo * | sed -e "s/ /\n/g" | cpio --quiet -o >../bootlogo'
+	@sh -c 'cd bootlogo.dir; chmod +t * ; chmod -t init languages ; touch -r ../src/main.bc *'
+	@sh -c 'cd bootlogo.dir; echo * | sed -e "s/ /\n/g" | cpio --quiet --reproducible --owner=+0:+0 -o >../bootlogo'
 
 message: src/main.bin src/gfxboot.cfg help-boot/.ready po/.ready fonts/.ready
 	@rm -rf message.dir
@@ -72,7 +72,8 @@ ifdef DEFAULT_LANG
 	@echo $(DEFAULT_LANG) >message.dir/lang
 	@echo $(DEFAULT_LANG) >>message.dir/languages
 endif
-	@sh -c 'cd message.dir; echo * | sed -e "s/ /\n/g" | cpio --quiet -o >../message'
+	@sh -c 'cd message.dir; touch -r ../src/main.bc *'
+	@sh -c 'cd message.dir; echo * | sed -e "s/ /\n/g" | cpio --quiet --reproducible --owner=+0:+0 -o >../message'
 
 clean:
 	@for i in $(SUBDIRS) ; do [ ! -f $$i/Makefile ] ||  make -C $$i clean || break ; done
