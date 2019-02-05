@@ -48,7 +48,11 @@ sub unpack_bootlogo
     }
   }
 
-  open P, "| cd $tmp; cpio --quiet -o >../bootlogo";
+  open P, "| cd $tmp; xargs touch -t 197001010000";
+  print P "$_\n" for grep $_, @files;
+  if($xdir) { print P "$_\n" for @ext }
+  close P;
+  open P, "| cd $tmp; cpio --quiet --reproducible --owner=+0:+0 -o >../bootlogo";
   print P "$_\n" for grep $_, @files;
   if($xdir) { print P "$_\n" for @ext }
   close P;
