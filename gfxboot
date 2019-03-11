@@ -1637,7 +1637,7 @@ sub prepare_grub
   $hdimage->type(1);
   $hdimage->label('GFXBOOT');
   $hdimage->fs('fat');
-  $hdimage->mbr('/usr/lib/boot/master-boot-code');
+  $hdimage->mbr('/usr/share/syslinux/mbr.bin');
   $hdimage->add_files(<$dst/*>);
   $hdimage->write($img);
 
@@ -1757,7 +1757,7 @@ sub prepare_lilo
   $hdimage->type(1);
   $hdimage->label('GFXBOOT');
   $hdimage->fs('fat');
-  $hdimage->mbr('/usr/lib/boot/master-boot-code');
+  $hdimage->mbr('/usr/share/syslinux/mbr.bin');
   $hdimage->add_files(<$dst/*>);
   $hdimage->write($img);
 
@@ -1991,7 +1991,7 @@ sub prepare_syslinux
   $hdimage->type(1);
   $hdimage->label('GFXBOOT');
   $hdimage->fs('fat');
-  $hdimage->mbr('/usr/lib/boot/master-boot-code');
+  $hdimage->mbr('/usr/share/syslinux/mbr.bin');
   $hdimage->add_files(<$dst/*>);
   $hdimage->write($img);
 
