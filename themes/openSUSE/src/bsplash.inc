@@ -230,12 +230,10 @@
   /b2_ok false def
 
   /b2_text "text.jpg" readimage def
-  % /b2_spot "spotlite.jpg" readimage def
 
   b2_text .undef eq { return } if
 
   /b2_text_tmp b2_text imgsize 0 0 moveto savescreen def
-  % /b2_spot_tmp b2_spot imgsize 0 0 moveto savescreen def
 
   560 120 moveto
   /b2_orig b2_text imgsize savescreen def
@@ -288,17 +286,11 @@
   b2_idx b2_start lt { false return } if
 
   b2_buf b2_orig over length memcpy
-
   b2_text_tmp b2_text over length memcpy
-  0 255 b2_idx b2_start sub 20 mul sub 0 max b2_text_tmp blend
 
-  % b2_spot_tmp b2_spot over length memcpy
-  % 0 255 b2_idx b2_start sub 20 mul sub 0 max b2_spot_tmp blend
-
-  % 0 0 moveto
-  % 0x80ff80 b2_spot_tmp b2_buf blend
+  % blend b2_text_tmp over b2_buf, store result in b2_buf
   0 0 moveto
-  0xffffff b2_text_tmp b2_buf blend
+  b2_text_tmp b2_idx b2_start sub 20 mul 255 min b2_buf blend
 
   560 120 moveto b2_buf restorescreen
 
