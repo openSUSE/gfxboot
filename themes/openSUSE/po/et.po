@@ -5,14 +5,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bootloader.et\n"
 "POT-Creation-Date: 2003-03-04 15:08+0100\n"
-"PO-Revision-Date: 2007-10-04 23:04+0300\n"
-"Last-Translator: Ain Vagula <avagula@gmail.com>\n"
-"Language-Team: Estonian <linux-ee@lists.eenet.ee>\n"
+"PO-Revision-Date: 2019-10-23 07:53+0000\n"
+"Last-Translator: Jaanus Ojangu <jaanus.ojangu@gmail.com>\n"
+"Language-Team: Estonian <https://l10n.opensuse.org/projects/gfxboot/master/"
+"et/>\n"
+"Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
-"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.6.1\n"
 
 #. ok button label
 #. txt_ok
@@ -363,7 +365,7 @@ msgstr "Paigaldatud süsteemi parandamine"
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr ""
+msgstr "Kontrolli paigalduse andmekandjat"
 
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
@@ -373,47 +375,47 @@ msgstr "Klaviatuur"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr ""
+msgstr "Laadige alla draiveri uuendus"
 
 #. input label
 #. txt_dud_enter_url
 msgid "Enter Driver Update URL\n"
-msgstr ""
+msgstr "Sisestage draiveri uuenduse URL\n"
 
 #. menu item
 #. txt_http_proxy
 msgid "HTTP Proxy"
-msgstr ""
+msgstr "HTTP Proxy"
 
 #. menu item
 #. txt_network_config
 msgid "Network Config"
-msgstr ""
+msgstr "Võrgu konfigureerimine"
 
 #. menu item
 #. txt_no_network
 msgid "No Network"
-msgstr ""
+msgstr "Võrku ei ole"
 
 #. short menu item for manual network config (NOT some kind of manual)
 #. txt_manual_network
 msgid "Manual"
-msgstr ""
+msgstr "Käsitsi"
 
 #. dialog title for manual network config
 #. txt_manual_network_title
 msgid "Manual Network Config"
-msgstr ""
+msgstr "Käsitsi võrgu seadistamine"
 
 #. label for gateway ip
 #. txt_gateway_ip
 msgid "Gateway\n"
-msgstr ""
+msgstr "Gateway - sisendlüüs\n"
 
 #. label for dns domain name (like 'opensuse.org')
 #. txt_domain_name
 msgid "Domain Name\n"
-msgstr ""
+msgstr "Domeeni nimi\n"
 
 #. label for netmask; 'Host IP' refers to label txt_host_ip above
 #. txt_netmask
@@ -421,26 +423,28 @@ msgid ""
 "Netmask\n"
 "(or use '/N' notation with Host IP)\n"
 msgstr ""
+"Võrgumask\n"
+"(või kasutage hosti IP-ga märget '/ N')\n"
 
 #. label for Live CD installation
 #. txt_live_kde
 msgid "openSUSE Live (KDE)"
-msgstr ""
+msgstr "openSUSE Live (KDE) paigaldus"
 
 #. label for Live CD installation
 #. txt_live_gnome
 msgid "openSUSE Live (GNOME)"
-msgstr ""
+msgstr "openSUSE Live (GNOME) paigaldus"
 
 #. menu label for an update (as opposed to a new installation)
 #. txt_upgrade
 msgid "Upgrade"
-msgstr ""
+msgstr "Täiendamine"
 
 #. label for name server (network setup)
 #. txt_nameservers
 msgid "Name servers, separated by spaces\n"
-msgstr ""
+msgstr "Nimeserverid, eraldatud tühikutega\n"
 
 #. label for ip address (network setup)
 #. txt_host_ip
@@ -448,18 +452,20 @@ msgid ""
 "IP address with network prefix\n"
 "(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 msgstr ""
+"IP-aadress koos võrgu prefiksiga\n"
+"(Näited: 192.168.5.77/24 2001: db8:75:fff::3/64)\n"
 
 #. menu item to signify no KMS (KMS = kernel mode setting - keep the english acronym)
 #. txt_video_no_kms
 msgid "No KMS"
-msgstr ""
+msgstr "KMS puudub"
 
 #. menu item for booting an installed Linux system
 #. txt_systemboot
 msgid "Boot Linux System"
-msgstr ""
+msgstr "Käivita Linux"
 
 #. menu item selecting a submenu with more entries
 #. txt_expert
 msgid "More ..."
-msgstr ""
+msgstr "Rohkem ..."
