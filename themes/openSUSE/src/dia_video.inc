@@ -301,14 +301,14 @@
   xmenu.video.installer .xm_attr xmenu.video.installer .xm_list get length array put
   % line above 2nd entry
   xmenu.video.installer .xm_attr get 1 1 put
-  xmenu.video.installer .xm_title "Installer Size" put
+  xmenu.video.installer .xm_title /txt_installer_size put
   xmenu.video.installer .xm_current 0 put
 
   xmenu.video.console .xm_list [ video.modes.console { .vm_label get } forall ] put
   xmenu.video.console .xm_attr xmenu.video.console .xm_list get length array put
   % line above 3rd entry
   xmenu.video.console .xm_attr get 2 1 put
-  xmenu.video.console .xm_title "Text Console Size" put
+  xmenu.video.console .xm_title /txt_console_size put
   xmenu.video.console .xm_current 0 put
 
   xmenu.video.bios .xm_list [ video.modes.bios { .vm_label get } forall ] put
@@ -316,14 +316,14 @@
   % line above 2nd entry
   % note: .xm_attr list might only have length 1
   xmenu.video.bios .xm_attr get dup length 1 gt { 1 1 put } { pop } ifelse
-  xmenu.video.bios .xm_title "Video BIOS Size" put
+  xmenu.video.bios .xm_title /txt_video_bios_size put
   xmenu.video.bios .xm_current 0 put
 
   % create screen mode submenu
 
   /xmenu.video.hc .xm_size array def
-  xmenu.video.hc .xm_list [ "Default" "High Contrast" "White on Black" "Cyan on Black" ] put
-  xmenu.video.hc .xm_title "Color Mode" put
+  xmenu.video.hc .xm_list [ /txt_kernel_default /txt_high_contrast /txt_white_on_black /txt_cyan_on_black ] put
+  xmenu.video.hc .xm_title /txt_color_mode put
   xmenu.video.hc .xm_current 0 put
 
   % now build the video mode menu out of the submenus above
@@ -338,12 +338,12 @@
   ] def
 
   xmenu .xm_list [
-    "Installer Size"
-    "Text Console Size"
-    "Video BIOS Size"
+    /txt_installer_size
+    /txt_console_size
+    /txt_video_bios_size
     /txt_text_mode
-    "Color Mode"
-    "Screen Reader"
+    /txt_color_mode
+    /txt_screen_reader
   ] put
 
   % As we have checkmarks, attach empty array to menu to hold checkmark states.

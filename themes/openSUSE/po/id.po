@@ -470,3 +470,44 @@ msgstr "Boot Sistem Linux"
 #. txt_expert
 msgid "More ..."
 msgstr "Lainnya ..."
+
+#. menu label for choosing installer screen size
+#. txt_installer_size
+msgid "Installer Size"
+msgstr ""
+
+#. menu label for choosing text console size
+#. txt_console_size
+msgid "Text Console Size"
+msgstr ""
+
+#. menu label for choosing screen size via BIOS
+#. txt_video_bios_size
+msgid "Video BIOS Size"
+msgstr ""
+
+#. menu label for choosing the color scheme of the installer
+#. txt_color_mode
+msgid "Color Mode"
+msgstr ""
+
+#. menu label for activating a screen reader (app reading screen content for blind people)
+#. txt_screen_reader
+msgid "Screen Reader"
+msgstr ""
+
+#. menu label for a color mode (cf. /txt_color_mode)
+#. txt_high_contrast
+msgid "High Contrast"
+msgstr ""
+
+#. menu label for a color mode (cf. /txt_color_mode)
+#. txt_white_on_black
+msgid "White on Black"
+msgstr ""
+
+#. menu label for a color mode (cf. /txt_color_mode)
+#. txt_cyan_on_black
+msgid "Cyan on Black"
+msgstr ""
+
