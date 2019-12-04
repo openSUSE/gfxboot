@@ -51,6 +51,7 @@
   [ "it_IT" "it"                   false "Italiano" ]						% Italian
   [ "ja_JP" "jp"                   false "日本語" ]						% Japanese
   [ "jv_ID" "us"                   false "Basa Jawa" ]						% Javanese
+  [ "kk_KZ" "us"                   false "Қазақша" ]						% Kazakh
 % [ "km_KH" "khmer"                false "\u1781\u17d2\u1798\u17c2\u179a" ]			% Khmer
   [ "km_KH" "khmer"                false "Khmer" ]						% Khmer
   [ "ko_KR" "kr"                   false "한글" ]						% Korean
