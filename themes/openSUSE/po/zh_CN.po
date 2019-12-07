@@ -4,12 +4,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2016-06-01 12:23\n"
-"Last-Translator: Novell language <language@novell.com>\n"
-"Language-Team: Novell language <language@novell.com>\n"
+"PO-Revision-Date: 2019-12-07 16:54+0000\n"
+"Last-Translator: Kevin Suo <suokunlong@126.com>\n"
+"Language-Team: Chinese (China) <https://l10n.opensuse.org/projects/gfxboot/"
+"master/zh_CN/>\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 3.6.1\n"
 
 #. ok button label
 #. txt_ok
@@ -24,7 +28,7 @@ msgstr "取消"
 #. reboot button label
 #. txt_reboot
 msgid "Reboot"
-msgstr "重引导"
+msgstr "重启"
 
 #. continue button label
 #. txt_continue
@@ -45,7 +49,7 @@ msgstr "从硬盘引导"
 
 #. txt_rescue
 msgid "Rescue System"
-msgstr "救援系统"
+msgstr "急救系统"
 
 #. txt_memtest
 msgid "Memory Test"
@@ -141,7 +145,7 @@ msgstr ""
 #. password dialog title
 #. txt_password_title
 msgid "Password"
-msgstr "口令"
+msgstr "密码"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
@@ -154,7 +158,7 @@ msgstr "关闭电源"
 
 #. txt_power_off
 msgid "Halt the system now?"
-msgstr "是否立即暂停系统？"
+msgstr "是否现在停止系统？"
 
 #. menu entry for hard disk installation
 #. txt_harddisk
@@ -185,7 +189,7 @@ msgstr "服务器\n"
 
 #. txt_password
 msgid "Password\n"
-msgstr "口令\n"
+msgstr "密码\n"
 
 #. label for ftp user input
 #. txt_user1
@@ -260,7 +264,7 @@ msgstr "手动模式"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
-msgstr "在 ZEN 分区上配置参数"
+msgstr "配置 ZEN 分区参数"
 
 #. txt_zenInstall
 msgid "Install or Update ZEN Partition"
@@ -321,7 +325,7 @@ msgstr "驱动程序更新"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr "存档"
+msgstr "体系架构"
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
@@ -360,7 +364,7 @@ msgstr "修复已安装系统"
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr "检查安装媒体"
+msgstr "检查安装媒介"
 
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
@@ -468,40 +472,39 @@ msgstr "更多..."
 #. menu label for choosing installer screen size
 #. txt_installer_size
 msgid "Installer Size"
-msgstr ""
+msgstr "安装界面大小"
 
 #. menu label for choosing text console size
 #. txt_console_size
 msgid "Text Console Size"
-msgstr ""
+msgstr "文本控制台大小"
 
 #. menu label for choosing screen size via BIOS
 #. txt_video_bios_size
 msgid "Video BIOS Size"
-msgstr ""
+msgstr "视频 BIOS 大小"
 
 #. menu label for choosing the color scheme of the installer
 #. txt_color_mode
 msgid "Color Mode"
-msgstr ""
+msgstr "色彩模式"
 
 #. menu label for activating a screen reader (app reading screen content for blind people)
 #. txt_screen_reader
 msgid "Screen Reader"
-msgstr ""
+msgstr "屏幕阅读器"
 
 #. menu label for a color mode (cf. /txt_color_mode)
 #. txt_high_contrast
 msgid "High Contrast"
-msgstr ""
+msgstr "高对比度"
 
 #. menu label for a color mode (cf. /txt_color_mode)
 #. txt_white_on_black
 msgid "White on Black"
-msgstr ""
+msgstr "黑底白字"
 
 #. menu label for a color mode (cf. /txt_color_mode)
 #. txt_cyan_on_black
 msgid "Cyan on Black"
-msgstr ""
-
+msgstr "黑底青字"
