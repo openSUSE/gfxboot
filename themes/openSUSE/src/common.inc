@@ -647,7 +647,7 @@
 
   syslinux {
     % find out initrd sizes for kernel loading progress bar
-    /progress_extra 0 def
+    /progress_extra config.initrd.size sectorsize div 1 add def
     bc.cmd "initrd" bootopt.find dup .undef ne {
       "initrd=" length add
       dup dup skipnonspaces
@@ -1775,6 +1775,9 @@ config.livecd {
 /keymap.default        "keymap"                      "" gfxconfig.set.str
 /config.addopt.lang    "addopt.lang"              false gfxconfig.set.bool
 /config.addopt.keytable "addopt.keytable"         false gfxconfig.set.bool
+
+% default value for initrd size (in bytes)
+/config.initrd.size    "initrd.size"                  0 gfxconfig.set.int
 
 /install.install       "install"                     "" gfxconfig.set.str
 /install.http.server   "install.http.server"         "" gfxconfig.set.str

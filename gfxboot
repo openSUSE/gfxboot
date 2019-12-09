@@ -1797,6 +1797,9 @@ sub prepare_isolinux
   $comboot = "$opt_syslinux/usr/share/syslinux/gfxboot.com" unless -f $comboot;
   $comboot = 0 unless -f $comboot;
 
+  # syslinux 6.x
+  $opt_no_unpack = 1 if -r "$opt_syslinux/usr/share/syslinux/libcom32.c32";
+
   my $menu = fake_menu 'install';
 
   if($opt_verbose) {
@@ -1867,6 +1870,12 @@ sub prepare_isolinux
   system "cp $opt_syslinux/usr/share/syslinux/isolinux.bin $dst/$loader" and die "error: no isolinux\n";
   system "cp $comboot $dst/$loader" if $comboot;
 
+  for my $f ("ldlinux.c32", "libcom32.c32") {
+    if(-r "$opt_syslinux/usr/share/syslinux/$f" ) {
+      system "cp $opt_syslinux/usr/share/syslinux/$f $dst/$loader"
+    }
+  }
+
   for (@opt_test_addfiles) {
     system "cp -r $_ $dst/${loader}" and die "error copying file: $_\n";
   }
@@ -1911,6 +1920,9 @@ sub prepare_syslinux
   $comboot = "$opt_syslinux/usr/share/syslinux/gfxboot.c32";
   $comboot = "$opt_syslinux/usr/share/syslinux/gfxboot.com" unless -f $comboot;
   $comboot = 0 unless -f $comboot;
+
+  # syslinux 6.x
+  $opt_no_unpack = 1 if -r "$opt_syslinux/usr/share/syslinux/libcom32.c32";
 
   my $menu = fake_menu 'install';
 
@@ -2026,6 +2038,9 @@ sub prepare_pxelinux
   $comboot = "$opt_syslinux/usr/share/syslinux/gfxboot.com" unless -f $comboot;
   $comboot = 0 unless -f $comboot;
 
+  # syslinux 6.x
+  $opt_no_unpack = 1 if -r "$opt_syslinux/usr/share/syslinux/libcom32.c32";
+
   my $menu = fake_menu 'install';
 
   if($opt_verbose) {
@@ -2095,6 +2110,12 @@ sub prepare_pxelinux
 
   system "cp $opt_syslinux/usr/share/syslinux/pxelinux.0 $dst/$loader" and die "error: no pxelinux\n";
   system "cp $comboot $dst/$loader" if $comboot;
+
+  for my $f ("ldlinux.c32", "libcom32.c32") {
+    if(-r "$opt_syslinux/usr/share/syslinux/$f" ) {
+      system "cp $opt_syslinux/usr/share/syslinux/$f $dst/$loader"
+    }
+  }
 
   for (@opt_test_addfiles) {
     system "cp -r $_ $dst/${loader}" and die "error copying file: $_\n";
