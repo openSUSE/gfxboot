@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2019-12-05 21:54+0000\n"
+"PO-Revision-Date: 2019-12-10 15:54+0000\n"
 "Last-Translator: Sarah Kriesch <ada.lovelace@gmx.de>\n"
 "Language-Team: German <https://l10n.opensuse.org/projects/gfxboot/master/de/>"
 "\n"
@@ -485,7 +485,7 @@ msgstr "Textkonsolen-Größe"
 #. menu label for choosing screen size via BIOS
 #. txt_video_bios_size
 msgid "Video BIOS Size"
-msgstr ""
+msgstr "Video-BIOS-Größe"
 
 #. menu label for choosing the color scheme of the installer
 #. txt_color_mode
@@ -495,7 +495,7 @@ msgstr "Farben-Modus"
 #. menu label for activating a screen reader (app reading screen content for blind people)
 #. txt_screen_reader
 msgid "Screen Reader"
-msgstr ""
+msgstr "Bildschirmleser"
 
 #. menu label for a color mode (cf. /txt_color_mode)
 #. txt_high_contrast
