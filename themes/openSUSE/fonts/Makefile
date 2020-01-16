@@ -31,8 +31,9 @@ fonts: 16x16.fnt
 	-f Loma:size=17:c=0x0e81-0x0eff:bold=0:dy=-2 \
 	-f KhmerOS_sys:size=16:c=0x1780-0x17f9:dy=-2 \
 	-f DejaVuSans:size=14 \
+	-f ipag:size=17:nobitmap=1:autohint=1 \
 	-f uming:size=17:nobitmap=1:autohint=1 \
-	-f gulim:size=17:bold=0:nobitmap=1:autohint=1 \
+	-f gulim:size=17:nobitmap=1:autohint=1 \
 	16x16.fnt >16x16.fnt.log
 	rm -f tmp.txt
 
