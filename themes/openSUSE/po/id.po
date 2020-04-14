@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: bootloader\n"
 "Report-Msgid-Bugs-To: translation@suse.de\n"
 "POT-Creation-Date: 2006-05-15 15:07+0200\n"
-"PO-Revision-Date: 2019-11-05 14:53+0000\n"
-"Last-Translator: M. Edwin Zakaria <medwin@opensuse.org>\n"
+"PO-Revision-Date: 2020-05-02 19:51+0000\n"
+"Last-Translator: Kukuh Syafaat <syafaatkukuh@gmail.com>\n"
 "Language-Team: Indonesian <https://l10n.opensuse.org/projects/gfxboot/master/"
 "id/>\n"
 "Language: id\n"
@@ -47,7 +47,7 @@ msgstr "Pengaturan Linux--Aman"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
-msgstr "Boot dari Hard Disk"
+msgstr "Boot dari Cakram Keras"
 
 #. txt_rescue
 msgid "Rescue System"
@@ -160,17 +160,17 @@ msgstr "Matikan Daya"
 
 #. txt_power_off
 msgid "Halt the system now?"
-msgstr "Halt sistem sekarang?"
+msgstr "Hentikan sistem sekarang?"
 
 #. menu entry for hard disk installation
 #. txt_harddisk
 msgid "Hard Disk"
-msgstr "Hard Disk"
+msgstr "Cakram Keras"
 
 #. dialog title for hard disk installation
 #. txt_harddisk_title
 msgid "Hard Disk Installation"
-msgstr "Pemasangan Hard Disk"
+msgstr "Pemasangan Cakram Kerass"
 
 #. txt_hd_diskdevice
 msgid "Disk Device (Scans All Disks If Empty)\n"
@@ -196,7 +196,7 @@ msgstr "Kata Sandi\n"
 #. label for ftp user input
 #. txt_user1
 msgid "User (Anonymous Login If Empty)\n"
-msgstr "Pengguna (Login Anonim bila Kosong)\n"
+msgstr "Pengguna (Masuk sebagai Anonim bila Kosong)\n"
 
 #. dialog title for nfs installation
 #. txt_nfs_title
@@ -211,7 +211,7 @@ msgstr "Pengguna (Gunakan \"guest\" jika Kosong)\n"
 #. dialog title for smb installation
 #. txt_smb_title
 msgid "SMB (Windows Share) Installation"
-msgstr "Pemasangan SMB (Share Windows)"
+msgstr "Pemasangan SMB (Berbagi Windows)"
 
 #. dialog title for http installation
 #. txt_http_title
@@ -254,7 +254,7 @@ msgstr "Berkas"
 #. input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr "Share\n"
+msgstr "Berbagi\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
@@ -376,7 +376,7 @@ msgstr "Papan Tik"
 #. menu title
 #. txt_dud_download
 msgid "Download Driver Update"
-msgstr "Unduh Pemutakhrian Penggerak"
+msgstr "Unduh Pemutakhiran Penggerak"
 
 #. input label
 #. txt_dud_enter_url
@@ -474,40 +474,39 @@ msgstr "Lainnya ..."
 #. menu label for choosing installer screen size
 #. txt_installer_size
 msgid "Installer Size"
-msgstr ""
+msgstr "Ukuran Pemasang"
 
 #. menu label for choosing text console size
 #. txt_console_size
 msgid "Text Console Size"
-msgstr ""
+msgstr "Ukuran Konsol Teks"
 
 #. menu label for choosing screen size via BIOS
 #. txt_video_bios_size
 msgid "Video BIOS Size"
-msgstr ""
+msgstr "Ukuran BIOS Video"
 
 #. menu label for choosing the color scheme of the installer
 #. txt_color_mode
 msgid "Color Mode"
-msgstr ""
+msgstr "Mode Warna"
 
 #. menu label for activating a screen reader (app reading screen content for blind people)
 #. txt_screen_reader
 msgid "Screen Reader"
-msgstr ""
+msgstr "Pembaca Layar"
 
 #. menu label for a color mode (cf. /txt_color_mode)
 #. txt_high_contrast
 msgid "High Contrast"
-msgstr ""
+msgstr "Kontras Tinggi"
 
 #. menu label for a color mode (cf. /txt_color_mode)
 #. txt_white_on_black
 msgid "White on Black"
-msgstr ""
+msgstr "Putih pada Hitam"
 
 #. menu label for a color mode (cf. /txt_color_mode)
 #. txt_cyan_on_black
 msgid "Cyan on Black"
-msgstr ""
-
+msgstr "Cyan pada hitam"
