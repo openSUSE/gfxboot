@@ -170,6 +170,7 @@
   dup "otheropts"  eq { pop [ /panel.otheropts /panel.otheropts.width /panel.otheropts.update /otheropts.init ] return } if
   dup "dud"        eq { pop [ /panel.dud /panel.dud.width /panel.dud.update /dud.init ] return } if
   dup "keymap"     eq { pop [ /panel.keymap /panel.keymap.width /panel.keymap.update /keymap.init ] return } if
+  dup "extralang"  eq { pop [ /panel.extralang /panel.extralang.width /panel.extralang.update /extralang.init ] return } if
 
   dup "bits"       eq { pop
     .undef
