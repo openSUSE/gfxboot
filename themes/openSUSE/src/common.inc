@@ -1305,7 +1305,7 @@
     moveto setcolor
   } if
 
-  dup keyF8 eq syslinux and {
+  dup keyF11 eq syslinux and {
     kroete.file .undef eq { /kroete.file "kroete.dat" findfile def } if
     kroete.file kroete.dir idle
     /kroete.dir kroete.dir 1 xor def
@@ -1341,7 +1341,7 @@
     moveto setcolor
   } if
 
-  dup keyShiftF8 eq debug 3 ge and {
+  dup keyShiftF11 eq debug 3 ge and {
     currentcolor debug 1 and { white } { black } ifelse setcolor
 
     currentpoint 300 0 moveto
@@ -1373,10 +1373,6 @@
 
   dup keyShiftF10 eq {
     /debug debug 1 add def
-  } if
-
-  dup keyShiftF11 eq {
-    400 0 moveto "ani_%04d.jpg" play_movie
   } if
 
   dup keyShiftF1 eq {
@@ -1413,47 +1409,6 @@
 
     sound.done
 
-  } if
-
-  dup keyF11 eq debug 1 ge and {
-
-    /dit {
-      dup 0xff and rand 0xff and gt { 0xff add } if
-      8 shr
-    } def
-
-    /c13.r rand 0x7f00 and def
-    /c02_13.r rand 0x7f00 and c13.r sub def
-    /c23.r rand 0x7f00 and def
-    /c01_23.r rand 0x7f00 and c23.r sub def
-    /c13.g rand 0x7f00 and def
-    /c02_13.g rand 0x7f00 and c13.g sub def
-    /c23.g rand 0x7f00 and def
-    /c01_23.g rand 0x7f00 and c23.g sub def
-    /c13.b rand 0x7f00 and def
-    /c02_13.b rand 0x7f00 and c13.b sub def
-    /c23.b rand 0x7f00 and def
-    /c01_23.b rand 0x7f00 and c23.b sub def
-
-    screen.size /h exch def /w exch def
-
-    0 1 screen.size exch pop {
-      0 1 screen.size pop {
-        over moveto
-
-        currentpoint c01_23.r mul h div exch c02_13.r mul w div add c13.r add c23.r add
-        dit 0 max 0xff min 16 shl
-        currentpoint c01_23.g mul h div exch c02_13.g mul w div add c13.g add c23.g add
-        dit 0 max 0xff min  8 shl
-        currentpoint c01_23.b mul h div exch c02_13.b mul w div add c13.b add c23.b add
-        dit 0 max 0xff min add add
-
-        setcolor putpixel
-      } for
-      pop
-    } for
-
-    pop 0
   } if
 
   dup keyF12 eq debug 6 ge and {
@@ -1775,6 +1730,7 @@ config.livecd {
 /keymap.default        "keymap"                      "" gfxconfig.set.str
 /config.addopt.lang    "addopt.lang"              false gfxconfig.set.bool
 /config.addopt.keytable "addopt.keytable"         false gfxconfig.set.bool
+/config.extralang.locales "extralang.locales"       [ ] gfxconfig.set.array_str
 
 % default value for initrd size (in bytes)
 /config.initrd.size    "initrd.size"                  0 gfxconfig.set.int
