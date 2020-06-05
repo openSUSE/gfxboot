@@ -6,16 +6,16 @@ msgstr ""
 "Project-Id-Version: bootloader\n"
 "Report-Msgid-Bugs-To: translation@suse.de\n"
 "POT-Creation-Date: 2006-05-15 15:07+0200\n"
-"PO-Revision-Date: 2018-03-08 17:25+0000\n"
+"PO-Revision-Date: 2020-06-30 08:32+0000\n"
 "Last-Translator: Manuel Vazquez <xixirei@yahoo.es>\n"
-"Language-Team: Galician "
-"<https://l10n.opensuse.org/projects/gfxboot/master/gl/>\n"
+"Language-Team: Galician <https://l10n.opensuse.org/projects/gfxboot/master/"
+"gl/>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.18\n"
+"X-Generator: Weblate 3.6.1\n"
 
 #. ok button label
 #. txt_ok
@@ -47,7 +47,7 @@ msgstr "Linux--Opcións Seguras"
 
 #. txt_boot_harddisk
 msgid "Boot from Hard Disk"
-msgstr "Arrincar desde o disco duro"
+msgstr "Arrancar desde o disco duro"
 
 #. txt_rescue
 msgid "Rescue System"
@@ -59,7 +59,7 @@ msgstr "Proba de memoria"
 
 #. txt_bootoptions
 msgid "Boot Options"
-msgstr "Opcións de arrinque"
+msgstr "Opcións de arranque"
 
 #. window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
@@ -71,7 +71,7 @@ msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"Está saíndo do menú gráfico de arrinque e\n"
+"Está saíndo do menú gráfico de arranque e\n"
 "está iniciando a interface en modo texto."
 
 #. txt_help
@@ -108,7 +108,7 @@ msgstr ""
 #. info box title
 #. txt_info_title
 msgid "Boot Loader"
-msgstr "Cargador de arrinque"
+msgstr "Cargador de arranque"
 
 #. error box title
 #. txt_error_title
@@ -118,12 +118,12 @@ msgstr "Erro de E/S"
 #. boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr "Cambiar o disco de arrinque"
+msgstr "Cambiar o disco de arranque"
 
 #. txt_insert_disk
 #, c-format
 msgid "Insert boot disk %u."
-msgstr "Insira o disco de arrinque %u."
+msgstr "Insira o disco de arranque %u."
 
 #. txt_insert_disk2
 #, c-format
@@ -131,8 +131,8 @@ msgid ""
 "This is boot disk %u.\n"
 "Insert boot disk %u."
 msgstr ""
-"Este é o disco de arrinque %u.\n"
-"Insira o disco de arrinque %u."
+"Este é o disco de arranque %u.\n"
+"Insira o disco de arranque %u."
 
 #. <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
 #. txt_insert_disk3
@@ -141,8 +141,8 @@ msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"Este non é un disco de arrinque de <product>.\n"
-"Insira o disco de arrinque %u."
+"Este non é un disco de arranque de <product>.\n"
+"Insira o disco de arranque %u."
 
 #. password dialog title
 #. txt_password_title
@@ -274,7 +274,7 @@ msgstr "Instalar ou actualizar partición ZEN"
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr "Reinstalar o cargador de arrinque da partición ZEN"
+msgstr "Reinstalar o cargador de arranque da partición ZEN"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
@@ -474,40 +474,39 @@ msgstr "Máis..."
 #. menu label for choosing installer screen size
 #. txt_installer_size
 msgid "Installer Size"
-msgstr ""
+msgstr "Tamaño do instalador"
 
 #. menu label for choosing text console size
 #. txt_console_size
 msgid "Text Console Size"
-msgstr ""
+msgstr "Tamaño da consola do texto"
 
 #. menu label for choosing screen size via BIOS
 #. txt_video_bios_size
 msgid "Video BIOS Size"
-msgstr ""
+msgstr "Tamaño da BIOS de vídeo"
 
 #. menu label for choosing the color scheme of the installer
 #. txt_color_mode
 msgid "Color Mode"
-msgstr ""
+msgstr "Modo de cor"
 
 #. menu label for activating a screen reader (app reading screen content for blind people)
 #. txt_screen_reader
 msgid "Screen Reader"
-msgstr ""
+msgstr "Lector de pantalla"
 
 #. menu label for a color mode (cf. /txt_color_mode)
 #. txt_high_contrast
 msgid "High Contrast"
-msgstr ""
+msgstr "Alto contraste"
 
 #. menu label for a color mode (cf. /txt_color_mode)
 #. txt_white_on_black
 msgid "White on Black"
-msgstr ""
+msgstr "Branco sobre negro"
 
 #. menu label for a color mode (cf. /txt_color_mode)
 #. txt_cyan_on_black
 msgid "Cyan on Black"
-msgstr ""
-
+msgstr "Ciano sobre negro"
