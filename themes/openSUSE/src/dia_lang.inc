@@ -82,8 +82,10 @@
   [ "vi_VN" "us"                   false "Tiếng Việt" ]						% Vietnamese
   [ "wa_BE" "be"                   false "Walon" ]						% Walloon
   [ "xh_ZA" "us"                   false "isiXhosa" ]						% Xhosa
-  [ "zh_CN" "us"                   false "简体中文" ]						% Simplified Chinese
-  [ "zh_TW" "us"                   false "繁體中文 (台灣)" ]					% Traditional Chinese
+% [ "zh_CN" "us"                   false "简体中文" ]						% Simplified Chinese
+  [ "zh_CN" "us"                   false "中文(中国)" ]						% Chinese (China)
+% [ "zh_TW" "us"                   false "繁體中文 (台灣)" ]					% Traditional Chinese
+  [ "zh_TW" "us"                   false "中文(台灣)" ]						% Chinese (Taiwan)
   [ "zu_ZA" "us"                   false "isiZulu" ]						% Zulu
 ] def
 
