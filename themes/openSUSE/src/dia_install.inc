@@ -12,22 +12,19 @@
 /proxy.option 255 string def
 
 % install types
-/.inst_cdrom	0 def
-/.inst_hd	1 def
-/.inst_slp	2 def
-/.inst_ftp	3 def
-/.inst_http	4 def
-/.inst_nfs	5 def
-/.inst_smb	6 def
-/.inst_net_setup 7 def
-/.inst_net_proxy 8 def
+/.inst_default	  0 def
+/.inst_cdrom	  1 def
+/.inst_hd	  2 def
+/.inst_slp	  3 def
+/.inst_ftp	  4 def
+/.inst_http	  5 def
+/.inst_https	  6 def
+/.inst_nfs	  7 def
+/.inst_smb	  8 def
+/.inst_net_setup  9 def
+/.inst_net_proxy 10 def
 
-/install.default .inst_cdrom def
-
-% isohybrid image booted as disk
-sectorsize 0x200 eq bootdrive 0x80 eq or {
-  /install.default .inst_hd def
-} if
+/install.default .inst_default def
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % Build install mode list.
@@ -52,11 +49,13 @@ sectorsize 0x200 eq bootdrive 0x80 eq or {
 
   % see install types (.inst_*)
   xmenu .xm_list [
+    /txt_kernel_default
     is_dvd { "DVD" } { "CD-ROM" } ifelse
     /txt_harddisk
     "SLP"
     "FTP"
     "HTTP"
+    "HTTPS"
     "NFS"
     "SMB / CIFS"
     /txt_network_config
@@ -70,10 +69,10 @@ sectorsize 0x200 eq bootdrive 0x80 eq or {
   xmenu .xm_submenus xmenu .xm_list get length array put
   xmenu .xm_attr xmenu .xm_list get length array put
 
-  % separation line above 3rd (slp) and 8th (net setup) entry (0-based count)
-  xmenu .xm_attr get dup .inst_slp 1 put .inst_net_setup 1 put
+  % separation line above cdrom entry and net setup entry
+  xmenu .xm_attr get dup .inst_cdrom 1 put .inst_net_setup 1 put
 
-  % attach network config menu to 8th (net setup) entry (0-based count)
+  % attach network config menu to net setup entry
   xmenu .xm_submenus get .inst_net_setup xmenu.net put
 
   xmenu .xm_title /txt_install_source put
@@ -97,7 +96,7 @@ sectorsize 0x200 eq bootdrive 0x80 eq or {
     xmenu .xm_current over .xm_last get put
     panel.net
   } {
-    xmenu .xm_current get dup .inst_cdrom eq exch .inst_slp eq or {
+    xmenu .xm_current get dup .inst_default eq exch dup .inst_cdrom eq exch .inst_slp eq or or {
       install.set.install.option
       /window.action actRedrawPanel def
     } {
@@ -177,6 +176,16 @@ sectorsize 0x200 eq bootdrive 0x80 eq or {
 
   dup .inst_http eq {
     dia .title txt_http_title put
+
+    % Must all be of same size!
+    dia .ed.list 2 array put
+    dia .ed.buffer.list input.edit.http put
+    dia .ed.text.list [ txt_server txt_directory ] put
+
+  } if
+
+  dup .inst_https eq {
+    dia .title txt_https_title put
 
     % Must all be of same size!
     dia .ed.list 2 array put
@@ -282,7 +291,7 @@ sectorsize 0x200 eq bootdrive 0x80 eq or {
   xmenu .xm_current get
 
   dup .inst_net_proxy ne {
-    % default: .inst_cdrom
+    % default: .inst_default
     install.option "" strcpy pop
   } if
 
@@ -312,6 +321,13 @@ sectorsize 0x200 eq bootdrive 0x80 eq or {
     dup 1 get dup 0 get '/' eq { 1 add } if
     exch 0 get
     "install=http://%s/%s" install.option sprintf
+  } if
+
+  dup .inst_https eq {
+    input.edit.http
+    dup 1 get dup 0 get '/' eq { 1 add } if
+    exch 0 get
+    "install=https://%s/%s" install.option sprintf
   } if
 
   dup .inst_nfs eq {
@@ -352,6 +368,10 @@ sectorsize 0x200 eq bootdrive 0x80 eq or {
     "install=hd://%s/%s" install.option sprintf
   } if
 
+  dup .inst_cdrom eq {
+    install.option "install=cd:/" strcpy pop
+  } if
+
   dup .inst_net_proxy eq {
     input.edit.proxy
       dup 0 get "" ne {
@@ -384,12 +404,21 @@ sectorsize 0x200 eq bootdrive 0x80 eq or {
 /install.read.config {
   install.install
   dup "cdrom" eq { /install.default .inst_cdrom def } if
+  dup "hd"    eq { /install.default .inst_hd    def } if
+  dup "disk"  eq {
+    % isohybrid image may be cdrom or hard disk
+    sectorsize 0x200 eq bootdrive 0x80 eq or {
+      /install.default .inst_hd def
+    } {
+      /install.default .inst_cdrom def
+    } ifelse
+  } if
   dup "slp"   eq { /install.default .inst_slp   def } if
   dup "ftp"   eq { /install.default .inst_ftp   def } if
   dup "http"  eq { /install.default .inst_http  def } if
+  dup "https" eq { /install.default .inst_https def } if
   dup "nfs"   eq { /install.default .inst_nfs   def } if
   dup "smb"   eq { /install.default .inst_smb   def } if
-  dup "hd"    eq { /install.default .inst_hd    def } if
   pop
 
   input.edit.http 0 get install.http.server strcpy pop
@@ -445,5 +474,4 @@ sectorsize 0x200 eq bootdrive 0x80 eq or {
 } def
 
 /url_esc_buf 256 string def
-
 
