@@ -507,3 +507,9 @@ msgstr "黒い画面に白色"
 #. txt_cyan_on_black
 msgid "Cyan on Black"
 msgstr "黒い画面に青緑"
+
+#. dialog title for https installation
+#. txt_https_title
+msgid "HTTPS Installation"
+msgstr "HTTPSインストール"
+

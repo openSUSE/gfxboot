@@ -511,3 +511,9 @@ msgstr "Weiß auf Schwarz"
 #. txt_cyan_on_black
 msgid "Cyan on Black"
 msgstr "Cyan auf Schwarz"
+
+#. dialog title for https installation
+#. txt_https_title
+msgid "HTTPS Installation"
+msgstr "HTTPS-Installation"
+

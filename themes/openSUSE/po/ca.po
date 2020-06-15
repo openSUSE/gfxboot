@@ -508,3 +508,9 @@ msgstr "Blanc sobre negre"
 #. txt_cyan_on_black
 msgid "Cyan on Black"
 msgstr "Cian sobre negre"
+
+#. dialog title for https installation
+#. txt_https_title
+msgid "HTTPS Installation"
+msgstr "Instal·lació per HTTPS"
+

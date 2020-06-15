@@ -511,3 +511,9 @@ msgstr "Hvid på sort"
 #. txt_cyan_on_black
 msgid "Cyan on Black"
 msgstr "Cyan på sort"
+
+#. dialog title for https installation
+#. txt_https_title
+msgid "HTTPS Installation"
+msgstr "HTTPS-installation"
+

@@ -514,3 +514,9 @@ msgstr "Biela na čiernej"
 #. txt_cyan_on_black
 msgid "Cyan on Black"
 msgstr "Azúrová na čiernej"
+
+#. dialog title for https installation
+#. txt_https_title
+msgid "HTTPS Installation"
+msgstr "HTTPS Inštalácia"
+

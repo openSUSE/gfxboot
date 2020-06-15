@@ -509,3 +509,9 @@ msgstr "ขาวบนดำ"
 #. txt_cyan_on_black
 msgid "Cyan on Black"
 msgstr "สีน้ำเงินเขียวบนดำ"
+
+#. dialog title for https installation
+#. txt_https_title
+msgid "HTTPS Installation"
+msgstr "ติดตั้งผ่านทาง HTTPS"
+
