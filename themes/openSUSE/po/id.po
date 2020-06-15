@@ -510,3 +510,9 @@ msgstr "Putih pada Hitam"
 #. txt_cyan_on_black
 msgid "Cyan on Black"
 msgstr "Cyan pada hitam"
+
+#. dialog title for https installation
+#. txt_https_title
+msgid "HTTPS Installation"
+msgstr "Pemasangan HTTPS"
+

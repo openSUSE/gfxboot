@@ -513,3 +513,9 @@ msgstr "Valkoinen mustalla"
 #. txt_cyan_on_black
 msgid "Cyan on Black"
 msgstr "Syaani mustalla"
+
+#. dialog title for https installation
+#. txt_https_title
+msgid "HTTPS Installation"
+msgstr "HTTPS-asennus"
+

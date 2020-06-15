@@ -512,3 +512,8 @@ msgstr ""
 msgid "Cyan on Black"
 msgstr ""
 
+#. dialog title for https installation
+#. txt_https_title
+msgid "HTTPS Installation"
+msgstr "HTTPS-telepítés"
+
