@@ -7,17 +7,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader.uk\n"
-"PO-Revision-Date: 2018-02-21 13:49+0000\n"
-"Last-Translator: Andriy Bandura <andriykopanytsia@gmail.com>\n"
-"Language-Team: Ukrainian "
-"<https://l10n.opensuse.org/projects/gfxboot/master/uk/>\n"
-"Language: uk\n"
+"PO-Revision-Date: 2020-07-02 07:27+0000\n"
+"Last-Translator: Lesath <4lesath@gmail.com>\n"
+"Language-Team: Ukrainian <https://l10n.opensuse.org/projects/gfxboot/master/"
+"uk/>\n"
+"Language: openSUSE/po/uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
-"4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 2.18\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 3.6.1\n"
 
 #. ok button label
 #. txt_ok
@@ -363,7 +363,7 @@ msgstr "Без локального APIC"
 #. main menu: start in system repair mode
 #. txt_repain_system
 msgid "Repair Installed System"
-msgstr "Поремонтувати встановлену систему"
+msgstr "Полагодити встановлену систему"
 
 #. menu item
 #. txt_mediacheck
@@ -432,12 +432,12 @@ msgstr ""
 #. label for Live CD installation
 #. txt_live_kde
 msgid "openSUSE Live (KDE)"
-msgstr "Живчик openSUSE (KDE)"
+msgstr "openSUSE Live (KDE)"
 
 #. label for Live CD installation
 #. txt_live_gnome
 msgid "openSUSE Live (GNOME)"
-msgstr "Живчик openSUSE (GNOME)"
+msgstr "openSUSE Live (GNOME)"
 
 #. menu label for an update (as opposed to a new installation)
 #. txt_upgrade
@@ -476,45 +476,44 @@ msgstr "Ще ..."
 #. menu label for choosing installer screen size
 #. txt_installer_size
 msgid "Installer Size"
-msgstr ""
+msgstr "Розмір встановлювача"
 
 #. menu label for choosing text console size
 #. txt_console_size
 msgid "Text Console Size"
-msgstr ""
+msgstr "Розмір текстової консолі"
 
 #. menu label for choosing screen size via BIOS
 #. txt_video_bios_size
 msgid "Video BIOS Size"
-msgstr ""
+msgstr "Розмір відео BIOS"
 
 #. menu label for choosing the color scheme of the installer
 #. txt_color_mode
 msgid "Color Mode"
-msgstr ""
+msgstr "Кольоровий режим"
 
 #. menu label for activating a screen reader (app reading screen content for blind people)
 #. txt_screen_reader
 msgid "Screen Reader"
-msgstr ""
+msgstr "Читач екрану"
 
 #. menu label for a color mode (cf. /txt_color_mode)
 #. txt_high_contrast
 msgid "High Contrast"
-msgstr ""
+msgstr "Високий контраст"
 
 #. menu label for a color mode (cf. /txt_color_mode)
 #. txt_white_on_black
 msgid "White on Black"
-msgstr ""
+msgstr "Біле на Чорному"
 
 #. menu label for a color mode (cf. /txt_color_mode)
 #. txt_cyan_on_black
 msgid "Cyan on Black"
-msgstr ""
+msgstr "Блакитне на Чорному"
 
 #. dialog title for https installation
 #. txt_https_title
 msgid "HTTPS Installation"
 msgstr "Встановлення через HTTPS"
-

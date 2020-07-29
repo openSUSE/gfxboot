@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2020-02-26 22:55+0000\n"
-"Last-Translator: jcsl <trcs@gmx.com>\n"
+"PO-Revision-Date: 2020-07-26 08:51+0000\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitoschido@gmail.com>\n"
 "Language-Team: Spanish <https://l10n.opensuse.org/projects/gfxboot/master/es/"
 ">\n"
 "Language: es\n"
@@ -73,8 +73,8 @@ msgid ""
 "You are leaving the graphical boot menu and\n"
 "starting the text mode interface."
 msgstr ""
-"Está saliendo del menú de arranque gráfico e\n"
-"iniciando la interfaz en modo texto."
+"Está por salir del menú de arranque gráfico e\n"
+"iniciar la interfaz en modo de texto."
 
 #. txt_help
 msgid "Help"
@@ -162,7 +162,7 @@ msgstr "Apagar"
 
 #. txt_power_off
 msgid "Halt the system now?"
-msgstr "¿Detener el sistema ahora?"
+msgstr "¿Quiere detener el sistema ahora?"
 
 #. menu entry for hard disk installation
 #. txt_harddisk
@@ -280,11 +280,11 @@ msgstr "Reinstalar el cargador de arranque de la partición ZEN"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
-msgstr "Inhabilitar partición ZEN"
+msgstr "Desactivar la partición ZEN"
 
 #. txt_zenEnable
 msgid "Enable ZEN Partition"
-msgstr "Habilitar partición ZEN"
+msgstr "Activar la partición ZEN"
 
 #. video mode menu item
 #. txt_text_mode
@@ -305,7 +305,7 @@ msgstr ""
 "Para cargar la actualización del controlador directamente desde un CD-ROM, \n"
 "introduzca los nombres de los archivos de actualización del controlador ("
 "separados\n"
-"por comas ',') aquí:\n"
+"por comas «,») aquí:\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
@@ -336,12 +336,12 @@ msgstr "Arquitectura"
 #. ** please keep it really short (comparable to the english text) **
 #. txt_kernel
 msgid "Kernel"
-msgstr "Kernel"
+msgstr "Núcleo"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
 msgid "Default"
-msgstr "Por defecto"
+msgstr "Predeterminado"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> like in txt_safe_linux
@@ -369,7 +369,7 @@ msgstr "Reparar el sistema instalado"
 #. menu item
 #. txt_mediacheck
 msgid "Check Installation Media"
-msgstr "Comprobar el medio de instalación"
+msgstr "Comprobar el soporte de instalación"
 
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
