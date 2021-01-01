@@ -2616,7 +2616,7 @@ sub pack_archive
     }
 
     if(@pack_list) {
-      open $f, "| ( cd $dir ; cpio --quiet -o ) >$file/$archive";
+      open $f, "| ( cd $dir ; cpio --quiet --reproducible --owner=+0:+0 -o ) >$file/$archive";
       print $f join("\n", @pack_list);
       close $f;
     }
@@ -2625,7 +2625,7 @@ sub pack_archive
   else {
     $file = $gfxboot_tmp->file;
 
-    $i = system "cd $dir ; find . | cpio --quiet -o >$file 2>/dev/null";
+    $i = system "cd $dir ; find . | cpio --quiet --reproducible --owner=+0:+0 -o >$file 2>/dev/null";
     die "$file: failed to create archive\n" if $i;
   }
 
