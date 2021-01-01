@@ -12,6 +12,7 @@ bootlogo: example_*.bc
 	@rm -rf $@.dir
 	@mkdir $@.dir
 	$(GFXBOOT_COMPILE) $(BFLAGS) -l $@.log -c $< $@.dir/init
+	touch --reference Makefile $@.dir/*
 	$(GFXBOOT) --archive $@.dir --pack-archive $@
 
 clean:
