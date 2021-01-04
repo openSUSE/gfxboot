@@ -13,7 +13,7 @@ bootlogo: example_*.bc font
 	@mkdir $@.dir
 	$(GFXBOOT_COMPILE) $(BFLAGS) -l $@.log -c $< $@.dir/init
 	@cp font.fnt $@.dir
-	touch --reference Makefile $@.dir/*
+	touch --reference example_02.bc $@.dir/*
 	$(GFXBOOT) --archive $@.dir --pack-archive $@
 
 font:
