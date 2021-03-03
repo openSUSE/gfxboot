@@ -1,0 +1,494 @@
+# LANGUAGE translations for boot loader
+# Copyright (C) 2005 SUSE Linux GmbH
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: bootloader\n"
+"PO-Revision-Date: 2005-07-27 11:49+0200\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: si\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. ok button label
+#. txt_ok
+msgid "OK"
+msgstr ""
+
+#. cancel button label
+#. txt_cancel
+msgid "Cancel"
+msgstr ""
+
+#. reboot button label
+#. txt_reboot
+msgid "Reboot"
+msgstr ""
+
+#. continue button label
+#. txt_continue
+msgid "Continue"
+msgstr ""
+
+#. txt_install
+msgid "Installation"
+msgstr ""
+
+#. txt_safe_linux
+msgid "Linux--Safe Settings"
+msgstr ""
+
+#. txt_boot_harddisk
+msgid "Boot from Hard Disk"
+msgstr ""
+
+#. txt_rescue
+msgid "Rescue System"
+msgstr ""
+
+#. txt_memtest
+msgid "Memory Test"
+msgstr ""
+
+#. txt_bootoptions
+msgid "Boot Options"
+msgstr ""
+
+#. window title for exit dialog
+#. txt_exit_title (see txt_exit_dialog)
+msgid "Exiting..."
+msgstr ""
+
+#. txt_exit_dialog
+msgid ""
+"You are leaving the graphical boot menu and\n"
+"starting the text mode interface."
+msgstr ""
+
+#. txt_help
+msgid "Help"
+msgstr ""
+
+#. window title for kernel loading (see txt_load_kernel)
+#. txt_load_kernel_title
+msgid "Starting..."
+msgstr ""
+
+#. Keep the three newlines!
+#. txt_load_kernel
+msgid ""
+"Loading Linux Kernel\n"
+"\n"
+"\n"
+msgstr ""
+
+#. Keep the three newlines!
+#. txt_load_memtest
+msgid ""
+"Loading memtest86\n"
+"\n"
+"\n"
+msgstr ""
+
+#. info box title
+#. txt_info_title
+msgid "Boot Loader"
+msgstr ""
+
+#. error box title
+#. txt_error_title
+msgid "I/O Error"
+msgstr ""
+
+#. boot disk change dialog title
+#. txt_change_disk_title
+msgid "Change Boot Disk"
+msgstr ""
+
+#. txt_insert_disk
+#, c-format
+msgid "Insert boot disk %u."
+msgstr ""
+
+#. txt_insert_disk2
+#, c-format
+msgid ""
+"This is boot disk %u.\n"
+"Insert boot disk %u."
+msgstr ""
+
+#. <product> is e.g. SuSE Linux X.Y or Enterprise Server Z
+#. txt_insert_disk3
+#, c-format
+msgid ""
+"This is not a <product> boot disk.\n"
+"Insert boot disk %u."
+msgstr ""
+
+#. password dialog title
+#. txt_password_title
+msgid "Password"
+msgstr ""
+
+#. txt_dud_ready
+msgid "Get your driver update floppy ready."
+msgstr ""
+
+#. power off dialog title
+#. txt_power_off_title
+msgid "Power Off"
+msgstr ""
+
+#. txt_power_off
+msgid "Halt the system now?"
+msgstr ""
+
+#. menu entry for hard disk installation
+#. txt_harddisk
+msgid "Hard Disk"
+msgstr ""
+
+#. dialog title for hard disk installation
+#. txt_harddisk_title
+msgid "Hard Disk Installation"
+msgstr ""
+
+#. txt_hd_diskdevice
+msgid "Disk Device (Scans All Disks If Empty)\n"
+msgstr ""
+
+#. txt_directory
+msgid "Directory\n"
+msgstr ""
+
+#. dialog title for ftp installation
+#. txt_ftp_title
+msgid "FTP Installation"
+msgstr ""
+
+#. txt_server
+msgid "Server\n"
+msgstr ""
+
+#. txt_password
+msgid "Password\n"
+msgstr ""
+
+#. label for ftp user input
+#. txt_user1
+msgid "User (Anonymous Login If Empty)\n"
+msgstr ""
+
+#. dialog title for nfs installation
+#. txt_nfs_title
+msgid "NFS Installation"
+msgstr ""
+
+#. label for smb user input
+#. txt_user2
+msgid "User (Uses \"guest\" If Empty)\n"
+msgstr ""
+
+#. dialog title for smb installation
+#. txt_smb_title
+msgid "SMB (Windows Share) Installation"
+msgstr ""
+
+#. dialog title for http installation
+#. txt_http_title
+msgid "HTTP Installation"
+msgstr ""
+
+#. 'driver' as in '(hardware) driver update'
+#. txt_driver_update
+msgid "Driver"
+msgstr ""
+
+#. as in Windows Authentication Domain
+#. txt_domain
+msgid "Domain\n"
+msgstr ""
+
+#. button label for other/more options
+#. txt_other_options
+msgid "Other Options"
+msgstr ""
+
+#. label for language selection
+#. txt_language
+msgid "Language"
+msgstr ""
+
+#. txt_yes
+msgid "Yes"
+msgstr ""
+
+#. txt_no
+msgid "No"
+msgstr ""
+
+#. menu item for selecting a file
+#. txt_file
+msgid "File"
+msgstr ""
+
+#. input label: share as in "Windows share" (SMB)
+#. txt_share
+msgid "Share\n"
+msgstr ""
+
+#. txt_zenAuto
+msgid "Automatic Mode"
+msgstr ""
+
+#. txt_zenManual
+msgid "Manual Mode"
+msgstr ""
+
+#. txt_zenConfig
+msgid "Configure Parameters on ZEN Partition"
+msgstr ""
+
+#. txt_zenInstall
+msgid "Install or Update ZEN Partition"
+msgstr ""
+
+#. txt_zenLilo
+msgid "Reinstall ZEN Partition Boot Loader"
+msgstr ""
+
+#. txt_zenDisable
+msgid "Disable ZEN Partition"
+msgstr ""
+
+#. txt_zenEnable
+msgid "Enable ZEN Partition"
+msgstr ""
+
+#. video mode menu item
+#. txt_text_mode
+msgid "Text Mode"
+msgstr ""
+
+#. menu item, like 'memory test'
+#. txt_firmware
+msgid "Firmware Test"
+msgstr ""
+
+#. txt_dud_file_msg
+#, wrap
+msgid ""
+"To load driver updates directly from CD-ROM,\n"
+"enter the driver update file names (separated\n"
+"by commas ',') here:\n"
+msgstr ""
+
+#. install source menu title
+#. ** please keep it really short (comparable to the english text) **
+#. txt_install_source
+msgid "Source"
+msgstr ""
+
+#. video mode/display size menu title
+#. ** please keep it really short (comparable to the english text) **
+#. txt_video_mode
+msgid "Video Mode"
+msgstr ""
+
+#. driver update dialog title
+#. -> txt_dud_file_msg
+#. txt_driver_update2
+msgid "Driver Update"
+msgstr ""
+
+#. menu label for selecting (cpu) architecture
+#. like i386, x86-64, ppc
+#. ** please keep it really short (comparable to the english text) **
+#. txt_arch
+msgid "Arch"
+msgstr ""
+
+#. menu label for selecting some (linux) kernel variant
+#. ** please keep it really short (comparable to the english text) **
+#. txt_kernel
+msgid "Kernel"
+msgstr ""
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. txt_kernel_default
+msgid "Default"
+msgstr ""
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. -> like in txt_safe_linux
+#. txt_kernel_safe
+msgid "Safe Settings"
+msgstr ""
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. -> similar to txt_noacpi_install
+#. txt_kernel_noacpi
+msgid "No ACPI"
+msgstr ""
+
+#. menu item for kernel variant (cf. txt_kernel)
+#. -> similar to txt_nolapic_install
+#. txt_kernel_nolapic
+msgid "No Local APIC"
+msgstr ""
+
+#. main menu: start in system repair mode
+#. txt_repain_system
+msgid "Repair Installed System"
+msgstr ""
+
+#. menu item
+#. txt_mediacheck
+msgid "Check Installation Media"
+msgstr ""
+
+#. menu item for keyboard layout (please keep it short)
+#. txt_keyboard
+msgid "Keyboard"
+msgstr ""
+
+#. menu title
+#. txt_dud_download
+msgid "Download Driver Update"
+msgstr ""
+
+#. input label
+#. txt_dud_enter_url
+msgid "Enter Driver Update URL\n"
+msgstr ""
+
+#. menu item
+#. txt_http_proxy
+msgid "HTTP Proxy"
+msgstr ""
+
+#. menu item
+#. txt_network_config
+msgid "Network Config"
+msgstr ""
+
+#. menu item
+#. txt_no_network
+msgid "No Network"
+msgstr ""
+
+#. short menu item for manual network config (NOT some kind of manual)
+#. txt_manual_network
+msgid "Manual"
+msgstr ""
+
+#. dialog title for manual network config
+#. txt_manual_network_title
+msgid "Manual Network Config"
+msgstr ""
+
+#. label for gateway ip
+#. txt_gateway_ip
+msgid "Gateway\n"
+msgstr ""
+
+#. label for dns domain name (like 'opensuse.org')
+#. txt_domain_name
+msgid "Domain Name\n"
+msgstr ""
+
+#. label for netmask; 'Host IP' refers to label txt_host_ip above
+#. txt_netmask
+msgid ""
+"Netmask\n"
+"(or use '/N' notation with Host IP)\n"
+msgstr ""
+
+#. label for Live CD installation
+#. txt_live_kde
+msgid "openSUSE Live (KDE)"
+msgstr ""
+
+#. label for Live CD installation
+#. txt_live_gnome
+msgid "openSUSE Live (GNOME)"
+msgstr ""
+
+#. menu label for an update (as opposed to a new installation)
+#. txt_upgrade
+msgid "Upgrade"
+msgstr ""
+
+#. label for name server (network setup)
+#. txt_nameservers
+msgid "Name servers, separated by spaces\n"
+msgstr ""
+
+#. label for ip address (network setup)
+#. txt_host_ip
+msgid ""
+"IP address with network prefix\n"
+"(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
+msgstr ""
+
+#. menu item to signify no KMS (KMS = kernel mode setting - keep the english acronym)
+#. txt_video_no_kms
+msgid "No KMS"
+msgstr ""
+
+#. menu item for booting an installed Linux system
+#. txt_systemboot
+msgid "Boot Linux System"
+msgstr ""
+
+#. menu item selecting a submenu with more entries
+#. txt_expert
+msgid "More ..."
+msgstr ""
+
+#. menu label for choosing installer screen size
+#. txt_installer_size
+msgid "Installer Size"
+msgstr ""
+
+#. menu label for choosing text console size
+#. txt_console_size
+msgid "Text Console Size"
+msgstr ""
+
+#. menu label for choosing screen size via BIOS
+#. txt_video_bios_size
+msgid "Video BIOS Size"
+msgstr ""
+
+#. menu label for choosing the color scheme of the installer
+#. txt_color_mode
+msgid "Color Mode"
+msgstr ""
+
+#. menu label for activating a screen reader (app reading screen content for blind people)
+#. txt_screen_reader
+msgid "Screen Reader"
+msgstr ""
+
+#. menu label for a color mode (cf. /txt_color_mode)
+#. txt_high_contrast
+msgid "High Contrast"
+msgstr ""
+
+#. menu label for a color mode (cf. /txt_color_mode)
+#. txt_white_on_black
+msgid "White on Black"
+msgstr ""
+
+#. menu label for a color mode (cf. /txt_color_mode)
+#. txt_cyan_on_black
+msgid "Cyan on Black"
+msgstr ""
+
+#. dialog title for https installation
+#. txt_https_title
+msgid "HTTPS Installation"
+msgstr ""
