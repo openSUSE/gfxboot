@@ -46,7 +46,7 @@ vocabulary.h: mk_vocabulary
 	./mk_vocabulary -c >$@
 
 jpeg.o: jpeg.S
-	as --32 -ahlsn=jpeg.lst -o $@ $<
+	as --32 -mx86-used-note=no -ahlsn=jpeg.lst -o $@ $<
 
 install: all
 	install -d -m 755 $(DESTDIR)/usr/sbin
