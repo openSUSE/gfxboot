@@ -12,10 +12,7 @@ THEMES	 = themes/upstream themes/openSUSE themes/SLES themes/SLED themes/KDE
 
 .PHONY: all clean distclean doc install installsrc themes
 
-all:	changelog bin2c gfxboot-compile bincode gfxboot-font addblack
-
-changelog: $(GITDEPS)
-	$(GIT2LOG) --changelog changelog
+all:	bin2c gfxboot-compile bincode gfxboot-font addblack
 
 gfxboot-font: gfxboot-font.c
 	$(CC) $(CFLAGS) -I /usr/include/freetype2 -lfreetype $< -o $@
@@ -70,10 +67,10 @@ installsrc:
 	cp -a themes/example* $(DESTDIR)/usr/share/gfxboot/themes
 	cp -a bin test $(DESTDIR)/usr/share/gfxboot
 
-archive: changelog
+archive:
 	mkdir -p package
 	git archive --prefix=$(PREFIX)/ $(BRANCH) | tar --no-wildcards-match-slash --wildcards --delete 'gfxboot-*/themes' > package/$(PREFIX).tar
-	tar -r -f package/$(PREFIX).tar --mode=0664 --owner=root --group=root --mtime="`git show -s --format=%ci`" --transform='s:^:$(PREFIX)/:' VERSION changelog
+	tar -r -f package/$(PREFIX).tar --mode=0664 --owner=root --group=root --mtime="`git show -s --format=%ci`" --transform='s:^:$(PREFIX)/:' VERSION
 	xz -f package/$(PREFIX).tar
 	for i in $(THEMES) ; do \
 	  git archive $(BRANCH) $$i | xz > package/$${i#*/}.tar.xz || break ; \
@@ -83,6 +80,7 @@ archive: changelog
 clean: themes doc
 	@rm -f gfxboot-compile bincode gfxboot-font addblack bincode.h bin2c *.lst *.map vocabulary.inc vocabulary.h *.o *~
 	@rm -rf tmp package
+	@rm -f VERSION changelog
 
 distclean: clean
 	@for i in themes/example* ; do make -C $$i clean || break ; done
