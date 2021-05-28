@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: YaST (@memory@)\n"
 "Report-Msgid-Bugs-To: translation@suse.de\n"
 "POT-Creation-Date: 2006-05-15 15:07+0200\n"
-"PO-Revision-Date: 2019-12-05 12:54+0000\n"
+"PO-Revision-Date: 2021-05-29 01:00+0000\n"
 "Last-Translator: David Medina <medipas@gmail.com>\n"
 "Language-Team: Catalan <https://l10n.opensuse.org/projects/gfxboot/master/ca/"
 ">\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.6.1\n"
+"X-Generator: Weblate 4.6.2\n"
 
 #. ok button label
 #. txt_ok
@@ -423,7 +423,9 @@ msgstr "Nom del domini\n"
 msgid ""
 "Netmask\n"
 "(or use '/N' notation with Host IP)\n"
-msgstr "Màscara de xarxa\n"
+msgstr ""
+"Màscara de xarxa\n"
+"(o useu la notació /N amb la IP de l'amfitrió)\n"
 
 #. label for Live CD installation
 #. txt_live_kde
@@ -513,4 +515,3 @@ msgstr "Cian sobre negre"
 #. txt_https_title
 msgid "HTTPS Installation"
 msgstr "Instal·lació per HTTPS"
-
