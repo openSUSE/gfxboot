@@ -16,6 +16,7 @@ bootlogo: example_*.bc font
 	@mkdir $@.dir
 	$(GFXBOOT_COMPILE) $(BFLAGS) -l $@.log -c $< $@.dir/init
 	@cp $(FILES) $@.dir
+	touch --reference example_06.bc $@.dir/*
 	$(GFXBOOT) --archive $@.dir --pack-archive $@
 	@ln -snf bootlogo message
 
