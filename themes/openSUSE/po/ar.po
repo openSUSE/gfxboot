@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2018-09-10 23:00+0000\n"
-"Last-Translator: Mahmoud Khalil <kkhalil2535@gmail.com>\n"
+"PO-Revision-Date: 2021-12-29 21:12+0000\n"
+"Last-Translator: mohammed alnajjar <mohnagar2@gmail.com>\n"
 "Language-Team: Arabic <https://l10n.opensuse.org/projects/gfxboot/master/ar/>"
 "\n"
 "Language: ar\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 2.18\n"
+"X-Generator: Weblate 4.9.1\n"
 
 #. ok button label
 #. txt_ok
@@ -140,8 +140,8 @@ msgid ""
 "This is not a <product> boot disk.\n"
 "Insert boot disk %u."
 msgstr ""
-"ليس هذا هو قرص تشغيل <المنتج>.\n"
-"قم بإدراج قرص التشغيل %u."
+"هذا ليس منتج قرص تشغيل\n"
+"ادرج قرص التشغيل"
 
 #. password dialog title
 #. txt_password_title
@@ -514,4 +514,3 @@ msgstr ""
 #. txt_https_title
 msgid "HTTPS Installation"
 msgstr "تثبيت HTTPS"
-
