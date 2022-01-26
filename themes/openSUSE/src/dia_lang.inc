@@ -32,12 +32,12 @@
   [ "da_DK" "dk"                   false "Dansk" ]						% Danish
   [ "de_DE" "de-nodeadkeys"        false "Deutsch" ]						% German
   [ "el_GR" "gr"                   false "Ελληνικά" ]						% Greek
-  [ "en_GB" "uk"                   false "English (UK)" ]					% English
+  [ "en_GB" "gb"                   false "English (UK)" ]					% English
   [ "en_US" "us"                   false "English (US)" ]					% English
   [ "es_ES" "es"                   false "Español" ]						% Spanish
-  [ "et_EE" "et"                   false "Eesti" ]						% Estonian
+  [ "et_EE" "ee"                   false "Eesti" ]						% Estonian
   [ "fa_IR" "us"                   true "\ufbfd\ufeb4\u0631\ufe8e\ufed3" ]			% Farsi
-  [ "fi_FI" "fi"                   false "Suomi" ]						% Finnish
+  [ "fi_FI" "fi-kotoistus"         false "Suomi" ]						% Finnish
   [ "fr_FR" "fr"                   false "Français" ]						% French
   [ "gl_ES" "es"                   false "Galego" ]						% Galician
   [ "ka_GE" "us"                   false "ქართული" ]						% Kartuli
@@ -72,14 +72,14 @@
   [ "si_LK" "us"                   false "\u0dc3\u0dd2\u0d82\u0dc4\u0dbd" ]			% Sinhala
   [ "sk_SK" "sk"                   false "Slovenčina" ]						% Slovak
   [ "sl_SI" "si"                   false "Slovenščina" ]					% Slovenian
-  [ "sr_RS" "sr-cy"                false "Srpski" ]						% Serbian
+  [ "sr_RS" "rs-latin"             false "Srpski" ]						% Serbian
   [ "sv_SE" "se"                   false "Svenska" ]						% Swedish
   [ "ta_IN" "us"                   false "\u0ba4\u0bae\u0bbf\u0bb4\u0bcd" ]			% Tamil
   [ "tg_TJ" "tj_alt-UTF8"          false "тоҷикӣ" ]						% Tadjik
   [ "th_TH" "us"                   false "\u0e20\u0e32\u0e29\u0e32\u0e44\u0e17\u0e22" ] 	% Thai
   [ "tr_TR" "tr"                   false "Türkçe" ]						% Turkish
-  [ "uk_UA" "ua-urf"               false "Українська" ]						% Ukrainian
-  [ "vi_VN" "us"                   false "Tiếng Việt" ]						% Vietnamese
+  [ "uk_UA" "ua-utf"               false "Українська" ]						% Ukrainian
+  [ "vi_VN" "us"                   false "Tiếng Việt" ]					% Vietnamese
   [ "wa_BE" "be"                   false "Walon" ]						% Walloon
   [ "xh_ZA" "us"                   false "isiXhosa" ]						% Xhosa
   [ "zh_CN" "us"                   false "简体中文" ]						% Simplified Chinese
