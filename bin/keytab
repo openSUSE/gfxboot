@@ -42,10 +42,10 @@ sub get_table
 
   open F, "loadkeys" . ($opt_uni ? " -u" : "") . " -m $kt |";
   while(<F>) {
-    $map_idx = 0 if /u_short/;
-    if(/u_short\s+plain_map\[/) { $map_idx = 1; $key_idx = 0 }
-    if(/u_short\s+shift_map\[/) { $map_idx = 2; $key_idx = 0 }
-    if(/u_short\s+altgr_map\[/) { $map_idx = 3; $key_idx = 0 }
+    $map_idx = 0 if /short|\};/;
+    if(/short\s+plain_map\[/) { $map_idx = 1; $key_idx = 0 }
+    if(/short\s+shift_map\[/) { $map_idx = 2; $key_idx = 0 }
+    if(/short\s+altgr_map\[/) { $map_idx = 3; $key_idx = 0 }
     if($map_idx) {
       if($opt_uni) {
         while(/(0x[0-9a-f]{4}),/g) {
