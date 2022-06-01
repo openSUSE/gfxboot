@@ -1564,15 +1564,45 @@
 %
 % Prefer 32 bit mode with fallback to 16 bit.
 %
+% If no mode was found in supported mode list, try VESA pre-defined mode
+% number (bsc#1199896).
+%
 % ( width height -- true|false )
 %
 /set_videomode {
-  over over
-  32 findmode setmode {
+  over over 32 findmode setmode {
     pop pop true
   } {
-    16 findmode setmode
+    over over 16 findmode setmode {
+      pop pop true
+    } {
+      legacy_videomode setmode
+    } ifelse
   } ifelse
+} def
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Look up old VESA pre-defined mode number (64k color modes).
+%
+% ( width height -- mode number | .undef )
+%
+/legacy_videomode {
+  over over 768 eq exch 1024 eq and {
+    0x117
+  } {
+    over over 600 eq exch 800 eq and {
+      0x114
+    } {
+      over over 480 eq exch 640 eq and {
+        0x111
+      } {
+        .undef
+      } ifelse
+    } ifelse
+  } ifelse
+
+  rot pop exch pop
 } def
 
 
