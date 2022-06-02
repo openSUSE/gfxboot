@@ -34,6 +34,13 @@ A more minimalistic [example](themes/example_07/example_07.bc) included in the g
 
 To build, simply run `make`. Install with `make install`.
 
+To build a reference for the stack-based bincode (used in `themes/openSUSE/src/*.inc`), run
+
+```console
+$ make doc
+$ xdg-open doc/gfxboot.html || less doc/gfxboot.txt
+```
+
 Basically every new commit into the master branch of the repository will be auto-submitted
 to all current SUSE products. No further action is needed except accepting the pull request.
 
