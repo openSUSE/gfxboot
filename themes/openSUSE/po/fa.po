@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2020-08-24 00:40+0000\n"
-"Last-Translator: hayyan rostami <hayyan71@yahoo.com>\n"
+"PO-Revision-Date: 2023-03-03 00:14+0000\n"
+"Last-Translator: Mohammad Rezaei Seresht <m.networking@gmail.com>\n"
 "Language-Team: Persian <https://l10n.opensuse.org/projects/gfxboot/master/fa/"
 ">\n"
 "Language: fa\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.6.1\n"
+"X-Generator: Weblate 4.9.1\n"
 
 #. ok button label
 #. txt_ok
@@ -72,12 +72,12 @@ msgstr ""
 
 #. txt_help
 msgid "Help"
-msgstr ""
+msgstr "کمک"
 
 #. window title for kernel loading (see txt_load_kernel)
 #. txt_load_kernel_title
 msgid "Starting..."
-msgstr ""
+msgstr "درحال شروع..."
 
 #. Keep the three newlines!
 #. txt_load_kernel
@@ -86,6 +86,9 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
+"بارگذاری هسته لینوکس\n"
+"\n"
+"\n"
 
 #. Keep the three newlines!
 #. txt_load_memtest
@@ -94,21 +97,24 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
+"بارگذاری memtest86\n"
+"\n"
+"\n"
 
 #. info box title
 #. txt_info_title
 msgid "Boot Loader"
-msgstr ""
+msgstr "بوت لودر"
 
 #. error box title
 #. txt_error_title
 msgid "I/O Error"
-msgstr ""
+msgstr "خطای وزودی/خروجی"
 
 #. boot disk change dialog title
 #. txt_change_disk_title
 msgid "Change Boot Disk"
-msgstr ""
+msgstr "تغییر دیسک بوت"
 
 #. txt_insert_disk
 #, c-format
@@ -133,7 +139,7 @@ msgstr ""
 #. password dialog title
 #. txt_password_title
 msgid "Password"
-msgstr ""
+msgstr "کلمه عبور"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
