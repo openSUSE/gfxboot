@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2020-05-02 19:51+0000\n"
-"Last-Translator: Luna Jernberg <droidbittin@gmail.com>\n"
+"PO-Revision-Date: 2023-03-12 08:14+0000\n"
+"Last-Translator: Luna  Jernberg <bittin@opensuse.org>\n"
 "Language-Team: Swedish <https://l10n.opensuse.org/projects/gfxboot/master/sv/"
 ">\n"
 "Language: sv\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.6.1\n"
+"X-Generator: Weblate 4.9.1\n"
 
 #. ok button label
 #. txt_ok
@@ -471,7 +471,7 @@ msgstr "Mer..."
 #. menu label for choosing installer screen size
 #. txt_installer_size
 msgid "Installer Size"
-msgstr ""
+msgstr "Storlek på installationsprogram"
 
 #. menu label for choosing text console size
 #. txt_console_size
@@ -512,4 +512,3 @@ msgstr "Cyan på svart"
 #. txt_https_title
 msgid "HTTPS Installation"
 msgstr "HTTPS-installation"
-
