@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2018-02-26 17:01+0000\n"
-"Last-Translator: Nathan Follens <nthn@unseen.is>\n"
+"PO-Revision-Date: 2023-06-20 08:14+0000\n"
+"Last-Translator: Natasha Ament <stacheldrahtje@gmail.com>\n"
 "Language-Team: Dutch <https://l10n.opensuse.org/projects/gfxboot/master/nl/>"
 "\n"
 "Language: nl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.18\n"
+"X-Generator: Weblate 4.9.1\n"
 
 #. ok button label
 #. txt_ok
@@ -477,45 +477,44 @@ msgstr "Meer ..."
 #. menu label for choosing installer screen size
 #. txt_installer_size
 msgid "Installer Size"
-msgstr ""
+msgstr "Installer grootte"
 
 #. menu label for choosing text console size
 #. txt_console_size
 msgid "Text Console Size"
-msgstr ""
+msgstr "Text console grootte"
 
 #. menu label for choosing screen size via BIOS
 #. txt_video_bios_size
 msgid "Video BIOS Size"
-msgstr ""
+msgstr "Video BIOS grootte"
 
 #. menu label for choosing the color scheme of the installer
 #. txt_color_mode
 msgid "Color Mode"
-msgstr ""
+msgstr "Kleur modus"
 
 #. menu label for activating a screen reader (app reading screen content for blind people)
 #. txt_screen_reader
 msgid "Screen Reader"
-msgstr ""
+msgstr "Schermlezer"
 
 #. menu label for a color mode (cf. /txt_color_mode)
 #. txt_high_contrast
 msgid "High Contrast"
-msgstr ""
+msgstr "Hoog contrast"
 
 #. menu label for a color mode (cf. /txt_color_mode)
 #. txt_white_on_black
 msgid "White on Black"
-msgstr ""
+msgstr "Wit op zwart"
 
 #. menu label for a color mode (cf. /txt_color_mode)
 #. txt_cyan_on_black
 msgid "Cyan on Black"
-msgstr ""
+msgstr "Cyaan op zwart"
 
 #. dialog title for https installation
 #. txt_https_title
 msgid "HTTPS Installation"
 msgstr "HTTPS-installatie"
-
