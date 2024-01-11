@@ -558,8 +558,12 @@
 
   dup 0 ne {
     "opt" help.setcontext
-  } if
+  } {
+    % set if at least one key has been processed
+    % see panel::panel.extra
 
+    /panel.extra.fkey 1 def
+  } ifelse
 } def
 
 

@@ -128,8 +128,9 @@
 % ( key ) => ( key )
 %
 /panel.extra {
-  % move down one menu entry; but only once
-  % see keyDown in menu::main.input
+  % move down one menu entry if the first entry is currently selected - but
+  % only once
+  % see also menu::main.input
 
   % only for install CDs
   config.autodown not { return } if
