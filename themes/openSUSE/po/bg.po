@@ -10,13 +10,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2009-10-05 21:44+0300\n"
-"Last-Translator: Borislav Mitev <morbid_viper@tkzs.org>\n"
-"Language-Team: Bulgarian <bg@li.org>\n"
+"PO-Revision-Date: 2024-06-08 15:46+0000\n"
+"Last-Translator: koralski <koralsky11@gmail.com>\n"
+"Language-Team: Bulgarian <https://l10n.opensuse.org/projects/gfxboot/master/"
+"bg/>\n"
+"Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.5.5\n"
 
 #. ok button label
 #. txt_ok
@@ -441,12 +444,12 @@ msgstr "Живо openSUSE (GNOME)"
 #. menu label for an update (as opposed to a new installation)
 #. txt_upgrade
 msgid "Upgrade"
-msgstr ""
+msgstr "Обновяване"
 
 #. label for name server (network setup)
 #. txt_nameservers
 msgid "Name servers, separated by spaces\n"
-msgstr ""
+msgstr "Сървъри за имена, разделени от интервали\n"
 
 #. label for ip address (network setup)
 #. txt_host_ip
@@ -454,64 +457,65 @@ msgid ""
 "IP address with network prefix\n"
 "(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 msgstr ""
+"IP адрес със мрежови префикс\n"
+"(Примери: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 
 #. menu item to signify no KMS (KMS = kernel mode setting - keep the english acronym)
 #. txt_video_no_kms
 msgid "No KMS"
-msgstr ""
+msgstr "Без KMS"
 
 #. menu item for booting an installed Linux system
 #. txt_systemboot
 msgid "Boot Linux System"
-msgstr ""
+msgstr "Зареждане на Линукс Системата"
 
 #. menu item selecting a submenu with more entries
 #. txt_expert
 msgid "More ..."
-msgstr ""
+msgstr "Още ..."
 
 #. menu label for choosing installer screen size
 #. txt_installer_size
 msgid "Installer Size"
-msgstr ""
+msgstr "Размер на инсталатора"
 
 #. menu label for choosing text console size
 #. txt_console_size
 msgid "Text Console Size"
-msgstr ""
+msgstr "Размер на текста в конзолата"
 
 #. menu label for choosing screen size via BIOS
 #. txt_video_bios_size
 msgid "Video BIOS Size"
-msgstr ""
+msgstr "Размер на екрана чрез BIOS"
 
 #. menu label for choosing the color scheme of the installer
 #. txt_color_mode
 msgid "Color Mode"
-msgstr ""
+msgstr "Цветови Режим"
 
 #. menu label for activating a screen reader (app reading screen content for blind people)
 #. txt_screen_reader
 msgid "Screen Reader"
-msgstr ""
+msgstr "Четец на Екрана"
 
 #. menu label for a color mode (cf. /txt_color_mode)
 #. txt_high_contrast
 msgid "High Contrast"
-msgstr ""
+msgstr "Висок Контраст"
 
 #. menu label for a color mode (cf. /txt_color_mode)
 #. txt_white_on_black
 msgid "White on Black"
-msgstr ""
+msgstr "Бяло на Черно"
 
 #. menu label for a color mode (cf. /txt_color_mode)
 #. txt_cyan_on_black
 msgid "Cyan on Black"
-msgstr ""
+msgstr "Циан на Черно"
 
 #. dialog title for https installation
 #. txt_https_title
 msgid "HTTPS Installation"
 msgstr "Инсталиране от HTTPS"
-
