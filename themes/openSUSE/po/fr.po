@@ -11,16 +11,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2020-06-30 08:32+0000\n"
-"Last-Translator: Antoine Belvire <antoine.belvire@opensuse.org>\n"
-"Language-Team: French <https://l10n.opensuse.org/projects/gfxboot/master/fr/"
-">\n"
-"Language: openSUSE/po/fr\n"
+"PO-Revision-Date: 2025-04-25 15:59+0000\n"
+"Last-Translator: Sophie Leroy <sophie@stoquart.com>\n"
+"Language-Team: French <https://l10n.opensuse.org/projects/gfxboot/master/fr/>"
+"\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.6.1\n"
+"X-Generator: Weblate 5.11.1\n"
 
 #. ok button label
 #. txt_ok
@@ -361,7 +361,7 @@ msgstr "Aucune ACPI"
 #. -> similar to txt_nolapic_install
 #. txt_kernel_nolapic
 msgid "No Local APIC"
-msgstr "APIC local"
+msgstr "Pas d'APIC local"
 
 #. main menu: start in system repair mode
 #. txt_repain_system
