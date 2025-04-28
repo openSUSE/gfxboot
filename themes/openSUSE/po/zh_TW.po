@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2025-04-28 23:30+0000\n"
+"PO-Revision-Date: 2025-04-29 01:59+0000\n"
 "Last-Translator: hsu zangmen <chzang55@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) <https://l10n.opensuse.org/projects/gfxboot/"
 "master/zh_TW/>\n"
@@ -462,7 +462,7 @@ msgstr "無 KMS(核心模式設定)"
 #. menu item for booting an installed Linux system
 #. txt_systemboot
 msgid "Boot Linux System"
-msgstr "將 Linux 系統開機"
+msgstr "將開機啟動至 Linux 系統"
 
 #. menu item selecting a submenu with more entries
 #. txt_expert
