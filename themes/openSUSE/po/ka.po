@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: @PACKAGE@\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-06-19 15:33+0200\n"
-"PO-Revision-Date: 2025-03-02 15:56+0000\n"
+"PO-Revision-Date: 2025-04-28 03:59+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://l10n.opensuse.org/projects/gfxboot/master/"
 "ka/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10.2\n"
+"X-Generator: Weblate 5.11.1\n"
 
 #. ok button label
 #. txt_ok
@@ -274,7 +274,7 @@ msgstr "ZEN დანაყოფის ჩადგმა ან განა�
 
 #. txt_zenLilo
 msgid "Reinstall ZEN Partition Boot Loader"
-msgstr ""
+msgstr "ZEN დანაყოფის ჩამტვირთავის თავიდან დაყენება"
 
 #. txt_zenDisable
 msgid "Disable ZEN Partition"
@@ -301,6 +301,9 @@ msgid ""
 "enter the driver update file names (separated\n"
 "by commas ',') here:\n"
 msgstr ""
+"იმისათვის, რომ განახლებები პირდაპირ CD-ROM-დან ჩატვირთოთ,\n"
+"შეიყვანეთ განახლების ფაილის სახელები (ერთმანეთისგან\n"
+"მძიმით გამოყოფილი ','):\n"
 
 #. install source menu title
 #. ** please keep it really short (comparable to the english text) **
@@ -422,26 +425,28 @@ msgid ""
 "Netmask\n"
 "(or use '/N' notation with Host IP)\n"
 msgstr ""
+"ქსელის ნიღაბი\n"
+"(ან გამოიყენეთ ნოტაცია '/N' ჰოსტის IP-ით)\n"
 
 #. label for Live CD installation
 #. txt_live_kde
 msgid "openSUSE Live (KDE)"
-msgstr ""
+msgstr "ცოცხალი openSUSE (KDE)"
 
 #. label for Live CD installation
 #. txt_live_gnome
 msgid "openSUSE Live (GNOME)"
-msgstr ""
+msgstr "ცოცხალი openSUSE (GNOME)"
 
 #. menu label for an update (as opposed to a new installation)
 #. txt_upgrade
 msgid "Upgrade"
-msgstr ""
+msgstr "ვერსიის აწევა"
 
 #. label for name server (network setup)
 #. txt_nameservers
 msgid "Name servers, separated by spaces\n"
-msgstr ""
+msgstr "მძიმით გამოყოფილი DNS სერვერები\n"
 
 #. label for ip address (network setup)
 #. txt_host_ip
@@ -449,61 +454,63 @@ msgid ""
 "IP address with network prefix\n"
 "(Examples: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 msgstr ""
+"IP მისამართი ქსელის პრეფიქსით\n"
+"(მაგ: 192.168.5.77/24 2001:db8:75:fff::3/64)\n"
 
 #. menu item to signify no KMS (KMS = kernel mode setting - keep the english acronym)
 #. txt_video_no_kms
 msgid "No KMS"
-msgstr ""
+msgstr "KMS-ის გარეშე"
 
 #. menu item for booting an installed Linux system
 #. txt_systemboot
 msgid "Boot Linux System"
-msgstr ""
+msgstr "Linux-ის ჩატვირთვა"
 
 #. menu item selecting a submenu with more entries
 #. txt_expert
 msgid "More ..."
-msgstr ""
+msgstr "მეტი..."
 
 #. menu label for choosing installer screen size
 #. txt_installer_size
 msgid "Installer Size"
-msgstr ""
+msgstr "დაყენების პროგრამის ზომა"
 
 #. menu label for choosing text console size
 #. txt_console_size
 msgid "Text Console Size"
-msgstr ""
+msgstr "ტექსტური კონსოლის ზომა"
 
 #. menu label for choosing screen size via BIOS
 #. txt_video_bios_size
 msgid "Video BIOS Size"
-msgstr ""
+msgstr "ვიდეოBIOS-ის ზომა"
 
 #. menu label for choosing the color scheme of the installer
 #. txt_color_mode
 msgid "Color Mode"
-msgstr ""
+msgstr "ფერების რეჟიმი"
 
 #. menu label for activating a screen reader (app reading screen content for blind people)
 #. txt_screen_reader
 msgid "Screen Reader"
-msgstr ""
+msgstr "ეკრანის წამკითხავი"
 
 #. menu label for a color mode (cf. /txt_color_mode)
 #. txt_high_contrast
 msgid "High Contrast"
-msgstr ""
+msgstr "მაღალი კონტრასტი"
 
 #. menu label for a color mode (cf. /txt_color_mode)
 #. txt_white_on_black
 msgid "White on Black"
-msgstr ""
+msgstr "თეთრი შავზე"
 
 #. menu label for a color mode (cf. /txt_color_mode)
 #. txt_cyan_on_black
 msgid "Cyan on Black"
-msgstr ""
+msgstr "ციანი შავზე"
 
 #. dialog title for https installation
 #. txt_https_title
