@@ -4,37 +4,40 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2005-07-27 11:49+0200\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-06-01 16:59+0000\n"
+"Last-Translator: Athmane MOKRAOUI <butterflyoffire+opensuse@protonmail.com>\n"
+"Language-Team: Kabyle <https://l10n.opensuse.org/projects/gfxboot/master/kab/"
+">\n"
 "Language: kab\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #. ok button label
 #. txt_ok
 msgid "OK"
-msgstr ""
+msgstr "Ih"
 
 #. cancel button label
 #. txt_cancel
 msgid "Cancel"
-msgstr ""
+msgstr "Semmet"
 
 #. reboot button label
 #. txt_reboot
 msgid "Reboot"
-msgstr ""
+msgstr "Ales asekker"
 
 #. continue button label
 #. txt_continue
 msgid "Continue"
-msgstr ""
+msgstr "Kemmel"
 
 #. txt_install
 msgid "Installation"
-msgstr ""
+msgstr "Asebded"
 
 #. txt_safe_linux
 msgid "Linux--Safe Settings"
@@ -69,12 +72,12 @@ msgstr ""
 
 #. txt_help
 msgid "Help"
-msgstr ""
+msgstr "Tallalt"
 
 #. window title for kernel loading (see txt_load_kernel)
 #. txt_load_kernel_title
 msgid "Starting..."
-msgstr ""
+msgstr "Asekker…"
 
 #. Keep the three newlines!
 #. txt_load_kernel
@@ -130,7 +133,7 @@ msgstr ""
 #. password dialog title
 #. txt_password_title
 msgid "Password"
-msgstr ""
+msgstr "Awal n uɛeddi"
 
 #. txt_dud_ready
 msgid "Get your driver update floppy ready."
@@ -139,7 +142,7 @@ msgstr ""
 #. power off dialog title
 #. txt_power_off_title
 msgid "Power Off"
-msgstr ""
+msgstr "Sexsi"
 
 #. txt_power_off
 msgid "Halt the system now?"
@@ -161,20 +164,20 @@ msgstr ""
 
 #. txt_directory
 msgid "Directory\n"
-msgstr ""
+msgstr "Akaram\n"
 
 #. dialog title for ftp installation
 #. txt_ftp_title
 msgid "FTP Installation"
-msgstr ""
+msgstr "Asebded FTP"
 
 #. txt_server
 msgid "Server\n"
-msgstr ""
+msgstr "Aqeddac\n"
 
 #. txt_password
 msgid "Password\n"
-msgstr ""
+msgstr "Awal n uɛeddi\n"
 
 #. label for ftp user input
 #. txt_user1
@@ -184,7 +187,7 @@ msgstr ""
 #. dialog title for nfs installation
 #. txt_nfs_title
 msgid "NFS Installation"
-msgstr ""
+msgstr "Asebded NFS"
 
 #. label for smb user input
 #. txt_user2
@@ -199,7 +202,7 @@ msgstr ""
 #. dialog title for http installation
 #. txt_http_title
 msgid "HTTP Installation"
-msgstr ""
+msgstr "Asebded HTTP"
 
 #. 'driver' as in '(hardware) driver update'
 #. txt_driver_update
@@ -209,30 +212,30 @@ msgstr ""
 #. as in Windows Authentication Domain
 #. txt_domain
 msgid "Domain\n"
-msgstr ""
+msgstr "Taɣult\n"
 
 #. button label for other/more options
 #. txt_other_options
 msgid "Other Options"
-msgstr ""
+msgstr "Tixtiṛiyin nniḍen"
 
 #. label for language selection
 #. txt_language
 msgid "Language"
-msgstr ""
+msgstr "Tutlayt"
 
 #. txt_yes
 msgid "Yes"
-msgstr ""
+msgstr "Ih"
 
 #. txt_no
 msgid "No"
-msgstr ""
+msgstr "Uhu"
 
 #. menu item for selecting a file
 #. txt_file
 msgid "File"
-msgstr ""
+msgstr "Afaylu"
 
 #. input label: share as in "Windows share" (SMB)
 #. txt_share
@@ -241,11 +244,11 @@ msgstr ""
 
 #. txt_zenAuto
 msgid "Automatic Mode"
-msgstr ""
+msgstr "Askar awurman"
 
 #. txt_zenManual
 msgid "Manual Mode"
-msgstr ""
+msgstr "Askar s ufus"
 
 #. txt_zenConfig
 msgid "Configure Parameters on ZEN Partition"
@@ -289,7 +292,7 @@ msgstr ""
 #. ** please keep it really short (comparable to the english text) **
 #. txt_install_source
 msgid "Source"
-msgstr ""
+msgstr "Aɣbalu"
 
 #. video mode/display size menu title
 #. ** please keep it really short (comparable to the english text) **
@@ -308,24 +311,24 @@ msgstr ""
 #. ** please keep it really short (comparable to the english text) **
 #. txt_arch
 msgid "Arch"
-msgstr ""
+msgstr "Arch"
 
 #. menu label for selecting some (linux) kernel variant
 #. ** please keep it really short (comparable to the english text) **
 #. txt_kernel
 msgid "Kernel"
-msgstr ""
+msgstr "Iɣes"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. txt_kernel_default
 msgid "Default"
-msgstr ""
+msgstr "Amezwer"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> like in txt_safe_linux
 #. txt_kernel_safe
 msgid "Safe Settings"
-msgstr ""
+msgstr "Iɣewwaren iɣellsanen"
 
 #. menu item for kernel variant (cf. txt_kernel)
 #. -> similar to txt_noacpi_install
@@ -352,7 +355,7 @@ msgstr ""
 #. menu item for keyboard layout (please keep it short)
 #. txt_keyboard
 msgid "Keyboard"
-msgstr ""
+msgstr "Anasiw"
 
 #. menu title
 #. txt_dud_download
@@ -367,12 +370,12 @@ msgstr ""
 #. menu item
 #. txt_http_proxy
 msgid "HTTP Proxy"
-msgstr ""
+msgstr "Apṛuksi HTTP"
 
 #. menu item
 #. txt_network_config
 msgid "Network Config"
-msgstr ""
+msgstr "Tawila n uẓeṭṭa"
 
 #. menu item
 #. txt_no_network
@@ -382,7 +385,7 @@ msgstr ""
 #. short menu item for manual network config (NOT some kind of manual)
 #. txt_manual_network
 msgid "Manual"
-msgstr ""
+msgstr "S ufus"
 
 #. dialog title for manual network config
 #. txt_manual_network_title
@@ -392,7 +395,7 @@ msgstr ""
 #. label for gateway ip
 #. txt_gateway_ip
 msgid "Gateway\n"
-msgstr ""
+msgstr "Tiqenṭert\n"
 
 #. label for dns domain name (like 'opensuse.org')
 #. txt_domain_name
@@ -419,7 +422,7 @@ msgstr ""
 #. menu label for an update (as opposed to a new installation)
 #. txt_upgrade
 msgid "Upgrade"
-msgstr ""
+msgstr "Amucceḍ"
 
 #. label for name server (network setup)
 #. txt_nameservers
@@ -446,7 +449,7 @@ msgstr ""
 #. menu item selecting a submenu with more entries
 #. txt_expert
 msgid "More ..."
-msgstr ""
+msgstr "Ugar…"
 
 #. menu label for choosing installer screen size
 #. txt_installer_size
@@ -491,4 +494,4 @@ msgstr ""
 #. dialog title for https installation
 #. txt_https_title
 msgid "HTTPS Installation"
-msgstr ""
+msgstr "Asebded HTTPS"
