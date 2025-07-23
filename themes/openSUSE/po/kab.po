@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bootloader\n"
-"PO-Revision-Date: 2025-06-05 21:59+0000\n"
-"Last-Translator: Athmane MOKRAOUI <butterflyoffire+opensuse@protonmail.com>\n"
+"PO-Revision-Date: 2025-07-23 14:59+0000\n"
+"Last-Translator: Moonshadow <zirisut@protonmail.com>\n"
 "Language-Team: Kabyle <https://l10n.opensuse.org/projects/gfxboot/master/kab/"
 ">\n"
 "Language: kab\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #. ok button label
 #. txt_ok
@@ -62,7 +62,7 @@ msgstr ""
 #. window title for exit dialog
 #. txt_exit_title (see txt_exit_dialog)
 msgid "Exiting..."
-msgstr ""
+msgstr "Tuffɣa..."
 
 #. txt_exit_dialog
 msgid ""
@@ -246,7 +246,7 @@ msgstr "Afaylu"
 #. input label: share as in "Windows share" (SMB)
 #. txt_share
 msgid "Share\n"
-msgstr ""
+msgstr "Bḍu\n"
 
 #. txt_zenAuto
 msgid "Automatic Mode"
