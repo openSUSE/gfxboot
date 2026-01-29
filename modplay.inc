@@ -297,13 +297,13 @@ p20:
 
 		movzx eax,word [es:esi+ch_pointer]
 		add ebx,eax
-		movsx dx,[es:ebx]
+		movsx dx, byte [es:ebx]
 		shl dx,2
 		inc eax
 		cmp ax,[es:esi+ch_end]
 		jnb p23
 		inc ebx
-		movsx ax,[es:ebx]
+		movsx ax, byte [es:ebx]
 		push ecx
 		mov cx,[es:esi+ch_pointer8]
 		or cx,cx
