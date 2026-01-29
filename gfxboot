@@ -2147,6 +2147,8 @@ sub run_qemu
   my $vm_env = shift;
   my $q = $vm_list{$opt_vm}{cmd};
 
+  $q .= " -cpu max";
+
   $q = "MALLOC_CHECK_=0 $q -enable-kvm" if -d "/sys/devices/system/kvm";
 
   $q .= " -boot c" if $vm_env->{boot} eq 'hd';
