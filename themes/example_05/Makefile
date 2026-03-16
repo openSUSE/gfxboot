@@ -13,6 +13,7 @@ bootlogo: example_*.bc font
 	@mkdir $@.dir
 	$(GFXBOOT_COMPILE) $(BFLAGS) -l $@.log -c $< $@.dir/init
 	@cp clouds.jpg font.fnt $@.dir
+	touch --reference example_05.bc $@.dir/*
 	$(GFXBOOT) --archive $@.dir --pack-archive $@
 
 font:
